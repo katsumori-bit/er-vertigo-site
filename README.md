@@ -1,28 +1,42 @@
-# ER Vertigo Static Site
+# ER 臨床メモ（静的サイト / GitHub Pages）
 
-このフォルダは `めまい.html` を静的公開するための最小構成です。
+Obsidian の `臨床/ER` を同期したリポジトリです。主訴別ページ・疾患詳細・**入院時心電図トリアージ**などを `er-note.css` で整形した HTML として公開します。
 
-## 公開ファイル
+## 構成
 
-- `index.html` (トップURL用エントリ)
-- `めまい.html` (本体)
-- `er-note.css` (スタイル)
-- `.nojekyll` (GitHub Pagesで静的配信を優先)
+- `index.html` — トップ（主訴ナビ＋心電図への入口）
+- `*.html` / `疾患詳細/**/*.html` — `md_to_html.py` が **同名の `.md` から生成**（手編集しないのが安全）
+- `er-note.css` — スタイル
+- `md_to_html.py` — Markdown → HTML 変換
+- `.nojekyll` — GitHub Pages で Jekyll を無効化
 
-## GitHub Pages 公開手順
+## HTML の生成
 
-1. このフォルダで初期化
-   - `git init`
-   - `git add .`
-   - `git commit -m "Initialize static site for ER vertigo page"`
-2. mainブランチを使用
-   - `git branch -M main`
-3. GitHubで空のリポジトリを作成して接続
-   - `git remote add origin https://github.com/<your-account>/<repo>.git`
-4. push
-   - `git push -u origin main`
-5. GitHubの `Settings > Pages` で
-   - Source: `Deploy from a branch`
-   - Branch: `main` / `/(root)`
+### ローカル
 
-数分後に `https://<your-account>.github.io/<repo>/` で閲覧できます。
+```powershell
+Set-Location -LiteralPath "<このリポジトリのルート>"
+python .\md_to_html.py
+```
+
+### GitHub Actions
+
+`main` への push のたびに `.github/workflows/regenerate-html.yml` が `md_to_html.py` を実行し、変更があれば **HTML だけ**を自動コミットします（`.md` は触りません）。
+
+初回に心電図まわりの `.md` だけ push しても、ワークフロー完了後に対応する `.html` がコミットされます。完了後に `git pull` するとローカルと揃います。
+
+## GitHub Pages
+
+1. リポジトリ **Settings → Pages**
+2. **Deploy from a branch** — **Branch: `main`**, folder **`/(root)`**
+
+数分後に `https://<user>.github.io/<repo>/` で閲覧できます。
+
+## リモート例
+
+```text
+git remote add origin https://github.com/<account>/<repo>.git
+git push -u origin main
+```
+
+（既に `origin` がある場合は URL だけ合わせてください。）

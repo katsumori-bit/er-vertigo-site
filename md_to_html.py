@@ -6,10 +6,12 @@ import re
 from pathlib import Path
 from urllib.parse import quote
 
-ER_DIR = Path(__file__).parent
-ROOT_DIR = ER_DIR.parent
+ER_DIR = Path(__file__).resolve().parent
+# リポジトリルート＝このフォルダ（GitHub 上では親に「臨床」が無い）。走査・Wiki解決は ER_DIR 基準。
+ROOT_DIR = ER_DIR
+# 表示用（Obsidian 上の元パス）
+SOURCE_PREFIX = "臨床/ER"
 CSS_PATH = ER_DIR / "er-note.css"
-TARGET_TOP_DIRS = {"ER", "疾患詳細"}
 
 RE_HEADING = re.compile(r"^(#{1,6})\s+(.*)$")
 RE_LIST = re.compile(r"^(\s*)([-*]|\d+\.)\s+(.*)$")
@@ -313,7 +315,7 @@ def css_href_for(md_path: Path) -> str:
 
 
 def build_html(md_path: Path, body_html: str) -> str:
-    source_rel = normalize_rel(md_path.relative_to(ROOT_DIR))
+    source_rel = f"{SOURCE_PREFIX}/{normalize_rel(md_path.relative_to(ER_DIR))}"
     title = md_path.stem
     return f"""<!DOCTYPE html>
 <html lang="ja">
@@ -328,7 +330,7 @@ def build_html(md_path: Path, body_html: str) -> str:
   <article class="note-shell">
     <header class="note-header">
       <h1>{html.escape(title)}</h1>
-      <p class="source-badge">元: 臨床/{html.escape(source_rel)}</p>
+      <p class="source-badge">元: {html.escape(source_rel)}</p>
     </header>
     <div class="md-body">
 {body_html}
@@ -355,10 +357,12 @@ def ensure_heading_ids(body_html: str) -> str:
 
 def collect_target_mds() -> list[Path]:
     md_files: list[Path] = []
-    for md in ROOT_DIR.rglob("*.md"):
-        rel = md.relative_to(ROOT_DIR)
-        if rel.parts and rel.parts[0] in TARGET_TOP_DIRS:
-            md_files.append(md.resolve())
+    for md in ER_DIR.rglob("*.md"):
+        if ".git" in md.parts:
+            continue
+        if md.name == "README.md":
+            continue
+        md_files.append(md.resolve())
     return sorted(md_files)
 
 

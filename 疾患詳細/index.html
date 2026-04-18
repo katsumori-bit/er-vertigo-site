@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="light only" />
+  <title>疾患詳細</title>
+  <link rel="stylesheet" href="../er-note.css" />
+  <style>
+    .nav-top { margin-bottom: 1.5rem; }
+    .nav-top a { color: var(--accent); text-decoration: none; }
+    .nav-top a:hover { text-decoration: underline; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 10px; margin: 0.75rem 0 1.5rem; }
+    .grid a {
+      display: block; padding: 10px 12px; border: 1px solid var(--border); border-radius: var(--radius);
+      text-decoration: none; color: var(--text); background: var(--surface); box-shadow: var(--shadow);
+    }
+    .grid a:hover { background: #f1f5f9; }
+  </style>
+</head>
+<body>
+  <article class="note-shell">
+    <header class="note-header">
+      <h1>疾患詳細</h1>
+      <p class="source-badge">インデックス。各 .html は md_to_html.py（GitHub Actions）で .md から再生成されます。</p>
+    </header>
+    <p class="nav-top"><a href="../index.html">← 救急外来 主訴ナビ（トップ）</a></p>
+
+    <h2 id="ecg">心電図・循環器トリアージ</h2>
+    <div class="grid">
+      <a href="STEMI.html">STEMI</a>
+      <a href="de Winterパターン.html">de Winterパターン</a>
+      <a href="Wellens症候群.html">Wellens症候群</a>
+      <a href="後壁梗塞.html">後壁梗塞</a>
+      <a href="高度房室ブロック.html">高度房室ブロック</a>
+      <a href="交代性脚ブロック.html">交代性脚ブロック</a>
+      <a href="二枝ブロック.html">二枝ブロック</a>
+      <a href="高K血症心電図.html">高K血症心電図</a>
+      <a href="Brugada心電図.html">Brugada心電図</a>
+      <a href="QT延長.html">QT延長</a>
+      <a href="旧心電図と内服確認.html">旧心電図と内服確認</a>
+      <a href="循環器コンサルトの判断.html">循環器コンサルトの判断</a>
+    </div>
+
+    <h2 id="cardio-other">循環器・その他</h2>
+    <div class="grid">
+      <a href="急性心不全.html">急性心不全</a>
+      <a href="急性心不全の重症度評価.html">急性心不全の重症度評価</a>
+      <a href="DNAR.html">DNAR</a>
+    </div>
+
+    <h2 id="resp">呼吸器・感染</h2>
+    <div class="grid">
+      <a href="喘息増悪.html">喘息増悪</a>
+      <a href="COPD増悪.html">COPD増悪</a>
+      <a href="誤嚥性肺炎.html">誤嚥性肺炎</a>
+      <a href="間質性肺炎急性増悪.html">間質性肺炎急性増悪</a>
+      <a href="好中球減少時発熱.html">好中球減少時発熱</a>
+    </div>
+
+    <h2 id="other">その他</h2>
+    <div class="grid">
+      <a href="胆管結石.html">胆管結石</a>
+      <a href="神経診察.html">神経診察</a>
+      <a href="下剤の選択.html">下剤の選択</a>
+      <a href="HINTS.html">HINTS</a>
+    </div>
+
+    <h2 id="fx">上肢骨折の固定</h2>
+    <div class="grid">
+      <a href="上肢骨折の固定/鎖骨骨折.html">鎖骨骨折</a>
+      <a href="上肢骨折の固定/上腕骨近位部骨折.html">上腕骨近位部骨折</a>
+      <a href="上肢骨折の固定/上腕骨骨幹部骨折.html">上腕骨骨幹部骨折</a>
+      <a href="上肢骨折の固定/前腕骨折.html">前腕骨折</a>
+      <a href="上肢骨折の固定/橈骨遠位端骨折.html">橈骨遠位端骨折</a>
+      <a href="上肢骨折の固定/肘周囲骨折.html">肘周囲骨折</a>
+      <a href="上肢骨折の固定/手・指の骨折.html">手・指の骨折</a>
+    </div>
+  </article>
+</body>
+</html>
