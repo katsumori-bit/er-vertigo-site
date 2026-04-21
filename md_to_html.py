@@ -19,6 +19,7 @@ RE_CALLOUT_START = re.compile(r"^>\s*\[!([A-Za-z]+)\]([+-])?\s*(.*)$")
 RE_CALLOUT_LINE = re.compile(r"^>\s?(.*)$")
 RE_TABLE_SEP = re.compile(r"^\s*\|?(\s*:?-{3,}:?\s*\|)+\s*:?-{3,}:?\s*\|?\s*$")
 RE_IMAGE_EXT = re.compile(r"\.(png|jpe?g|gif|webp|svg)$", re.IGNORECASE)
+RE_FENCE = re.compile(r"^\s*(```+|~~~+)\s*([A-Za-z0-9_+\-]*)\s*$")
 
 
 def normalize_rel(path: Path) -> str:
@@ -217,6 +218,25 @@ def render_blocks(lines: list[str], current_md: Path, all_md: set[Path], by_stem
             i += 1
             continue
 
+        m_fence = RE_FENCE.match(line)
+        if m_fence:
+            close_para()
+            close_lists()
+            fence = m_fence.group(1)
+            lang = m_fence.group(2) or ""
+            code_lines: list[str] = []
+            i += 1
+            while i < len(lines):
+                if lines[i].strip().startswith(fence[0] * 3) and lines[i].strip().rstrip("`~") == "":
+                    i += 1
+                    break
+                code_lines.append(lines[i])
+                i += 1
+            code_text = html.escape("\n".join(code_lines))
+            lang_attr = f' class="language-{html.escape(lang)}"' if lang else ""
+            out.append(f"<pre><code{lang_attr}>{code_text}</code></pre>")
+            continue
+
         m_callout = RE_CALLOUT_START.match(line)
         if m_callout:
             close_para()
@@ -314,27 +334,59 @@ def css_href_for(md_path: Path) -> str:
     return os.path.relpath(CSS_PATH, html_dir).replace("\\", "/")
 
 
+def root_index_href_for(md_path: Path) -> str:
+    html_dir = md_path.with_suffix(".html").parent
+    return (os.path.relpath(ROOT_DIR / "index.html", html_dir).replace("\\", "/"))
+
+
+def build_toc(body_html: str) -> str:
+    """Collect <h2 id="..."> headings for a collapsible ToC. Skip if fewer than 3."""
+    headings: list[tuple[str, str]] = []
+    for match in re.finditer(r'<h2[^>]*id="([^"]+)"[^>]*>(.*?)</h2>', body_html, flags=re.DOTALL):
+        hid = match.group(1)
+        text = re.sub(r"<[^>]+>", "", match.group(2)).strip()
+        if text:
+            headings.append((hid, text))
+    if len(headings) < 3:
+        return ""
+    items = "".join(
+        f'<li><a href="#{html.escape(h)}">{html.escape(t)}</a></li>' for h, t in headings
+    )
+    return f'<details class="toc"><summary>目次（{len(headings)} セクション）</summary><ol>{items}</ol></details>'
+
+
 def build_html(md_path: Path, body_html: str) -> str:
     source_rel = f"{SOURCE_PREFIX}/{normalize_rel(md_path.relative_to(ER_DIR))}"
     title = md_path.stem
+    css_href = css_href_for(md_path)
+    home_href = root_index_href_for(md_path)
+    toc_html = build_toc(body_html)
     return f"""<!DOCTYPE html>
 <html lang="ja">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="color-scheme" content="light only" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="color-scheme" content="light dark" />
   <title>{html.escape(title)}</title>
-  <link rel="stylesheet" href="{css_href_for(md_path)}" />
+  <link rel="stylesheet" href="{css_href}" />
 </head>
 <body>
+  <nav class="site-bar">
+    <a class="site-bar__back" href="{home_href}">← 主訴ナビ</a>
+    <span class="site-bar__title">{html.escape(title)}</span>
+  </nav>
   <article class="note-shell">
     <header class="note-header">
       <h1>{html.escape(title)}</h1>
       <p class="source-badge">元: {html.escape(source_rel)}</p>
     </header>
+    {toc_html}
     <div class="md-body">
 {body_html}
     </div>
+    <footer class="page-footer">
+      <a href="{home_href}">↑ 主訴ナビへ戻る</a>
+    </footer>
   </article>
 </body>
 </html>
