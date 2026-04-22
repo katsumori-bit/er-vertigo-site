@@ -2,36 +2,40 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="color-scheme" content="light only" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="color-scheme" content="light dark" />
   <title>胸痛</title>
   <link rel="stylesheet" href="er-note.css" />
 </head>
 <body>
+  <nav class="site-bar">
+    <a class="site-bar__back" href="index.html">← 主訴ナビ</a>
+    <span class="site-bar__title">胸痛</span>
+  </nav>
   <article class="note-shell">
     <header class="note-header">
       <h1>胸痛</h1>
       <p class="source-badge">元: 臨床/ER/胸痛.md</p>
     </header>
+    <details class="toc"><summary>目次（12 セクション）</summary><ol><li><a href="#0-来院-10-分以内にやること">0. 来院 10 分以内にやること</a></li><li><a href="#1-致死的胸痛-5-つを外す">1. 致死的胸痛 5 つを外す</a></li><li><a href="#2-問診">2. 問診</a></li><li><a href="#3-身体所見">3. 身体所見</a></li><li><a href="#4-12-誘導-ecg-の見方">4. 12 誘導 ECG の見方</a></li><li><a href="#5-リスク評価">5. リスク評価</a></li><li><a href="#6-採血と画像">6. 採血と画像</a></li><li><a href="#7-初期対応診断がつくまで">7. 初期対応（診断がつくまで）</a></li><li><a href="#8-disposition">8. disposition</a></li><li><a href="#やりがちなミス">やりがちなミス</a></li><li><a href="#出典トリアージ・リスク層別化">出典（トリアージ・リスク層別化）</a></li><li><a href="#このページから張るリンク">このページから張るリンク</a></li></ol></details>
     <div class="md-body">
 <p>#ER #救急 #胸痛 #ACS #心筋梗塞 #肺塞栓 #大動脈解離 #気胸</p>
 <div class="callout callout-summary">
-<div class="callout-title">このページの使い方</div>
+<div class="callout-title">このページは「診断がつくまで」</div>
 <div class="callout-body"><ol>
-<li><strong>5 大致死的胸痛</strong> を 10 分以内に外しにいく（ACS / 大動脈解離 / 肺塞栓 / 緊張性気胸 / 食道破裂）</li>
-<li><strong>来院 10 分以内に 12 誘導 ECG</strong>、これを最優先で回す</li>
-<li>ECG・問診・身体所見で <strong>方向性</strong> を決める</li>
-<li><strong>採血（トロポニン・D-dimer）+ 胸部 X 線 / 必要に応じて CT</strong> を出す</li>
-<li>該当する詳細ページに進む</li>
+<li><strong>来院 10 分以内に 12 誘導 ECG</strong></li>
+<li><strong>5 大致死的胸痛</strong>（ACS / 大動脈解離 / 肺塞栓 / 緊張性気胸 / 食道破裂）を外す</li>
+<li><strong>HEART / Wells・PERC</strong> で前確率を絞る</li>
+<li><strong>トロポニン・D-dimer・胸部 X 線・必要で造影 CT</strong></li>
+<li><strong>診断がついたら疾患ページへ</strong> → <a class="wiki-link" href="疾患詳細/STEMI.html">STEMI</a> / <span class="wiki-missing">ACS</span> / <span class="wiki-missing">大動脈解離</span> / <span class="wiki-missing">肺塞栓</span> / <span class="wiki-missing">気胸</span> / <span class="wiki-missing">食道破裂</span></li>
 </ol></div>
 </div>
 <div class="callout callout-tip">
 <div class="callout-title">主訴が胸痛ではないとき</div>
 <div class="callout-body"><ul>
-<li><strong>呼吸困難が前景</strong> → <a class="wiki-link" href="呼吸困難.html">呼吸困難</a></li>
-<li><strong>背部痛が前景</strong> → 大動脈解離を疑い続けつつ整形外科的鑑別も考える</li>
-<li><strong>動悸・失神が前景</strong> → <a class="wiki-link" href="意識消失.html">意識消失</a></li>
-<li><strong>心窩部痛が前景</strong> → <a class="wiki-link" href="腹痛.html">腹痛</a>（下壁梗塞・膵炎・胆道系も）</li>
+<li>呼吸困難が前景 → <a class="wiki-link" href="呼吸困難.html">呼吸困難</a></li>
+<li>動悸・失神が前景 → <a class="wiki-link" href="意識消失.html">意識消失</a></li>
+<li>心窩部痛が前景 → <a class="wiki-link" href="腹痛.html">腹痛</a>（下壁梗塞・膵炎・胆道系も）</li>
 </ul></div>
 </div>
 <hr>
@@ -39,88 +43,61 @@
 <div class="callout callout-danger">
 <div class="callout-title">来院 → 10 分以内</div>
 <div class="callout-body"><ol>
-<li><strong>バイタル</strong>（血圧は両上肢で測る）</li>
-<li><strong>モニター装着</strong>（SpO2・心電図・自動血圧）</li>
-<li><strong>末梢ルート確保</strong>（できれば 18–20G 2 本）</li>
-<li><strong>12 誘導 ECG</strong>（来院から 10 分以内 — AHA/ACC）</li>
-<li><strong>採血</strong>：トロポニン（hs-cTn）、D-dimer、CBC、生化、凝固、血型・クロス、血ガス</li>
-<li><strong>酸素</strong>：SpO2 &lt; 90% または呼吸困難で投与（ルーチン高流量酸素は心筋障害を悪化させうる）</li>
-<li><strong>アスピリン 162–325 mg 咀嚼</strong>（ACS が否定できなければ早期に。出血リスクと禁忌を確認）</li>
+<li><strong>バイタル</strong>（血圧は両上肢で）</li>
+<li><strong>モニター</strong>（SpO2・ECG・自動血圧）</li>
+<li><strong>末梢ルート</strong>（できれば 18–20G 2 本）</li>
+<li><strong>12 誘導 ECG</strong>（AHA/ACC：10 分以内）</li>
+<li><strong>採血</strong>：hs-cTn、D-dimer、CBC、生化、凝固、血型・クロス、血ガス</li>
+<li><strong>酸素</strong>：SpO2 &lt; 90% or 呼吸困難で投与（ルーチン高流量酸素は避ける）</li>
+<li><strong>アスピリン 162–325 mg 咀嚼</strong>：ACS が否定できなければ早期に（禁忌・出血リスク確認）</li>
 </ol></div>
 </div>
 <hr>
 <h2 id="1-致死的胸痛-5-つを外す">1. 致死的胸痛 5 つを外す</h2>
-<div class="table-wrap"><table><thead><tr><th>疾患</th><th>典型</th><th>初手</th></tr></thead><tbody><tr><td><strong>ACS（STEMI/NSTEMI/UA）</strong></td><td>圧迫感、冷汗、放散痛、嘔気、労作で誘発、休息で軽快</td><td><strong>12 誘導 ECG + トロポニン</strong>、STEMI なら直ちに循環器コール</td></tr><tr><td><strong>大動脈解離</strong></td><td>突然の引き裂かれる胸背部痛、移動する痛み、左右上肢血圧差、新規 AR 雑音</td><td><strong>造影 CT</strong>（D-dimer 陰性なら除外に有用）</td></tr><tr><td><strong>肺塞栓（PE）</strong></td><td>突然の呼吸困難 + 頻脈、胸膜痛、片側下肢腫脹、長期臥床・術後・OC</td><td><strong>D-dimer → 造影 CT（CTPA）</strong>、Wells/PERC で前確率を絞る</td></tr><tr><td><strong>緊張性気胸</strong></td><td>突然の片側胸痛 + 呼吸困難、片側呼吸音消失、頸静脈怒張、気管偏位</td><td><strong>画像を待たず針減圧 → ドレナージ</strong></td></tr><tr><td><strong>食道破裂（Boerhaave）</strong></td><td>強い嘔吐後の胸痛、皮下気腫、縦隔気腫、口臭</td><td><strong>造影 CT or 食道造影</strong>、外科コンサルト</td></tr></tbody></table></div>
-<div class="callout callout-danger">
-<div class="callout-title">STEMI に出会ったら</div>
-<div class="callout-body"><ul>
-<li><strong>症状発症から 12 時間以内</strong> → <strong>再灌流療法</strong>（PCI が第一選択、door-to-balloon ≤ 90 分）</li>
-<li><strong>症状発症 12–24 時間</strong> でも、症状持続・血行動態不安定なら PCI を考慮</li>
-<li>当院に PCI 設備がなければ <strong>直ちに転送</strong>（DIDO ≤ 30 分目標）</li>
-<li>詳細 → <a class="wiki-link" href="疾患詳細/STEMI.html">STEMI</a> / <a class="wiki-link" href="疾患詳細/循環器コンサルトの判断.html">循環器コンサルトの判断</a></li>
-</ul></div>
-</div>
+<div class="table-wrap"><table><thead><tr><th>疾患</th><th>典型</th><th>初手</th><th>疾患ページ</th></tr></thead><tbody><tr><td><strong>ACS（STEMI/NSTEMI/UA）</strong></td><td>圧迫感、冷汗、放散痛、嘔気、労作誘発・休息軽快</td><td><strong>12 誘導 ECG + トロポニン</strong>、STEMI なら直ちに循環器コール</td><td><a class="wiki-link" href="疾患詳細/STEMI.html">STEMI</a> / <span class="wiki-missing">ACS</span></td></tr><tr><td><strong>大動脈解離</strong></td><td>突然の引き裂かれる胸背部痛、移動する痛み、左右上肢血圧差、新規 AR 雑音</td><td><strong>造影 CT</strong>（ADD-RS ≤1 + D-dimer 陰性で除外補助）</td><td><span class="wiki-missing">大動脈解離</span></td></tr><tr><td><strong>肺塞栓（PE）</strong></td><td>突然の呼吸困難 + 頻脈、胸膜痛、片側下肢腫脹、長期臥床・術後・OC</td><td><strong>Wells/PERC → D-dimer → CTPA</strong></td><td><span class="wiki-missing">肺塞栓</span></td></tr><tr><td><strong>緊張性気胸</strong></td><td>突然の片側胸痛 + 呼吸困難、片側呼吸音消失、頸静脈怒張、気管偏位</td><td><strong>画像を待たず針減圧 → ドレナージ</strong></td><td><span class="wiki-missing">気胸</span></td></tr><tr><td><strong>食道破裂（Boerhaave）</strong></td><td>強い嘔吐後の胸痛、皮下気腫、縦隔気腫</td><td><strong>造影 CT or 食道造影</strong>、外科コンサルト</td><td><span class="wiki-missing">食道破裂</span></td></tr></tbody></table></div>
 <hr>
 <h2 id="2-問診">2. 問診</h2>
-<h3 id="opqrst-で取る">OPQRST で取る</h3>
+<h3 id="opqrst">OPQRST</h3>
 <ul>
 <li><strong>O</strong>nset：いつから、どんな状況で（労作中？安静時？嘔吐後？）</li>
-<li><strong>P</strong>rovocation/Palliation：何で増悪・軽減するか（労作・体位・呼吸・食事）</li>
-<li><strong>Q</strong>uality：圧迫感、絞扼感、引き裂かれる、刺すような、灼熱感</li>
-<li><strong>R</strong>egion/Radiation：部位、放散先（左肩・顎・両腕・背部）</li>
-<li><strong>S</strong>everity：強さ（NRS 0–10）</li>
+<li><strong>P</strong>rovocation/Palliation：労作・体位・呼吸・食事</li>
+<li><strong>Q</strong>uality：圧迫感、絞扼感、引き裂かれる、刺す、灼熱</li>
+<li><strong>R</strong>egion/Radiation：左肩・顎・両腕・背部</li>
+<li><strong>S</strong>everity：NRS</li>
 <li><strong>T</strong>iming：持続時間、反復パターン</li>
 </ul>
-<h3 id="必ず聞くこと">必ず聞くこと</h3>
+<h3 id="必ず聞く">必ず聞く</h3>
 <ul>
-<li><strong>発症様式</strong>：突然 vs 徐々（突然なら大動脈解離・PE・気胸を強く疑う）</li>
-<li><strong>持続時間</strong>：数秒（非心臓性が多い）vs 持続性（ACS・解離・PE）</li>
-<li><strong>随伴症状</strong>：呼吸困難、冷汗、嘔気、失神、動悸、咳、血痰、発熱</li>
-<li><strong>危険因子</strong>：年齢、性別、喫煙、高血圧、糖尿病、脂質異常、家族歴、避妊薬、悪性腫瘍、長時間臥床、手術、外傷、コカイン</li>
+<li><strong>発症様式</strong>：突然 vs 徐々（突然なら解離・PE・気胸）</li>
+<li><strong>持続時間</strong>：数秒（非心臓性多い）vs 持続（ACS・解離・PE）</li>
+<li><strong>随伴</strong>：呼吸困難、冷汗、嘔気、失神、動悸、咳、血痰、発熱</li>
+<li><strong>危険因子</strong>：年齢、性別、喫煙、HT、DM、脂質、家族歴、避妊薬、悪性腫瘍、長期臥床、手術、外傷、コカイン</li>
 </ul>
 <div class="callout callout-tip">
-<div class="callout-title">ACS らしさを上げる所見</div>
-<div class="callout-body"><ul>
-<li><strong>放散痛（両腕 / 右肩 / 顎）</strong></li>
-<li><strong>冷汗</strong></li>
-<li><strong>嘔気・嘔吐</strong></li>
-<li><strong>労作で誘発、休息で軽快</strong></li>
-<li><strong>過去の ACS/PCI 歴</strong></li>
-</ul>
-<p>ACS らしさを下げる所見：</p>
-<ul>
-<li><strong>体位変換で増悪</strong></li>
-<li><strong>触診で再現できる胸壁痛</strong></li>
-<li><strong>数秒の刺すような痛み</strong></li>
-<li><strong>呼吸でのみ誘発される鋭い痛み</strong>（ただし PE/胸膜炎は除外不要ではない）</li>
-</ul></div>
+<div class="callout-title">ACS らしさの増減</div>
+<div class="callout-body"><p><strong>らしさ UP</strong>：放散痛（両腕 / 右肩 / 顎）・冷汗・嘔気嘔吐・労作誘発 - 休息軽快・ACS/PCI 歴 <strong>らしさ DOWN</strong>：体位変換で増悪・触診で再現できる胸壁痛・数秒の刺す痛み （<strong>ただし胸壁再現性があっても PE / 解離は除外できない</strong>）</p></div>
 </div>
 <hr>
 <h2 id="3-身体所見">3. 身体所見</h2>
 <ul>
-<li><strong>バイタル</strong>：両上肢の血圧（差 ≥ 20 mmHg → 解離示唆）</li>
+<li><strong>バイタル</strong>：両上肢血圧（差 ≥ 20 mmHg → 解離示唆）</li>
 <li><strong>頸</strong>：頸静脈怒張（PE / タンポナーデ / 緊張性気胸）</li>
-<li><strong>胸</strong>：呼吸音の左右差・減弱（気胸・血胸）、皮下気腫（食道破裂・気胸）</li>
-<li><strong>心音</strong>：新規雑音（特に AR → 解離）、S3/S4、心膜摩擦音</li>
-<li><strong>腹部</strong>：圧痛（下壁梗塞は心窩部痛を呈することがある）</li>
-<li><strong>下肢</strong>：片側腫脹（DVT）、左右差</li>
+<li><strong>胸</strong>：呼吸音左右差・減弱、皮下気腫</li>
+<li><strong>心音</strong>：新規雑音（AR → 解離）、S3/S4、心膜摩擦音</li>
+<li><strong>腹部</strong>：圧痛（下壁梗塞は心窩部痛）</li>
+<li><strong>下肢</strong>：片側腫脹（DVT）</li>
 </ul>
-<div class="callout callout-warning">
-<div class="callout-title">胸壁触診で再現できても安心しない</div>
-<div class="callout-body"><p>胸壁圧痛があっても、ACS / PE / 大動脈解離は否定できない（感度・特異度ともに不十分）。</p></div>
-</div>
 <hr>
 <h2 id="4-12-誘導-ecg-の見方">4. 12 誘導 ECG の見方</h2>
-<div class="table-wrap"><table><thead><tr><th>所見</th><th>考える疾患</th></tr></thead><tbody><tr><td><strong>ST 上昇</strong>（隣接 2 誘導以上）</td><td>STEMI → <a class="wiki-link" href="疾患詳細/STEMI.html">STEMI</a></td></tr><tr><td><strong>ST 下降 / T 波陰転化</strong></td><td>NSTEMI / UA、左主幹部・三枝病変、後壁梗塞</td></tr><tr><td><strong>後壁梗塞パターン</strong>（V1–V3 の R 増高 + ST 下降）</td><td>後壁 STEMI → <a class="wiki-link" href="疾患詳細/後壁梗塞.html">後壁梗塞</a>（V7–V9 で再評価）</td></tr><tr><td><strong>de Winter T</strong>（V1–V6 で上行 ST + 高 T）</td><td>LAD 近位部閉塞 → <a class="wiki-link" href="疾患詳細/de Winterパターン.html">de Winterパターン</a></td></tr><tr><td><strong>Wellens 征候</strong>（V2–V3 で T 波双相 / 深い陰転）</td><td>LAD 高度狭窄 → <a class="wiki-link" href="疾患詳細/Wellens症候群.html">Wellens症候群</a></td></tr><tr><td><strong>新規左脚ブロック</strong></td><td>当面は STEMI 等価として扱う（Sgarbossa 基準）</td></tr><tr><td><strong>右心負荷</strong>（S1Q3T3、右軸偏位、V1–V3 T 陰転）</td><td>PE を示唆</td></tr><tr><td><strong>電気的交互現象</strong></td><td>心タンポナーデ</td></tr><tr><td><strong>広範な ST 上昇 + PR 下降</strong></td><td>急性心膜炎</td></tr></tbody></table></div>
+<div class="table-wrap"><table><thead><tr><th>所見</th><th>考える疾患</th></tr></thead><tbody><tr><td><strong>ST 上昇</strong>（隣接 2 誘導以上）</td><td>STEMI → <a class="wiki-link" href="疾患詳細/STEMI.html">STEMI</a></td></tr><tr><td><strong>ST 下降 / T 陰転</strong></td><td>NSTEMI / UA、左主幹部・三枝、後壁梗塞</td></tr><tr><td><strong>後壁梗塞パターン</strong>（V1–V3 R 増高 + ST 下降）</td><td>→ <a class="wiki-link" href="疾患詳細/後壁梗塞.html">後壁梗塞</a>（V7–V9 再評価）</td></tr><tr><td><strong>de Winter T</strong></td><td>LAD 近位部閉塞 → <a class="wiki-link" href="疾患詳細/de Winterパターン.html">de Winterパターン</a></td></tr><tr><td><strong>Wellens 征候</strong></td><td>LAD 高度狭窄 → <a class="wiki-link" href="疾患詳細/Wellens症候群.html">Wellens症候群</a></td></tr><tr><td><strong>新規 LBBB</strong></td><td>STEMI 等価（Sgarbossa）</td></tr><tr><td><strong>右心負荷</strong>（S1Q3T3、右軸、V1–V3 T 陰転）</td><td>PE</td></tr><tr><td><strong>電気的交互現象</strong></td><td>心タンポナーデ</td></tr><tr><td><strong>広範 ST 上昇 + PR 下降</strong></td><td>急性心膜炎</td></tr></tbody></table></div>
 <div class="callout callout-check">
 <div class="callout-title">ECG は 1 回で終わらせない</div>
 <div class="callout-body"><ul>
-<li>症状あり・初回 ECG 非診断的 → <strong>15–30 分後に再検</strong></li>
-<li>症状の変化、新たな所見の出現を捉える</li>
-<li>右側胸部誘導（V3R, V4R）→ 右室梗塞、後壁誘導（V7–V9）→ 後壁梗塞も忘れない</li>
+<li>初回非診断的・症状持続 → <strong>15–30 分後に再検</strong></li>
+<li>右側胸部誘導（V3R, V4R）→ 右室梗塞、後壁誘導（V7–V9）→ 後壁梗塞</li>
 </ul></div>
 </div>
-<p>詳細は → <a class="wiki-link" href="入院時心電図.html">入院時心電図</a></p>
+<p>詳細 → <a class="wiki-link" href="入院時心電図.html">入院時心電図</a></p>
 <hr>
 <h2 id="5-リスク評価">5. リスク評価</h2>
 <h3 id="heart-スコアed-での-acs-リスク層別化">HEART スコア（ED での ACS リスク層別化）</h3>
@@ -133,111 +110,102 @@
 <h3 id="wells-percpe">Wells / PERC（PE）</h3>
 <div class="callout callout-check">
 <div class="callout-title">PERC（全項目満たせば PE 検査不要）</div>
-<div class="callout-body"><ul>
-<li>年齢 &lt; 50</li>
-<li>心拍 &lt; 100</li>
-<li>SpO2 ≥ 95%</li>
-<li>片側下肢腫脹なし</li>
-<li>喀血なし</li>
-<li>4 週以内の手術 / 外傷なし</li>
-<li>既往の DVT / PE なし</li>
-<li>エストロゲン使用なし</li>
-</ul></div>
+<div class="callout-body"><p>年齢 &lt; 50 / 心拍 &lt; 100 / SpO2 ≥ 95% / 片側下肢腫脹なし / 喀血なし / 4 週以内手術・外傷なし / 既往 DVT・PE なし / エストロゲン使用なし</p></div>
 </div>
-<p>PERC 満たさない or 中等度以上 → <strong>D-dimer</strong>（年齢調整 cutoff: 50 歳以上は age × 10 ng/mL）→ 陽性なら <strong>造影 CT（CTPA）</strong></p>
+<p>PERC 満たさない or Wells 中等度以上 → <strong>D-dimer</strong>（50 歳以上は age × 10 ng/mL）→ 陽性で <strong>CTPA</strong></p>
 <hr>
 <h2 id="6-採血と画像">6. 採血と画像</h2>
 <h3 id="採血">採血</h3>
-<div class="table-wrap"><table><thead><tr><th>項目</th><th>意義</th></tr></thead><tbody><tr><td><strong>hs-cTn</strong>（高感度トロポニン）</td><td>ACS の中心的バイオマーカー。<strong>0/1h or 0/3h プロトコル</strong>で rule-out</td></tr><tr><td><strong>D-dimer</strong></td><td>PE / 解離の rule-out（陰性的中率を活用）</td></tr><tr><td><strong>BNP / NT-proBNP</strong></td><td>心不全の合併評価</td></tr><tr><td><strong>CBC</strong></td><td>貧血、感染</td></tr><tr><td><strong>生化（Cr）</strong></td><td>造影 CT 前の腎機能</td></tr><tr><td><strong>凝固（PT, APTT）</strong></td><td>抗凝固薬の評価、tPA・PCI 準備</td></tr><tr><td><strong>血型・クロス</strong></td><td>解離・大量出血に備える</td></tr><tr><td><strong>血ガス（VBG/ABG）</strong></td><td>呼吸不全、A-aDO2</td></tr></tbody></table></div>
+<div class="table-wrap"><table><thead><tr><th>項目</th><th>意義</th></tr></thead><tbody><tr><td><strong>hs-cTn</strong></td><td>ACS 中心。<strong>0/1h or 0/3h プロトコル</strong>で rule-out</td></tr><tr><td><strong>D-dimer</strong></td><td>PE / 解離の rule-out</td></tr><tr><td><strong>BNP / NT-proBNP</strong></td><td>心不全合併評価</td></tr><tr><td><strong>CBC / 生化 / 凝固</strong></td><td>腎機能、抗凝固評価</td></tr><tr><td><strong>血型・クロス</strong></td><td>解離・大量出血</td></tr><tr><td><strong>血ガス</strong></td><td>呼吸不全、A-aDO2</td></tr></tbody></table></div>
 <h3 id="画像">画像</h3>
 <ul>
 <li><strong>胸部 X 線</strong>：気胸、縦隔拡大（解離）、肺水腫、肺炎、皮下気腫</li>
-<li><strong>造影 CT（CTPA / 大動脈 CT）</strong>：PE、大動脈解離、肺梗塞</li>
+<li><strong>造影 CT（CTPA / 大動脈 CT）</strong>：PE、解離、肺梗塞</li>
 <li><strong>心エコー</strong>：壁運動異常（ACS）、右心拡大（PE）、心嚢液（タンポナーデ）、AR（解離）</li>
-<li><strong>POCUS</strong>：迅速ベッドサイド評価（特にショック例で有用）</li>
+<li><strong>POCUS</strong>：ショック例で迅速評価</li>
 </ul>
 <hr>
-<h2 id="7-acs-疑いの初期治療mona-bash-の更新版">7. ACS 疑いの初期治療（MONA-BASH の更新版）</h2>
-<div class="callout callout-info">
-<div class="callout-title">「MONA」は古い</div>
-<div class="callout-body"><p>現在のガイドラインでは、ルーチンの酸素投与とモルヒネは推奨度が下がっている。</p></div>
+<h2 id="7-初期対応診断がつくまで">7. 初期対応（診断がつくまで）</h2>
+<div class="callout callout-tip">
+<div class="callout-title">診断ごとの詳細治療は疾患ページへ</div>
+<div class="callout-body"><p>抗血小板・抗凝固レジメン、Stanford A/B 別治療、massive PE の線溶療法などは → <strong><a class="wiki-link" href="疾患詳細/STEMI.html">STEMI</a> / <span class="wiki-missing">ACS</span> / <span class="wiki-missing">大動脈解離</span> / <span class="wiki-missing">肺塞栓</span></strong></p></div>
 </div>
-<div class="table-wrap"><table><thead><tr><th>薬剤</th><th>用量・適応</th></tr></thead><tbody><tr><td><strong>アスピリン</strong></td><td>162–325 mg 咀嚼。出血・アスピリン喘息は禁忌</td></tr><tr><td><strong>P2Y12 阻害薬</strong>（クロピドグレル / プラスグレル / チカグレロル）</td><td>PCI 経路で循環器と相談して選択</td></tr><tr><td><strong>ヘパリン</strong></td><td>体重あたり投与、APTT 1.5–2.5 倍 目標</td></tr><tr><td><strong>硝酸薬（ニトログリセリン）</strong></td><td>持続痛・高血圧で。<strong>右室梗塞・PDE5 阻害薬使用中は禁忌</strong></td></tr><tr><td><strong>β 遮断薬</strong></td><td>来院 24 時間以内に開始（ショック・心不全・徐脈・喘息は除外）</td></tr><tr><td><strong>スタチン</strong></td><td>高用量で早期に開始</td></tr><tr><td><strong>酸素</strong></td><td>SpO2 &lt; 90% で投与。ルーチン高流量酸素は避ける</td></tr><tr><td><strong>モルヒネ</strong></td><td>硝酸薬で改善しない強い痛みに限定（P2Y12 吸収遅延の懸念）</td></tr></tbody></table></div>
-<hr>
-<h2 id="8-大動脈解離を疑ったとき">8. 大動脈解離を疑ったとき</h2>
 <ul>
-<li><strong>3 つのキー所見</strong>：突然発症、移動する痛み、引き裂かれる性状（いずれも感度は完璧でない）</li>
-<li><strong>左右上肢血圧差 ≥ 20 mmHg</strong>、新規 AR 雑音、神経脱落症状</li>
-<li><strong>D-dimer 陰性</strong>（&lt; 500 ng/mL or 年齢調整）+ <strong>ADD-RS ≤ 1</strong> → 解離の可能性は低い（IRAD 解析）</li>
-<li>疑わしければ <strong>造影 CT</strong>（胸腹部）を躊躇しない</li>
-<li>治療：<strong>収縮期血圧 100–120 mmHg、心拍 60 以下</strong>を目標に β 遮断薬（ランジオロール / エスモロール）を先行 → 必要なら血管拡張薬</li>
-<li><strong>Stanford A</strong>（上行大動脈）→ <strong>緊急手術</strong>、<strong>Stanford B</strong>（下行）→ 内科治療基本</li>
+<li><strong>アスピリン 162–325 mg 咀嚼</strong>：ACS 否定できないなら早期（禁忌・出血リスク確認）</li>
+<li><strong>酸素</strong>：SpO2 &lt; 90% のみ</li>
+<li><strong>硝酸薬（ニトログリセリン）</strong>：持続痛・高血圧で。<strong>右室梗塞・PDE5 阻害薬使用中は禁忌</strong></li>
+<li><strong>鎮痛</strong>：硝酸薬で改善しない強い痛みには<strong>モルヒネ</strong>を限定使用（P2Y12 吸収遅延の懸念）</li>
+<li><strong>解離を疑ったら降圧</strong>：<strong>SBP 100–120 / HR ≤ 60 を目標</strong>にランジオロール or エスモロール（詳細 → <span class="wiki-missing">大動脈解離</span>）</li>
+<li><strong>緊張性気胸を疑ったら画像を待たず針減圧</strong> → <span class="wiki-missing">気胸</span></li>
+<li><strong>STEMI → 直ちに循環器コール + 再灌流</strong>（door-to-balloon ≤ 90 分、PCI 設備なければ転送、DIDO ≤ 30 分）→ <a class="wiki-link" href="疾患詳細/STEMI.html">STEMI</a></li>
+<li><strong>P2Y12 / ヘパリン / β 遮断薬 / スタチン</strong> の用量と選択 → <strong><a class="wiki-link" href="疾患詳細/STEMI.html">STEMI</a> / <span class="wiki-missing">ACS</span></strong> で解説</li>
 </ul>
+<div class="callout callout-warning">
+<div class="callout-title">初期対応での落とし穴</div>
+<div class="callout-body"><ul>
+<li><strong>胸壁圧痛で「筋骨格」と決めつける</strong>（ACS・PE・解離は否定できない）</li>
+<li><strong>初回 ECG 陰性で ACS 除外</strong>（15–30 分後に再検、右側・後壁誘導）</li>
+<li><strong>解離を疑わず抗血小板 + 抗凝固を走らせる</strong>（大動脈解離で致命的）</li>
+<li><strong>右室梗塞に硝酸薬 / ニトロ</strong>（前負荷低下で血圧崩壊）</li>
+</ul></div>
+</div>
 <hr>
-<h2 id="9-pe-を疑ったとき">9. PE を疑ったとき</h2>
-<ul>
-<li><strong>Wells / PERC</strong> で前確率を絞る</li>
-<li>中〜高リスク → <strong>D-dimer → 陽性なら CTPA</strong></li>
-<li>高リスク（ショック・血行動態不安定）→ <strong>直接 CTPA or ベッドサイド心エコー</strong>（右心拡大）</li>
-<li>治療：抗凝固（ヘパリン → DOAC / ワルファリン）、massive PE は <strong>線溶療法 / カテーテル治療 / 外科血栓摘除</strong></li>
-<li>詳細 → <span class="wiki-missing">肺塞栓</span></li>
-</ul>
-<hr>
-<h2 id="10-disposition">10. disposition</h2>
+<h2 id="8-disposition">8. disposition</h2>
 <h3 id="入院">入院</h3>
 <ul>
-<li><strong>STEMI / NSTEMI / 高リスク UA</strong></li>
-<li><strong>大動脈解離（A は手術、B は ICU 管理）</strong></li>
-<li><strong>PE（中等症以上は入院、低リスクは外来 DOAC も可）</strong></li>
-<li><strong>緊張性気胸 / 食道破裂</strong></li>
+<li>STEMI / NSTEMI / 高リスク UA</li>
+<li>大動脈解離（A は手術、B は ICU 管理）</li>
+<li>PE（中等症以上は入院、低リスクは外来 DOAC も可）</li>
+<li>緊張性気胸 / 食道破裂</li>
 <li><strong>HEART ≥ 4 / 持続痛 / 不安定</strong></li>
 </ul>
 <h3 id="帰宅検討">帰宅検討</h3>
 <ul>
 <li><strong>HEART 0–3 + hs-cTn 0/3h 陰性</strong></li>
 <li><strong>PERC 全項目陰性</strong></li>
-<li><strong>明らかな非心臓性原因が同定</strong>（筋骨格痛、逆流性食道炎、肋間神経痛、不安発作）</li>
-<li><strong>再診基準を口頭 + 書面で説明</strong></li>
+<li>明らかな非心臓性原因が同定</li>
+<li>再診基準を口頭 + 書面で説明</li>
 </ul>
 <div class="callout callout-warning">
-<div class="callout-title">帰宅前に必ず伝える再診基準</div>
-<div class="callout-body"><ul>
-<li>痛みが再発・悪化する</li>
-<li>呼吸困難が出る</li>
-<li>失神・冷汗・嘔気が出る</li>
-<li>痛みが背部に広がる</li>
-<li>片側下肢が腫れる</li>
-</ul></div>
+<div class="callout-title">帰宅前に伝える再診基準</div>
+<div class="callout-body"><p>痛み再発・悪化 / 呼吸困難 / 失神・冷汗・嘔気 / 背部への広がり / 片側下肢腫脹</p></div>
 </div>
 <hr>
-<h2 id="出典">出典</h2>
+<h2 id="やりがちなミス">やりがちなミス</h2>
 <ul>
-<li><strong>AHA/ACC/ASE/CHEST/SAEM/SCCT/SCMR 2021</strong>：Guideline for the Evaluation and Diagnosis of Chest Pain. <em>Circulation.</em> 2021;144.</li>
-<li><strong>ESC 2023</strong>：Guidelines for the management of acute coronary syndromes. <em>Eur Heart J.</em> 2023.</li>
-<li><strong>ESC 2014/2024</strong>：Diagnosis and treatment of aortic diseases.</li>
-<li><strong>ESC 2019</strong>：Guidelines for the diagnosis and management of acute pulmonary embolism.</li>
+<li>初回 ECG 陰性で ACS を除外する</li>
+<li>胸壁圧痛があるので筋骨格痛と決めつける</li>
+<li>解離を考えず抗血小板 + 抗凝固を流す</li>
+<li>右室梗塞に硝酸薬を使う</li>
+<li>ルーチン高流量酸素投与</li>
+<li>HEART 0–3 なのに入院、HEART ≥ 7 なのに帰宅</li>
+</ul>
+<hr>
+<h2 id="出典トリアージ・リスク層別化">出典（トリアージ・リスク層別化）</h2>
+<ul>
+<li><strong>AHA/ACC/ASE/CHEST/SAEM/SCCT/SCMR 2021</strong>：Chest Pain Guideline. <em>Circulation.</em> 2021;144.</li>
+<li><strong>ESC 2023</strong>：Acute Coronary Syndromes.</li>
+<li><strong>ESC 2014/2024</strong>：Aortic Diseases.</li>
+<li><strong>ESC 2019</strong>：Acute Pulmonary Embolism.</li>
 <li><strong>HEART score</strong>：Backus BE ほか. <em>Int J Cardiol.</em> 2013.</li>
 <li><strong>PERC rule</strong>：Kline JA ほか. <em>J Thromb Haemost.</em> 2008.</li>
+<li>治療・処方の一次文献（STEMI 再灌流、解離 β 遮断薬、PE 抗凝固）は疾患ページ</li>
 </ul>
 <hr>
 <h2 id="このページから張るリンク">このページから張るリンク</h2>
 <ul>
-<li><a class="wiki-link" href="疾患詳細/STEMI.html">STEMI</a></li>
-<li><a class="wiki-link" href="疾患詳細/Wellens症候群.html">Wellens症候群</a></li>
-<li><a class="wiki-link" href="疾患詳細/de Winterパターン.html">de Winterパターン</a></li>
-<li><a class="wiki-link" href="疾患詳細/後壁梗塞.html">後壁梗塞</a></li>
-<li><a class="wiki-link" href="入院時心電図.html">入院時心電図</a></li>
-<li><a class="wiki-link" href="疾患詳細/循環器コンサルトの判断.html">循環器コンサルトの判断</a></li>
-<li><a class="wiki-link" href="呼吸困難.html">呼吸困難</a></li>
-<li><span class="wiki-missing">肺塞栓</span></li>
-<li><span class="wiki-missing">気胸</span></li>
-<li><span class="wiki-missing">大動脈解離</span></li>
-<li><span class="wiki-missing">食道破裂</span></li>
+<li><a class="wiki-link" href="疾患詳細/STEMI.html">STEMI</a> / <span class="wiki-missing">ACS</span></li>
+<li><a class="wiki-link" href="疾患詳細/Wellens症候群.html">Wellens症候群</a> / <a class="wiki-link" href="疾患詳細/de Winterパターン.html">de Winterパターン</a> / <a class="wiki-link" href="疾患詳細/後壁梗塞.html">後壁梗塞</a></li>
+<li><a class="wiki-link" href="入院時心電図.html">入院時心電図</a> / <a class="wiki-link" href="疾患詳細/循環器コンサルトの判断.html">循環器コンサルトの判断</a></li>
+<li><span class="wiki-missing">肺塞栓</span> / <span class="wiki-missing">大動脈解離</span> / <span class="wiki-missing">気胸</span> / <span class="wiki-missing">食道破裂</span></li>
 <li><a class="wiki-link" href="疾患詳細/急性心不全.html">急性心不全</a></li>
+<li><a class="wiki-link" href="呼吸困難.html">呼吸困難</a> / <a class="wiki-link" href="意識消失.html">意識消失</a> / <a class="wiki-link" href="腹痛.html">腹痛</a></li>
 <li><a class="wiki-link" href="アナフィラキシー疑い.html">アナフィラキシー疑い</a></li>
-<li><a class="wiki-link" href="意識消失.html">意識消失</a></li>
 </ul>
     </div>
+    <footer class="page-footer">
+      <a href="index.html">↑ 主訴ナビへ戻る</a>
+    </footer>
   </article>
 </body>
 </html>

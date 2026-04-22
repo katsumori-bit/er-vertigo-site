@@ -2,27 +2,37 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="color-scheme" content="light only" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="color-scheme" content="light dark" />
   <title>転倒</title>
   <link rel="stylesheet" href="er-note.css" />
 </head>
 <body>
+  <nav class="site-bar">
+    <a class="site-bar__back" href="index.html">← 主訴ナビ</a>
+    <span class="site-bar__title">転倒</span>
+  </nav>
   <article class="note-shell">
     <header class="note-header">
       <h1>転倒</h1>
       <p class="source-badge">元: 臨床/ER/転倒.md</p>
     </header>
+    <details class="toc"><summary>目次（14 セクション）</summary><ol><li><a href="#最初に決めること">最初に決めること</a></li><li><a href="#骨折診断の思考手順骨折ハンター式">骨折診断の思考手順（骨折ハンター式）</a></li><li><a href="#問診">問診</a></li><li><a href="#身体診察頭から足まで">身体診察（頭から足まで）</a></li><li><a href="#部位別-骨折の鑑別とマネジメント">部位別 骨折の鑑別とマネジメント</a></li><li><a href="#頭部-ct-の判断">頭部 CT の判断</a></li><li><a href="#なぜ転んだか原因検索">なぜ転んだか（原因検索）</a></li><li><a href="#外傷評価-マネジメント">外傷評価 → マネジメント</a></li><li><a href="#検査">検査</a></li><li><a href="#疼痛管理">疼痛管理</a></li><li><a href="#disposition">disposition</a></li><li><a href="#プログレスノート-a-欄テンプレ">プログレスノート A 欄テンプレ</a></li><li><a href="#出典">出典</a></li><li><a href="#このページから張るリンク">このページから張るリンク</a></li></ol></details>
     <div class="md-body">
-<p>#ER #救急 #転倒 #外傷 #頭部外傷 #骨折 #失神 #高齢者</p>
+<p>#ER #救急 #転倒 #外傷 #頭部外傷 #骨折 #失神 #高齢者 #脆弱性骨折</p>
 <div class="callout callout-summary">
-<div class="callout-title">このページの使い方</div>
-<div class="callout-body"><ol>
-<li><strong>バイタル・意識・受傷機転</strong> で緊急度を決める</li>
-<li><strong>頭から足まで</strong> 系統的に外傷を評価する</li>
-<li><strong>頭部 CT が要るか</strong> を判断する（抗凝固薬の有無が特に重要）</li>
-<li><strong>なぜ転んだか</strong> を考える（外傷だけ治して終わらせない）</li>
-<li><strong>帰宅 or 入院</strong> を決める</li>
+<div class="callout-title">このページは「診断がつくまで」— <strong>2 軸で走る</strong></div>
+<div class="callout-body"><p><code>#高齢者の転倒 s/o ●●による△△</code>（●● = 原因、△△ = 外傷）の形で立てる</p>
+<ul>
+<li><strong>軸 1：転倒原因検索</strong>（なぜ転んだか）— syncope / syncope mimic を外す</li>
+<li><strong>軸 2：外傷評価とマネジメント</strong>（どこを何で損傷したか）— ABCD → 頭から足まで</li>
+</ul>
+<ol>
+<li>バイタル・意識・受傷機転で緊急度</li>
+<li><strong>原因検索</strong>：エコー / ECG / その他（起立・迷走・PE）</li>
+<li><strong>外傷評価</strong>：ABCD → 頭頸部 → 胸腹部 → 四肢</li>
+<li>頭部 CT の判断（抗凝固薬は閾値を下げる）</li>
+<li>帰宅 or 入院、<strong>診断がついたら疾患ページへ</strong> → <a class="wiki-link" href="疾患詳細/頸椎損傷.html">頸椎損傷</a> / <a class="wiki-link" href="疾患詳細/大腿骨近位部骨折.html">大腿骨近位部骨折</a> / <a class="wiki-link" href="疾患詳細/脊椎圧迫骨折.html">脊椎圧迫骨折</a> / <a class="wiki-link" href="疾患詳細/脆弱性骨盤骨折.html">脆弱性骨盤骨折</a> / <a class="wiki-link" href="意識消失.html">意識消失</a></li>
 </ol></div>
 </div>
 <h2 id="最初に決めること">最初に決めること</h2>
@@ -32,6 +42,7 @@
 <li><strong>抗凝固薬 / 抗血小板薬を内服しているか</strong></li>
 <li><strong>どうやって転んだか</strong>（受傷機転）— 立位からの転倒か、階段か、失神が先行したか</li>
 <li><strong>外傷（出血・変形・疼痛）はあるか</strong></li>
+<li><strong>歩けていたか</strong>（転倒後の歩行可否は骨折の除外にならないことに注意）</li>
 </ul>
 <div class="callout callout-danger">
 <div class="callout-title">すぐ動く</div>
@@ -43,8 +54,35 @@
 <li><strong>頸部痛</strong> → 頸椎保護</li>
 <li><strong>ショック</strong></li>
 <li><strong>失神が先行している</strong> → 原因検索が必要</li>
+<li><strong>大腿骨骨幹部の変形</strong>（出血 1–1.5 L、直達牽引が必要）→ <a class="wiki-link" href="股関節痛.html">股関節痛</a></li>
 </ul></div>
 </div>
+<hr>
+<h2 id="骨折診断の思考手順骨折ハンター式">骨折診断の思考手順（骨折ハンター式）</h2>
+<div class="callout callout-check">
+<div class="callout-title">整形外傷は「画像の前に考える」</div>
+<div class="callout-body"><p>内科：<code>身体所見 → 鑑別 → 検査</code> 整形外傷：<code>年齢 + 受傷機転 → 鑑別 → 骨折線イメージ → 画像で照合</code></p>
+<p>痛くて動かせない高齢者では、<strong>身体所見を省略して画像へ直行</strong>することも許容される（例：外旋・短縮位の大腿骨近位部骨折）。</p></div>
+</div>
+<h3 id="レントゲンで見える見えない-3-つの骨折タイプ">レントゲンで見える／見えない — 3 つの骨折タイプ</h3>
+<div class="table-wrap"><table><thead><tr><th>タイプ</th><th>特徴</th><th>対応の要点</th></tr></thead><tbody><tr><td><strong>①明確骨折</strong></td><td>誰が見てもレントゲンでわかる</td><td>見つけるだけ。調べれば対応できる</td></tr><tr><td><strong>②微妙骨折</strong></td><td>見るべき所を知って初めて見える</td><td><strong>骨折線イメージ</strong>を持ってから読影する</td></tr><tr><td><strong>③亡霊（occult）骨折</strong></td><td>レントゲンに絶対映らない</td><td><strong>鑑別に挙げた上で CT / MRI を追う</strong></td></tr></tbody></table></div>
+<ul>
+<li><strong>②③は鑑別を挙げられないと見逃す</strong>。「レントゲンで異常なし」で思考停止しないこと。</li>
+<li>骨折線は原則 <strong>2 方向</strong>（正面 + 側面、股関節は正面 + 軸位）で確認する。</li>
+<li>骨皮質の途絶 / 2–3 スライスの連続 → 骨折線として扱う。</li>
+</ul>
+<h3 id="マネジメントは-5-択で決める">マネジメントは 5 択で決める</h3>
+<div class="table-wrap"><table><thead><tr><th>分類</th><th>定義</th><th>典型例</th></tr></thead><tbody><tr><td><strong>即時整形</strong></td><td>夜間・休日でも呼ぶ</td><td>開放骨折、整復不能な脱臼、血管・神経損傷、脊椎破裂骨折、大腿骨骨幹部骨折</td></tr><tr><td><strong>入院整形</strong></td><td>入院 → 後日・翌朝コンサルト</td><td>大腿骨近位部骨折（夜間）、脆弱性骨盤骨折、脊椎圧迫骨折で生活困難、occult の経過観察入院</td></tr><tr><td><strong>帰宅手術</strong></td><td>待機手術になるが帰宅可</td><td>転位の強い橈骨遠位端骨折、上腕骨近位部骨折 2 part 以上</td></tr><tr><td><strong>帰宅保存</strong></td><td>保存加療で外来フォロー</td><td>転位の少ない橈骨遠位端骨折、安定型の上腕骨近位部骨折、鎖骨骨折、横突起骨折</td></tr><tr><td><strong>再診不要</strong></td><td>短期保存で済む</td><td>打撲、scrape、軽度の指骨折</td></tr></tbody></table></div>
+<div class="callout callout-tip">
+<div class="callout-title">上肢外傷は原則「帰宅」、下肢外傷は原則「入院」</div>
+<div class="callout-body"><p>上肢は歩けるので通院可、手術も待機的。例外は開放骨折 / 整復不能な脱臼 / 血管・神経合併の 3 つのみ。 下肢は荷重困難なら入院マネジメント。</p></div>
+</div>
+<h3 id="高齢者の-4-大骨折脆弱性骨折-頻度順">高齢者の 4 大骨折（脆弱性骨折）— 頻度順</h3>
+<div class="table-wrap"><table><thead><tr><th>骨折</th><th>罹患率（女性／男性, /10000 人年）</th><th>受傷機転</th><th>診断の要点</th></tr></thead><tbody><tr><td><strong>脊椎圧迫骨折</strong></td><td>680 / 700</td><td>しりもち・軽微</td><td>初回 Xp では診断不能、MRI で STIR 白・T1 黒 → <a class="wiki-link" href="疾患詳細/脊椎圧迫骨折.html">脊椎圧迫骨折</a></td></tr><tr><td><strong>大腿骨近位部骨折</strong>（頸部・転子部）</td><td>50–76 / 33–36</td><td>転倒</td><td>外旋・短縮位で即 Xp。偽陰性 2–10% は CT / MRI → <a class="wiki-link" href="疾患詳細/大腿骨近位部骨折.html">大腿骨近位部骨折</a></td></tr><tr><td><strong>橈骨遠位端骨折</strong></td><td>75 / 19</td><td>手をついた転倒</td><td>Xp で明確。sugar tong で固定 → <a class="wiki-link" href="疾患詳細/上肢骨折の固定/橈骨遠位端骨折.html">橈骨遠位端骨折</a></td></tr><tr><td><strong>上腕骨近位部骨折</strong></td><td>42 / 15</td><td>転倒・肩を打った</td><td>ほぼ明確骨折。三角巾 ± バストバンド → <a class="wiki-link" href="疾患詳細/上肢骨折の固定/上腕骨近位部骨折.html">上腕骨近位部骨折</a></td></tr></tbody></table></div>
+<ul>
+<li><strong>原因不明の歩行困難で来院する高齢者の 4.4%</strong> が受傷歴のない大腿骨近位部骨折（「なぜか急に歩けない」で受診）。<strong>転んでいなくても骨折を鑑別に挙げる</strong>。</li>
+</ul>
+<hr>
 <h2 id="問診">問診</h2>
 <ul>
 <li><strong>いつ、どこで、どうやって転んだか</strong></li>
@@ -54,6 +92,9 @@
 <li><strong>受傷後の健忘はあるか</strong></li>
 <li><strong>内服薬</strong>：特に <strong>抗凝固薬・抗血小板薬・降圧薬・睡眠薬・血糖降下薬</strong></li>
 <li><strong>既往歴</strong>：心疾患・不整脈・てんかん・骨粗鬆症・認知症</li>
+<li><strong>骨折歴 / 手術歴</strong>：大腿骨や人工関節の術後 → <strong>インプラント周囲骨折</strong>を鑑別に加える</li>
+<li><strong>ビスホスホネート内服歴</strong>：脆弱性骨折のリピーターを見つけるきっかけ → <a class="wiki-link" href="疾患詳細/骨粗鬆症治療.html">骨粗鬆症治療</a></li>
+<li><strong>もとの ADL / 居住環境</strong>：入院可否の判断に必須（要支援 1 か、車いすか、独居か）</li>
 </ul>
 <h2 id="身体診察頭から足まで">身体診察（頭から足まで）</h2>
 <h3 id="頭部">頭部</h3>
@@ -72,6 +113,14 @@
 <ul>
 <li><strong>正中圧痛</strong> → 頸椎損傷の可能性 → <strong>固定して画像評価</strong></li>
 <li>高齢者では軽微な受傷でも起こりうる — 痛みがあれば安易に否定しない</li>
+<li><strong>画像を撮るか</strong>：NEXUS / Canadian C-spine Rule（詳細 → <a class="wiki-link" href="疾患詳細/頸椎損傷.html">頸椎損傷</a>）</li>
+<li><strong>CT 後に MRI を追うか</strong>は <strong>①②③すべて満たせば MRI 不要</strong> の判定 → <a class="wiki-link" href="疾患詳細/頸椎損傷.html">頸椎損傷</a></li>
+<ul>
+<li>① <strong>CT で骨折像なし</strong></li>
+<li>② <strong>OPLL / OLF / DISH なし</strong></li>
+<li>③ <strong>全身神経診察上、普段からの変化なし</strong></li>
+</ul>
+<li>②の素地がある or 神経所見あり → <strong>MRI を追う</strong>（中心性頸髄損傷に注意）</li>
 </ul>
 <h3 id="胸部・腹部">胸部・腹部</h3>
 <ul>
@@ -79,26 +128,98 @@
 <li><strong>呼吸音の左右差</strong></li>
 <li><strong>腹部の圧痛・膨満</strong>（抗凝固薬内服中は腹腔内出血も考慮）</li>
 </ul>
+<h3 id="腰背部">腰背部</h3>
+<ul>
+<li><strong>椎体の棘突起叩打痛</strong>：closed-fist percussion sign（CFPS）— 感度 87.5% / 特異度 90% 程度</li>
+<li><strong>傍脊柱筋の圧痛</strong>（椎体から 1–2 cm 外側）→ 横突起骨折（高エネルギー）</li>
+<li><strong>背部全体の圧痛分布</strong> → 圧迫骨折の責任椎体を推定</li>
+<li>低エネルギー＋高齢者の腰痛 → 鑑別は <strong><a class="wiki-link" href="疾患詳細/脊椎圧迫骨折.html">脊椎圧迫骨折</a> の一択</strong></li>
+<li>高エネルギー → <strong>脊椎破裂骨折</strong>（即時整形）、<strong>横突起骨折</strong>（帰宅 or 入院保存）</li>
+</ul>
 <h3 id="骨盤・股関節">骨盤・股関節</h3>
 <ul>
 <li><strong>骨盤の圧迫痛</strong> → 骨盤骨折</li>
 <li><strong>鼠径部・大転子部の圧痛</strong> → 大腿骨近位部骨折</li>
-<li><strong>下肢の短縮・外旋</strong> → <strong>大腿骨近位部骨折を強く示唆</strong></li>
-<li>股関節痛がある場合 → <a class="wiki-link" href="股関節痛.html">股関節痛</a>（画像評価・整形外科コンサルトのフロー）</li>
+<li><strong>下肢の短縮・外旋</strong> → <strong>大腿骨近位部骨折を強く示唆</strong>（1 秒で判断できる）</li>
+<li><strong>股関節の内外旋で疼痛</strong>（他動的に動かして誘発）→ occult の <a class="wiki-link" href="疾患詳細/大腿骨近位部骨折.html">大腿骨近位部骨折</a> を示唆</li>
+<li><strong>恥骨結合・坐骨結節・仙骨の圧痛</strong>（臥位 / 股関節屈曲位 / 側臥位）→ <a class="wiki-link" href="疾患詳細/脆弱性骨盤骨折.html">脆弱性骨盤骨折</a></li>
+<li>大腿骨近位部骨折術後の患肢痛 → <strong>インプラント周囲骨折（ステム周囲骨折）</strong></li>
+<li>股関節痛のフローは → <a class="wiki-link" href="股関節痛.html">股関節痛</a></li>
 </ul>
 <h3 id="四肢">四肢</h3>
 <ul>
 <li><strong>変形・腫脹・圧痛・可動域制限</strong></li>
-<li><strong>手関節の変形</strong> → 橈骨遠位端骨折（手をついた場合）</li>
-<li><strong>足関節の腫脹</strong> → 足関節骨折</li>
-<li><strong>荷重できるか</strong> → 歩行を試せる状態なら確認</li>
+<li><strong>手関節の変形（silver fork）</strong> → <a class="wiki-link" href="疾患詳細/上肢骨折の固定/橈骨遠位端骨折.html">橈骨遠位端骨折</a>（手をついた場合）</li>
+<li><strong>肩を動かせない・変形</strong> → <a class="wiki-link" href="疾患詳細/上肢骨折の固定/上腕骨近位部骨折.html">上腕骨近位部骨折</a> / 肩関節脱臼 / <a class="wiki-link" href="疾患詳細/上肢骨折の固定/鎖骨骨折.html">鎖骨骨折</a></li>
+<li><strong>足関節の腫脹</strong> → <a class="wiki-link" href="疾患詳細/足関節痛.html">足関節痛</a>（Ottawa rule に準ずるが日本では診療補助ツール）</li>
+<li><strong>荷重できるか</strong> → 歩行を試せる状態なら確認（ただし<strong>歩行可＝骨折否定ではない</strong>）</li>
 </ul>
 <h3 id="皮膚">皮膚</h3>
 <ul>
 <li><strong>擦過傷・皮下出血の分布</strong> → 受傷機転の推定</li>
 <li><strong>頭部裂創</strong> → 洗浄 + 縫合 or ステープラー</li>
 <li><strong>スキンテア</strong> → 皮弁を戻して被覆</li>
+<li><strong>大転子部の新鮮皮下血腫</strong> → 大腿骨近位部骨折の補助所見（感度 56%）</li>
 </ul>
+<hr>
+<h2 id="部位別-骨折の鑑別とマネジメント">部位別 骨折の鑑別とマネジメント</h2>
+<div class="callout callout-tip">
+<div class="callout-title">使い方</div>
+<div class="callout-body"><p>痛がっている部位から入る。<strong>鑑別疾患</strong>を挙げ、<strong>骨折線イメージ</strong>を持ってから画像へ進む。 年齢（高齢者 / 成人 / 小児）によって鑑別が大きく変わるため、先に年齢を意識する。</p></div>
+</div>
+<h3 id="腰痛">腰痛</h3>
+<div class="table-wrap"><table><thead><tr><th>鑑別</th><th>受傷機転</th><th>画像</th><th>マネジメント</th></tr></thead><tbody><tr><td><strong>脊椎圧迫骨折</strong></td><td>低エネルギー（しりもち）</td><td>Xp では診断不能、MRI</td><td>生活可能 = 帰宅保存 / 困難 = <strong>入院整形</strong></td></tr><tr><td><strong>脊椎破裂骨折</strong></td><td>高エネルギー（転落）</td><td>CT 必須</td><td>神経所見の有無によらず <strong>即時整形</strong></td></tr><tr><td><strong>横突起骨折</strong></td><td>高エネルギー or 直接打撲</td><td>Xp 陰性、CT で確認</td><td><strong>帰宅保存</strong>、疼痛強ければ <strong>入院整形</strong></td></tr></tbody></table></div>
+<ul>
+<li>詳細 → <a class="wiki-link" href="疾患詳細/脊椎圧迫骨折.html">脊椎圧迫骨折</a></li>
+<li><strong>楔形変形 = 新鮮骨折ではない</strong>（新鮮骨折で楔形となるのは 10%、半年で 60%）。「潰れて見える椎体」は陳旧性の可能性が高い。</li>
+<li><strong>初回 Xp で責任病変は決められない</strong>。MRI がなければ「圧迫骨折疑い」で ADL 基準で disposition。</li>
+</ul>
+<h3 id="股関節痛">股関節痛</h3>
+<div class="table-wrap"><table><thead><tr><th>鑑別</th><th>画像の要点</th><th>マネジメント</th></tr></thead><tbody><tr><td><strong>大腿骨近位部骨折</strong>（頸部 / 転子部）</td><td>正面 + 軸位。occult 2–10%</td><td>日中 = 即時整形 / 夜間 = <strong>入院整形</strong>で翌朝コンサルト</td></tr><tr><td><strong>脆弱性骨盤骨折</strong>（恥・坐・仙骨）</td><td>Xp 感度 46–50%、<strong>CT</strong> 追加</td><td>安定型 = 帰宅 or 入院、部分安定型 = <strong>入院整形</strong></td></tr><tr><td><strong>筋挫傷</strong>（内転筋）</td><td>MRI で STIR 白</td><td>保存加療。歩行困難なら入院</td></tr><tr><td><strong>インプラント周囲骨折</strong>（術後）</td><td>術側の患肢痛。デバイス近傍</td><td><strong>手術した病院</strong>で再手術が原則</td></tr></tbody></table></div>
+<ul>
+<li>詳細 → <a class="wiki-link" href="股関節痛.html">股関節痛</a> / <a class="wiki-link" href="疾患詳細/大腿骨近位部骨折.html">大腿骨近位部骨折</a> / <a class="wiki-link" href="疾患詳細/脆弱性骨盤骨折.html">脆弱性骨盤骨折</a></li>
+<li><strong>Xp 陰性時の 3 ステップ</strong>：</li>
+<ol>
+<li><strong>股関節の内外旋</strong>で疼痛が出るか → 大腿骨近位部骨折の occult</li>
+<li><strong>恥骨・坐骨・仙骨の圧痛</strong> → 脆弱性骨盤骨折</li>
+<li>両方陰性でも疼痛強ければ <strong>MRI</strong>（できなければ CT、それもだめなら入院観察）</li>
+</ol>
+<li><strong>歩けていても骨折は否定できない</strong>。Occult の大腿骨近位部骨折で歩行できる例あり。</li>
+</ul>
+<h3 id="肩痛">肩痛</h3>
+<div class="table-wrap"><table><thead><tr><th>年齢</th><th>多い鑑別</th></tr></thead><tbody><tr><td><strong>高齢者</strong></td><td><strong>上腕骨近位部骨折（大結節 / 外科頸）</strong>、上腕骨脱臼骨折、鎖骨骨折</td></tr><tr><td><strong>成人</strong></td><td><strong>肩関節脱臼</strong>、鎖骨骨折、肩鎖関節脱臼、腱板損傷</td></tr><tr><td><strong>小児</strong></td><td>鎖骨骨折（一択に近い）</td></tr></tbody></table></div>
+<ul>
+<li><strong>上腕骨近位部骨折</strong>は 80% が安定型 → 三角巾 ± バストバンドで帰宅保存。Neer 分類 2 part 以上は帰宅手術の可能性 → <a class="wiki-link" href="疾患詳細/上肢骨折の固定/上腕骨近位部骨折.html">上腕骨近位部骨折</a></li>
+<li><strong>肩関節脱臼</strong>は 90% 以上が前方脱臼。非整形外科医が整復すべき手技（外旋 + Milch / 肩甲骨回旋 + Stimson / 反対牽引）</li>
+<li><strong>鎖骨骨折</strong>は「肩 2 方向」だけでは微妙骨折になるため、<strong>鎖骨 2 方向</strong>の追加撮影を忘れない → <a class="wiki-link" href="疾患詳細/上肢骨折の固定/鎖骨骨折.html">鎖骨骨折</a></li>
+<li>合併する Bankart lesion / Hill-Sachs lesion は occult になり MRI で後日評価。帰宅時に説明しておく</li>
+</ul>
+<h3 id="手関節痛手をついた-foosh">手関節痛（手をついた FOOSH）</h3>
+<div class="table-wrap"><table><thead><tr><th>年齢</th><th>最多の鑑別</th></tr></thead><tbody><tr><td><strong>高齢者</strong></td><td><strong>橈骨遠位端骨折</strong>（一択でよい、有病率が圧倒的）</td></tr><tr><td><strong>成人</strong></td><td>橈骨遠位端骨折、<strong>舟状骨骨折</strong>（解剖学的嗅ぎたばこ窩の圧痛）</td></tr><tr><td><strong>小児</strong></td><td>橈骨遠位端骨折（若木骨折）、<strong>上腕骨顆上骨折</strong>（肘）</td></tr></tbody></table></div>
+<ul>
+<li><strong>舟状骨骨折</strong>は初回 Xp 陰性率が高い。嗅ぎたばこ窩圧痛があれば母指スパイカで固定 → 2 週後再検 or MRI</li>
+<li>橈骨遠位端骨折の手術適応 3 つ：</li>
+<ol>
+<li><strong>活動性が高い</strong>（紹介状に ADL を必ず書く）</li>
+<li><strong>関節内骨折</strong></li>
+<li><strong>整復して外固定してもずれる</strong></li>
+</ol>
+<li>非整形外科医でも <strong>sugar tong splint</strong> は必須手技 → <a class="wiki-link" href="疾患詳細/上肢骨折の固定/橈骨遠位端骨折.html">橈骨遠位端骨折</a></li>
+</ul>
+<h3 id="膝痛">膝痛</h3>
+<div class="table-wrap"><table><thead><tr><th>鑑別</th><th>画像・所見</th></tr></thead><tbody><tr><td><strong>大腿骨遠位端骨折 / 脛骨高原骨折</strong></td><td>Xp + CT</td></tr><tr><td><strong>膝蓋骨骨折 / 脱臼</strong></td><td>Xp 側面で明瞭</td></tr><tr><td><strong>ACL / MCL / 半月板損傷</strong></td><td>Xp 陰性で疑い → MRI（後日で可）</td></tr></tbody></table></div>
+<ul>
+<li>Xp の撮影判断：<strong>Ottawa Knee Rule / Pittsburgh Rule</strong></li>
+<li>高齢者の転倒で膝痛なら <strong>大腿骨遠位端</strong>や<strong>脛骨高原</strong>の occult を疑い、荷重困難なら CT 追加</li>
+<li><strong>TKA 術後</strong> → インプラント周囲骨折</li>
+</ul>
+<h3 id="足関節痛">足関節痛</h3>
+<div class="table-wrap"><table><thead><tr><th>鑑別</th><th>ポイント</th></tr></thead><tbody><tr><td><strong>外果骨折（腓骨遠位端）</strong></td><td>単独 / 三果骨折</td></tr><tr><td><strong>脛骨遠位端 pilon 骨折</strong></td><td>高所からの転落。CT 必須、即時整形考慮</td></tr><tr><td><strong>Maisonneuve 骨折</strong></td><td>足関節捻挫＋腓骨近位の圧痛 → <strong>膝下まで触診</strong></td></tr><tr><td><strong>ATFL 損傷</strong></td><td>腓骨遠位端前方の圧痛、腓骨先端の圧痛なし</td></tr><tr><td><strong>第 5 中足骨近位端骨折</strong></td><td>足関節を捻って小指の付け根が痛い</td></tr></tbody></table></div>
+<ul>
+<li><strong>Ottawa Ankle Rule</strong> は日本では診療補助ツール（Xp を減らすためより、撮る根拠づけに使う）</li>
+</ul>
+<h3 id="足部痛">足部痛</h3>
+<div class="table-wrap"><table><thead><tr><th>鑑別</th><th>ポイント</th></tr></thead><tbody><tr><td><strong>踵骨骨折</strong></td><td>高所からの転落 → <strong>合併外傷の評価</strong>（脊椎・骨盤）</td></tr><tr><td><strong>リスフラン関節脱臼骨折</strong></td><td>中足骨基部に離解。見逃し多い</td></tr><tr><td><strong>中足骨骨折</strong></td><td>直達外力</td></tr><tr><td><strong>足趾骨折</strong></td><td>buddy taping で保存</td></tr></tbody></table></div>
 <hr>
 <h2 id="頭部-ct-の判断">頭部 CT の判断</h2>
 <div class="callout callout-danger">
@@ -110,9 +231,9 @@
 <li><strong>GCS &lt; 15</strong></li>
 <li><strong>頭部打撲あり</strong>（疑いを含む）</li>
 <li><strong>抗凝固薬 / 抗血小板薬を内服中</strong></li>
-<li><strong>65歳以上の頭部打撲</strong></li>
+<li><strong>65 歳以上の頭部打撲</strong></li>
 <li><strong>受傷後の健忘</strong></li>
-<li><strong>嘔吐（2回以上）</strong></li>
+<li><strong>嘔吐（2 回以上）</strong></li>
 <li><strong>新規の神経所見</strong></li>
 <li><strong>受傷機転が不明</strong>（目撃者なし → 頭部打撲を否定できない）</li>
 </ul>
@@ -128,19 +249,26 @@
 <h3 id="抗凝固薬内服者の注意">抗凝固薬内服者の注意</h3>
 <ul>
 <li>初回 CT で出血あり → <strong>数時間後に再撮影を考慮</strong>（急速増大のリスク）</li>
-<li>初回 CT 正常でも → <strong>遅発性出血に注意</strong>（24–72時間）</li>
-<li><strong>ワルファリン</strong> → PT-INR 確認。出血あれば拮抗（ビタミンK ± PCC）</li>
+<li>初回 CT 正常でも → <strong>遅発性出血に注意</strong>（24–72 時間）</li>
+<li><strong>ワルファリン</strong> → PT-INR 確認。出血あれば拮抗（ビタミン K ± PCC）</li>
 <li><strong>DOAC</strong> → 施設の拮抗プロトコルに従う</li>
 <li><strong>出血あり</strong> → <strong>脳神経外科コンサルト</strong></li>
 </ul>
 <hr>
 <h2 id="なぜ転んだか原因検索">なぜ転んだか（原因検索）</h2>
 <p><strong>外傷の治療だけで終わらせない。</strong> 特に高齢者では「なぜ転んだか」が重要。</p>
-<p>まず <strong>本人・目撃者の証言から失神を否定できるか</strong> を確認する。 否定できない → <strong>syncope および syncope mimic の検索</strong>。</p>
+<div class="callout callout-check">
+<div class="callout-title">原因検索の手順</div>
+<div class="callout-body"><ol>
+<li><strong>本人・目撃者の証言から失神の否定（−）</strong> を確認</li>
+<li>否定できない → <strong>syncope / syncope mimic の検索</strong>（心腹部エコー + 心電図 + その他）</li>
+<li><strong>何も見つからない</strong> → <strong>逆行性健忘の可能性</strong>を考える（頭部打撲で記憶が飛び「つまずいただけ」になっている）</li>
+</ol></div>
+</div>
 <div class="table-wrap"><table><thead><tr><th>原因</th><th>確認すること</th></tr></thead><tbody><tr><td><strong>つまずき / 滑り</strong></td><td>環境要因。靴・段差・暗さ</td></tr><tr><td><strong>起立性低血圧</strong></td><td>臥位→立位の血圧測定（≥20 mmHg 低下で陽性）。降圧薬・脱水</td></tr><tr><td><strong>失神 / 前失神</strong></td><td>目撃者の証言、前駆症状、ECG</td></tr><tr><td><strong>迷走神経反射</strong></td><td>転倒時の状況（長時間立位、排尿後、食後、痛み刺激）</td></tr><tr><td><strong>不整脈</strong></td><td>ECG。徐脈・頻脈・pause</td></tr><tr><td><strong>低血糖</strong></td><td>血糖測定。インスリン・SU 薬</td></tr><tr><td><strong>てんかん</strong></td><td>目撃者の証言、舌咬傷、尿失禁</td></tr><tr><td><strong>薬剤性</strong></td><td>睡眠薬・ベンゾ・降圧薬・オピオイド</td></tr><tr><td><strong>アルコール</strong></td><td>飲酒歴、臭い、血中アルコール</td></tr></tbody></table></div>
 <h3 id="失神を疑うときの追加検索">失神を疑うときの追加検索</h3>
 <p><strong>心電図で確認するもの</strong>：</p>
-<div class="table-wrap"><table><thead><tr><th>所見</th><th>疑う疾患</th></tr></thead><tbody><tr><td>VT / VF</td><td>致死性不整脈</td></tr><tr><td>AF（頻脈性）</td><td>心原性塞栓・血行動態破綻</td></tr><tr><td>III度 AVB / Mobitz II型</td><td>高度房室ブロック</td></tr><tr><td>SSS（洞不全症候群）</td><td>徐脈性失神</td></tr></tbody></table></div>
+<div class="table-wrap"><table><thead><tr><th>所見</th><th>疑う疾患</th></tr></thead><tbody><tr><td>VT / VF</td><td>致死性不整脈</td></tr><tr><td>AF（頻脈性）</td><td>心原性塞栓・血行動態破綻</td></tr><tr><td>III 度 AVB / Mobitz II 型</td><td>高度房室ブロック</td></tr><tr><td>SSS（洞不全症候群）</td><td>徐脈性失神</td></tr></tbody></table></div>
 <p><strong>心エコーで確認するもの</strong>（施行可能な場合）：</p>
 <div class="table-wrap"><table><thead><tr><th>所見</th><th>疑う疾患</th></tr></thead><tbody><tr><td>low EF</td><td>心不全による低灌流</td></tr><tr><td>壁運動異常</td><td>ACS</td></tr><tr><td>HOCM（左室肥大 + SAM）</td><td>肥大型心筋症による流出路閉塞</td></tr><tr><td>心嚢液</td><td>心タンポナーデ</td></tr><tr><td>大動脈拡大</td><td>大動脈解離</td></tr><tr><td>腹部大動脈瘤</td><td>AAA 破裂</td></tr></tbody></table></div>
 <p><strong>その他</strong>：</p>
@@ -155,17 +283,11 @@
 <div class="callout-body"><p>「転んだ」のではなく「倒れた」可能性がある。 <strong>目撃者がいない + 受傷機転が不明確</strong> → 失神の可能性を考える。 → <strong>ECG は必ず取る</strong>。心疾患の既往があれば循環器への相談も検討。 — ESC 2018 失神ガイドライン</p></div>
 </div>
 <hr>
-<h2 id="外傷評価">外傷評価</h2>
-<h3 id="abcd-評価">ABCD 評価</h3>
-<div class="table-wrap"><table><thead><tr><th>項目</th><th>確認すること</th></tr></thead><tbody><tr><td><strong>A（気道）</strong></td><td>発声、口腔内異物、頸部腫脹、stridor</td></tr><tr><td><strong>B（呼吸）</strong></td><td>フレイルチェスト → 胸郭運動の左右差・胸部圧痛 / 緊張性気胸 → 気管偏位・頸静脈怒張・呼吸音減弱</td></tr><tr><td><strong>C（循環）</strong></td><td>FAST → 大量血胸・腹腔内出血・心タンポナーデ</td></tr><tr><td><strong>D（意識）</strong></td><td>GCS、瞳孔、四肢の動き</td></tr></tbody></table></div>
+<h2 id="外傷評価-マネジメント">外傷評価 → マネジメント</h2>
+<h3 id="abcd-評価所見を具体に">ABCD 評価（所見を具体に）</h3>
+<div class="table-wrap"><table><thead><tr><th>項目</th><th>拾いにいく疾患</th><th>所見</th></tr></thead><tbody><tr><td><strong>A</strong>：気道閉塞</td><td>上気道閉塞</td><td><strong>発声 / 口腔内異物 / 頸部腫脹 / stridor</strong></td></tr><tr><td><strong>B</strong>：呼吸</td><td><strong>フレイルチェスト</strong></td><td>胸郭運動の<strong>左右差</strong>、胸部圧痛、奇異呼吸</td></tr><tr><td></td><td><strong>緊張性気胸</strong></td><td><strong>気管偏位</strong>、頸静脈怒張、胸部聴診で呼吸音減弱、皮下気腫</td></tr><tr><td><strong>C</strong>：循環</td><td><strong>FAST</strong>（1 検査で 3 疾患）</td><td><strong>大量血胸 / 腹腔内出血 / 心タンポナーデ</strong></td></tr><tr><td><strong>D</strong>：意識</td><td>頭蓋内病変</td><td>GCS、瞳孔、四肢の動き（左右差）</td></tr></tbody></table></div>
 <h3 id="部位別の評価">部位別の評価</h3>
-<ul>
-<li><strong>頭部</strong> → <a class="wiki-link" href="転倒.html#%E9%A0%AD%E9%83%A8-ct-%E3%81%AE%E5%88%A4%E6%96%AD">#頭部 CT の判断</a> を参照</li>
-<li><strong>頸部</strong> → 正中圧痛があれば頸椎損傷を考慮 → 固定</li>
-<li><strong>胸部・腹部</strong> → 圧痛、呼吸音左右差、腹膜刺激症状</li>
-<li><strong>四肢</strong> → 変形・腫脹・圧痛・可動域制限</li>
-<li><strong>股関節痛</strong> → <a class="wiki-link" href="股関節痛.html">股関節痛</a>（大腿骨骨折の評価フロー）</li>
-</ul>
+<div class="table-wrap"><table><thead><tr><th>部位</th><th>拾うもの</th></tr></thead><tbody><tr><td><strong>頭部</strong></td><td>頭皮腫脹・裂創・圧痛（<strong>後頭部</strong>）、Battle 徴候、Raccoon eyes、耳鼻液漏出、瞳孔（<a class="wiki-link" href="転倒.html#%E9%A0%AD%E9%83%A8-ct-%E3%81%AE%E5%88%A4%E6%96%AD">#頭部 CT の判断</a>）</td></tr><tr><td><strong>頸部</strong></td><td>正中圧痛 → 頸椎損傷（固定 + 画像）、<strong><a class="wiki-link" href="疾患詳細/頸椎損傷.html">頸椎損傷</a> の MRI 不要判定 ①②③</strong></td></tr><tr><td><strong>外傷性頸部症候群</strong>（むち打ち様）</td><td>頸部痛、可動域制限、後頭部痛、めまい、上肢の感覚異常。<strong>高齢者は遅発性に症状が出ることあり</strong>、帰宅時に再診基準を伝える</td></tr><tr><td><strong>胸部・腹部</strong></td><td>胸郭圧痛、呼吸音左右差、腹膜刺激、<strong>抗凝固薬内服中は腹腔内出血も</strong></td></tr><tr><td><strong>腰背部</strong></td><td>棘突起 CFPS、傍脊柱筋圧痛（横突起）→ <a class="wiki-link" href="疾患詳細/脊椎圧迫骨折.html">脊椎圧迫骨折</a></td></tr><tr><td><strong>骨盤・股関節</strong></td><td>恥坐仙骨圧痛、股関節内外旋痛、大転子部血腫。<a class="wiki-link" href="股関節痛.html">股関節痛</a> / <a class="wiki-link" href="疾患詳細/大腿骨近位部骨折.html">大腿骨近位部骨折</a> / <a class="wiki-link" href="疾患詳細/脆弱性骨盤骨折.html">脆弱性骨盤骨折</a></td></tr><tr><td><strong>四肢</strong></td><td>変形・腫脹・圧痛・可動域制限・荷重可否。<strong>大腿骨近位部骨折の短縮外旋</strong>、橈骨遠位端（手をついた）、足関節</td></tr></tbody></table></div>
 <hr>
 <h2 id="検査">検査</h2>
 <p>必ずやるもの：</p>
@@ -178,9 +300,27 @@
 <li><strong>血糖</strong>（ふらつき・意識変容がある場合）</li>
 <li><strong>心電図</strong>（失神・前失神・動悸が先行した場合、高齢者）</li>
 <li><strong>心エコー</strong>（失神 + 心疾患の既往・リスクがある場合）</li>
-<li><strong>血液検査</strong>（抗凝固薬内服中 → 凝固、高齢者 → 貧血・腎機能・電解質）</li>
+<li><strong>血液検査</strong>（抗凝固薬内服中 → 凝固、高齢者 → 貧血・腎機能・電解質、骨折手術見込みなら<strong>血型・クロスマッチ</strong>）</li>
 <li><strong>起立試験</strong>（起立性低血圧を疑う場合）</li>
+<li><strong>MRI</strong>（occult 骨折を疑う時 — 大腿骨近位部 / 脊椎圧迫）</li>
+<li><strong>CT</strong>（MRI が撮れない時の代用、高エネルギー外傷の脊椎評価、脆弱性骨盤骨折）</li>
 </ul>
+<h3 id="画像の優先順位occult-が疑わしいとき">画像の優先順位（occult が疑わしいとき）</h3>
+<div class="table-wrap"><table><thead><tr><th>状況</th><th>第 1 選択</th><th>代替</th></tr></thead><tbody><tr><td><strong>大腿骨近位部骨折 occult</strong></td><td>MRI（感度・特異度ほぼ 100%）</td><td>CT（前額断 + 矢状断 + 冠状断で骨皮質の途絶を見る）</td></tr><tr><td><strong>脊椎圧迫骨折</strong></td><td>MRI（STIR 白・T1 黒）</td><td><strong>CT はあまり寄与しない</strong>（レントゲンと情報量が大差ない）</td></tr><tr><td><strong>脆弱性骨盤骨折</strong></td><td>CT（単純で可、造影は血腫疑いのみ）</td><td>—</td></tr><tr><td><strong>舟状骨骨折 occult</strong></td><td>MRI</td><td>2 週後の Xp 再検</td></tr></tbody></table></div>
+<hr>
+<h2 id="疼痛管理">疼痛管理</h2>
+<ul>
+<li><strong>アセトアミノフェン</strong>（アセリオ® 15 mg/kg 静注）— 高齢者の第一選択</li>
+<li><strong>NSAIDs は高齢者で避ける</strong>（腎障害・消化管出血）</li>
+<li><strong>オピオイド</strong>（フェンタニル・トラマドール）— アセトアミノフェン効果不十分時</li>
+<li><strong>大腿神経ブロック</strong>（施行可能なら）— 大腿骨近位部骨折に有効（NICE 2023, AAOS）</li>
+<li><strong>血腫内麻酔（hematoma block）</strong> — 橈骨遠位端骨折整復時</li>
+<li><strong>肩関節注射</strong> — 肩関節脱臼整復時</li>
+</ul>
+<div class="callout callout-tip">
+<div class="callout-title">痛みが取れても disposition は変わりうる</div>
+<div class="callout-body"><p>脊椎圧迫骨折で VAS 10→3 になっても、<strong>「この痛みで生活できるか」</strong>で入院 / 帰宅を決める。 患者さん・介護者と一緒に判断するのが原則。</p></div>
+</div>
 <hr>
 <h2 id="disposition">disposition</h2>
 <h3 id="帰宅できる条件">帰宅できる条件</h3>
@@ -195,37 +335,140 @@
 <h3 id="帰宅時の説明">帰宅時の説明</h3>
 <ul>
 <li><strong>頭を打った場合</strong> → <strong>頭部外傷の注意事項</strong>（嘔吐・意識変容・強い頭痛が出たら再受診）を必ず説明</li>
-<li><strong>骨折なしでも痛みが続く場合</strong> → <strong>再受診して再評価</strong>（不全骨折の可能性）</li>
+<li><strong>骨折なしでも痛みが続く場合</strong> → <strong>再受診して再評価</strong>（occult / 不全骨折の可能性）</li>
 <li><strong>独居高齢者</strong> → 帰宅後の見守りが確保できるか確認</li>
+<li><strong>上肢外傷で固定した場合</strong> → 指の屈伸を積極的に、挙上、しびれ・蒼白・強痛で即受診</li>
+<li><strong>肩関節脱臼整復後</strong> → occult 骨折（Bankart / Hill-Sachs）の可能性を説明し整形フォロー</li>
 </ul>
 <h3 id="入院-or-専門科コンサルト">入院 or 専門科コンサルト</h3>
 <ul>
 <li><strong>頭蓋内出血</strong> → <strong>脳神経外科</strong></li>
-<li><strong>大腿骨近位部骨折</strong> → <strong>整形外科</strong>（手術適応の判断）</li>
+<li><strong>大腿骨近位部骨折</strong> → <strong>整形外科</strong>（48 時間以内、可能なら 24 時間以内の手術が目標）</li>
+<li><strong>大腿骨骨幹部骨折</strong> → <strong>即時整形</strong>（直達牽引）</li>
+<li><strong>脊椎破裂骨折</strong> → <strong>即時整形</strong></li>
 <li><strong>頸椎損傷の疑い</strong> → <strong>整形外科 / 脊椎外科</strong></li>
-<li><strong>開放骨折 / 脱臼</strong> → <strong>整形外科</strong></li>
+<li><strong>開放骨折 / 整復不能な脱臼 / 血管・神経損傷</strong> → <strong>即時整形</strong></li>
+<li><strong>脊椎圧迫骨折 / 脆弱性骨盤骨折で生活困難</strong> → <strong>入院整形</strong></li>
 <li><strong>失神の精査が必要</strong> → 入院 or 循環器</li>
 <li><strong>歩行不能 / ADL が維持できない</strong> → 入院</li>
 <li><strong>抗凝固薬内服中 + 頭部打撲</strong> → 経過観察入院を検討</li>
 </ul>
+<h3 id="整形外科コンサルトの作法骨折ハンター式">整形外科コンサルトの作法（骨折ハンター式）</h3>
+<div class="callout callout-check">
+<div class="callout-title">スムーズに通すコツ</div>
+<div class="callout-body"><ul>
+<li><strong>診断名は「大腿骨近位部骨折」ではなく「大腿骨頸部骨折」「大腿骨転子部骨折」</strong>と区別して伝える</li>
+<li><strong>Garden 分類</strong>を添える（頸部骨折のみ。転子部は不要）</li>
+<li>橈骨遠位端骨折なら <strong>活動性（ADL）と関節内 / 外</strong>を紹介状に記載</li>
+<li>上腕骨近位部骨折なら <strong>ADL + CT</strong>（できれば）</li>
+<li>Occult 疑いなら「<strong>内外旋で疼痛あり、MRI で STIR 白・T1 黒</strong>です」と言えると通る</li>
+<li>整形外科医が嫌がる時間帯（夜間・休日・週末）にあえてコンサルトしない手もある（overnight で翌朝に）</li>
+</ul></div>
+</div>
+<hr>
+<h2 id="プログレスノート-a-欄テンプレ">プログレスノート A 欄テンプレ</h2>
+<div class="callout callout-example">
+<div class="callout-title">2 軸で書く</div>
+<div class="callout-body"><p><strong>#高齢者の転倒 s/o ●●による△△</strong> → 転倒原因検索、外傷評価マネジメント</p>
+<p><strong>●転倒原因検索</strong> 本人・目撃者の証言から失神の否定（−） → syncope および syncope mimic の検索</p>
+<ul>
+<li><strong>心腹部エコー</strong>：low EF / ACS / HOCM / 心タンポ / AD / AAA</li>
+<li><strong>心電図</strong>：VT / VF / AF / III 度 AVB / MobitzII / SSS</li>
+<li><strong>その他</strong></li>
+<ul>
+<li>PE → 胸痛、SpO2</li>
+<li>迷走神経反射 → 転倒時状況</li>
+<li>起立性低血圧 → 起立時血圧測定</li>
+</ul>
+<li><strong>何もないなら逆行性健忘？</strong></li>
+</ul>
+<p><strong>●外傷評価 → マネジメント</strong></p>
+<ul>
+<li><strong>ABCD</strong></li>
+<ul>
+<li>気道閉塞 → 発声、口腔内異物、頸部腫脹、stridor</li>
+<li>フレイルチェスト → 胸郭運動左右差、胸部圧痛</li>
+<li>緊張性気胸 → 気管偏位、頸静脈怒張、胸部聴診</li>
+<li>FAST → 大量血胸、腹腔内出血、心タンポナーデ</li>
+</ul>
+<li><strong>頭部</strong>：CT 適応、抗凝固薬</li>
+<li><strong>頸部</strong>：正中圧痛、<a class="wiki-link" href="疾患詳細/頸椎損傷.html">頸椎損傷</a> ①②③</li>
+<li><strong>外傷性頸部症候群</strong></li>
+<li><strong>胸部腹部</strong></li>
+<li><strong>腰背部</strong>：CFPS、傍脊柱筋圧痛</li>
+<li><strong>骨盤・股関節</strong>：恥坐仙骨圧痛、内外旋痛、大転子部血腫</li>
+<li><strong>四肢</strong>：部位別の鑑別 → 骨折線イメージ → 画像照合</li>
+</ul>
+<p><strong>【骨折ハンター的 鑑別→画像】</strong></p>
+<ul>
+<li>年齢：[高齢者 / 成人 / 小児]</li>
+<li>部位別鑑別：[疾患 1] / [疾患 2] / [疾患 3]</li>
+<li>骨折線イメージ：[微妙骨折 / occult の可能性]</li>
+<li>画像計画：Xp → 必要に応じて CT / MRI</li>
+<li>マネジメント分類：[即時 / 入院 / 帰宅手術 / 帰宅保存 / 再診不要]</li>
+</ul>
+<p><strong>【ER 介入事項】</strong></p>
+<p>（処置・画像・コンサルト・帰宅時指示）</p></div>
+</div>
 <hr>
 <details class="section-fold"><summary id="折りたたみ用メモ">折りたたみ用メモ</summary>
 <h3 id="見落としやすいもの">見落としやすいもの</h3>
 <ul>
 <li><strong>後頭部の打撲・裂創</strong>（仰臥位のまま確認していない）</li>
-<li><strong>大腿骨近位部の不全骨折</strong>（初回 X 線で見えない → 痛みが続けば CT / MRI）</li>
-<li><strong>頸椎損傷</strong>（高齢者の軽微外傷でも起こりうる）</li>
-<li><strong>脊椎圧迫骨折</strong>（背部痛として訴える）</li>
+<li><strong>大腿骨近位部の occult 骨折</strong>（初回 X 線で見えない → 痛みが続けば CT / MRI）</li>
+<li><strong>脆弱性骨盤骨折の仙骨部</strong>（Xp 感度 7–44%、恥坐骨が折れていれば仙骨も疑う）</li>
+<li><strong>頸椎損傷</strong>（高齢者の軽微外傷でも起こりうる、中心性頸髄損傷）</li>
+<li><strong>脊椎圧迫骨折</strong>（背部痛として訴える、初回 Xp で責任椎体を決めない）</li>
 <li><strong>失神が原因の転倒</strong>（「つまずいた」で片付けている）</li>
 <li><strong>抗凝固薬の確認漏れ</strong></li>
+<li><strong>ビスホスホネート未処方</strong>（脆弱性骨折のリピーター予防）</li>
+<li><strong>インプラント周囲骨折</strong>（術後患肢の転倒疼痛で必ず鑑別に）</li>
+<li><strong>舟状骨骨折</strong>（嗅ぎたばこ窩圧痛。初回 Xp 陰性率が高い）</li>
+<li><strong>Maisonneuve 骨折</strong>（足関節捻挫と思ったら膝下まで触る）</li>
+<li><strong>鎖骨骨折</strong>（肩 2 方向だけだと写らない、鎖骨 2 方向を追加）</li>
+<li><strong>上腕骨脱臼骨折の外科頸骨折</strong>（大結節は牽引で戻るが、外科頸は戻らない → 即時整形）</li>
+<li><strong>大腿骨骨幹部骨折</strong>（出血 1–1.5 L、大腿神経ブロック + 直達牽引）</li>
 </ul>
 <h3 id="やりがちなミス">やりがちなミス</h3>
 <ul>
 <li>「頭を打っていない」という本人の言葉だけで CT を省略する（目撃者がいなければ否定できない）</li>
 <li>頭部だけ見て四肢・骨盤を診ない</li>
 <li>外傷対応だけして転倒原因を考えない</li>
-<li>高齢者の「歩ける」を過信して帰宅させる（翌日歩けなくなることがある）</li>
+<li>高齢者の「歩ける」を過信して帰宅させる（翌日歩けなくなることがある、occult 骨折あり）</li>
 <li>抗凝固薬内服者の頭部外傷で帰宅時説明が不十分</li>
+<li><strong>Xp で異常なし → 思考停止</strong>（鑑別を先に挙げていないから）</li>
+<li>脊椎圧迫骨折疑いで<strong>楔形変形を見つけて満足</strong>（陳旧性の可能性）</li>
+<li><strong>コンサルト時の診断名が「大腿骨近位部骨折」</strong>（頸部 or 転子部で伝えないと整形が嫌がる）</li>
+<li><strong>NSAIDs を高齢者に出してしまう</strong>（腎障害）</li>
+<li><strong>歩行 = 骨折否定</strong>と考える（occult の大腿骨近位部骨折でも歩けることがある）</li>
+</ul>
+<h3 id="骨折ハンター的-tips現場で効く">骨折ハンター的 TIPS（現場で効く）</h3>
+<div class="callout callout-tip">
+<div class="callout-title">整形外傷 5 箇条</div>
+<div class="callout-body"><ol>
+<li><strong>画像より先に鑑別</strong>を挙げる（年齢 + 受傷機転）</li>
+<li><strong>骨折線イメージ</strong>を持ってから読影する</li>
+<li>「<strong>Xp 異常なし</strong>」で止めない。occult を疑ったら CT / MRI</li>
+<li>マネジメントは <strong>5 択</strong>（即時 / 入院 / 帰宅手術 / 帰宅保存 / 再診不要）で決める</li>
+<li>コンサルトは <strong>分類名 + 骨折線 + ADL</strong> を添える</li>
+</ol></div>
+</div>
+<ul>
+<li><strong>外旋 + 短縮位</strong>を見たら身体所見を省略して Xp 直行でもよい（大腿骨近位部骨折）</li>
+<li><strong>恥骨・坐骨・仙骨は体表から触れる骨</strong> → 圧痛があれば骨折と診断してよい</li>
+<li><strong>股関節・膝・肩のような関節部は触れないので他動運動で代用</strong>（内外旋痛 = 大腿骨近位部）</li>
+<li><strong>Xp はほぼ必ず 2 方向</strong>（正面 + 側面、股関節は正面 + 軸位）</li>
+<li><strong>CT で骨折線を見つけるコツ</strong>：3 断面のうち 2 つで見える・2–3 スライス連続・骨皮質の途絶</li>
+<li><strong>MRI で新鮮骨折 = STIR 白・T1 黒</strong>（筋挫傷も同じパターンで、場所が骨か筋肉かで区別）</li>
+<li><strong>高齢者転倒後の骨密度介入漏れ</strong>：大腿骨近位部骨折・脊椎圧迫骨折の既往があって BP（ビスホスホネート）未処方なら介入機会</li>
+</ul>
+<h3 id="高齢者の転倒予防-再転倒を防ぐ視点退院・帰宅時">高齢者の転倒予防 — 再転倒を防ぐ視点（退院・帰宅時）</h3>
+<ul>
+<li>起立性低血圧の誘発薬（α 遮断薬・ニトロ）を減量</li>
+<li>ベンゾジアゼピン・睡眠薬の整理</li>
+<li>白内障・視力の確認</li>
+<li>住環境（段差・照明・浴室）</li>
+<li>骨粗鬆症治療（BP 未処方ならビスホスホネート導入の提案）</li>
 </ul>
 <hr>
 <h2 id="出典">出典</h2>
@@ -233,23 +476,60 @@
 <li><strong>Canadian CT Head Rule</strong>：Stiell IG ほか. <em>Lancet.</em> 2001.</li>
 <li><strong>Falls Decision Rule</strong>：Abdulaziz K ほか. <em>CMAJ.</em> 2023;195(47):E1614.（感度 98.6%、NPV 99.8%）</li>
 <li><strong>ESC 2018</strong>：失神の診断・管理ガイドライン. <em>Eur Heart J.</em> 2018;39(21).</li>
-<li><strong>日本医療安全調査機構 提言9号</strong>（2019）：入院中の転倒・転落による頭部外傷に係る死亡事例の分析.</li>
+<li><strong>NICE CG124（2023 updated）</strong>：Hip fracture: management.</li>
+<li><strong>AAOS CPG</strong>：Management of Hip Fractures in Older Adults.</li>
+<li><strong>日本医療安全調査機構 提言 9 号</strong>（2019）：入院中の転倒・転落による頭部外傷に係る死亡事例の分析.</li>
+<li><strong>増井伸高. 骨折ハンター. 中外医学社. 2019.</strong>（鑑別 → 骨折線イメージ → 画像の思考法、マネジメント 5 分類、高齢者 4 大骨折の考え方）</li>
+<li><strong>Gehlbach SH ほか.</strong> Recognition of vertebral fracture in a clinical setting. <em>Osteoporos Int.</em> 2000.</li>
+<li><strong>VAPOUR</strong>：Clark W ほか. <em>Lancet.</em> 2016.（早期 PVP の有効性）</li>
 </ul>
 <hr>
 <h2 id="このページから張るリンク">このページから張るリンク</h2>
+<h3 id="原因・合併症">原因・合併症</h3>
 <ul>
-<li><span class="wiki-missing">頭部外傷</span></li>
-<li><a class="wiki-link" href="股関節痛.html">股関節痛</a></li>
-<li><span class="wiki-missing">大腿骨近位部骨折</span></li>
-<li><span class="wiki-missing">頸椎損傷</span></li>
-<li><a class="wiki-link" href="意識消失.html">意識消失</a></li>
-<li><a class="wiki-link" href="意識障害.html">意識障害</a></li>
-<li><a class="wiki-link" href="めまい.html">めまい</a></li>
-<li><span class="wiki-missing">抗凝固薬の管理</span></li>
-<li><span class="wiki-missing">創傷処置</span></li>
+<li><span class="wiki-missing">頭部外傷</span> / <a class="wiki-link" href="意識消失.html">意識消失</a> / <span class="wiki-missing">失神</span> / <span class="wiki-missing">不整脈</span></li>
+<li><span class="wiki-missing">抗凝固薬の管理</span> / <span class="wiki-missing">創傷処置</span></li>
+</ul>
+<h3 id="高齢者-4-大骨折・骨粗鬆症">高齢者 4 大骨折・骨粗鬆症</h3>
+<ul>
+<li><a class="wiki-link" href="疾患詳細/大腿骨近位部骨折.html">大腿骨近位部骨折</a> / <a class="wiki-link" href="疾患詳細/脊椎圧迫骨折.html">脊椎圧迫骨折</a> / <a class="wiki-link" href="疾患詳細/上肢骨折の固定/橈骨遠位端骨折.html">橈骨遠位端骨折</a> / <a class="wiki-link" href="疾患詳細/上肢骨折の固定/上腕骨近位部骨折.html">上腕骨近位部骨折</a></li>
+<li><a class="wiki-link" href="疾患詳細/脆弱性骨盤骨折.html">脆弱性骨盤骨折</a> / <a class="wiki-link" href="疾患詳細/骨粗鬆症治療.html">骨粗鬆症治療</a> / <a class="wiki-link" href="疾患詳細/頸椎損傷.html">頸椎損傷</a> / <span class="wiki-missing">外傷性頸部症候群</span></li>
+</ul>
+<h3 id="脊椎">脊椎</h3>
+<ul>
+<li><a class="wiki-link" href="疾患詳細/脊椎圧迫骨折.html">脊椎圧迫骨折</a> / <a class="wiki-link" href="疾患詳細/脊椎破裂骨折.html">脊椎破裂骨折</a></li>
+</ul>
+<h3 id="肩・上腕">肩・上腕</h3>
+<ul>
+<li><a class="wiki-link" href="疾患詳細/肩関節脱臼.html">肩関節脱臼</a> / <a class="wiki-link" href="疾患詳細/腱板損傷.html">腱板損傷</a> / <a class="wiki-link" href="疾患詳細/肩鎖関節脱臼.html">肩鎖関節脱臼</a> / <a class="wiki-link" href="疾患詳細/上肢骨折の固定/鎖骨骨折.html">鎖骨骨折</a> / <a class="wiki-link" href="疾患詳細/上肢骨折の固定/上腕骨近位部骨折.html">上腕骨近位部骨折</a> / <a class="wiki-link" href="疾患詳細/上肢骨折の固定/上腕骨骨幹部骨折.html">上腕骨骨幹部骨折</a></li>
+</ul>
+<h3 id="肘">肘</h3>
+<ul>
+<li><a class="wiki-link" href="疾患詳細/肘関節脱臼.html">肘関節脱臼</a> / <a class="wiki-link" href="疾患詳細/肘頭骨折.html">肘頭骨折</a> / <a class="wiki-link" href="疾患詳細/橈骨頭骨折.html">橈骨頭骨折</a> / <a class="wiki-link" href="疾患詳細/上腕骨顆上骨折.html">上腕骨顆上骨折</a> / <a class="wiki-link" href="疾患詳細/肘内障.html">肘内障</a> / <a class="wiki-link" href="疾患詳細/上肢骨折の固定/肘周囲骨折.html">肘周囲骨折</a></li>
+</ul>
+<h3 id="前腕・手・指">前腕・手・指</h3>
+<ul>
+<li><a class="wiki-link" href="疾患詳細/上肢骨折の固定/前腕骨折.html">前腕骨折</a> / <a class="wiki-link" href="疾患詳細/上肢骨折の固定/橈骨遠位端骨折.html">橈骨遠位端骨折</a> / <a class="wiki-link" href="疾患詳細/舟状骨骨折.html">舟状骨骨折</a> / <a class="wiki-link" href="疾患詳細/中手骨頸部骨折.html">中手骨頸部骨折</a> / <a class="wiki-link" href="疾患詳細/第1中手骨基部骨折.html">第1中手骨基部骨折</a></li>
+<li><a class="wiki-link" href="疾患詳細/Mallet finger・Jersey finger.html">Mallet finger・Jersey finger</a> / <a class="wiki-link" href="疾患詳細/ゲームキーパー母指.html">ゲームキーパー母指</a> / <a class="wiki-link" href="疾患詳細/PIP関節脱臼.html">PIP関節脱臼</a> / <a class="wiki-link" href="疾患詳細/上肢骨折の固定/手・指の骨折.html">手・指の骨折</a></li>
+</ul>
+<h3 id="股関節・大腿・膝">股関節・大腿・膝</h3>
+<ul>
+<li><a class="wiki-link" href="股関節痛.html">股関節痛</a> / <a class="wiki-link" href="疾患詳細/大腿骨骨幹部骨折.html">大腿骨骨幹部骨折</a> / <a class="wiki-link" href="疾患詳細/大腿骨遠位端骨折.html">大腿骨遠位端骨折</a> / <a class="wiki-link" href="疾患詳細/脛骨高原骨折.html">脛骨高原骨折</a> / <a class="wiki-link" href="疾患詳細/膝蓋骨骨折・脱臼.html">膝蓋骨骨折・脱臼</a> / <a class="wiki-link" href="疾患詳細/膝靱帯・半月板損傷.html">膝靱帯・半月板損傷</a></li>
+</ul>
+<h3 id="下腿・足関節・足部">下腿・足関節・足部</h3>
+<ul>
+<li><a class="wiki-link" href="疾患詳細/脛骨骨幹部骨折.html">脛骨骨幹部骨折</a> / <a class="wiki-link" href="疾患詳細/足関節痛.html">足関節痛</a> / <a class="wiki-link" href="疾患詳細/足関節果部骨折.html">足関節果部骨折</a> / <a class="wiki-link" href="疾患詳細/Pilon骨折.html">Pilon骨折</a> / <a class="wiki-link" href="疾患詳細/Maisonneuve骨折.html">Maisonneuve骨折</a> / <a class="wiki-link" href="疾患詳細/ATFL損傷.html">ATFL損傷</a></li>
+<li><a class="wiki-link" href="疾患詳細/距骨骨折.html">距骨骨折</a> / <a class="wiki-link" href="疾患詳細/踵骨骨折.html">踵骨骨折</a> / <a class="wiki-link" href="疾患詳細/リスフラン関節脱臼骨折.html">リスフラン関節脱臼骨折</a> / <a class="wiki-link" href="疾患詳細/第5中足骨近位端骨折.html">第5中足骨近位端骨折</a> / <a class="wiki-link" href="疾患詳細/アキレス腱損傷.html">アキレス腱損傷</a></li>
+</ul>
+<h3 id="緊急病態・小児・鎮痛">緊急病態・小児・鎮痛</h3>
+<ul>
+<li><a class="wiki-link" href="疾患詳細/開放骨折.html">開放骨折</a> / <a class="wiki-link" href="疾患詳細/コンパートメント症候群.html">コンパートメント症候群</a> / <a class="wiki-link" href="疾患詳細/小児骨端線骨折.html">小児骨端線骨折</a> / <a class="wiki-link" href="疾患詳細/大腿神経ブロック.html">大腿神経ブロック</a></li>
 </ul>
 </details>
     </div>
+    <footer class="page-footer">
+      <a href="index.html">↑ 主訴ナビへ戻る</a>
+    </footer>
   </article>
 </body>
 </html>

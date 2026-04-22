@@ -2,94 +2,28 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="color-scheme" content="light only" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="color-scheme" content="light dark" />
   <title>HINTS</title>
   <link rel="stylesheet" href="../er-note.css" />
 </head>
 <body>
+  <nav class="site-bar">
+    <a class="site-bar__back" href="../index.html">← 主訴ナビ</a>
+    <span class="site-bar__title">HINTS</span>
+  </nav>
   <article class="note-shell">
     <header class="note-header">
       <h1>HINTS</h1>
       <p class="source-badge">元: 臨床/ER/疾患詳細/HINTS.md</p>
     </header>
+    
     <div class="md-body">
-<p>#ER #救急 #疾患詳細 #HINTS #めまい #AVS #脳梗塞 #神経診察</p>
-<div class="callout callout-summary">
-<div class="callout-title">HINTS とは</div>
-<div class="callout-body"><p><strong>AVS（Acute Vestibular Syndrome）</strong> に対する <strong>3 種のベッドサイド検査</strong>を組み合わせて、末梢性 vs 中枢性（後方循環梗塞）を鑑別する手技。</p>
-<ul>
-<li><strong>HI</strong>：Head Impulse Test（頭部衝動検査）</li>
-<li><strong>N</strong>：Nystagmus（自発眼振の方向）</li>
-<li><strong>TS</strong>：Test of Skew（偏視試験 / cover-uncover test）</li>
-</ul>
-<p>訓練された検者であれば、<strong>急性期 MRI より感度が高い</strong>とする報告がある（Kattah 2009）。</p></div>
-</div>
-<div class="callout callout-warning">
-<div class="callout-title">適応に注意</div>
-<div class="callout-body"><ul>
-<li><strong>AVS（持続性めまい + 自発眼振 + 悪心嘔吐 + 平衡障害が 24 時間以上）</strong> で適応</li>
-<li><strong>t-EVS</strong>（<span class="wiki-missing">BPPV</span> のように頭位で誘発される短時間のめまい）には<strong>使ってはいけない</strong></li>
-<li><strong>自発眼振がない患者には適応外</strong></li>
-<p>→ 詳しくは <a class="wiki-link" href="../めまい.html">めまい</a> を参照</p>
-</ul></div>
-</div>
-<hr>
-<h2 id="各テストの手技">各テストの手技</h2>
-<h3 id="head-impulse-testhi">Head Impulse Test（HI）</h3>
-<p>患者の頭を素早く水平方向に他動的に回し、視線が固視点（検者の鼻など）に保たれるかを観察する。</p>
-<div class="table-wrap"><table><thead><tr><th>所見</th><th>解釈</th></tr></thead><tbody><tr><td><strong>異常（catch-up saccade あり）</strong></td><td>末梢性（前庭神経炎など）を示唆</td></tr><tr><td><strong>正常（視線固視維持）</strong></td><td><strong>中枢性（後方循環梗塞）を示唆</strong>（直感に反するので注意）</td></tr></tbody></table></div>
-<div class="callout callout-tip">
-<div class="callout-title">「正常 = 怖い」のパラドックス</div>
-<div class="callout-body"><p>AVS で <strong>HI が正常</strong>なら、末梢前庭機能が保たれていることを意味する → 中枢性病変（脳幹・小脳）を疑う。</p></div>
-</div>
-<h3 id="nystagmusn">Nystagmus（N）</h3>
-<p>固視下で自発眼振を観察。眼球を左右に動かしてもらい眼振の方向が変わるかを確認。</p>
-<div class="table-wrap"><table><thead><tr><th>所見</th><th>解釈</th></tr></thead><tbody><tr><td><strong>一方向性水平眼振</strong>（注視方向で増強、Alexander の法則）</td><td>末梢性</td></tr><tr><td><strong>方向交代性眼振</strong>（右注視で右、左注視で左に向く）</td><td><strong>中枢性</strong></td></tr><tr><td><strong>垂直眼振 / 純粋な回旋性眼振</strong></td><td><strong>中枢性</strong></td></tr></tbody></table></div>
-<h3 id="test-of-skewts">Test of Skew（TS）</h3>
-<p>カバー/アンカバー試験。片眼を覆って外し、覆われていた眼が<strong>垂直方向にずれる</strong>かを観察。</p>
-<div class="table-wrap"><table><thead><tr><th>所見</th><th>解釈</th></tr></thead><tbody><tr><td><strong>垂直方向のずれ（skew deviation）あり</strong></td><td><strong>中枢性</strong>（脳幹病変）</td></tr><tr><td>ずれなし</td><td>末梢性を示唆</td></tr></tbody></table></div>
-<hr>
-<h2 id="infarct-サインの覚え方">INFARCT サインの覚え方</h2>
-<p><strong>1 つでも当てはまれば中枢性を強く疑う</strong>：</p>
-<ul>
-<li><strong>I</strong>mpulse normal（HI 正常）</li>
-<li><strong>F</strong>ast-phase <strong>A</strong>lternating（眼振が方向交代性）</li>
-<li><strong>R</strong>efixation on <strong>C</strong>over <strong>T</strong>est（skew deviation あり）</li>
-</ul>
-<hr>
-<h2 id="解釈の流れ">解釈の流れ</h2>
-<p>``<code> AVS 患者 ├─ HI 異常 + 一方向性眼振 + skew なし │     → 末梢性（前庭神経炎など）の可能性が高い └─ INFARCT サインのいずれか陽性 → 中枢性（後方循環梗塞）を疑う → MRI / MRA を考慮 </code>``</p>
-<div class="callout callout-danger">
-<div class="callout-title">早期 MRI でも見逃される</div>
-<div class="callout-body"><p>発症 24–48 時間以内の脳幹・小脳梗塞では、<strong>MRI DWI でも 10–20% が偽陰性</strong>。臨床所見（HINTS、歩行不能、神経脱落症状）が陽性なら、画像が陰性でも入院・経過観察を検討する。</p></div>
-</div>
-<hr>
-<h2 id="ピットフォール">ピットフォール</h2>
-<ul>
-<li><strong>AVS でない患者に使う</strong>（<span class="wiki-missing">BPPV</span> や失神前状態に使っても意味がない）</li>
-<li><strong>手技が不慣れ</strong>で偽陽性・偽陰性を生む → 訓練が必要</li>
-<li><strong>HI 正常を「異常なし」と誤解する</strong> → 中枢性のサインであることを忘れない</li>
-<li><strong>HINTS 陰性でも、歩行不能・新規難聴・他の中枢所見があれば中枢性を疑う</strong></li>
-<li><strong>HINTS plus</strong>（聴力検査を加えた拡張版）：突然の片側難聴があれば AICA 梗塞を疑う</li>
-</ul>
-<hr>
-<h2 id="出典">出典</h2>
-<ul>
-<li><strong>Kattah JC ほか</strong>. HINTS to diagnose stroke in the acute vestibular syndrome: three-step bedside oculomotor examination more sensitive than early MRI diffusion-weighted imaging. <em>Stroke.</em> 2009;40(11):3504–10.</li>
-<li><strong>Newman-Toker DE ほか</strong>. HINTS outperforms ABCD2 to screen for stroke in acute continuous vertigo and dizziness. <em>Acad Emerg Med.</em> 2013;20(10):986–96.</li>
-<li><strong>Edlow JA, Newman-Toker DE</strong>. Using the physical examination to diagnose patients with acute dizziness and vertigo. <em>J Emerg Med.</em> 2016;50(4):617–28.</li>
-</ul>
-<hr>
-<h2 id="関連ページ">関連ページ</h2>
-<ul>
-<li><a class="wiki-link" href="../めまい.html">めまい</a></li>
-<li><a class="wiki-link" href="神経診察.html">神経診察</a></li>
-<li><span class="wiki-missing">後方循環梗塞</span></li>
-<li><span class="wiki-missing">BPPV</span></li>
-<li><span class="wiki-missing">前庭神経炎</span></li>
-</ul>
+
     </div>
+    <footer class="page-footer">
+      <a href="../index.html">↑ 主訴ナビへ戻る</a>
+    </footer>
   </article>
 </body>
 </html>

@@ -19,6 +19,9 @@ Set-Location -LiteralPath "<このリポジトリのルート>"
 python .\md_to_html.py
 ```
 
+- リポジトリ直下の各 `.md` と同じ場所に **同名の `.html`** を出力します（`README.md` と `骨折ハンター/` 配下の `.md` は対象外）。
+- `docs/` フォルダがある場合は、**公開用の HTML のみ**（主訴・`疾患詳細/**/*.html`・`er-note.css`・`index.html`・`.nojekyll`）をルートから上書きコピーして揃えます（`docs/` に `.md` は置きません）。
+
 ### GitHub Actions
 
 `main` への push のたびに `.github/workflows/regenerate-html.yml` が `md_to_html.py` を実行し、変更があれば **HTML だけ**を自動コミットします（`.md` は触りません）。

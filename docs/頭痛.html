@@ -2,390 +2,143 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="color-scheme" content="light only" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="color-scheme" content="light dark" />
   <title>頭痛</title>
   <link rel="stylesheet" href="er-note.css" />
 </head>
 <body>
+  <nav class="site-bar">
+    <a class="site-bar__back" href="index.html">← 主訴ナビ</a>
+    <span class="site-bar__title">頭痛</span>
+  </nav>
   <article class="note-shell">
     <header class="note-header">
       <h1>頭痛</h1>
       <p class="source-badge">元: 臨床/ER/頭痛.md</p>
     </header>
+    <details class="toc"><summary>目次（9 セクション）</summary><ol><li><a href="#最初の-5-秒">最初の 5 秒</a></li><li><a href="#パターン別first-に考える疾患とやること">パターン別：first に考える疾患とやること</a></li><li><a href="#最低限の診察">最低限の診察</a></li><li><a href="#検査の置き方">検査の置き方</a></li><li><a href="#一次性頭痛の初期対応赤旗がないとき">一次性頭痛の初期対応（赤旗がないとき）</a></li><li><a href="#救急外来での実戦サマリ">救急外来での実戦サマリ</a></li><li><a href="#やりがちなミス">やりがちなミス</a></li><li><a href="#出典トリアージ・二次性除外の枠組み">出典（トリアージ・二次性除外の枠組み）</a></li><li><a href="#このページから張るリンク">このページから張るリンク</a></li></ol></details>
     <div class="md-body">
+<p>#ER #救急 #頭痛 #SAH #髄膜炎 #片頭痛</p>
 <div class="callout callout-summary">
-<div class="callout-title">このページの使い方</div>
+<div class="callout-title">このページは「診断がつくまで」</div>
 <div class="callout-body"><ol>
-<li>まず<strong>危険な二次性頭痛</strong>かを5秒でふるい分ける</li>
-<li>次に<strong>どのパターンの頭痛か</strong>を決める</li>
-<li>必要な枝だけ開く</li>
-<li>詳しい診察や各疾患はリンク先で確認する</li>
+<li><strong>危険な二次性頭痛</strong>を 5 秒でふるい分ける（SNNOOP10）</li>
+<li><strong>パターン別に first に考える疾患</strong>を決める</li>
+<li><strong>CT / CTA / LP</strong> の適応を判断</li>
+<li><strong>診断がついたら疾患ページへ</strong> → <span class="wiki-missing">くも膜下出血</span> / <span class="wiki-missing">髄膜炎・脳炎</span> / <a class="wiki-link" href="疾患詳細/頭痛の対症療法.html">頭痛の対症療法</a> など</li>
 </ol></div>
 </div>
 <div class="callout callout-danger">
-<div class="callout-title">最初に結論</div>
-<div class="callout-body"><p>以下のどれかがあれば、<strong>一次性頭痛と決め打ちしない</strong></p>
-<ul>
-<li><strong>雷鳴頭痛</strong></li>
+<div class="callout-title">一次性頭痛と決め打ちしない赤旗（SNNOOP10）</div>
+<div class="callout-body"><ul>
+<li><strong>雷鳴頭痛</strong>（1 時間以内にピーク）</li>
 <li><strong>発熱 / 項部硬直 / 意識障害</strong></li>
-<li><strong>局所神経症状</strong></li>
-<li><strong>妊娠中 / 産褥期の新しい頭痛</strong></li>
+<li><strong>局所神経症状 / けいれん</strong></li>
+<li><strong>妊娠中 / 産褥 6 週以内の新規頭痛</strong></li>
 <li><strong>眼痛 + 視力低下 + 充血</strong></li>
-<li><strong>50歳以降の新規頭痛</strong></li>
+<li><strong>50 歳以降の新規頭痛</strong></li>
 <li><strong>癌 / 免疫不全 / 抗凝固薬</strong></li>
-<li><strong>高血圧緊急症を疑う所見</strong></li>
 <li><strong>乳頭浮腫 / 体位で増悪 / 進行性悪化</strong></li>
+<li><strong>外傷後・最近の穿刺操作</strong></li>
 </ul></div>
 </div>
-<h2 id="最初の5秒">最初の5秒</h2>
+<hr>
+<h2 id="最初の-5-秒">最初の 5 秒</h2>
 <ul>
-<li>バイタルは安定しているか</li>
-<li>意識障害はないか</li>
+<li>バイタル・意識</li>
 <li>雷鳴頭痛か</li>
-<li>発熱・項部硬直はないか</li>
-<li>麻痺・失語・複視・歩行障害・けいれんはないか</li>
-<li>妊娠中 / 産褥6週以内ではないか</li>
-<li>眼痛・視力低下・充血はないか</li>
-<li>50歳以上の新しい頭痛ではないか</li>
-<li>癌・免疫不全・抗凝固薬内服はないか</li>
-<li>今までと同じ頭痛か、それとも<strong>初めて / 最悪 / 明らかに違う</strong>頭痛か</li>
+<li>発熱・項部硬直</li>
+<li>局所神経症状（軽い失語・半盲・歩行失調・複視を落とさない）</li>
+<li>妊娠・産褥、50 歳以上の新規、癌・免疫不全・抗凝固薬</li>
+<li>眼痛・視力低下・充血</li>
+<li><strong>いつもと同じ頭痛か、初めて / 最悪 / 違うタイプか</strong></li>
 </ul>
 <div class="callout callout-tip">
 <div class="callout-title">頭痛で最初に見るもの</div>
-<div class="callout-body"><ul>
-<li><strong>発症様式</strong>：突然か、じわじわか</li>
-<li><strong>ピーク到達時間</strong>：一瞬〜1時間以内か</li>
-<li><strong>初回か / いつもの頭痛か</strong></li>
-<li><strong>随伴症状</strong>：発熱、項部硬直、嘔吐、視覚症状、局所神経症状</li>
-<li><strong>背景</strong>：妊娠、産褥、癌、免疫不全、抗凝固薬、最近の穿刺・外傷</li>
-</ul></div>
+<div class="callout-body"><p><strong>発症様式・ピーク到達時間・初回か・随伴症状・背景（妊娠・癌・免疫不全・抗凝固薬・穿刺/外傷）</strong></p></div>
 </div>
 <hr>
-<h2 id="まず分類する">まず分類する</h2>
-<ul>
-<li><strong>雷鳴頭痛</strong></li>
-<li><strong>発熱・髄膜刺激を伴う頭痛</strong></li>
-<li><strong>神経脱落症状 / 意識障害を伴う頭痛</strong></li>
-<li><strong>妊娠・産褥関連頭痛</strong></li>
-<li><strong>眼科救急を疑う頭痛</strong></li>
-<li><strong>50歳以上の新規頭痛</strong></li>
-<li><strong>頭蓋内圧異常を疑う頭痛</strong></li>
-<li><strong>典型的な一次性頭痛</strong></li>
-</ul>
-<hr>
-<h2 id="対応フロー">対応フロー</h2>
-<h3 id="1-雷鳴頭痛">1. 雷鳴頭痛</h3>
-<ul>
-<li><strong>くも膜下出血を最優先</strong></li>
-<li>他にも</li>
-<ul>
-<li>可逆性脳血管攣縮症候群</li>
-<li>頸動脈 / 椎骨動脈解離</li>
-<li>脳静脈洞血栓症</li>
-<li>下垂体卒中</li>
-<li>高血圧性脳症</li>
-<p>を考える</p>
-</ul>
-</ul>
-<h4 id="この場でやること">この場でやること</h4>
-<ul>
-<li>頭部単純CT</li>
-<li>神経診察</li>
-<li>血圧評価</li>
-<li>必要ならCTA or LPを追加</li>
-</ul>
-<h4 id="判断の実際">判断の実際</h4>
-<ul>
-<li><strong>神経学的にほぼ正常で、発症1時間以内にピークに達した新規重症頭痛</strong>では、<strong>オタワくも膜下出血ルール</strong>が高感度のふるい分けに使える</li>
-<li><strong>発症6時間以内</strong>で、<strong>神経所見が正常</strong>、<strong>高性能CTで頭部単純CTが正常</strong>なら、ACEPは<strong>非外傷性くも膜下出血の除外に使える</strong>としている</li>
-<li>ただし、<strong>6時間を超えている</strong>、または<strong>なお疑いが残る</strong>なら、<strong>LPまたはCTA</strong>を追加する</li>
-</ul>
-<h4 id="雷鳴頭痛で見逃したくない所見">雷鳴頭痛で見逃したくない所見</h4>
-<ul>
-<li>項部硬直</li>
-<li>失神</li>
-<li>運動時発症</li>
-<li>神経症状</li>
-<li>血圧著明高値</li>
-<li>妊娠 / 産褥</li>
-<li>抗凝固薬</li>
-</ul>
-<p>詳細 → <span class="wiki-missing">くも膜下出血</span> / <span class="wiki-missing">脳静脈洞血栓症</span> / <span class="wiki-missing">頸動脈・椎骨動脈解離</span></p>
-<hr>
-<h3 id="2-発熱・項部硬直・意識障害を伴う頭痛">2. 発熱・項部硬直・意識障害を伴う頭痛</h3>
-<ul>
-<li><strong>髄膜炎 / 脳炎を最優先</strong></li>
-<li>迷っても、<strong>治療遅れが危険</strong></li>
-</ul>
-<h4 id="この場でやること">この場でやること</h4>
-<ul>
-<li>血液培養</li>
-<li>採血</li>
-<li>LPを考える</li>
-<li>ただし治療を遅らせない</li>
-<li>抗菌薬を早期開始</li>
-<li>細菌性髄膜炎が強く疑わしければデキサメタゾン併用を考える</li>
-</ul>
-<h4 id="重要">重要</h4>
-<ul>
-<li>WHOは、<strong>急性細菌性髄膜炎が疑われたら経験的抗菌薬はできるだけ早く、理想的には1時間以内</strong>としている</li>
-<li>LPは重要だが、<strong>検査待ちで治療を遅らせない</strong></li>
-<li>CT先行が必要なのは、WHOでは<strong>GCS低下、局所神経徴候、脳神経障害、乳頭浮腫、新規けいれん、重度免疫不全</strong>などがある場合</li>
-</ul>
-<p>詳細 → <span class="wiki-missing">髄膜炎・脳炎</span></p>
-<hr>
-<h3 id="3-神経脱落症状-意識障害を伴う頭痛">3. 神経脱落症状 / 意識障害を伴う頭痛</h3>
-<ul>
-<li><strong>脳卒中、脳炎、脳腫瘍、脳膿瘍、高血圧性脳症、PRES</strong> を考える</li>
-<li>「頭痛だけ」に見えても、<strong>軽い失語・半盲・歩行失調・複視</strong>を落としやすい</li>
-</ul>
-<h4 id="この場でやること">この場でやること</h4>
-<ul>
-<li>神経診察</li>
-<li>頭部画像</li>
-<li>必要なら血管画像</li>
-<li>血圧、血糖、けいれん既往、抗凝固薬を確認</li>
-</ul>
-<h4 id="画像の考え方">画像の考え方</h4>
-<ul>
-<li><strong>神経症状を伴う頭痛</strong>や<strong>発熱 / 免疫不全 / 癌 / 50歳以上の新規頭痛</strong>などの危険所見があれば、ACRでも初期画像評価が適切とされる</li>
-<li>逆に、<strong>危険所見がない典型的な一次性頭痛</strong>では、ルーチン画像は通常不要</li>
-</ul>
-<p>詳細 → <a class="wiki-link" href="疾患詳細/神経診察.html">神経診察</a> / <span class="wiki-missing">脳卒中</span></p>
-<hr>
-<h3 id="4-妊娠中-産褥期の頭痛">4. 妊娠中 / 産褥期の頭痛</h3>
-<ul>
-<li><strong>妊娠関連頭痛は閾値を下げて二次性を探す</strong></li>
-<li>特に注意</li>
-<ul>
-<li><strong>子癇前症 / 子癇</strong></li>
-<li><strong>脳静脈洞血栓症</strong></li>
-<li><strong>PRES</strong></li>
-<li><strong>可逆性脳血管攣縮症候群</strong></li>
-<li><strong>硬膜穿刺後頭痛</strong></li>
-</ul>
-</ul>
-<h4 id="この場でやること">この場でやること</h4>
-<ul>
-<li>血圧</li>
-<li>尿蛋白</li>
-<li>神経診察</li>
-<li>眼症状確認</li>
-<li>画像をためらわない</li>
-</ul>
-<h4 id="重要">重要</h4>
-<ul>
-<li>ACRでは、<strong>妊娠中または周産期の新規頭痛 / パターン変化</strong>は画像評価を考える状況に入る</li>
-<li>ACOGでは、<strong>産褥6週以内で頭痛 + 高血圧</strong>なら子癇前症を考える</li>
-</ul>
-<p>詳細 → <span class="wiki-missing">妊娠・産褥の頭痛</span> / <span class="wiki-missing">脳静脈洞血栓症</span></p>
-<hr>
-<h3 id="5-眼痛を伴う頭痛">5. 眼痛を伴う頭痛</h3>
-<ul>
-<li><strong>急性閉塞隅角緑内障</strong>をまず外さない</li>
-<li>眼科救急を疑う所見</li>
-<ul>
-<li>眼痛</li>
-<li>充血</li>
-<li>視力低下</li>
-<li>虹視</li>
-<li>悪心嘔吐</li>
-<li>片側優位</li>
-</ul>
-</ul>
-<h4 id="この場でやること">この場でやること</h4>
-<ul>
-<li>視力</li>
-<li>瞳孔</li>
-<li>眼球運動</li>
-<li>角膜混濁の有無</li>
-<li>眼圧測定できれば確認</li>
-<li>眼科コンサルト</li>
-</ul>
-<p>詳細 → <span class="wiki-missing">急性閉塞隅角緑内障</span></p>
-<hr>
-<h3 id="6-50歳以上の新規頭痛">6. 50歳以上の新規頭痛</h3>
-<ul>
-<li><strong>巨細胞性動脈炎</strong>を必ず考える</li>
-<li>聞くこと</li>
-<ul>
-<li>側頭部痛</li>
-<li>顎跛行</li>
-<li>視覚症状</li>
-<li>頭皮圧痛</li>
-<li>発熱</li>
-<li>PMR症状</li>
-</ul>
-</ul>
-<h4 id="この場でやること">この場でやること</h4>
-<ul>
-<li>ESR</li>
-<li>CRP</li>
-<li>視覚症状があれば緊急対応</li>
-<li>強く疑えばステロイドを遅らせない</li>
-</ul>
-<h4 id="重要">重要</h4>
-<ul>
-<li>GCAは<strong>50歳以上</strong>で起こる新規頭痛で疑うべき疾患で、診断は<strong>症状、側頭動脈生検、血管画像</strong>などで行う</li>
-<li>視力障害を残すことがあるため、疑いが高ければ迅速対応が必要</li>
-</ul>
-<p>詳細 → <span class="wiki-missing">巨細胞性動脈炎</span></p>
-<hr>
-<h3 id="7-頭蓋内圧異常を疑う頭痛">7. 頭蓋内圧異常を疑う頭痛</h3>
-<h4 id="頭蓋内圧亢進を疑う">頭蓋内圧亢進を疑う</h4>
-<ul>
-<li>朝に強い</li>
-<li>咳・いきみで悪化</li>
-<li>仰臥位で悪化</li>
-<li>嘔吐</li>
-<li>乳頭浮腫</li>
-<li>複視</li>
-</ul>
-<h4 id="頭蓋内圧低下を疑う">頭蓋内圧低下を疑う</h4>
-<ul>
-<li><strong>立位で悪化、臥位で改善</strong></li>
-<li>最近のLP、硬膜外、脊椎処置</li>
-</ul>
-<h4 id="この場でやること">この場でやること</h4>
-<ul>
-<li>眼底</li>
-<li>神経診察</li>
-<li>画像</li>
-<li>LP適応は慎重に判断</li>
-</ul>
-<p>詳細 → <span class="wiki-missing">頭蓋内圧亢進</span> / <span class="wiki-missing">低髄液圧症候群</span></p>
-<hr>
-<h3 id="8-典型的な一次性頭痛に見える場合">8. 典型的な一次性頭痛に見える場合</h3>
-<p>以下がそろえば一次性頭痛寄り</p>
-<ul>
-<li>以前と同じパターン</li>
-<li>神経所見なし</li>
-<li>発熱なし</li>
-<li>雷鳴頭痛ではない</li>
-<li>妊娠 / 産褥ではない</li>
-<li>50歳以降の新規発症ではない</li>
-<li>癌 / 免疫不全 / 抗凝固薬なし</li>
-</ul>
-<h4 id="よくあるもの">よくあるもの</h4>
-<ul>
-<li>片頭痛</li>
-<li>緊張型頭痛</li>
-<li>群発頭痛</li>
-</ul>
-<h4 id="救急での治療の考え方">救急での治療の考え方</h4>
-<ul>
-<li>片頭痛では<strong>オピオイドを第一選択にしない</strong></li>
-<li>AHS 2016では、急性片頭痛に対して</li>
-<ul>
-<li><strong>メトクロプラミド静注</strong></li>
-<li><strong>プロクロルペラジン静注</strong></li>
-<li><strong>スマトリプタン皮下注</strong></li>
-<p>が有力</p>
-</ul>
-<li><strong>デキサメタゾン</strong>は再燃予防に有用</li>
-<li><strong>モルヒネ / ヒドロモルフォンは第一選択として避ける</strong>方向</li>
-</ul>
-<p>詳細 → <span class="wiki-missing">片頭痛</span> / <span class="wiki-missing">群発頭痛</span> / <span class="wiki-missing">頭痛の対症療法</span></p>
-<hr>
-<h2 id="危険所見">危険所見</h2>
-<div class="callout callout-danger">
-<div class="callout-title">危険所見</div>
+<h2 id="パターン別first-に考える疾患とやること">パターン別：first に考える疾患とやること</h2>
+<div class="table-wrap"><table><thead><tr><th>パターン</th><th>first</th><th>ED でやること</th><th>詳細</th></tr></thead><tbody><tr><td><strong>雷鳴頭痛</strong>（1h 以内ピーク）</td><td><strong>くも膜下出血</strong></td><td>頭部単純 CT → 必要で CTA/LP、血圧、神経所見</td><td><span class="wiki-missing">くも膜下出血</span> / <span class="wiki-missing">脳静脈洞血栓症</span> / <span class="wiki-missing">頸動脈・椎骨動脈解離</span></td></tr><tr><td><strong>発熱 + 項部硬直 / 意識障害</strong></td><td><strong>髄膜炎・脳炎</strong></td><td>血培 → 抗菌薬 <strong>1 h 以内</strong>、LP（CT 先行判断は下記）、デキサメタゾン併用考慮</td><td><span class="wiki-missing">髄膜炎・脳炎</span></td></tr><tr><td><strong>神経脱落症状 / 意識障害</strong></td><td><strong>脳卒中・脳炎・脳腫瘍・膿瘍・PRES</strong></td><td>神経診察、頭部画像、必要で血管画像、血圧・血糖</td><td><a class="wiki-link" href="疾患詳細/神経診察.html">神経診察</a> / <span class="wiki-missing">脳卒中</span></td></tr><tr><td><strong>妊娠中 / 産褥 6 週以内</strong></td><td><strong>子癇前症 / CVST / PRES / RCVS</strong></td><td>血圧、尿蛋白、眼症状、画像をためらわない</td><td><span class="wiki-missing">妊娠・産褥の頭痛</span> / <span class="wiki-missing">脳静脈洞血栓症</span></td></tr><tr><td><strong>眼痛 + 視力低下 + 充血</strong></td><td><strong>急性閉塞隅角緑内障</strong></td><td>視力・瞳孔・眼位・角膜混濁、眼圧、<strong>眼科コンサルト</strong></td><td><span class="wiki-missing">急性閉塞隅角緑内障</span></td></tr><tr><td><strong>50 歳以上の新規頭痛</strong></td><td><strong>巨細胞性動脈炎</strong></td><td>側頭部痛・顎跛行・視覚症状・頭皮圧痛、<strong>ESR・CRP</strong>、強く疑えばステロイドを遅らせない</td><td><span class="wiki-missing">巨細胞性動脈炎</span></td></tr><tr><td><strong>頭蓋内圧異常</strong>（朝強い / 咳いきみで増悪 or 立位で増悪）</td><td><strong>ICP 亢進 / 低髄液圧</strong></td><td>眼底、神経診察、画像、LP 適応は慎重</td><td><span class="wiki-missing">頭蓋内圧亢進</span> / <span class="wiki-missing">低髄液圧症候群</span></td></tr><tr><td><strong>典型的な一次性頭痛</strong></td><td><strong>片頭痛・緊張型・群発</strong></td><td>赤旗がなく以前と同じパターンなら対症療法へ</td><td><strong><a class="wiki-link" href="疾患詳細/頭痛の対症療法.html">頭痛の対症療法</a></strong></td></tr></tbody></table></div>
+<div class="callout callout-tip">
+<div class="callout-title">雷鳴頭痛での CT/LP のタイミング（Ottawa SAH Rule / ACEP）</div>
 <div class="callout-body"><ul>
-<li>突然発症</li>
-<li>進行性悪化</li>
-<li>発熱</li>
-<li>項部硬直</li>
-<li>意識障害</li>
-<li>局所神経症状</li>
-<li>けいれん</li>
-<li>乳頭浮腫</li>
-<li>妊娠 / 産褥</li>
-<li>50歳以上の新規発症</li>
-<li>癌</li>
-<li>免疫不全</li>
-<li>抗凝固薬</li>
-<li>外傷後</li>
-<li>体位で変化</li>
-<li>眼痛 / 視力低下</li>
+<li><strong>発症 6 時間以内 + 神経所見正常 + 高性能 CT 陰性</strong> → SAH は実質除外可</li>
+<li><strong>6 時間超 or なお疑いが残る</strong> → <strong>LP または CTA</strong> を追加</li>
 </ul></div>
 </div>
-<p>SNNOOP10は、<strong>二次性頭痛を拾うための危険所見リスト</strong>として広く使われている</p>
+<div class="callout callout-warning">
+<div class="callout-title">髄膜炎で CT を先行する条件（WHO）</div>
+<div class="callout-body"><p>GCS 低下 / 局所神経徴候 / 脳神経障害 / 乳頭浮腫 / 新規けいれん / 重度免疫不全 <strong>該当しなければ CT を待たずに LP → 抗菌薬</strong></p></div>
+</div>
 <hr>
 <h2 id="最低限の診察">最低限の診察</h2>
-<ul>
-<li>意識レベル</li>
-<li>血圧</li>
-<li>体温</li>
-<li>項部硬直</li>
-<li>瞳孔</li>
-<li>眼位 / 眼球運動</li>
-<li>視力</li>
-<li>顔面左右差</li>
-<li>構音障害</li>
-<li>上下肢の麻痺</li>
-<li>感覚障害</li>
-<li>小脳失調</li>
-<li>歩行</li>
-<li>乳頭浮腫を可能なら確認</li>
-</ul>
-<p>詳細 → <a class="wiki-link" href="疾患詳細/神経診察.html">神経診察</a></p>
+<p>意識 / 血圧 / 体温 / 項部硬直 / 瞳孔・眼位・眼球運動 / 視力 / 顔面左右差 / 構音 / 上下肢麻痺 / 感覚 / 小脳失調 / 歩行 / 可能なら乳頭浮腫 詳細 → <a class="wiki-link" href="疾患詳細/神経診察.html">神経診察</a></p>
 <hr>
 <h2 id="検査の置き方">検査の置き方</h2>
-<h3 id="頭部単純ctを急ぐ">頭部単純CTを急ぐ</h3>
+<div class="table-wrap"><table><thead><tr><th>検査</th><th>適応</th></tr></thead><tbody><tr><td><strong>頭部単純 CT</strong>（急ぐ）</td><td>雷鳴頭痛、神経症状、意識障害、ICP 亢進疑い、外傷後、抗凝固薬、発熱で占拠性病変を否定したい</td></tr><tr><td><strong>CTA / CTV</strong></td><td>SAH 疑いで CT 陰性だが未解決、解離疑い、CVST 疑い、RCVS 疑い</td></tr><tr><td><strong>LP</strong></td><td>髄膜炎 / 脳炎疑い、SAH 疑いで CT 陰性、占拠性病変・ヘルニアリスク評価の上で</td></tr><tr><td><strong>ESR / CRP</strong></td><td>50 歳以上の新規頭痛（GCA）</td></tr></tbody></table></div>
+<hr>
+<h2 id="一次性頭痛の初期対応赤旗がないとき">一次性頭痛の初期対応（赤旗がないとき）</h2>
 <ul>
-<li>雷鳴頭痛</li>
-<li>神経症状あり</li>
-<li>意識障害</li>
-<li>頭蓋内圧亢進疑い</li>
-<li>外傷後</li>
-<li>抗凝固薬</li>
-<li>発熱 + 中枢感染を否定しきれないがまず占拠性病変も気になる時</li>
-</ul>
-<h3 id="cta-ctvを考える">CTA / CTVを考える</h3>
-<ul>
-<li>SAH疑いでCT陰性だがまだ疑う</li>
-<li>解離疑い</li>
-<li>CVST疑い</li>
-<li>RCVS疑い</li>
-</ul>
-<h3 id="lpを考える">LPを考える</h3>
-<ul>
-<li>髄膜炎 / 脳炎疑い</li>
-<li>SAH疑いでCT後も未解決</li>
-<li>ただし占拠性病変 / ヘルニアリスクには注意</li>
+<li>暗室安静・補液・制吐</li>
+<li><strong>オピオイド（モルヒネ・ペンタゾシン・トラマドール）は第一選択にしない</strong></li>
+<li>具体的な薬剤・用量・帰宅処方は → <strong><a class="wiki-link" href="疾患詳細/頭痛の対症療法.html">頭痛の対症療法</a></strong></li>
 </ul>
 <hr>
-<h2 id="救急外来での実際のまとめ">救急外来での実際のまとめ</h2>
+<h2 id="救急外来での実戦サマリ">救急外来での実戦サマリ</h2>
 <div class="callout callout-summary">
-<div class="callout-title">実戦用</div>
+<div class="callout-title">一行ずつ</div>
 <div class="callout-body"><ul>
-<li><strong>雷鳴頭痛</strong> → SAH first</li>
+<li><strong>雷鳴</strong> → SAH first</li>
 <li><strong>発熱 / 項部硬直</strong> → 髄膜炎 first</li>
-<li><strong>神経症状 / 意識障害</strong> → 脳卒中・脳炎・腫瘍 first</li>
+<li><strong>神経症状 / 意識障害</strong> → 脳卒中・脳炎 first</li>
 <li><strong>妊娠 / 産褥</strong> → 子癇前症 / CVST / PRES first</li>
 <li><strong>眼痛 + 視力低下</strong> → 緑内障 first</li>
-<li><strong>50歳以上の新規頭痛</strong> → GCA first</li>
-<li>どれにも当てはまらず、いつもの頭痛なら一次性頭痛を考える</li>
+<li><strong>50 歳以上の新規</strong> → GCA first</li>
+<li><strong>赤旗なし + いつもの頭痛</strong> → 一次性頭痛 → <a class="wiki-link" href="疾患詳細/頭痛の対症療法.html">頭痛の対症療法</a></li>
 </ul></div>
 </div>
 <hr>
-<h2 id="リンク">リンク</h2>
+<h2 id="やりがちなミス">やりがちなミス</h2>
+<ul>
+<li><strong>「いつもの片頭痛」と決めつけ神経所見を取らない</strong></li>
+<li><strong>雷鳴頭痛で CT 陰性 = SAH 除外と早合点</strong>（6h 超なら LP/CTA）</li>
+<li><strong>髄膜炎疑いで CT 待ちして抗菌薬が遅れる</strong></li>
+<li><strong>50 歳以上の側頭部痛で ESR を測らず帰す</strong>（GCA で失明）</li>
+<li><strong>妊娠・産褥の頭痛を片頭痛で帰す</strong>（子癇前症・CVST）</li>
+<li><strong>オピオイドで片頭痛を抑える</strong>（乱用性頭痛・慢性化）</li>
+</ul>
+<hr>
+<h2 id="出典トリアージ・二次性除外の枠組み">出典（トリアージ・二次性除外の枠組み）</h2>
+<ul>
+<li><strong>SNNOOP10</strong>：Do L ほか. Red and orange flags for secondary headaches. <em>Neurology.</em> 2019;92(3):134–144.</li>
+<li><strong>Ottawa SAH Rule</strong>：Perry JJ ほか. <em>JAMA.</em> 2013.</li>
+<li><strong>ACEP 2019 Clinical Policy</strong>：Acute Headache.</li>
+<li><strong>WHO Meningitis Guideline 2023</strong>.</li>
+<li><strong>ACR Appropriateness Criteria</strong>：Headache.</li>
+<li>治療・処方の一次文献は → <a class="wiki-link" href="疾患詳細/頭痛の対症療法.html">頭痛の対症療法</a> / 各疾患ページ</li>
+</ul>
+<hr>
+<h2 id="このページから張るリンク">このページから張るリンク</h2>
 <ul>
 <li><a class="wiki-link" href="疾患詳細/神経診察.html">神経診察</a></li>
+<li><a class="wiki-link" href="疾患詳細/頭痛の対症療法.html">頭痛の対症療法</a></li>
 <li><span class="wiki-missing">くも膜下出血</span></li>
 <li><span class="wiki-missing">髄膜炎・脳炎</span></li>
 <li><span class="wiki-missing">脳静脈洞血栓症</span></li>
 <li><span class="wiki-missing">妊娠・産褥の頭痛</span></li>
 <li><span class="wiki-missing">巨細胞性動脈炎</span></li>
 <li><span class="wiki-missing">急性閉塞隅角緑内障</span></li>
+<li><span class="wiki-missing">頭蓋内圧亢進</span></li>
+<li><span class="wiki-missing">低髄液圧症候群</span></li>
 <li><span class="wiki-missing">片頭痛</span></li>
-<li><span class="wiki-missing">頭痛の対症療法</span></li>
-<li><a class="wiki-link" href="めまい.html">めまい</a></li>
-<li><a class="wiki-link" href="意識障害.html">意識障害</a></li>
-<li><a class="wiki-link" href="嘔気・嘔吐.html">嘔気・嘔吐</a></li>
+<li><span class="wiki-missing">群発頭痛</span></li>
 </ul>
     </div>
+    <footer class="page-footer">
+      <a href="index.html">↑ 主訴ナビへ戻る</a>
+    </footer>
   </article>
 </body>
 </html>

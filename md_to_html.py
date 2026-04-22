@@ -3,6 +3,7 @@ from __future__ import annotations
 import html
 import os
 import re
+import shutil
 from pathlib import Path
 from urllib.parse import quote
 
@@ -414,8 +415,34 @@ def collect_target_mds() -> list[Path]:
             continue
         if md.name == "README.md":
             continue
+        # 参照用の巨大ソース（Obsidian 用）。サイト公開用 HTML は不要。
+        if "骨折ハンター" in md.parts:
+            continue
         md_files.append(md.resolve())
     return sorted(md_files)
+
+
+def sync_docs_mirror() -> None:
+    """GitHub Pages 用の `docs/` が残っている場合、ルート直下の生成物と揃える。"""
+    docs = ER_DIR / "docs"
+    if not docs.is_dir():
+        return
+    for name in ("er-note.css", ".nojekyll", "index.html"):
+        src = ER_DIR / name
+        if src.is_file():
+            shutil.copy2(src, docs / name)
+    for html in ER_DIR.glob("*.html"):
+        shutil.copy2(html, docs / html.name)
+    src_detail = ER_DIR / "疾患詳細"
+    dst_detail = docs / "疾患詳細"
+    if not src_detail.is_dir():
+        return
+    dst_detail.mkdir(parents=True, exist_ok=True)
+    for sp in src_detail.rglob("*.html"):
+        rel = sp.relative_to(src_detail)
+        dp = dst_detail / rel
+        dp.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(sp, dp)
 
 
 def main() -> None:
@@ -430,6 +457,8 @@ def main() -> None:
         body = render_blocks(lines, md, all_md, by_stem)
         body = ensure_heading_ids(body)
         md.with_suffix(".html").write_text(build_html(md, body), encoding="utf-8")
+
+    sync_docs_mirror()
 
 
 if __name__ == "__main__":

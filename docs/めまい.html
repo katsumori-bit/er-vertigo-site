@@ -2,321 +2,166 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="color-scheme" content="light only" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="color-scheme" content="light dark" />
   <title>めまい</title>
   <link rel="stylesheet" href="er-note.css" />
 </head>
 <body>
+  <nav class="site-bar">
+    <a class="site-bar__back" href="index.html">← 主訴ナビ</a>
+    <span class="site-bar__title">めまい</span>
+  </nav>
   <article class="note-shell">
     <header class="note-header">
       <h1>めまい</h1>
       <p class="source-badge">元: 臨床/ER/めまい.md</p>
     </header>
+    <details class="toc"><summary>目次（10 セクション）</summary><ol><li><a href="#red-flags">Red flags</a></li><li><a href="#最初に決めることtitrate">最初に決めること（TiTrATE）</a></li><li><a href="#その場で行う最小診察">その場で行う最小診察</a></li><li><a href="#症候群ごとのやること">症候群ごとのやること</a></li><li><a href="#疾患別のポイント入口">疾患別のポイント（入口）</a></li><li><a href="#検査の置き方">検査の置き方</a></li><li><a href="#disposition">disposition</a></li><li><a href="#ピットフォール">ピットフォール</a></li><li><a href="#出典トリアージ・症候群分類">出典（トリアージ・症候群分類）</a></li><li><a href="#関連ページ">関連ページ</a></li></ol></details>
     <div class="md-body">
 <p>#ER #救急 #めまい #dizziness #AVS #BPPV #HINTS #神経診察 #脳梗塞</p>
 <div class="callout callout-summary">
-<div class="callout-title">このページの使い方</div>
+<div class="callout-title">このページは「診断がつくまで」</div>
 <div class="callout-body"><ol>
-<li>まず <a class="wiki-link" href="めまい.html#red-flags">#Red flags</a> を確認する</li>
-<li>次に、どの症候群に当てはまるかを決める</li>
-<li>該当する枝だけ読む</li>
+<li><strong>Red flags</strong> を確認する</li>
+<li><strong>症候群</strong>（失神前 / AVS / t-EVS / s-EVS）に当てはめる</li>
+<li><strong>ターゲット診察</strong>（眼振・歩行・聴力・神経・HINTS）で末梢 vs 中枢</li>
+<li><strong>診断がついたら疾患ページへ</strong> → <span class="wiki-missing">BPPV</span> / <span class="wiki-missing">前庭神経炎</span> / <span class="wiki-missing">Ménière病</span> / <span class="wiki-missing">後方循環梗塞</span> / <span class="wiki-missing">失神前状態</span></li>
 </ol></div>
 </div>
 <h2 id="red-flags">Red flags</h2>
 <ul>
-<li>歩行不能 / 起立不能</li>
-<li>構音障害</li>
-<li>複視</li>
-<li>嚥下障害</li>
-<li>片麻痺 / 感覚障害</li>
-<li>明らかな体幹失調 / 四肢失調</li>
-<li>垂直眼振</li>
-<li>方向交代性眼振</li>
+<li>歩行不能 / 起立不能、強い体幹・四肢失調</li>
+<li>構音障害・複視・嚥下障害・片麻痺・感覚障害</li>
+<li><strong>垂直眼振 / 方向交代性眼振</strong></li>
 <li>強い後頭部痛 / 頸部痛</li>
 <li>新規難聴 + 中枢所見</li>
 <li>高齢 + 血管危険因子</li>
 <li>抗凝固薬内服</li>
-<li>明らかな失神前状態 / 胸痛 / 動悸</li>
+<li>失神前状態 / 胸痛 / 動悸</li>
 </ul>
 <div class="callout callout-warning">
-<div class="callout-title">1つでもあれば要注意</div>
-<div class="callout-body"><p><strong>末梢性めまいとして安易に片付けない。</strong> このようなRed flag所見があれば、以下の重篤な疾患を十分に疑い除外すること：</p>
+<div class="callout-title">1 つでもあれば末梢性で片付けない</div>
+<div class="callout-body"><p>除外する主な致死的疾患：</p>
 <ul>
-<li><a class="wiki-link" href="めまい.html#%E5%BE%8C%E6%96%B9%E5%BE%AA%E7%92%B0%E6%A2%97%E5%A1%9E">#後方循環梗塞</a>（椎骨脳底動脈系梗塞：<span class="wiki-missing">小脳梗塞</span>、<span class="wiki-missing">延髄梗塞</span>、<span class="wiki-missing">橋梗塞</span> <span class="wiki-missing">AICA梗塞</span>などを含む）</li>
-<li><span class="wiki-missing">椎骨動脈解離</span></li>
-<li><span class="wiki-missing">くも膜下出血</span>（急な頭痛や頸部痛があれば）</li>
-<li><span class="wiki-missing">急性脳出血</span>（抗凝固薬内服例や重度神経症状の場合）</li>
-<li><span class="wiki-missing">心原性失神</span>・<span class="wiki-missing">致死性不整脈</span>・<span class="wiki-missing">大動脈解離</span> など、中枢神経系疾患以外の致死的疾患も文脈に応じて考慮すること</li>
+<li><span class="wiki-missing">後方循環梗塞</span>（<span class="wiki-missing">小脳梗塞</span> / <span class="wiki-missing">延髄梗塞</span> / <span class="wiki-missing">橋梗塞</span> / <span class="wiki-missing">AICA梗塞</span>）</li>
+<li><span class="wiki-missing">椎骨動脈解離</span> / <span class="wiki-missing">くも膜下出血</span> / <span class="wiki-missing">急性脳出血</span>（抗凝固薬例や重度神経症状）</li>
+<li><span class="wiki-missing">心原性失神</span> / <span class="wiki-missing">致死性不整脈</span> / <span class="wiki-missing">大動脈解離</span></li>
 </ul></div>
 </div>
-<h2 id="最初に決めること">最初に決めること</h2>
-<ul>
-<li><a class="wiki-link" href="めまい.html#1-%E5%A4%B1%E7%A5%9E%E5%89%8D%E7%8A%B6%E6%85%8B">#1. 失神前状態</a> / 全身性ふらつき か</li>
-<li><a class="wiki-link" href="めまい.html#2-avs">#2. AVS</a>（急性持続性前庭症候群）か</li>
-<li><a class="wiki-link" href="めまい.html#3-t-evs">#3. t-EVS</a>（頭位などで誘発される短時間発作性前庭症候群）か</li>
-<li><a class="wiki-link" href="めまい.html#4-s-evs">#4. s-EVS</a>（誘因なし反復発作性前庭症候群）か</li>
-</ul>
-<div class="callout callout-info">
-<div class="callout-title">Timing and Triggers</div>
-<div class="callout-body"><p>めまいは「回る」「ふわふわする」といった<strong>症状の質</strong>よりも、<strong>持続時間・反復性・誘因・随伴症状・ターゲット診察</strong>で分類する。詳しくは <a class="wiki-link" href="https://www.google.com/search?q=TiTrATE%20%E3%82%81%E3%81%BE%E3%81%84"><strong>「TiTrATE めまい」</strong></a></p></div>
-</div>
+<hr>
+<h2 id="最初に決めることtitrate">最初に決めること（TiTrATE）</h2>
+<p>「回る vs ふわふわ」の<strong>質</strong>より、<strong>持続時間・反復性・誘因・随伴症状・ターゲット診察</strong>で分類。</p>
+<div class="table-wrap"><table><thead><tr><th>症候群</th><th>典型</th><th>代表疾患</th></tr></thead><tbody><tr><td><strong>失神前状態</strong></td><td>眼前暗黒感、立位で悪化、動悸、胸痛</td><td><span class="wiki-missing">起立性低血圧</span> / <span class="wiki-missing">不整脈</span> / <span class="wiki-missing">低血糖</span> / <span class="wiki-missing">脱水</span> / <span class="wiki-missing">貧血</span> / <span class="wiki-missing">薬剤性めまい</span></td></tr><tr><td><strong>AVS</strong>（急性持続性）</td><td>急性発症・24 h 以上持続・悪心嘔吐・眼振 or 歩行不安定</td><td><span class="wiki-missing">前庭神経炎</span> / <span class="wiki-missing">後方循環梗塞</span> / <span class="wiki-missing">小脳梗塞</span> / <span class="wiki-missing">脳幹梗塞</span> / <span class="wiki-missing">AICA梗塞</span></td></tr><tr><td><strong>t-EVS</strong>（頭位誘発短時間）</td><td>頭位変換で数秒〜1 分、発作間は軽快</td><td><span class="wiki-missing">BPPV</span>、まれに中枢性</td></tr><tr><td><strong>s-EVS</strong>（誘因なし反復）</td><td>誘因なく発作、発作間は軽快</td><td><span class="wiki-missing">Ménière病</span> / <span class="wiki-missing">前庭性片頭痛</span> / <span class="wiki-missing">TIA</span> / <span class="wiki-missing">不整脈</span> / <span class="wiki-missing">起立性低血圧</span></td></tr></tbody></table></div>
+<p><a class="wiki-link" href="https://www.google.com/search?q=TiTrATE%20%E3%82%81%E3%81%BE%E3%81%84">TiTrATE めまい</a></p>
 <hr>
 <h2 id="その場で行う最小診察">その場で行う最小診察</h2>
-<p><strong>ほぼ全例</strong>で下記。<a class="wiki-link" href="疾患詳細/HINTS.html">HINTS</a> は <strong><a class="wiki-link" href="めまい.html#2-avs">#2. AVS</a></strong> で適応と手技の訓練がそろったときの<strong>追加</strong>。短時間・頭位誘発が主（<a class="wiki-link" href="めまい.html#3-t-evs">#3. t-EVS</a>）なら原則使わない。</p>
 <ul>
-<li><strong>バイタル</strong>（循環器・失神前が疑われれば臥位／立位も）</li>
-<li><strong>座位・立位・歩行</strong>（座位を保てるか、立てるか、歩けるか）</li>
-<li><strong>眼振</strong>（自発／頭位誘発、方向、固視）… <span class="wiki-missing">眼振の見方</span></li>
-<li><strong>聴力</strong>（指こすり・ささやきなどで可）</li>
+<li><strong>バイタル</strong>（失神前疑いなら臥位／立位）</li>
+<li><strong>座位・立位・歩行</strong>（保てる？立てる？歩ける？）</li>
+<li><strong>眼振</strong>（自発／頭位誘発、方向、固視）→ <span class="wiki-missing">眼振の見方</span></li>
+<li><strong>聴力</strong>（指こすり・ささやき）</li>
 <li><strong><a class="wiki-link" href="疾患詳細/神経診察.html">神経診察</a></strong></li>
-<li><strong>採血</strong>（血糖ほか、電解質・Hbなど）</li>
-<li><strong>12誘導ECG</strong>（胸痛・動悸・失神前・不整脈懐疑、施設方針）</li>
-</ul>
-<h4 id="hints">HINTS</h4>
-<p>頭部衝動・眼振・偏視による末梢／中枢（後循環）鑑別のベッドサイドセット。手技・判定の細部は <a class="wiki-link" href="疾患詳細/HINTS.html">HINTS</a>。適応・解釈・次の一手は <a class="wiki-link" href="めまい.html#2-avs">#2. AVS</a>。</p>
-<div class="callout callout-tip">
-<div class="callout-title">初期評価の要点</div>
-<div class="callout-body"><p>上のリストをサクッと終わらせる。</p></div>
-</div>
-<hr>
-<h2 id="症候群で分ける">症候群で分ける</h2>
-<h3 id="1-失神前状態">1. <span class="wiki-missing">失神前状態</span></h3>
-<p><strong>こういう訴えならこちらを優先</strong></p>
-<ul>
-<li>眼前暗黒感</li>
-<li>ふっと遠のく感じ</li>
-<li>立位で悪化</li>
-<li>動悸</li>
-<li>胸痛</li>
-<li>一過性意識消失に近いエピソード</li>
-</ul>
-<p><strong>主な鑑別</strong></p>
-<ul>
-<li><span class="wiki-missing">起立性低血圧</span></li>
-<li><span class="wiki-missing">不整脈</span></li>
-<li><span class="wiki-missing">低血糖</span></li>
-<li><span class="wiki-missing">脱水</span></li>
-<li><span class="wiki-missing">貧血</span></li>
-<li><span class="wiki-missing">薬剤性めまい</span></li>
-</ul>
-<h4 id="まず行うこと">まず行うこと</h4>
-<ul>
-<li>採血（血糖含む・適宜各項目）</li>
-<li>12誘導ECG</li>
-<li>モニター</li>
-<li>起立性変化</li>
-<li>胸部症状があれば循環器評価</li>
-</ul>
-<hr>
-<h3 id="2-avs">2. <span class="wiki-missing">AVS</span></h3>
-<p><strong>定義</strong></p>
-<ul>
-<li>急性発症</li>
-<li>持続性のめまい / 回転感 / 平衡障害</li>
-<li>悪心・嘔吐</li>
-<li>眼振または歩行不安定</li>
-<li>通常は24時間以上持続</li>
-</ul>
-<p><strong>主な鑑別</strong></p>
-<ul>
-<li><a class="wiki-link" href="めまい.html#%E5%89%8D%E5%BA%AD%E7%A5%9E%E7%B5%8C%E7%82%8E">#前庭神経炎</a></li>
-<li><a class="wiki-link" href="めまい.html#%E5%BE%8C%E6%96%B9%E5%BE%AA%E7%92%B0%E6%A2%97%E5%A1%9E">#後方循環梗塞</a></li>
-<li><span class="wiki-missing">小脳梗塞</span></li>
-<li><span class="wiki-missing">脳幹梗塞</span></li>
-<li>まれに <span class="wiki-missing">AICA梗塞</span></li>
-</ul>
-<h4 id="avsで確認すること">AVSで確認すること</h4>
-<ul>
-<li><a class="wiki-link" href="めまい.html#hints">#HINTS</a>（適応がある場合）</li>
-<li>聴力（指こすり・ささやきなど）</li>
-<li>座位・立位・歩行（<span class="wiki-missing">歩行評価</span>）</li>
-<li><a class="wiki-link" href="疾患詳細/神経診察.html">神経診察</a></li>
-</ul>
-<h4 id="avsで末梢性を示唆する所見">AVSで末梢性を示唆する所見</h4>
-<ul>
-<li>一方向性水平眼振</li>
-<li>明らかな神経脱落症状なし</li>
-<li>難聴なし</li>
-<li><a class="wiki-link" href="めまい.html#hints">#HINTS</a> が末梢パターン</li>
-</ul>
-<h4 id="avsで中枢性を示唆する所見">AVSで中枢性を示唆する所見</h4>
-<ul>
-<li>歩行不能 / 強い体幹失調</li>
-<li>垂直眼振</li>
-<li>方向交代性眼振</li>
-<li><a class="wiki-link" href="めまい.html#hints">#HINTS</a> が中枢パターン、または判断困難</li>
-<li>構音障害、複視、嚥下障害、片麻痺</li>
-<li>頭痛 / 頸部痛</li>
-<li>血管危険因子が強い</li>
-</ul>
-<div class="callout callout-warning">
-<div class="callout-title">AVSの原則</div>
-<div class="callout-body"><p><strong>CTをルーチンには使わない。</strong> 訓練された診療者がいるなら、まずベッドサイド評価を優先する。<a class="wiki-link" href="めまい.html#hints">#HINTS</a> が中枢パターン、または判断困難なら <a class="wiki-link" href="めまい.html#mri-mra">#MRI / MRA</a> を考える。</p></div>
-</div>
-<hr>
-<h3 id="3-t-evs">3. <span class="wiki-missing">t-EVS</span></h3>
-<p><strong>典型</strong></p>
-<ul>
-<li>頭位変換で誘発される</li>
-<li>数秒〜1分程度</li>
-<li>発作間欠期は比較的落ち着く</li>
-</ul>
-<p><strong>主な鑑別</strong></p>
-<ul>
-<li><a class="wiki-link" href="めまい.html#bppv">#BPPV</a></li>
-<li>まれに、位置変化で悪化する中枢性病変</li>
-</ul>
-<h4 id="t-evsで行うこと">t-EVSで行うこと</h4>
-<ul>
-<li><span class="wiki-missing">Dix-Hallpike</span></li>
-<li>必要に応じて <span class="wiki-missing">Supine roll test</span></li>
-</ul>
-<h4 id="後半規管bppvなら">後半規管BPPVなら</h4>
-<ul>
-<li><span class="wiki-missing">Epley法</span></li>
+<li><strong>採血</strong>（血糖・電解質・Hb）</li>
+<li><strong>12 誘導 ECG</strong>（胸痛・動悸・失神前・不整脈懸念）</li>
 </ul>
 <div class="callout callout-tip">
-<div class="callout-title">BPPVの原則</div>
-<div class="callout-body"><p>典型的な後半規管BPPVでは、不要な画像検査や漫然とした前庭抑制薬は避ける。</p></div>
+<div class="callout-title">HINTS は AVS 限定</div>
+<div class="callout-body"><p><strong>頭部衝動・眼振・偏視</strong>のベッドサイドセット。<strong>AVS で適応と手技の訓練がそろったときの追加</strong>。 t-EVS（BPPV）には使わない。手技・解釈 → <a class="wiki-link" href="疾患詳細/HINTS.html">HINTS</a></p></div>
 </div>
 <hr>
-<h3 id="4-s-evs">4. <span class="wiki-missing">s-EVS</span></h3>
-<p><strong>典型</strong></p>
+<h2 id="症候群ごとのやること">症候群ごとのやること</h2>
+<h3 id="1-失神前状態">1. 失神前状態</h3>
 <ul>
-<li>明確な誘因なし</li>
-<li>発作性に起こる</li>
-<li>発作間欠期は比較的落ち着く</li>
+<li>採血（血糖含む）、12 誘導 ECG、モニター</li>
+<li><strong>起立性変化</strong>、胸部症状があれば循環器評価</li>
+<li>詳細 → <span class="wiki-missing">失神前状態</span> / <a class="wiki-link" href="意識消失.html">意識消失</a></li>
 </ul>
-<p><strong>主な鑑別</strong></p>
+<h3 id="2-avs急性持続性">2. AVS（急性持続性）</h3>
 <ul>
-<li><a class="wiki-link" href="めまい.html#m%C3%A9ni%C3%A8re%E7%97%85">#Ménière病</a></li>
-<li><span class="wiki-missing">前庭性片頭痛</span></li>
-<li><span class="wiki-missing">TIA</span></li>
-<li><span class="wiki-missing">不整脈</span></li>
-<li><span class="wiki-missing">起立性低血圧</span></li>
-</ul>
-<h4 id="s-evsで重視すること">s-EVSで重視すること</h4>
-<ul>
-<li>脳神経診察</li>
-<li>視野</li>
-<li>眼球運動</li>
-<li>四肢協調運動</li>
-<li>座位・立位・歩行（<span class="wiki-missing">歩行評価</span>）</li>
-<li>聴覚症状</li>
-<li>血管危険因子</li>
-<li>胸痛 / 動悸 / 失神</li>
+<li><strong>HINTS</strong>（適応があれば）、聴力、座位・立位・歩行、神経診察</li>
+<li><strong>末梢性示唆</strong>：一方向性水平眼振、明らかな神経脱落症状なし、難聴なし、HINTS 末梢パターン</li>
+<li><strong>中枢性示唆</strong>：歩行不能 / 強い体幹失調、垂直眼振、方向交代性眼振、HINTS 中枢パターンまたは判断困難、構音・複視・嚥下・片麻痺、頭痛 / 頸部痛、血管危険因子強い</li>
 </ul>
 <div class="callout callout-warning">
-<div class="callout-title">s-EVSでの画像</div>
-<div class="callout-body"><p>中枢と末梢の区別に<strong>CTは使わない</strong>。TIAや大血管病変が気になるなら、血管評価を考える。</p></div>
+<div class="callout-title">AVS の原則</div>
+<div class="callout-body"><p><strong>CT をルーチンには使わない</strong>（後方循環虚血に感度低い）。 ベッドサイドで末梢示唆なら経過観察、中枢示唆 or 判断困難なら <strong>MRI / MRA</strong>。</p></div>
+</div>
+<h3 id="3-t-evs頭位誘発">3. t-EVS（頭位誘発）</h3>
+<ul>
+<li><strong>Dix-Hallpike</strong>、必要に応じて <strong>Supine roll test</strong></li>
+<li>後半規管 BPPV なら <strong>Epley 法</strong></li>
+<li>詳細 → <span class="wiki-missing">BPPV</span></li>
+</ul>
+<div class="callout callout-tip">
+<div class="callout-title">典型的 BPPV の原則</div>
+<div class="callout-body"><p>不要な画像検査や漫然とした前庭抑制薬は避ける。</p></div>
+</div>
+<h3 id="4-s-evs誘因なし反復">4. s-EVS（誘因なし反復）</h3>
+<ul>
+<li>脳神経診察、視野、眼球運動、四肢協調運動、歩行、聴覚症状、血管危険因子、胸痛 / 動悸 / 失神</li>
+<li>詳細 → <span class="wiki-missing">Ménière病</span> / <span class="wiki-missing">前庭性片頭痛</span> / <span class="wiki-missing">TIA</span></li>
+</ul>
+<div class="callout callout-warning">
+<div class="callout-title">s-EVS での画像</div>
+<div class="callout-body"><p>中枢・末梢の区別に CT は使わない。TIA・大血管病変が気になれば<strong>血管評価</strong>。</p></div>
 </div>
 <hr>
-<h2 id="救急でまず押さえる代表疾患">救急でまず押さえる代表疾患</h2>
-<h3 id="前庭神経炎"><span class="wiki-missing">前庭神経炎</span></h3>
-<ul>
-<li>AVSの代表</li>
-<li>強い持続性めまい</li>
-<li>悪心・嘔吐を伴う</li>
-<li>難聴は通常ない</li>
-<li>神経所見があれば再考する</li>
-<li>ステロイドは「全員に必須」ではなく、発症3日以内であれば短期投与を患者と相談して検討する位置づけ</li>
-</ul>
-<h3 id="bppv"><span class="wiki-missing">BPPV</span></h3>
-<ul>
-<li>t-EVSの代表</li>
-<li><span class="wiki-missing">Dix-Hallpike</span> で後半規管BPPVを診断する</li>
-<li><span class="wiki-missing">Epley法</span> で治療する</li>
-<li>不要な画像検査は減らす</li>
-<li>前庭抑制薬を漫然と続けない</li>
-</ul>
-<h3 id="ménière病"><span class="wiki-missing">Ménière病</span></h3>
-<ul>
-<li>自発性めまい発作</li>
-<li>発作は20分〜12時間</li>
-<li>低〜中音域優位の感音難聴</li>
-<li>耳鳴り / 耳閉感を伴うことが多い</li>
-<li>ただし救急では、<strong>難聴があるから末梢性と決めつけない</strong></li>
-</ul>
-<h3 id="後方循環梗塞"><span class="wiki-missing">後方循環梗塞</span></h3>
-<ul>
-<li>AVSで見逃してはいけない危険診断</li>
-<li>めまい単独のように見えることがある</li>
-<li>歩行不能、体幹失調、眼振パターン、HINTS異常が重要</li>
-<li>早期MRIでも見逃しはありうるため、臨床判断を捨てない</li>
-</ul>
+<h2 id="疾患別のポイント入口">疾患別のポイント（入口）</h2>
+<div class="table-wrap"><table><thead><tr><th>疾患</th><th>一言特徴</th><th>詳細</th></tr></thead><tbody><tr><td><strong>前庭神経炎</strong></td><td>AVS の代表、持続性めまい + 悪心、難聴なし。ステロイドは全例必須ではなく、発症 3 日以内で短期投与を相談</td><td><span class="wiki-missing">前庭神経炎</span></td></tr><tr><td><strong>BPPV</strong></td><td>t-EVS の代表、Dix-Hallpike → Epley で治療、画像・前庭抑制薬は漫然と使わない</td><td><span class="wiki-missing">BPPV</span></td></tr><tr><td><strong>Ménière病</strong></td><td>自発性発作 20 分〜12 h、低〜中音感音難聴 + 耳鳴 / 耳閉。<strong>難聴があっても末梢と決めつけない</strong></td><td><span class="wiki-missing">Ménière病</span></td></tr><tr><td><strong>後方循環梗塞</strong></td><td>AVS で見逃してはいけない。めまい単独に見える。歩行不能・体幹失調・眼振パターン・HINTS 異常が重要。早期 MRI でも見逃しあり</td><td><span class="wiki-missing">後方循環梗塞</span></td></tr></tbody></table></div>
 <hr>
-<h2 id="検査">検査</h2>
-<h3 id="基本">基本</h3>
+<h2 id="検査の置き方">検査の置き方</h2>
 <ul>
-<li>採血(血糖＋脱水・感染・貧血・電解質などは適応で)</li>
-<li>12誘導ECG</li>
-</ul>
-<h3 id="画像">画像</h3>
-<h4 id="頭部ct"><span class="wiki-missing">頭部CT</span></h4>
-<ul>
-<li>出血疑い</li>
-<li>外傷</li>
-<li>激しい頭痛</li>
-<li>明らかな局所神経症状</li>
-<li>ただし <strong>後方循環虚血の除外には弱い</strong></li>
-</ul>
-<h4 id="mri-mra"><span class="wiki-missing">MRI</span> / <span class="wiki-missing">MRA</span></h4>
-<ul>
-<li>AVSで中枢性が疑わしい</li>
-<li><a class="wiki-link" href="めまい.html#hints">#HINTS</a> が中枢パターン、または判断困難</li>
-<li>高リスク背景</li>
-<li>局所神経症状あり</li>
-<li>ただし <strong>早期陰性でも絶対安心ではない</strong></li>
+<li><strong>採血</strong>：血糖、電解質、Hb、脱水・感染の疑いで適宜</li>
+<li><strong>12 誘導 ECG</strong>：失神前・胸痛・動悸・不整脈懸念</li>
+<li><strong>頭部 CT</strong>：出血疑い / 外傷 / 激しい頭痛 / 局所神経症状（<strong>後方循環虚血の除外には弱い</strong>）</li>
+<li><strong>MRI / MRA</strong>：AVS で中枢性疑い、HINTS 中枢 or 判断困難、高リスク背景、局所神経症状（<strong>早期陰性でも絶対安心ではない</strong>）</li>
 </ul>
 <hr>
 <h2 id="disposition">disposition</h2>
-<h3 id="帰宅を考えやすい場合">帰宅を考えやすい場合</h3>
+<h3 id="帰宅を考えやすい">帰宅を考えやすい</h3>
 <ul>
-<li>典型的な <a class="wiki-link" href="めまい.html#bppv">#BPPV</a></li>
-<li>歩行可能</li>
-<li>経口摂取可能</li>
-<li>中枢性 / 循環器性が低そう</li>
+<li>典型的 BPPV、歩行可、経口可</li>
+<li>中枢性 / 循環器性が低い</li>
 <li>フォロー可能</li>
 </ul>
-<h3 id="入院-コンサルトを考える場合">入院 / コンサルトを考える場合</h3>
+<h3 id="入院-コンサルト">入院 / コンサルト</h3>
 <ul>
 <li>中枢性を否定できない</li>
-<li>歩行不能</li>
-<li>持続する嘔吐</li>
-<li>局所神経症状あり</li>
-<li>高リスク背景</li>
+<li>歩行不能、持続する嘔吐</li>
+<li>局所神経症状あり、高リスク背景</li>
 <li>独居などで安全性が低い</li>
 </ul>
 <hr>
 <h2 id="ピットフォール">ピットフォール</h2>
 <ul>
-<li>「回転性だから末梢」と決めつける</li>
-<li>CTが正常だから安心する</li>
-<li>AVSに適応がないのに <a class="wiki-link" href="めまい.html#hints">#HINTS</a> を使う</li>
-<li>難聴があるから中枢性ではないと思い込む</li>
-<li>症状改善 = 安全 と考える</li>
-<li>歩けないめまいを軽視する</li>
+<li><strong>「回転性だから末梢」と決めつける</strong></li>
+<li><strong>CT 正常で安心する</strong>（後方循環虚血に弱い）</li>
+<li><strong>AVS 以外で HINTS を使う</strong></li>
+<li><strong>難聴 = 中枢性ではない、と思い込む</strong></li>
+<li><strong>症状改善 = 安全と考える</strong></li>
+<li><strong>歩けないめまいを軽視する</strong></li>
+</ul>
+<hr>
+<h2 id="出典トリアージ・症候群分類">出典（トリアージ・症候群分類）</h2>
+<ul>
+<li><strong>TiTrATE</strong>：Newman-Toker DE ほか. <em>Neurol Clin.</em> 2015.</li>
+<li><strong>HINTS</strong>：Kattah JC ほか. <em>Stroke.</em> 2009.</li>
+<li>治療・個別疾患の一次文献は疾患ページ</li>
 </ul>
 <hr>
 <h2 id="関連ページ">関連ページ</h2>
 <ul>
-<li><span class="wiki-missing">神経症状</span></li>
-<li><a class="wiki-link" href="疾患詳細/神経診察.html">神経診察</a></li>
-<li><span class="wiki-missing">眼振の見方</span></li>
-<li><a class="wiki-link" href="めまい.html#hints">#HINTS</a></li>
-<li><span class="wiki-missing">歩行評価</span></li>
-<li><a class="wiki-link" href="めまい.html#bppv">#BPPV</a></li>
-<li><span class="wiki-missing">Dix-Hallpike</span></li>
-<li><span class="wiki-missing">Epley法</span></li>
-<li><a class="wiki-link" href="めまい.html#%E5%89%8D%E5%BA%AD%E7%A5%9E%E7%B5%8C%E7%82%8E">#前庭神経炎</a></li>
-<li><a class="wiki-link" href="めまい.html#m%C3%A9ni%C3%A8re%E7%97%85">#Ménière病</a></li>
-<li><a class="wiki-link" href="めまい.html#%E5%BE%8C%E6%96%B9%E5%BE%AA%E7%92%B0%E6%A2%97%E5%A1%9E">#後方循環梗塞</a></li>
-<li><a class="wiki-link" href="めまい.html#1-%E5%A4%B1%E7%A5%9E%E5%89%8D%E7%8A%B6%E6%85%8B">#1. 失神前状態</a></li>
-<li><span class="wiki-missing">TiTrATE</span></li>
-<li><a class="wiki-link" href="めまい.html#red-flags">#Red flags</a></li>
+<li><a class="wiki-link" href="疾患詳細/神経診察.html">神経診察</a> / <span class="wiki-missing">眼振の見方</span> / <span class="wiki-missing">歩行評価</span> / <a class="wiki-link" href="疾患詳細/HINTS.html">HINTS</a></li>
+<li><span class="wiki-missing">BPPV</span> / <span class="wiki-missing">Dix-Hallpike</span> / <span class="wiki-missing">Epley法</span></li>
+<li><span class="wiki-missing">前庭神経炎</span> / <span class="wiki-missing">Ménière病</span> / <span class="wiki-missing">前庭性片頭痛</span></li>
+<li><span class="wiki-missing">後方循環梗塞</span> / <span class="wiki-missing">小脳梗塞</span> / <span class="wiki-missing">延髄梗塞</span> / <span class="wiki-missing">橋梗塞</span> / <span class="wiki-missing">AICA梗塞</span></li>
+<li><span class="wiki-missing">失神前状態</span> / <a class="wiki-link" href="意識消失.html">意識消失</a> / <span class="wiki-missing">TIA</span></li>
 </ul>
     </div>
+    <footer class="page-footer">
+      <a href="index.html">↑ 主訴ナビへ戻る</a>
+    </footer>
   </article>
 </body>
 </html>
