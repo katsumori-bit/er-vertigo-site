@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="color-scheme" content="light dark" />
+  <title>小腸閉塞</title>
+  <link rel="stylesheet" href="../er-note.css" />
+</head>
+<body>
+  <nav class="site-bar">
+    <a class="site-bar__back" href="../腹痛.html">← 腹痛へ戻る</a>
+    <span class="site-bar__title">小腸閉塞</span>
+  </nav>
+  <article class="note-shell">
+    <header class="note-header">
+      <h1>小腸閉塞（Small Bowel Obstruction：SBO）</h1>
+      <p class="source-badge">元: 急性腹症 参考用.md（窪田『フラッシュアップ急性腹症』第 2 版）の章構成を踏襲した要約 ／ 補完出典は文末記載</p>
+    </header>
+    <details class="toc"><summary>目次（原著章順）</summary><ol>
+      <li><a href="#定義">定義と分類</a></li>
+      <li><a href="#アプローチ">アプローチの原則</a></li>
+      <li><a href="#病歴">病歴</a></li>
+      <li><a href="#身体所見">身体所見</a></li>
+      <li><a href="#初期診断">初期診断と鑑別疾患</a></li>
+      <li><a href="#検査">検査</a></li>
+      <li><a href="#確定診断">確定診断/詳細診断</a></li>
+      <li><a href="#治療方針">治療方針</a></li>
+    </ol></details>
+    <div class="md-body">
+
+<p>#ER #救急 #腹痛 #SBO #closedloop #絞扼</p>
+
+<h2 id="定義">定義と分類</h2>
+<p><strong>要点：</strong>「腸閉塞」と「イレウス（麻痺性イレウス）」は別物。閉塞があれば <strong>intestinal obstruction</strong>、なくびまん性に拡張だけしているのは <strong>paralytic ileus</strong>（＝状態を表す語、診断名ではない）。本書では両者を区別して用いる。</p>
+
+<h3>分類の 2 軸：成因 × 形態</h3>
+<div class="table-wrap"><table>
+<thead><tr><th>軸</th><th>分類</th><th>代表</th></tr></thead>
+<tbody>
+<tr><td rowspan="3"><strong>成因</strong></td><td>① 内因性（intrinsic）</td><td>腫瘍／炎症性肥厚／先天閉鎖</td></tr>
+<tr><td>② 外因性（extrinsic）</td><td><strong>癒着（最多）</strong>／バンド／内ヘルニア／腸重積／捻転</td></tr>
+<tr><td>③ 管腔内異物（intraluminal bodies）</td><td>食餌（食物残渣）／胆石／胃石／誤嚥した異物</td></tr>
+<tr><td rowspan="2"><strong>形態</strong></td><td>Single obstruction（SO）</td><td>閉塞 1 カ所、口側内容はドレナージ可能</td></tr>
+<tr><td>Closed loop obstruction（CLO）</td><td>内腔から見て閉塞 2 カ所以上、ドレナージ不能の loop が存在</td></tr>
+</tbody></table></div>
+
+<div class="callout callout-note">
+<div class="callout-title">バンド閉塞の特殊性</div>
+<div class="callout-body">
+バンドは大網などが小孔を作りそこに小腸ループが入り込んで閉塞する。<strong>バンド閉塞は必ず closed loop</strong> となる。指 2 本くらいの小孔が危険。一方で構成物が軟部組織のため締め付けが緩い場合があり、<strong>「closed loop obstruction without strangulation」</strong>（腸管は締まるが腸間膜＝血管は締まらない）という中間状態も存在する。
+</div>
+</div>
+<hr>
+
+<h2 id="アプローチ">アプローチの原則</h2>
+<p><strong>要点：</strong>「<strong>形態 → 成因</strong>」の順で考える。最大のキーワードは <strong>closed loop</strong>。</p>
+
+<h3>① Closed loop なら原則手術</h3>
+<ul>
+<li>Closed loop は<strong>必ず外因性（extrinsic）</strong>（バンド・ヘルニア・捻転・複数の癒着）。例外は複数の非連続性炎症（クローン病くらい）</li>
+<li>ドレナージ不能部位があるので、成因にかかわらず<strong>原則手術適応</strong></li>
+<li>絞扼（strangulation）なら緊急手術 → <strong>「Never let the sunset or sunrise!」</strong>（日暮れまで／朝まで待つな）。疑ったら時機を逸さない</li>
+<li>CT で closed loop を疑うコツ：closed loop と思った腸管の連続性を口径差まで追う → 反対側にも追う → <strong>2 つの口径差が近い位置 = バンド／内ヘルニア</strong>、明らかに離れていれば癒着</li>
+</ul>
+
+<h3>② Single obstruction は成因で分ける</h3>
+<ul>
+<li>閉塞部の壁が肥厚 → <strong>内因性</strong>（腫瘍は手術、炎症は待てば消退）</li>
+<li>壁が肥厚していない → <strong>外因性</strong>（癒着は保存可、腸重積は手術、他臓器圧迫は原疾患による）</li>
+<li>口側に「物」が見える → <strong>管腔内異物</strong>（食餌は通過待ち可、胆石・大きな異物は手術）</li>
+</ul>
+
+<h3>③ Partial obstruction（不完全閉塞）の 4 パターン</h3>
+<ul>
+<li>放射線性腸炎（一定範囲の慢性炎症）／腹膜播種（多発狭窄）／緩いバンド閉塞／複数の癒着</li>
+<li>いずれも<strong>保存治療によく反応</strong>。「癒着による single obstruction」は partial にはならない（＝この 4 つ以外で「partial」を使うのはやめた方がよい）</li>
+</ul>
+
+<div class="callout callout-warning">
+<div class="callout-title">初診で常に頭にあるべき 2 つの問い</div>
+<div class="callout-body">
+<ol>
+<li><strong>本当に腸閉塞か？</strong>（画像で腸管拡張しているだけで、別の疾患が隠れていないか — 「イレウス＝腸閉塞」と取り違えていないか）</li>
+<li><strong>絞扼か？</strong>（減圧治療だけでよいのか、いま手術するのか）</li>
+</ol>
+これが解消されないまま入院手続きや申し送りが先行する症例で、後から絞扼とわかる hospital delay が多い。
+</div>
+</div>
+<hr>
+
+<h2 id="病歴">病歴</h2>
+<p><strong>要点：</strong>全 SBO の <strong>2/3 が癒着性</strong>。典型像（術後の single & adhesion）に合わないなら<strong>「何かおかしい、絞扼ではないか？」</strong>と疑う姿勢が hospital delay 減少につながる。</p>
+
+<h3>典型的な癒着性腸閉塞の病歴</h3>
+<ul>
+<li><strong>開腹手術の既往</strong></li>
+<li><strong>Fiber rich diet</strong>（昆布・ワカメ・コンニャクなど発症前 1〜3 日）</li>
+<li><strong>Gradually onset intermittent pain</strong>（数分〜数十分間隔）</li>
+<li><strong>嘔吐</strong>（吐物は食物残渣ではなく<strong>胆汁を含む腸液</strong>＝茶〜黄色の水様）</li>
+<li><strong>排便排ガスの消失</strong></li>
+<li>繰り返す患者では<strong>以前の症状との差異</strong>を聞く</li>
+</ul>
+
+<h3>痛みの間隔と閉塞部位</h3>
+<ul>
+<li><strong>近位空腸：4〜5 分</strong>／<strong>遠位回腸：十数分〜</strong>（遠位ほど間隔が長い）</li>
+</ul>
+
+<h3>嘔吐・NG ドレナージの性状</h3>
+<ul>
+<li>典型 SBO は<strong>胆汁が混じる茶〜黄色の水様排液</strong></li>
+<li>NG 入れても排液が乏しい／胃液のみ／緑色の薄い胆汁のみ → <strong>近位閉塞 or closed loop</strong>を考える</li>
+</ul>
+
+<h3>開腹既往の質</h3>
+<ul>
+<li><strong>胆嚢摘出（右肋骨弓下切開）</strong>：癒着するのは大腸主体で SBO になりにくい</li>
+<li><strong>腹腔鏡下手術</strong>：切開が小さく癒着 SBO 起こしにくい</li>
+<li><strong>虫垂切除</strong>：傷は大きくないが <strong>SBO の原因として最多</strong></li>
+<li>手術既往なしで SBO を疑うとき → <strong>ヘルニア（全 SBO の約 10%）</strong>、内ヘルニア、腹部外傷既往（交通事故など腸間膜損傷で数カ月後に狭窄）、バンド strangulation を考える</li>
+</ul>
+<hr>
+
+<h2 id="身体所見">身体所見</h2>
+<p><strong>要点：</strong>腹部膨満＋腸雑音亢進が典型。所見と疾患を直結させず、<strong>所見 → 病態 → 疾患</strong>の順で考える。<strong>外ヘルニアの触診を必ず行う</strong>。</p>
+
+<ul>
+<li><strong>腹部膨満</strong>：一見して目立つ膨満は小腸ではなく大腸拡張のことが多い</li>
+<li><strong>腸雑音</strong>：通常亢進。SBO 感度は 30〜40% で<strong>亢進してなくても否定はできない</strong>。蠕動の周期で低下時に当たることもある → 強い痛みのときに再聴診する</li>
+<li><strong>「metallic sound」を絞扼と直結しない</strong>。短くて張りの強い高音 → 「閉塞腸管が短く・内圧が高い病態」 → 絞扼された closed loop で矛盾なく説明できる、という考え方</li>
+<li><strong>圧痛は拡張腸管の上にある</strong>：遠位閉塞で拡張範囲が長ければ広く、近位閉塞なら限局。<strong>closed loop に一致した強い圧痛</strong>はそれだけで closed loop を強く示唆。<strong>絞扼で虚血</strong>があれば体表から触って<strong>冷たく感じる</strong>こともある</li>
+<li><strong>癒着性で腹膜刺激症状（反跳痛・筋性防御）が出たら 2 通り</strong>：① そもそも腸閉塞でなく腹膜炎の他疾患／② 絞扼性 SBO（壁全層が病変＝腹膜まで波及）</li>
+<li><strong>ヘルニアのチェック</strong>：内ヘルニアは触ってわからないが<strong>外ヘルニアは触診可能</strong>。とくに<strong>高齢女性で手術既往なし</strong> → <strong>大腿ヘルニア</strong>を見落とさない</li>
+</ul>
+<hr>
+
+<h2 id="初期診断">初期診断と鑑別疾患</h2>
+<p><strong>要点：</strong>第一歩は <strong>SBO なのか ileus なのか</strong>を区別すること。「<strong>イレウスと思ったので CT を撮った</strong>」だけは避ける。</p>
+
+<h3>典型 4 所見のどれかが欠けたとき</h3>
+<ul>
+<li>① 手術既往なし（あっても否定にはならない／なくても起こり得る）</li>
+<li>② 嘔吐がない／少量（食物残渣のみ・嘔気の割に内容少なら closed loop を考える）</li>
+<li>③ 排便排ガスがある（明らかにあれば SBO は否定的）</li>
+<li>④ 腸雑音が亢進していない（<strong>消失することはない</strong>。痛みのピーク時に再聴診）</li>
+<li><strong>局所症状（限局した部位の痛み）</strong>があれば SBO らしくない（SBO の痛みはびまん性／全般性）</li>
+</ul>
+
+<h3>イレウスを起こし得る原疾患（腹膜炎を起こし得る病態）</h3>
+<ul>
+<li>穿孔性虫垂炎／消化管穿孔／腸管壊死（<strong>虚血の段階ではイレウスにならない</strong>ことに注意）／急性膵炎／劇症型大腸炎</li>
+</ul>
+<hr>
+
+<h2 id="検査">検査</h2>
+
+<h3>血液</h3>
+<ul>
+<li>SBO の診断に有用な血液検査は<strong>ない</strong>。脱水・電解質・鑑別目的で取る</li>
+<li><strong>乳酸</strong>は広範腸管虚血で感度 90% / 特異度 87%。ただし虚血範囲が狭い／絞扼早期では正常もあり、<strong>正常値で絞扼を否定できない</strong></li>
+</ul>
+
+<h3>単純 X 線</h3>
+<ul>
+<li>感度 59〜83% / 特異度 67〜83%。完全に無用ではない</li>
+<li><strong>「ニボー＝腸閉塞」は誤り</strong>。Air fluid level は重力下でガスと液体があれば出る所見</li>
+<li>SBO に特異的な所見は <strong>「口径差変化（caliber change）」</strong>。「<strong>小腸内ガスあり拡張・大腸ガスなし</strong>」が SBO 示唆（多くは single obstruction、<strong>closed loop は例外</strong>）</li>
+<li>同一 loop の AFL の高さに <strong>5 mm 以上の差</strong>があれば SBO の可能性が高い（イレウスでは段差なし）</li>
+</ul>
+
+<h3>腹部 CT（造影）— ゴールドスタンダード</h3>
+<ul>
+<li>感度 79〜96% / 特異度 87〜100%。<strong>造影必須</strong>（単純では感度低下）</li>
+<li>10 分かけて腸管を追って連続性を確かめる。<strong>形態 → 成因</strong>の順に評価</li>
+</ul>
+
+<div class="table-wrap"><table>
+<thead><tr><th>評価軸</th><th>チェック項目</th></tr></thead>
+<tbody>
+<tr><td><strong>形態</strong></td><td>口径差はどこか／ 1 カ所か複数か／複数なら近接か離れているか（近接 → closed loop ＝ バンド・内ヘルニア）</td></tr>
+<tr><td><strong>成因</strong></td><td>閉塞部の壁肥厚（intrinsic）／腹壁ヘルニア</td></tr>
+<tr><td><strong>参考</strong></td><td>閉塞先進部の食物残渣（細かいエア混じる）／腸閉塞では断面が<strong>正円形</strong>（緊満）／<strong>closed loop はエアが少なく液貯留主体</strong>／closed loop が限局範囲にパッキングされていれば<strong>内ヘルニア</strong>を疑う</td></tr>
+<tr><td><strong>絞扼示唆</strong></td><td>腹水（<strong>血性で強く示唆</strong>）／腸間膜脂肪織浮腫／壁の造影効果低下 or 消失／closed loop 内の<strong>腸管ひだの消失</strong>（壊死示唆）</td></tr>
+</tbody></table></div>
+
+<p><strong>造影効果の解釈</strong>：造影されない＝絞扼決定、しかし<strong>造影されていても虚血を否定できない</strong>。</p>
+
+<h3>小腸造影（保存治療後の通過評価）</h3>
+<ul>
+<li>急性期に診断目的では行わない</li>
+<li>水溶性造影剤（ガストログラフィン）が <strong>4〜24 時間以内に結腸到達</strong>すれば軽快率が高く（<strong>感度 96 / 特異度 98</strong>）、その群は 99% が手術回避できた</li>
+<li>逆に 24 時間以内に結腸未到達なら 90% が手術を要した</li>
+</ul>
+
+<h3>超音波</h3>
+<ul>
+<li>全体評価には弱いが補助的に有用</li>
+<li><strong>「keyboard sign」「to and fro」は SBO 特異的でない</strong>（ileus でも見える）</li>
+<li>SBO 特異所見は CT 同様<strong>口径差変化</strong>。腸管断面が正円形（緊満）なら SBO らしい</li>
+<li>closed loop はエアが少ないので CT より US で見えることもある</li>
+</ul>
+
+<h3>腹水の性状（虚血の指標）</h3>
+<div class="table-wrap"><table>
+<thead><tr><th>性状</th><th>意味</th></tr></thead>
+<tbody>
+<tr><td>黄色透明（straw yellow）</td><td>虚血の可能性低</td></tr>
+<tr><td>淡血性（serosanguineous）</td><td>腸管虚血の可能性</td></tr>
+<tr><td>明らかに血性（bloody）</td><td>すでに壊死の可能性高</td></tr>
+</tbody></table></div>
+<p>腹水中 <strong>RBC &gt; 20,000/mm³</strong> で絞扼確率 100%、<strong>&gt; 40,000/mm³</strong> では高率に切除を要する（壊死していた）との報告。臨床所見と画像で決めきれず、もう一押しが欲しいときの予測因子。</p>
+<hr>
+
+<h2 id="確定診断">確定診断 / 詳細診断</h2>
+<p><strong>要点：</strong>「イレウス」で済ませず、<strong>「どこが、どのように、なんで」閉塞しているか</strong>を説明できてはじめて SBO を診断したことになる。</p>
+<div class="table-wrap"><table>
+<thead><tr><th></th><th colspan="3">Single obstruction（SO）</th><th colspan="2">Closed loop obstruction（CLO）</th></tr>
+<tr><th></th><th>外因性</th><th>内因性</th><th>管腔内</th><th>外因性</th><th>内因性</th></tr></thead>
+<tbody>
+<tr><td><strong>緊急手術</strong></td><td>ヘルニア（リヒター型）／腸重積</td><td></td><td></td><td><strong>バンド／捻転／ヘルニア</strong></td><td></td></tr>
+<tr><td><strong>準緊急手術</strong></td><td></td><td>腫瘍</td><td>胆石・胃石・消化不能食餌</td><td></td><td></td></tr>
+<tr><td><strong>保存治療可能</strong></td><td><strong>癒着</strong></td><td>急性炎症／慢性炎症（放射線腸炎）</td><td>消化可能食餌</td><td>複数癒着／腹膜播種</td><td>複数の慢性炎症（クローン）</td></tr>
+</tbody></table></div>
+<p><small>Closed loop は唯一の例外（複数の非連続性炎症＝クローン病）を除き必ず外因性。</small></p>
+<hr>
+
+<h2 id="治療方針">治療方針</h2>
+
+<h3>① Closed loop obstruction → 原則手術</h3>
+<ul>
+<li>「<strong>closed loop = 手術</strong>」と覚える</li>
+<li><strong>絞扼疑いは 12 時間以内に手術</strong>するかを判断（&gt; 12 時間で腸管切除が必要になる確率が増える）</li>
+<li>急性輸入脚症候群も緊急手術適応 → <a class="wiki-link" href="輸入脚症候群.html">輸入脚症候群</a></li>
+<li>絞扼所見のない closed loop は夜中の手術場ではなくてよいが、<strong>早期手術を考慮</strong></li>
+<li><strong>複数癒着で closed loop ＋ partial obstruction</strong> は保存治療で軽快しやすく、過去に同様エピソードがあることが多い</li>
+</ul>
+
+<h3>② Single obstruction → 保存治療から</h3>
+<ul>
+<li>外因性：腸重積 → 手術／壁外圧迫・浸潤 → 原疾患による</li>
+<li>内因性：炎症 → 治癒で再開通／腫瘍 → 手術（治癒切除 vs バイパス）</li>
+<li>管腔内：食餌は通過待ち可、消化不能物・胆石は手術</li>
+</ul>
+
+<h3>癒着性 SBO の保存治療</h3>
+<ul>
+<li><strong>NPO</strong></li>
+<li><strong>NG tube による腸管減圧</strong>（long tube は侵襲増の割に奏効率に差なし）</li>
+<li><strong>補液</strong>：拡張腸管内の液は <strong>internal fluid shift</strong>（小腸 3 cm × 3 m で約 2 L、胃も拡張で計 5〜6 L）。仮に半分が水分でも <strong>3 L の脱水</strong>と考える</li>
+<li>水溶性造影剤（ガストログラフィン）は治療効果に賛否あり</li>
+<li><strong>抗菌薬は推奨されない</strong>（必要を支持する強い根拠なし）</li>
+</ul>
+
+<h3>保存治療が奏効しないとき</h3>
+
+<div class="callout callout-warning">
+<div class="callout-title">① 急性期に症状がスムーズに軽快しない場合</div>
+<div class="callout-body">
+<p>「single & adhesion と思って保存しているが、実は違う？」と疑う場面。<strong>初診から 12〜24 時間以上の手術遅延で合併症率が上昇</strong>するため、最初の 12〜24 時間は <strong>closed loop を見落としていないか</strong>定時評価する。</p>
+<p>チェック項目（2〜6 時間ごと）：</p>
+<ul>
+<li>持続痛（strangulation 症状）</li>
+<li>腹膜刺激症状</li>
+<li>循環動態（尿量低下／頻脈／低血圧）</li>
+<li>痛み止めを繰り返し要する</li>
+<li>腹水増加・性状変化（yellow → serosanguineous）</li>
+<li>WBC・血清膵酵素・乳酸の上昇（参考値）</li>
+</ul>
+<p>痛み止めを自動指示にして夜間に何度も使われ、気づいたら腸管壊死、というパターンを避ける。</p>
+</div>
+</div>
+
+<h3>② 症状軽快したが SBO 状態が継続するとき</h3>
+<ul>
+<li>Cox らの 123 例：保存で通過する症例の <strong>88% が 48 時間以内</strong>、残り 12% も <strong>72 時間以内</strong>に軽快</li>
+<li>→ <strong>48〜72 時間が断念目安</strong>。5 日超で合併症・死亡率が上昇するので避ける</li>
+</ul>
+<hr>
+
+<h2>このページから張るリンク</h2>
+<ul>
+<li><a class="wiki-link" href="../腹痛.html">← 腹痛入口へ戻る</a></li>
+<li><a class="wiki-link" href="嵌頓ヘルニア.html">嵌頓ヘルニア</a>（手術既往なしの SBO で必ず検索）</li>
+<li><a class="wiki-link" href="内ヘルニア.html">内ヘルニア</a>（手術既往なしの closed loop）</li>
+<li><a class="wiki-link" href="輸入脚症候群.html">輸入脚症候群</a>（特殊な closed loop、緊急手術）</li>
+<li><a class="wiki-link" href="腸重積.html">腸重積</a>（成人は腫瘍が先進部 → 原則切除）</li>
+<li><a class="wiki-link" href="急性腸管虚血.html">急性腸管虚血</a>（絞扼鑑別）</li>
+<li><a class="wiki-link" href="大腸閉塞.html">大腸閉塞</a>（別物としての対比）</li>
+</ul>
+
+<h2>出典</h2>
+<ul>
+<li>窪田忠夫『フラッシュアップ急性腹症』第 2 版（中外医学社）— 章構成の踏襲元</li>
+<li>Washington Manual of Medical Therapeutics, 32nd ed. — イレウスと腸閉塞の定義</li>
+<li>Di Saverio S, et al. Bologna guidelines（WSES ASBO working group）<em>World J Emerg Surg</em> 2013</li>
+<li>Branco BC, et al. <em>Br J Surg</em> 2010 — 水溶性造影剤の診断・治療的役割の系統的レビュー</li>
+<li>Cox MR, et al. <em>Aust NZ J Surg</em> 1993 — 保存治療の安全性と期間</li>
+<li>Kobayashi S, et al. <em>J Gastrointest Surg</em> 2007 — 腹水穿刺と絞扼予測</li>
+<li>急性腹症診療ガイドライン 2015（日本腹部救急医学会）</li>
+</ul>
+
+    </div>
+    <footer class="page-footer">
+      <a href="../index.html">↑ 主訴ナビへ戻る</a>
+    </footer>
+  </article>
+</body>
+</html>

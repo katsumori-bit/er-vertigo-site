@@ -1,323 +1,1122 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="color-scheme" content="light dark" />
-  <title>腹痛</title>
-  <link rel="stylesheet" href="er-note.css" />
-</head>
-<body>
-  <nav class="site-bar">
-    <a class="site-bar__back" href="index.html">← 主訴ナビ</a>
-    <span class="site-bar__title">腹痛</span>
-  </nav>
-  <article class="note-shell">
-    <header class="note-header">
-      <h1>腹痛</h1>
-      <p class="source-badge">元: 臨床/ER/腹痛.md</p>
-    </header>
-    <details class="toc"><summary>目次（14 セクション）</summary><ol><li><a href="#0-5分でやること">0〜5分でやること</a></li><li><a href="#カルテで先に拾う到着前の5つ">カルテで先に拾う（到着前の5つ）</a></li><li><a href="#最優先に外す急性腹症">最優先に外す急性腹症</a></li><li><a href="#まず打つ手">まず打つ手</a></li><li><a href="#まず取るべき最小情報">まず取るべき最小情報</a></li><li><a href="#部位別first-に考える疾患とやること">部位別：first に考える疾患とやること</a></li><li><a href="#検査の考え方">検査の考え方</a></li><li><a href="#画像を読むときの順番">画像を読むときの順番</a></li><li><a href="#初期対応診断がつくまで">初期対応（診断がつくまで）</a></li><li><a href="#症候群で考える鑑別">症候群で考える鑑別</a></li><li><a href="#便秘と決めつけない">便秘と決めつけない</a></li><li><a href="#disposition">disposition</a></li><li><a href="#出典トリアージ・部位別診断・早期鎮痛">出典（トリアージ・部位別診断・早期鎮痛）</a></li><li><a href="#このページから張るリンク">このページから張るリンク</a></li></ol></details>
-    <div class="md-body">
-<p>#ER #救急 #腹痛 #急性腹症 #穿孔 #腸閉塞 #虚血 #胆道系</p>
-<div class="callout callout-summary">
-<div class="callout-title">このページは「診断がつくまで」</div>
-<div class="callout-body"><ol>
-<li><strong><a href="#0-5分でやること">0〜5分でやること</a></strong>の順で、不安定・腹膜刺激・見逃せない腹痛を拾う</li>
-<li><strong>カルテで先に勝てる情報</strong>を取る</li>
-<li><strong>部位 × パターン</strong>で枝を決めて<strong>画像を切る</strong></li>
-<li><strong>鎮痛・制吐・輸液</strong>を並行で回す</li>
-<li><strong>診断がついたら疾患ページへ</strong> → <span class="wiki-missing">胆嚢炎・胆管炎</span> / <span class="wiki-missing">膵炎</span> / <span class="wiki-missing">虫垂炎</span> / <span class="wiki-missing">憩室炎</span> / <span class="wiki-missing">腸閉塞</span> / <span class="wiki-missing">腸間膜虚血</span> / <span class="wiki-missing">AAA</span> / <span class="wiki-missing">異所性妊娠</span> / <span class="wiki-missing">尿管結石</span></li>
-</ol></div>
-</div>
-<p>腹痛診療の目的は、最初から診断名を当てることではない。まずやることは、<strong>今すぐ死にうる腹痛</strong>を拾うこと、<strong>緊急手術・IVR・専門科コールが必要な腹痛</strong>を拾うこと、<strong>帰してはいけない腹痛</strong>を拾うこと、残った患者では<strong>部位・発症様式・随伴症状</strong>から鑑別を絞ることである。</p>
-<p>急性腹痛は ED 受診の約 10%、150 以上の病因があるが上位 20 疾患で 70% をカバーする（AAFP 2023）。</p>
-<hr>
-<h2 id="0-5分でやること">0〜5分でやること</h2>
-<p>診断名を考えすぎず、<strong>何を見て・何を聞いて・何を押して・誰を呼ぶか</strong>の順で進める。</p>
-<h3 id="0-5分-見た瞬間">0. 見た瞬間（〜30秒）：重症感</h3>
-<p>まず患者を見て、ショック・敗血症・腹膜炎・血管イベントを頭に置く。</p>
-<ul>
-<li>顔色不良、冷汗、末梢冷感、mottling</li>
-<li>意識変容、苦悶様表情、呼吸が荒い</li>
-<li>体動困難、歩くと響く、ベッド上でじっとしている／転げ回っている</li>
-<li>吐血・下血・黒色便の訴えがあれば問診を伸ばさず体制を組む</li>
-</ul>
-<p>これらが強いときは、問診を長く続けず、バイタル・ルート・採血・鎮痛・上級医・外科と<strong>並行</strong>で進める。</p>
-<h3 id="0-5分-不安定">1. 〜1分：バイタルと腹膜刺激</h3>
-<p><strong>血圧・脈拍・SpO2・体温・意識</strong>を確認しながら、腹部を軽く触れる。ここでの目的は確定診断ではなく、<strong>今すぐ外科／上級医を呼ぶ患者か</strong>を決めること。</p>
-<p>以下のいずれかがあれば<strong>不安定な腹痛</strong>として扱う。</p>
-<ul>
-<li><strong>ショック</strong>：低血圧、頻脈、冷汗、末梢冷感、意識変容</li>
-<li><strong>敗血症疑い</strong>：発熱または低体温、頻脈、頻呼吸、mottling</li>
-<li><strong>腹膜炎疑い</strong>：板状硬、反跳痛、体動で響く腹痛</li>
-<li><strong>血管イベント疑い</strong>：突然発症、発症時最強痛、<strong>痛みの割に腹部所見が乏しい</strong></li>
-<li><strong>消化管穿孔疑い</strong>：突然の強い腹痛＋腹膜刺激、free air を疑う状況</li>
-<li><strong>絞扼・閉塞疑い</strong>：嘔吐、膨満、排ガス排便停止、開腹歴、ヘルニア</li>
-</ul>
-<p>この時点で不安定なら、<strong>モニター・ルート・採血（血ガス・乳酸）・輸液・鎮痛・制吐・外科／上級医・造影 CT</strong>を同時並行で進める（詳細は下記「まず打つ手」）。</p>
-<h3 id="0-5分-病歴6">2. 〜3分：病歴はまず 6 項目だけ</h3>
-<p>最初から全部聞かない。まず次だけを取る。</p>
-<ol>
-<li>いつから？</li>
-<li>どこが痛い？（本人の指さし＝罹患部位とは限らない→全身を触る）</li>
-<li>痛みの始まり方（下記 <strong>sudden / acute / gradually</strong>）</li>
-<li>持続痛か、間欠痛か、発作性か</li>
-<li>嘔吐・下痢はあるか（性状まで）</li>
-<li>発熱はあるか（無熱でも油断しない）</li>
-</ol>
-<p>この 6 つで緊急疾患の方向性をかなり絞れる。</p>
-<h3 id="0-5分-発症様式">3. 始まり方は必ず 3 つに分ける</h3>
-<p>「急に痛くなりましたか？」だけでは <strong>sudden</strong> と <strong>acute</strong> を区別できない。カルテに「急に」とだけ書かない。</p>
-<div class="table-wrap"><table><thead><tr><th>発症様式</th><th>意味</th><th>疑うこと</th></tr></thead><tbody><tr><td><strong>sudden onset</strong></td><td>ある一瞬を境に最強痛</td><td>血管疾患、穿孔、破裂、捻転など</td></tr><tr><td><strong>acute onset</strong></td><td>数分〜十数分で最強痛</td><td>膵炎、胆嚢炎、胆石発作など</td></tr><tr><td><strong>gradually onset</strong></td><td>数十分〜数時間で増悪</td><td>虫垂炎、憩室炎、腸炎、腸閉塞など</td></tr></tbody></table></div>
-<div class="callout callout-tip">
-<div class="callout-title">聞き方の例</div>
-<div class="callout-body"><p>「まったく痛くなかったのに、ある瞬間にスイッチが入ったように痛くなりましたか？」<br>「おかしいなと思ってから、数分〜10 分くらいかけてだんだん強くなりましたか？」</p></div>
-</div>
-<p><strong>sudden</strong> なら、まず血管・穿孔・破裂・捻転の枠で動く。<strong>acute</strong> では心窩部なら穿孔と膵炎の枝が重要になる。</p>
-<h3 id="0-5分-間欠">4. 持続痛か間欠痛か</h3>
-<p>「ずっと痛いですか？」だけでは不十分（間欠でもイエスになりやすい）。</p>
-<div class="callout callout-tip">
-<div class="callout-title">聞き方の例</div>
-<div class="callout-body"><p>いま強い痛みがあるとき：「今より少し楽な時間はありましたか？」<br>いま落ち着いているとき：「今より強い痛みが波のように来る時間はありましたか？」</p></div>
-</div>
-<div class="table-wrap"><table><thead><tr><th>痛みの型</th><th>考えること</th></tr></thead><tbody><tr><td>持続痛</td><td>炎症、穿孔、虚血、膵炎、胆嚢炎など</td></tr><tr><td>間欠痛</td><td>腸閉塞、腸炎、虫垂炎初期など（<strong>完全に痛くない時間</strong>があるなら間欠として扱う）</td></tr><tr><td>発作性</td><td>胆石・尿管結石、消化性潰瘍、abdominal angina など</td></tr></tbody></table></div>
-<h3 id="0-5分-5パターン">5. 最初に 5 パターンへ振り分ける</h3>
-<p><strong>A.</strong> 不安定・腹膜刺激あり → 外科腹症として動く（ルート・採血・血ガス・乳酸・輸液・鎮痛・抗菌薬を考慮・外科・造影 CT）。<br>
-<strong>B.</strong> sudden onset／発症時最強痛 → AAA、解離、腸間膜虚血、穿孔、異所性妊娠破裂、卵巣捻転、尿管結石、胆石発作など。<strong>痛みの割に所見が乏しければ腸間膜虚血</strong>を疑い CTA（「まず打つ手」参照）。<br>
-<strong>C.</strong> 嘔吐・膨満・排ガス排便停止 → 腸閉塞。開腹歴・ヘルニア・担癌・オピオイド・腸雑音・CT（transition、closed loop、虚血所見）。絞扼が否定できなければ外科を早める。<br>
-<strong>D.</strong> 発熱＋局在痛 → 右下：虫垂炎、左下：憩室炎、右季肋：胆嚢炎・胆管炎、心窩：膵炎・穿孔・ACS、下腹部：婦人科・尿路感染・PID。局在があるときは画像で原因を確認。<br>
-<strong>E.</strong> 下痢主体で全身状態良好 → 腸炎も考えるが決めつけない。<strong>血便・高熱・強い腹痛・高齢・免疫不全・脱水・腹膜刺激・少量粘液便のみ</strong>などがあれば単純胃腸炎として帰さない。</p>
-<h3 id="high-risk-腹痛">High risk patients</h3>
-<p>所見が軽くても、<strong>低い閾値で検査・画像・相談</strong>を考える。</p>
-<ul>
-<li>高齢、<strong>透析</strong>、<strong>Af</strong>、心血管疾患・PAD、抗凝固薬、免疫抑制、担癌、糖尿病</li>
-<li>妊娠可能年齢、開腹歴、オピオイド使用</li>
-</ul>
-<div class="callout callout-danger">
-<div class="callout-title">特に危険度を上げるフレーズ</div>
-<div class="callout-body"><p><strong>透析患者の腹痛</strong>　<strong>Af 患者の腹痛</strong>　<strong>高齢者の突然の腹痛</strong>　<strong>痛みの割に腹部所見が乏しい腹痛</strong></p></div>
-</div>
-<hr>
-<h2 id="カルテで先に拾う到着前の5つ">カルテで先に拾う（到着前の5つ）</h2>
-<p><strong>開腹歴・担癌・オピオイド・抗凝固薬・心房細動</strong></p>
-<ul>
-<li><strong>開腹歴</strong> → 癒着性腸閉塞</li>
-<li><strong>担癌</strong> → 悪性腸閉塞、穿孔、感染、治療関連有害事象</li>
-<li><strong>オピオイド</strong> → 便秘、麻痺性イレウス</li>
-<li><strong>抗凝固薬</strong> → 出血、腹壁血腫</li>
-<li><strong>Af / 血管リスク</strong> → 腸間膜虚血</li>
-<li><strong>胆石・尿管結石歴</strong> → 再発</li>
-<li><strong>婦人科既往</strong> → 異所性妊娠、卵巣捻転、PID</li>
-</ul>
-<hr>
-<h2 id="最優先に外す急性腹症">最優先に外す急性腹症</h2>
-<ul>
-<li>絞扼性腸閉塞・腸間膜虚血・消化管穿孔・<strong>AAA</strong></li>
-<li>重症胆管炎 / 重症胆嚢炎・重症膵炎</li>
-<li>異所性妊娠・卵巣捻転・嵌頓 / 絞扼ヘルニア</li>
-</ul>
-<div class="callout callout-danger">
-<div class="callout-title">迷ったらこの 4 つを先に外す</div>
-<div class="callout-body"><p><strong>AAA・腸間膜虚血・消化管穿孔・異所性妊娠</strong></p></div>
-</div>
-<hr>
-<h2 id="まず打つ手">まず打つ手</h2>
-<p><strong>不安定・腹膜炎が疑われるときは問診を長く続けない。</strong>モニター・ルート・採血・輸液・鎮痛・外科／上級医・画像を並行で回す。</p>
-<h3 id="1-不安定-腹膜刺激あり">1. 不安定 / 腹膜刺激あり</h3>
-<ul>
-<li>ルート → 採血（<strong>乳酸含む</strong>）→ 血ガス</li>
-<li>輸液・鎮痛・制吐、敗血症像なら<strong>早期抗菌薬</strong>（源が絞れたら疾患ページで）</li>
-<li><strong>外科コール + 造影 CT を急ぐ</strong>（AAA が強ければ POCUS 先行も可）</li>
-</ul>
-<h3 id="2-局在あり外科腹症を否定できない">2. 局在あり、外科腹症を否定できない</h3>
-<ul>
-<li><strong>造影 CT を低い閾値で</strong></li>
-<li>例外：<strong>右上腹部痛 → US 先行</strong>、<strong>妊娠可能年齢の骨盤痛 → US 先行</strong>、<strong>典型的尿管結石 → 単純 CT</strong></li>
-</ul>
-<h3 id="3-痛みの割に所見が乏しい">3. 痛みの割に所見が乏しい</h3>
-<ul>
-<li><strong>腸間膜虚血</strong>を疑う。<strong>乳酸正常でも否定しない</strong>。<strong>CTA</strong> を考える</li>
-</ul>
-<hr>
-<h2 id="まず取るべき最小情報">まず取るべき最小情報</h2>
-<p>入口の<strong>病歴 6 項目</strong>に対応するチェックリスト。取れたら枝を決めて画像・検査へ。</p>
-<ol>
-<li><strong>いつから</strong>（発症早期来院は手術疾患を意識、数日からは余裕も高齢・認知・麻痺は例外）</li>
-<li><strong>どこが</strong>：心窩 / 右上 / 右下 / 左下 / 下腹部 / びまん性・<strong>背部痛のみでも腹痛を聞く</strong>。本人の指さしだけで診察を終えない（虫垂などでズレる）</li>
-<li><strong>始まり方</strong>（<a href="#0-5分-発症様式">0〜5分 §3</a>）：<strong>sudden</strong>（一瞬で最強）／<strong>acute</strong>（数分〜十数分で最強）／<strong>gradually</strong>（数十分〜時間で増悪）—「急に」だけで書かない</li>
-<li><strong>持続 / 間欠 / 発作性</strong>：疝痛、移動痛。間欠は<strong>楽な瞬間の有無</strong>で確認（<a href="#0-5分-間欠">0〜5分 §4</a>）</li>
-<li><strong>嘔吐・下痢</strong>：悪心のみ／食物残渣様／水様・腸液様など。性状・回数・血便</li>
-<li><strong>発熱</strong>：無熱でも穿孔・壊死・敗血症では<strong>低体温</strong>があり得る</li>
-</ol>
-<ul>
-<li><strong>随伴の追加</strong>：便秘、胸痛、失神、排尿症状</li>
-<li><strong>女性</strong>：最終月経、妊娠可能性、不正出血</li>
-<li><strong>背景</strong>：高齢、手術歴、血管リスク、免疫不全、抗凝固薬、胆石歴、尿路結石歴</li>
-</ul>
-<hr>
-<h2 id="部位別first-に考える疾患とやること">部位別：first に考える疾患とやること</h2>
-<div class="table-wrap"><table><thead><tr><th>部位</th><th>first</th><th>ED でやること</th><th>疾患ページ</th></tr></thead><tbody><tr><td><strong>右上腹部</strong></td><td>胆嚢炎 / 胆石疝痛 / 胆管炎</td><td>Murphy・発熱・黄疸、CBC/CRP/<strong>肝胆道系 + T-Bil</strong>、<strong>初手 US</strong>、胆管炎疑いなら <strong>CT で石確認</strong></td><td><span class="wiki-missing">胆嚢炎・胆管炎</span> / <a class="wiki-link" href="疾患詳細/胆管結石.html">胆管結石</a></td></tr><tr><td><strong>心窩部</strong></td><td>潰瘍・穿孔 / 膵炎 / <strong>ACS</strong> / 大動脈病変</td><td><strong>ECG + トロポニン</strong>（症状なくても）、<strong>リパーゼ</strong>、腹膜刺激あれば穿孔疑い</td><td><span class="wiki-missing">膵炎</span> / <span class="wiki-missing">ACS</span></td></tr><tr><td><strong>右下腹部</strong></td><td>虫垂炎、女性は卵巣捻転 / 異所性妊娠 / PID</td><td>食欲低下・発熱・移動痛・反跳痛、尿、<strong>妊娠反応必須</strong>、画像（成人 CT、若年女性 US 先行可）</td><td><span class="wiki-missing">虫垂炎</span> / <span class="wiki-missing">異所性妊娠</span></td></tr><tr><td><strong>左下腹部</strong></td><td>憩室炎 / 腸炎 / 尿管結石、女性は婦人科</td><td>発熱・便通、CBC/CRP、<strong>CT</strong></td><td><span class="wiki-missing">憩室炎</span> / <span class="wiki-missing">尿管結石</span></td></tr><tr><td><strong>下腹部 / 骨盤</strong></td><td>膀胱炎 / 腎盂腎炎 / 尿閉 / 婦人科 / PID / 卵巣捻転 / 異所性妊娠</td><td><strong>妊娠反応必須</strong>、排尿症状、性器出血、骨盤 US</td><td><span class="wiki-missing">異所性妊娠</span> / <span class="wiki-missing">卵巣捻転</span></td></tr><tr><td><strong>びまん性</strong></td><td>胃腸炎 / 腸閉塞 / 便秘 / <strong>腸間膜虚血</strong> / DKA / 敗血症 / 腹膜炎</td><td>膨満・腸雑音・腹膜刺激・脱水、CBC/CMP/CRP/<strong>乳酸</strong>、血糖、<strong>造影 CT</strong> を考える</td><td><span class="wiki-missing">腸閉塞</span> / <span class="wiki-missing">腸間膜虚血</span> / <a class="wiki-link" href="疾患詳細/急性胃腸炎.html">急性胃腸炎</a> / <span class="wiki-missing">DKA・HHS</span></td></tr></tbody></table></div>
-<div class="callout callout-danger">
-<div class="callout-title">胆管炎を疑ったら — Charcot / Reynolds / TG18</div>
-<div class="callout-body"><ul>
-<li><strong>Charcot の三徴</strong>：発熱・黄疸・右上腹部痛（揃わなくても胆管炎はある）</li>
-<li><strong>Reynolds の五徴</strong>：上記 + ショック + 意識障害 → <strong>重症胆管炎として即動く</strong>（CT を待たず消化器コール + 抗菌薬開始）</li>
-<li><strong>TG18 基準・重症度・抗菌薬選択・ドレナージタイミング</strong> → <span class="wiki-missing">胆嚢炎・胆管炎</span> / <a class="wiki-link" href="疾患詳細/胆管結石.html">胆管結石</a></li>
-</ul></div>
-</div>
-<div class="callout callout-danger">
-<div class="callout-title">妊娠可能年齢の下腹部痛</div>
-<div class="callout-body"><p><strong>妊娠反応を飛ばさない。hCG 値だけで異所性妊娠は除外できない</strong>（ACOG / ACEP）。</p></div>
-</div>
-<hr>
-<h2 id="検査の考え方">検査の考え方</h2>
-<h3 id="血液・尿・心電図">血液・尿・心電図</h3>
-<ul>
-<li><strong>採血</strong>：CBC、電解質 / 腎機能、肝胆道系 + T-Bil、CRP、リパーゼ、<strong>乳酸</strong>（重症感・虚血疑い）、<strong>トロポニン</strong>（心窩部痛・高齢・冠リスク）</li>
-<li><strong>尿定性、妊娠反応</strong>（妊娠可能年齢で原則全例）</li>
-<li><strong>ECG</strong>：心窩部痛、高齢、冠リスクあり</li>
-</ul>
-<h3 id="画像選択の基本">画像選択の基本</h3>
-<div class="table-wrap"><table><thead><tr><th>場面</th><th>初手</th></tr></thead><tbody><tr><td>非局在性 / びまん性 / 外科腹症が気になる</td><td><strong>造影 CT</strong></td></tr><tr><td>右上腹部痛</td><td><strong>超音波</strong></td></tr><tr><td>妊娠可能年齢の骨盤痛</td><td><strong>骨盤超音波</strong></td></tr><tr><td>尿管結石が強く疑わしい</td><td><strong>単純 CT</strong></td></tr><tr><td>高齢 + 低血圧 + 腹痛 / 背部痛</td><td><strong>AAA を POCUS or CT で除外</strong></td></tr><tr><td>痛みの割に所見が乏しい / 虚血疑い</td><td><strong>CTA</strong></td></tr></tbody></table></div>
-<p>ACR は非局在性急性腹痛で<strong>造影 CT を通常適切</strong>、腹部単純 X 線は「管理方針を変えないことが多い」としている。</p>
-<hr>
-<h2 id="画像を読むときの順番">画像を読むときの順番</h2>
-<p>手術・IVR・緊急コンサルトに直結する所見を先に拾う：</p>
-<ol>
-<li><strong>穿孔</strong>：free air、腹水、限局炎症</li>
-<li><strong>血管</strong>：AAA、解離、SMA / SMV 閉塞・血栓</li>
-<li><strong>閉塞</strong>：拡張腸管、transition point、closed loop</li>
-<li><strong>絞扼 / 虚血</strong>：腸管壁造影不良（特異度 95%）、腸間膜浮腫、腹水、pneumatosis、portal venous gas、whirl sign</li>
-<li><strong>炎症</strong>：虫垂、憩室、胆嚢、膵周囲</li>
-<li><strong>骨盤</strong>：卵巣腫大、骨盤液体貯留</li>
-</ol>
-<p>閉塞 + 腹膜刺激 / 絞扼徴候があれば<strong>非手術に固執しない</strong>（WSES SBO）。</p>
-<hr>
-<h2 id="初期対応診断がつくまで">初期対応（診断がつくまで）</h2>
-<div class="callout callout-tip">
-<div class="callout-title">診断ごとの詳細処方は疾患ページへ</div>
-<div class="callout-body"><p>抗菌薬レジメン・膵炎輸液・胆管炎ドレナージ等は <strong><span class="wiki-missing">胆嚢炎・胆管炎</span> / <span class="wiki-missing">膵炎</span> / <span class="wiki-missing">虫垂炎</span> / <span class="wiki-missing">憩室炎</span> / <span class="wiki-missing">腸閉塞</span></strong> で解説。</p></div>
-</div>
-<h3 id="鎮痛診断前に投与してよい推奨度-a">鎮痛（<strong>診断前に投与してよい</strong>、推奨度 A）</h3>
-<ul>
-<li><strong>アセトアミノフェン IV（アセリオ）1000 mg を 15 分点滴</strong></li>
-<ul>
-<li>体重 50 kg 未満は 15 mg/kg、投与間隔 4–6 h、1 日 4000 mg 上限</li>
-</ul>
-<li><strong>ブチルスコポラミン（ブスコパン）20 mg IV/IM</strong>：疝痛（胆石・尿管結石）に。持続痛には効果乏しい。<strong>緑内障・前立腺肥大・頻脈性不整脈・麻痺性イレウス禁忌</strong></li>
-<li><strong>NSAIDs（フルルビプロフェン IV 50 mg、ジクロフェナク坐 25–50 mg）</strong>：尿管結石・胆石疝痛に有用。腎・脱水・潰瘍・出血リスクでは慎重。<strong>STEC 疑い・脱水の下痢では避ける</strong>（→ <a class="wiki-link" href="下痢.html">下痢</a>）</li>
-</ul>
-<div class="callout callout-tip">
-<div class="callout-title">痛みを後回しにしない</div>
-<div class="callout-body"><p>早期鎮痛は診断精度を損なわない（急性腹症診療ガイドライン 2015、推奨度 A）。 <strong>アセリオ IV → 疝痛なら NSAIDs or ブスコパン → 効果不十分なら外科コンサルトを早める</strong>。</p></div>
-</div>
-<h3 id="制吐">制吐</h3>
-<ul>
-<li><strong>メトクロプラミド 10 mg IV</strong> or <strong>オンダンセトロン 4 mg IV</strong></li>
-<li>イレウス疑いでは制吐しつつも<strong>原因評価と減圧を遅らせない</strong></li>
-<li>詳細 → <a class="wiki-link" href="嘔気・嘔吐.html">嘔気・嘔吐</a></li>
-</ul>
-<h3 id="輸液">輸液</h3>
-<ul>
-<li>嘔吐・脱水・敗血症・膵炎・閉塞では早めに補正（細胞外液 500–1000 mL ボーラス）</li>
-<li><strong>膵炎の輸液戦略（moderately aggressive、乳酸リンゲル）</strong> → <span class="wiki-missing">膵炎</span></li>
-</ul>
-<h3 id="抗菌薬原則">抗菌薬（原則）</h3>
-<ul>
-<li><strong>すべての腹痛に入れない</strong>。source を絞ってから</li>
-<li><strong>入れる場面</strong>：胆管炎、胆嚢炎、穿孔疑い、腹腔内感染、壊死性腸管疑い、complicated appendicitis、敗血症</li>
-<li><strong>具体的レジメン（市中 / 重症 / 院内、TG18 重症度別）</strong> → <span class="wiki-missing">胆嚢炎・胆管炎</span> / <span class="wiki-missing">虫垂炎</span> / <span class="wiki-missing">憩室炎</span> / 腹腔内感染の経験的治療（JAID/JSC 2023）</li>
-<li><strong>原則：source control が本体</strong>。ドレナージ・手術が遅れないように</li>
-</ul>
-<hr>
-<h2 id="症候群で考える鑑別">症候群で考える鑑別</h2>
-<div class="table-wrap"><table><thead><tr><th>症候群</th><th>鑑別</th></tr></thead><tbody><tr><td>突然の激痛</td><td>AAA / 腸間膜虚血 / 穿孔 / 卵巣捻転 / 尿管結石 / 胆石疝痛 / 異所性妊娠破裂</td></tr><tr><td>嘔吐 + 膨満 + 排ガス排便停止</td><td>単純性腸閉塞 / <strong>絞扼性腸閉塞</strong> / 嵌頓ヘルニア / 結腸閉塞 / 麻痺性イレウス</td></tr><tr><td>発熱 + 腹痛</td><td>胆嚢炎 / 胆管炎 / 虫垂炎 / 憩室炎 / 腎盂腎炎 / PID / 腹腔内膿瘍</td></tr><tr><td>痛みの割に所見が弱い</td><td>腸間膜虚血 / 初期閉塞 / 早期穿孔前 / 代謝性疾患 / 帯状疱疹前駆期</td></tr></tbody></table></div>
-<hr>
-<h2 id="便秘と決めつけない">便秘と決めつけない</h2>
-<ul>
-<li><strong>便秘で済ませにくい</strong>：排ガス停止、嘔吐、膨満、持続痛、発熱、腹膜刺激、担癌、開腹歴、炎症反応高い</li>
-<li><strong>オピオイド誘発性便秘（OIC）</strong>：下剤の予防・早期介入が基本。<strong>ただし閉塞が疑わしいときは下剤で押さない</strong></li>
-<li>下剤選択・OIC の管理 → <a class="wiki-link" href="疾患詳細/下剤の選択.html">下剤の選択</a></li>
-</ul>
-<hr>
-<h2 id="disposition">disposition</h2>
-<h3 id="帰しにくい">帰しにくい</h3>
-<ul>
-<li>不安定 / 腹膜刺激 / 原因不明の強い痛み</li>
-<li>高齢・免疫不全・担癌</li>
-<li>コントロール不能な嘔吐 / 疼痛</li>
-<li>腸管虚血・穿孔・胆管炎・AAA・婦人科救急が否定できない</li>
-<li>画像で虚血 / 閉塞 / 穿孔 / 膿瘍</li>
-</ul>
-<h3 id="帰宅を考えやすい">帰宅を考えやすい</h3>
-<ul>
-<li>バイタル安定・赤旗なし・経口可・痛み改善</li>
-<li>重大疾患の除外ができている</li>
-<li>再診基準を明確に伝えられる</li>
-</ul>
-<div class="callout callout-warning">
-<div class="callout-title">帰宅時に必ず伝える</div>
-<div class="callout-body"><ul>
-<li>痛み増悪 / 発熱 / 嘔吐持続</li>
-<li>血便 / 黒色便 / 失神 / 新たな腹膜刺激感</li>
-<li>再受診の目安（48 時間以内）</li>
-</ul></div>
-</div>
-<hr>
-<details class="section-fold"><summary id="折りたたみ用メモ">折りたたみ用メモ</summary>
-<h3 id="外してはいけないもの">外してはいけないもの</h3>
-<ul>
-<li><span class="wiki-missing">AAA</span> / <span class="wiki-missing">腸間膜虚血</span> / <span class="wiki-missing">消化管穿孔</span> / <span class="wiki-missing">絞扼性腸閉塞</span></li>
-<li><span class="wiki-missing">異所性妊娠</span> / <span class="wiki-missing">卵巣捻転</span></li>
-<li><span class="wiki-missing">重症胆管炎</span>（TG18 Grade III）</li>
-</ul>
-<p>AAA は腹部拍動性腫瘤がなくても否定できない。腸間膜虚血は初期に腹部所見が乏しく乳酸上昇は遅れうる。異所性妊娠は hCG 値だけで除外しない。</p>
-<h3 id="やりがちなミス">やりがちなミス</h3>
-<ul>
-<li><strong>「便秘」で済ませる</strong>（開腹歴・担癌・排ガス停止があるのに）</li>
-<li><strong>鎮痛を後回しにする</strong>（診断精度は損なわない）</li>
-<li><strong>右上腹部痛でいきなり CT</strong>（初手は US）</li>
-<li><strong>心窩部痛で ECG を取らない</strong>（ACS の見逃し）</li>
-<li><strong>妊娠可能年齢で妊娠反応を飛ばす</strong></li>
-<li><strong>「乳酸が正常だから虚血ではない」と決めつける</strong></li>
-<li><strong>鎮痛で痛みが消えた＝安全と錯覚</strong>（外科腹症が隠れる）</li>
-</ul>
-<h3 id="帰宅前に最低限">帰宅前に最低限</h3>
-<ul>
-<li>再診基準を具体的に伝える</li>
-<li>鎮痛の処方、食事・水分指導</li>
-<li>フォロー先と時期の確認</li>
-</ul>
-<hr>
-<h2 id="出典トリアージ・部位別診断・早期鎮痛">出典（トリアージ・部位別診断・早期鎮痛）</h2>
-<ul>
-<li><strong>AAFP 2023</strong>：Macaluso CR, McNamara RM. Acute Abdominal Pain in Adults. <em>Am Fam Physician.</em> 2023;107(6):585–595.</li>
-<li><strong>ACR Appropriateness Criteria</strong>：Acute Nonlocalized Abdominal Pain. <em>JACR.</em> 2019.</li>
-<li><strong>急性腹症診療ガイドライン 2015</strong>：日本腹部救急医学会.（<strong>診断前の早期アセトアミノフェン IV 投与を推奨度 A</strong>）</li>
-<li><strong>WSES 2025</strong>：虫垂炎 Jerusalem Guidelines. <em>World J Emerg Surg.</em></li>
-<li><strong>WSES SBO</strong>：Bologna Guidelines for adhesive SBO.</li>
-<li><strong>ACOG / ACEP</strong>：hCG 値だけでの異所性妊娠除外を否定.</li>
-<li>治療・処方の一次文献（TG18、ACG 膵炎、JAID/JSC 腹腔内感染）は <strong>疾患ページ</strong>（<span class="wiki-missing">胆嚢炎・胆管炎</span> / <span class="wiki-missing">膵炎</span> 等）で引用</li>
-</ul>
-<hr>
-<h2 id="このページから張るリンク">このページから張るリンク</h2>
-<ul>
-<li><span class="wiki-missing">ショック対応</span></li>
-<li><span class="wiki-missing">腹部診察</span> / <span class="wiki-missing">腹部エコー</span> / <span class="wiki-missing">腹部CTの読み方</span></li>
-<li><span class="wiki-missing">腸閉塞</span> / <span class="wiki-missing">絞扼性腸閉塞</span> / <span class="wiki-missing">腸間膜虚血</span> / <span class="wiki-missing">消化管穿孔</span></li>
-<li><span class="wiki-missing">虫垂炎</span> / <span class="wiki-missing">憩室炎</span></li>
-<li><span class="wiki-missing">胆嚢炎・胆管炎</span> / <a class="wiki-link" href="疾患詳細/胆管結石.html">胆管結石</a> / <span class="wiki-missing">膵炎</span></li>
-<li><span class="wiki-missing">異所性妊娠</span> / <span class="wiki-missing">卵巣捻転</span> / <span class="wiki-missing">妊娠可能年齢の腹痛</span></li>
-<li><span class="wiki-missing">尿管結石</span> / <span class="wiki-missing">AAA</span></li>
-<li><a class="wiki-link" href="疾患詳細/下剤の選択.html">下剤の選択</a></li>
-<li><a class="wiki-link" href="下痢.html">下痢</a> / <a class="wiki-link" href="嘔気・嘔吐.html">嘔気・嘔吐</a> / <a class="wiki-link" href="吐血.html">吐血</a> / <a class="wiki-link" href="血便・下血.html">血便・下血</a> / <a class="wiki-link" href="発熱.html">発熱</a></li>
-</ul>
-</details>
-    </div>
-    <footer class="page-footer">
-      <a href="index.html">↑ 主訴ナビへ戻る</a>
-    </footer>
-  </article>
-</body>
-</html>
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="color-scheme" content="light dark" />
+  <title>腹痛</title>
+  <link rel="stylesheet" href="er-note.css" />
+</head>
+<body>
+  <nav class="site-bar">
+    <a class="site-bar__back" href="index.html">← 主訴ナビ</a>
+    <span class="site-bar__title">腹痛</span>
+  </nav>
+  <article class="note-shell">
+    <header class="note-header">
+      <h1>腹痛</h1>
+      <p class="source-badge">元: 急性腹症 参考用.md（窪田『フラッシュアップ急性腹症』第 2 版）第 1 章「腹痛疾患へのアプローチ」段落別要点整理</p>
+    </header>
+    <details class="toc"><summary>目次（7 節 + 出典・リンク）</summary>
+      <ol>
+        <li><a href="#病歴聴取">§1 病歴聴取</a></li>
+        <li><a href="#身体所見">§2 身体所見</a></li>
+        <li><a href="#初期診断">§3 初期診断と鑑別疾患</a></li>
+        <li><a href="#検査">§4 確定診断のための検査</a></li>
+        <li><a href="#つかないとき">§5 確定診断がつかないとき</a></li>
+        <li><a href="#経過観察">§6 経過観察と再評価</a></li>
+        <li><a href="#アプローチ">§7 各種アプローチ法</a></li>
+        <li><a href="#出典">§8 出典・参考文献</a></li>
+        <li><a href="#リンク">§9 このページから張るリンク</a></li>
+      </ol>
+    </details>
+    <div class="md-body">
+<p>#ER #救急 #腹痛 #急性腹症 #穿孔 #腸閉塞 #虚血 #胆道系</p>
+
+<div class="callout callout-summary">
+<div class="callout-title">このページは「診断がつくまで」</div>
+<div class="callout-body"><ol>
+<li><strong>病歴 6 項目</strong>（いつから／どこ／始まり方／持続 vs 間欠／嘔吐下痢／発熱）で鑑別の方向を決める</li>
+<li><strong>身体所見</strong>でバイタル・腹膜刺激・局在を拾う</li>
+<li><strong>初期診断と鑑別疾患</strong>を立て、必要な検査を選ぶ</li>
+<li><strong>診断がつかなければ</strong>帰宅 / 入院 / 緊急手術を判断、確定がつけば再評価フローへ</li>
+<li><strong>診断がついたら疾患ページへ</strong>飛んで続きを読む（→ §9 リンク索引）</li>
+</ol></div>
+</div>
+
+<div class="callout callout-tip">
+<div class="callout-title">主訴が腹痛ではないとき</div>
+<div class="callout-body"><ul>
+<li><strong>嘔吐が前景</strong>で腹痛は軽い → <a class="wiki-link" href="嘔気・嘔吐.html">嘔気・嘔吐</a></li>
+<li><strong>下痢が前景</strong> → <a class="wiki-link" href="下痢.html">下痢</a></li>
+<li><strong>血便・下血が主体</strong> → <a class="wiki-link" href="血便・下血.html">血便・下血</a></li>
+<li><strong>吐血</strong> → <a class="wiki-link" href="吐血.html">吐血</a></li>
+<li><strong>発熱が前景</strong>で腹痛は軽い → <a class="wiki-link" href="発熱.html">発熱</a></li>
+<li><strong>胸痛と上腹部痛が紛らわしい</strong> → <a class="wiki-link" href="胸痛.html">胸痛</a>（下壁梗塞・解離）</li>
+</ul></div>
+</div>
+<hr>
+
+<h2 id="病歴聴取">§1 病歴聴取</h2>
+<p>腹痛の鑑別はまず以下の <strong>6 項目</strong>を聴取することから始める。これでかなり方向性がつく。</p>
+<ol>
+<li>いつから？</li>
+<li>どの部位が？</li>
+<li>痛みの始まり方は？（<strong>Sudden / Acute / Gradually</strong>）</li>
+<li>持続痛か？ 間欠痛か？</li>
+<li>悪心嘔吐・下痢は伴うか？</li>
+<li>発熱はあるか？</li>
+</ol>
+<details class="callout callout-note">
+<summary>痛みの性状・強さ・放散痛などはどうする？</summary>
+<div class="callout-body"><p>性状（鈍い／鋭い）・強さ（NRS）・放散痛・増悪緩解因子も聴取項目だが、まずは「腹痛の鑑別」に焦点を当てた 6 項目を取る。残りは身体診察や検査の流れの中で追加で拾う。</p></div>
+</details>
+
+<h3 id="いつから">§1.1 発症からの時間「いつからか？」</h3>
+<ul>
+<li><strong>発症早期に来院 = 痛みが強い</strong>。重症化・緊急手術リスクの疾患を含む</li>
+<li>「この人手術かも？」と思うのは悪いセンスではない（同じ<a class="wiki-link" href="疾患詳細/小腸閉塞.html">腸閉塞</a>でも<strong>絞扼性は癒着性より早く来院</strong>する）</li>
+<li>逆に「数日前から」なら緊急手術の可能性は低くゆっくり考える余裕がある</li>
+</ul>
+<div class="callout callout-warning">
+<div class="callout-title">「数日前から」の例外</div>
+<div class="callout-body"><p><strong>高齢者・麻痺のある患者・統合失調症</strong>では、時間が経って重症化してから来院することがある。</p></div>
+</div>
+
+<h3 id="どこが">§1.2 部位「どこが痛む？」</h3>
+<ul>
+<li>まず本人に痛む場所を説明してもらう。多くは罹患臓器の直上だが<strong>必ずしも一致しない</strong></li>
+<li>典型例：<a class="wiki-link" href="疾患詳細/急性虫垂炎.html">急性虫垂炎</a>で「胃が痛い」と訴え上腹部のみ診察 →「急性胃腸炎」と誤診。実際は右下腹部にしっかり圧痛あり</li>
+<li>体性痛と違い<strong>内臓痛は本人の位置把握が曖昧</strong>。「最も痛い場所」は身体所見で求める</li>
+<li>主訴が<strong>背部痛のみ</strong>でも要注意：後腹膜臓器・胆道疾患のことがある。腹痛の有無はこちらから聞きにいく</li>
+</ul>
+<details class="callout callout-tip">
+<summary>若年男性の心窩部痛（窪田の経験談）</summary>
+<div class="callout-body"><p>「<strong>若年男性によく見られる。痛みに弱いこの世代は初期の心窩部痛を強く感じるのだろうか？</strong>」 — 虫垂炎の初期心窩部痛をそのまま訴えてくる若年男性が多い。</p></div>
+</details>
+
+<h3 id="始まり方">§1.3 発症時の様子「痛みの始まり方」</h3>
+<p>発症様式（onset）を <strong>sudden / acute / gradually</strong> の 3 つに分ける。<strong>初期診断の最大のヤマ</strong>。</p>
+<div class="table-wrap"><table>
+<thead><tr><th>分類</th><th>定義</th><th>主な疑い</th></tr></thead>
+<tbody>
+<tr><td><strong>sudden</strong></td><td>ある一瞬を境に最強痛</td><td>血管疾患（出血／虚血）、消化管穿孔（特に上部）、各種捻転</td></tr>
+<tr><td><strong>acute</strong></td><td>数分〜十数分で最強痛</td><td><a class="wiki-link" href="疾患詳細/急性膵炎.html">急性膵炎</a>、<a class="wiki-link" href="疾患詳細/胆石症・急性胆嚢炎.html">急性胆嚢炎</a>、胆石発作</td></tr>
+<tr><td><strong>gradually</strong></td><td>数十分〜数時間で増強</td><td><a class="wiki-link" href="疾患詳細/急性虫垂炎.html">急性虫垂炎</a>、<a class="wiki-link" href="疾患詳細/急性憩室炎.html">急性憩室炎</a>、腸炎、<a class="wiki-link" href="疾患詳細/小腸閉塞.html">腸閉塞</a></td></tr>
+</tbody></table></div>
+
+<div class="callout callout-warning">
+<div class="callout-title">同じ「強い上腹部痛＋汎発性腹膜炎」でも</div>
+<div class="callout-body"><p>sudden onset → <a class="wiki-link" href="疾患詳細/上部消化管穿孔.html">上部消化管穿孔</a>。acute onset → <a class="wiki-link" href="疾患詳細/急性膵炎.html">急性膵炎</a>。発症様式の聞き分けで方針が変わる。</p></div>
+</div>
+
+<details class="callout callout-tip">
+<summary>聞き方の例（sudden vs acute の区別）</summary>
+<div class="callout-body">
+<p>「<strong>急に痛くなりましたか？</strong>」だけでは sudden と acute は区別できない（両方イエスになる）。カルテに「急に痛くなった」とだけ書かない。</p>
+<ul>
+<li><strong>sudden を引き出す：</strong>「<strong>まったく痛くなかったのに、ある瞬間にスイッチが入ったみたいに痛くなりましたか？</strong>」「それまで痛くなかったのがある瞬間を境にいきなりどーん！と痛みがきましたか？」</li>
+<li><strong>acute を引き出す：</strong>「<strong>あれ？ おかしい？ なんか変だ、お腹が痛い、と思っているうちにだんだん痛みが強くなって 10 分後くらいには痛くてたまらなくなりましたか？</strong>」</li>
+<li><strong>gradually の確認：</strong>「いつから？」に即答しなければ gradually の可能性。「半日前から？」「昨日の朝から？」と質問していく</li>
+</ul>
+</div>
+</details>
+
+<p><strong>sudden onset の鑑別</strong>（緊急処置を要する疾患を多く含む）— 「血管疾患」か「消化管穿孔」と考える。</p>
+<ul>
+<li><strong>出血性</strong>（ショック合併で真っ先に疑う）：<a class="wiki-link" href="疾患詳細/破裂性腹部大動脈瘤.html">破裂性腹部大動脈瘤</a> / <a class="wiki-link" href="疾患詳細/破裂性腹腔動脈瘤.html">破裂性腹腔動脈瘤</a> / <a class="wiki-link" href="疾患詳細/破裂性腹腔動脈瘤.html">破裂性肝細胞癌</a> / <span class="wiki-missing">子宮外妊娠・卵巣出血</span></li>
+<li><strong>虚血性</strong>（痛みの割に腹部所見が乏しい）：<a class="wiki-link" href="疾患詳細/急性腸管虚血.html">急性腸管虚血</a> / 各種捻転（<span class="wiki-missing">卵巣捻転</span> など）</li>
+<li><strong>消化管穿孔</strong>：上部は sudden が多い → <a class="wiki-link" href="疾患詳細/上部消化管穿孔.html">上部消化管穿孔</a>。下部は sudden / acute / gradually どの形態もあり → <a class="wiki-link" href="疾患詳細/下部消化管穿孔.html">下部消化管穿孔</a></li>
+<li><strong>腹腔外</strong>：心筋梗塞（上腹部痛）／大動脈解離（範囲が広い／移動する）→ <a class="wiki-link" href="疾患詳細/腹痛をきたす胸部疾患.html">腹痛をきたす胸部疾患</a></li>
+</ul>
+
+<details class="section-fold">
+<summary>表 1：疾患による発症様式の違い（Abdullah 2012）</summary>
+<div class="table-wrap"><table>
+<thead><tr><th>疾患</th><th>発症</th><th>部位</th><th>性状</th><th>放散</th><th>強さ</th></tr></thead>
+<tbody>
+<tr><td><a class="wiki-link" href="疾患詳細/急性虫垂炎.html">虫垂炎</a></td><td>Gradual</td><td>臍周囲 → RLQ</td><td>初期びまん／後期局在</td><td>—</td><td>++</td></tr>
+<tr><td><a class="wiki-link" href="疾患詳細/胆石症・急性胆嚢炎.html">胆嚢炎</a></td><td>Acute</td><td>RUQ</td><td>局在、絞扼感</td><td>肩甲骨</td><td>++</td></tr>
+<tr><td><a class="wiki-link" href="疾患詳細/急性膵炎.html">膵炎</a></td><td>Acute</td><td>心窩部・背部</td><td>局在、鈍痛</td><td>背部</td><td>++〜+++</td></tr>
+<tr><td><a class="wiki-link" href="疾患詳細/急性憩室炎.html">憩室炎</a></td><td>Gradual</td><td>LLQ</td><td>局在、鈍痛</td><td>—</td><td>+</td></tr>
+<tr><td><a class="wiki-link" href="疾患詳細/上部消化管穿孔.html">穿孔性潰瘍</a></td><td>Sudden</td><td>心窩部</td><td>初期局在／後期びまん</td><td>—</td><td>+++</td></tr>
+<tr><td><a class="wiki-link" href="疾患詳細/小腸閉塞.html">小腸閉塞</a></td><td>Gradual</td><td>臍周囲</td><td>びまん、疝痛</td><td>—</td><td>++</td></tr>
+<tr><td><a class="wiki-link" href="疾患詳細/破裂性腹部大動脈瘤.html">破裂性 AAA</a></td><td>Sudden</td><td>腹部・背部・側腹</td><td>びまん、引き裂かれる</td><td>—</td><td>+++</td></tr>
+<tr><td><a class="wiki-link" href="疾患詳細/急性腸管虚血.html">腸間膜虚血</a></td><td>Sudden</td><td>臍周囲</td><td>びまん、鋭い</td><td>—</td><td>+++</td></tr>
+<tr><td>胃腸炎</td><td>Gradual</td><td>臍周囲</td><td>びまん、痙攣性</td><td>—</td><td>+〜++</td></tr>
+<tr><td><span class="wiki-missing">PID</span></td><td>Gradual</td><td>下腹部・骨盤</td><td>局在、鈍痛</td><td>大腿</td><td>++</td></tr>
+<tr><td><span class="wiki-missing">子宮外妊娠破裂</span></td><td>Sudden</td><td>下腹部・骨盤</td><td>局在、鋭い</td><td>—</td><td>++</td></tr>
+</tbody></table></div>
+</details>
+
+<h3 id="持続間欠">§1.4 持続痛か？ 間欠痛か？ 発作性か？</h3>
+<ul>
+<li><strong>持続痛の聴取は易、間欠痛が問題</strong>。「ずっと痛い？」だけでは不十分（間欠でもイエスになる）</li>
+<li><strong>間欠痛 = 消化管病変があり虚血／穿孔がない</strong>。典型は<a class="wiki-link" href="疾患詳細/小腸閉塞.html">腸閉塞</a>と<a class="wiki-link" href="疾患詳細/急性腸炎・感染性下痢症.html">腸炎</a>。これ以外で典型的間欠痛を呈する疾患は稀</li>
+<li><a class="wiki-link" href="疾患詳細/急性虫垂炎.html">虫垂炎</a>は持続痛と誤判断されやすい：間欠の<strong>間隔が数時間と長くオンオフがはっきりしない</strong>。トライツからの距離 ∝ 痛みの間隔（近位空腸 → 数分／遠位回腸 → 数十分／虫垂 → 数時間）</li>
+<li><strong>発作性</strong>：完全な無症状期間を挟む反復痛。典型は<strong>胆石・尿管結石・<a class="wiki-link" href="疾患詳細/急性潰瘍・急性胃炎.html">消化性潰瘍</a></strong>、稀に動脈硬化リスク患者の <em>abdominal angina</em>（SMA 血栓症 → <a class="wiki-link" href="疾患詳細/急性腸管虚血.html">急性腸管虚血</a>）</li>
+</ul>
+<details class="callout callout-tip">
+<summary>聞き方の例（間欠痛をあぶり出す）</summary>
+<div class="callout-body">
+<ul>
+<li>今強く痛がっているなら：「<strong>今より少し楽な時間がありましたか？</strong>」</li>
+<li>今楽そうなら：「<strong>今より強い痛みが波のように来る時間がありましたか？</strong>」</li>
+<li>「波がある？」だけだと持続でもイエス。<strong>痛みがおさまっている瞬間の有無</strong>を確認する</li>
+<li>追加：「強い痛みは何回？／何時間おき？／1 回どれくらい続く？／全然痛くない時間はあった？」</li>
+</ul>
+<p><em>窪田の経験談：「<strong>虫垂炎の手術を待っていたら『痛くなくなった』という経験がある人も多いのではないか？</strong>」</em></p>
+</div>
+</details>
+
+<h3 id="嘔吐下痢">§1.5 悪心・嘔吐、下痢</h3>
+<p><strong>消化器症状の有無 ≠ 消化器疾患の有無</strong>。例外が多いので慎重に判断する。</p>
+<ul>
+<li><a class="wiki-link" href="疾患詳細/急性憩室炎.html">大腸憩室炎</a>・繰り返す慢性の<a class="wiki-link" href="疾患詳細/急性虫垂炎.html">虫垂炎</a>は消化器症状が<strong>乏しい</strong></li>
+<li>結石（胆石・尿管結石）や臓器捻転は強い痛み＋悪心嘔吐があるが、<strong>下痢はない、嘔吐は持続しない</strong></li>
+<li>水様大量下痢があるなら<strong>蠕動が保たれている＝汎発性腹膜炎なし</strong>（緊急手術になる可能性が下がる「ホッとする」情報）</li>
+</ul>
+<div class="table-wrap"><table>
+<thead><tr><th>嘔吐の性状</th><th>意味</th></tr></thead>
+<tbody>
+<tr><td><strong>悪心のみ</strong></td><td>癒着性<a class="wiki-link" href="疾患詳細/小腸閉塞.html">腸閉塞</a>は否定的。腹部疾患の付随症状か、絞扼性腸閉塞早期の可能性</td></tr>
+<tr><td><strong>食物残渣様</strong></td><td>痛みに伴う、または<strong>胃出口部閉塞</strong>（小児：肥厚性幽門狭窄症／成人：幽門部胃癌）</td></tr>
+<tr><td><strong>水様（黄茶褐色）</strong></td><td>癒着性腸閉塞の典型。遠位閉塞ほど便汁様、近位閉塞ほど緑色が強い</td></tr>
+<tr><td><strong>胃液様（緑色）＋手術歴なし</strong></td><td><strong>closed loop obstruction</strong>＝絞扼性腸閉塞を念頭に → <a class="wiki-link" href="疾患詳細/小腸閉塞.html">小腸閉塞</a></td></tr>
+</tbody></table></div>
+<p><strong>下痢の性状</strong>：</p>
+<ul>
+<li><strong>頻回大量水様</strong> → 腸炎を考えてよい → <a class="wiki-link" href="疾患詳細/急性腸炎・感染性下痢症.html">急性腸炎・感染性下痢症</a></li>
+<li><strong>水様だが回数少ない／少量</strong> → 非特異的、腸炎を想定しない方が無難</li>
+<li><strong>白っぽい粘液</strong> → 骨盤内炎症で直腸が刺激された粘液。周囲の炎症（虫垂炎・憩室炎・<span class="wiki-missing">PID</span>）を探す</li>
+<li><strong>高齢で表現が曖昧</strong>：下血を「下痢」と言うことがある。<strong>実物観察</strong>を。<em>hematochezia には特有の臭い</em>がある</li>
+</ul>
+
+<h3 id="発熱">§1.6 発熱の有無</h3>
+<ul>
+<li>発熱は<strong>感染症</strong>を考える契機。急性腹症は感染性炎症（<a class="wiki-link" href="疾患詳細/急性虫垂炎.html">虫垂炎</a>・<a class="wiki-link" href="疾患詳細/胆石症・急性胆嚢炎.html">胆嚢炎</a>）と非感染性（<a class="wiki-link" href="疾患詳細/小腸閉塞.html">腸閉塞</a>・穿孔初期）が混在する</li>
+<li><strong>発熱なし＝安心ではない</strong>。穿孔・腸壊死から重篤敗血症に進むときに<strong>低体温</strong>を呈することがある（→ 身体所見でチェック）</li>
+</ul>
+
+<h3 id="その他病歴">§1.7 その他の病歴</h3>
+<ul>
+<li><strong>年齢・性別</strong>：NOMI（→ <a class="wiki-link" href="疾患詳細/急性腸管虚血.html">急性腸管虚血</a>）は若年では稀、<a class="wiki-link" href="疾患詳細/下部消化管穿孔.html">下部消化管穿孔</a>は高齢に多い、女性内性器疾患は女性のみ</li>
+<li><strong>食歴</strong>：「思い当たる食べ物は？」→ <strong>生もの／外食（弁当含む）／集団発生</strong>を過去 1 週間以内で確認。<a class="wiki-link" href="疾患詳細/アニサキス症.html">アニサキス</a>を疑うなら食材の産地まで踏み込む</li>
+<li><strong>旅行歴／月経歴</strong></li>
+<li><strong>増悪緩解因子</strong>：「歩くと響く」 = 腹膜刺激を示唆</li>
+<li><strong>痛みの質</strong>：鈍痛は内臓痛を示唆（内臓神経は体性神経より鋭敏でない）</li>
+<li><strong>放散痛</strong>の有無と場所</li>
+</ul>
+<div class="callout callout-tip">
+<div class="callout-title">病歴は身体所見・検査と並行で</div>
+<div class="callout-body"><p>急性腹痛は早期介入を要する疾患を含む。<strong>聴取項目をすべて取ってから身体所見</strong>は現実的でない。詳細病歴は身体所見・検査と<strong>並行</strong>で追加していく。</p></div>
+</div>
+
+<h3 id="ハイリスク">§1.8 High risk patients の抽出</h3>
+<p>病歴聴取の中で「<strong>この人やばいな</strong>」という gut feeling を客観的項目に落とし込む。</p>
+<div class="table-wrap"><table>
+<thead><tr><th>カテゴリ</th><th>項目</th></tr></thead>
+<tbody>
+<tr><td><strong>背景因子（一般）</strong></td><td>65 歳以上／免疫抑制状態（疾患・薬剤）／アルコール多飲／重篤併存（DM・癌・IBD）／妊娠早期</td></tr>
+<tr><td><strong>背景因子（特に注意）</strong></td><td><strong>心血管疾患（PAD 含む）／腎不全（特に透析）</strong>／心房細動・冠動脈疾患・弁膜症</td></tr>
+<tr><td><strong>痛みの性状</strong></td><td>Sudden onset／<strong>発症時最強痛</strong>（→ 血管疾患示唆）／腹痛発生<strong>後の</strong>嘔吐（→ self-limited でない）／2 日以内の持続痛</td></tr>
+</tbody></table></div>
+<div class="callout callout-danger">
+<div class="callout-title">特に危険なフレーズ</div>
+<div class="callout-body"><p><strong>「透析の人がおなかが痛い」はそれだけで恐れおののいた方がよいフレーズ</strong>（窪田）。Tomino 2014 では透析手術例の予後は著しく不良と報告されている。</p></div>
+</div>
+<details class="callout callout-note">
+<summary>「2 日以内の持続痛」の意味</summary>
+<div class="callout-body"><p><a class="wiki-link" href="疾患詳細/急性腸管虚血.html">腸管虚血</a>や<a class="wiki-link" href="疾患詳細/下部消化管穿孔.html">下部消化管穿孔</a>は適切処置なしで 24 時間を過ぎると重篤化する。<strong>数日以上同じ痛みが持続している場合はこれらの可能性は低い</strong>と考えてよい（例外はもちろんある）。</p></div>
+</details>
+<hr>
+
+<h2 id="身体所見">§2 身体所見</h2>
+<p>評価項目は <strong>バイタル・視診・聴診・打診・触診</strong> の 5 つに、<strong>直腸診・意識レベル・High risk 抽出</strong>を加える。</p>
+
+<h3 id="バイタル">§2.1 バイタルサインの確認</h3>
+<ul>
+<li><strong>「腹痛＋ショック」はほぼ例外なく緊急の外科処置を要する</strong>。原因は<strong>出血か敗血症</strong>のいずれか</li>
+<li>数値以外のショック所見も拾う：<strong>末梢冷感・冷や汗</strong> → 出血性ショック／<strong>mottling（網状斑）</strong> → 敗血症性ショック</li>
+<li><strong>体温</strong>を忘れない：<strong>高齢者の敗血症は若年より低体温になりやすい</strong>（Cooper 1994）</li>
+</ul>
+
+<h3 id="視診">§2.2 視診</h3>
+<ul>
+<li>主要観察項目：<strong>手術創／腹部膨満／皮膚色調（黄疸・mottling）／刺青／腹壁・鼠径・大腿ヘルニア</strong></li>
+<li><strong>鼠径ヘルニア・大腿ヘルニア</strong>（高齢痩せ女性に多く<strong>嵌頓しやすい</strong>）はパンツを下ろして鼠径部を見ないと見逃す → <a class="wiki-link" href="疾患詳細/嵌頓ヘルニア.html">嵌頓ヘルニア</a></li>
+<li>膨満は初診では判断難しい。<strong>一見して膨満とわかる場合のほとんどは大腸の拡張</strong>。小腸病変（<a class="wiki-link" href="疾患詳細/小腸閉塞.html">腸閉塞</a>）の膨満は初回視診で捉えにくい</li>
+<li>膨満すると皮膚が緊張して<strong>しわがなくつやが出る</strong>。腹部コンパートメント症候群では<strong>テカリ</strong>さえ出る</li>
+</ul>
+<details class="callout callout-note">
+<summary>Mottling（網状斑）とは</summary>
+<div class="callout-body"><p>皮膚色調が紫の網状になり一見「色が悪い」と感じる状態。<strong>高度末梢循環不全＋アシドーシス</strong>を示唆。急性腹症では<a class="wiki-link" href="疾患詳細/急性腸管虚血.html">腸管壊死</a>に伴う敗血症で出る。多臓器不全を伴うことが多く、敗血症性ショックの<strong>予後不良因子</strong>（Postelnicu 2017）。</p></div>
+</details>
+
+<h3 id="聴診">§2.3 聴診</h3>
+<p>腸雑音を 4 段階で評価する。</p>
+<div class="table-wrap"><table>
+<thead><tr><th>段階</th><th>呼称</th><th>典型場面</th></tr></thead>
+<tbody>
+<tr><td>① 亢進</td><td>Hyper active</td><td>腸炎、機械的腸閉塞</td></tr>
+<tr><td>② 正常</td><td>Norm active</td><td>—</td></tr>
+<tr><td>③ 低下</td><td>Hypo active</td><td>虫垂炎、膵炎、麻痺性イレウス</td></tr>
+<tr><td>④ 消失</td><td>Silent</td><td>汎発性腹膜炎（2 分以上消失で示唆）、腸壊死</td></tr>
+</tbody></table></div>
+<div class="callout callout-tip">
+<div class="callout-title">腸雑音の覚え方（窪田）</div>
+<div class="callout-body"><p>腸が<strong>自分自身が調子悪い</strong>とき（腸炎・腸閉塞）は <em>"騒ぐ"</em>（正常〜亢進）、<strong>他臓器が調子悪い</strong>とき（虫垂炎・膵炎）は <em>"黙る"</em>（低下〜消失）。<br>注意：<a class="wiki-link" href="疾患詳細/急性腸管虚血.html">腸管虚血</a>の<strong>発症早期は腸雑音が低下しない</strong>。消失していれば<strong>すでに壊死</strong>を示唆する。</p></div>
+</div>
+<details class="callout callout-note">
+<summary>音の高さで病態を読む — 弦楽器の例え</summary>
+<div class="callout-body">
+<ul>
+<li>弦の長さ＝病的腸管の長さ（長い：低音／短い：高音）</li>
+<li>弦の強さ＝腸管内圧（低：低音／高：高音）</li>
+<li>弦の太さ＝腸管径（太：低音／細：高音）</li>
+</ul>
+<p><strong>絞扼性腸閉塞</strong>の closed loop は<strong>短く・内圧高く・径細い</strong> → 高音 = いわゆる<strong>金属音</strong>。<br>
+癒着性腸閉塞は病的腸管が長く内圧低く径太い → より低い音。<br>
+腸炎は閉塞がない（弦の端のしめが緩い） → さらに低い音にしかならない。</p>
+</div>
+</details>
+
+<h3 id="打診">§2.4 打診</h3>
+<p>内容物の推定。腹部全体を丹念に。</p>
+<div class="table-wrap"><table>
+<thead><tr><th>音</th><th>意味</th><th>典型</th></tr></thead>
+<tbody>
+<tr><td><strong>① Tympanic（鼓音）</strong></td><td>よく響く高い音、ガス充満</td><td>正常胃・盲腸・<strong>拡張大腸</strong></td></tr>
+<tr><td><strong>② Hyperresonance</strong></td><td>鼓音と半濁音の間</td><td>拡張小腸</td></tr>
+<tr><td><strong>③ Resonance（半濁音）</strong></td><td>響き悪いが濁音ではない</td><td>ガスのない正常臓器</td></tr>
+<tr><td><strong>④ Dull（濁音）</strong></td><td>響かない硬い音</td><td>腫瘍／膿瘍／腸液充満腸管（closed loop）</td></tr>
+</tbody></table></div>
+<ul>
+<li>広範に tympanic → びまん性の腸管拡張（通常は大腸ガス充満）</li>
+<li>限局濁音＋圧痛一致 → 膿瘍などの炎症性病変</li>
+<li>限局濁音＋圧痛なし → 腫瘍性病変など</li>
+</ul>
+
+<h3 id="触診">§2.5 触診</h3>
+<p>触診は <strong>light → moderate → deep</strong> の 3 段階で力加減を変える。light は腹壁が 1 cm も沈まない程度（板状硬は判別可、圧痛は不可）。moderate がメイン。deep は moderate で所見がないとき想定臓器上で試みる。<strong>双手法</strong>も併用。</p>
+<p>評価項目は 5 つ：</p>
+<div class="table-wrap"><table>
+<thead><tr><th>項目</th><th>意味</th></tr></thead>
+<tbody>
+<tr><td><strong>① 硬さ</strong></td><td>軟 / 硬 / <strong>板状硬</strong>（→ <a class="wiki-link" href="疾患詳細/上部消化管穿孔.html">上部消化管穿孔</a>を強く示唆）</td></tr>
+<tr><td><strong>② 圧痛</strong></td><td>有無・部位・<strong>局在性</strong>・再現性</td></tr>
+<tr><td><strong>③ 反跳痛</strong></td><td>壁側腹膜の刺激症状（腹膜炎とは限らない）</td></tr>
+<tr><td><strong>④ 腫瘤・膨隆</strong></td><td>急性炎症・腫れた臓器・嵌頓ヘルニア</td></tr>
+<tr><td><strong>⑤ 温度</strong></td><td>虚血部の温度差（窪田の独自所見）</td></tr>
+</tbody></table></div>
+
+<details class="callout callout-note">
+<summary>① 硬さ — 板状硬と guarding の整理</summary>
+<div class="callout-body">
+<ul>
+<li><strong>板状硬</strong>（board like rigidity）：圧痛も反跳痛もわからないほどカチカチ。出現するのは<strong>ほとんどが <a class="wiki-link" href="疾患詳細/上部消化管穿孔.html">上部消化管穿孔</a></strong>に限られる。胃酸・胆汁の化学性反応</li>
+<li>同じ消化管穿孔でも<strong>下部は「押したら硬い」</strong>所見にとどまる（腸内細菌による感染性腹膜炎 → <a class="wiki-link" href="疾患詳細/下部消化管穿孔.html">下部消化管穿孔</a>）</li>
+<li>「軟」を判断するには<strong>正常をたくさん経験する</strong>必要がある。「あれ、普通とちょっと違うかも？」と思えるかどうか</li>
+<li><strong>rigidity = involuntary guarding</strong>（腹膜炎を示唆）／<strong>voluntary guarding</strong>＝触診に反応して腹部を硬くする状態（非穿孔性虫垂炎などで腹膜炎は示唆しない）</li>
+</ul>
+</div>
+</details>
+
+<details class="callout callout-note">
+<summary>② 圧痛 — 局在と再現性</summary>
+<div class="callout-body">
+<ul>
+<li><strong>局在する</strong>場合は固定臓器の病変、<strong>局在しない</strong>場合は小腸の広範病変</li>
+<li>局在するなら数 cm ずつずらしてゆっくり深く押し<strong>範囲を特定</strong>する</li>
+<li>非穿孔性<a class="wiki-link" href="疾患詳細/急性虫垂炎.html">虫垂炎</a>の本当に痛い部位は<strong>指 1 本程度の幅</strong>しかなく、虫垂の走行が触診だけでわかることもある</li>
+<li><a class="wiki-link" href="疾患詳細/急性腸炎・感染性下痢症.html">腸炎</a>では範囲特定し難く再現性も乏しい</li>
+<li>痛いか痛くないかは聞くより<strong>本人の反射的反応</strong>（表情変化・眉間のしわ・体動）の方が信頼性が高い</li>
+</ul>
+</div>
+</details>
+
+<details class="callout callout-note">
+<summary>③ 反跳痛 — 限定的な特異度</summary>
+<div class="callout-body">
+<ul>
+<li>反跳痛＝<strong>壁側腹膜の刺激症状</strong>。必ずしも腹膜炎を意味しない。<a class="wiki-link" href="疾患詳細/急性虫垂炎.html">虫垂炎</a>・<a class="wiki-link" href="疾患詳細/胆石症・急性胆嚢炎.html">胆嚢炎</a>・重症腸炎で漿膜面まで炎症が達すれば出る</li>
+<li><a class="wiki-link" href="疾患詳細/急性憩室炎.html">憩室炎</a>では反跳痛があるのが通常</li>
+<li>どこもかしこも認めれば<strong>汎発性腹膜炎</strong></li>
+<li><strong>特異度は低い（0.48〜0.60）</strong>。tapping（指腹で腹壁を弾く）や <em>pain over speed bump</em>（来院車中で振動が痛かったか）の方がよいとする向きもある</li>
+<li>所見の取り方：指 2、3 本でゆっくり圧痛最強点を押し、反動をつけずに一気に離す。陽性陰性は痛いと言うかどうかではなく<strong>体の反応</strong>で取る</li>
+</ul>
+<p><em>窪田：「単一の身体所見の感度特異度はどれもたかが知れている。だからいろいろな所見をとっているのだ。所詮大きな差がない手法をどうしようか迷う前に、いろいろな方法で所見をとり、腹膜刺激症状のある患者さんの診察経験を積むことが大事」</em></p>
+<p><strong>Heel test</strong>（踵をついたときに響くか）は感度高い。歩いてきた人なら病歴聴取の時点で取れる。</p>
+</div>
+</details>
+
+<details class="callout callout-note">
+<summary>④ 腫瘤、⑤ 温度（と稀な触診所見）</summary>
+<div class="callout-body">
+<ul>
+<li><strong>腫瘤 = 腫瘍とは限らない</strong>：急性炎症組織は硬く触れる（蜂窩織性虫垂炎・膿瘍）／腫れた臓器そのもの（胆嚢炎・痩せた人の腎盂腎炎）／嵌頓ヘルニアは硬い皮下腫瘤として触れる</li>
+<li>腫瘍そのものは<strong>強い圧痛を伴わない</strong>のが特徴</li>
+<li>小さなヘルニア（大腿ヘルニアなど）は視診で分からなくても<strong>触ればわかる</strong>こともある</li>
+<li><strong>温度</strong>：絞扼性腸閉塞や上腸間膜動脈閉塞では<a class="wiki-link" href="疾患詳細/急性腸管虚血.html">虚血</a>部分の腹壁と周囲とで<strong>温度差を感じる</strong>ことがある（教科書外、窪田が多用する所見）</li>
+<li>稀：触った部分が皮下出血になる（敗血症 → DIC）／<strong>皮下気腫</strong>（後腹膜経由で達する <a class="wiki-link" href="疾患詳細/下部消化管穿孔.html">下部消化管穿孔</a>）</li>
+</ul>
+</div>
+</details>
+
+<h3 id="直腸診">§2.6 直腸診</h3>
+<ul>
+<li>近年は<strong>施行されないケースが増えている</strong>（有用性が限られるとの意見＋医師の不慣れ＋患者の不慣れ）</li>
+<li>女性に対して男性医師が行う際は<strong>女性職員の立会い</strong>必須</li>
+<li>やり方：示指を挿入し<strong>腫瘤・硬便</strong>をチェック → <strong>6 時方向</strong>（仙骨側、通常無痛）を押して比較基準を作る → 他方向の圧痛を確かめる</li>
+<li>9 時方向の圧痛 → 小骨盤に下垂した<a class="wiki-link" href="疾患詳細/急性虫垂炎.html">虫垂</a>（小児・スリム体型）</li>
+<li><strong>最も有用なのは PID と虫垂炎の鑑別</strong>：<strong>cervical motion pain</strong>（直腸越しに子宮頸部を動かして生じる痛み）は <span class="wiki-missing">PID</span> の重要かつ感度の高い所見</li>
+</ul>
+<div class="callout callout-tip">
+<div class="callout-body"><p><em>窪田：「無意味に全例行う必要はないと思うが、必要時にも省くような方向には向いて欲しくない」</em></p></div>
+</div>
+
+<h3 id="意識">§2.7 意識レベルのチェック</h3>
+<ul>
+<li>広範囲腸管壊死から敗血症へ進むと例外なく<strong>意識障害・呼吸障害・代謝性アシドーシス</strong>が進行</li>
+<li>Sepsis-3（2016）の SOFA スコアにも<strong>altered mentation</strong>が項目として記載</li>
+<li>虫垂炎・胆嚢炎などポピュラーな疾患でも敗血症移行で軽度意識障害は珍しくない</li>
+<li>受け答え可能で済まさず <strong>GCS で正しく評価</strong>。<strong>E or V が 1 点マイナス</strong>なら敗血症の可能性を考える</li>
+</ul>
+
+<h3 id="ハイリスク所見">§2.8 High risk patients の抽出（身体所見側）</h3>
+<p>診察にいたずらに時間を要さぬよう、以下の単独所見があれば赤旗とする。</p>
+<ul>
+<li><strong>ショックの存在</strong></li>
+<li><strong>mottling</strong></li>
+<li><strong>腹部の高度膨満（皮膚に光沢）</strong></li>
+<li><strong>rigidity（involuntary guarding）</strong></li>
+</ul>
+<div class="callout callout-danger">
+<div class="callout-title">光沢を伴う膨満腹部＋膨満部が冷たい</div>
+<div class="callout-body"><p>窪田：「<strong>このような腹部を触診して膨満部が周囲よりも『冷たい』と感じたならば広範囲腸管虚血（壊死）を疑う</strong>」 → <a class="wiki-link" href="疾患詳細/急性腸管虚血.html">急性腸管虚血</a></p></div>
+</div>
+<hr>
+
+<h2 id="初期診断">§3 初期診断と鑑別疾患</h2>
+<p>H&P（病歴 + 身体所見）を終えた段階で<strong>必ず初期診断と鑑別疾患をあげる</strong>。検査をする前に。トレーニングで最も重要な過程。</p>
+
+<h3 id="初期診断について">§3.1 初期診断について</h3>
+<ul>
+<li><strong>一切の検査をする前に初期診断と鑑別疾患をあげなくてはならない</strong>。これが診察である</li>
+<li>CT は確かに高精度だが、これは<strong>「読影」であって「（臨床）診断」ではない</strong></li>
+<li>最大の欠点は<strong>「臨床症状と画像所見が解離した場合」</strong>：人間の症状（痛い）よりも物（画像が異常なし）を優先してしまう。治すべきは患者の症状であって検査異常ではない</li>
+<li>H&P のみで診断すべき重要疾患は <strong>① <a class="wiki-link" href="疾患詳細/急性虫垂炎.html">急性虫垂炎</a>、② 消化管穿孔（<a class="wiki-link" href="疾患詳細/上部消化管穿孔.html">上部</a>／<a class="wiki-link" href="疾患詳細/下部消化管穿孔.html">下部</a>）</strong>。典型例は H&P で診断できる（確認の画像はその後）</li>
+<li>病歴と所見から虫垂炎・穿孔と診断したら、<strong>他疾患であることが判明しない限り安易に初期診断を覆さない</strong></li>
+</ul>
+
+<div class="callout callout-danger">
+<div class="callout-title">否定材料にならない検査結果</div>
+<div class="callout-body"><ul>
+<li>「<strong>白血球が上昇していないから</strong>」 → 虫垂炎を否定できない</li>
+<li>「<strong>CRP が上昇していないから</strong>」 → 同上</li>
+<li>「<strong>CT で腫大した虫垂が見えないから</strong>」 → 同上</li>
+<li>「<strong>CT でフリーエアが見えないから</strong>」 → 消化管穿孔を否定できない</li>
+</ul></div>
+</div>
+
+<details class="callout callout-note">
+<summary>free air と extraluminal air の違い</summary>
+<div class="callout-body"><p>用語としての <strong>free air</strong>（腹腔内遊離ガス）はフリースペースにあるガス。仰臥位 CT なら肝表面など前腹壁の壁側腹膜直下に存在する。しかし消化管穿孔で漏れた腸管ガスは必ずしも free air にならない — 周囲臓器でパッキングされたり腸間膜内穿孔で保たれた場合は<strong>病変周囲にトラップ</strong>される（= <strong>extraluminal air</strong>）。<br>微細な extraluminal air は腸管内と紛らわしく、初診で見過ごされることは珍しくない。<strong>外傷 CT では実際の腸管損傷の 50% 程度しか腹腔内ガスを指摘できない</strong>（Hefny 2015）。</p></div>
+</details>
+
+<h4>初診時に鑑別すべき疾患（部位別）</h4>
+<div class="table-wrap"><table>
+<thead><tr><th>部位</th><th>鑑別</th></tr></thead>
+<tbody>
+<tr><td><strong>上腹部痛</strong></td><td><a class="wiki-link" href="疾患詳細/上部消化管穿孔.html">上部消化管穿孔</a> / <a class="wiki-link" href="疾患詳細/急性膵炎.html">急性膵炎</a> / 胆石疾患（<a class="wiki-link" href="疾患詳細/胆石症・急性胆嚢炎.html">胆嚢炎</a>・<a class="wiki-link" href="疾患詳細/急性胆管炎・総胆管結石症.html">胆管炎</a>） / <a class="wiki-link" href="疾患詳細/急性虫垂炎.html">急性虫垂炎</a></td></tr>
+<tr><td><strong>下腹部痛</strong></td><td><a class="wiki-link" href="疾患詳細/急性虫垂炎.html">急性虫垂炎</a> / <a class="wiki-link" href="疾患詳細/下部消化管穿孔.html">下部消化管穿孔</a> / <span class="wiki-missing">子宮外妊娠</span> / <span class="wiki-missing">卵巣嚢腫茎捻転</span></td></tr>
+<tr><td><strong>全般痛</strong></td><td><a class="wiki-link" href="疾患詳細/小腸閉塞.html">腸閉塞</a>（含 絞扼・軸捻転・<a class="wiki-link" href="疾患詳細/嵌頓ヘルニア.html">ヘルニア嵌頓</a>） / <a class="wiki-link" href="疾患詳細/急性腸管虚血.html">急性腸管虚血</a></td></tr>
+</tbody></table></div>
+<p><small>窪田：「腹痛の部位と疾患の相関を記した一覧図はあまり有用でない。図を見比べて診断する人はいないだろう。それより<strong>解剖図・正常 CT・手術中所見で臓器の正確な位置を学ぶ</strong>方がはるかに有用」</small></p>
+
+<div class="callout callout-warning">
+<div class="callout-title">「胃腸炎」「便秘」と診断しない</div>
+<div class="callout-body">
+<ul>
+<li><strong>「胃腸炎」という診断名は一切使用しない</strong>。胃炎は通常感染性ではなく、腸炎の主座は小腸 or 大腸。胃と腸の両方が同時に主座になることはまずない。「胃腸炎」とつけると同時にハズレ → <a class="wiki-link" href="疾患詳細/急性虫垂炎.html">虫垂炎</a> など他疾患の見逃しが増える</li>
+<li><strong>「便秘」も初期診断に使わない</strong>。これは病名でなく症状。「便秘」とされた小児が穿孔性虫垂炎、高齢者が<a class="wiki-link" href="疾患詳細/下部消化管穿孔.html">下部消化管穿孔</a>だったということを<em>繰り返し経験する</em></li>
+<li><strong>「胃・十二指腸潰瘍／急性胃炎／急性腸炎」は除外診断</strong>。緊急疾患を除外せず安易につけない</li>
+</ul>
+<p><em>窪田：「便秘と言いたくなるところを 100 回我慢して 1 回の下部消化管穿孔をみつけることができればその人は名医ではないか」</em></p>
+</div>
+</div>
+
+<details class="callout callout-note">
+<summary>constipation vs obstipation</summary>
+<div class="callout-body"><p>英語では <strong>constipation</strong>（便秘：便が出にくい慢性状態）と <strong>obstipation</strong>（便もガスも通過しない急性状態）を使い分ける。痛みが発生するのは <strong>obstipation</strong>。fecal impaction（硬便による直腸閉塞 → 便性大腸閉塞）は急性大腸閉塞であって慢性便秘そのものの症状ではない。直腸膨大部に便が溜まっているだけの高齢者はいくらでもいる。</p></div>
+</details>
+
+<div class="callout callout-danger">
+<div class="callout-title">初期診断が最も難しい疾患</div>
+<div class="callout-body"><p><a class="wiki-link" href="疾患詳細/急性腸管虚血.html">急性腸管虚血</a>（特に NOMI）— 高齢者に多く、訴えが乏しく、初期は<strong>痛みの割に腹部所見が乏しい</strong>のが特徴。「胃腸炎」と初期診断され <em>hospital delay</em>（早期受診したのに診断が遅れる）となる代表例。<br><strong>心房細動／透析患者の「高齢者のよくわからない腹痛」では常に念頭におく</strong>。</p></div>
+</div>
+
+<h3 id="鑑別疾患について">§3.2 鑑別疾患について</h3>
+<ul>
+<li>鑑別は H&P を<strong>終えた後ではなく、同時並行で出ては消える</strong>もの。Google の検索ボックスに用語を入れるたびに候補が変化するイメージ</li>
+<li>「下腹部痛」と聞いた段階で疾患が浮かび、本人に会うとそのうちいくつかが消えて別なものが浮上、診察を進めるうちに片手で数えられるくらいに絞られる</li>
+<li>こうやって進めると<strong>陰性所見も拾いやすい</strong>（重要疾患の否定に大事）</li>
+<li>残った鑑別は<strong>1 個でもよい</strong>。「最低 N 個あげよ」は不要。診察所見に矛盾する鑑別を延々羅列したカルテを見て「すごい」とは誰も思わない</li>
+</ul>
+<details class="callout callout-tip">
+<summary>"よこしまな心" で診察する（窪田流）</summary>
+<div class="callout-body">
+<p><em>「初学者は H&P 終了後に『え〜とー』と考え始める。きっとまっさらな心で患者の話を聞き、まっさらな気持ちで手順通り身体所見を取ったのだろう。<strong>でもこんなの診察とはいわない。診察はもっと "よこしま" な心で行う。</strong>こういう主訴ならアレじゃないか？ 前はあの疾患だったぞ、ここにこんな所見があるとはさてはアレか？ — 自分の思いつき（実はコレが臨床能力）に素直に従うのだ」</em></p>
+<p>そして思いついた疾患を<strong>示唆する所見と示唆しない所見</strong>を上げてゆく。示唆する所見が多いとき、ここで初めて客観性が生じる（診断スコアはこの定式化）。</p>
+<p>"A Little Book of Doctor's Rules"：<em>"An acute surgical abdomen is when a good surgeon says it is an acute surgical abdomen. There is no other test for it."</em></p>
+</div>
+</details>
+
+<h3 id="ROS">§3.3 ROS（Review of systems）</h3>
+<ul>
+<li>focused examination（主訴・症状から疑う部位に集中した診察）の<strong>対極</strong></li>
+<li>ROS は<strong>まっさらな気持ち</strong>で、手順通り順番にシステムごとに淡々とチェック</li>
+<li>そのなかで「あっ！」という発見がときにあり、それが今回の疾患に直結することもある — 臨床って面白いと感じる瞬間</li>
+</ul>
+<hr>
+
+<h2 id="検査">§4 確定診断のための検査</h2>
+<p>多くの腹部疾患は血液・尿は補足的で、<strong>画像検査で確定診断</strong>になる。常に <strong>初期診断と鑑別疾患を確認する最低限の検査</strong>を行う。</p>
+<div class="callout callout-warning">
+<div class="callout-title">検査の前に答えを用意せよ</div>
+<div class="callout-body">
+<p>「<strong>なぜ血液検査をしたのか？</strong>」「<strong>なぜ胸部立位 X 線を撮ったのか？</strong>」「<strong>なぜ腹部 CT を撮ったのか？</strong>」と聞かれて、<em>「<a class="wiki-link" href="疾患詳細/急性虫垂炎.html">虫垂炎</a>を疑い白血球上昇を見るため」「<a class="wiki-link" href="疾患詳細/上部消化管穿孔.html">上部消化管穿孔</a>を疑いフリーエアを確かめるため」「<a class="wiki-link" href="疾患詳細/急性膵炎.html">急性膵炎</a>を疑い膵臓の状態を確認するため」</em> のように<strong>即答できなければ検査の意味がない</strong>。</p>
+<p>とくに CT は被曝する。<strong>妊婦でなくとも若い女性や小児では安易に撮らない</strong>。</p>
+</div>
+</div>
+
+<p><strong>定型的な検査</strong>（あえて挙げるなら）：</p>
+<ul>
+<li><strong>血液検査</strong>：血算・生化学（AST/ALT、ALP/γ-GT、T/D-Bil、s-Amy）</li>
+<li><strong>尿検査</strong>：定性・沈渣</li>
+<li><strong>腹部単純 X 線</strong>：立位・臥位</li>
+<li><strong>腹部超音波</strong></li>
+<li><strong>40 歳以上の心窩部痛・高齢者は心電図</strong>（<a class="wiki-link" href="疾患詳細/腹痛をきたす胸部疾患.html">急性心筋梗塞</a>を見落とさない）</li>
+<li><strong>妊娠可能女性は尿で妊娠反応</strong>（妊娠関連疾患の有無確認＋ X 線前の確認）</li>
+</ul>
+
+<h3 id="血液検査">§4.1 血液検査</h3>
+<ul>
+<li>多くの腹部疾患では<strong>特異的所見がない</strong>。WBC・CRP の上昇はばらつきが多く、重症化で下がることもあり<strong>診断的価値は低い</strong></li>
+<li>比較的特異性のある項目：
+  <ul>
+  <li><strong>胆道系酵素</strong> → 胆管疾患（<a class="wiki-link" href="疾患詳細/急性胆管炎・総胆管結石症.html">急性胆管炎・総胆管結石症</a>）</li>
+  <li><strong>アミラーゼ／リパーゼ</strong> → <a class="wiki-link" href="疾患詳細/急性膵炎.html">急性膵炎</a>（<a class="wiki-link" href="疾患詳細/輸入脚症候群.html">輸入脚症候群</a>でも二次性に上昇）</li>
+  </ul>
+</li>
+<li><strong>誤解されやすい点</strong>：<a class="wiki-link" href="疾患詳細/胆石症・急性胆嚢炎.html">胆嚢疾患（胆石症・急性胆嚢炎）では通常トランスアミナーゼ／ビリルビンは変動しない</a></li>
+</ul>
+
+<h3 id="尿検査">§4.2 尿検査</h3>
+<ul>
+<li>最も頻用は<strong>妊娠反応検査</strong></li>
+<li>尿管結石の<strong>血尿</strong>（含 潜血）、<a class="wiki-link" href="疾患詳細/急性膵炎.html">膵炎</a>のアミラーゼなど疾患特異的な指標もあるが、<strong>意義は補足的</strong></li>
+</ul>
+
+<h3 id="単純X線">§4.3 単純 X 線</h3>
+<ul>
+<li>近年は救急室での<strong>腹部 X 線撮影は省略傾向</strong>。CT が簡便・短時間・高解像度で代替できるため</li>
+<li>初診時に意義があるのは：
+  <ul>
+  <li><strong>繰り返す腸閉塞</strong>（過去像と比較できる） → <a class="wiki-link" href="疾患詳細/小腸閉塞.html">小腸閉塞</a></li>
+  <li><strong>若年健康者の上部消化管穿孔</strong> → <a class="wiki-link" href="疾患詳細/上部消化管穿孔.html">上部消化管穿孔</a>（フリーエア検出）</li>
+  </ul>
+</li>
+<li>フリーエア検出能：<strong>5 mL あれば指摘可、条件付き（5〜10 分立位後の立位胸部 X 線）なら 1〜2 mL のエアでも指摘可</strong>（Billittier 1996）</li>
+<li>上部消化管穿孔で撮るのは<strong>胸部</strong> X 線。腹部 X 線対象は結果的に<strong>腸閉塞疑い</strong>のみ</li>
+</ul>
+
+<details class="callout callout-tip">
+<summary>窪田の経験：1 枚で 1 発診断 — gasless film</summary>
+<div class="callout-body">
+<p>腸管ガスがほとんど見えない <em>"gasless film"</em>（胃泡と少量のガスは容赦）。比較的頻度の高い 2 つ：</p>
+<div class="table-wrap"><table>
+<thead><tr><th>X 線像</th><th>病態</th><th>典型ストーリー</th></tr></thead>
+<tbody>
+<tr><td>右下腹部痛＋ガスレス</td><td><strong>右側<a class="wiki-link" href="疾患詳細/大腸閉塞.html">大腸閉塞</a></strong>（回盲弁機能正常の上行結腸癌など）</td><td>泥状便で閉塞、その先のガス排出済、回盲弁が小腸ガスを止める → 小腸大腸ともガスレス</td></tr>
+<tr><td>食後嘔吐・体重減少＋ガスレス</td><td><strong>Gastric outlet obstruction</strong>（幽門部胃癌など）</td><td>胃の先にガスが通過しない</td></tr>
+</tbody></table></div>
+<p>その他：<strong>全大腸型大腸炎</strong>（<a class="wiki-link" href="疾患詳細/非感染性腸炎.html">潰瘍性大腸炎</a>など）— 全大腸の壁肥厚＋大腸ガス消失でほぼガスレス。</p>
+<p>癌年齢の患者がガスレスを呈したら、<strong>右下腹部痛なら上行結腸癌、食後嘔吐＋体重減少なら幽門部胃癌</strong>と診断できる。既知の悪性腫瘍があれば「閉塞した」「増悪した」の病状変化把握にも使える。</p>
+</div>
+</details>
+
+<h3 id="超音波">§4.4 超音波検査</h3>
+<ul>
+<li>検査と診察の<strong>中間</strong>：術者によって結果が変わり、リアルタイムでしか評価できない</li>
+<li>特性：<strong>局所解像度に優れる</strong>（ミリ単位の細かい病変）。一方<strong>エア・骨が介在すると見えない、深部も苦手</strong></li>
+<li>プローベ：固形臓器・深部はコンベックス（3.5〜5 MHz）／腸管・浅い部位はリニア（7〜10 MHz）</li>
+<li>超音波が CT より優位な場面：
+  <ul>
+  <li>穿孔性<a class="wiki-link" href="疾患詳細/急性虫垂炎.html">虫垂炎</a>（CT で見えない場合）</li>
+  <li>小児・痩せ身の女性</li>
+  <li>結腸<a class="wiki-link" href="疾患詳細/急性憩室炎.html">憩室炎</a></li>
+  <li><strong>CT に写らないコレステロール結石</strong></li>
+  </ul>
+</li>
+<li>欠点：肥満者・腸管ガス多量で精度低下、立体的構造は頭で組み立てる必要、死角あり</li>
+<li>非特異的腹痛の精査で<strong>CT 前に超音波</strong>を行うと診断率向上＋被曝低減できる前向き研究あり（Laméris 2009、Jang 2014）</li>
+</ul>
+
+<h3 id="CT">§4.5 腹部 CT</h3>
+<ul>
+<li><strong>禁忌がない限り造影 CT が原則</strong>。腹部内臓は造影しないと評価が難しく、出血や梗塞も単純では分かり難い</li>
+<li>腎毒性に留意。検査の利益とリスクを秤にかける</li>
+<li><a class="wiki-link" href="疾患詳細/小腸閉塞.html">腸閉塞</a>・<a class="wiki-link" href="疾患詳細/急性虫垂炎.html">虫垂炎</a>など多くは造影 CT のみで評価可能 → 小児・若年者では<strong>単純 CT カット</strong>も考慮可</li>
+<li><strong>単純＋造影どちらもあった方がよい</strong>：総胆管結石、急性期血栓</li>
+<li><strong>単純のみで十分</strong>：尿管結石</li>
+</ul>
+
+<div class="callout callout-danger">
+<div class="callout-title">「とりあえず CT」はいただけない</div>
+<div class="callout-body">
+<p><em>窪田：「H&P でまったく鑑別がついてないままに、全然わからないから CT で調べてみようというケースを散見する。いくら感度特異度が高いといっても 100% ではない。あくまで検査であるので、その目的を明確にすることが大事」</em></p>
+<p>検査の目的は<strong>疑っている疾患の存在確認 or 否定したい疾患の不在確認</strong>であって、「とりあえず CT」ではない。</p>
+</div>
+</div>
+
+<details class="callout callout-note">
+<summary>「ウォーリーを探せ」— 鑑別がないと CT は読めない</summary>
+<div class="callout-body">
+<p>窪田の症例：子宮筋腫手術歴のある高齢女性が腹痛で来院。初診時 CT でびまん性小腸拡張あり → 腸閉塞と診断され保存治療開始。実際は<a class="wiki-link" href="疾患詳細/下部消化管穿孔.html">下部消化管穿孔</a>で、5 日目に手術。<strong>「拡張腸管」と思った部分は穿孔した腸液が周囲小腸にパッキングされた像</strong>だった。</p>
+<p>情報を整理すると：</p>
+<ul>
+<li>来院 1 週間前から体調悪く食欲低下</li>
+<li>嘔吐なし</li>
+<li>強い自発痛なし、下腹部に限局した圧痛</li>
+</ul>
+<p>典型的な癒着性腸閉塞像とまったく合致しない。担当医は<strong>鑑別が浮かばないままゼロベースで CT に診断を託した</strong> → びまん性小腸拡張＋手術歴 = 腸閉塞 という短絡。<strong>消化管穿孔はまったく頭になかった</strong>。</p>
+<p><em>「『ウォーリーを探せ』でウォーリーが見つけられるのは顔をあらかじめ知っているからであって、漫然と眺めた後に『この顔の人どこにいた？』と聞かれても誰も答えられない。<strong>人は頭のなかにないことはアウトプットできない</strong>」</em></p>
+<p>下腹部痛で鑑別が浮かばないなら、<strong>① <a class="wiki-link" href="疾患詳細/急性虫垂炎.html">急性虫垂炎</a>、② <a class="wiki-link" href="疾患詳細/下部消化管穿孔.html">下部消化管穿孔</a>、③ <span class="wiki-missing">子宮外妊娠／卵巣捻転</span></strong>を念頭に置いてから CT を見る。そうすれば extraluminal air を必死に探すし、「これ腸管？」「腸間膜内穿孔？」のように見え方が変わる。</p>
+</div>
+</details>
+
+<h3 id="MRI">§4.6 MRI</h3>
+<ul>
+<li>急性腹痛のメジャー検査ではない</li>
+<li><strong>妊婦の腹部検査</strong>（特に<a class="wiki-link" href="疾患詳細/急性虫垂炎.html">虫垂炎</a>を疑った際の超音波と CT の間）として推奨されつつある（Long 2011）</li>
+<li>多用は<strong>胆道系評価（MRCP）</strong>：胆嚢摘出術前の胆嚢管位置・変異チェック、<a class="wiki-link" href="疾患詳細/急性胆管炎・総胆管結石症.html">総胆管結石</a>の有無確認 — 診断より治療方針決定の意義</li>
+<li>急性<a class="wiki-link" href="疾患詳細/胆石症・急性胆嚢炎.html">胆嚢炎</a>：<strong>胆嚢壁肥厚は超音波が勝り、総胆管結石は MRCP が勝る</strong>（Park 1998）</li>
+</ul>
+<hr>
+
+<h2 id="つかないとき">§5 確定診断がつかないとき</h2>
+<p>確定診断は<strong>単一の疾患名</strong>でつけるのが原則（虫垂炎／癒着性腸閉塞／細菌性腸炎 など）。曖昧な「<strong>イレウス／胃腸炎／便秘</strong>」を診断名にしない。検査を終えても診断がつかない場合の方針は<strong>① 帰宅／② 入院経過観察／③ 緊急手術・診断的腹腔鏡</strong> の 3 つしかない。</p>
+<p>まず先にあげた鑑別すべき疾患（上腹部・下腹部・全般痛それぞれ）に該当しないか、High risk patient として抽出されていないかを<strong>もう一度確認</strong>する。該当があれば対象疾患の H&P を取り直し、未施行の検査をオーダーする。</p>
+
+<h3 id="帰宅経過観察">§5.1 帰宅して経過観察</h3>
+<p><a class="wiki-link" href="疾患詳細/下部消化管穿孔.html">下部消化管穿孔</a>と<a class="wiki-link" href="疾患詳細/急性腸管虚血.html">腸壊死</a>以外のすべてが否定的、かつ以下を満たす場合のみ：</p>
+<ul>
+<li>重篤な基礎疾患がない</li>
+<li>強い自発痛がない</li>
+<li>筋性防御／反跳痛がない</li>
+<li>圧痛なし（あっても軽度）</li>
+<li>経口摂取が可能（嘔吐がない）</li>
+</ul>
+<details class="callout callout-tip">
+<summary>帰宅説明の言い方（窪田の例）</summary>
+<div class="callout-body">
+<p>右下腹部を押さえて：<em>「正直なところ今の時点では診断がはっきりしていません。症状が強くないのでいったん帰って様子を見ますが、<strong>痛みが強くなったり、吐き気が強くなったり、ここを押したときに強い痛みを感じるようであればまた来てください — 虫垂炎の可能性があります</strong>」</em></p>
+<p>「<strong>虫垂炎</strong>」と疑っている疾患名をはっきり伝える。この一言で「見逃された」と言われなくなる。</p>
+<p>帰宅した場合は<strong>外来でフォロー</strong>すること（自身のスキルアップにもつながる：どんな場合に帰して大丈夫だったかを結果から学ぶ）。</p>
+</div>
+</details>
+
+<h3 id="入院経過観察">§5.2 入院して経過観察</h3>
+<p>筋性防御・反跳痛なしだが痛みが強い／経口摂取不能の場合は入院して再評価する。経過観察＝放置ではない。<strong>中途半端な治療行為をしない</strong>のが鉄則。</p>
+
+<h4>① 疾患に対する治療を不用意に始めない</h4>
+<ul>
+<li>診断がついていないのだから治療は行いようがない</li>
+<li><strong>「熱がある／CRP が上昇している／感染症の可能性」だけで抗菌薬を始めるのは厳禁</strong>。培養を提出した上で対象疾患と起因菌を明確にしてから</li>
+<li><strong>例外</strong>：敗血症は 1 時間以内の抗菌薬開始が強く推奨される（Gaieski 2010）。ただし敗血症と判断したならそもそも経過観察の対象外</li>
+</ul>
+
+<h4>② 症状に対する治療（対症療法）も注意</h4>
+<ul>
+<li>痛み止めで一時的に良くなっても<strong>解決していない</strong>。治療はまだ行っていない</li>
+<li>「痛み時 ○○」の自動指示で看護師が延々と繰り返した結果、回診時にまったくよくなっていない…ということが起きうる</li>
+<li><strong>痛み止めの使用そのものは診断を遅らせない</strong>（Brewster 2000、Thomas 2003）。Cope の「診断のついていない腹痛には痛み止めを使うな」は今は当てはまらない</li>
+<li>ただし<strong>何度も痛み止めを必要とする = 治療介入を要する重篤な状態（要するに手術）</strong>と認識を改めるべき</li>
+<li>ブチルスコポラミン（ブスコパン）は<strong>鎮痙作用のみで直接の鎮痛効果はない</strong>。腸管攣縮が原因のときはよいが、原因不明の腹痛には鎮痛成分を持つ薬剤を優先。胆石発作・尿管結石でもブスコパンの優位性は示されていない（Kumar 2004、Holdgate 2005）</li>
+</ul>
+
+<details class="callout callout-note">
+<summary>経過観察で予想される 3 つの結末</summary>
+<div class="callout-body">
+<ol>
+<li>（診断がつかなかったが）症状軽快し <em>self-limited</em> な疾患だったと解釈</li>
+<li>時間経過で所見が分かりやすくなり診断がつく</li>
+<li>症状増悪して（診断はつかないものの）治療介入（開腹手術など）せざるを得なくなる</li>
+</ol>
+<p>この間に必要なのは <strong>NPO（経口摂取禁）＋ 補液＋観察</strong>のみ。</p>
+</div>
+</details>
+
+<h3 id="緊急手術">§5.3 緊急手術／診断的腹腔鏡（外科コンサルト）</h3>
+<ul>
+<li>身体所見で <strong>High risk</strong>（ショック／mottling／腹部高度膨満／筋性防御）と認識されたら、診断がついていなくても外科コンサルトの理由になる（de Dombal 1994）</li>
+<li>ショック・敗血症併発なら<strong>検査結果を待っている余裕はない</strong></li>
+<li><strong>このような状態は手術自体が診断的意義をもつ</strong>。画像診断は必須ではない。CT でも異常があるのは明らかだが、どこが異常かわからないことも珍しくない</li>
+<li>結果的に多いのは<a class="wiki-link" href="疾患詳細/上部消化管穿孔.html">消化管穿孔</a>か<a class="wiki-link" href="疾患詳細/急性腸管虚血.html">腸管壊死</a>（<a class="wiki-link" href="疾患詳細/小腸閉塞.html">絞扼性腸閉塞</a>含む）</li>
+<li><strong>診断的腹腔鏡</strong>のオプション：高齢者の NOMI、若年女性の PID vs <a class="wiki-link" href="疾患詳細/急性虫垂炎.html">虫垂炎</a>鑑別など、CT で診断できず肉眼所見で診断できる対象がある</li>
+</ul>
+
+<details class="callout callout-warning">
+<summary>"使えないかもしれない指導医リスト"（窪田）</summary>
+<div class="callout-body">
+<p>パンペリ＋敗血症性ショックは mortality が高く、治療タイミングを逸すれば救命困難。コンサルトを受けた外科医が…</p>
+<ul>
+<li>「<strong>診断は何？</strong>」「<strong>CT 撮ってないの？</strong>」「<strong>ワイセは上がってるの？</strong>」を必要以上に聞いてくる → 「使えないかもしれない指導医リスト」に載せてよい</li>
+<li>「<strong>CT できたら呼んで</strong>」と診にも来ず電話で返事 → 「やばいかもしれない指導医リスト」にノミネート</li>
+</ul>
+<p><em>「外科医にどやされるようなことがあってもコンサルトしたあなたが絶対的に正しい！」</em></p>
+</div>
+</details>
+<hr>
+
+<h2 id="経過観察">§6 経過観察と再評価</h2>
+<p>入院後の経過観察は<strong>「入院させて放っておく」ではない</strong>。状況に応じたフォローアップ計画をつくる。<strong>診断がついても当たっているとは限らない</strong>（指導医が診たところで研修医より精度は上がらないという報告もある — Acute Abdominal Pain Study Group 2016）。まっさらな気持ちでもう一度レヴューする周到さが必要。</p>
+
+<h3 id="確定診断あり">§6.1 確定診断がついている場合</h3>
+
+<h4>① 保存治療が奏功すると予想される疾患（→ 退院計画）</h4>
+<ul>
+<li>本来は外来治療対象だが入院を選択したケース。<a class="wiki-link" href="疾患詳細/急性腸炎・感染性下痢症.html">急性腸炎</a>／合併症のない<a class="wiki-link" href="疾患詳細/急性憩室炎.html">大腸憩室炎</a>など</li>
+<li><strong>入院後すぐに退院基準（criteria）を作る</strong>。例：<em>「憩室炎：自発痛がなくなり、食事再開しても痛みの増悪がなければ退院」</em></li>
+</ul>
+
+<h4>② 保存治療適応だが増悪可能性あり（→ フォローアップ計画）</h4>
+<ul>
+<li><a class="wiki-link" href="疾患詳細/急性膵炎.html">急性膵炎</a>／<a class="wiki-link" href="疾患詳細/非感染性腸炎.html">虚血性大腸炎</a>などが該当。重症化を想定したフォロー計画を立てる</li>
+<li>急性膵炎は重症化で死亡率 30%、虚血性大腸炎が腸管壊死に移行すれば救命困難 — <strong>hospital delay だけは避けたい</strong></li>
+<li>診察頻度（1 日 1 回？ 4 回？）と<strong>増悪の指標</strong>（indicator）をリストアップ</li>
+</ul>
+
+<details class="callout callout-note">
+<summary>例：虚血性大腸炎のフォローアップ計画</summary>
+<div class="callout-body">
+<ul>
+<li><strong>現在の状態</strong>：痛みは自制内、腹膜刺激症状なし</li>
+<li><strong>増悪の指標</strong>：痛みの増悪または腹膜刺激症状（反跳痛・タッピング痛*）の出現</li>
+<li><strong>診察頻度</strong>：1 日 2 回（腸管は約 12 時間の虚血で不可逆的な壊死となるため、最低 12 時間に 1 回）</li>
+<li><strong>チェック項目</strong>：自発痛の増悪、反跳痛・タッピング痛の有無（筋性防御は問わない — 全層変化が及んだ時点で腹膜刺激症状が出ると解釈）</li>
+</ul>
+<p>*<strong>タッピング痛</strong>＝指先で腹壁を軽く叩いた時の痛み。文献では <em>pain with percussion / pain on percussion</em>。</p>
+</div>
+</details>
+
+<h4>③ 手術適応もあるが保存治療を選択した場合（→ 手術計画）</h4>
+<ul>
+<li>穿孔性十二指腸潰瘍（保存）／急性<a class="wiki-link" href="疾患詳細/胆石症・急性胆嚢炎.html">胆嚢炎</a>（保存）など</li>
+<li>増悪時に<strong>手術に踏み切る条件をあらかじめ細かく設定</strong>する。これがないと hospital delay になりやすい</li>
+<li>胆嚢炎は TG18 など<strong>ガイドラインに従う</strong>。<a class="wiki-link" href="疾患詳細/上部消化管穿孔.html">上部消化管穿孔</a>のように明確基準のない疾患は症例ごとに設定</li>
+</ul>
+
+<details class="callout callout-note">
+<summary>例：穿孔性十二指腸潰瘍に対する手術計画</summary>
+<div class="callout-body">
+<p><strong>現在の状態</strong>：</p>
+<ul>
+<li>バイタル安定／尿量減少なし</li>
+<li>上腹部に限局した反跳痛と voluntary guarding</li>
+<li>自発痛は痛み止めでコントロール</li>
+</ul>
+<p><strong>手術基準</strong>（以下のいずれか 1 つでも抵触したら）：</p>
+<ul>
+<li>バイタルサインに変化</li>
+<li>尿量減少（&lt; 5 mL/kg/hr）</li>
+<li>下腹部に痛み／反跳痛が広がる、または involuntary guarding が出現</li>
+<li>痛み止めが経時的に増量</li>
+</ul>
+<p><em>条件を決めることでスタッフ全員に注意が喚起され、変化を早めに見つけられる効果が期待できる。</em></p>
+</div>
+</details>
+
+<div class="callout callout-warning">
+<div class="callout-title">この方針の最大のピットフォール</div>
+<div class="callout-body"><p><strong>そもそも診断が間違っている可能性</strong>（Crofts 1989）。<em>「上部穿孔だから保存治療しているよ」</em>と申し送られて鵜呑みにしていると危険 — 実は<a class="wiki-link" href="疾患詳細/下部消化管穿孔.html">下部穿孔</a>かもしれない。</p></div>
+</div>
+
+<h3 id="局在のみ">§6.2 疾患の局在性はわかったが診断に至っていない場合</h3>
+<ul>
+<li><a class="wiki-link" href="疾患詳細/急性虫垂炎.html">虫垂炎</a>疑い、<a class="wiki-link" href="疾患詳細/上部消化管穿孔.html">上部消化管穿孔</a>疑いだが診断に至らないケース</li>
+<li>予想疾患をリストアップ → <strong>self-limited なものは消去</strong>し、<strong>surgical な疾患のみ</strong>を対象に</li>
+<li>中途半端な治療（抗菌薬の処方など）はせず、<strong>絶飲食＋補液＋必ず再評価</strong></li>
+<li>翌日になって増悪し確定診断もつかないなら、想定対象疾患を念頭に手術を検討</li>
+</ul>
+<details class="callout callout-tip">
+<summary>第三者がカルテを読んだらどう思うか？</summary>
+<div class="callout-body">
+<p>一通り診察が終わって「今日は手術せず様子をみよう」と決めたあと、もう一度診療録を眺めてみる。</p>
+<ul>
+<li>診察した人のなかに 1 人でも<strong>「右下腹部に反跳痛あり」</strong>と記載していないか？</li>
+<li>手術しないと決めた理由は本当に症状で決めたのか？ それとも<strong>「画像でハッキリしなかった（CT でよくわからなかった）」</strong>ことが理由になっていないか？</li>
+</ul>
+<p><em>窪田：「結果的に時間がたってから手術となった hospital delay のケースで、初診の診療録に典型的な病歴・身体所見が書いてあったのに、画像診断できなかったがために手術に踏み切れなかった、ということをときどき経験する」</em></p>
+</div>
+</details>
+
+<h3 id="全然わからない">§6.3 全然わからない場合</h3>
+
+<h4>① びまん性の腸管拡張を認める場合</h4>
+<ul>
+<li>腹部異常膨満や X 線でびまん性の腸管拡張があるなら、<strong>必ず疾患が隠れている</strong>と考える</li>
+<li>麻痺性イレウスとして小腸がびまん性に拡張しているのに「小腸イレウス」と書かれたからといって<strong>減圧だけで様子見をしてはならない</strong></li>
+<li>方向性がつくまでは思考停止せず、診断のための努力を継続。増悪なら<strong>診断のための手術（審査腹腔鏡）</strong>もある</li>
+<li>麻痺性イレウスを呈した時に想定すべき病態は <strong><a class="wiki-link" href="疾患詳細/急性腸管虚血.html">腸管虚血（壊死）</a></strong> と <strong><a class="wiki-link" href="疾患詳細/下部消化管穿孔.html">下部消化管穿孔</a></strong> の 2 つ。High risk patient ならこの 2 つを否定するまで念頭から外さない</li>
+</ul>
+
+<h4>② 痛みはあるが、有意な所見を認めない場合</h4>
+<ul>
+<li>自発痛だけ強く、身体所見は乏しい。高齢でも基礎疾患でもない。画像も異常がはっきりしない</li>
+<li>当日は積極的に痛み止めを使い再評価</li>
+<li><strong>注意：<a class="wiki-link" href="疾患詳細/急性腸管虚血.html">腸管虚血の早期</a>はこの群に入る</strong></li>
+</ul>
+<hr>
+
+<h2 id="アプローチ">§7 各種アプローチ法</h2>
+<p>5 つの切り口（緊急性／罹患部位／痛みの性状／随伴症状／女性）から鑑別を組み立てる。</p>
+
+<h3 id="緊急性アプローチ">§7.1 緊急性からのアプローチ</h3>
+<p>腹痛にも優先順位がある：</p>
+<div class="callout callout-danger">
+<div class="callout-title">緊急性の優先順位</div>
+<div class="callout-body"><p><strong>ショック &gt; 敗血症（septic abdomen）&gt; 汎発性腹膜炎（のみ）&gt; 強い自発痛（のみ）</strong></p>
+<p>「痛いよー」と叫ぶのは優先順位が低い。重症度が上がるほど意識障害が進行し<strong>元気に「痛いよー」と言えなくなる</strong>。</p></div>
+</div>
+
+<h4>① ショックの場合 — 出血／敗血症／脱水に分ける</h4>
+<div class="table-wrap"><table>
+<thead><tr><th>パターン</th><th>典型疾患</th><th>キモ</th></tr></thead>
+<tbody>
+<tr><td><strong>① 出血性</strong>（発症早期のショック）</td><td>血管疾患（<a class="wiki-link" href="疾患詳細/破裂性腹部大動脈瘤.html">破裂性 AAA</a>・<a class="wiki-link" href="疾患詳細/破裂性腹腔動脈瘤.html">破裂性腹腔動脈瘤</a>）／肝脾（肝細胞癌破裂・脾破裂）／婦人科（<span class="wiki-missing">子宮外妊娠・卵巣出血</span>）</td><td>エコーで腹水確認、悩めば穿刺。<strong>迅速止血（手術 or IVR）</strong>がすべて</td></tr>
+<tr><td><strong>② 敗血症性</strong>（時間経過長め）</td><td>a) 原疾患→腹膜炎→敗血症：広範腸壊死／<a class="wiki-link" href="疾患詳細/下部消化管穿孔.html">下部消化管穿孔</a>。<br>b) 原疾患→敗血症（腹膜炎経由しない）：<a class="wiki-link" href="疾患詳細/急性胆管炎・総胆管結石症.html">急性胆管炎</a>／重症急性<a class="wiki-link" href="疾患詳細/胆石症・急性胆嚢炎.html">胆嚢炎</a>／一部の穿孔性<a class="wiki-link" href="疾患詳細/急性虫垂炎.html">虫垂炎</a></td><td>a は死亡率高く全身管理＋集中治療。b は原疾患への治療が奏効しやすい</td></tr>
+<tr><td><strong>③ 脱水性</strong>（internal fluid shift）</td><td><a class="wiki-link" href="疾患詳細/急性膵炎.html">急性膵炎</a>／<a class="wiki-link" href="疾患詳細/小腸閉塞.html">腸閉塞</a>／重症腸炎／<a class="wiki-link" href="疾患詳細/上部消化管穿孔.html">上部消化管穿孔</a>（数日経過）</td><td>外から見えない脱水。<strong>上部穿孔のショックを敗血症と決めつけない</strong>（高浸透圧消化液で著しい脱水になる）</td></tr>
+</tbody></table></div>
+
+<h4>② 敗血症（Septic abdomen）</h4>
+<ul>
+<li>所見：ショック／呼吸不全／<strong>軽度黄疸</strong>（胆管炎以外で）／低体温／mottling／意識障害</li>
+<li>広範腸壊死や腹部全体に便汁が広がる<a class="wiki-link" href="疾患詳細/下部消化管穿孔.html">下部消化管穿孔</a>は <em>catastrophic abdomen</em></li>
+<li><strong>代謝性アシドーシスを伴う</strong>。敗血症で他に説明のつかないアシドーシスを見たら septic abdomen を疑う</li>
+<li>術前画像診断が困難なことも多く、その場合は<strong>腹水穿刺（US ガイド下）</strong>で色調・臭い・培養を取る</li>
+</ul>
+
+<details class="section-fold">
+<summary>腹水の色調・臭い早見表（窪田）</summary>
+<div class="callout-body">
+<p><strong>色調</strong>：</p>
+<div class="table-wrap"><table>
+<thead><tr><th>色調</th><th>示唆</th></tr></thead>
+<tbody>
+<tr><td><strong>黄色混濁（turbid ascitis）</strong></td><td><a class="wiki-link" href="疾患詳細/急性虫垂炎.html">虫垂炎</a>の可能性。穿孔も壊死もない虫垂炎でも珍しくない（濁りはフィブリン析出。膿瘍の <em>creamy pus</em> とは別物）</td></tr>
+<tr><td><strong>淡血性（serosangenous）</strong></td><td><a class="wiki-link" href="疾患詳細/急性腸管虚血.html">腸管虚血</a>（<a class="wiki-link" href="疾患詳細/小腸閉塞.html">絞扼性腸閉塞</a>初期など）</td></tr>
+<tr><td><strong>血性（bloody）</strong></td><td>鮮血 → 出血。黒褐色 → 時間経った腸壊死（壊死なら悪臭）</td></tr>
+<tr><td><strong>胆汁性</strong></td><td>純胆汁 → 胆汁瘻。緑色 or 黄色混濁の腸液 → <a class="wiki-link" href="疾患詳細/上部消化管穿孔.html">上部消化管穿孔</a>または近位空腸穿孔</td></tr>
+<tr><td><strong>便性（feces ascitis）</strong></td><td>下痢便そのもの → 大腸または回腸の穿孔</td></tr>
+</tbody></table></div>
+<p><strong>臭い</strong>：</p>
+<div class="table-wrap"><table>
+<thead><tr><th>臭い</th><th>示唆</th></tr></thead>
+<tbody>
+<tr><td><strong>嫌気性臭（anaerobic smell）</strong></td><td>多くは <em>B. fragilis</em>（一度嗅げば覚える）</td></tr>
+<tr><td><strong>酸性臭（acidity smell）</strong></td><td>消化液・腸液の酸えた臭い → <a class="wiki-link" href="疾患詳細/上部消化管穿孔.html">上部消化管穿孔</a></td></tr>
+<tr><td><strong>便臭（feces smell）</strong></td><td><a class="wiki-link" href="疾患詳細/下部消化管穿孔.html">下部消化管穿孔</a></td></tr>
+<tr><td><strong>無臭（not smelly）</strong></td><td>単一菌増殖（多くは <em>E. coli</em>・Klebsiella）→ 消化管穿孔は否定的。穿孔性虫垂炎や（高齢女性なら）<strong>破裂性子宮留嚢腫</strong>を想起</td></tr>
+</tbody></table></div>
+<p>腹水の生化学（アミラーゼ・ビリルビン）が同時期の血清値を上回れば腸液混在の可能性大。グラム染色で <em>poly microbial</em> なら腸内細菌由来＝消化管穿孔を高率に示唆。<strong>大腸壊死では腹水がほとんど出ないこともある</strong>ので注意。</p>
+</div>
+</details>
+
+<h4>③ 汎発性腹膜炎（Panperitonitis）— 3 ヴァリエーション</h4>
+<p>パンペリ＝開腹手術と認識（一部例外あり）。</p>
+<div class="table-wrap"><table>
+<thead><tr><th>タイプ</th><th>典型疾患</th><th>所見の特徴</th></tr></thead>
+<tbody>
+<tr><td><strong>① 板状硬</strong>（Board like rigidity）</td><td><a class="wiki-link" href="疾患詳細/上部消化管穿孔.html">上部消化管穿孔</a></td><td>カチンコチン、反跳痛を確かめる余裕すらない、強い自発痛（化学性腹膜炎）</td></tr>
+<tr><td><strong>② 反跳痛が著明</strong></td><td><a class="wiki-link" href="疾患詳細/下部消化管穿孔.html">下部消化管穿孔</a></td><td>ゴム風船様の弾力ある膨満、どこもかしこも反跳痛、自発痛は反跳痛の強さに比してやや弱い（細菌性腹膜炎）</td></tr>
+<tr><td><strong>③ Focus が明らか</strong></td><td>穿孔性虫垂炎／穿孔性胆嚢炎</td><td>圧痛・反跳痛が一点で最強、離れるほど弱まる</td></tr>
+</tbody></table></div>
+<p><strong>例外（汎発性腹膜炎を呈するが手術が治療にならない）</strong>：<a class="wiki-link" href="疾患詳細/急性膵炎.html">急性膵炎</a>／原発性細菌性腹膜炎／重症<a class="wiki-link" href="疾患詳細/急性腸炎・感染性下痢症.html">急性腸炎</a>（炎症が漿膜に達した場合）</p>
+
+<h3 id="罹患部位アプローチ">§7.2 罹患部位からのアプローチ</h3>
+<ul>
+<li>最も汎用される実際的アプローチ。<strong>「手の何センチ下にどの臓器がどう重なっているか」を目をつむってイメージできる</strong>解剖知識が前提</li>
+<li>トレーニング：何も見ずに腹部臓器の位置関係をスケッチ／開腹を観察／互いにエコー／他人の CT もとりあえず見る</li>
+<li>初期診断の部位別鑑別（上腹部／下腹部／全般痛 → §3.1 参照）を骨格に</li>
+</ul>
+<details class="callout callout-note">
+<summary>痛い場所と罹患臓器が解離する 3 パターン</summary>
+<div class="callout-body">
+<ul>
+<li><strong>① 自発痛の位置との解離（放散痛）</strong>：<a class="wiki-link" href="疾患詳細/急性虫垂炎.html">虫垂炎</a>の上腹部痛、<a class="wiki-link" href="疾患詳細/胆石症・急性胆嚢炎.html">胆嚢炎</a>・<a class="wiki-link" href="疾患詳細/急性膵炎.html">膵炎</a>の背部痛、尿管結石の尿管走行に沿う痛み、小児精巣捻転の下腹部痛。<strong>放散部位に圧痛はない</strong> — 全身を診察するのが必須</li>
+<li><strong>② 罹患部位が想像より広がっている</strong>：左下腹部痛だが虫垂炎（痩せ身で虫垂が長く左下腹部まで届く）、右下腹部痛だが膵炎（炎症性浸出液が腸間膜根部から右骨盤腔に達する）。圧痛の<strong>最強部・中心部</strong>を丹念に探す</li>
+<li><strong>③ 臓器が想定位置にない</strong>：先天的（内臓逆位／腸回転異常／左側胆嚢／馬蹄腎・片腎）／後天的（摘出済 — 胃全摘で消化性潰瘍にならない、胆嚢なしで胆嚢炎なし、膵切除後に膵炎は稀）／高度食道裂孔ヘルニアで胃が胸腔内／高齢者で肝が高位（典型的な Murphy が出ない）／高齢女性で椎体圧迫骨折により肋骨弓が骨盤腔に入り込み<a class="wiki-link" href="疾患詳細/胆石症・急性胆嚢炎.html">胆嚢炎</a>を右下腹部痛・<a class="wiki-link" href="疾患詳細/急性虫垂炎.html">虫垂炎</a>を右上腹部痛として表現</li>
+</ul>
+</div>
+</details>
+
+<h3 id="痛みの性状アプローチ">§7.3 痛みの性状からのアプローチ</h3>
+<p>「痛みをなんとかしてくれー」と訴えられる疾患は大きく 2 通り：</p>
+<div class="table-wrap"><table>
+<thead><tr><th>タイプ</th><th>定義</th><th>典型疾患</th><th>本質</th></tr></thead>
+<tbody>
+<tr><td><strong>① 七転八倒型</strong></td><td>もんどり打って動き回る、じっとしていられない</td><td>結石性疾患（尿管結石・胆石発作）</td><td>腹膜刺激症状なし → 動いても痛みが増えない（内臓痛）</td></tr>
+<tr><td><strong>② 苦悶型</strong></td><td>動くと痛みが増えるのでじっとしている、冷や汗をかいて耐える、ときどき体位変更</td><td><a class="wiki-link" href="疾患詳細/上部消化管穿孔.html">上部消化管穿孔</a>（座位）／<a class="wiki-link" href="疾患詳細/急性膵炎.html">急性膵炎</a>（側臥位 chest-knee）</td><td>腹膜刺激症状あり → 重篤であることが多い</td></tr>
+</tbody></table></div>
+<div class="callout callout-warning">
+<div class="callout-title">七転八倒型は安心できる？</div>
+<div class="callout-body"><p>七転八倒型は腹膜刺激症状がないため一見ホッとできる。<strong>ただし安心は痛みが治まってから</strong>。臓器虚血（含む捻転）でも七転八倒型を呈する — <strong>心房細動・卵巣腫瘍などのリスクファクターを念頭におく</strong>。</p></div>
+</div>
+
+<details class="callout callout-note">
+<summary>痛みがマスクされる／和らぐ場合（要注意）</summary>
+<div class="callout-body">
+<p><strong>痛みがマスクされる基礎疾患</strong>（自分から訴えない）：麻痺（脊損後・脳血管後）／高齢者／統合失調症／悪液質／糖尿病／妊娠</p>
+<p><strong>痛みが和らぐパターン</strong>（治っていない）：</p>
+<ul>
+<li><strong>穿孔性<a class="wiki-link" href="疾患詳細/急性虫垂炎.html">虫垂炎</a></strong>：穿孔の直前が最も痛い、穿孔直後に自発痛は少し和らぐ</li>
+<li><strong>梗塞</strong>（<a class="wiki-link" href="疾患詳細/急性腸管虚血.html">上腸間膜動脈閉塞</a>など）：虚血の時期は痛く、壊死してしまえば痛みはなくなる</li>
+</ul>
+<p><em>窪田：「<a class="wiki-link" href="疾患詳細/小腸閉塞.html">絞扼性腸閉塞</a>で手術に向かうとき、苦悶の表情で痛がっているなら<strong>『まだ間に合うぞ（腸は生きている、腸切除しないでいけそう）』</strong>と外科医は考えている。逆に手術場に向かうエレベーターで『だいぶ楽になってきました』と言われたら<strong>『あっ、もう間に合わないかな（腸切除必要かな）？』</strong>と考えてしまう。痛みは重要サインだがときに逆を意味する」</em></p>
+</div>
+</details>
+
+<h3 id="随伴症状アプローチ">§7.4 随伴症状からのアプローチ</h3>
+<p>大きく区分するときは <strong>消化器症状（悪心嘔吐／下痢）と発熱</strong>の有無に着目。</p>
+
+<h4>① 消化器症状 — 本管 vs 側管モデル</h4>
+<details class="callout callout-note">
+<summary>悪心・嘔吐：本管／側管／虫垂で分ける</summary>
+<div class="callout-body">
+<p>消化管を <strong>本管</strong>（胃・小腸・大腸）と <strong>側管</strong>（胆管・胆嚢・膵臓・憩室）に分けて考える。</p>
+<ul>
+<li><strong>本管</strong>は悪心が強い。<strong>口側ほどさらに強い</strong></li>
+<li>本管とも側管ともいえない<a class="wiki-link" href="疾患詳細/急性虫垂炎.html">虫垂</a>は吐き気はあるが<strong>長続きしない</strong></li>
+<li><strong>側管</strong>は悪心が弱い（強い痛みに伴う吐き気はある）</li>
+<li><strong>後天的にできた側管</strong>（<a class="wiki-link" href="疾患詳細/急性憩室炎.html">憩室</a>）は悪心ほぼなし</li>
+</ul>
+<p><strong>下痢の解釈</strong>：</p>
+<ul>
+<li>大量水様 → <a class="wiki-link" href="疾患詳細/急性腸炎・感染性下痢症.html">急性腸炎</a></li>
+<li>頻回だが少量 → <strong>骨盤内炎症</strong>（膿瘍など）の存在</li>
+<li>下痢どころか軟便もない → 急性腸炎を初期診断から一旦除外（可能性は残るが鑑別から外す方が得策）</li>
+</ul>
+</div>
+</details>
+
+<h4>② 発熱 — 窪田流アプローチ</h4>
+<ul>
+<li><strong>Common disease</strong>（<a class="wiki-link" href="疾患詳細/急性虫垂炎.html">虫垂炎</a>・<a class="wiki-link" href="疾患詳細/胆石症・急性胆嚢炎.html">胆嚢炎</a>）は<strong>発熱の有無を重視しない</strong></li>
+<li>明らかな発熱あり → <strong>感染性疾患から鑑別</strong></li>
+<li>平熱 → 非感染性疾患から鑑別（腫瘍など）</li>
+<li><strong>低体温＝敗血症（septic abdomen）</strong></li>
+<li><strong>悪寒戦慄（shaking chill）</strong>＝外科的感染症が敗血症化した状態。緊急ドレナージを要する可能性。典型は<a class="wiki-link" href="疾患詳細/急性胆管炎・総胆管結石症.html">急性胆管炎</a>と閉塞性腎盂腎炎</li>
+</ul>
+
+<h4>③ 黄疸</h4>
+<ul>
+<li>診断的には<a class="wiki-link" href="疾患詳細/急性胆管炎・総胆管結石症.html">胆管炎</a>を考える</li>
+<li>いかなる疾患でも<strong>敗血症に至ると軽度黄疸を伴う</strong>（Sepsis-3 の臓器障害スコアにビリルビン値が含まれる） → 重症度評価としても用いる</li>
+</ul>
+
+<h4>④ 腹部以外の痛み</h4>
+<div class="table-wrap"><table>
+<thead><tr><th>部位</th><th>示唆</th></tr></thead>
+<tbody>
+<tr><td>背部痛・腰痛</td><td>後腹膜病変（大動脈含む） → <a class="wiki-link" href="疾患詳細/破裂性腹部大動脈瘤.html">破裂性 AAA</a>／<a class="wiki-link" href="疾患詳細/急性膵炎.html">膵炎</a></td></tr>
+<tr><td>右肩甲骨部</td><td>胆石／<a class="wiki-link" href="疾患詳細/胆石症・急性胆嚢炎.html">胆嚢炎</a></td></tr>
+<tr><td>左肩痛</td><td>脾臓／膵臓／左横隔膜</td></tr>
+<tr><td>右肩痛</td><td>肝臓／右横隔膜</td></tr>
+<tr><td>下肢痛</td><td>血管疾患（<a class="wiki-link" href="疾患詳細/腹痛をきたす胸部疾患.html">大動脈解離</a>など）／閉鎖孔ヘルニア</td></tr>
+</tbody></table></div>
+
+<h3 id="女性アプローチ">§7.5 女性へのアプローチ</h3>
+<p>すべからく男女平等の世の中だが、<strong>腹痛については女性は別視する</strong>（婦人科疾患・妊娠の存在）。詳細は原著第 5 章 ①（婦人科疾患）参照。</p>
+
+<h4>① いつ婦人科疾患を考えるか</h4>
+<ul>
+<li><strong>消化器症状（悪心嘔吐・下痢）に乏しい</strong></li>
+<li><strong>発熱を伴わない強い腹痛</strong>、持続痛</li>
+<li>例外：<span class="wiki-missing">卵巣捻転</span>は嘔吐を伴うことも多い、<span class="wiki-missing">PID</span> は発熱を伴う</li>
+</ul>
+
+<h4>② 年齢別</h4>
+<ul>
+<li><strong>初潮〜20 代前半</strong>：卵巣茎捻転／子宮外妊娠／PID／卵巣出血</li>
+<li><strong>20 代後半以降</strong>：上記＋子宮内膜症</li>
+<li><strong>中年</strong>：子宮筋腫が加わる</li>
+<li><strong>高齢者</strong>：子宮留膿腫</li>
+<li>卵巣茎捻転は<strong>全年齢</strong>で起こるが、奇形腫由来は若年に多い</li>
+</ul>
+
+<details class="callout callout-note">
+<summary>問診のタイミングと聞き方</summary>
+<div class="callout-body">
+<p>聞くべき項目（若い女性の下腹部痛で問診なしは診察したことにならない）：</p>
+<ul>
+<li><strong>妊娠歴</strong>：回数・流産歴（人工含む）・人工授精</li>
+<li><strong>月経歴</strong>：初潮・閉経、周期・期間・量、<strong>LMP</strong>（last menstrual period）と <strong>PMP</strong>（previous menstrual period）— LMP は不正確なことがあるので 1 つ前まで聞く</li>
+<li><strong>性行為</strong>：最終性交日・性交時痛・出血、パートナー（誰か・人数）</li>
+</ul>
+<p><strong>聞き方の原則</strong>：</p>
+<ul>
+<li>話の初めには聞かない（関係性ができてから）</li>
+<li>他人や家族（特に母親）の前で聞かない</li>
+<li>同伴者がいる場合は必要な問診を済ませてから席を外させ、診察中・診察後に</li>
+<li>妊娠歴・月経歴 → 「女性の腹痛では女性器が原因のこともあるので…」と前置いて性交歴へ</li>
+<li>「この医者はしっかり診てくれている」と<strong>信頼を作ってから</strong>。「お前にそんなこといってもどうせわからないだろう」と思われると不正確な情報しか得られない</li>
+</ul>
+</div>
+</details>
+
+<h4>③ 妊娠反応 — 必ず取る</h4>
+<ul>
+<li>妊娠を疑ったら当然、疑わなくても<strong>妊孕性のある患者では妊娠反応陰性を確認してから X 線検査</strong></li>
+<li><em>「本人が絶対に妊娠していないと言った」は言い訳にならない</em>。初診で patient-doctor relationship が確立していない段階の答えは信用に値しない</li>
+</ul>
+<details class="callout callout-tip">
+<summary>妊娠反応を断られないための言い方</summary>
+<div class="callout-body">
+<p><em>「妊娠可能年齢の女性が腹痛のために X 線検査をするときは、事前に尿検査で妊娠反応を確かめることが医学的に定められています。これはあなた自身の妊娠の可能性とは関係がありません。各個人に可能性があるかどうかを聞くよりも、尿検査で確かめた方が全体として正確であることがわかっているからです。」</em></p>
+<p>それでも断られたらカルテに「協力が得られなかった旨」を記載。</p>
+</div>
+</details>
+
+<h4>④ 妊婦への対応 — 3 大原則</h4>
+<div class="callout callout-warning">
+<div class="callout-title">妊婦の検査・治療 3 大原則（窪田）</div>
+<div class="callout-body"><ol>
+<li><strong>必ず産科医と協議</strong>して行う（一般医単独で動かない）</li>
+<li>妊娠・胎児には常に一定の自然リスクがある。薬剤・検査・治療が問題となるのは<strong>その自然リスクを上回る場合のみ</strong>。完全に危険性のない／100% 危険な薬剤・検査・治療は存在しない</li>
+<li><strong>母体の健康＝胎児の健康</strong>。母の疾患を治療せず胎児だけ健康はあり得ない</li>
+</ol></div>
+</div>
+
+<details class="section-fold">
+<summary>放射線被曝の閾値（ACR-SPR 2013／Williams 2010）</summary>
+<div class="callout-body">
+<ul>
+<li><strong>0.05 Gy（5 rad）以下</strong>では、形態異常・発達障害・成長障害・流産（死産）の発生率は<strong>自然発生率を上回らない</strong>（ACR-SPR 2013）</li>
+<li>救急室レベルで問題になるのは<strong>腹部 CT</strong>。骨盤部を含む CT は<strong>2 回撮影で 0.05 Gy を超える</strong>（単純＋造影は 2 回撮影と意識）。撮影せざるを得ないなら 1 回のみにする努力</li>
+<li>小児癌発生率：0.05 Gy 以下なら自然発生率 1/3,000 が 1/1,500〜2,000 に上がる程度（一般成人 CT の発癌率上昇度と特段に違わない）</li>
+</ul>
+<p>胎児被曝量の目安（Williams 2010）：腹部 CT 10 スライス 0.0024〜0.026 Gy／胸部 CT 0.001〜0.0045 Gy／頭部 CT &lt; 0.0005 Gy／骨盤 CT 0.0073〜0.046 Gy／腹部 X 線 0.001〜0.003 Gy／胸部 X 線 2 view &lt; 0.0001 Gy。</p>
+<p><em>窪田：「『腹痛？ とりあえず CT 撮っていて、後で診に行くから！』などという対応をしている人が困るだけだ。普段の診療がしっかりしていれば『妊娠中だから』という特殊性はほとんどない」</em></p>
+</div>
+</details>
+
+<details class="callout callout-note">
+<summary>妊婦への薬剤投与 — FDA カテゴリーは撤廃</summary>
+<div class="callout-body">
+<p>FDA の妊娠中薬剤カテゴリー（A・B・C・D・X）は<strong>2015 年に撤廃された</strong>。理由は、過剰に単純化された分類が医師・患者にとって正しくない選択（危険度が高いから使用しない）につながるとの危惧。</p>
+<p>放射線と同じく、<strong>使用するメリット・デメリットと使用しないメリット・デメリットを天秤にかけて決定</strong>する。基礎疾患の常用薬は必要だから常用しているのであって、妊娠だからといって中断できるならそもそも最初から不要だったということになる。</p>
+<p><em>「『腹痛があって熱があるからとりあえず抗生剤いっとくか』という思考過程をしている人だけが『妊娠』という言葉にとたんにナーバスになる」</em></p>
+</div>
+</details>
+<hr>
+
+<h2 id="出典">§8 出典・参考文献</h2>
+<p><strong>主たる出典</strong>：窪田忠夫『フラッシュアップ急性腹症』第 2 版（中外医学社, 2018）— 第 1 章 腹痛疾患へのアプローチ。本ページは原著の章構成・主張・著者の言い回しを忠実に踏襲している。</p>
+
+<details class="section-fold">
+<summary>原著で引用されている個別文献（§1〜§7）</summary>
+<div class="callout-body">
+<p><strong>§1 病歴聴取</strong></p>
+<ul>
+<li>Smith JK, Dileep NL. Abdominal surgery investigation of the acute abdomen. <em>Surgery</em> 2012; 30: 296-305.</li>
+<li>Abdullah M, Firmansyah MA. Diagnostic approach and management of acute abdominal pain. <em>Acta Med Indones</em> 2012; 44: 344-50.</li>
+<li>Bugliosi TF, et al. Acute abdominal pain in the elderly. <em>Ann Emerg Med</em> 1990; 19: 1383-6.</li>
+<li>Parker LJ, et al. Emergency department evaluation of geriatric patients with acute cholecystitis. <em>Acad Emerg Med</em> 1997; 4: 51-5.</li>
+<li>Tomino T, et al. Outcomes of emergency surgery for acute abdomen in dialysis patients. <em>Surg Today</em> 2014; 44: 690-5.</li>
+</ul>
+<p><strong>§2 身体所見</strong></p>
+<ul>
+<li>Cooper GS, et al. Intraabdominal infection: differences in presentation and outcome between younger patients and the elderly. <em>Clin Infect Dis</em> 1994; 19: 146-8.</li>
+<li>Postelnicu R, Evans L. Monitoring of the physical exam in sepsis. <em>Curr Opin Crit Care</em> 2017; 23: 232-6.</li>
+<li>Bemelman WA, Kievit J. Physical examination—rebound tenderness. <em>Ned Tijdschr Geneeskd</em> 1999; 143: 300-3.</li>
+<li>Ashdown HF, et al. Pain over speed bumps in diagnosis of acute appendicitis. <em>BMJ</em> 2012; 345: e8012.</li>
+<li>Singer M, et al. Sepsis-3. <em>JAMA</em> 2016; 23: 801-10.</li>
+</ul>
+<p><strong>§3 初期診断と鑑別疾患</strong></p>
+<ul>
+<li>Hefny AF, et al. Usefulness of free intraperitoneal air detected by CT scan in diagnosing bowel perforation in blunt trauma. <em>Injury</em> 2015; 46: 100-4.</li>
+<li>Meador CK. <em>A Little Book of Doctor's Rules</em>. Philadelphia: HANLEY &amp; BELFUS; 1992.</li>
+</ul>
+<p><strong>§4 確定診断のための検査</strong></p>
+<ul>
+<li>Maglinte DD, et al. Reliability and role of plain film radiography and CT in the diagnosis of small-bowel obstruction. <em>AJR</em> 1996; 167: 1451-5.</li>
+<li>Billittier AJ, et al. Radiographic imaging for the patient in emergency department with abdominal complaints. <em>Emerg Med Clin North Am</em> 1996; 14: 789-850.</li>
+<li>Kellow ZS, et al. The role of abdominal radiography in the evaluation of the nontrauma emergency patient. <em>Radiology</em> 2008; 248: 887-93.</li>
+<li>Laméris W, et al. Imaging strategies for detection of urgent conditions in patients with acute abdominal pain. <em>BMJ</em> 2009; 338: b2431.</li>
+<li>Stoker J, et al. Imaging patients with acute abdominal pain. <em>Radiology</em> 2009; 253: 31-46.</li>
+<li>Long SS, et al. Imaging strategies for right lower quadrant pain in pregnancy. <em>AJR</em> 2011; 196: 4-12.</li>
+<li>Park MS, et al. Acute cholecystitis: comparison of MR cholangiography and US. <em>Radiology</em> 1998; 209: 781-5.</li>
+</ul>
+<p><strong>§5 確定診断がつかないとき</strong></p>
+<ul>
+<li>Cope Z. <em>Early Diagnosis of the Acute Abdomen</em>, 2nd ed. London: Oxford; 1921.</li>
+<li>Brewster GS, et al. Medical myth: Analgesia should not be given to patients with acute abdomen. <em>West J Med</em> 2000; 172: 209-10.</li>
+<li>Thomas SH, et al. Effects of morphine analgesia on diagnostic accuracy. <em>J Am Coll Surg</em> 2003; 196: 18-31.</li>
+<li>Gaieski DF, et al. Impact of time to antibiotics on survival in severe sepsis or septic shock. <em>Crit Care Med</em> 2010; 38: 1045-53.</li>
+<li>de Dombal FT. Acute abdominal pain in the elderly. <em>J Clin Gastroenterol</em> 1994; 19: 331-5.</li>
+</ul>
+<p><strong>§6 経過観察と再評価</strong></p>
+<ul>
+<li>Acute Abdominal Pain Study Group. Diagnostic accuracy of surgeons and trainees in assessment of patients with acute abdominal pain. <em>Br J Surg</em> 2016; 103: 1343-9.</li>
+<li>Crofts TJ, et al. A randomized trial of nonoperative treatment for perforated peptic ulcer. <em>N Engl J Med</em> 1989; 320: 970-3.</li>
+</ul>
+<p><strong>§7 各種アプローチ法</strong></p>
+<ul>
+<li>ACR-SPR practice parameter for imaging pregnant or potentially pregnant adolescents and women with ionizing radiation, 2013 (resolution 48).</li>
+<li>Williams PM, Fletcher S. Health effect of prenatal radiation exposure. <em>Am Fam Physician</em> 2010; 82: 488-93.</li>
+<li>Committee on Obstetric Practice. Committee opinion No. 723: guidelines for diagnostic imaging during pregnancy and lactation. <em>Obstet Gynecol</em> 2017; 130: e210-6.</li>
+<li>Spain J, Rheinboldt M. MDCT of pelvic inflammatory disease. <em>Emerg Radiol</em> 2017; 24: 87-93.</li>
+</ul>
+</div>
+</details>
+
+<h2 id="リンク">§9 このページから張るリンク</h2>
+<ul>
+<li><strong>第 2 章 熟知すべき代表的な外科疾患</strong>：
+  <a class="wiki-link" href="疾患詳細/急性虫垂炎.html">急性虫垂炎</a> /
+  <a class="wiki-link" href="疾患詳細/小腸閉塞.html">小腸閉塞</a> /
+  <a class="wiki-link" href="疾患詳細/大腸閉塞.html">大腸閉塞</a> /
+  <a class="wiki-link" href="疾患詳細/上部消化管穿孔.html">上部消化管穿孔</a> /
+  <a class="wiki-link" href="疾患詳細/下部消化管穿孔.html">下部消化管穿孔</a> /
+  <a class="wiki-link" href="疾患詳細/胆石症・急性胆嚢炎.html">胆石症・急性胆嚢炎</a> /
+  <a class="wiki-link" href="疾患詳細/急性胆管炎・総胆管結石症.html">急性胆管炎・総胆管結石症</a> /
+  <a class="wiki-link" href="疾患詳細/急性腸管虚血.html">急性腸管虚血</a> /
+  <a class="wiki-link" href="疾患詳細/破裂性腹部大動脈瘤.html">破裂性腹部大動脈瘤</a> /
+  <a class="wiki-link" href="疾患詳細/嵌頓ヘルニア.html">嵌頓ヘルニア</a></li>
+<li><strong>第 3 章 外科的疾患の鑑別</strong>：
+  <a class="wiki-link" href="疾患詳細/急性憩室炎.html">急性憩室炎</a> /
+  <a class="wiki-link" href="疾患詳細/急性膵炎.html">急性膵炎</a> /
+  <a class="wiki-link" href="疾患詳細/急性腸炎・感染性下痢症.html">急性腸炎・感染性下痢症</a> /
+  <a class="wiki-link" href="疾患詳細/非感染性腸炎.html">非感染性腸炎</a> /
+  <a class="wiki-link" href="疾患詳細/アニサキス症.html">アニサキス症</a> /
+  <a class="wiki-link" href="疾患詳細/急性潰瘍・急性胃炎.html">急性潰瘍・急性胃炎</a> /
+  <a class="wiki-link" href="疾患詳細/強い腹痛を呈する内科的疾患.html">強い腹痛を呈する内科的疾患</a> /
+  <a class="wiki-link" href="疾患詳細/腹痛をきたす胸部疾患.html">腹痛をきたす胸部疾患</a></li>
+<li><strong>第 4 章 緊急手術が必要な疾患</strong>：
+  <a class="wiki-link" href="疾患詳細/破裂性腹腔動脈瘤.html">破裂性腹腔動脈瘤</a> /
+  <a class="wiki-link" href="疾患詳細/内ヘルニア.html">内ヘルニア</a> /
+  <a class="wiki-link" href="疾患詳細/腸重積.html">腸重積</a> /
+  <a class="wiki-link" href="疾患詳細/輸入脚症候群.html">輸入脚症候群</a></li>
+<li><a class="wiki-link" href="疾患詳細/下剤の選択.html">下剤の選択</a></li>
+<li><strong>関連主訴</strong>：<a class="wiki-link" href="嘔気・嘔吐.html">嘔気・嘔吐</a> / <a class="wiki-link" href="下痢.html">下痢</a> / <a class="wiki-link" href="吐血.html">吐血</a> / <a class="wiki-link" href="血便・下血.html">血便・下血</a> / <a class="wiki-link" href="発熱.html">発熱</a> / <a class="wiki-link" href="胸痛.html">胸痛</a></li>
+</ul>
+
+    </div>
+    <footer class="page-footer">
+      <a href="index.html">↑ 主訴ナビへ戻る</a>
+    </footer>
+  </article>
+</body>
+</html>
