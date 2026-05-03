@@ -4,266 +4,378 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="color-scheme" content="light dark" />
-  <title>急性胆管炎・総胆管結石症</title>
+  <title>急性胆管炎・総胆管結石症 | ER ノート</title>
   <link rel="stylesheet" href="../er-note.css" />
 </head>
 <body>
-  <nav class="site-bar">
-    <a class="site-bar__back" href="../腹痛.html">← 腹痛へ戻る</a>
-    <span class="site-bar__title">急性胆管炎・総胆管結石症</span>
+  <header class="hokuto-top">
+    <a class="hokuto-top__btn" href="../薬剤情報.html">
+      <span class="hokuto-top__icon">℞</span><span>薬剤情報</span>
+    </a>
+    <a class="hokuto-top__btn" href="../表計算.html">
+      <span class="hokuto-top__icon">⊞</span><span>表計算</span>
+    </a>
+  </header>
+
+  <main class="hokuto-main">
+    <article class="note-shell">
+      <h1 class="page-title">急性胆管炎・総胆管結石症</h1>
+
+      <!-- 即時アクションヘッダー -->
+      <div class="action-header">
+        <div class="action-header__title">⚡ 即時アクション</div>
+        <ol class="action-header__list">
+          <li><strong>Charcot 3 徴</strong>（腹痛/発熱/黄疸）→ <strong>Reynolds 5 徴</strong>（＋ショック/意識障害）で重症化警戒</li>
+          <li><strong>TG18 重症度判定</strong>（Grade Ⅰ-Ⅲ）。臓器障害 1 つで Grade Ⅲ、5 項目中 2 つ以上で Grade Ⅱ</li>
+          <li><strong>Grade Ⅱ-Ⅲ は緊急 ERCP / ENBD・ERBD</strong>。穿刺不能・解剖異常なら PTCD/PTGBD 検討</li>
+          <li><strong>経験的抗菌薬</strong>：PIPC/TAZ 4.5 g IV q6h（または ABPC/SBT・セフメタゾール）。<strong>血液培養 2 セット採取後すぐ開始</strong></li>
+        </ol>
+      </div>
+
+      <!-- メニュータイル -->
+      <nav class="section-tiles" id="sectionMenu">
+        <a class="section-tile" href="#s1"><span class="section-tile__no">🩺</span><span class="section-tile__name">病態<br><small>胆管炎/結石症</small></span></a>
+        <a class="section-tile" href="#s2"><span class="section-tile__no">📖</span><span class="section-tile__name">病歴<br><small>Charcot/Reynolds</small></span></a>
+        <a class="section-tile" href="#s3"><span class="section-tile__no">👁</span><span class="section-tile__name">身体所見</span></a>
+        <a class="section-tile" href="#s4"><span class="section-tile__no">🔍</span><span class="section-tile__name">初期診断<br><small>と鑑別</small></span></a>
+        <a class="section-tile" href="#s5"><span class="section-tile__no">🧪</span><span class="section-tile__name">検査<br><small>血液/画像</small></span></a>
+        <a class="section-tile" href="#s6"><span class="section-tile__no">📋</span><span class="section-tile__name">確定診断<br><small>TG18</small></span></a>
+        <a class="section-tile" href="#s7"><span class="section-tile__no">💊</span><span class="section-tile__name">治療<br><small>ERCP/抗菌薬</small></span></a>
+        <a class="section-tile" href="#s8"><span class="section-tile__no">⚠️</span><span class="section-tile__name">特殊な胆管炎</span></a>
+      </nav>
+
+      <!-- 関連主訴 -->
+      <details class="sub-fold" id="related-symptoms">
+        <summary>📞 この疾患が該当する主訴</summary>
+        <div class="sub-fold__body">
+          <ul>
+            <li><a class="wiki-link" href="../腹痛.html">腹痛</a> — 心窩部〜右季肋部痛、ただしマイルドで「発熱だけ」が主訴のことも</li>
+            <li><a class="wiki-link" href="../発熱.html">発熱</a> — 高熱＋悪寒戦慄（shaking chill）が特徴</li>
+            <li><span class="wiki-missing">黄疸</span> — 結石性は軽度（4-5 mg/dL）。本人は皮膚色より「尿の濃染」で気付く</li>
+            <li><span class="wiki-missing">嘔気・嘔吐</span> — 敗血症随伴症状として</li>
+          </ul>
+        </div>
+      </details>
+
+      <!-- §1 病態 -->
+      <section class="section-page" id="s1" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🩺 病態</h2>
+
+        <p><strong>急性胆管炎は急性胆嚢炎としばしば混同される</strong>が、<strong>まったく異なる病態で治療方針も異なる</strong>。胆嚢炎の臨床像は腹痛、<strong>胆管炎の臨床像は敗血症</strong>。厳格に区別する。</p>
+
+        <h3>① 急性胆管炎</h3>
+        <ul>
+          <li>閉塞の原因で最多は<strong>総胆管結石</strong>（乳頭部嵌頓）。他に<strong>悪性腫瘍（胆管癌・膵頭部癌）</strong>／胆道再建術後／十二指腸憩室炎（Lemmel 症候群、存在に異論あり）</li>
+          <li>嵌頓直後は感染症ではない（非感染性）。閉塞部位が腸管に近いため<strong>容易に感染症へ移行</strong>し、感染すれば<strong>胆管 → 肝内 → 血中</strong>へ細菌が移行 → <strong>すぐ敗血症</strong></li>
+          <li>敗血症の絶対数は腎盂腎炎より少ないが、<strong>敗血症化する確率は腎盂腎炎より高い</strong></li>
+          <li>本邦では<strong>AOSC（acute obstructive suppurative cholangitis）</strong>という用語があるが、欧文では ASC として記載される程度で和製の感あり（胆汁が膿そのものになる重篤感染を意味する）</li>
+        </ul>
+
+        <h3>② 総胆管結石症</h3>
+        <ul>
+          <li>結石があるだけでは無症状</li>
+          <li><strong>小さな結石</strong>：胆嚢由来（胆嚢管を通過するサイズ）＝若年者に多い。乳頭部に短時間嵌頓 → <strong>心窩部痛発作</strong>のみで感染に至らず</li>
+          <li><strong>大きめの結石</strong>：総胆管内で生成／増成＝高齢者に多い。嵌頓が長引き<strong>胆管炎へ移行</strong>しやすい</li>
+          <li>同サイズの結石が胆嚢内に複数あれば発作を繰り返す</li>
+        </ul>
+
+        <p><small>初期治療は内視鏡的に行われるのが一般的で、初診で外科コンサルトする疾患ではなくなっている。</small></p>
+      </section>
+
+      <!-- §2 病歴 -->
+      <section class="section-page" id="s2" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>📖 病歴</h2>
+
+        <h3>① 急性胆管炎</h3>
+        <ul>
+          <li>発症は半日〜2-3 日。主症状は<strong>腹痛／発熱／黄疸 ＝ Charcot's triad（シャルコー 3 徴）</strong>。3 つ揃うのは <strong>50〜75%</strong></li>
+          <li><strong>腹痛</strong>（出現率 70%）：胆嚢炎より程度はマイルド。心窩部違和感や胸部不快感程度のこともあり、<strong>「発熱」だけが主訴</strong>のこともある → こちらから腹痛を聞き出す。<strong>胆石膵炎合併</strong>を考えて左上腹部・背部痛も確認</li>
+          <li><strong>発熱</strong>（出現率 90%）：高熱が多い。<strong>悪寒戦慄（shaking chill）</strong>を伴うのが特徴 — 20〜30 分ガタガタ震え → 高熱、しばらくおさまる → 再び悪寒戦慄、を反復</li>
+          <li><strong>黄疸</strong>（出現率 70%）：結石性は軽度（4〜5 mg/dL 程度）でアジア人の肌では分かりにくい。<strong>本人の自覚は皮膚色より「尿の濃染」</strong>のことが多い → 「発症後の尿の色が普段より濃かったか」を聞く</li>
+        </ul>
+
+        <div class="callout callout-danger">
+          <div class="callout-title">Reynolds の 5 徴（重症化サイン）</div>
+          <div class="callout-body">
+            Charcot 3 徴 ＋ <strong>ショック（30%）</strong> ＋ <strong>意識障害（10〜20%）</strong>。揃うと <strong>mortality &gt; 50%</strong>。救急室では「敗血症」としてまず扱われ、<strong>25% は胆管炎とすぐに診断できない</strong>。
+          </div>
+        </div>
+
+        <h3>② 総胆管結石症</h3>
+        <ul>
+          <li>胆石発作と同様だが<strong>痛みはマイルド</strong>のことが多く、心窩部違和感・不快感程度のこともある</li>
+          <li>胆石発作と違って嵌頓した結石は症状軽快時には<strong>乳頭部を通過</strong>している → <strong>1 つの石で痛みが起きるのは 1 回だけ</strong></li>
+        </ul>
+      </section>
+
+      <!-- §3 身体所見 -->
+      <section class="section-page" id="s3" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>👁 身体所見</h2>
+
+        <h3>① 急性胆管炎</h3>
+        <p>敗血症としての所見と胆管炎としての所見に分けて取る。</p>
+        <ul>
+          <li><strong>敗血症の所見</strong>：高熱（90%、高齢者で無熱もあり）／意識レベル低下（10〜20%）／低血圧（30%）。発症早期から出現することもある</li>
+          <li><strong>胆管炎の所見</strong>：右上腹部圧痛（65%）／黄疸（80%）</li>
+        </ul>
+
+        <div class="callout callout-tip">
+          <div class="callout-title">胆嚢炎と胆管炎の圧痛の取り方の違い</div>
+          <div class="callout-body">
+            肝臓は大部分が右肋骨に覆われている。総胆管自体は膵・十二指腸・肝に覆われ直接の圧痛は強くないが、<strong>末梢の肝内胆管は肝表面に広がる</strong>ため、<strong>右下位肋骨の叩打で響く痛み</strong>として認識できる。<br>
+            <strong>胆嚢炎は痛みが胆嚢にフォーカス</strong>するのに対し、<strong>胆管炎は肝表面全体が痛い</strong>のが特徴。
+          </div>
+        </div>
+
+        <ul>
+          <li>黄疸は<strong>眼球結膜で 2〜3 mg/dL、皮膚で 5〜10 mg/dL</strong> 程度で認識できる。急性期は高度上昇していないことが多く、見落として血液検査でびっくりする経験はみんなある。<strong>軽度黄疸（〜3 mg/dL）は敗血症だけでも生じる</strong>ので判断に迷うことがある</li>
+        </ul>
+
+        <h3>② 総胆管結石症</h3>
+        <p>有症状時は急性胆管炎の「胆管炎による所見」のみと考えてよい。<strong>黄疸はないことが多い</strong>（嵌頓時間が短いため）。</p>
+      </section>
+
+      <!-- §4 初期診断と鑑別 -->
+      <section class="section-page" id="s4" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🔍 初期診断と鑑別</h2>
+        <p>3 徴のうち 1 つが欠けたとき。</p>
+
+        <h3>① 発熱がない</h3>
+        <ul>
+          <li>「黄疸＋腹痛」 → <strong>総胆管結石症（有症状）</strong>／胆道閉塞の器質的疾患（膵頭部癌・胆管癌）／急性肝炎（アルコール／薬剤性、ウイルス性は通常無痛）</li>
+          <li>重症で<strong>低体温</strong>になっている場合や、<strong>発熱の間欠期</strong>に来院した場合に「発熱なし」と評価することがある</li>
+        </ul>
+
+        <h3>② 黄疸がない</h3>
+        <ul>
+          <li>「発熱＋腹痛」 → 右季肋部圧痛なら胆嚢炎・結腸憩室炎・肝膿瘍・上行虫垂炎・横隔膜下膿瘍・<strong>Fitz-Hugh-Curtis 症候群</strong>（女性で PID の肝周囲波及）</li>
+          <li>心窩部痛なら急性膵炎・急性虫垂炎も加わる（虫垂炎は自発痛が心窩部でも圧痛は右下腹部）</li>
+        </ul>
+
+        <h3>③ 腹痛がない</h3>
+        <ul>
+          <li>「発熱＋黄疸」 → 敗血症全般で見られ鑑別が広い</li>
+        </ul>
+      </section>
+
+      <!-- §5 検査 -->
+      <section class="section-page" id="s5" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🧪 検査</h2>
+
+        <h3>血液</h3>
+        <ul>
+          <li>胆嚢炎と違って<strong>生化学が意義を持つ</strong></li>
+          <li><strong>ビリルビン上昇 90%、ALP 上昇 80%</strong>。AST/ALT も軽度上昇のことが多い</li>
+          <li>ビリルビンは<strong>直接型優位（D-Bil &gt; T-Bil）</strong>。間接型優位なら黄疸の原因を再考</li>
+          <li>白血球上昇 80%、ただし敗血症では逆に減少することも</li>
+          <li><strong>膵酵素は必ずチェック</strong>：上昇していれば<strong>胆石性膵炎の合併</strong>を示唆。膵酵素正常でも膵炎のことあり、上昇＝膵炎ではない</li>
+          <li><strong>血液培養 2 セット</strong>を採取（陽性率 50%）</li>
+        </ul>
+
+        <h3>画像</h3>
+
+        <h4>超音波</h4>
+        <ul>
+          <li>観察項目は<strong>総胆管と肝内胆管のサイズ</strong>。<strong>総胆管 ≥ 7 mm、肝内胆管 ≥ 4 mm で拡張</strong>。二次分枝より末梢が見えれば拡張</li>
+          <li>感度 50〜90% で<strong>閉塞期間に依存</strong>。長期狭窄（悪性腫瘍）→ 高度拡張で容易、急性結石性 → 拡張軽度で慣れないと指摘困難</li>
+          <li><strong>偽陽性の落とし穴</strong>：胆嚢摘出後 → 代償で総胆管 10 mm 程度は異常でない／高齢者の<strong>乳頭括約筋不全</strong> → 慢性的に拡張（近位主体・末梢肝内胆管は拡張せず）</li>
+          <li>嵌頓結石の画出は乳頭部付近が見にくく必ずしも容易でない（胃・横行結腸ガス）</li>
+        </ul>
+
+        <h4>腹部 CT — 結石を見るなら単純、胆管を見るなら造影</h4>
+        <ul>
+          <li>結石の同定は<strong>単純 CT が優れる</strong>（コレステロール結石は見えない、ただし総胆管結石は色素結石が多いため同定可なことが多い）</li>
+          <li>肝内胆管は<strong>造影 CT が見やすい</strong> → 結局「単純＋造影」が必要</li>
+          <li>軽度拡張は超音波同様、門脈と並行する肝内胆管二次分枝以遠が描出されれば拡張</li>
+        </ul>
+      </section>
+
+      <!-- §6 確定診断 TG18 -->
+      <section class="section-page" id="s6" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>📋 確定診断（Tokyo Guideline 2018）</h2>
+        <div class="callout callout-info">
+          <div class="callout-title">TG18 — 急性胆管炎の診断基準</div>
+          <div class="callout-body">
+            <ul>
+              <li><strong>A. 全身炎症</strong>：A-1 発熱／戦慄、A-2 炎症反応（検査値）</li>
+              <li><strong>B. 胆汁うっ滞</strong>：B-1 黄疸、B-2 肝機能異常（検査値）</li>
+              <li><strong>C. 画像</strong>：C-1 胆道拡張、C-2 etiology（狭窄・結石・ステント等）</li>
+            </ul>
+            <strong>疑診</strong>：A 1 項目 + B または C 1 項目<br>
+            <strong>確診</strong>：A 1 項目 + B 1 項目 + C 1 項目
+          </div>
+        </div>
+        <p>※ 重症度（Grade Ⅰ-Ⅲ）の詳細フローは <a class="wiki-link" href="胆管結石.html">胆管結石</a> ページの「TG18 重症度判定」を参照。</p>
+      </section>
+
+      <!-- §7 治療 -->
+      <section class="section-page" id="s7" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>💊 治療</h2>
+
+        <h3>① 治療方針</h3>
+        <ul>
+          <li>初期抗菌薬の奏効率は<strong>約 80%</strong>。緊急手術になることはほとんどなく、保存治療＋必要に応じ内視鏡的ドレナージが基本</li>
+          <li>抗菌薬を開始しただけで安心しない。<strong>最初の 24 時間以内に奏効するかを判断</strong></li>
+        </ul>
+
+        <div class="callout callout-warning">
+          <div class="callout-title">緊急ドレナージを考慮すべき所見</div>
+          <div class="callout-body">
+            <ul>
+              <li>強い腹痛が持続する</li>
+              <li>適切な補液にもかかわらず<strong>低血圧</strong></li>
+              <li><strong>39℃以上の高熱</strong></li>
+              <li><strong>意識障害（GCS ≤ 14）</strong></li>
+            </ul>
+          </div>
+        </div>
+
+        <h3>② ドレナージのオプション</h3>
+        <ul>
+          <li><strong>第一選択：内視鏡的ドレナージ（ENBD／ERBD）</strong>。non-operative method が好ましい</li>
+          <li>胃手術後（Roux-Y 再建）では<strong>BE-ERCP</strong>（ダブルバルーン内視鏡）／<strong>EUS-BD</strong>（内視鏡超音波下ドレナージ）が選択肢だが、施設・術者の習熟度に依存（EUS-BD はガイドライン上「確立されていない」）</li>
+          <li>第二選択：<strong>PTCD（経皮経肝胆道ドレナージ）</strong>。急性発症で胆管拡張が軽度な場合は穿刺困難になりやすい</li>
+          <li>3 管合流部開存＋胆嚢拡張があれば <strong>PTGBD で減圧</strong>を図ることも可能</li>
+          <li>経皮的いずれも不能なら<strong>緊急手術（重症例には太い T-tube ドレナージ）</strong></li>
+        </ul>
+
+        <h3>③ 抗菌薬</h3>
+        <ul>
+          <li>血液培養 2 セット採取後すぐ開始</li>
+          <li><strong>monotherapy なら PIPC/TAZ 4.5 g IV q6h</strong>（または ABPC/SBT 3 g IV q6h、重症感染では増量 12 g/日）</li>
+          <li>かつての ABPC + GM はほぼ使わない</li>
+        </ul>
+
+        <h3>④ 保存治療奏効後</h3>
+        <ul>
+          <li>胆道評価で<strong>総胆管結石が残っていなければ腹腔鏡下胆嚢摘出術</strong>を施行</li>
+          <li>残っていれば（i）<strong>ERCP±EST で総胆管結石除去 → 腹腔鏡下胆嚢摘出術</strong>、または（ii）<strong>腹腔鏡下総胆管切石術</strong>。施設・症例により選択</li>
+          <li><strong>退院せず入院中に完結</strong>（早期再発、入院期間・コスト面）</li>
+          <li>「画像で胆嚢内結石なし」でも、有症状胆石症（症状が出た）の診断で胆嚢摘出が適応 — <strong>「画像に石があるかどうか」で手術適応を決めるのではない</strong></li>
+        </ul>
+
+        <details class="section-fold"><summary>胆道評価のモダリティ</summary>
+        <div class="callout-body">
+          US（体表）／DIC-CT／<strong>MRCP</strong>／ERCP／<strong>EUS</strong>／IOC（術中胆道造影）。MRCP と EUS の感度・特異度は同等。<br>
+          高確率で結石があると考えれば <strong>ERCP（治療兼ねて）</strong>、結石はすでに通過したと考えるなら MRCP・EUS・DIC-CT から低侵襲に選ぶ。IOC で術中確認できるので術前確認は必須でない。
+        </div>
+        </details>
+      </section>
+
+      <!-- §8 特殊な胆管炎 -->
+      <section class="section-page" id="s8" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>⚠️ 特殊な胆管炎</h2>
+
+        <h3>① Lemmel 症候群</h3>
+        <p>十二指腸乳頭部付近の憩室による胆管圧迫が原因とされる。<strong>因果関係は証明されておらず、存在自体に異論あり</strong>。「憩室＋胆管炎」だけでこの診断に直結させない。</p>
+
+        <h3>② Mirizzi 症候群</h3>
+        <ul>
+          <li>Type I：胆嚢頸部・胆嚢管の嵌頓結石の影響が CBD に及び胆管炎を併発（一般的な典型例）</li>
+          <li>Type II：胆嚢頸部・胆嚢管と総胆管に瘻孔</li>
+          <li>Type III：嵌頓結石で肝管狭窄</li>
+          <li>Type IV：無石性胆嚢炎で肝管狭窄</li>
+          <li>治療は胆嚢摘出術が第一選択</li>
+        </ul>
+
+        <h3>③ 胆道再建後・乳頭機能不全に伴う胆管炎</h3>
+        <p>膵頭十二指腸切除後・膵胆管合流異常に対する胆道再建後、小児なら総胆管嚢腫術後・胆道閉鎖症の Kasai／Suruga 後など。<strong>逆行性胆管炎</strong>で <strong>EST 後</strong>や乳頭機能不全でも同様。重症化せず敗血症には至らないことが多い。</p>
+
+        <h3>④ 胆道狭窄に対するステント留置中の胆管炎</h3>
+        <p>ドレナージのために留置したチューブが閉塞して胆管炎が発症。<strong>ERBD（細径ステント・体外導出なし）</strong>は閉塞を早期認知できず<strong>重篤な敗血症に進展する危険</strong>。</p>
+
+        <h3>このページから張るリンク</h3>
+        <ul>
+          <li><a class="wiki-link" href="../腹痛.html">← 腹痛入口へ戻る</a></li>
+          <li><a class="wiki-link" href="胆石症・急性胆嚢炎.html">胆石症・急性胆嚢炎</a>（病態と治療が異なる、混同しないこと）</li>
+          <li><a class="wiki-link" href="急性膵炎.html">急性膵炎</a>（胆石性膵炎の合併・24h 以内 ERCP 適応）</li>
+          <li><a class="wiki-link" href="強い腹痛を呈する内科的疾患.html">強い腹痛を呈する内科的疾患</a>（敗血症の鑑別）</li>
+        </ul>
+
+        <h3>出典</h3>
+        <ul>
+          <li>窪田忠夫『フラッシュアップ急性腹症』第 2 版（中外医学社）— 章構成の踏襲元</li>
+          <li>Takada T. <em>J Hepatobiliary Pancreat Sci</em> 2018 — Tokyo Guideline 2018</li>
+          <li>Mosler P. <em>Curr Gastroenterol Rep</em> 2011 — 急性胆管炎の診断・管理</li>
+          <li>Attasaranya S, et al. <em>Med Clin North Am</em> 2008 — 総胆管結石症</li>
+          <li>Lai EC, et al. <em>Ann Surg</em> 1990 — 重症急性胆管炎の緊急手術</li>
+          <li>急性腹症診療ガイドライン 2015（日本腹部救急医学会）</li>
+        </ul>
+      </section>
+
+    </article>
+  </main>
+
+  <nav class="hokuto-bottom">
+    <button class="hokuto-bottom__btn" type="button" id="navBack">
+      <span class="hokuto-bottom__icon">←</span><span>戻る</span>
+    </button>
+    <a class="hokuto-bottom__btn" href="../ツール.html">
+      <span class="hokuto-bottom__icon">⚙</span><span>ツール</span>
+    </a>
+    <a class="hokuto-bottom__btn" href="../index.html">
+      <span class="hokuto-bottom__icon">⌂</span><span>ホーム</span>
+    </a>
   </nav>
-  <article class="note-shell">
-    <header class="note-header">
-      <h1>急性胆管炎・総胆管結石症（Acute Cholangitis & Choledocholithiasis）</h1>
-      <p class="source-badge">元: 急性腹症 参考用.md（窪田『フラッシュアップ急性腹症』第 2 版）の章構成を踏襲した要約 ／ 補完出典は文末記載</p>
-    </header>
-    <details class="toc"><summary>目次（原著章順）</summary><ol>
-      <li><a href="#病態">病態</a></li>
-      <li><a href="#病歴">病歴</a></li>
-      <li><a href="#身体所見">身体所見</a></li>
-      <li><a href="#初期診断">初期診断と鑑別</a></li>
-      <li><a href="#検査">検査</a></li>
-      <li><a href="#確定診断">確定診断（TG18）</a></li>
-      <li><a href="#治療">治療</a></li>
-      <li><a href="#特殊型">特殊な胆管炎</a></li>
-    </ol></details>
-    <div class="md-body">
 
-<p>#ER #救急 #腹痛 #胆管炎 #敗血症 #ERCP #TG18</p>
+  <script>
+  (function(){
+    const menu = document.getElementById('sectionMenu');
+    const pages = document.querySelectorAll('.section-page');
+    const titleH1 = document.querySelector('.page-title');
+    const relatedSymp = document.getElementById('related-symptoms');
 
-<p><strong>急性胆管炎は急性胆嚢炎としばしば混同される</strong>が、<strong>まったく異なる病態で治療方針も異なる</strong>。胆嚢炎の臨床像は腹痛、<strong>胆管炎の臨床像は敗血症</strong>。厳格に区別する。</p>
+    function showSection(id) {
+      menu.hidden = true;
+      if (titleH1) titleH1.hidden = true;
+      if (relatedSymp) relatedSymp.hidden = true;
+      pages.forEach(p => p.hidden = (p.id !== id));
+      window.scrollTo(0, 0);
+    }
+    function showMenu(scrollTarget) {
+      menu.hidden = false;
+      if (titleH1) titleH1.hidden = false;
+      if (relatedSymp) relatedSymp.hidden = false;
+      pages.forEach(p => p.hidden = true);
+      if (scrollTarget) {
+        if (scrollTarget.tagName === 'DETAILS') scrollTarget.open = true;
+        scrollTarget.scrollIntoView({behavior: 'instant', block: 'start'});
+      } else {
+        window.scrollTo(0, 0);
+      }
+    }
+    function syncFromHash() {
+      const id = (location.hash || '').replace('#','');
+      const target = id ? document.getElementById(id) : null;
+      if (target && target.classList.contains('section-page')) {
+        showSection(id);
+      } else if (target) {
+        showMenu(target);
+      } else {
+        showMenu();
+      }
+    }
 
-<h2 id="病態">病態</h2>
+    window.addEventListener('hashchange', syncFromHash);
+    document.querySelectorAll('.back-to-menu').forEach(b => {
+      b.addEventListener('click', () => { history.pushState(null,'',location.pathname); showMenu(); });
+    });
+    const navBack = document.getElementById('navBack');
+    if (navBack) navBack.addEventListener('click', () => {
+      if (window.history.length > 1) history.back();
+      else window.location.href = '../index.html';
+    });
 
-<h3>① 急性胆管炎</h3>
-<ul>
-<li>閉塞の原因で最多は<strong>総胆管結石</strong>（乳頭部嵌頓）。他に<strong>悪性腫瘍（胆管癌・膵頭部癌）</strong>／胆道再建術後／十二指腸憩室炎（Lemmel 症候群、存在に異論あり）</li>
-<li>嵌頓直後は感染症ではない（非感染性）。閉塞部位が腸管に近いため<strong>容易に感染症へ移行</strong>し、感染すれば<strong>胆管 → 肝内 → 血中</strong>へ細菌が移行 → <strong>すぐ敗血症</strong></li>
-<li>敗血症の絶対数は腎盂腎炎より少ないが、<strong>敗血症化する確率は腎盂腎炎より高い</strong></li>
-<li>本邦では<strong>AOSC（acute obstructive suppurative cholangitis）</strong>という用語があるが、欧文では ASC として記載される程度で和製の感あり（胆汁が膿そのものになる重篤感染を意味する）</li>
-</ul>
-
-<h3>② 総胆管結石症</h3>
-<ul>
-<li>結石があるだけでは無症状</li>
-<li><strong>小さな結石</strong>：胆嚢由来（胆嚢管を通過するサイズ）＝若年者に多い。乳頭部に短時間嵌頓 → <strong>心窩部痛発作</strong>のみで感染に至らず</li>
-<li><strong>大きめの結石</strong>：総胆管内で生成／増成＝高齢者に多い。嵌頓が長引き<strong>胆管炎へ移行</strong>しやすい</li>
-<li>同サイズの結石が胆嚢内に複数あれば発作を繰り返す</li>
-</ul>
-
-<p><small>初期治療は内視鏡的に行われるのが一般的で、初診で外科コンサルトする疾患ではなくなっている。</small></p>
-<hr>
-
-<h2 id="病歴">病歴</h2>
-
-<h3>① 急性胆管炎</h3>
-<ul>
-<li>発症は半日〜2-3 日。主症状は<strong>腹痛／発熱／黄疸 ＝ Charcot's triad（シャルコー 3 徴）</strong>。3 つ揃うのは <strong>50〜75%</strong></li>
-<li><strong>腹痛</strong>（出現率 70%）：胆嚢炎より程度はマイルド。心窩部違和感や胸部不快感程度のこともあり、<strong>「発熱」だけが主訴</strong>のこともある → こちらから腹痛を聞き出す。<strong>胆石膵炎合併</strong>を考えて左上腹部・背部痛も確認</li>
-<li><strong>発熱</strong>（出現率 90%）：高熱が多い。<strong>悪寒戦慄（shaking chill）</strong>を伴うのが特徴 — 20〜30 分ガタガタ震え → 高熱、しばらくおさまる → 再び悪寒戦慄、を反復</li>
-<li><strong>黄疸</strong>（出現率 70%）：結石性は軽度（4〜5 mg/dL 程度）でアジア人の肌では分かりにくい。<strong>本人の自覚は皮膚色より「尿の濃染」</strong>のことが多い → 「発症後の尿の色が普段より濃かったか」を聞く</li>
-</ul>
-
-<div class="callout callout-danger">
-<div class="callout-title">Reynolds の 5 徴（重症化サイン）</div>
-<div class="callout-body">
-Charcot 3 徴 ＋ <strong>ショック（30%）</strong> ＋ <strong>意識障害（10〜20%）</strong>。揃うと <strong>mortality &gt; 50%</strong>。救急室では「敗血症」としてまず扱われ、<strong>25% は胆管炎とすぐに診断できない</strong>。
-</div>
-</div>
-
-<h3>② 総胆管結石症</h3>
-<ul>
-<li>胆石発作と同様だが<strong>痛みはマイルド</strong>のことが多く、心窩部違和感・不快感程度のこともある</li>
-<li>胆石発作と違って嵌頓した結石は症状軽快時には<strong>乳頭部を通過</strong>している → <strong>1 つの石で痛みが起きるのは 1 回だけ</strong></li>
-</ul>
-<hr>
-
-<h2 id="身体所見">身体所見</h2>
-
-<h3>① 急性胆管炎</h3>
-<p>敗血症としての所見と胆管炎としての所見に分けて取る。</p>
-<ul>
-<li><strong>敗血症の所見</strong>：高熱（90%、高齢者で無熱もあり）／意識レベル低下（10〜20%）／低血圧（30%）。発症早期から出現することもある</li>
-<li><strong>胆管炎の所見</strong>：右上腹部圧痛（65%）／黄疸（80%）</li>
-</ul>
-
-<div class="callout callout-tip">
-<div class="callout-title">胆嚢炎と胆管炎の圧痛の取り方の違い</div>
-<div class="callout-body">
-肝臓は大部分が右肋骨に覆われている。総胆管自体は膵・十二指腸・肝に覆われ直接の圧痛は強くないが、<strong>末梢の肝内胆管は肝表面に広がる</strong>ため、<strong>右下位肋骨の叩打で響く痛み</strong>として認識できる。<br>
-<strong>胆嚢炎は痛みが胆嚢にフォーカス</strong>するのに対し、<strong>胆管炎は肝表面全体が痛い</strong>のが特徴。
-</div>
-</div>
-
-<ul>
-<li>黄疸は<strong>眼球結膜で 2〜3 mg/dL、皮膚で 5〜10 mg/dL</strong> 程度で認識できる。急性期は高度上昇していないことが多く、見落として血液検査でびっくりする経験はみんなある。<strong>軽度黄疸（〜3 mg/dL）は敗血症だけでも生じる</strong>ので判断に迷うことがある</li>
-</ul>
-
-<h3>② 総胆管結石症</h3>
-<p>有症状時は急性胆管炎の「胆管炎による所見」のみと考えてよい。<strong>黄疸はないことが多い</strong>（嵌頓時間が短いため）。</p>
-<hr>
-
-<h2 id="初期診断">初期診断と鑑別</h2>
-<p>3 徴のうち 1 つが欠けたとき。</p>
-
-<h3>① 発熱がない</h3>
-<ul>
-<li>「黄疸＋腹痛」 → <strong>総胆管結石症（有症状）</strong>／胆道閉塞の器質的疾患（膵頭部癌・胆管癌）／急性肝炎（アルコール／薬剤性、ウイルス性は通常無痛）</li>
-<li>重症で<strong>低体温</strong>になっている場合や、<strong>発熱の間欠期</strong>に来院した場合に「発熱なし」と評価することがある</li>
-</ul>
-
-<h3>② 黄疸がない</h3>
-<ul>
-<li>「発熱＋腹痛」 → 右季肋部圧痛なら胆嚢炎・結腸憩室炎・肝膿瘍・上行虫垂炎・横隔膜下膿瘍・<strong>Fitz-Hugh-Curtis 症候群</strong>（女性で PID の肝周囲波及）</li>
-<li>心窩部痛なら急性膵炎・急性虫垂炎も加わる（虫垂炎は自発痛が心窩部でも圧痛は右下腹部）</li>
-</ul>
-
-<h3>③ 腹痛がない</h3>
-<ul>
-<li>「発熱＋黄疸」 → 敗血症全般で見られ鑑別が広い</li>
-</ul>
-<hr>
-
-<h2 id="検査">検査</h2>
-
-<h3>血液</h3>
-<ul>
-<li>胆嚢炎と違って<strong>生化学が意義を持つ</strong></li>
-<li><strong>ビリルビン上昇 90%、ALP 上昇 80%</strong>。AST/ALT も軽度上昇のことが多い</li>
-<li>ビリルビンは<strong>直接型優位（D-Bil &gt; T-Bil）</strong>。間接型優位なら黄疸の原因を再考</li>
-<li>白血球上昇 80%、ただし敗血症では逆に減少することも</li>
-<li><strong>膵酵素は必ずチェック</strong>：上昇していれば<strong>胆石性膵炎の合併</strong>を示唆。膵酵素正常でも膵炎のことあり、上昇＝膵炎ではない</li>
-<li><strong>血液培養 2 セット</strong>を採取（陽性率 50%）</li>
-</ul>
-
-<h3>画像</h3>
-
-<h4>超音波</h4>
-<ul>
-<li>観察項目は<strong>総胆管と肝内胆管のサイズ</strong>。<strong>総胆管 ≥ 7 mm、肝内胆管 ≥ 4 mm で拡張</strong>。二次分枝より末梢が見えれば拡張</li>
-<li>感度 50〜90% で<strong>閉塞期間に依存</strong>。長期狭窄（悪性腫瘍）→ 高度拡張で容易、急性結石性 → 拡張軽度で慣れないと指摘困難</li>
-<li><strong>偽陽性の落とし穴</strong>：胆嚢摘出後 → 代償で総胆管 10 mm 程度は異常でない／高齢者の<strong>乳頭括約筋不全</strong> → 慢性的に拡張（近位主体・末梢肝内胆管は拡張せず）</li>
-<li>嵌頓結石の画出は乳頭部付近が見にくく必ずしも容易でない（胃・横行結腸ガス）</li>
-</ul>
-
-<h4>腹部 CT — 結石を見るなら単純、胆管を見るなら造影</h4>
-<ul>
-<li>結石の同定は<strong>単純 CT が優れる</strong>（コレステロール結石は見えない、ただし総胆管結石は色素結石が多いため同定可なことが多い）</li>
-<li>肝内胆管は<strong>造影 CT が見やすい</strong> → 結局「単純＋造影」が必要</li>
-<li>軽度拡張は超音波同様、門脈と並行する肝内胆管二次分枝以遠が描出されれば拡張</li>
-</ul>
-<hr>
-
-<h2 id="確定診断">確定診断（Tokyo Guideline 2018）</h2>
-<div class="callout callout-info">
-<div class="callout-title">TG18 — 急性胆管炎の診断基準</div>
-<div class="callout-body">
-<ul>
-<li><strong>A. 全身炎症</strong>：A-1 発熱／戦慄、A-2 炎症反応（検査値）</li>
-<li><strong>B. 胆汁うっ滞</strong>：B-1 黄疸、B-2 肝機能異常（検査値）</li>
-<li><strong>C. 画像</strong>：C-1 胆道拡張、C-2 etiology（狭窄・結石・ステント等）</li>
-</ul>
-<strong>疑診</strong>：A 1 項目 + B または C 1 項目<br>
-<strong>確診</strong>：A 1 項目 + B 1 項目 + C 1 項目
-</div>
-</div>
-<hr>
-
-<h2 id="治療">治療</h2>
-
-<h3>① 治療方針</h3>
-<ul>
-<li>初期抗菌薬の奏効率は<strong>約 80%</strong>。緊急手術になることはほとんどなく、保存治療＋必要に応じ内視鏡的ドレナージが基本</li>
-<li>抗菌薬を開始しただけで安心しない。<strong>最初の 24 時間以内に奏効するかを判断</strong></li>
-</ul>
-
-<div class="callout callout-warning">
-<div class="callout-title">緊急ドレナージを考慮すべき所見</div>
-<div class="callout-body">
-<ul>
-<li>強い腹痛が持続する</li>
-<li>適切な補液にもかかわらず<strong>低血圧</strong></li>
-<li><strong>39℃以上の高熱</strong></li>
-<li><strong>意識障害（GCS ≤ 14）</strong></li>
-</ul>
-</div>
-</div>
-
-<h3>② ドレナージのオプション</h3>
-<ul>
-<li><strong>第一選択：内視鏡的ドレナージ（ENBD／ERBD）</strong>。non-operative method が好ましい</li>
-<li>胃手術後（Roux-Y 再建）では<strong>BE-ERCP</strong>（ダブルバルーン内視鏡）／<strong>EUS-BD</strong>（内視鏡超音波下ドレナージ）が選択肢だが、施設・術者の習熟度に依存（EUS-BD はガイドライン上「確立されていない」）</li>
-<li>第二選択：<strong>PTCD（経皮経肝胆道ドレナージ）</strong>。急性発症で胆管拡張が軽度な場合は穿刺困難になりやすい</li>
-<li>3 管合流部開存＋胆嚢拡張があれば <strong>PTGBD で減圧</strong>を図ることも可能</li>
-<li>経皮的いずれも不能なら<strong>緊急手術（重症例には太い T-tube ドレナージ）</strong></li>
-</ul>
-
-<h3>③ 抗菌薬</h3>
-<ul>
-<li>血液培養 2 セット採取後すぐ開始</li>
-<li><strong>monotherapy なら PIPC/TAZ 4.5 g IV q6h</strong>（または ABPC/SBT 3 g IV q6h、重症感染では増量 12 g/日）</li>
-<li>かつての ABPC + GM はほぼ使わない</li>
-</ul>
-
-<h3>④ 保存治療奏効後</h3>
-<ul>
-<li>胆道評価で<strong>総胆管結石が残っていなければ腹腔鏡下胆嚢摘出術</strong>を施行</li>
-<li>残っていれば（i）<strong>ERCP±EST で総胆管結石除去 → 腹腔鏡下胆嚢摘出術</strong>、または（ii）<strong>腹腔鏡下総胆管切石術</strong>。施設・症例により選択</li>
-<li><strong>退院せず入院中に完結</strong>（早期再発、入院期間・コスト面）</li>
-<li>「画像で胆嚢内結石なし」でも、有症状胆石症（症状が出た）の診断で胆嚢摘出が適応 — <strong>「画像に石があるかどうか」で手術適応を決めるのではない</strong></li>
-</ul>
-
-<details class="section-fold"><summary>胆道評価のモダリティ</summary>
-<div class="callout-body">
-US（体表）／DIC-CT／<strong>MRCP</strong>／ERCP／<strong>EUS</strong>／IOC（術中胆道造影）。MRCP と EUS の感度・特異度は同等。<br>
-高確率で結石があると考えれば <strong>ERCP（治療兼ねて）</strong>、結石はすでに通過したと考えるなら MRCP・EUS・DIC-CT から低侵襲に選ぶ。IOC で術中確認できるので術前確認は必須でない。
-</div>
-</details>
-<hr>
-
-<h2 id="特殊型">特殊な胆管炎</h2>
-
-<h3>① Lemmel 症候群</h3>
-<p>十二指腸乳頭部付近の憩室による胆管圧迫が原因とされる。<strong>因果関係は証明されておらず、存在自体に異論あり</strong>。「憩室＋胆管炎」だけでこの診断に直結させない。</p>
-
-<h3>② Mirizzi 症候群</h3>
-<ul>
-<li>Type I：胆嚢頸部・胆嚢管の嵌頓結石の影響が CBD に及び胆管炎を併発（一般的な典型例）</li>
-<li>Type II：胆嚢頸部・胆嚢管と総胆管に瘻孔</li>
-<li>Type III：嵌頓結石で肝管狭窄</li>
-<li>Type IV：無石性胆嚢炎で肝管狭窄</li>
-<li>治療は胆嚢摘出術が第一選択</li>
-</ul>
-
-<h3>③ 胆道再建後・乳頭機能不全に伴う胆管炎</h3>
-<p>膵頭十二指腸切除後・膵胆管合流異常に対する胆道再建後、小児なら総胆管嚢腫術後・胆道閉鎖症の Kasai／Suruga 後など。<strong>逆行性胆管炎</strong>で <strong>EST 後</strong>や乳頭機能不全でも同様。重症化せず敗血症には至らないことが多い。</p>
-
-<h3>④ 胆道狭窄に対するステント留置中の胆管炎</h3>
-<p>ドレナージのために留置したチューブが閉塞して胆管炎が発症。<strong>ERBD（細径ステント・体外導出なし）</strong>は閉塞を早期認知できず<strong>重篤な敗血症に進展する危険</strong>。</p>
-<hr>
-
-<h2>このページから張るリンク</h2>
-<ul>
-<li><a class="wiki-link" href="../腹痛.html">← 腹痛入口へ戻る</a></li>
-<li><a class="wiki-link" href="胆石症・急性胆嚢炎.html">胆石症・急性胆嚢炎</a>（病態と治療が異なる、混同しないこと）</li>
-<li><a class="wiki-link" href="急性膵炎.html">急性膵炎</a>（胆石性膵炎の合併・24h 以内 ERCP 適応）</li>
-<li><a class="wiki-link" href="強い腹痛を呈する内科的疾患.html">強い腹痛を呈する内科的疾患</a>（敗血症の鑑別）</li>
-</ul>
-
-<h2>出典</h2>
-<ul>
-<li>窪田忠夫『フラッシュアップ急性腹症』第 2 版（中外医学社）— 章構成の踏襲元</li>
-<li>Takada T. <em>J Hepatobiliary Pancreat Sci</em> 2018 — Tokyo Guideline 2018</li>
-<li>Mosler P. <em>Curr Gastroenterol Rep</em> 2011 — 急性胆管炎の診断・管理</li>
-<li>Attasaranya S, et al. <em>Med Clin North Am</em> 2008 — 総胆管結石症</li>
-<li>Lai EC, et al. <em>Ann Surg</em> 1990 — 重症急性胆管炎の緊急手術</li>
-<li>急性腹症診療ガイドライン 2015（日本腹部救急医学会）</li>
-</ul>
-
-    </div>
-    <footer class="page-footer">
-      <a href="../index.html">↑ 主訴ナビへ戻る</a>
-    </footer>
-  </article>
+    syncFromHash();
+  })();
+  </script>
 </body>
 </html>

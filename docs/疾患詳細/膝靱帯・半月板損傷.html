@@ -4,138 +4,288 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="color-scheme" content="light dark" />
-  <title>膝靱帯・半月板損傷</title>
+  <title>膝靱帯・半月板損傷 | ER ノート</title>
   <link rel="stylesheet" href="../er-note.css" />
 </head>
 <body>
-  <nav class="site-bar">
-    <a class="site-bar__back" href="../index.html">← 主訴ナビ</a>
-    <span class="site-bar__title">膝靱帯・半月板損傷</span>
+  <header class="hokuto-top">
+    <a class="hokuto-top__btn" href="../薬剤情報.html">
+      <span class="hokuto-top__icon">℞</span><span>薬剤情報</span>
+    </a>
+    <a class="hokuto-top__btn" href="../表計算.html">
+      <span class="hokuto-top__icon">⊞</span><span>表計算</span>
+    </a>
+  </header>
+
+  <main class="hokuto-main">
+    <article class="note-shell">
+      <h1 class="page-title">膝靱帯・半月板損傷</h1>
+
+      <!-- 即時アクションヘッダー（常時 sticky） -->
+      <div class="action-header">
+        <div class="action-header__title">⚡ 即時アクション</div>
+        <ol class="action-header__list">
+          <li><strong>ACL / PCL / MCL / LCL / 半月板</strong> を区別（pop 音 + 急速血腫は ACL、外反痛は MCL、ロッキングは半月板）</li>
+          <li><strong>Lachman / anterior drawer / pivot shift / McMurray</strong> で評価（Lachman が ACL に最も鋭敏）</li>
+          <li><strong>MRI</strong> で確定（整形外科外来で。ER では Ottawa Knee Rules で骨折除外＋ヒンジ装具固定）</li>
+          <li>若年 active は<strong>手術</strong>、高齢非 active は<strong>保存</strong>（年齢・活動性・不安定性で判断）</li>
+        </ol>
+      </div>
+
+      <!-- §1〜§8 メニュータイル -->
+      <nav class="section-tiles" id="sectionMenu">
+        <a class="section-tile" href="#s1"><span class="section-tile__no">🔢</span><span class="section-tile__name">膝外傷の<br><small>除外順序</small></span></a>
+        <a class="section-tile" href="#s2"><span class="section-tile__no">🦵</span><span class="section-tile__name">ACL 損傷<br><small>前十字靱帯</small></span></a>
+        <a class="section-tile" href="#s3"><span class="section-tile__no">↔️</span><span class="section-tile__name">MCL 損傷<br><small>内側側副</small></span></a>
+        <a class="section-tile" href="#s4"><span class="section-tile__no">↩️</span><span class="section-tile__name">LCL 損傷<br><small>外側側副</small></span></a>
+        <a class="section-tile" href="#s5"><span class="section-tile__no">🚗</span><span class="section-tile__name">PCL 損傷<br><small>後十字靱帯</small></span></a>
+        <a class="section-tile" href="#s6"><span class="section-tile__no">🌙</span><span class="section-tile__name">半月板<br><small>損傷</small></span></a>
+        <a class="section-tile" href="#s7"><span class="section-tile__no">📐</span><span class="section-tile__name">Ottawa<br><small>Knee Rules</small></span></a>
+        <a class="section-tile" href="#s8"><span class="section-tile__no">🏥</span><span class="section-tile__name">ER 対応<br><small>+ 出典</small></span></a>
+      </nav>
+
+      <!-- 関連主訴（双方向リンク） -->
+      <details class="sub-fold" id="related-symptoms">
+        <summary>📞 この疾患が該当する主訴</summary>
+        <div class="sub-fold__body">
+          <ul>
+            <li><span class="wiki-missing">膝の外傷・痛み</span> — 膝内障の総称、ER では除外診断</li>
+            <li><a class="wiki-link" href="../転倒.html">転倒</a> — 膝を捻って受傷、ピボット・着地</li>
+          </ul>
+        </div>
+      </details>
+
+      <!-- §1 膝外傷の除外順序 -->
+      <section class="section-page" id="s1" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🔢 膝外傷の除外順序</h2>
+        <p>#靱帯損傷 #半月板 #膝関節 #ER #スポーツ外傷</p>
+
+        <div class="callout callout-summary">
+          <div class="callout-title">膝内障 = 膝の靱帯・半月板損傷を総称、ER では除外診断で</div>
+          <div class="callout-body"><ul>
+            <li><strong>関節内骨折・脱臼を除外</strong>した後に疑う</li>
+            <li><strong>ACL 断裂</strong>：pop 音 + 急激な血腫</li>
+            <li><strong>MCL 損傷</strong>：外反ストレスの痛み</li>
+            <li><strong>半月板損傷</strong>：膝の引っかかり・ロッキング</li>
+            <li>ER では<strong>身体所見 + 装具固定 + 整形外科紹介</strong>で十分</li>
+          </ul></div>
+        </div>
+
+        <ol>
+          <li><strong>骨折</strong>（レントゲン・必要なら CT）</li>
+          <li><strong>脱臼</strong>（膝蓋骨・膝関節）</li>
+          <li><strong>靱帯・半月板損傷</strong>（臨床所見 + MRI）</li>
+        </ol>
+      </section>
+
+      <!-- §2 ACL 損傷 -->
+      <section class="section-page" id="s2" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🦵 ACL（前十字靱帯）損傷</h2>
+
+        <h3>受傷機転</h3>
+        <ul>
+          <li><strong>非接触型</strong>：ピボット動作・着地で膝を捻る（バスケ・サッカー）</li>
+          <li><strong>接触型</strong>：タックル</li>
+          <li><strong>女性に多い</strong>（男性の 2–8 倍）</li>
+        </ul>
+
+        <h3>身体所見</h3>
+        <ul>
+          <li><strong>受傷時に「パキッ」という pop 音</strong></li>
+          <li><strong>急激な関節内血腫</strong>（1–2 時間でピーク）</li>
+          <li><strong>Lachman test</strong>：30° 屈曲で脛骨前方引き出し → 陽性（感度 85%）</li>
+          <li><strong>前方引き出しテスト</strong>：90° 屈曲（感度 55%）</li>
+          <li><strong>Pivot shift test</strong>：感度 24% だが特異度 98%</li>
+        </ul>
+
+        <h3>マネジメント</h3>
+        <ul>
+          <li>血腫は関節穿刺で排液することもあるが、ER では不要</li>
+          <li><strong>ヒンジ装具 + 松葉杖</strong></li>
+          <li><strong>MRI</strong> で靱帯・半月板評価（整形外科外来で）</li>
+          <li><strong>手術 vs 保存</strong>：年齢・活動性・不安定性で判断</li>
+        </ul>
+      </section>
+
+      <!-- §3 MCL 損傷 -->
+      <section class="section-page" id="s3" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>↔️ MCL（内側側副靱帯）損傷</h2>
+
+        <h3>受傷機転</h3>
+        <ul>
+          <li>膝外側からの <strong>外反ストレス</strong>（ラグビー・アメフトのタックル）</li>
+        </ul>
+
+        <h3>身体所見</h3>
+        <ul>
+          <li><strong>内側関節裂隙の圧痛</strong></li>
+          <li><strong>外反ストレステスト</strong>（30° 屈曲位）：不安定性 → 陽性</li>
+        </ul>
+
+        <h3>分類・治療</h3>
+        <div class="table-wrap"><table><thead><tr><th>Grade</th><th>所見</th><th>治療</th></tr></thead><tbody><tr><td>I</td><td>部分断裂、不安定性なし</td><td>装具で保存</td></tr><tr><td>II</td><td>部分断裂、軽度不安定</td><td>装具 4–6 週</td></tr><tr><td>III</td><td>完全断裂、明らかな不安定</td><td>保存 or ACL 合併例は手術</td></tr></tbody></table></div>
+        <ul>
+          <li>保存治療が基本（血流豊富で修復良好）</li>
+        </ul>
+      </section>
+
+      <!-- §4 LCL 損傷 -->
+      <section class="section-page" id="s4" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>↩️ LCL（外側側副靱帯）損傷</h2>
+        <ul>
+          <li>膝内側からの内反ストレス（稀）</li>
+          <li>後外側支持機構（PLC）合併で <strong>神経血管損傷リスク</strong></li>
+          <li>疑えば MRI + 整形外科紹介</li>
+        </ul>
+      </section>
+
+      <!-- §5 PCL 損傷 -->
+      <section class="section-page" id="s5" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🚗 PCL（後十字靱帯）損傷</h2>
+        <ul>
+          <li><strong>ダッシュボード損傷</strong>（膝屈曲位で脛骨が後方に押される）</li>
+          <li><strong>後方引き出しテスト</strong> 陽性</li>
+          <li>単独断裂は保存でも良好、合併例は手術</li>
+        </ul>
+      </section>
+
+      <!-- §6 半月板損傷 -->
+      <section class="section-page" id="s6" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🌙 半月板損傷</h2>
+
+        <h3>受傷機転</h3>
+        <ul>
+          <li>膝を <strong>屈曲 + 回旋</strong></li>
+          <li>年齢で病態が異なる：若年は外傷性、中年以降は退行性</li>
+        </ul>
+
+        <h3>身体所見</h3>
+        <ul>
+          <li><strong>関節裂隙の圧痛</strong></li>
+          <li><strong>McMurray test</strong>：屈曲 → 外旋 or 内旋で伸展、関節裂隙に clicking</li>
+          <li><strong>Apley 圧迫テスト</strong></li>
+          <li><strong>ロッキング</strong>（bucket handle tear で膝が伸びない）</li>
+        </ul>
+
+        <h3>マネジメント</h3>
+        <ul>
+          <li>MRI で確定診断</li>
+          <li><strong>ロッキング</strong> → 早期関節鏡</li>
+          <li><strong>退行性変化</strong> → 保存優先、リハビリ</li>
+        </ul>
+      </section>
+
+      <!-- §7 Ottawa Knee Rules -->
+      <section class="section-page" id="s7" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>📐 Ottawa Knee Rules（レントゲン撮影基準）</h2>
+        <ul>
+          <li><strong>膝痛で以下のいずれかなら撮影</strong>：</li>
+        </ul>
+        <ol>
+          <li><strong>55 歳以上</strong></li>
+          <li><strong>腓骨頭の圧痛</strong></li>
+          <li><strong>膝蓋骨単独の圧痛</strong>（他の圧痛なし）</li>
+          <li><strong>膝の 90° 屈曲ができない</strong></li>
+          <li><strong>受傷直後 + ER で合計 4 歩歩けない</strong></li>
+        </ol>
+      </section>
+
+      <!-- §8 ER 対応 + 出典 -->
+      <section class="section-page" id="s8" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🏥 ER での対応</h2>
+        <ol>
+          <li><strong>Ottawa Knee Rules</strong> でレントゲン適応を判断</li>
+          <li>骨折・脱臼を除外</li>
+          <li>靱帯・半月板損傷を疑えば <strong>ヒンジ装具 + 松葉杖</strong></li>
+          <li><strong>帰宅保存 or 帰宅手術</strong> として整形外科外来へ（1–2 週以内）</li>
+        </ol>
+
+        <h3>出典</h3>
+        <ul>
+          <li><strong>増井伸高. 骨折ハンター. 中外医学社. 2019.</strong></li>
+          <li><strong>Stiell IG ほか.</strong> Derivation of a decision rule for the use of radiography in acute knee injuries. <em>Ann Emerg Med.</em> 1995.</li>
+          <li><strong>Benjaminse A ほか.</strong> Clinical diagnosis of an anterior cruciate ligament rupture: a meta-analysis. <em>J Orthop Sports Phys Ther.</em> 2006.</li>
+        </ul>
+
+        <h3>関連</h3>
+        <ul>
+          <li><a class="wiki-link" href="../転倒.html">転倒</a> / <a class="wiki-link" href="膝蓋骨骨折・脱臼.html">膝蓋骨骨折・脱臼</a> / <a class="wiki-link" href="脛骨高原骨折.html">脛骨高原骨折</a></li>
+        </ul>
+      </section>
+
+    </article>
+  </main>
+
+  <nav class="hokuto-bottom">
+    <button class="hokuto-bottom__btn" type="button" id="navBack">
+      <span class="hokuto-bottom__icon">←</span><span>戻る</span>
+    </button>
+    <a class="hokuto-bottom__btn" href="../ツール.html">
+      <span class="hokuto-bottom__icon">⚙</span><span>ツール</span>
+    </a>
+    <a class="hokuto-bottom__btn" href="../index.html">
+      <span class="hokuto-bottom__icon">⌂</span><span>ホーム</span>
+    </a>
   </nav>
-  <article class="note-shell">
-    <header class="note-header">
-      <h1>膝靱帯・半月板損傷</h1>
-      <p class="source-badge">元: 臨床/ER/疾患詳細/膝靱帯・半月板損傷.md</p>
-    </header>
-    <details class="toc"><summary>目次（10 セクション）</summary><ol><li><a href="#膝外傷の除外順序">膝外傷の除外順序</a></li><li><a href="#acl前十字靱帯損傷">ACL（前十字靱帯）損傷</a></li><li><a href="#mcl内側側副靱帯損傷">MCL（内側側副靱帯）損傷</a></li><li><a href="#lcl外側側副靱帯損傷">LCL（外側側副靱帯）損傷</a></li><li><a href="#pcl後十字靱帯損傷">PCL（後十字靱帯）損傷</a></li><li><a href="#半月板損傷">半月板損傷</a></li><li><a href="#ottawa-knee-rulesレントゲン撮影基準">Ottawa Knee Rules（レントゲン撮影基準）</a></li><li><a href="#er-での対応">ER での対応</a></li><li><a href="#出典">出典</a></li><li><a href="#関連">関連</a></li></ol></details>
-    <div class="md-body">
-<p>#靱帯損傷 #半月板 #膝関節 #ER #スポーツ外傷</p>
-<div class="callout callout-summary">
-<div class="callout-title">膝内障 = 膝の靱帯・半月板損傷を総称、ER では除外診断で</div>
-<div class="callout-body"><ul>
-<li><strong>関節内骨折・脱臼を除外</strong>した後に疑う</li>
-<li><strong>ACL 断裂</strong>：pop 音 + 急激な血腫</li>
-<li><strong>MCL 損傷</strong>：外反ストレスの痛み</li>
-<li><strong>半月板損傷</strong>：膝の引っかかり・ロッキング</li>
-<li>ER では<strong>身体所見 + 装具固定 + 整形外科紹介</strong>で十分</li>
-</ul></div>
-</div>
-<h2 id="膝外傷の除外順序">膝外傷の除外順序</h2>
-<ol>
-<li><strong>骨折</strong>（レントゲン・必要なら CT）</li>
-<li><strong>脱臼</strong>（膝蓋骨・膝関節）</li>
-<li><strong>靱帯・半月板損傷</strong>（臨床所見 + MRI）</li>
-</ol>
-<h2 id="acl前十字靱帯損傷">ACL（前十字靱帯）損傷</h2>
-<h3 id="受傷機転">受傷機転</h3>
-<ul>
-<li><strong>非接触型</strong>：ピボット動作・着地で膝を捻る（バスケ・サッカー）</li>
-<li><strong>接触型</strong>：タックル</li>
-<li><strong>女性に多い</strong>（男性の 2–8 倍）</li>
-</ul>
-<h3 id="身体所見">身体所見</h3>
-<ul>
-<li><strong>受傷時に「パキッ」という pop 音</strong></li>
-<li><strong>急激な関節内血腫</strong>（1–2 時間でピーク）</li>
-<li><strong>Lachman test</strong>：30° 屈曲で脛骨前方引き出し → 陽性（感度 85%）</li>
-<li><strong>前方引き出しテスト</strong>：90° 屈曲（感度 55%）</li>
-<li><strong>Pivot shift test</strong>：感度 24% だが特異度 98%</li>
-</ul>
-<h3 id="マネジメント">マネジメント</h3>
-<ul>
-<li>血腫は関節穿刺で排液することもあるが、ER では不要</li>
-<li><strong>ヒンジ装具 + 松葉杖</strong></li>
-<li><strong>MRI</strong> で靱帯・半月板評価（整形外科外来で）</li>
-<li><strong>手術 vs 保存</strong>：年齢・活動性・不安定性で判断</li>
-</ul>
-<h2 id="mcl内側側副靱帯損傷">MCL（内側側副靱帯）損傷</h2>
-<h3 id="受傷機転">受傷機転</h3>
-<ul>
-<li>膝外側からの <strong>外反ストレス</strong>（ラグビー・アメフトのタックル）</li>
-</ul>
-<h3 id="身体所見">身体所見</h3>
-<ul>
-<li><strong>内側関節裂隙の圧痛</strong></li>
-<li><strong>外反ストレステスト</strong>（30° 屈曲位）：不安定性 → 陽性</li>
-</ul>
-<h3 id="分類・治療">分類・治療</h3>
-<div class="table-wrap"><table><thead><tr><th>Grade</th><th>所見</th><th>治療</th></tr></thead><tbody><tr><td>I</td><td>部分断裂、不安定性なし</td><td>装具で保存</td></tr><tr><td>II</td><td>部分断裂、軽度不安定</td><td>装具 4–6 週</td></tr><tr><td>III</td><td>完全断裂、明らかな不安定</td><td>保存 or ACL 合併例は手術</td></tr></tbody></table></div>
-<ul>
-<li>保存治療が基本（血流豊富で修復良好）</li>
-</ul>
-<h2 id="lcl外側側副靱帯損傷">LCL（外側側副靱帯）損傷</h2>
-<ul>
-<li>膝内側からの内反ストレス（稀）</li>
-<li>後外側支持機構（PLC）合併で <strong>神経血管損傷リスク</strong></li>
-<li>疑えば MRI + 整形外科紹介</li>
-</ul>
-<h2 id="pcl後十字靱帯損傷">PCL（後十字靱帯）損傷</h2>
-<ul>
-<li><strong>ダッシュボード損傷</strong>（膝屈曲位で脛骨が後方に押される）</li>
-<li><strong>後方引き出しテスト</strong> 陽性</li>
-<li>単独断裂は保存でも良好、合併例は手術</li>
-</ul>
-<h2 id="半月板損傷">半月板損傷</h2>
-<h3 id="受傷機転">受傷機転</h3>
-<ul>
-<li>膝を <strong>屈曲 + 回旋</strong></li>
-<li>年齢で病態が異なる：若年は外傷性、中年以降は退行性</li>
-</ul>
-<h3 id="身体所見">身体所見</h3>
-<ul>
-<li><strong>関節裂隙の圧痛</strong></li>
-<li><strong>McMurray test</strong>：屈曲 → 外旋 or 内旋で伸展、関節裂隙に clicking</li>
-<li><strong>Apley 圧迫テスト</strong></li>
-<li><strong>ロッキング</strong>（bucket handle tear で膝が伸びない）</li>
-</ul>
-<h3 id="マネジメント">マネジメント</h3>
-<ul>
-<li>MRI で確定診断</li>
-<li><strong>ロッキング</strong> → 早期関節鏡</li>
-<li><strong>退行性変化</strong> → 保存優先、リハビリ</li>
-</ul>
-<h2 id="ottawa-knee-rulesレントゲン撮影基準">Ottawa Knee Rules（レントゲン撮影基準）</h2>
-<ul>
-<li><strong>膝痛で以下のいずれかなら撮影</strong>：</li>
-<ol>
-<li><strong>55 歳以上</strong></li>
-<li><strong>腓骨頭の圧痛</strong></li>
-<li><strong>膝蓋骨単独の圧痛</strong>（他の圧痛なし）</li>
-<li><strong>膝の 90° 屈曲ができない</strong></li>
-<li><strong>受傷直後 + ER で合計 4 歩歩けない</strong></li>
-</ol>
-</ul>
-<h2 id="er-での対応">ER での対応</h2>
-<ol>
-<li><strong>Ottawa Knee Rules</strong> でレントゲン適応を判断</li>
-<li>骨折・脱臼を除外</li>
-<li>靱帯・半月板損傷を疑えば <strong>ヒンジ装具 + 松葉杖</strong></li>
-<li><strong>帰宅保存 or 帰宅手術</strong> として整形外科外来へ（1–2 週以内）</li>
-</ol>
-<h2 id="出典">出典</h2>
-<ul>
-<li><strong>増井伸高. 骨折ハンター. 中外医学社. 2019.</strong></li>
-<li><strong>Stiell IG ほか.</strong> Derivation of a decision rule for the use of radiography in acute knee injuries. <em>Ann Emerg Med.</em> 1995.</li>
-<li><strong>Benjaminse A ほか.</strong> Clinical diagnosis of an anterior cruciate ligament rupture: a meta-analysis. <em>J Orthop Sports Phys Ther.</em> 2006.</li>
-</ul>
-<h2 id="関連">関連</h2>
-<ul>
-<li><a class="wiki-link" href="../転倒.html">転倒</a> / <a class="wiki-link" href="膝蓋骨骨折・脱臼.html">膝蓋骨骨折・脱臼</a> / <a class="wiki-link" href="脛骨高原骨折.html">脛骨高原骨折</a></li>
-</ul>
-    </div>
-    <footer class="page-footer">
-      <a href="../index.html">↑ 主訴ナビへ戻る</a>
-    </footer>
-  </article>
+
+  <script>
+  (function(){
+    const menu = document.getElementById('sectionMenu');
+    const pages = document.querySelectorAll('.section-page');
+    const titleH1 = document.querySelector('.page-title');
+    const relatedSymp = document.getElementById('related-symptoms');
+
+    function showSection(id) {
+      menu.hidden = true;
+      if (titleH1) titleH1.hidden = true;
+      if (relatedSymp) relatedSymp.hidden = true;
+      pages.forEach(p => p.hidden = (p.id !== id));
+      window.scrollTo(0, 0);
+    }
+    function showMenu(scrollTarget) {
+      menu.hidden = false;
+      if (titleH1) titleH1.hidden = false;
+      if (relatedSymp) relatedSymp.hidden = false;
+      pages.forEach(p => p.hidden = true);
+      if (scrollTarget) {
+        if (scrollTarget.tagName === 'DETAILS') scrollTarget.open = true;
+        scrollTarget.scrollIntoView({behavior: 'instant', block: 'start'});
+      } else {
+        window.scrollTo(0, 0);
+      }
+    }
+    function syncFromHash() {
+      const id = (location.hash || '').replace('#','');
+      const target = id ? document.getElementById(id) : null;
+      if (target && target.classList.contains('section-page')) {
+        showSection(id);
+      } else if (target) {
+        showMenu(target);
+      } else {
+        showMenu();
+      }
+    }
+
+    window.addEventListener('hashchange', syncFromHash);
+    document.querySelectorAll('.back-to-menu').forEach(b => {
+      b.addEventListener('click', () => { history.pushState(null,'',location.pathname); showMenu(); });
+    });
+    const navBack = document.getElementById('navBack');
+    if (navBack) navBack.addEventListener('click', () => {
+      if (window.history.length > 1) history.back();
+      else window.location.href = '../index.html';
+    });
+
+    syncFromHash();
+  })();
+  </script>
 </body>
 </html>

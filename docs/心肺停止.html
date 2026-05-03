@@ -4,195 +4,340 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="color-scheme" content="light dark" />
-  <title>心肺停止</title>
+  <title>心肺停止 | ER ノート</title>
   <link rel="stylesheet" href="er-note.css" />
 </head>
 <body>
-  <nav class="site-bar">
-    <a class="site-bar__back" href="index.html">← 主訴ナビ</a>
-    <span class="site-bar__title">心肺停止</span>
+  <header class="hokuto-top">
+    <a class="hokuto-top__btn" href="薬剤情報.html">
+      <span class="hokuto-top__icon">℞</span><span>薬剤情報</span>
+    </a>
+    <a class="hokuto-top__btn" href="表計算.html">
+      <span class="hokuto-top__icon">⊞</span><span>表計算</span>
+    </a>
+  </header>
+
+  <main class="hokuto-main">
+    <article class="note-shell">
+      <h1 class="page-title">心肺停止</h1>
+
+      <!-- 即時アクションヘッダー -->
+      <div class="action-header">
+        <div class="action-header__title">⚡ 即時アクション</div>
+        <ol class="action-header__list">
+          <li><strong>即 CPR 開始</strong>：胸骨圧迫 5〜6 cm / 100〜120 回・中断 10 秒以内</li>
+          <li><strong>モニター → ショック適応リズム判定</strong>（VF / 無脈性 VT → 除細動）</li>
+          <li><strong>可逆性原因 4H4T</strong>：低酸素 / 低容量 / 酸 / K / 気胸 / タンポ / 中毒 / 血栓</li>
+          <li><strong>ROSC 後管理</strong>：12 誘導・血圧・体温管理・原因検索</li>
+        </ol>
+      </div>
+
+      <!-- §タイル -->
+      <nav class="section-tiles" id="sectionMenu">
+        <a class="section-tile" href="#s1"><span class="section-tile__no">📞</span><span class="section-tile__name">来院前<br><small>救急隊からの連絡</small></span></a>
+        <a class="section-tile" href="#s2"><span class="section-tile__no">🚑</span><span class="section-tile__name">来院時の初動</span></a>
+        <a class="section-tile" href="#s3"><span class="section-tile__no">🫀</span><span class="section-tile__name">CPR 実施<br><small>BLS + ACLS</small></span></a>
+        <a class="section-tile" href="#s4"><span class="section-tile__no">⏸</span><span class="section-tile__name">CPA 中止判断</span></a>
+        <a class="section-tile" href="#s5"><span class="section-tile__no">💚</span><span class="section-tile__name">ROSC 後管理</span></a>
+        <a class="section-tile" href="#s6"><span class="section-tile__no">🔗</span><span class="section-tile__name">関連リンク</span></a>
+        <a class="section-tile" href="#s7"><span class="section-tile__no">📚</span><span class="section-tile__name">出典</span></a>
+      </nav>
+
+      <!-- §1 来院前 -->
+      <section class="section-page" id="s1" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>📞 1. 救急隊からの連絡（来院前）</h2>
+
+        <p>救急隊からの第一報の段階で CPA 対応は始まる。<strong>電話で聴取すべき項目</strong>を以下に挙げる。</p>
+
+        <h3>聴取項目</h3>
+        <ul>
+          <li><strong>発見状況</strong>：目撃の有無、発見時の体位、最終目撃時刻（または「いつまで元気だったか」）</li>
+          <li><strong>bystander CPR の有無</strong>：誰が・いつから・質はどうか</li>
+          <li><strong>推定心停止時間</strong>：発見〜通報〜救急隊接触までの時間経過</li>
+          <li><strong>初期波形</strong>：VF / VT / PEA / asystole</li>
+          <li><strong>救急隊の処置経過</strong>：アドレナリン投与回数、除細動回数、気管挿管の有無</li>
+          <li><strong>患者背景</strong>：年齢、性別、既往歴（わかる範囲で）</li>
+          <li><strong>DNAR や事前指示の情報</strong>：現場で確認できていれば</li>
+          <li><strong>家族の同乗</strong>：来院時に意思確認できる家族がいるか</li>
+        </ul>
+
+        <div class="callout callout-tip">
+          <div class="callout-title">連絡を受けた時点でやること</div>
+          <div class="callout-body"><ul>
+            <li>ER スタッフに CPA 来院を周知</li>
+            <li>初期波形・心停止時間から、<strong>来院時点で CPA 中止を視野に入れるかどうか</strong>をあらかじめ意識しておく</li>
+            <li>家族が同乗しているなら、来院後すぐに意思確認できるよう準備</li>
+          </ul></div>
+        </div>
+      </section>
+
+      <!-- §2 来院時の初動 -->
+      <section class="section-page" id="s2" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🚑 2. 来院時の初動</h2>
+
+        <h3>搬入〜最初の 1 分</h3>
+        <ol>
+          <li><strong>救急隊からの引き継ぎ</strong>を受けつつ、<strong>モニター装着</strong>（波形・SpO2・ETCO2）</li>
+          <li><strong>胸骨圧迫を途切れさせない</strong>：救急隊→院内スタッフへの交代をスムーズに</li>
+          <li><strong>来院時の波形を確認</strong>し、ショック可能リズムかどうかを判断</li>
+          <li><strong>ルート確保</strong>（まだなら IO も考慮）</li>
+          <li>同時に<strong>病歴の追加聴取</strong>（救急隊・家族から）</li>
+        </ol>
+
+        <h3>来院後の病歴聴取</h3>
+        <p>救急隊からの情報に加え、<strong>家族や関係者</strong>から以下を確認する。</p>
+        <ul>
+          <li><strong>既往歴・内服薬</strong>：特に心疾患、悪性腫瘍（終末期か）、透析、神経疾患</li>
+          <li><strong>ADL</strong>：CPA 前の生活自立度（寝たきりか、自立歩行できていたか）</li>
+          <li><strong>最終健常確認時刻</strong>：「最後に普通に話していたのはいつか」</li>
+          <li><strong>発見時の詳細</strong>：倒れていた場所、状況（入浴中、就寝中、トイレなど）</li>
+          <li><strong>本人の意思・事前指示</strong>：延命治療についての事前の希望があったか</li>
+          <li><strong>かかりつけ医</strong>：情報共有が必要な場合に備えて</li>
+        </ul>
+
+        <div class="callout callout-danger">
+          <div class="callout-title">迷ったら圧迫</div>
+          <div class="callout-body"><p>波形確認や情報整理に時間をかけすぎない。<strong>判断に迷う間は CPR を継続</strong>。中止の判断は情報が揃ってから行う。</p></div>
+        </div>
+      </section>
+
+      <!-- §3 CPR -->
+      <section class="section-page" id="s3" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🫀 3. CPR の実施（高品質 BLS + ACLS）</h2>
+
+        <details class="sub-fold">
+          <summary>胸骨圧迫の要点</summary>
+          <div class="sub-fold__body">
+            <ul>
+              <li><strong>部位</strong>：胸骨の<strong>下半分</strong>の中央</li>
+              <li><strong>深度</strong>：<strong>約 5〜6 cm</strong></li>
+              <li><strong>速度</strong>：<strong>100〜120 回/分</strong></li>
+              <li><strong>解放</strong>：胸郭が<strong>完全に戻る</strong>まで（不十分だと心拍出量が落ちる）</li>
+              <li><strong>中断は最小限</strong>：除細動器装着・分析・挿管時も<strong>10 秒以内</strong>に圧迫再開</li>
+              <li><strong>圧迫者は 2 分ごとに交代</strong>（疲労を感じる前に）</li>
+              <li><strong>換気</strong>：未確保気道では <strong>30：2</strong>、挿管後は<strong>連続圧迫 + 10 回/分の換気</strong>（過換気は避ける）</li>
+            </ul>
+          </div>
+        </details>
+
+        <details class="sub-fold">
+          <summary>除細動（ショック可能リズム：VF / 無脈性 VT）</summary>
+          <div class="sub-fold__body">
+            <ol>
+              <li><strong>パッド装着</strong> → <strong>リズム分析</strong></li>
+              <li>ショック適応なら<strong>周囲の安全を確認</strong>して<strong>除細動 1 回</strong></li>
+              <li><strong>直ちに CPR 再開</strong>（ショック後の脈拍確認で圧迫を止めない）</li>
+              <li>ROSC が確実でない限り<strong>圧迫優先</strong></li>
+            </ol>
+          </div>
+        </details>
+
+        <details class="sub-fold">
+          <summary>薬剤</summary>
+          <div class="sub-fold__body">
+            <p><strong>アドレナリン 1 mg IV/IO</strong></p>
+            <ul>
+              <li><strong>非ショック可能リズム（asystole / PEA）</strong>：<strong>できるだけ早く</strong>投与、以後 <strong>3〜5 分ごと</strong></li>
+              <li><strong>ショック可能リズム（VF / 無脈性 VT）</strong>：2 回目の除細動後から投与開始、以後 <strong>3〜5 分ごと</strong></li>
+            </ul>
+            <p><strong>除細動抵抗性 VF / VT</strong></p>
+            <ul>
+              <li><strong>アミオダロン</strong> 300 mg IV（2 回目 150 mg）</li>
+              <li>代替として<strong>リドカイン</strong></li>
+            </ul>
+            <div class="callout callout-warning">
+              <div class="callout-title">薬剤より圧迫と除細動</div>
+              <div class="callout-body"><p><strong>高品質 CPR と適時の除細動</strong>が予後を決める。薬は補助。</p></div>
+            </div>
+          </div>
+        </details>
+
+        <details class="sub-fold">
+          <summary>可逆的原因：4H と 4T</summary>
+          <div class="sub-fold__body">
+            <div class="table-wrap"><table><thead><tr><th>略号</th><th>意味</th><th>介入の例</th></tr></thead><tbody><tr><td><strong>H</strong>ypoxia</td><td>低酸素</td><td>気道確保、酸素、換気、気胸の除外</td></tr><tr><td><strong>H</strong>ypovolemia</td><td>低血容量</td><td>出血管理、輸液</td></tr><tr><td><strong>H</strong>+（acidosis）</td><td>アシドーシス</td><td>換気、原因治療</td></tr><tr><td><strong>H</strong>ypo/Hyperkalemia</td><td>K 異常</td><td>血液検査、高 K 治療</td></tr><tr><td><strong>T</strong>ension pneumothorax</td><td>緊張性気胸</td><td>針減圧・ドレナージ</td></tr><tr><td><strong>T</strong>amponade</td><td>心タンポナーデ</td><td>エコー、心嚢穿刺</td></tr><tr><td><strong>T</strong>oxins</td><td>中毒</td><td>特異的解毒薬</td></tr><tr><td><strong>T</strong>hrombosis</td><td>血栓（PE・AMI）</td><td>溶栓・PCI・ECPR（施設体制による）</td></tr></tbody></table></div>
+          </div>
+        </details>
+      </section>
+
+      <!-- §4 CPA 中止判断 -->
+      <section class="section-page" id="s4" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>⏸ 4. CPA 対応の中止判断</h2>
+
+        <p>当院で受け入れる CPA の多くは<strong>院外で発見された蘇生可能性の低い症例</strong>である。「どこまで続けるか」の判断は、以下の要素を総合的に評価して行う。</p>
+
+        <h3>蘇生中止を考慮する因子</h3>
+
+        <h4>予後不良を示唆する因子</h4>
+        <ul>
+          <li><strong>目撃なしの心停止</strong></li>
+          <li><strong>bystander CPR なし</strong>（または開始までの時間が長い）</li>
+          <li><strong>初期波形が asystole</strong>（VF/VT に比べ予後が悪い）</li>
+          <li><strong>推定心停止時間が長い</strong>（発見〜CPR 開始まで）</li>
+          <li><strong>高齢</strong>（特に 80 歳以上、ADL 低下を伴う場合）</li>
+          <li><strong>重篤な基礎疾患</strong>：終末期悪性腫瘍、重度心不全、寝たきり状態など</li>
+          <li><strong>ETCO2 が持続的に低値</strong>（＜10 mmHg が 20 分以上）</li>
+          <li><strong>アドレナリン複数回投与後も波形変化なし</strong></li>
+          <li><strong>瞳孔散大・固定が持続</strong></li>
+          <li><strong>低体温でない（偶発的低体温は蘇生の余地あり）</strong></li>
+        </ul>
+
+        <h4>蘇生継続を考慮する因子</h4>
+        <ul>
+          <li><strong>目撃あり + 早期 bystander CPR</strong></li>
+          <li><strong>初期波形が VF / VT</strong>（除細動で戻る可能性）</li>
+          <li><strong>若年</strong></li>
+          <li><strong>可逆的原因が同定・治療可能</strong>（4H4T のいずれか）</li>
+          <li><strong>偶発的低体温</strong>（「温まるまで死亡宣告しない」）</li>
+          <li><strong>中毒</strong>（特定の解毒薬や長時間の蘇生で回復する可能性）</li>
+          <li><strong>ETCO2 に改善傾向がある</strong></li>
+        </ul>
+
+        <div class="callout callout-important">
+          <div class="callout-title">中止判断の目安時間</div>
+          <div class="callout-body"><p>明らかな可逆的原因がなく、上記の予後不良因子が複数揃う場合、<strong>来院後 20〜30 分の CPR</strong>で反応がなければ中止を検討する根拠は十分にある。ただし、時間だけで機械的に決めない。</p></div>
+        </div>
+
+        <h3>家族への意思確認</h3>
+        <p>CPA 中止の判断において、<strong>家族の意向を確認するプロセス</strong>は欠かせない。</p>
+
+        <h4>確認すべきこと</h4>
+        <ul>
+          <li><strong>本人の事前の意思表示</strong>：「延命はしないでほしい」等の発言があったか、書面があるか</li>
+          <li><strong>家族としての希望</strong>：蘇生を続けてほしいか、やめてよいと考えるか</li>
+          <li><strong>状況の理解度</strong>：現在の状態と蘇生の見込みについて、家族が理解できているか</li>
+        </ul>
+
+        <h4>伝え方のポイント</h4>
+        <ul>
+          <li><strong>現在の状況を率直に伝える</strong>：「心臓が止まった状態で発見され、○分以上経過しています。懸命に蘇生を行っていますが、現時点で心臓の動きは戻っていません」</li>
+          <li><strong>蘇生の見込みを正直に説明する</strong>：「このような状況では、蘇生が成功する可能性は極めて低いと考えられます」</li>
+          <li><strong>家族に決定の全責任を負わせない</strong>：「医学的には蘇生を中止する段階と考えます。ご家族のお気持ちも伺いたいのですが」という形で、<strong>医療者としての判断を先に示す</strong></li>
+          <li><strong>希望があれば蘇生に立ち会ってもらう</strong>ことも選択肢として提示</li>
+        </ul>
+
+        <div class="callout callout-warning">
+          <div class="callout-title">家族が「続けてほしい」と言った場合</div>
+          <div class="callout-body"><p>家族の希望は尊重するが、<strong>医学的に無益な蘇生を無期限に続ける義務はない</strong>。一定時間追加で CPR を行い、改めて状況を説明して再度意思確認を行う。上級医と相談しながら対応する。</p></div>
+        </div>
+
+        <h3>中止の手順</h3>
+        <ol>
+          <li><strong>CPR を中止</strong>し、<strong>モニター波形を確認</strong></li>
+          <li><strong>瞳孔・自発呼吸・心拍</strong>を確認</li>
+          <li><strong>死亡時刻を宣言</strong>（CPR 中止時刻）</li>
+          <li><strong>家族への説明</strong>：経過・行った処置・死因の見込みを丁寧に伝える</li>
+          <li><strong>死亡診断書の作成</strong>：検案が必要な場合は警察への届出を検討</li>
+          <li><strong>記録の整備</strong>：来院時刻、CPR 開始・中止時刻、投与薬剤、家族への説明内容を漏れなく記載</li>
+        </ol>
+      </section>
+
+      <!-- §5 ROSC -->
+      <section class="section-page" id="s5" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>💚 5. ROSC した場合</h2>
+
+        <p>蘇生可能性の低い症例が中心ではあるが、<strong>ROSC する場合もある</strong>。</p>
+        <ul>
+          <li><strong>脈・血圧・SpO2・意識</strong>を確認</li>
+          <li><strong>12 誘導心電図</strong>（STEMI なら PCI 経路を検討）</li>
+          <li><strong>血糖・電解質・動脈血ガス</strong></li>
+          <li><strong>体温管理</strong>（目標温度管理の適応を検討）</li>
+          <li><strong>血圧</strong>：収縮期 100 mmHg 以上を目標に</li>
+          <li><strong>意識障害</strong>の精査は <a class="wiki-link" href="意識障害.html">意識障害</a> のフローへ</li>
+        </ul>
+      </section>
+
+      <!-- §6 関連リンク -->
+      <section class="section-page" id="s6" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🔗 このページから張るリンク</h2>
+
+        <ul>
+          <li><a class="wiki-link" href="意識障害.html">意識障害</a></li>
+          <li><a class="wiki-link" href="呼吸困難.html">呼吸困難</a></li>
+        </ul>
+      </section>
+
+      <!-- §7 出典 -->
+      <section class="section-page" id="s7" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>📚 出典</h2>
+
+        <ul>
+          <li><strong>AHA</strong>：2020 American Heart Association Guidelines for CPR and Emergency Cardiovascular Care. <em>Circulation.</em> 2020. <a class="wiki-link" href="https://doi.org/10.1161/CIR.0000000000000916">https://doi.org/10.1161/CIR.0000000000000916</a></li>
+          <li><strong>日本蘇生協議会（JRC）</strong>：成人 BLS／ACLS は ILCOR の科学的評価と整合したガイドラインを公表している。院内マニュアルは最新版 JRC に合わせる。</li>
+        </ul>
+
+        <p>#ER #救急 #心肺停止 #CPA #BLS #ACLS</p>
+      </section>
+
+    </article>
+  </main>
+
+  <nav class="hokuto-bottom">
+    <button class="hokuto-bottom__btn" type="button" id="navBack">
+      <span class="hokuto-bottom__icon">←</span><span>戻る</span>
+    </button>
+    <a class="hokuto-bottom__btn" href="ツール.html">
+      <span class="hokuto-bottom__icon">⚙</span><span>ツール</span>
+    </a>
+    <a class="hokuto-bottom__btn" href="index.html">
+      <span class="hokuto-bottom__icon">⌂</span><span>ホーム</span>
+    </a>
   </nav>
-  <article class="note-shell">
-    <header class="note-header">
-      <h1>心肺停止</h1>
-      <p class="source-badge">元: 臨床/ER/心肺停止.md</p>
-    </header>
-    <details class="toc"><summary>目次（7 セクション）</summary><ol><li><a href="#1-救急隊からの連絡来院前">1. 救急隊からの連絡（来院前）</a></li><li><a href="#2-来院時の初動">2. 来院時の初動</a></li><li><a href="#3-cpr-の実施高品質-bls-acls">3. CPR の実施（高品質 BLS + ACLS）</a></li><li><a href="#4-cpa-対応の中止判断">4. CPA 対応の中止判断</a></li><li><a href="#5-rosc-した場合">5. ROSC した場合</a></li><li><a href="#このページから張るリンク">このページから張るリンク</a></li><li><a href="#出典">出典</a></li></ol></details>
-    <div class="md-body">
-<p>#ER #救急 #心肺停止 #CPA #BLS #ACLS</p>
-<div class="callout callout-summary">
-<div class="callout-title">このページの概要</div>
-<div class="callout-body"><p>当院の CPA 対応の流れをまとめたもの。<strong>救急隊からの連絡 → 来院前準備 → 来院後の初動・CPR → CPA 中止判断</strong>の順に記載。 当院では<strong>院外で心肺停止状態で発見され、蘇生可能性が低いと見込まれる症例</strong>を多く受け入れるため、<strong>いつ・どのように CPA 対応を中止するか</strong>の判断が特に重要になる。</p></div>
-</div>
-<hr>
-<h2 id="1-救急隊からの連絡来院前">1. 救急隊からの連絡（来院前）</h2>
-<p>救急隊からの第一報の段階で CPA 対応は始まる。<strong>電話で聴取すべき項目</strong>を以下に挙げる。</p>
-<h3 id="聴取項目">聴取項目</h3>
-<ul>
-<li><strong>発見状況</strong>：目撃の有無、発見時の体位、最終目撃時刻（または「いつまで元気だったか」）</li>
-<li><strong>bystander CPR の有無</strong>：誰が・いつから・質はどうか</li>
-<li><strong>推定心停止時間</strong>：発見〜通報〜救急隊接触までの時間経過</li>
-<li><strong>初期波形</strong>：VF / VT / PEA / asystole</li>
-<li><strong>救急隊の処置経過</strong>：アドレナリン投与回数、除細動回数、気管挿管の有無</li>
-<li><strong>患者背景</strong>：年齢、性別、既往歴（わかる範囲で）</li>
-<li><strong>DNAR や事前指示の情報</strong>：現場で確認できていれば</li>
-<li><strong>家族の同乗</strong>：来院時に意思確認できる家族がいるか</li>
-</ul>
-<div class="callout callout-tip">
-<div class="callout-title">連絡を受けた時点でやること</div>
-<div class="callout-body"><ul>
-<li>ER スタッフに CPA 来院を周知</li>
-<li>初期波形・心停止時間から、<strong>来院時点で CPA 中止を視野に入れるかどうか</strong>をあらかじめ意識しておく</li>
-<li>家族が同乗しているなら、来院後すぐに意思確認できるよう準備</li>
-</ul></div>
-</div>
-<hr>
-<h2 id="2-来院時の初動">2. 来院時の初動</h2>
-<h3 id="搬入最初の-1-分">搬入〜最初の 1 分</h3>
-<ol>
-<li><strong>救急隊からの引き継ぎ</strong>を受けつつ、<strong>モニター装着</strong>（波形・SpO2・ETCO2）</li>
-<li><strong>胸骨圧迫を途切れさせない</strong>：救急隊→院内スタッフへの交代をスムーズに</li>
-<li><strong>来院時の波形を確認</strong>し、ショック可能リズムかどうかを判断</li>
-<li><strong>ルート確保</strong>（まだなら IO も考慮）</li>
-<li>同時に<strong>病歴の追加聴取</strong>（救急隊・家族から）</li>
-</ol>
-<h3 id="来院後の病歴聴取">来院後の病歴聴取</h3>
-<p>救急隊からの情報に加え、<strong>家族や関係者</strong>から以下を確認する。</p>
-<ul>
-<li><strong>既往歴・内服薬</strong>：特に心疾患、悪性腫瘍（終末期か）、透析、神経疾患</li>
-<li><strong>ADL</strong>：CPA 前の生活自立度（寝たきりか、自立歩行できていたか）</li>
-<li><strong>最終健常確認時刻</strong>：「最後に普通に話していたのはいつか」</li>
-<li><strong>発見時の詳細</strong>：倒れていた場所、状況（入浴中、就寝中、トイレなど）</li>
-<li><strong>本人の意思・事前指示</strong>：延命治療についての事前の希望があったか</li>
-<li><strong>かかりつけ医</strong>：情報共有が必要な場合に備えて</li>
-</ul>
-<div class="callout callout-danger">
-<div class="callout-title">迷ったら圧迫</div>
-<div class="callout-body"><p>波形確認や情報整理に時間をかけすぎない。<strong>判断に迷う間は CPR を継続</strong>。中止の判断は情報が揃ってから行う。</p></div>
-</div>
-<hr>
-<h2 id="3-cpr-の実施高品質-bls-acls">3. CPR の実施（高品質 BLS + ACLS）</h2>
-<h3 id="胸骨圧迫の要点">胸骨圧迫の要点</h3>
-<ul>
-<li><strong>部位</strong>：胸骨の<strong>下半分</strong>の中央</li>
-<li><strong>深度</strong>：<strong>約 5〜6 cm</strong></li>
-<li><strong>速度</strong>：<strong>100〜120 回/分</strong></li>
-<li><strong>解放</strong>：胸郭が<strong>完全に戻る</strong>まで（不十分だと心拍出量が落ちる）</li>
-<li><strong>中断は最小限</strong>：除細動器装着・分析・挿管時も<strong>10 秒以内</strong>に圧迫再開</li>
-<li><strong>圧迫者は 2 分ごとに交代</strong>（疲労を感じる前に）</li>
-<li><strong>換気</strong>：未確保気道では <strong>30：2</strong>、挿管後は<strong>連続圧迫 + 10 回/分の換気</strong>（過換気は避ける）</li>
-</ul>
-<h3 id="除細動ショック可能リズムvf-無脈性-vt">除細動（ショック可能リズム：VF / 無脈性 VT）</h3>
-<ol>
-<li><strong>パッド装着</strong> → <strong>リズム分析</strong></li>
-<li>ショック適応なら<strong>周囲の安全を確認</strong>して<strong>除細動 1 回</strong></li>
-<li><strong>直ちに CPR 再開</strong>（ショック後の脈拍確認で圧迫を止めない）</li>
-<li>ROSC が確実でない限り<strong>圧迫優先</strong></li>
-</ol>
-<h3 id="薬剤">薬剤</h3>
-<p><strong>アドレナリン 1 mg IV/IO</strong></p>
-<ul>
-<li><strong>非ショック可能リズム（asystole / PEA）</strong>：<strong>できるだけ早く</strong>投与、以後 <strong>3〜5 分ごと</strong></li>
-<li><strong>ショック可能リズム（VF / 無脈性 VT）</strong>：2 回目の除細動後から投与開始、以後 <strong>3〜5 分ごと</strong></li>
-</ul>
-<p><strong>除細動抵抗性 VF / VT</strong></p>
-<ul>
-<li><strong>アミオダロン</strong> 300 mg IV（2 回目 150 mg）</li>
-<li>代替として<strong>リドカイン</strong></li>
-</ul>
-<div class="callout callout-warning">
-<div class="callout-title">薬剤より圧迫と除細動</div>
-<div class="callout-body"><p><strong>高品質 CPR と適時の除細動</strong>が予後を決める。薬は補助。</p></div>
-</div>
-<h3 id="可逆的原因4h-と-4t">可逆的原因：4H と 4T</h3>
-<div class="table-wrap"><table><thead><tr><th>略号</th><th>意味</th><th>介入の例</th></tr></thead><tbody><tr><td><strong>H</strong>ypoxia</td><td>低酸素</td><td>気道確保、酸素、換気、気胸の除外</td></tr><tr><td><strong>H</strong>ypovolemia</td><td>低血容量</td><td>出血管理、輸液</td></tr><tr><td><strong>H</strong>+（acidosis）</td><td>アシドーシス</td><td>換気、原因治療</td></tr><tr><td><strong>H</strong>ypo/Hyperkalemia</td><td>K 異常</td><td>血液検査、高 K 治療</td></tr><tr><td><strong>T</strong>ension pneumothorax</td><td>緊張性気胸</td><td>針減圧・ドレナージ</td></tr><tr><td><strong>T</strong>amponade</td><td>心タンポナーデ</td><td>エコー、心嚢穿刺</td></tr><tr><td><strong>T</strong>oxins</td><td>中毒</td><td>特異的解毒薬</td></tr><tr><td><strong>T</strong>hrombosis</td><td>血栓（PE・AMI）</td><td>溶栓・PCI・ECPR（施設体制による）</td></tr></tbody></table></div>
-<hr>
-<h2 id="4-cpa-対応の中止判断">4. CPA 対応の中止判断</h2>
-<p>当院で受け入れる CPA の多くは<strong>院外で発見された蘇生可能性の低い症例</strong>である。「どこまで続けるか」の判断は、以下の要素を総合的に評価して行う。</p>
-<h3 id="蘇生中止を考慮する因子">蘇生中止を考慮する因子</h3>
-<h4 id="予後不良を示唆する因子">予後不良を示唆する因子</h4>
-<ul>
-<li><strong>目撃なしの心停止</strong></li>
-<li><strong>bystander CPR なし</strong>（または開始までの時間が長い）</li>
-<li><strong>初期波形が asystole</strong>（VF/VT に比べ予後が悪い）</li>
-<li><strong>推定心停止時間が長い</strong>（発見〜CPR 開始まで）</li>
-<li><strong>高齢</strong>（特に 80 歳以上、ADL 低下を伴う場合）</li>
-<li><strong>重篤な基礎疾患</strong>：終末期悪性腫瘍、重度心不全、寝たきり状態など</li>
-<li><strong>ETCO2 が持続的に低値</strong>（＜10 mmHg が 20 分以上）</li>
-<li><strong>アドレナリン複数回投与後も波形変化なし</strong></li>
-<li><strong>瞳孔散大・固定が持続</strong></li>
-<li><strong>低体温でない（偶発的低体温は蘇生の余地あり）</strong></li>
-</ul>
-<h4 id="蘇生継続を考慮する因子">蘇生継続を考慮する因子</h4>
-<ul>
-<li><strong>目撃あり + 早期 bystander CPR</strong></li>
-<li><strong>初期波形が VF / VT</strong>（除細動で戻る可能性）</li>
-<li><strong>若年</strong></li>
-<li><strong>可逆的原因が同定・治療可能</strong>（4H4T のいずれか）</li>
-<li><strong>偶発的低体温</strong>（「温まるまで死亡宣告しない」）</li>
-<li><strong>中毒</strong>（特定の解毒薬や長時間の蘇生で回復する可能性）</li>
-<li><strong>ETCO2 に改善傾向がある</strong></li>
-</ul>
-<div class="callout callout-important">
-<div class="callout-title">中止判断の目安時間</div>
-<div class="callout-body"><p>明らかな可逆的原因がなく、上記の予後不良因子が複数揃う場合、<strong>来院後 20〜30 分の CPR</strong>で反応がなければ中止を検討する根拠は十分にある。ただし、時間だけで機械的に決めない。</p></div>
-</div>
-<h3 id="家族への意思確認">家族への意思確認</h3>
-<p>CPA 中止の判断において、<strong>家族の意向を確認するプロセス</strong>は欠かせない。</p>
-<h4 id="確認すべきこと">確認すべきこと</h4>
-<ul>
-<li><strong>本人の事前の意思表示</strong>：「延命はしないでほしい」等の発言があったか、書面があるか</li>
-<li><strong>家族としての希望</strong>：蘇生を続けてほしいか、やめてよいと考えるか</li>
-<li><strong>状況の理解度</strong>：現在の状態と蘇生の見込みについて、家族が理解できているか</li>
-</ul>
-<h4 id="伝え方のポイント">伝え方のポイント</h4>
-<ul>
-<li><strong>現在の状況を率直に伝える</strong>：「心臓が止まった状態で発見され、○分以上経過しています。懸命に蘇生を行っていますが、現時点で心臓の動きは戻っていません」</li>
-<li><strong>蘇生の見込みを正直に説明する</strong>：「このような状況では、蘇生が成功する可能性は極めて低いと考えられます」</li>
-<li><strong>家族に決定の全責任を負わせない</strong>：「医学的には蘇生を中止する段階と考えます。ご家族のお気持ちも伺いたいのですが」という形で、<strong>医療者としての判断を先に示す</strong></li>
-<li><strong>希望があれば蘇生に立ち会ってもらう</strong>ことも選択肢として提示</li>
-</ul>
-<div class="callout callout-warning">
-<div class="callout-title">家族が「続けてほしい」と言った場合</div>
-<div class="callout-body"><p>家族の希望は尊重するが、<strong>医学的に無益な蘇生を無期限に続ける義務はない</strong>。一定時間追加で CPR を行い、改めて状況を説明して再度意思確認を行う。上級医と相談しながら対応する。</p></div>
-</div>
-<h3 id="中止の手順">中止の手順</h3>
-<ol>
-<li><strong>CPR を中止</strong>し、<strong>モニター波形を確認</strong></li>
-<li><strong>瞳孔・自発呼吸・心拍</strong>を確認</li>
-<li><strong>死亡時刻を宣言</strong>（CPR 中止時刻）</li>
-<li><strong>家族への説明</strong>：経過・行った処置・死因の見込みを丁寧に伝える</li>
-<li><strong>死亡診断書の作成</strong>：検案が必要な場合は警察への届出を検討</li>
-<li><strong>記録の整備</strong>：来院時刻、CPR 開始・中止時刻、投与薬剤、家族への説明内容を漏れなく記載</li>
-</ol>
-<hr>
-<h2 id="5-rosc-した場合">5. ROSC した場合</h2>
-<p>蘇生可能性の低い症例が中心ではあるが、<strong>ROSC する場合もある</strong>。</p>
-<ul>
-<li><strong>脈・血圧・SpO2・意識</strong>を確認</li>
-<li><strong>12 誘導心電図</strong>（STEMI なら PCI 経路を検討）</li>
-<li><strong>血糖・電解質・動脈血ガス</strong></li>
-<li><strong>体温管理</strong>（目標温度管理の適応を検討）</li>
-<li><strong>血圧</strong>：収縮期 100 mmHg 以上を目標に</li>
-<li><strong>意識障害</strong>の精査は <a class="wiki-link" href="意識障害.html">意識障害</a> のフローへ</li>
-</ul>
-<hr>
-<h2 id="このページから張るリンク">このページから張るリンク</h2>
-<ul>
-<li><a class="wiki-link" href="意識障害.html">意識障害</a></li>
-<li><a class="wiki-link" href="呼吸困難.html">呼吸困難</a></li>
-</ul>
-<hr>
-<h2 id="出典">出典</h2>
-<ul>
-<li><strong>AHA</strong>：2020 American Heart Association Guidelines for CPR and Emergency Cardiovascular Care. <em>Circulation.</em> 2020.</li>
-<p><a class="wiki-link" href="https://doi.org/10.1161/CIR.0000000000000916">https://doi.org/10.1161/CIR.0000000000000916</a></p>
-<li><strong>日本蘇生協議会（JRC）</strong>：成人 BLS／ACLS は ILCOR の科学的評価と整合したガイドラインを公表している。院内マニュアルは最新版 JRC に合わせる。</li>
-</ul>
-    </div>
-    <footer class="page-footer">
-      <a href="index.html">↑ 主訴ナビへ戻る</a>
-    </footer>
-  </article>
+
+  <script>
+  (function(){
+    const menu = document.getElementById('sectionMenu');
+    const pages = document.querySelectorAll('.section-page');
+    const titleH1 = document.querySelector('.page-title');
+
+    function showSection(id) {
+      menu.hidden = true;
+      if (titleH1) titleH1.hidden = true;
+      pages.forEach(p => p.hidden = (p.id !== id));
+      window.scrollTo(0, 0);
+    }
+    function showMenu(scrollTarget) {
+      menu.hidden = false;
+      if (titleH1) titleH1.hidden = false;
+      pages.forEach(p => p.hidden = true);
+      if (scrollTarget) {
+        if (scrollTarget.tagName === 'DETAILS') scrollTarget.open = true;
+        scrollTarget.scrollIntoView({behavior: 'instant', block: 'start'});
+      } else {
+        window.scrollTo(0, 0);
+      }
+    }
+    function syncFromHash() {
+      const id = (location.hash || '').replace('#','');
+      const target = id ? document.getElementById(id) : null;
+      if (target && target.classList.contains('section-page')) {
+        showSection(id);
+      } else if (target) {
+        showMenu(target);
+      } else {
+        showMenu();
+      }
+    }
+
+    window.addEventListener('hashchange', syncFromHash);
+    document.querySelectorAll('.back-to-menu').forEach(b => {
+      b.addEventListener('click', () => { history.pushState(null,'',location.pathname); showMenu(); });
+    });
+    const navBack = document.getElementById('navBack');
+    if (navBack) navBack.addEventListener('click', () => {
+      if (window.history.length > 1) history.back();
+      else window.location.href = 'index.html';
+    });
+
+    syncFromHash();
+  })();
+  </script>
 </body>
 </html>

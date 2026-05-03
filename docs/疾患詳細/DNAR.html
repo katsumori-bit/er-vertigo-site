@@ -4,61 +4,172 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="color-scheme" content="light dark" />
-  <title>DNAR</title>
+  <title>DNAR | ER ノート</title>
   <link rel="stylesheet" href="../er-note.css" />
 </head>
 <body>
-  <nav class="site-bar">
-    <a class="site-bar__back" href="../index.html">← 主訴ナビ</a>
-    <span class="site-bar__title">DNAR</span>
+  <header class="hokuto-top">
+    <a class="hokuto-top__btn" href="../薬剤情報.html">
+      <span class="hokuto-top__icon">℞</span><span>薬剤情報</span>
+    </a>
+    <a class="hokuto-top__btn" href="../表計算.html">
+      <span class="hokuto-top__icon">⊞</span><span>表計算</span>
+    </a>
+  </header>
+
+  <main class="hokuto-main">
+    <article class="note-shell">
+      <h1 class="page-title">DNAR</h1>
+
+      <!-- 即時アクションヘッダー（常時 sticky） -->
+      <div class="action-header">
+        <div class="action-header__title">⚡ 即時アクション</div>
+        <ol class="action-header__list">
+          <li><strong>Advance Care Planning（ACP）</strong>で早期に話し合う（入院決定時・状態変化時）</li>
+          <li><strong>患者の意思</strong>を最優先、家族と医療チームで共有</li>
+          <li><strong>書類化</strong>（DNAR 指示書、POLST など）— 説明日時・説明者・同意者・内容を残す</li>
+          <li><strong>いつでも撤回可能</strong>、状況変化で再確認（口頭のみで終わらせない）</li>
+        </ol>
+      </div>
+
+      <!-- §1〜§4 メニュータイル -->
+      <nav class="section-tiles" id="sectionMenu">
+        <a class="section-tile" href="#s1"><span class="section-tile__no">⏰</span><span class="section-tile__name">いつ開くか</span></a>
+        <a class="section-tile" href="#s2"><span class="section-tile__no">📝</span><span class="section-tile__name">DNAR の進め方<br><small>説明・記録・共有</small></span></a>
+        <a class="section-tile" href="#s3"><span class="section-tile__no">🔗</span><span class="section-tile__name">関連リンク</span></a>
+        <a class="section-tile" href="#s4"><span class="section-tile__no">📚</span><span class="section-tile__name">出典・参考<br><small>一般論</small></span></a>
+      </nav>
+
+      <!-- 関連主訴（双方向リンク） -->
+      <details class="sub-fold" id="related-symptoms">
+        <summary>📞 この疾患が該当する主訴</summary>
+        <div class="sub-fold__body">
+          <ul>
+            <li><a class="wiki-link" href="../意識障害.html">意識障害</a> — 終末期の意識障害、CPA 方針の擦り合わせ</li>
+            <li><a class="wiki-link" href="../呼吸困難.html">呼吸困難</a> — 終末期の呼吸困難、間質性肺炎急性増悪などで方針確認</li>
+          </ul>
+        </div>
+      </details>
+
+      <!-- §1 いつ開くか -->
+      <section class="section-page" id="s1" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>⏰ いつ開くか</h2>
+
+        <div class="callout callout-summary">
+          <div class="callout-title">このページの使い方</div>
+          <div class="callout-body"><ol>
+            <li><strong>DNAR（心肺蘇生を行わない／限定する）</strong>の説明・記録・共有だけをまとめる</li>
+            <li><strong>書面とカルテ</strong>で残す。口頭のみにしない</li>
+            <li>救急・病棟・夜勤で<strong>同じ理解</strong>になるよう反映する</li>
+          </ol></div>
+        </div>
+
+        <p><a class="wiki-link" href="誤嚥性肺炎.html">誤嚥性肺炎</a>・<a class="wiki-link" href="../発熱.html">発熱</a>・<a class="wiki-link" href="../呼吸困難.html">呼吸困難</a>・<a class="wiki-link" href="間質性肺炎急性増悪.html">間質性肺炎急性増悪</a>などで入院が決まり、<strong>CPA を前提にしない方針</strong>や家族の意向を早めに擦り合わせるとき。<strong>蘇生可能性が低い超高齢</strong>でも、来院時点で<strong>説明と記録</strong>がないと後から揉める。</p>
+      </section>
+
+      <!-- §2 DNAR の進め方 -->
+      <section class="section-page" id="s2" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>📝 DNAR（不蘇生・心肺蘇生の拒否／限定）</h2>
+        <ul>
+          <li><strong>誰に説明するか</strong>：本人（判断能力があれば本人優先）／<strong>家族・代理人</strong>（本人不明・判断不能時は院規・法に従う）</li>
+          <li><strong>何を決めるか</strong>：<strong>CPA（心肺蘇生）を行うか行わないか</strong>。必要なら<strong>時限・場所の限定</strong>（病棟のみ、など）も院の書式に合わせて明記</li>
+          <li><strong>カルテ</strong>：<strong>説明日時・説明者・同意者・内容の要約</strong>を残す。<strong>署名済み同意書</strong>がある場合は保管場所・スキャン連番など、当院ルールに従う</li>
+          <li><strong>チーム共有</strong>：救急・病棟・夜勤で<strong>同じ理解</strong>になるよう、オーダ・看護指示・退院サマリーに反映</li>
+        </ul>
+
+        <div class="callout callout-warning">
+          <div class="callout-title">よくある落とし穴</div>
+          <div class="callout-body"><p>「口頭だけで DNAR」と聞いたが<strong>書面・記録がない</strong>／<strong>更新されていない</strong>／<strong>別疾患で入院したが前回の DNAR がカルテに見えない</strong>。再確認する。</p></div>
+        </div>
+      </section>
+
+      <!-- §3 関連リンク -->
+      <section class="section-page" id="s3" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🔗 このページから張るリンク</h2>
+        <ul>
+          <li><a class="wiki-link" href="誤嚥性肺炎.html">誤嚥性肺炎</a></li>
+          <li><a class="wiki-link" href="../心肺停止.html">心肺停止</a>（CPA 方針と DNAR の関係を整理するとき）</li>
+        </ul>
+      </section>
+
+      <!-- §4 出典・参考 -->
+      <section class="section-page" id="s4" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>📚 出典・参考（一般論）</h2>
+        <ul>
+          <li>日本医学会等による<strong>終末期医療の決定プロセス</strong>に関する指針・解説（版は院図書館で確認）</li>
+          <li>各施設の<strong>倫理委員会・緩和ケア委員会</strong>資料</li>
+        </ul>
+      </section>
+
+    </article>
+  </main>
+
+  <nav class="hokuto-bottom">
+    <button class="hokuto-bottom__btn" type="button" id="navBack">
+      <span class="hokuto-bottom__icon">←</span><span>戻る</span>
+    </button>
+    <a class="hokuto-bottom__btn" href="../ツール.html">
+      <span class="hokuto-bottom__icon">⚙</span><span>ツール</span>
+    </a>
+    <a class="hokuto-bottom__btn" href="../index.html">
+      <span class="hokuto-bottom__icon">⌂</span><span>ホーム</span>
+    </a>
   </nav>
-  <article class="note-shell">
-    <header class="note-header">
-      <h1>DNAR</h1>
-      <p class="source-badge">元: 臨床/ER/疾患詳細/DNAR.md</p>
-    </header>
-    <details class="toc"><summary>目次（4 セクション）</summary><ol><li><a href="#いつ開くか">いつ開くか</a></li><li><a href="#dnar不蘇生・心肺蘇生の拒否限定">DNAR（不蘇生・心肺蘇生の拒否／限定）</a></li><li><a href="#このページから張るリンク">このページから張るリンク</a></li><li><a href="#出典・参考一般論">出典・参考（一般論）</a></li></ol></details>
-    <div class="md-body">
-<p>#ER #救急 #入院 #DNAR #不蘇生 #ACP</p>
-<div class="callout callout-summary">
-<div class="callout-title">このページの使い方</div>
-<div class="callout-body"><ol>
-<li><strong>DNAR（心肺蘇生を行わない／限定する）</strong>の説明・記録・共有だけをまとめる</li>
-<li><strong>書面とカルテ</strong>で残す。口頭のみにしない</li>
-<li>救急・病棟・夜勤で<strong>同じ理解</strong>になるよう反映する</li>
-</ol></div>
-</div>
-<hr>
-<h2 id="いつ開くか">いつ開くか</h2>
-<p><a class="wiki-link" href="誤嚥性肺炎.html">誤嚥性肺炎</a>・<a class="wiki-link" href="../発熱.html">発熱</a>・<a class="wiki-link" href="../呼吸困難.html">呼吸困難</a>・<a class="wiki-link" href="間質性肺炎急性増悪.html">間質性肺炎急性増悪</a>などで入院が決まり、<strong>CPA を前提にしない方針</strong>や家族の意向を早めに擦り合わせるとき。<strong>蘇生可能性が低い超高齢</strong>でも、来院時点で<strong>説明と記録</strong>がないと後から揉める。</p>
-<hr>
-<h2 id="dnar不蘇生・心肺蘇生の拒否限定">DNAR（不蘇生・心肺蘇生の拒否／限定）</h2>
-<ul>
-<li><strong>誰に説明するか</strong>：本人（判断能力があれば本人優先）／<strong>家族・代理人</strong>（本人不明・判断不能時は院規・法に従う）</li>
-<li><strong>何を決めるか</strong>：<strong>CPA（心肺蘇生）を行うか行わないか</strong>。必要なら<strong>時限・場所の限定</strong>（病棟のみ、など）も院の書式に合わせて明記</li>
-<li><strong>カルテ</strong>：<strong>説明日時・説明者・同意者・内容の要約</strong>を残す。<strong>署名済み同意書</strong>がある場合は保管場所・スキャン連番など、当院ルールに従う</li>
-<li><strong>チーム共有</strong>：救急・病棟・夜勤で<strong>同じ理解</strong>になるよう、オーダ・看護指示・退院サマリーに反映</li>
-</ul>
-<div class="callout callout-warning">
-<div class="callout-title">よくある落とし穴</div>
-<div class="callout-body"><p>「口頭だけで DNAR」と聞いたが<strong>書面・記録がない</strong>／<strong>更新されていない</strong>／<strong>別疾患で入院したが前回の DNAR がカルテに見えない</strong>。再確認する。</p></div>
-</div>
-<hr>
-<h2 id="このページから張るリンク">このページから張るリンク</h2>
-<ul>
-<li><a class="wiki-link" href="誤嚥性肺炎.html">誤嚥性肺炎</a></li>
-<li><a class="wiki-link" href="../心肺停止.html">心肺停止</a>（CPA 方針と DNAR の関係を整理するとき）</li>
-</ul>
-<hr>
-<h2 id="出典・参考一般論">出典・参考（一般論）</h2>
-<ul>
-<li>日本医学会等による<strong>終末期医療の決定プロセス</strong>に関する指針・解説（版は院図書館で確認）</li>
-<li>各施設の<strong>倫理委員会・緩和ケア委員会</strong>資料</li>
-</ul>
-    </div>
-    <footer class="page-footer">
-      <a href="../index.html">↑ 主訴ナビへ戻る</a>
-    </footer>
-  </article>
+
+  <script>
+  (function(){
+    const menu = document.getElementById('sectionMenu');
+    const pages = document.querySelectorAll('.section-page');
+    const titleH1 = document.querySelector('.page-title');
+    const relatedSymp = document.getElementById('related-symptoms');
+
+    function showSection(id) {
+      menu.hidden = true;
+      if (titleH1) titleH1.hidden = true;
+      if (relatedSymp) relatedSymp.hidden = true;
+      pages.forEach(p => p.hidden = (p.id !== id));
+      window.scrollTo(0, 0);
+    }
+    function showMenu(scrollTarget) {
+      menu.hidden = false;
+      if (titleH1) titleH1.hidden = false;
+      if (relatedSymp) relatedSymp.hidden = false;
+      pages.forEach(p => p.hidden = true);
+      if (scrollTarget) {
+        if (scrollTarget.tagName === 'DETAILS') scrollTarget.open = true;
+        scrollTarget.scrollIntoView({behavior: 'instant', block: 'start'});
+      } else {
+        window.scrollTo(0, 0);
+      }
+    }
+    function syncFromHash() {
+      const id = (location.hash || '').replace('#','');
+      const target = id ? document.getElementById(id) : null;
+      if (target && target.classList.contains('section-page')) {
+        showSection(id);
+      } else if (target) {
+        showMenu(target);
+      } else {
+        showMenu();
+      }
+    }
+
+    window.addEventListener('hashchange', syncFromHash);
+    document.querySelectorAll('.back-to-menu').forEach(b => {
+      b.addEventListener('click', () => { history.pushState(null,'',location.pathname); showMenu(); });
+    });
+    const navBack = document.getElementById('navBack');
+    if (navBack) navBack.addEventListener('click', () => {
+      if (window.history.length > 1) history.back();
+      else window.location.href = '../index.html';
+    });
+
+    syncFromHash();
+  })();
+  </script>
 </body>
 </html>

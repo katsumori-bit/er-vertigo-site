@@ -4,143 +4,290 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="color-scheme" content="light dark" />
-  <title>間質性肺炎急性増悪</title>
+  <title>間質性肺炎急性増悪 | ER ノート</title>
   <link rel="stylesheet" href="../er-note.css" />
 </head>
 <body>
-  <nav class="site-bar">
-    <a class="site-bar__back" href="../index.html">← 主訴ナビ</a>
-    <span class="site-bar__title">間質性肺炎急性増悪</span>
+  <header class="hokuto-top">
+    <a class="hokuto-top__btn" href="../薬剤情報.html">
+      <span class="hokuto-top__icon">℞</span><span>薬剤情報</span>
+    </a>
+    <a class="hokuto-top__btn" href="../表計算.html">
+      <span class="hokuto-top__icon">⊞</span><span>表計算</span>
+    </a>
+  </header>
+
+  <main class="hokuto-main">
+    <article class="note-shell">
+      <h1 class="page-title">間質性肺炎急性増悪</h1>
+
+      <!-- 即時アクションヘッダー（常時 sticky） -->
+      <div class="action-header">
+        <div class="action-header__title">⚡ 即時アクション</div>
+        <ol class="action-header__list">
+          <li><strong>HRCT で diffuse な GGO 出現</strong>（既存 UIP に重畳する新規両側性 GGO ± consolidation）</li>
+          <li><strong>ステロイドパルス</strong>（メチルプレドニゾロン 1 g/日 × 3 日）、適応で<strong>免疫抑制剤</strong></li>
+          <li><strong>HFNC vs NPPV vs 挿管</strong>を慎重に検討（予後不良 — DNAR の早期相談）</li>
+          <li><strong>特発性 IPF</strong> か基礎疾患（CTD-ILD など）かで<strong>治療反応性が違う</strong>（呼吸器内科 + 必要に応じ膠原病内科）</li>
+        </ol>
+      </div>
+
+      <!-- メニュータイル -->
+      <nav class="section-tiles" id="sectionMenu">
+        <a class="section-tile" href="#s1"><span class="section-tile__no">📖</span><span class="section-tile__name">使い方</span></a>
+        <a class="section-tile" href="#s2"><span class="section-tile__no">🩺</span><span class="section-tile__name">いつ開くか</span></a>
+        <a class="section-tile" href="#s3"><span class="section-tile__no">📐</span><span class="section-tile__name">診断基準<br><small>Collard 2016</small></span></a>
+        <a class="section-tile" href="#s4"><span class="section-tile__no">🔍</span><span class="section-tile__name">同時に除外</span></a>
+        <a class="section-tile" href="#s5"><span class="section-tile__no">💊</span><span class="section-tile__name">初期対応<br><small>救急〜入院初日</small></span></a>
+        <a class="section-tile" href="#s6"><span class="section-tile__no">🏥</span><span class="section-tile__name">入院管理</span></a>
+        <a class="section-tile" href="#s7"><span class="section-tile__no">🧬</span><span class="section-tile__name">非 IPF・CTD-ILD</span></a>
+        <a class="section-tile" href="#s8"><span class="section-tile__no">🔗</span><span class="section-tile__name">リンク</span></a>
+        <a class="section-tile" href="#s9"><span class="section-tile__no">📰</span><span class="section-tile__name">出典</span></a>
+      </nav>
+
+      <!-- 関連主訴（双方向リンク） -->
+      <details class="sub-fold" id="related-symptoms">
+        <summary>📞 この疾患が該当する主訴</summary>
+        <div class="sub-fold__body">
+          <ul>
+            <li><a class="wiki-link" href="../呼吸困難.html">呼吸困難</a> — 急性悪化が主訴</li>
+            <li><a class="wiki-link" href="../発熱.html">発熱</a> — 感染が引き金のときに併発</li>
+          </ul>
+        </div>
+      </details>
+
+      <!-- §1 ページの使い方 -->
+      <section class="section-page" id="s1" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>📖 ページの使い方</h2>
+        <div class="callout callout-summary">
+          <div class="callout-title">このページの使い方</div>
+          <div class="callout-body"><ol>
+            <li><strong><a class="wiki-link" href="../発熱.html">発熱</a> / <a class="wiki-link" href="../呼吸困難.html">呼吸困難</a></strong> の画像で <strong>ILD 既往 ＋ 急性の両側浸潤</strong> を認め、ここに飛んでくる</li>
+            <li><strong>定義に当てはまるか</strong>を確認し、<strong>感染・心不全を中心に鑑別</strong>し、必要に応じて PE も検討する</li>
+            <li><strong>呼吸器内科にコンサルト</strong>（当院では必須）</li>
+            <li><strong>ステロイドパルス・抗菌薬・酸素</strong>を組み立てる</li>
+            <li><strong>予後が厳しい疾患</strong>であることを家族と共有 → <strong><a class="wiki-link" href="DNAR.html">DNAR</a></strong></li>
+          </ol></div>
+        </div>
+      </section>
+
+      <!-- §2 いつこのページを開くか -->
+      <section class="section-page" id="s2" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🩺 いつこのページを開くか</h2>
+        <p><strong>ILD（間質性肺炎）の既往がある患者が、急性の呼吸悪化で来院し、画像で新規の両側性 GGO や浸潤が出ているとき</strong>。</p>
+        <p><a class="wiki-link" href="../発熱.html">発熱</a> や <a class="wiki-link" href="../呼吸困難.html">呼吸困難</a> のフローで検査・画像が済んでいる想定。<strong>いつもの線維化とは違う急性変化がある</strong>ことがポイント。</p>
+        <div class="callout callout-warning">
+          <div class="callout-title">頻度は高くないが、見逃すと致命的</div>
+          <div class="callout-body"><p>AE-IPF の短期死亡率は <strong>50% 超</strong>。IPF 関連死の <strong>40% 以上</strong>が急性増悪に関連する（Collard 2016）。<strong>早期の認知と呼吸器内科コンサルト</strong>が最も重要。</p></div>
+        </div>
+      </section>
+
+      <!-- §3 診断基準 -->
+      <section class="section-page" id="s3" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>📐 診断基準（Collard 2016 改訂定義）</h2>
+        <p>以下の<strong>すべて</strong>を満たすとき <strong>AE-IPF（急性増悪）</strong>と診断する。</p>
+        <div class="table-wrap"><table><thead><tr><th>項目</th><th>内容</th></tr></thead><tbody><tr><td><strong>1. IPF の既往</strong></td><td>既知の IPF、または今回の画像で UIP パターンが確認できる</td></tr><tr><td><strong>2. 急性の呼吸悪化</strong></td><td>呼吸困難の出現・悪化が<strong>おおむね 30 日以内</strong></td></tr><tr><td><strong>3. 画像</strong></td><td>HRCT で<strong>既存の UIP パターンに重畳する新規の両側性 GGO ± consolidation</strong></td></tr><tr><td><strong>4. 心原性肺水腫・体液過負荷では説明できない</strong></td><td>BNP・心エコー・臨床像で除外</td></tr></tbody></table></div>
+        <ul>
+          <li><strong>感染が引き金（triggered AE）</strong>の場合も、上記を満たせば AE-IPF に含める（2016 改訂で idiopathic 限定ではなくなった）</li>
+          <li>データ不足で基準を完全に満たせない場合は <strong>「suspected AE」</strong> として扱う</li>
+        </ul>
+      </section>
+
+      <!-- §4 救急で同時に除外するもの -->
+      <section class="section-page" id="s4" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🔍 救急で同時に除外するもの</h2>
+        <p>AE-ILD を疑ったとき、<strong>まず感染と心不全</strong>を押さえ、<strong>臨床疑いとリスクに応じて</strong>他を足す。</p>
+        <div class="table-wrap"><table><thead><tr><th>鑑別</th><th>確認方法</th></tr></thead><tbody><tr><td><strong>感染（細菌・ウイルス）</strong></td><td>採血(血算・CRP・PCT)、血培、尿抗原、喀痰（可能なら）、PCR</td></tr><tr><td><strong>心不全・肺水腫</strong></td><td><strong>BNP / NT-proBNP</strong>、心エコー（可能な範囲で）、輸液バランス</td></tr><tr><td><strong>肺塞栓</strong></td><td><strong>全例ではない</strong>。突然発症・頻脈が説明できない、DVT リスク、術後・長期臥床など<strong>疑い・リスクがあるとき</strong>に D-dimer → 必要なら造影 CT 等（誤診すると抗凝固 vs ステロイドで方針が逆になる）</td></tr><tr><td><strong>薬剤性肺障害</strong></td><td>最近の薬剤変更・追加歴（抗がん剤・MTX・分子標的薬・抗線維化薬など）</td></tr></tbody></table></div>
+        <div class="callout callout-tip">
+          <div class="callout-title">感染が引き金でも AE は AE</div>
+          <div class="callout-body"><p>感染を完全に否定できなくても、<strong>画像で両側性 GGO ＋ UIP ＋ 急性悪化</strong>なら AE として対応を始める。感染の治療と AE の治療は<strong>排他的でなく並行する</strong>。</p></div>
+        </div>
+      </section>
+
+      <!-- §5 初期対応 -->
+      <section class="section-page" id="s5" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>💊 初期対応（救急〜入院初日）</h2>
+
+        <h3>1. 呼吸器内科にコンサルト</h3>
+        <p><strong>当院では必須</strong>。治療方針（ステロイドの量と期間、免疫抑制薬の追加、挿管の方針）は呼吸器内科が主導する。<strong>コンサルトまでの間に以下を始める</strong>。</p>
+
+        <h3>2. 酸素</h3>
+        <ul>
+          <li>目標 SpO2 は <strong>88–92%</strong> を目安（低酸素に対して過剰酸素を入れすぎない）</li>
+          <li><strong>HFNC / NIV</strong> を検討。ただし<strong>挿管の適応・DNAR の方針</strong>を早期に話し合う</li>
+        </ul>
+
+        <h3>3. ステロイドパルス（呼吸器内科と相談のうえ）</h3>
+        <p><strong>現時点の標準的な初期治療</strong>として広く行われている。ただし<strong>RCT での有効性エビデンスは確立していない</strong>。</p>
+        <ul>
+          <li><strong>メチルプレドニゾロン 1000 mg/日 × 3 日間</strong> IV（パルス）</li>
+          <li>その後 <strong>経口プレドニゾロン 0.5–1.0 mg/kg/日</strong>で漸減（スケジュールは呼吸器内科判断）</li>
+        </ul>
+        <div class="callout callout-tip">
+          <div class="callout-title">なぜメチルプレドニゾロン（mPSL）か</div>
+          <div class="callout-body"><p>IPF-AE に<strong>唯一科学的に決まった薬剤選択</strong>があるわけではない。<strong>静注で高用量を短期に投与できる</strong>こと、<strong>鉱皮质激素作用がヒドロコルチゾンほど強くない</strong>こと、移植・自己免疫疾患などで<strong>パルスが慣例化</strong>してきた経緯で、多くのプロトコルが mPSL を採用している。<strong>プレドニゾロン換算の目安</strong>は施設表に従うが、おおむね <strong>mPSL 4 mg ≒ PSL 5 mg 程度</strong>とされる（パルス 1000 mg は経口維持用量とは別次元の短期投与）。</p></div>
+        </div>
+        <div class="callout callout-warning">
+          <div class="callout-title">ステロイドのエビデンスについて</div>
+          <div class="callout-body"><p>Farrand 2020（米・後ろ向き）：ステロイド投与群で ICU 入室・人工呼吸が多く、生存改善を示せなかった。EXAFIP trial（Naccache 2021・仏 RCT）：ステロイド＋シクロホスファミドはステロイド単独に比べ<strong>生存改善なし・むしろ有害</strong>。<strong>ステロイドパルスは「やらないよりまし」の段階であり、過信しない</strong>。呼吸器内科と予後・方針を共有する。</p></div>
+        </div>
+
+        <h3>4. 経験的抗菌薬</h3>
+        <p><strong>感染を否定しきれないことが多い</strong>ため、実務上は<strong>広域抗菌薬を並行投与</strong>する施設が多い。</p>
+        <ul>
+          <li>培養結果が出たら <strong>de-escalation</strong></li>
+          <li><strong>PCP 予防（ST 合剤）</strong>：<strong>パルス 3 日単独</strong>で即座にリスクが跳ね上がるとまでは言いにくい。<strong>経口ステロイドを mg/kg 単位で数週以上継続する見込み</strong>、<strong>既存の免疫抑制薬</strong>、<strong>リンパ球減少</strong>などがあるときに、呼吸器内科・感染症の方針で<strong>個別に検討</strong>（EXAFIP 等の試験でも高用量ステロイド群に PCP 予防が組み込まれた例がある）</li>
+        </ul>
+
+        <h3>5. 抗線維化薬</h3>
+        <ul>
+          <li><strong>ニンテダニブ・ピルフェニドン</strong>を内服中なら原則<strong>継続</strong>（呼吸器内科と確認）</li>
+          <li>急性期に新規開始するかは呼吸器内科判断</li>
+        </ul>
+      </section>
+
+      <!-- §6 入院管理 -->
+      <section class="section-page" id="s6" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🏥 入院管理</h2>
+        <p>当院では初期対応医がしばらく主治医になりやすいが、<strong>AE-ILD は呼吸器内科が主導する例外的なケース</strong>。コンサルト後は<strong>共同管理 or 転科</strong>の方向を早めに決める。</p>
+
+        <h3>オーダー・指示のチェック</h3>
+        <ul>
+          <li><strong>酸素・モニタリング</strong>：SpO2 連続、バイタル頻回</li>
+          <li><strong>ステロイドパルス</strong>：上記スケジュール</li>
+          <li><strong>抗菌薬</strong>：経験的投与（広域）</li>
+          <li><strong>PCP 予防</strong>：上記のとおり<strong>リスクベース</strong>。呼吸器内科（± 感染症）と開始可否を決める</li>
+          <li><strong>輸液</strong>：最小限（肺水腫を悪化させない）</li>
+          <li><strong>VTE 予防</strong>：寝たきりなら施設プロトコル</li>
+          <li><strong>DNAR</strong>：<strong><a class="wiki-link" href="DNAR.html">DNAR</a></strong> — 予後が厳しい疾患のため<strong>早期に方針を話し合う</strong></li>
+        </ul>
+
+        <h3>フォロー・経過</h3>
+        <ul>
+          <li><strong>画像</strong>：ステロイドパルス後に HRCT で反応を評価</li>
+          <li><strong>血液ガス・SpO2 推移</strong></li>
+          <li><strong>悪化時</strong>：挿管・ICU の適応 or 緩和的方針を再確認</li>
+          <li><strong>退院後</strong>：呼吸器内科外来での継続管理（ステロイド漸減・抗線維化薬・在宅酸素）</li>
+        </ul>
+      </section>
+
+      <!-- §7 IPF 以外の ILD・CTD-ILD -->
+      <section class="section-page" id="s7" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🧬 IPF 以外の ILD（NSIP・COP・膠原病関連 ILD など）</h2>
+        <details class="callout callout-abstract" open>
+          <summary>IPF 以外の ILD（NSIP・COP・膠原病関連 ILD など）</summary>
+          <div class="callout-body">
+            <p>IPF 以外の線維化性 ILD でも急性増悪は起こりうる。<strong>2016 の定義は IPF が対象</strong>だが、<strong>臨床的な考え方は応用可能</strong>。</p>
+            <p><strong>膠原病関連 ILD（RA-ILD、SSc-ILD、筋炎関連 ILD など）</strong>では、呈示が似ていても<strong>治療の落とし穴</strong>が増える。</p>
+            <ul>
+              <li><strong>悪化の原因</strong>が「肺の AE 様」なのか、<strong>感染・胸水・薬剤（MTX・生物製剤など）・原疾患の全身活動性</strong>なのかで、<strong>ステロイドや免疫抑制を増やすか止めるか</strong>が変わる。</li>
+              <li><strong>強皮症関連</strong>ではステロイドと<strong>腎クリーゼ</strong>の関係など、<strong>IPF と同じパルス感覚では決められない</strong>ことがある。</li>
+              <li><strong>抗合成酶症候群・筋炎関連</strong>では肺外所見とセットで解釈することが多い。</li>
+            </ul>
+            <p>→ <strong>呼吸器内科に相談しつつ</strong>、必要なら<strong>膠原病内科（リウマチ）にも同時に相談</strong>し、<strong>方針の食い違い</strong>（ステロイド・免疫抑制の強さ）を残さない。</p>
+          </div>
+        </details>
+      </section>
+
+      <!-- §8 リンク -->
+      <section class="section-page" id="s8" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🔗 このページから張るリンク</h2>
+        <ul>
+          <li><a class="wiki-link" href="../発熱.html">発熱</a></li>
+          <li><a class="wiki-link" href="../呼吸困難.html">呼吸困難</a></li>
+          <li><a class="wiki-link" href="急性心不全.html">急性心不全</a></li>
+          <li><a class="wiki-link" href="誤嚥性肺炎.html">誤嚥性肺炎</a></li>
+          <li><a class="wiki-link" href="DNAR.html">DNAR</a></li>
+        </ul>
+      </section>
+
+      <!-- §9 出典 -->
+      <section class="section-page" id="s9" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>📰 出典</h2>
+        <ul>
+          <li><strong>AE-IPF 改訂定義</strong>：Collard HR ほか. Acute Exacerbation of Idiopathic Pulmonary Fibrosis. An International Working Group Report. <em>Am J Respir Crit Care Med.</em> 2016;194(3):265–275. <a class="wiki-link" href="https://doi.org/10.1164/rccm.201604-0801CI">doi:10.1164/rccm.201604-0801CI</a></li>
+          <li><strong>ステロイドの有効性に関する後ろ向き研究</strong>：Farrand E ほか. Corticosteroid Use Is Not Associated with Improved Outcomes in AE-IPF. <em>Respirology.</em> 2020;25:629–635. PMID: 31846126</li>
+          <li><strong>EXAFIP trial（CYC＋ステロイド vs ステロイド単独）</strong>：Naccache JM ほか. <em>Lancet Respir Med.</em> 2021. PMID: 34767764</li>
+          <li><strong>AE-IPF の疫学・予後</strong>：Papiris SA ほか. IPF-Acute Exacerbations: Advances and Future Perspectives. <em>Front Pharmacol.</em> 2022;13:836553. <a class="wiki-link" href="https://pmc.ncbi.nlm.nih.gov/articles/PMC9047939/">PMC9047939</a></li>
+          <li><strong>ILD 急性増悪のステロイド SR</strong>：Moran-Mendoza A ほか. Corticosteroid therapy for AE of ILD: a systematic review. <em>Thorax.</em> 2025;80:140–. <a class="wiki-link" href="https://doi.org/10.1136/thorax-2024-222125">doi:10.1136/thorax-2024-222125</a></li>
+          <li><strong>JRS 成人肺炎診療ガイドライン 2024</strong>（間質性肺炎と感染の重複に関する記載）</li>
+        </ul>
+      </section>
+
+    </article>
+  </main>
+
+  <nav class="hokuto-bottom">
+    <button class="hokuto-bottom__btn" type="button" id="navBack">
+      <span class="hokuto-bottom__icon">←</span><span>戻る</span>
+    </button>
+    <a class="hokuto-bottom__btn" href="../ツール.html">
+      <span class="hokuto-bottom__icon">⚙</span><span>ツール</span>
+    </a>
+    <a class="hokuto-bottom__btn" href="../index.html">
+      <span class="hokuto-bottom__icon">⌂</span><span>ホーム</span>
+    </a>
   </nav>
-  <article class="note-shell">
-    <header class="note-header">
-      <h1>間質性肺炎急性増悪</h1>
-      <p class="source-badge">元: 臨床/ER/疾患詳細/間質性肺炎急性増悪.md</p>
-    </header>
-    <details class="toc"><summary>目次（7 セクション）</summary><ol><li><a href="#いつこのページを開くか">いつこのページを開くか</a></li><li><a href="#診断基準collard-2016-改訂定義">診断基準（Collard 2016 改訂定義）</a></li><li><a href="#救急で同時に除外するもの">救急で同時に除外するもの</a></li><li><a href="#初期対応救急入院初日">初期対応（救急〜入院初日）</a></li><li><a href="#入院管理">入院管理</a></li><li><a href="#このページから張るリンク">このページから張るリンク</a></li><li><a href="#出典">出典</a></li></ol></details>
-    <div class="md-body">
-<p>#ER #救急 #呼吸困難 #発熱 #間質性肺炎 #ILD #IPF #急性増悪 #AE</p>
-<div class="callout callout-summary">
-<div class="callout-title">このページの使い方</div>
-<div class="callout-body"><ol>
-<li><strong><a class="wiki-link" href="../発熱.html">発熱</a> / <a class="wiki-link" href="../呼吸困難.html">呼吸困難</a></strong> の画像で <strong>ILD 既往 ＋ 急性の両側浸潤</strong> を認め、ここに飛んでくる</li>
-<li><strong>定義に当てはまるか</strong>を確認し、<strong>感染・心不全を中心に鑑別</strong>し、必要に応じて PE も検討する</li>
-<li><strong>呼吸器内科にコンサルト</strong>（当院では必須）</li>
-<li><strong>ステロイドパルス・抗菌薬・酸素</strong>を組み立てる</li>
-<li><strong>予後が厳しい疾患</strong>であることを家族と共有 → <strong><a class="wiki-link" href="DNAR.html">DNAR</a></strong></li>
-</ol></div>
-</div>
-<hr>
-<h2 id="いつこのページを開くか">いつこのページを開くか</h2>
-<p><strong>ILD（間質性肺炎）の既往がある患者が、急性の呼吸悪化で来院し、画像で新規の両側性 GGO や浸潤が出ているとき</strong>。</p>
-<p><a class="wiki-link" href="../発熱.html">発熱</a> や <a class="wiki-link" href="../呼吸困難.html">呼吸困難</a> のフローで検査・画像が済んでいる想定。<strong>いつもの線維化とは違う急性変化がある</strong>ことがポイント。</p>
-<div class="callout callout-warning">
-<div class="callout-title">頻度は高くないが、見逃すと致命的</div>
-<div class="callout-body"><p>AE-IPF の短期死亡率は <strong>50% 超</strong>。IPF 関連死の <strong>40% 以上</strong>が急性増悪に関連する（Collard 2016）。<strong>早期の認知と呼吸器内科コンサルト</strong>が最も重要。</p></div>
-</div>
-<hr>
-<h2 id="診断基準collard-2016-改訂定義">診断基準（Collard 2016 改訂定義）</h2>
-<p>以下の<strong>すべて</strong>を満たすとき <strong>AE-IPF（急性増悪）</strong>と診断する。</p>
-<div class="table-wrap"><table><thead><tr><th>項目</th><th>内容</th></tr></thead><tbody><tr><td><strong>1. IPF の既往</strong></td><td>既知の IPF、または今回の画像で UIP パターンが確認できる</td></tr><tr><td><strong>2. 急性の呼吸悪化</strong></td><td>呼吸困難の出現・悪化が<strong>おおむね 30 日以内</strong></td></tr><tr><td><strong>3. 画像</strong></td><td>HRCT で<strong>既存の UIP パターンに重畳する新規の両側性 GGO ± consolidation</strong></td></tr><tr><td><strong>4. 心原性肺水腫・体液過負荷では説明できない</strong></td><td>BNP・心エコー・臨床像で除外</td></tr></tbody></table></div>
-<ul>
-<li><strong>感染が引き金（triggered AE）</strong>の場合も、上記を満たせば AE-IPF に含める（2016 改訂で idiopathic 限定ではなくなった）</li>
-<li>データ不足で基準を完全に満たせない場合は <strong>「suspected AE」</strong> として扱う</li>
-</ul>
-<details class="callout callout-abstract">
-<summary>IPF 以外の ILD（NSIP・COP・膠原病関連 ILD など）</summary><div class="callout-body"><p>IPF 以外の線維化性 ILD でも急性増悪は起こりうる。<strong>2016 の定義は IPF が対象</strong>だが、<strong>臨床的な考え方は応用可能</strong>。</p>
-<p><strong>膠原病関連 ILD（RA-ILD、SSc-ILD、筋炎関連 ILD など）</strong>では、呈示が似ていても<strong>治療の落とし穴</strong>が増える。</p>
-<ul>
-<li><strong>悪化の原因</strong>が「肺の AE 様」なのか、<strong>感染・胸水・薬剤（MTX・生物製剤など）・原疾患の全身活動性</strong>なのかで、<strong>ステロイドや免疫抑制を増やすか止めるか</strong>が変わる。</li>
-<li><strong>強皮症関連</strong>ではステロイドと<strong>腎クリーゼ</strong>の関係など、<strong>IPF と同じパルス感覚では決められない</strong>ことがある。</li>
-<li><strong>抗合成酶症候群・筋炎関連</strong>では肺外所見とセットで解釈することが多い。</li>
-</ul>
-<p>→ <strong>呼吸器内科に相談しつつ</strong>、必要なら<strong>膠原病内科（リウマチ）にも同時に相談</strong>し、<strong>方針の食い違い</strong>（ステロイド・免疫抑制の強さ）を残さない。</p></div>
-</details>
-<hr>
-<h2 id="救急で同時に除外するもの">救急で同時に除外するもの</h2>
-<p>AE-ILD を疑ったとき、<strong>まず感染と心不全</strong>を押さえ、<strong>臨床疑いとリスクに応じて</strong>他を足す。</p>
-<div class="table-wrap"><table><thead><tr><th>鑑別</th><th>確認方法</th></tr></thead><tbody><tr><td><strong>感染（細菌・ウイルス）</strong></td><td>採血（血算・CRP・PCT）、血培、尿抗原、喀痰（可能なら）、PCR</td></tr><tr><td><strong>心不全・肺水腫</strong></td><td><strong>BNP / NT-proBNP</strong>、心エコー（可能な範囲で）、輸液バランス</td></tr><tr><td><strong>肺塞栓</strong></td><td><strong>全例ではない</strong>。突然発症・頻脈が説明できない、DVT リスク、術後・長期臥床など<strong>疑い・リスクがあるとき</strong>に D-dimer → 必要なら造影 CT 等（誤診すると抗凝固 vs ステロイドで方針が逆になる）</td></tr><tr><td><strong>薬剤性肺障害</strong></td><td>最近の薬剤変更・追加歴（抗がん剤・MTX・分子標的薬・抗線維化薬など）</td></tr></tbody></table></div>
-<div class="callout callout-tip">
-<div class="callout-title">感染が引き金でも AE は AE</div>
-<div class="callout-body"><p>感染を完全に否定できなくても、<strong>画像で両側性 GGO ＋ UIP ＋ 急性悪化</strong>なら AE として対応を始める。感染の治療と AE の治療は<strong>排他的でなく並行する</strong>。</p></div>
-</div>
-<hr>
-<h2 id="初期対応救急入院初日">初期対応（救急〜入院初日）</h2>
-<h3 id="1-呼吸器内科にコンサルト">1. 呼吸器内科にコンサルト</h3>
-<p><strong>当院では必須</strong>。治療方針（ステロイドの量と期間、免疫抑制薬の追加、挿管の方針）は呼吸器内科が主導する。<strong>コンサルトまでの間に以下を始める</strong>。</p>
-<h3 id="2-酸素">2. 酸素</h3>
-<ul>
-<li>目標 SpO2 は <strong>88–92%</strong> を目安（低酸素に対して過剰酸素を入れすぎない）</li>
-<li><strong>HFNC / NIV</strong> を検討。ただし<strong>挿管の適応・DNAR の方針</strong>を早期に話し合う</li>
-</ul>
-<h3 id="3-ステロイドパルス呼吸器内科と相談のうえ">3. ステロイドパルス（呼吸器内科と相談のうえ）</h3>
-<p><strong>現時点の標準的な初期治療</strong>として広く行われている。ただし<strong>RCT での有効性エビデンスは確立していない</strong>。</p>
-<ul>
-<li><strong>メチルプレドニゾロン 1000 mg/日 × 3 日間</strong> IV（パルス）</li>
-<li>その後 <strong>経口プレドニゾロン 0.5–1.0 mg/kg/日</strong>で漸減（スケジュールは呼吸器内科判断）</li>
-</ul>
-<div class="callout callout-tip">
-<div class="callout-title">なぜメチルプレドニゾロン（mPSL）か</div>
-<div class="callout-body"><p>IPF-AE に<strong>唯一科学的に決まった薬剤選択</strong>があるわけではない。<strong>静注で高用量を短期に投与できる</strong>こと、<strong>鉱皮质激素作用がヒドロコルチゾンほど強くない</strong>こと、移植・自己免疫疾患などで<strong>パルスが慣例化</strong>してきた経緯で、多くのプロトコルが mPSL を採用している。<strong>プレドニゾロン換算の目安</strong>は施設表に従うが、おおむね <strong>mPSL 4 mg ≒ PSL 5 mg 程度</strong>とされる（パルス 1000 mg は経口維持用量とは別次元の短期投与）。</p></div>
-</div>
-<div class="callout callout-warning">
-<div class="callout-title">ステロイドのエビデンスについて</div>
-<div class="callout-body"><p>Farrand 2020（米・後ろ向き）：ステロイド投与群で ICU 入室・人工呼吸が多く、生存改善を示せなかった。EXAFIP trial（Naccache 2021・仏 RCT）：ステロイド＋シクロホスファミドはステロイド単独に比べ<strong>生存改善なし・むしろ有害</strong>。<strong>ステロイドパルスは「やらないよりまし」の段階であり、過信しない</strong>。呼吸器内科と予後・方針を共有する。</p></div>
-</div>
-<h3 id="4-経験的抗菌薬">4. 経験的抗菌薬</h3>
-<p><strong>感染を否定しきれないことが多い</strong>ため、実務上は<strong>広域抗菌薬を並行投与</strong>する施設が多い。</p>
-<ul>
-<li>培養結果が出たら <strong>de-escalation</strong></li>
-<li><strong>PCP 予防（ST 合剤）</strong>：<strong>パルス 3 日単独</strong>で即座にリスクが跳ね上がるとまでは言いにくい。<strong>経口ステロイドを mg/kg 単位で数週以上継続する見込み</strong>、<strong>既存の免疫抑制薬</strong>、<strong>リンパ球減少</strong>などがあるときに、呼吸器内科・感染症の方針で<strong>個別に検討</strong>（EXAFIP 等の試験でも高用量ステロイド群に PCP 予防が組み込まれた例がある）</li>
-</ul>
-<h3 id="5-抗線維化薬">5. 抗線維化薬</h3>
-<ul>
-<li><strong>ニンテダニブ・ピルフェニドン</strong>を内服中なら原則<strong>継続</strong>（呼吸器内科と確認）</li>
-<li>急性期に新規開始するかは呼吸器内科判断</li>
-</ul>
-<hr>
-<h2 id="入院管理">入院管理</h2>
-<p>当院では初期対応医がしばらく主治医になりやすいが、<strong>AE-ILD は呼吸器内科が主導する例外的なケース</strong>。コンサルト後は<strong>共同管理 or 転科</strong>の方向を早めに決める。</p>
-<h3 id="オーダー・指示のチェック">オーダー・指示のチェック</h3>
-<ul>
-<li><strong>酸素・モニタリング</strong>：SpO2 連続、バイタル頻回</li>
-<li><strong>ステロイドパルス</strong>：上記スケジュール</li>
-<li><strong>抗菌薬</strong>：経験的投与（広域）</li>
-<li><strong>PCP 予防</strong>：上記のとおり<strong>リスクベース</strong>。呼吸器内科（± 感染症）と開始可否を決める</li>
-<li><strong>輸液</strong>：最小限（肺水腫を悪化させない）</li>
-<li><strong>VTE 予防</strong>：寝たきりなら施設プロトコル</li>
-<li><strong>DNAR</strong>：<strong><a class="wiki-link" href="DNAR.html">DNAR</a></strong> — 予後が厳しい疾患のため<strong>早期に方針を話し合う</strong></li>
-</ul>
-<h3 id="フォロー・経過">フォロー・経過</h3>
-<ul>
-<li><strong>画像</strong>：ステロイドパルス後に HRCT で反応を評価</li>
-<li><strong>血液ガス・SpO2 推移</strong></li>
-<li><strong>悪化時</strong>：挿管・ICU の適応 or 緩和的方針を再確認</li>
-<li><strong>退院後</strong>：呼吸器内科外来での継続管理（ステロイド漸減・抗線維化薬・在宅酸素）</li>
-</ul>
-<hr>
-<h2 id="このページから張るリンク">このページから張るリンク</h2>
-<ul>
-<li><a class="wiki-link" href="../発熱.html">発熱</a></li>
-<li><a class="wiki-link" href="../呼吸困難.html">呼吸困難</a></li>
-<li><a class="wiki-link" href="急性心不全.html">急性心不全</a></li>
-<li><a class="wiki-link" href="誤嚥性肺炎.html">誤嚥性肺炎</a></li>
-<li><a class="wiki-link" href="DNAR.html">DNAR</a></li>
-</ul>
-<hr>
-<h2 id="出典">出典</h2>
-<ul>
-<li><strong>AE-IPF 改訂定義</strong>：Collard HR ほか. Acute Exacerbation of Idiopathic Pulmonary Fibrosis. An International Working Group Report. <em>Am J Respir Crit Care Med.</em> 2016;194(3):265–275. <a class="wiki-link" href="https://doi.org/10.1164/rccm.201604-0801CI">doi:10.1164/rccm.201604-0801CI</a></li>
-<li><strong>ステロイドの有効性に関する後ろ向き研究</strong>：Farrand E ほか. Corticosteroid Use Is Not Associated with Improved Outcomes in AE-IPF. <em>Respirology.</em> 2020;25:629–635. PMID: 31846126</li>
-<li><strong>EXAFIP trial（CYC＋ステロイド vs ステロイド単独）</strong>：Naccache JM ほか. <em>Lancet Respir Med.</em> 2021. PMID: 34767764</li>
-<li><strong>AE-IPF の疫学・予後</strong>：Papiris SA ほか. IPF-Acute Exacerbations: Advances and Future Perspectives. <em>Front Pharmacol.</em> 2022;13:836553. <a class="wiki-link" href="https://pmc.ncbi.nlm.nih.gov/articles/PMC9047939/">PMC9047939</a></li>
-<li><strong>ILD 急性増悪のステロイド SR</strong>：Moran-Mendoza A ほか. Corticosteroid therapy for AE of ILD: a systematic review. <em>Thorax.</em> 2025;80:140–. <a class="wiki-link" href="https://doi.org/10.1136/thorax-2024-222125">doi:10.1136/thorax-2024-222125</a></li>
-<li><strong>JRS 成人肺炎診療ガイドライン 2024</strong>（間質性肺炎と感染の重複に関する記載）</li>
-</ul>
-    </div>
-    <footer class="page-footer">
-      <a href="../index.html">↑ 主訴ナビへ戻る</a>
-    </footer>
-  </article>
+
+  <script>
+  (function(){
+    const menu = document.getElementById('sectionMenu');
+    const pages = document.querySelectorAll('.section-page');
+    const titleH1 = document.querySelector('.page-title');
+    const relatedSymp = document.getElementById('related-symptoms');
+
+    function showSection(id) {
+      menu.hidden = true;
+      if (titleH1) titleH1.hidden = true;
+      if (relatedSymp) relatedSymp.hidden = true;
+      pages.forEach(p => p.hidden = (p.id !== id));
+      window.scrollTo(0, 0);
+    }
+    function showMenu(scrollTarget) {
+      menu.hidden = false;
+      if (titleH1) titleH1.hidden = false;
+      if (relatedSymp) relatedSymp.hidden = false;
+      pages.forEach(p => p.hidden = true);
+      if (scrollTarget) {
+        if (scrollTarget.tagName === 'DETAILS') scrollTarget.open = true;
+        scrollTarget.scrollIntoView({behavior: 'instant', block: 'start'});
+      } else {
+        window.scrollTo(0, 0);
+      }
+    }
+    function syncFromHash() {
+      const id = (location.hash || '').replace('#','');
+      const target = id ? document.getElementById(id) : null;
+      if (target && target.classList.contains('section-page')) {
+        showSection(id);
+      } else if (target) {
+        showMenu(target);
+      } else {
+        showMenu();
+      }
+    }
+
+    window.addEventListener('hashchange', syncFromHash);
+    document.querySelectorAll('.back-to-menu').forEach(b => {
+      b.addEventListener('click', () => { history.pushState(null,'',location.pathname); showMenu(); });
+    });
+    const navBack = document.getElementById('navBack');
+    if (navBack) navBack.addEventListener('click', () => {
+      if (window.history.length > 1) history.back();
+      else window.location.href = '../index.html';
+    });
+
+    syncFromHash();
+  })();
+  </script>
 </body>
 </html>

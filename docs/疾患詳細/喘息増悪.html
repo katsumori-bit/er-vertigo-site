@@ -4,191 +4,324 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="color-scheme" content="light dark" />
-  <title>喘息増悪</title>
+  <title>喘息増悪 | ER ノート</title>
   <link rel="stylesheet" href="../er-note.css" />
 </head>
 <body>
-  <nav class="site-bar">
-    <a class="site-bar__back" href="../index.html">← 主訴ナビ</a>
-    <span class="site-bar__title">喘息増悪</span>
+  <header class="hokuto-top">
+    <a class="hokuto-top__btn" href="../薬剤情報.html">
+      <span class="hokuto-top__icon">℞</span><span>薬剤情報</span>
+    </a>
+    <a class="hokuto-top__btn" href="../表計算.html">
+      <span class="hokuto-top__icon">⊞</span><span>表計算</span>
+    </a>
+  </header>
+
+  <main class="hokuto-main">
+    <article class="note-shell">
+      <h1 class="page-title">喘息増悪</h1>
+
+      <!-- 即時アクションヘッダー（常時 sticky） -->
+      <div class="action-header">
+        <div class="action-header__title">⚡ 即時アクション</div>
+        <ol class="action-header__list">
+          <li><strong>SpO2 / PEFR / 努力呼吸</strong>で重症度評価（mild-moderate / severe / life-threatening の三層）</li>
+          <li><strong>SABA + 全身ステロイド</strong>を即時開始、重症は <strong>イプラトロピウム + Mg 静注</strong>追加</li>
+          <li><strong>life-threatening</strong>（PEFR &lt; 33%、SpO2 &lt; 92%、無声）→ <strong>ICU・挿管検討</strong></li>
+          <li><strong>シフト性アシドーシス</strong>で「悪化したように見える改善」（PaCO2 正常〜上昇は疲弊サイン）</li>
+        </ol>
+      </div>
+
+      <!-- メニュータイル -->
+      <nav class="section-tiles" id="sectionMenu">
+        <a class="section-tile" href="#s1"><span class="section-tile__no">📋</span><span class="section-tile__name">前提<br><small>呼吸困難から</small></span></a>
+        <a class="section-tile" href="#s2"><span class="section-tile__no">🩺</span><span class="section-tile__name">重症度判定<br><small>三層</small></span></a>
+        <a class="section-tile" href="#s3"><span class="section-tile__no">💊</span><span class="section-tile__name">治療を始める</span></a>
+        <a class="section-tile" href="#s4"><span class="section-tile__no">🔄</span><span class="section-tile__name">1 時間後判定<br><small>血ガス</small></span></a>
+        <a class="section-tile" href="#s5"><span class="section-tile__no">📤</span><span class="section-tile__name">disposition</span></a>
+        <a class="section-tile" href="#s6"><span class="section-tile__no">🏥</span><span class="section-tile__name">入院時オーダー<br><small>病棟指示</small></span></a>
+        <a class="section-tile" href="#s7"><span class="section-tile__no">📅</span><span class="section-tile__name">外来フォロー<br><small>退院後</small></span></a>
+        <a class="section-tile" href="#s8"><span class="section-tile__no">⚠️</span><span class="section-tile__name">落とし穴<br><small>鑑別・退院前</small></span></a>
+        <a class="section-tile" href="#s9"><span class="section-tile__no">📚</span><span class="section-tile__name">出典・リンク</span></a>
+      </nav>
+
+      <!-- 関連主訴（双方向リンク） -->
+      <details class="sub-fold" id="related-symptoms">
+        <summary>📞 この疾患が該当する主訴</summary>
+        <div class="sub-fold__body">
+          <ul>
+            <li><a class="wiki-link" href="../呼吸困難.html">呼吸困難</a> — 急性発作・喘鳴の主訴</li>
+          </ul>
+        </div>
+      </details>
+
+      <!-- §1 前提 -->
+      <section class="section-page" id="s1" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>📋 前提</h2>
+        <p><a class="wiki-link" href="../呼吸困難.html">呼吸困難</a> のフローに沿って以下が済んでいる or 進行中：</p>
+        <ul>
+          <li>バイタル・呼吸仕事量 確認済み</li>
+          <li>血液検査 提出済み</li>
+          <li>心電図・胸部X線 施行済み or 進行中</li>
+        </ul>
+      </section>
+
+      <!-- §2 重症度を判定する -->
+      <section class="section-page" id="s2" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🩺 重症度を判定する</h2>
+        <div class="callout callout-danger">
+          <div class="callout-title">Life-threatening のサイン</div>
+          <div class="callout-body"><ul>
+            <li><strong>drowsy / confused</strong></li>
+            <li><strong>silent chest / quiet chest</strong></li>
+            <li><strong>SpO2 &lt; 92%</strong></li>
+            <li><strong>会話困難</strong></li>
+            <li><strong>低血圧 / 不整脈 / exhaustion</strong></li>
+          </ul>
+          <p>→ <strong>先に治療を始める</strong>。上級医 / ICU にすぐ連絡。</p></div>
+        </div>
+        <div class="table-wrap"><table><thead><tr><th>重症度</th><th>会話</th><th>RR</th><th>HR</th><th>SpO2</th><th>PEF</th></tr></thead><tbody><tr><td><strong>Mild-Moderate</strong></td><td>フレーズで話せる</td><td>上昇あり</td><td>100–120</td><td>90–95%</td><td>&gt;50%</td></tr><tr><td><strong>Severe</strong></td><td>単語のみ</td><td>&gt;30</td><td>&gt;120</td><td>&lt;90%</td><td>≤50%</td></tr><tr><td><strong>Life-threatening</strong></td><td>不能</td><td>—</td><td>—</td><td>—</td><td>—</td></tr></tbody></table></div>
+        <p>GINA 2025 の急性増悪フローはこの三層構造で、会話・呼吸数・脈拍・SpO2・PEF を使う。</p>
+      </section>
+
+      <!-- §3 治療を始める -->
+      <section class="section-page" id="s3" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>💊 治療を始める</h2>
+        <p><strong>重症そうなら迷わず全部入れる：</strong></p>
+        <ul>
+          <li><strong>SABA</strong>：pMDI + spacer で <strong>4–10 puff、20分ごとに3回まで反復</strong></li>
+          <li><strong>酸素</strong>：目標 SpO2 <strong>93–95%</strong></li>
+          <li><strong>ipratropium（アトロベント）</strong>：severe 以上で追加（入院リスク低下のエビデンスあり）</li>
+          <li><strong>全身ステロイド</strong>：<strong>プレドニゾロン 40–50 mg</strong> 内服（嘔気あれば IV ヒドロコルチゾン 100–200 mg）、<strong>5–7日</strong></li>
+          <li><strong>反応不良なら MgSO4 IV</strong>：<strong>2 g を 20分で</strong>点滴静注</li>
+        </ul>
+        <div class="callout callout-tip">
+          <div class="callout-title">迷ったら</div>
+          <div class="callout-body"><p><strong>重症そうなら：SABA + O2 + ipratropium + steroid</strong> ここまでを先に入れる。考えるのはその後でよい。</p></div>
+        </div>
+
+        <h3>やらないこと</h3>
+        <ul>
+          <li><strong>sedation は避ける</strong>（BTS/SIGN: "No sedatives of any kind"）</li>
+          <li><strong>抗菌薬を routine で入れない</strong>（感染が明らかなとき以外）</li>
+        </ul>
+      </section>
+
+      <!-- §4 1 時間後に判定する -->
+      <section class="section-page" id="s4" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🔄 1 時間後に判定する</h2>
+        <ul>
+          <li>息苦しさが改善したか</li>
+          <li>会話が戻ったか</li>
+          <li>SpO2 が保てるか</li>
+          <li>PEF が上がったか（取れれば）</li>
+          <li>SABA をまだ頻回に欲しがるか</li>
+          <li>疲れてきていないか</li>
+        </ul>
+
+        <h3>血ガスを見るとき</h3>
+        <ul>
+          <li>見た目の割に悪い</li>
+          <li>疲弊している</li>
+          <li>quiet chest</li>
+          <li><strong>「正常〜上昇した PaCO2」は危険サイン</strong>（BTS/SIGN） — 通常の喘息発作では過換気で CO2 は低下するはず。正常 or 上昇は疲弊を意味する。</li>
+        </ul>
+      </section>
+
+      <!-- §5 disposition -->
+      <section class="section-page" id="s5" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>📤 disposition</h2>
+        <h3>帰宅寄り</h3>
+        <ul>
+          <li>症状改善</li>
+          <li>SABA 連発不要</li>
+          <li>SpO2 &gt;94%（room air）</li>
+          <li>PEF 改善して 60–80% 超</li>
+          <li>自宅資源あり</li>
+        </ul>
+        <h3>入院寄り</h3>
+        <ul>
+          <li>反応が鈍い</li>
+          <li>PEF 低いまま</li>
+          <li>酸素が要る</li>
+          <li>再増悪しそう</li>
+        </ul>
+        <h3>上級医 / ICU すぐ</h3>
+        <ul>
+          <li>drowsy / confused</li>
+          <li>quiet chest</li>
+          <li>exhaustion</li>
+          <li>低血圧 / 不整脈</li>
+          <li>呼吸不全進行</li>
+        </ul>
+      </section>
+
+      <!-- §6 入院時オーダー・病棟指示 -->
+      <section class="section-page" id="s6" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🏥 入院時オーダー・病棟指示の枠（急性喘息）</h2>
+        <p>GINA 2025・BTS/SIGN を踏まえた<strong>病棟指示の骨格</strong>。</p>
+
+        <h3>モニタリング</h3>
+        <ul>
+          <li><strong>SpO2</strong>（目標 <strong>93–95%</strong>）</li>
+          <li><strong>PEF</strong>（可能なら毎日、個人最良値との比較）</li>
+          <li><strong>バイタル・意識</strong>：静かな胸（quiet chest）、会話可否、疲弊</li>
+        </ul>
+
+        <h3>薬物</h3>
+        <ul>
+          <li><strong>SABA</strong> 吸入（スペーサー併用）— 頻回投与は<strong>プロトコル化</strong>（例：1 時間ごと評価）</li>
+          <li><strong>SAMA</strong>：重症例で追加（GINA）</li>
+          <li><strong>全身ステロイド</strong>：<strong>プレドニゾロン 40–50 mg/日</strong>相当、<strong>5–7 日</strong>（早期減量は再発リスク — BTS/SIGN）</li>
+          <li><strong>硫酸マグネシウム 2 g IV</strong>：重症で反応不良時（GINA）</li>
+        </ul>
+
+        <h3>酸素・呼吸</h3>
+        <ul>
+          <li><strong>酸素</strong>で SpO2 目標を維持</li>
+          <li><strong>NIV</strong>：<strong>高炭酸血症性呼吸不全</strong>で考慮（施設方針・呼吸器）</li>
+        </ul>
+
+        <h3>やらないことの再掲</h3>
+        <ul>
+          <li><strong>鎮静薬のルーチン使用は避ける</strong>（BTS/SIGN）</li>
+          <li><strong>抗菌薬は感染が明らかな場合以外ルーチンに使わない</strong></li>
+        </ul>
+      </section>
+
+      <!-- §7 外来フォロー・退院後 -->
+      <section class="section-page" id="s7" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>📅 外来フォロー・退院後（喘息）</h2>
+        <ul>
+          <li><strong>退院／帰宅後 2–7 日以内</strong>の外来再診（GINA：増悪後のフォロー）</li>
+          <li><strong>書面のアクションプラン</strong>（緑・黄・赤ゾーン、吸入の段階的使用）を<strong>必ず更新</strong></li>
+          <li><strong>吸入ステロイド（ICS）の継続</strong>：増悪時に SABA のみに偏らないよう確認（GINA は ICS を基幹とする管理を推奨）</li>
+          <li><strong>スモーキング・アレルゲン</strong>など誘因の再確認</li>
+        </ul>
+      </section>
+
+      <!-- §8 落とし穴 -->
+      <section class="section-page" id="s8" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>⚠️ 落とし穴</h2>
+
+        <h3>喘息ではないかもしれないとき</h3>
+        <ul>
+          <li>片側呼吸音低下 → <span class="wiki-missing">気胸</span></li>
+          <li>発熱・局在性 crackles → <a class="wiki-link" href="誤嚥性肺炎.html">誤嚥性肺炎</a></li>
+          <li>胸痛・頻脈・DVT 所見 → <span class="wiki-missing">肺塞栓</span></li>
+          <li>吸気性喘鳴・喉頭違和感 → <span class="wiki-missing">アナフィラキシー</span> / 上気道</li>
+          <li>湿性ラ音・起坐呼吸 → <a class="wiki-link" href="急性心不全.html">急性心不全</a>（cardiac wheeze との鑑別）</li>
+        </ul>
+        <p>GINA 2025 も代替診断として心不全、上気道機能異常、異物吸入、肺塞栓を明示している。</p>
+
+        <h3>退院時に最低限</h3>
+        <ul>
+          <li><strong>ICS を途切れさせない</strong></li>
+          <li>吸入手技確認</li>
+          <li>アクションプラン確認</li>
+          <li><strong>2–7日以内フォロー</strong></li>
+          <li>再増悪リスク確認</li>
+        </ul>
+      </section>
+
+      <!-- §9 出典・リンク -->
+      <section class="section-page" id="s9" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>📚 出典・このページから張るリンク</h2>
+
+        <h3>出典</h3>
+        <ul>
+          <li><strong>GINA 2025</strong>：Global Initiative for Asthma. <em>Global Strategy for Asthma Management and Prevention.</em> <a class="wiki-link" href="https://ginasthma.org/">https://ginasthma.org/</a></li>
+          <li><strong>BTS/SIGN</strong>：British Guideline on the Management of Asthma. <em>SIGN 158.</em> <a class="wiki-link" href="https://www.brit-thoracic.org.uk/quality-improvement/guidelines/asthma/">https://www.brit-thoracic.org.uk/quality-improvement/guidelines/asthma/</a></li>
+        </ul>
+
+        <h3>このページから張るリンク</h3>
+        <ul>
+          <li><a class="wiki-link" href="../呼吸困難.html">呼吸困難</a></li>
+          <li><a class="wiki-link" href="COPD増悪.html">COPD増悪</a></li>
+          <li><span class="wiki-missing">NIV</span></li>
+          <li><span class="wiki-missing">気管挿管</span></li>
+          <li><span class="wiki-missing">アナフィラキシー</span></li>
+          <li><span class="wiki-missing">気胸</span></li>
+          <li><a class="wiki-link" href="誤嚥性肺炎.html">誤嚥性肺炎</a></li>
+          <li><span class="wiki-missing">肺塞栓</span></li>
+          <li><a class="wiki-link" href="急性心不全.html">急性心不全</a></li>
+        </ul>
+      </section>
+
+    </article>
+  </main>
+
+  <nav class="hokuto-bottom">
+    <button class="hokuto-bottom__btn" type="button" id="navBack">
+      <span class="hokuto-bottom__icon">←</span><span>戻る</span>
+    </button>
+    <a class="hokuto-bottom__btn" href="../ツール.html">
+      <span class="hokuto-bottom__icon">⚙</span><span>ツール</span>
+    </a>
+    <a class="hokuto-bottom__btn" href="../index.html">
+      <span class="hokuto-bottom__icon">⌂</span><span>ホーム</span>
+    </a>
   </nav>
-  <article class="note-shell">
-    <header class="note-header">
-      <h1>喘息増悪</h1>
-      <p class="source-badge">元: 臨床/ER/疾患詳細/喘息増悪.md</p>
-    </header>
-    <details class="toc"><summary>目次（9 セクション）</summary><ol><li><a href="#前提">前提</a></li><li><a href="#重症度を判定する">重症度を判定する</a></li><li><a href="#治療を始める">治療を始める</a></li><li><a href="#1時間後に判定する">1時間後に判定する</a></li><li><a href="#disposition">disposition</a></li><li><a href="#入院時オーダー・病棟指示の枠急性喘息">入院時オーダー・病棟指示の枠（急性喘息）</a></li><li><a href="#外来フォロー・退院後喘息">外来フォロー・退院後（喘息）</a></li><li><a href="#出典">出典</a></li><li><a href="#このページから張るリンク">このページから張るリンク</a></li></ol></details>
-    <div class="md-body">
-<p>#ER #救急 #呼吸困難 #喘息 #asthma #喘鳴</p>
-<div class="callout callout-summary">
-<div class="callout-title">このページの使い方</div>
-<div class="callout-body"><ol>
-<li><a class="wiki-link" href="../呼吸困難.html">呼吸困難</a> から喘息発作を疑ってここに来ている</li>
-<li><strong>重症度を判定</strong>する</li>
-<li><strong>治療を開始し、1時間後に反応を判定</strong>する</li>
-<li>disposition を決める</li>
-</ol></div>
-</div>
-<h2 id="前提">前提</h2>
-<p><a class="wiki-link" href="../呼吸困難.html">呼吸困難</a> のフローに沿って以下が済んでいる or 進行中：</p>
-<ul>
-<li>バイタル・呼吸仕事量 確認済み</li>
-<li>血液検査 提出済み</li>
-<li>心電図・胸部X線 施行済み or 進行中</li>
-</ul>
-<h2 id="重症度を判定する">重症度を判定する</h2>
-<div class="callout callout-danger">
-<div class="callout-title">Life-threatening のサイン</div>
-<div class="callout-body"><ul>
-<li><strong>drowsy / confused</strong></li>
-<li><strong>silent chest / quiet chest</strong></li>
-<li><strong>SpO2 &lt; 92%</strong></li>
-<li><strong>会話困難</strong></li>
-<li><strong>低血圧 / 不整脈 / exhaustion</strong></li>
-</ul>
-<p>→ <strong>先に治療を始める</strong>。上級医 / ICU にすぐ連絡。</p></div>
-</div>
-<div class="table-wrap"><table><thead><tr><th>重症度</th><th>会話</th><th>RR</th><th>HR</th><th>SpO2</th><th>PEF</th></tr></thead><tbody><tr><td><strong>Mild-Moderate</strong></td><td>フレーズで話せる</td><td>上昇あり</td><td>100–120</td><td>90–95%</td><td>&gt;50%</td></tr><tr><td><strong>Severe</strong></td><td>単語のみ</td><td>&gt;30</td><td>&gt;120</td><td>&lt;90%</td><td>≤50%</td></tr><tr><td><strong>Life-threatening</strong></td><td>不能</td><td>—</td><td>—</td><td>—</td><td>—</td></tr></tbody></table></div>
-<p>GINA 2025 の急性増悪フローはこの三層構造で、会話・呼吸数・脈拍・SpO2・PEF を使う。</p>
-<h2 id="治療を始める">治療を始める</h2>
-<p><strong>重症そうなら迷わず全部入れる：</strong></p>
-<ul>
-<li><strong>SABA</strong>：pMDI + spacer で <strong>4–10 puff、20分ごとに3回まで反復</strong></li>
-<li><strong>酸素</strong>：目標 SpO2 <strong>93–95%</strong></li>
-<li><strong>ipratropium（アトロベント）</strong>：severe 以上で追加（入院リスク低下のエビデンスあり）</li>
-<li><strong>全身ステロイド</strong>：<strong>プレドニゾロン 40–50 mg</strong> 内服（嘔気あれば IV ヒドロコルチゾン 100–200 mg）、<strong>5–7日</strong></li>
-<li><strong>反応不良なら MgSO4 IV</strong>：<strong>2 g を 20分で</strong>点滴静注</li>
-</ul>
-<div class="callout callout-tip">
-<div class="callout-title">迷ったら</div>
-<div class="callout-body"><p><strong>重症そうなら：SABA + O2 + ipratropium + steroid</strong> ここまでを先に入れる。考えるのはその後でよい。</p></div>
-</div>
-<h3 id="やらないこと">やらないこと</h3>
-<ul>
-<li><strong>sedation は避ける</strong>（BTS/SIGN: &quot;No sedatives of any kind&quot;）</li>
-<li><strong>抗菌薬を routine で入れない</strong>（感染が明らかなとき以外）</li>
-</ul>
-<h2 id="1時間後に判定する">1時間後に判定する</h2>
-<ul>
-<li>息苦しさが改善したか</li>
-<li>会話が戻ったか</li>
-<li>SpO2 が保てるか</li>
-<li>PEF が上がったか（取れれば）</li>
-<li>SABA をまだ頻回に欲しがるか</li>
-<li>疲れてきていないか</li>
-</ul>
-<h3 id="血ガスを見るとき">血ガスを見るとき</h3>
-<ul>
-<li>見た目の割に悪い</li>
-<li>疲弊している</li>
-<li>quiet chest</li>
-<li><strong>「正常〜上昇した PaCO2」は危険サイン</strong>（BTS/SIGN） — 通常の喘息発作では過換気で CO2 は低下するはず。正常 or 上昇は疲弊を意味する。</li>
-</ul>
-<h2 id="disposition">disposition</h2>
-<ul>
-<li><strong>帰宅寄り</strong></li>
-<ul>
-<li>症状改善</li>
-<li>SABA 連発不要</li>
-<li>SpO2 &gt;94%（room air）</li>
-<li>PEF 改善して 60–80% 超</li>
-<li>自宅資源あり</li>
-</ul>
-<li><strong>入院寄り</strong></li>
-<ul>
-<li>反応が鈍い</li>
-<li>PEF 低いまま</li>
-<li>酸素が要る</li>
-<li>再増悪しそう</li>
-</ul>
-<li><strong>上級医 / ICU すぐ</strong></li>
-<ul>
-<li>drowsy / confused</li>
-<li>quiet chest</li>
-<li>exhaustion</li>
-<li>低血圧 / 不整脈</li>
-<li>呼吸不全進行</li>
-</ul>
-</ul>
-<hr>
-<details class="section-fold"><summary id="折りたたみ用メモ">折りたたみ用メモ</summary>
-<h3 id="喘息ではないかもしれないとき">喘息ではないかもしれないとき</h3>
-<ul>
-<li>片側呼吸音低下 → <span class="wiki-missing">気胸</span></li>
-<li>発熱・局在性 crackles → <a class="wiki-link" href="誤嚥性肺炎.html">誤嚥性肺炎</a></li>
-<li>胸痛・頻脈・DVT 所見 → <span class="wiki-missing">肺塞栓</span></li>
-<li>吸気性喘鳴・喉頭違和感 → <span class="wiki-missing">アナフィラキシー</span> / 上気道</li>
-<li>湿性ラ音・起坐呼吸 → <a class="wiki-link" href="急性心不全.html">急性心不全</a>（cardiac wheeze との鑑別）</li>
-</ul>
-<p>GINA 2025 も代替診断として心不全、上気道機能異常、異物吸入、肺塞栓を明示している。</p>
-<h3 id="退院時に最低限">退院時に最低限</h3>
-<ul>
-<li><strong>ICS を途切れさせない</strong></li>
-<li>吸入手技確認</li>
-<li>アクションプラン確認</li>
-<li><strong>2–7日以内フォロー</strong></li>
-<li>再増悪リスク確認</li>
-</ul>
-<hr>
-<h2 id="入院時オーダー・病棟指示の枠急性喘息">入院時オーダー・病棟指示の枠（急性喘息）</h2>
-<p>GINA 2025・BTS/SIGN を踏まえた<strong>病棟指示の骨格</strong>。</p>
-<h3 id="モニタリング">モニタリング</h3>
-<ul>
-<li><strong>SpO2</strong>（目標 <strong>93–95%</strong>）</li>
-<li><strong>PEF</strong>（可能なら毎日、個人最良値との比較）</li>
-<li><strong>バイタル・意識</strong>：静かな胸（quiet chest）、会話可否、疲弊</li>
-</ul>
-<h3 id="薬物">薬物</h3>
-<ul>
-<li><strong>SABA</strong> 吸入（スペーサー併用）— 頻回投与は<strong>プロトコル化</strong>（例：1 時間ごと評価）</li>
-<li><strong>SAMA</strong>：重症例で追加（GINA）</li>
-<li><strong>全身ステロイド</strong>：<strong>プレドニゾロン 40–50 mg/日</strong>相当、<strong>5–7 日</strong>（早期減量は再発リスク — BTS/SIGN）</li>
-<li><strong>硫酸マグネシウム 2 g IV</strong>：重症で反応不良時（GINA）</li>
-</ul>
-<h3 id="酸素・呼吸">酸素・呼吸</h3>
-<ul>
-<li><strong>酸素</strong>で SpO2 目標を維持</li>
-<li><strong>NIV</strong>：<strong>高炭酸血症性呼吸不全</strong>で考慮（施設方針・呼吸器）</li>
-</ul>
-<h3 id="やらないことの再掲">やらないことの再掲</h3>
-<ul>
-<li><strong>鎮静薬のルーチン使用は避ける</strong>（BTS/SIGN）</li>
-<li><strong>抗菌薬は感染が明らかな場合以外ルーチンに使わない</strong></li>
-</ul>
-<hr>
-<h2 id="外来フォロー・退院後喘息">外来フォロー・退院後（喘息）</h2>
-<ul>
-<li><strong>退院／帰宅後 2–7 日以内</strong>の外来再診（GINA：増悪後のフォロー）</li>
-<li><strong>書面のアクションプラン</strong>（緑・黄・赤ゾーン、吸入の段階的使用）を<strong>必ず更新</strong></li>
-<li><strong>吸入ステロイド（ICS）の継続</strong>：増悪時に SABA のみに偏らないよう確認（GINA は ICS を基幹とする管理を推奨）</li>
-<li><strong>スモーキング・アレルゲン</strong>など誘因の再確認</li>
-</ul>
-<hr>
-<h2 id="出典">出典</h2>
-<ul>
-<li><strong>GINA 2025</strong>：Global Initiative for Asthma. <em>Global Strategy for Asthma Management and Prevention.</em></li>
-<p><a class="wiki-link" href="https://ginasthma.org/">https://ginasthma.org/</a></p>
-<li><strong>BTS/SIGN</strong>：British Guideline on the Management of Asthma. <em>SIGN 158.</em></li>
-<p><a class="wiki-link" href="https://www.brit-thoracic.org.uk/quality-improvement/guidelines/asthma/">https://www.brit-thoracic.org.uk/quality-improvement/guidelines/asthma/</a></p>
-</ul>
-<hr>
-<h2 id="このページから張るリンク">このページから張るリンク</h2>
-<ul>
-<li><a class="wiki-link" href="../呼吸困難.html">呼吸困難</a></li>
-<li><a class="wiki-link" href="COPD増悪.html">COPD増悪</a></li>
-<li><span class="wiki-missing">NIV</span></li>
-<li><span class="wiki-missing">気管挿管</span></li>
-<li><span class="wiki-missing">アナフィラキシー</span></li>
-<li><span class="wiki-missing">気胸</span></li>
-<li><a class="wiki-link" href="誤嚥性肺炎.html">誤嚥性肺炎</a></li>
-<li><span class="wiki-missing">肺塞栓</span></li>
-<li><a class="wiki-link" href="急性心不全.html">急性心不全</a></li>
-</ul>
-</details>
-    </div>
-    <footer class="page-footer">
-      <a href="../index.html">↑ 主訴ナビへ戻る</a>
-    </footer>
-  </article>
+
+  <script>
+  (function(){
+    const menu = document.getElementById('sectionMenu');
+    const pages = document.querySelectorAll('.section-page');
+    const titleH1 = document.querySelector('.page-title');
+    const relatedSymp = document.getElementById('related-symptoms');
+
+    function showSection(id) {
+      menu.hidden = true;
+      if (titleH1) titleH1.hidden = true;
+      if (relatedSymp) relatedSymp.hidden = true;
+      pages.forEach(p => p.hidden = (p.id !== id));
+      window.scrollTo(0, 0);
+    }
+    function showMenu(scrollTarget) {
+      menu.hidden = false;
+      if (titleH1) titleH1.hidden = false;
+      if (relatedSymp) relatedSymp.hidden = false;
+      pages.forEach(p => p.hidden = true);
+      if (scrollTarget) {
+        if (scrollTarget.tagName === 'DETAILS') scrollTarget.open = true;
+        scrollTarget.scrollIntoView({behavior: 'instant', block: 'start'});
+      } else {
+        window.scrollTo(0, 0);
+      }
+    }
+    function syncFromHash() {
+      const id = (location.hash || '').replace('#','');
+      const target = id ? document.getElementById(id) : null;
+      if (target && target.classList.contains('section-page')) {
+        showSection(id);
+      } else if (target) {
+        showMenu(target);
+      } else {
+        showMenu();
+      }
+    }
+
+    window.addEventListener('hashchange', syncFromHash);
+    document.querySelectorAll('.back-to-menu').forEach(b => {
+      b.addEventListener('click', () => { history.pushState(null,'',location.pathname); showMenu(); });
+    });
+    const navBack = document.getElementById('navBack');
+    if (navBack) navBack.addEventListener('click', () => {
+      if (window.history.length > 1) history.back();
+      else window.location.href = '../index.html';
+    });
+
+    syncFromHash();
+  })();
+  </script>
 </body>
 </html>

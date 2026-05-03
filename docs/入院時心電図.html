@@ -4,126 +4,366 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="color-scheme" content="light dark" />
-  <title>入院時心電図</title>
+  <title>入院時心電図 | ER ノート</title>
   <link rel="stylesheet" href="er-note.css" />
 </head>
 <body>
-  <nav class="site-bar">
-    <a class="site-bar__back" href="index.html">← 主訴ナビ</a>
-    <span class="site-bar__title">入院時心電図</span>
+  <header class="hokuto-top">
+    <a class="hokuto-top__btn" href="薬剤情報.html">
+      <span class="hokuto-top__icon">℞</span><span>薬剤情報</span>
+    </a>
+    <a class="hokuto-top__btn" href="表計算.html">
+      <span class="hokuto-top__icon">⊞</span><span>表計算</span>
+    </a>
+  </header>
+
+  <main class="hokuto-main">
+    <article class="note-shell">
+      <h1 class="page-title">入院時心電図</h1>
+
+      <!-- 即時アクションヘッダー（常時 sticky） -->
+      <div class="action-header">
+        <div class="action-header__title">⚡ 即時アクション</div>
+        <ol class="action-header__list">
+          <li><strong>STEMI / NSTEMI / 致死性不整脈（VT, VF, 完全 AVB, Wide QRS）</strong> をまず外す</li>
+          <li>読む順：<strong>リズム → 軸 → 間隔（PR, QRS, QT）→ ST-T → 房室ブロック → 心室肥大</strong></li>
+          <li><strong>正常変異 vs 病的</strong>を区別（早期再分極、若年男性 ST 上昇など）</li>
+          <li><strong>過去の心電図と比較</strong>する — 変化があれば異常を疑う</li>
+        </ol>
+      </div>
+
+      <!-- §1〜§9 メニュータイル -->
+      <nav class="section-tiles" id="sectionMenu">
+        <a class="section-tile" href="#s1"><span class="section-tile__no">🚨</span><span class="section-tile__name">即相談<br><small>今すぐ電話</small></span></a>
+        <a class="section-tile" href="#s2"><span class="section-tile__no">💔</span><span class="section-tile__name">虚血パターン<br><small>STEMI / NSTE-ACS</small></span></a>
+        <a class="section-tile" href="#s3"><span class="section-tile__no">⚡</span><span class="section-tile__name">致死性不整脈<br><small>VT / VF / Wide QRS</small></span></a>
+        <a class="section-tile" href="#s4"><span class="section-tile__no">🧱</span><span class="section-tile__name">伝導障害<br><small>高度房室 / 脚ブロック</small></span></a>
+        <a class="section-tile" href="#s5"><span class="section-tile__no">📅</span><span class="section-tile__name">同日相談<br><small>今日中に循環器</small></span></a>
+        <a class="section-tile" href="#s6"><span class="section-tile__no">📖</span><span class="section-tile__name">読み方の順序<br><small>6 ステップ</small></span></a>
+        <a class="section-tile" href="#s7"><span class="section-tile__no">📞</span><span class="section-tile__name">電話前に詰める<br><small>旧 ECG・内服・既往</small></span></a>
+        <a class="section-tile" href="#s8"><span class="section-tile__no">⚠️</span><span class="section-tile__name">ピットフォール</span></a>
+        <a class="section-tile" href="#s9"><span class="section-tile__no">📚</span><span class="section-tile__name">出典・リンク</span></a>
+      </nav>
+
+      <!-- §1 即相談 -->
+      <section class="section-page" id="s1" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🚨 即相談（今すぐ電話）</h2>
+
+        <p><strong>無症状でも</strong> 以下があれば、夜間・休日でも循環器オンコールを検討。</p>
+
+        <h3>虚血・電解質・チャネル病</h3>
+        <ul>
+          <li><strong>VT / VF</strong>（モニター上で明らかなため詳細リンクは省略）</li>
+          <li><a class="wiki-link" href="疾患詳細/STEMI.html">STEMI</a> 基準のST上昇</li>
+          <li><a class="wiki-link" href="疾患詳細/de Winterパターン.html">de Winterパターン</a></li>
+          <li><a class="wiki-link" href="疾患詳細/後壁梗塞.html">後壁梗塞</a>（V1–V4のST低下 + 高いR波 / 直立T）</li>
+          <li><a class="wiki-link" href="疾患詳細/高K血症心電図.html">高K血症心電図</a> の進行所見</li>
+          <li><a class="wiki-link" href="疾患詳細/Brugada心電図.html">Brugada心電図</a> 1型様（新規・強疑）</li>
+          <li><a class="wiki-link" href="疾患詳細/QT延長.html">QT延長</a> で著明（QTc ≥500 ms）＋ 誘発因子</li>
+        </ul>
+
+        <h3>伝導障害で即相談に入るもの</h3>
+        <ul>
+          <li><strong>完全房室ブロック（Ⅲ度）</strong> → <a class="wiki-link" href="疾患詳細/高度房室ブロック.html">高度房室ブロック</a></li>
+          <li><strong>Mobitz II 型</strong>・<strong>2:1 房室ブロック</strong>・<strong>連続脱落の高度房室ブロック</strong> → <a class="wiki-link" href="疾患詳細/高度房室ブロック.html">高度房室ブロック</a></li>
+          <li><strong><a class="wiki-link" href="疾患詳細/交代性脚ブロック.html">交代性脚ブロック</a></strong>（RBBB と LBBB が時系列で入れ替わる等）</li>
+          <li>上記に関わらず <strong>血行不安定</strong>・<strong>心室率が著しく遅い</strong>・<strong>逸搏QRSが寛い</strong> のいずれかを伴う徐脈</li>
+        </ul>
+
+        <div class="callout callout-danger">
+          <div class="callout-title">最短の行動</div>
+          <div class="callout-body"><ol>
+            <li>循環器オンコール</li>
+            <li>同時に：モニター、末梢ルート、採血（<strong>K / Mg / Ca / トロポニン</strong>）</li>
+            <li>原因の手掛かり（<a class="wiki-link" href="疾患詳細/旧心電図と内服確認.html">旧心電図と内服確認</a>）</li>
+          </ol></div>
+        </div>
+      </section>
+
+      <!-- §2 虚血パターン -->
+      <section class="section-page" id="s2" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>💔 虚血パターン（STEMI / NSTE-ACS）</h2>
+
+        <h3>STEMI 基準（要点）</h3>
+        <ul>
+          <li>連続2誘導での ST 上昇 — V2–V3 で男性≥2 mm（≥40歳）/ ≥2.5 mm（&lt;40歳）/ 女性≥1.5 mm、その他誘導≥1 mm</li>
+          <li>新規 LBBB は虚血と区別困難 → <strong>Sgarbossa 基準</strong>を当てる</li>
+          <li>詳細 → <a class="wiki-link" href="疾患詳細/STEMI.html">STEMI</a></li>
+        </ul>
+
+        <h3>STEMI 等価所見（見落とし注意）</h3>
+        <ul>
+          <li><a class="wiki-link" href="疾患詳細/de Winterパターン.html">de Winterパターン</a> — V1–V6 で J 点 ST 低下 + 高い T 波 + aVR の ST 上昇</li>
+          <li><a class="wiki-link" href="疾患詳細/後壁梗塞.html">後壁梗塞</a> — V1–V4 の ST 低下 + 高い R 波 + 直立 T。後壁誘導（V7–V9）追加で確認</li>
+          <li><strong>aVR の ST 上昇 + 広範な ST 低下</strong> — 左主幹部 / 三枝病変の可能性</li>
+        </ul>
+
+        <h3>NSTE-ACS を疑う所見</h3>
+        <ul>
+          <li><a class="wiki-link" href="疾患詳細/Wellens症候群.html">Wellens症候群</a>（V2–V3 の二相性 T / 深い T 陰性）</li>
+          <li>広範な ST 低下 + トロポニン動態</li>
+          <li>新規 T 波陰転、症状連動の動的変化</li>
+        </ul>
+
+        <div class="callout callout-warning">
+          <div class="callout-title">ST 上昇＝STEMI ではない</div>
+          <div class="callout-body"><p>早期再分極、心膜炎、Brugada、左室肥大、LBBB、ペーシング — いずれも ST 上昇を起こす。<strong>分布・形・経時変化・症状・トロポニン</strong>で総合判断。迷ったら循環器に相談。</p></div>
+        </div>
+      </section>
+
+      <!-- §3 致死性不整脈 -->
+      <section class="section-page" id="s3" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>⚡ 致死性不整脈（VT / VF / Wide QRS）</h2>
+
+        <h3>すぐに見るもの</h3>
+        <ul>
+          <li><strong>VF</strong> — 不規則な細動波 → 直ちに除細動 + CPR</li>
+          <li><strong>持続性 VT</strong>（≥30 秒 or 血行不安定）— 同期下カルディオバージョン or 薬物</li>
+          <li><strong>Wide QRS 頻拍</strong> — 原則 VT として対応（特に虚血・心不全既往あり）</li>
+          <li><strong>Torsades de Pointes</strong> — Mg 静注、QT 延長薬中止、誘発因子是正</li>
+        </ul>
+
+        <h3>基質を疑う所見</h3>
+        <ul>
+          <li><a class="wiki-link" href="疾患詳細/Brugada心電図.html">Brugada心電図</a> 1 型（V1–V2 で coved 型 ST 上昇 + T 陰転）</li>
+          <li><a class="wiki-link" href="疾患詳細/QT延長.html">QT延長</a>（QTc ≥500 ms は TdP リスク）</li>
+          <li><a class="wiki-link" href="疾患詳細/高K血症心電図.html">高K血症心電図</a> 進行（テント T → P 消失 → QRS 拡大 → sine wave）</li>
+        </ul>
+
+        <div class="callout callout-danger">
+          <div class="callout-title">Wide QRS に迷ったら VT</div>
+          <div class="callout-body"><p>Wide QRS 頻拍を「SVT + 変行伝導」と決めつけて Ca 拮抗薬を入れると、本物の VT で血行破綻する。<strong>分からなければ VT として扱う</strong>のが安全。</p></div>
+        </div>
+      </section>
+
+      <!-- §4 伝導障害 -->
+      <section class="section-page" id="s4" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🧱 伝導障害（房室ブロック / 脚ブロック）</h2>
+
+        <h3>房室ブロックの分類</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>分類</th><th>所見</th><th>対応</th></tr></thead>
+          <tbody>
+            <tr><td>Ⅰ度</td><td>PR &gt;200 ms、脱落なし</td><td>原則経過観察、原因薬剤確認</td></tr>
+            <tr><td>Ⅱ度 Mobitz I（Wenckebach）</td><td>PR が徐々に延長 → 脱落</td><td>狭 QRS・血行安定なら経過観察。初見・原因不明・内服濃いなら同日相談</td></tr>
+            <tr><td><strong>Ⅱ度 Mobitz II</strong></td><td>PR 一定で突然脱落、しばしば広 QRS</td><td><strong>即相談</strong>。ペーシング検討</td></tr>
+            <tr><td><strong>2:1 / 高度房室</strong></td><td>P 波の半数以上が脱落</td><td><strong>即相談</strong></td></tr>
+            <tr><td><strong>Ⅲ度（完全）</strong></td><td>P と QRS が完全解離</td><td><strong>即相談</strong>、ペーシング</td></tr>
+          </tbody>
+        </table></div>
+
+        <h3>脚ブロック・分枝ブロック</h3>
+        <ul>
+          <li><strong>新規 LBBB</strong> — 虚血と区別困難。症状連動なら STEMI 等価として扱う</li>
+          <li><a class="wiki-link" href="疾患詳細/二枝ブロック.html">二枝ブロック</a>（RBBB + 左脚前枝 or 後枝）<strong> + Ⅰ度房室ブロック</strong>、旧 ECG なし or 失神・転倒・多薬・腎障害ありなら同日相談</li>
+          <li><a class="wiki-link" href="疾患詳細/交代性脚ブロック.html">交代性脚ブロック</a> — <strong>即相談</strong>（高度房室への進行リスク）</li>
+        </ul>
+
+        <div class="callout callout-warning">
+          <div class="callout-title">境界例で迷ったら</div>
+          <div class="callout-body"><p><strong>血行と逸搏 QRS の形</strong>で即寄りに倒す。心室率が遅い・逸搏 QRS が寛い・血行不安定 — どれか一つでも即相談。</p></div>
+        </div>
+      </section>
+
+      <!-- §5 同日相談 -->
+      <section class="section-page" id="s5" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>📅 同日相談（今日中に循環器）</h2>
+
+        <p><strong>今夜カテ即ではない</strong> が、外来に逃がさず日中に方針を取る。</p>
+
+        <h3>虚血・AF・心不全</h3>
+        <ul>
+          <li><a class="wiki-link" href="疾患詳細/Wellens症候群.html">Wellens症候群</a>（V2–V3 の二相性 T / 深い T 陰性）</li>
+          <li>広範な ST 低下で NSTE-ACS を疑う所見 + トロポニン動態</li>
+          <li>新規心房細動</li>
+          <li>新規の著明な左室肥大所見 + 心不全 / 高血圧急症 / 腎障害</li>
+        </ul>
+
+        <h3>伝導障害で同日相談に入るもの</h3>
+        <p>判断に困うときは相談してよい。入院・転倒・失神の文脈では閾値を下げる。</p>
+        <ul>
+          <li><strong><a class="wiki-link" href="疾患詳細/二枝ブロック.html">二枝ブロック</a></strong>（右脚ブロック + 左脚前枝または後枝）<strong>+ Ⅰ度房室ブロック</strong> で、<strong>旧 ECG なし／比較不能</strong>、または <strong>転倒・失神・多薬併用・腎障害</strong> のいずれか → 同日循環器（夜間は施設ルール：オンコールに出すか、記録＋翌朝フォローか）</li>
+          <li><strong>Mobitz I（Wenckebach）</strong> で狭い QRS・血行安定でも、<strong>初見・原因不明・内服が濃い</strong> → 同日相談または翌朝までの明確なフォロー指示</li>
+        </ul>
+
+        <p><strong>即に寄せる／同日でよいの境界</strong>が迷ったら、<strong>血行と逸搏の形</strong>で即寄りに倒す。</p>
+      </section>
+
+      <!-- §6 読み方の順序 -->
+      <section class="section-page" id="s6" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>📖 読み方の順序（6 ステップ）</h2>
+
+        <p>「目に入った所見から飛びつく」ではなく、<strong>毎回同じ順</strong>で見る。</p>
+
+        <ol>
+          <li><strong>リズム</strong> — 洞調律か / P-QRS 関係 / 規則性 / レート</li>
+          <li><strong>軸</strong> — 正常 / 左軸偏位 / 右軸偏位（Ⅰ・aVF の向きで判定）</li>
+          <li><strong>間隔</strong> — PR（120–200 ms）、QRS（&lt;120 ms）、QT / QTc（男性 &lt;450、女性 &lt;460 ms 目安）</li>
+          <li><strong>ST-T</strong> — 上昇 / 低下 / T 波の向き、分布（前壁 / 下壁 / 側壁）</li>
+          <li><strong>房室ブロック</strong> — PR 延長、Wenckebach、Mobitz II、完全房室</li>
+          <li><strong>心室肥大</strong> — Sokolow-Lyon、Cornell、左房負荷所見</li>
+        </ol>
+
+        <h3>正常変異 vs 病的の区別</h3>
+        <ul>
+          <li><strong>早期再分極</strong> — 若年男性、V2–V5 で凹型 ST 上昇 + notch / slur — 通常良性</li>
+          <li><strong>若年男性の生理的 ST 上昇</strong> — 1–2 mm、症状なし、経時変化なし</li>
+          <li><strong>運動選手の徐脈・Ⅰ度 AVB・早期再分極</strong> — しばしば生理的</li>
+          <li>ただし<strong>失神既往・突然死家族歴</strong>があれば「正常変異」と決めつけない</li>
+        </ul>
+
+        <div class="callout callout-tip">
+          <div class="callout-title">過去の心電図と比較</div>
+          <div class="callout-body"><p>「新規変化」は強い情報。同じ所見でも<strong>過去にあれば慢性、なければ急性病態</strong>を疑う。電子カルテで必ず旧 ECG を呼び出す。</p></div>
+        </div>
+      </section>
+
+      <!-- §7 電話前に詰める -->
+      <section class="section-page" id="s7" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>📞 電話前に詰める（旧 ECG・内服・既往）</h2>
+
+        <p>「新規か？」に固執しない。<strong>夜間・休日・非内科医</strong>でも回せる順で、循環器に渡す材料を揃える。</p>
+
+        <h3>そろえるもの</h3>
+        <ul>
+          <li><strong>旧 ECG</strong>（電子カルテ・他院紹介状・お薬手帳の写真）</li>
+          <li><strong>内服</strong>（抗不整脈薬、QT 延長薬、β 遮断薬、Ca 拮抗薬、ジゴキシン、利尿薬、抗うつ薬）</li>
+          <li><strong>既往</strong>（心疾患、透析、ペースメーカ / ICD、失神・転倒、突然死家族歴）</li>
+          <li><strong>採血</strong>（K / Mg / Ca / Cr / トロポニン / TSH）</li>
+          <li><strong>バイタル</strong>と<strong>症状の有無</strong>（無症候か / 失神 / 動悸 / 胸痛）</li>
+        </ul>
+
+        <p>詳細は <a class="wiki-link" href="疾患詳細/旧心電図と内服確認.html">旧心電図と内服確認</a>。</p>
+
+        <h3>相談先の決め方</h3>
+        <p>入院中の初回判断は <strong>原則として循環器（院内）</strong>。退院後の振り分けは評価後。</p>
+        <p>→ <a class="wiki-link" href="疾患詳細/循環器コンサルトの判断.html">循環器コンサルトの判断</a></p>
+
+        <details class="callout callout-quote">
+          <summary>コラム：「入院だから全例 12 誘導」はエビデンスで絶対か</summary>
+          <div class="callout-body"><p>多くの病院では <strong>運用・安全網</strong>（無症候性虚血・伝導障害・AF の拾い、院内急変時のベースライン）として <strong>全例取得が慣習化</strong>している。一方、<strong>「全入院患者にルーチン 12 誘導を取れば転帰が改善する」</strong>と示した大規模 RCT のような強いエビデンスは乏しい。無症状一般成人のスクリーニング心電図については、米国予防サービス作業部会（USPSTF）も <strong>利益が不明確</strong>としている。 → <strong>「病院ルールだから取る」は正しいが、「ルールだから必ず臨床的に意味がある」とは限らない。</strong> 取ったあとの判断は別問題。</p></div>
+        </details>
+      </section>
+
+      <!-- §8 ピットフォール -->
+      <section class="section-page" id="s8" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>⚠️ ピットフォール</h2>
+
+        <ul>
+          <li><strong>ST 上昇だけを探す</strong>（de Winter・Wellens・後壁を見落とす）</li>
+          <li><strong>無症状だから安心する</strong>（糖尿病高齢者・鎮静下で症状が出ない）</li>
+          <li><strong>数値上の徐脈だけで循環器に回す／回さないを決める</strong></li>
+          <li><strong>旧 ECG を探さないまま「新規」と報告する</strong></li>
+          <li><strong>内服・既往（心疾患・透析・ペースメーカ）の確認漏れ</strong></li>
+          <li><strong>心電図自動診断レポートを鵜呑みにする</strong></li>
+          <li><strong>Wide QRS 頻拍を SVT + 変行と決めつけて Ca 拮抗薬を入れる</strong></li>
+          <li><strong>新規 LBBB を「ただの脚ブロック」と流す</strong>（症状あれば STEMI 等価）</li>
+        </ul>
+      </section>
+
+      <!-- §9 出典・リンク -->
+      <section class="section-page" id="s9" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>📚 出典・リンク</h2>
+
+        <h3>主要文献</h3>
+        <ul>
+          <li>2023 ESC ACS Guidelines. Eur Heart J. 2023;44(38):3720.</li>
+          <li>2018 ACC/AHA/HRS Guideline on Bradycardia and Cardiac Conduction Delay. JACC.</li>
+          <li>2017 ACC/AHA/HRS Syncope Guideline. JACC.</li>
+          <li>Fourth Universal Definition of Myocardial Infarction. Circulation. 2018;138:e618.</li>
+          <li>USPSTF. Screening for Cardiovascular Disease With Electrocardiography.</li>
+        </ul>
+
+        <h3>このページから張るリンク</h3>
+        <ul>
+          <li><a class="wiki-link" href="疾患詳細/STEMI.html">STEMI</a></li>
+          <li><a class="wiki-link" href="疾患詳細/de Winterパターン.html">de Winterパターン</a></li>
+          <li><a class="wiki-link" href="疾患詳細/Wellens症候群.html">Wellens症候群</a></li>
+          <li><a class="wiki-link" href="疾患詳細/後壁梗塞.html">後壁梗塞</a></li>
+          <li><a class="wiki-link" href="疾患詳細/高度房室ブロック.html">高度房室ブロック</a></li>
+          <li><a class="wiki-link" href="疾患詳細/交代性脚ブロック.html">交代性脚ブロック</a></li>
+          <li><a class="wiki-link" href="疾患詳細/二枝ブロック.html">二枝ブロック</a></li>
+          <li><a class="wiki-link" href="疾患詳細/高K血症心電図.html">高K血症心電図</a></li>
+          <li><a class="wiki-link" href="疾患詳細/Brugada心電図.html">Brugada心電図</a></li>
+          <li><a class="wiki-link" href="疾患詳細/QT延長.html">QT延長</a></li>
+          <li><a class="wiki-link" href="疾患詳細/旧心電図と内服確認.html">旧心電図と内服確認</a></li>
+          <li><a class="wiki-link" href="疾患詳細/循環器コンサルトの判断.html">循環器コンサルトの判断</a></li>
+        </ul>
+
+        <p>#ER #救急 #心電図 #ECG #入院時心電図 #循環器 #当直 #夜間</p>
+      </section>
+
+    </article>
+  </main>
+
+  <nav class="hokuto-bottom">
+    <button class="hokuto-bottom__btn" type="button" id="navBack">
+      <span class="hokuto-bottom__icon">←</span><span>戻る</span>
+    </button>
+    <a class="hokuto-bottom__btn" href="ツール.html">
+      <span class="hokuto-bottom__icon">⚙</span><span>ツール</span>
+    </a>
+    <a class="hokuto-bottom__btn" href="index.html">
+      <span class="hokuto-bottom__icon">⌂</span><span>ホーム</span>
+    </a>
   </nav>
-  <article class="note-shell">
-    <header class="note-header">
-      <h1>入院時心電図</h1>
-      <p class="source-badge">元: 臨床/ER/入院時心電図.md</p>
-    </header>
-    <details class="toc"><summary>目次（7 セクション）</summary><ol><li><a href="#即相談今すぐ電話">即相談（今すぐ電話）</a></li><li><a href="#同日相談今日中に循環器">同日相談（今日中に循環器）</a></li><li><a href="#電話前に詰める旧ecg・内服・既往">電話前に詰める（旧ECG・内服・既往）</a></li><li><a href="#相談先の決め方">相談先の決め方</a></li><li><a href="#ピットフォール">ピットフォール</a></li><li><a href="#出典">出典</a></li><li><a href="#このページから張るリンク">このページから張るリンク</a></li></ol></details>
-    <div class="md-body">
-<p>#ER #救急 #心電図 #ECG #入院時心電図 #循環器 #当直 #夜間</p>
-<div class="callout callout-summary">
-<div class="callout-title">このページの使い方</div>
-<div class="callout-body"><ol>
-<li><a class="wiki-link" href="入院時心電図.html#%E5%8D%B3%E7%9B%B8%E8%AB%87%E4%BB%8A%E3%81%99%E3%81%90%E9%9B%BB%E8%A9%B1">#即相談（今すぐ電話）</a> にあたるか</li>
-<li>なければ <a class="wiki-link" href="入院時心電図.html#%E5%90%8C%E6%97%A5%E7%9B%B8%E8%AB%87%E4%BB%8A%E6%97%A5%E4%B8%AD%E3%81%AB%E5%BE%AA%E7%92%B0%E5%99%A8">#同日相談（今日中に循環器）</a></li>
-<li>迷えば <a class="wiki-link" href="疾患詳細/旧心電図と内服確認.html">旧心電図と内服確認</a> で電話用の情報を詰める</li>
-<li>振り分けは <a class="wiki-link" href="疾患詳細/循環器コンサルトの判断.html">循環器コンサルトの判断</a></li>
-</ol></div>
-</div>
-<details class="callout callout-quote">
-<summary>コラム：「入院だから全例12誘導」はエビデンスで絶対か</summary><div class="callout-body"><p>多くの病院では <strong>運用・安全網</strong>（無症候性虚血・伝導障害・AFの拾い、院内急変時のベースライン）として <strong>全例取得が慣習化</strong>している。一方、<strong>「全入院患者にルーチン12誘導を取れば転帰が改善する」</strong>と示した大規模RCTのような強いエビデンスは乏しい。無症状一般成人のスクリーニング心電図については、米国予防サービス作業部会（USPSTF）も <strong>利益が不明確</strong>としている。 → <strong>「病院ルールだから取る」は正しいが、「ルールだから必ず臨床的に意味がある」とは限らない。</strong> 取ったあとの判断は別問題。</p></div>
-</details>
-<hr>
-<h2 id="即相談今すぐ電話">即相談（今すぐ電話）</h2>
-<p><strong>無症状でも</strong> 以下があれば、夜間・休日でも循環器オンコールを検討。</p>
-<p><strong>虚血・電解質・チャネル病</strong></p>
-<ul>
-<li><strong>VT / VF</strong>（モニター上で明らかなため詳細リンクは省略）</li>
-<li><a class="wiki-link" href="疾患詳細/STEMI.html">STEMI</a> 基準のST上昇</li>
-<li><a class="wiki-link" href="疾患詳細/de Winterパターン.html">de Winterパターン</a></li>
-<li><a class="wiki-link" href="疾患詳細/後壁梗塞.html">後壁梗塞</a>（V1–V4のST低下 + 高いR波 / 直立T）</li>
-<li><a class="wiki-link" href="疾患詳細/高K血症心電図.html">高K血症心電図</a> の進行所見</li>
-<li><a class="wiki-link" href="疾患詳細/Brugada心電図.html">Brugada心電図</a> 1型様（新規・強疑）</li>
-<li><a class="wiki-link" href="疾患詳細/QT延長.html">QT延長</a> で著明（QTc ≥500 ms）＋ 誘発因子</li>
-</ul>
-<p><strong>伝導障害で即相談に入るもの</strong></p>
-<ul>
-<li><strong>完全房室ブロック（Ⅲ度）</strong> → <a class="wiki-link" href="疾患詳細/高度房室ブロック.html">高度房室ブロック</a></li>
-<li><strong>Mobitz II 型</strong>・<strong>2:1 房室ブロック</strong>・<strong>連続脱落の高度房室ブロック</strong> → <a class="wiki-link" href="疾患詳細/高度房室ブロック.html">高度房室ブロック</a></li>
-<li><strong><a class="wiki-link" href="疾患詳細/交代性脚ブロック.html">交代性脚ブロック</a></strong>（RBBB と LBBB が時系列で入れ替わる等）</li>
-<li>上記に関わらず <strong>血行不安定</strong>・<strong>心室率が著しく遅い</strong>・<strong>逸搏QRSが寛い</strong> のいずれかを伴う徐脈</li>
-</ul>
-<div class="callout callout-danger">
-<div class="callout-title">最短の行動</div>
-<div class="callout-body"><ol>
-<li>循環器オンコール</li>
-<li>同時に：モニター、末梢ルート、採血（<strong>K / Mg / Ca / トロポニン</strong>）</li>
-<li>原因の手掛かり（<a class="wiki-link" href="疾患詳細/旧心電図と内服確認.html">旧心電図と内服確認</a>）</li>
-</ol></div>
-</div>
-<hr>
-<h2 id="同日相談今日中に循環器">同日相談（今日中に循環器）</h2>
-<p><strong>今夜カテ即ではない</strong> が、外来に逃がさず日中に方針を取る。</p>
-<p><strong>虚血・AF・心不全</strong></p>
-<ul>
-<li><a class="wiki-link" href="疾患詳細/Wellens症候群.html">Wellens症候群</a>（V2–V3の二相性T / 深いT陰性）</li>
-<li>広範なST低下で NSTE-ACS を疑う所見 + トロポニン動態</li>
-<li>新規心房細動</li>
-<li>新規の著明な左室肥大所見 + 心不全 / 高血圧急症 / 腎障害</li>
-</ul>
-<p><strong>伝導障害で同日相談に入るもの</strong></p>
-<p>判断に困うときは相談してよい。入院・転倒・失神の文脈では閾値を下げる。</p>
-<ul>
-<li><strong><a class="wiki-link" href="疾患詳細/二枝ブロック.html">二枝ブロック</a></strong>（右脚ブロック + 左脚前枝または後枝）<strong>+ Ⅰ度房室ブロック</strong> で、<strong>旧ECGなし／比較不能</strong>、または <strong>転倒・失神・多薬併用・腎障害</strong> のいずれか → 同日循環器（夜間は施設ルール：オンコールに出すか、記録＋翌朝フォローか）</li>
-<li><strong>Mobitz I（Wenckebach）</strong> で狭いQRS・血行安定でも、<strong>初見・原因不明・内服が濃い</strong> → 同日相談または翌朝までの明確なフォロー指示</li>
-</ul>
-<p><strong>即に寄せる／同日でよいの境界</strong>が迷ったら、<strong>血行と逸搏の形</strong>で即寄りに倒す。</p>
-<hr>
-<h2 id="電話前に詰める旧ecg・内服・既往">電話前に詰める（旧ECG・内服・既往）</h2>
-<p>「新規か？」に固執しない。<strong>夜間・休日・非内科医</strong>でも回せる順で、循環器に渡す材料を揃える。</p>
-<p>詳細は <a class="wiki-link" href="疾患詳細/旧心電図と内服確認.html">旧心電図と内服確認</a>。</p>
-<hr>
-<h2 id="相談先の決め方">相談先の決め方</h2>
-<p>入院中の初回判断は <strong>原則として循環器（院内）</strong>。退院後の振り分けは評価後。</p>
-<p><a class="wiki-link" href="疾患詳細/循環器コンサルトの判断.html">循環器コンサルトの判断</a></p>
-<hr>
-<h2 id="ピットフォール">ピットフォール</h2>
-<ul>
-<li>ST上昇だけを探す（de Winter・Wellens・後壁を見落とす）</li>
-<li>無症状だから安心する（糖尿病高齢者・鎮静下で症状が出ない）</li>
-<li>数値上の徐脈だけで循環器に回す／回さないを決める</li>
-<li>旧ECGを探さないまま「新規」と報告する</li>
-<li>内服・既往（心疾患・透析・ペースメーカ）の確認漏れ</li>
-<li>心電図自動診断レポートを鵜呑みにする</li>
-</ul>
-<hr>
-<h2 id="出典">出典</h2>
-<ul>
-<li>2023 ESC ACS Guidelines. Eur Heart J. 2023;44(38):3720. &lt;https://academic.oup.com/eurheartj/article/44/38/3720/7243210&gt;</li>
-<li>2018 ACC/AHA/HRS Guideline on Bradycardia and Cardiac Conduction Delay. JACC. &lt;https://www.jacc.org/doi/10.1016/j.jacc.2018.10.044&gt;</li>
-<li>2017 ACC/AHA/HRS Syncope Guideline. JACC. &lt;https://www.jacc.org/doi/10.1016/j.jacc.2017.03.003&gt;</li>
-<li>Fourth Universal Definition of Myocardial Infarction. Circulation. 2018;138:e618.</li>
-<li>USPSTF. Screening for Cardiovascular Disease With Electrocardiography. &lt;https://www.uspreventiveservicestaskforce.org/uspstf/recommendation/cardiovascular-disease-screening-with-electrocardiography&gt;</li>
-</ul>
-<hr>
-<h2 id="このページから張るリンク">このページから張るリンク</h2>
-<ul>
-<li><a class="wiki-link" href="疾患詳細/STEMI.html">STEMI</a></li>
-<li><a class="wiki-link" href="疾患詳細/de Winterパターン.html">de Winterパターン</a></li>
-<li><a class="wiki-link" href="疾患詳細/Wellens症候群.html">Wellens症候群</a></li>
-<li><a class="wiki-link" href="疾患詳細/後壁梗塞.html">後壁梗塞</a></li>
-<li><a class="wiki-link" href="疾患詳細/高度房室ブロック.html">高度房室ブロック</a></li>
-<li><a class="wiki-link" href="疾患詳細/交代性脚ブロック.html">交代性脚ブロック</a></li>
-<li><a class="wiki-link" href="疾患詳細/二枝ブロック.html">二枝ブロック</a></li>
-<li><a class="wiki-link" href="疾患詳細/高K血症心電図.html">高K血症心電図</a></li>
-<li><a class="wiki-link" href="疾患詳細/Brugada心電図.html">Brugada心電図</a></li>
-<li><a class="wiki-link" href="疾患詳細/QT延長.html">QT延長</a></li>
-<li><a class="wiki-link" href="疾患詳細/旧心電図と内服確認.html">旧心電図と内服確認</a></li>
-<li><a class="wiki-link" href="疾患詳細/循環器コンサルトの判断.html">循環器コンサルトの判断</a></li>
-</ul>
-    </div>
-    <footer class="page-footer">
-      <a href="index.html">↑ 主訴ナビへ戻る</a>
-    </footer>
-  </article>
+
+  <script>
+  (function(){
+    const menu = document.getElementById('sectionMenu');
+    const pages = document.querySelectorAll('.section-page');
+    const titleH1 = document.querySelector('.page-title');
+
+    function showSection(id) {
+      menu.hidden = true;
+      if (titleH1) titleH1.hidden = true;
+      pages.forEach(p => p.hidden = (p.id !== id));
+      window.scrollTo(0, 0);
+    }
+    function showMenu(scrollTarget) {
+      menu.hidden = false;
+      if (titleH1) titleH1.hidden = false;
+      pages.forEach(p => p.hidden = true);
+      if (scrollTarget) {
+        if (scrollTarget.tagName === 'DETAILS') scrollTarget.open = true;
+        scrollTarget.scrollIntoView({behavior: 'instant', block: 'start'});
+      } else {
+        window.scrollTo(0, 0);
+      }
+    }
+    function syncFromHash() {
+      const id = (location.hash || '').replace('#','');
+      const target = id ? document.getElementById(id) : null;
+      if (target && target.classList.contains('section-page')) {
+        showSection(id);
+      } else if (target) {
+        showMenu(target);
+      } else {
+        showMenu();
+      }
+    }
+
+    window.addEventListener('hashchange', syncFromHash);
+    document.querySelectorAll('.back-to-menu').forEach(b => {
+      b.addEventListener('click', () => { history.pushState(null,'',location.pathname); showMenu(); });
+    });
+    const navBack = document.getElementById('navBack');
+    if (navBack) navBack.addEventListener('click', () => {
+      if (window.history.length > 1) history.back();
+      else window.location.href = 'index.html';
+    });
+
+    syncFromHash();
+  })();
+  </script>
 </body>
 </html>

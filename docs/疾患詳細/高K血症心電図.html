@@ -4,105 +4,235 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="color-scheme" content="light dark" />
-  <title>高K血症心電図</title>
+  <title>高K血症心電図 | ER ノート</title>
   <link rel="stylesheet" href="../er-note.css" />
 </head>
 <body>
-  <nav class="site-bar">
-    <a class="site-bar__back" href="../index.html">← 主訴ナビ</a>
-    <span class="site-bar__title">高K血症心電図</span>
+  <header class="hokuto-top">
+    <a class="hokuto-top__btn" href="../薬剤情報.html">
+      <span class="hokuto-top__icon">℞</span><span>薬剤情報</span>
+    </a>
+    <a class="hokuto-top__btn" href="../表計算.html">
+      <span class="hokuto-top__icon">⊞</span><span>表計算</span>
+    </a>
+  </header>
+
+  <main class="hokuto-main">
+    <article class="note-shell">
+      <h1 class="page-title">高K血症心電図</h1>
+
+      <!-- 即時アクションヘッダー（常時 sticky） -->
+      <div class="action-header">
+        <div class="action-header__title">⚡ これを見たら○○</div>
+        <ol class="action-header__list">
+          <li><strong>テント T → 幅広 QRS → sine wave → 心停止</strong> の進行を見極める</li>
+          <li><strong>まずグルコン酸 Ca</strong>（<strong>心筋膜安定化、心電図異常あれば即時</strong>、採血を待たない）</li>
+          <li><strong>ブドウ糖 + インスリン + β2 刺激薬</strong>（K の細胞内シフト）で時間を稼ぐ</li>
+          <li><strong>透析考慮</strong>（K &gt; 6.5 / 急性腎障害 / 心電図異常）— 腎内科・ICU 早期相談</li>
+        </ol>
+      </div>
+
+      <!-- メニュータイル -->
+      <nav class="section-tiles" id="sectionMenu">
+        <a class="section-tile" href="#s1"><span class="section-tile__no">📈</span><span class="section-tile__name">心電図の進行段階</span></a>
+        <a class="section-tile" href="#s2"><span class="section-tile__no">🖼️</span><span class="section-tile__name">図解リンク<br><small>心電図.com</small></span></a>
+        <a class="section-tile" href="#s3"><span class="section-tile__no">💉</span><span class="section-tile__name">即座の治療<br><small>3 ステップ</small></span></a>
+        <a class="section-tile" href="#s4"><span class="section-tile__no">🔍</span><span class="section-tile__name">同時にやる<br><small>原因・採血</small></span></a>
+        <a class="section-tile" href="#s5"><span class="section-tile__no">🆚</span><span class="section-tile__name">鑑別<br><small>見える心電図</small></span></a>
+        <a class="section-tile" href="#s6"><span class="section-tile__no">⚠️</span><span class="section-tile__name">ピットフォール</span></a>
+        <a class="section-tile" href="#s7"><span class="section-tile__no">📚</span><span class="section-tile__name">出典・関連</span></a>
+      </nav>
+
+      <!-- 関連主訴（双方向リンク） -->
+      <details class="sub-fold" id="related-symptoms">
+        <summary>📞 この疾患が該当する主訴</summary>
+        <div class="sub-fold__body">
+          <ul>
+            <li><a class="wiki-link" href="../入院時心電図.html">入院時心電図</a> — 12 誘導の進行所見をスクリーニング</li>
+            <li><a class="wiki-link" href="../意識障害.html">意識障害</a> — 重症高K血症（不整脈・低灌流）で意識障害を来す</li>
+          </ul>
+        </div>
+      </details>
+
+      <!-- §1 心電図の進行段階 -->
+      <section class="section-page" id="s1" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>📈 心電図の進行段階</h2>
+        <div class="table-wrap"><table>
+          <thead><tr><th>段階</th><th>心電図</th><th>目安 K（参考値、個人差大）</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>尖鋭・対称・狭いT波（テント状T）</td><td>5.5–6.5 mEq/L</td></tr>
+            <tr><td>2</td><td>PR 延長、P 波低平化〜消失</td><td>6.5–7.5</td></tr>
+            <tr><td>3</td><td>QRS 幅広化、伝導遅延</td><td>7.0–8.0</td></tr>
+            <tr><td>4</td><td>サインウェーブ、心室細動・停止</td><td>≥8–9</td></tr>
+          </tbody>
+        </table></div>
+        <div class="callout callout-warning">
+          <div class="callout-title">数値依存しない</div>
+          <div class="callout-body"><p>心電図は <strong>数値より早く悪化する</strong>ことがある。進行所見を見たら <strong>血液ガスや生化学を待たない</strong>。</p></div>
+        </div>
+      </section>
+
+      <!-- §2 図解リンク -->
+      <section class="section-page" id="s2" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🖼️ 図解リンク（心電図.com）</h2>
+        <ul>
+          <li><a class="wiki-link" href="https://sindenzu.com/hyperkalemia/">高カリウム血症</a></li>
+        </ul>
+      </section>
+
+      <!-- §3 即座の治療 -->
+      <section class="section-page" id="s3" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>💉 即座の治療</h2>
+
+        <h3>1. 心筋保護（1–3分）</h3>
+        <ul>
+          <li><strong>グルコン酸カルシウム 10% 10 mL</strong>（1アンプル）を 2–5分で静注</li>
+          <li>効果 10–20分、改善なければ 5–10分後に再投与可</li>
+          <li>中心静脈が使えるなら塩化カルシウムでも可</li>
+          <li>ジギタリス中毒疑いではカルシウムは慎重投与（ゆっくり）</li>
+        </ul>
+
+        <h3>2. K を細胞内に移す（30–60分）</h3>
+        <ul>
+          <li><strong>インスリン 10単位 + 50% ブドウ糖 50 mL</strong> 静注</li>
+          <li>血糖 &lt;250 mg/dL なら必ずブドウ糖併用、以降の低血糖を監視</li>
+          <li><strong>サルブタモール吸入 10–20 mg</strong>（大量、効くまで15分）</li>
+          <li>アシドーシスがあれば <strong>重炭酸ナトリウム</strong></li>
+        </ul>
+
+        <h3>3. K を体外に出す</h3>
+        <ul>
+          <li>ループ利尿薬（腎機能が残っていれば）</li>
+          <li>陽イオン交換樹脂（新規製剤 patiromer / ZS-9 を含む。急性期の主役ではない）</li>
+          <li><strong>透析</strong>：無尿 / 乏尿、薬剤で下がらない、心電図が重症</li>
+        </ul>
+
+        <div class="callout callout-tip">
+          <div class="callout-title">救急外来での流れ</div>
+          <div class="callout-body"><p>ECG で所見 → モニター → Ca 静注 → インスリン＋糖 → 採血確認 → β2吸入 → 腎内科 / ICU 相談</p></div>
+        </div>
+      </section>
+
+      <!-- §4 同時にやる -->
+      <section class="section-page" id="s4" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🔍 同時にやる</h2>
+        <ul>
+          <li>原因検索：AKI / CKD、RAAS阻害薬、カリウム保持性利尿薬、K補充、横紋筋融解、溶血、腫瘍崩壊、副腎不全</li>
+          <li>採血：K / Mg / Ca、Cr、CK、LDH、血糖、血液ガス</li>
+          <li>ECG 再検（治療後の改善確認）</li>
+        </ul>
+      </section>
+
+      <!-- §5 鑑別 -->
+      <section class="section-page" id="s5" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🆚 鑑別（高K血症に「見える」心電図）</h2>
+        <ul>
+          <li><a class="wiki-link" href="de Winterパターン.html">de Winterパターン</a>：T 波の形が違う（上行性STが主役）</li>
+          <li>急性心膜炎</li>
+          <li>早期再分極</li>
+        </ul>
+      </section>
+
+      <!-- §6 ピットフォール -->
+      <section class="section-page" id="s6" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>⚠️ ピットフォール</h2>
+        <ul>
+          <li>採血結果を待ってから動く</li>
+          <li>偽性高K（溶血・採血困難・白血球 /血小板 著増）で焦る／見落とす</li>
+          <li>インスリン＋糖のあと血糖監視を忘れる（遅発性低血糖）</li>
+          <li>「心電図変化なし」を理由に介入しない（透析例・急速上昇例は危険）</li>
+        </ul>
+      </section>
+
+      <!-- §7 出典・関連 -->
+      <section class="section-page" id="s7" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>📚 出典・関連</h2>
+        <h3>出典</h3>
+        <ul>
+          <li>Long B et al. Hyperkalemia: management in the ED. J Emerg Med. 2018.</li>
+          <li>PMC expert panel consensus. &lt;https://pmc.ncbi.nlm.nih.gov/articles/PMC8485984/&gt;</li>
+          <li>UK Renal Association / KDIGO guidelines.</li>
+        </ul>
+        <h3>関連</h3>
+        <ul>
+          <li><a class="wiki-link" href="../入院時心電図.html">入院時心電図</a></li>
+          <li><a class="wiki-link" href="高度房室ブロック.html">高度房室ブロック</a></li>
+          <li><a class="wiki-link" href="STEMI.html">STEMI</a></li>
+        </ul>
+      </section>
+
+    </article>
+  </main>
+
+  <nav class="hokuto-bottom">
+    <button class="hokuto-bottom__btn" type="button" id="navBack">
+      <span class="hokuto-bottom__icon">←</span><span>戻る</span>
+    </button>
+    <a class="hokuto-bottom__btn" href="../ツール.html">
+      <span class="hokuto-bottom__icon">⚙</span><span>ツール</span>
+    </a>
+    <a class="hokuto-bottom__btn" href="../index.html">
+      <span class="hokuto-bottom__icon">⌂</span><span>ホーム</span>
+    </a>
   </nav>
-  <article class="note-shell">
-    <header class="note-header">
-      <h1>高K血症心電図</h1>
-      <p class="source-badge">元: 臨床/ER/疾患詳細/高K血症心電図.md</p>
-    </header>
-    <details class="toc"><summary>目次（8 セクション）</summary><ol><li><a href="#図解リンク心電図com">図解リンク（心電図.com）</a></li><li><a href="#心電図の進行段階">心電図の進行段階</a></li><li><a href="#即座の治療">即座の治療</a></li><li><a href="#同時にやる">同時にやる</a></li><li><a href="#鑑別高k血症に見える心電図">鑑別（高K血症に「見える」心電図）</a></li><li><a href="#ピットフォール">ピットフォール</a></li><li><a href="#出典">出典</a></li><li><a href="#関連">関連</a></li></ol></details>
-    <div class="md-body">
-<p>#ER #心電図 #電解質 #高K血症 #救急</p>
-<div class="callout callout-summary">
-<div class="callout-title">一行で</div>
-<div class="callout-body"><p><strong>尖鋭T / PR延長 / QRS延長 / サインウェーブ のいずれかを見たら、採血結果を待たずにカルシウム準備。</strong></p></div>
-</div>
-<p>戻る: <a class="wiki-link" href="../入院時心電図.html">入院時心電図</a></p>
-<hr>
-<h2 id="図解リンク心電図com">図解リンク（心電図.com）</h2>
-<ul>
-<li><a class="wiki-link" href="https://sindenzu.com/hyperkalemia/">高カリウム血症</a></li>
-</ul>
-<hr>
-<h2 id="心電図の進行段階">心電図の進行段階</h2>
-<div class="table-wrap"><table><thead><tr><th>段階</th><th>心電図</th><th>目安 K（参考値、個人差大）</th></tr></thead><tbody><tr><td>1</td><td>尖鋭・対称・狭いT波（テント状T）</td><td>5.5–6.5 mEq/L</td></tr><tr><td>2</td><td>PR 延長、P 波低平化〜消失</td><td>6.5–7.5</td></tr><tr><td>3</td><td>QRS 幅広化、伝導遅延</td><td>7.0–8.0</td></tr><tr><td>4</td><td>サインウェーブ、心室細動・停止</td><td>≥8–9</td></tr></tbody></table></div>
-<div class="callout callout-warning">
-<div class="callout-title">数値依存しない</div>
-<div class="callout-body"><p>心電図は <strong>数値より早く悪化する</strong>ことがある。進行所見を見たら <strong>血液ガスや生化学を待たない</strong>。</p></div>
-</div>
-<hr>
-<h2 id="即座の治療">即座の治療</h2>
-<h3 id="1-心筋保護13分">1. 心筋保護（1–3分）</h3>
-<ul>
-<li><strong>グルコン酸カルシウム 10% 10 mL</strong>（1アンプル）を 2–5分で静注</li>
-<li>効果 10–20分、改善なければ 5–10分後に再投与可</li>
-<li>中心静脈が使えるなら塩化カルシウムでも可</li>
-<li>ジギタリス中毒疑いではカルシウムは慎重投与（ゆっくり）</li>
-</ul>
-<h3 id="2-k-を細胞内に移す3060分">2. K を細胞内に移す（30–60分）</h3>
-<ul>
-<li><strong>インスリン 10単位 + 50% ブドウ糖 50 mL</strong> 静注</li>
-<li>血糖 &lt;250 mg/dL なら必ずブドウ糖併用、以降の低血糖を監視</li>
-<li><strong>サルブタモール吸入 10–20 mg</strong>（大量、効くまで15分）</li>
-<li>アシドーシスがあれば <strong>重炭酸ナトリウム</strong></li>
-</ul>
-<h3 id="3-k-を体外に出す">3. K を体外に出す</h3>
-<ul>
-<li>ループ利尿薬（腎機能が残っていれば）</li>
-<li>陽イオン交換樹脂（新規製剤 patiromer / ZS-9 を含む。急性期の主役ではない）</li>
-<li><strong>透析</strong>：無尿 / 乏尿、薬剤で下がらない、心電図が重症</li>
-</ul>
-<div class="callout callout-tip">
-<div class="callout-title">救急外来での流れ</div>
-<div class="callout-body"><p>ECG で所見 → モニター → Ca 静注 → インスリン＋糖 → 採血確認 → β2吸入 → 腎内科 / ICU 相談</p></div>
-</div>
-<hr>
-<h2 id="同時にやる">同時にやる</h2>
-<ul>
-<li>原因検索：AKI / CKD、RAAS阻害薬、カリウム保持性利尿薬、K補充、横紋筋融解、溶血、腫瘍崩壊、副腎不全</li>
-<li>採血：K / Mg / Ca、Cr、CK、LDH、血糖、血液ガス</li>
-<li>ECG 再検（治療後の改善確認）</li>
-</ul>
-<hr>
-<h2 id="鑑別高k血症に見える心電図">鑑別（高K血症に「見える」心電図）</h2>
-<ul>
-<li><a class="wiki-link" href="de Winterパターン.html">de Winterパターン</a>：T 波の形が違う（上行性STが主役）</li>
-<li>急性心膜炎</li>
-<li>早期再分極</li>
-</ul>
-<hr>
-<h2 id="ピットフォール">ピットフォール</h2>
-<ul>
-<li>採血結果を待ってから動く</li>
-<li>偽性高K（溶血・採血困難・白血球 /血小板 著増）で焦る／見落とす</li>
-<li>インスリン＋糖のあと血糖監視を忘れる（遅発性低血糖）</li>
-<li>「心電図変化なし」を理由に介入しない（透析例・急速上昇例は危険）</li>
-</ul>
-<hr>
-<h2 id="出典">出典</h2>
-<ul>
-<li>Long B et al. Hyperkalemia: management in the ED. J Emerg Med. 2018.</li>
-<li>PMC expert panel consensus. &lt;https://pmc.ncbi.nlm.nih.gov/articles/PMC8485984/&gt;</li>
-<li>UK Renal Association / KDIGO guidelines.</li>
-</ul>
-<hr>
-<h2 id="関連">関連</h2>
-<ul>
-<li><a class="wiki-link" href="../入院時心電図.html">入院時心電図</a></li>
-<li><a class="wiki-link" href="高度房室ブロック.html">高度房室ブロック</a></li>
-<li><a class="wiki-link" href="STEMI.html">STEMI</a></li>
-</ul>
-    </div>
-    <footer class="page-footer">
-      <a href="../index.html">↑ 主訴ナビへ戻る</a>
-    </footer>
-  </article>
+
+  <script>
+  (function(){
+    const menu = document.getElementById('sectionMenu');
+    const pages = document.querySelectorAll('.section-page');
+    const titleH1 = document.querySelector('.page-title');
+    const relatedSymp = document.getElementById('related-symptoms');
+
+    function showSection(id) {
+      menu.hidden = true;
+      if (titleH1) titleH1.hidden = true;
+      if (relatedSymp) relatedSymp.hidden = true;
+      pages.forEach(p => p.hidden = (p.id !== id));
+      window.scrollTo(0, 0);
+    }
+    function showMenu(scrollTarget) {
+      menu.hidden = false;
+      if (titleH1) titleH1.hidden = false;
+      if (relatedSymp) relatedSymp.hidden = false;
+      pages.forEach(p => p.hidden = true);
+      if (scrollTarget) {
+        if (scrollTarget.tagName === 'DETAILS') scrollTarget.open = true;
+        scrollTarget.scrollIntoView({behavior: 'instant', block: 'start'});
+      } else {
+        window.scrollTo(0, 0);
+      }
+    }
+    function syncFromHash() {
+      const id = (location.hash || '').replace('#','');
+      const target = id ? document.getElementById(id) : null;
+      if (target && target.classList.contains('section-page')) {
+        showSection(id);
+      } else if (target) {
+        showMenu(target);
+      } else {
+        showMenu();
+      }
+    }
+
+    window.addEventListener('hashchange', syncFromHash);
+    document.querySelectorAll('.back-to-menu').forEach(b => {
+      b.addEventListener('click', () => { history.pushState(null,'',location.pathname); showMenu(); });
+    });
+    const navBack = document.getElementById('navBack');
+    if (navBack) navBack.addEventListener('click', () => {
+      if (window.history.length > 1) history.back();
+      else window.location.href = '../index.html';
+    });
+
+    syncFromHash();
+  })();
+  </script>
 </body>
 </html>

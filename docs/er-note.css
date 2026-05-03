@@ -352,3 +352,289 @@ tr:last-child td { border-bottom: none; }
 
   ul, ol { padding-left: 1.15rem; }
 }
+
+/* ===== HOKUTO 風 3 ゾーンレイアウト ===== */
+.hokuto-top {
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 0.6rem;
+  padding-top: calc(0.35rem + env(safe-area-inset-top));
+  background: var(--bar-bg);
+  -webkit-backdrop-filter: saturate(180%) blur(10px);
+  backdrop-filter: saturate(180%) blur(10px);
+  border-bottom: 1px solid var(--border);
+}
+.hokuto-top__btn {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 72px;
+  padding: 6px 10px;
+  border-radius: 12px;
+  text-decoration: none;
+  background: var(--accent-weak);
+  color: var(--accent);
+  font-size: 0.74rem;
+  font-weight: 700;
+  line-height: 1.15;
+  white-space: nowrap;
+}
+.hokuto-top__btn:active { transform: scale(0.96); }
+.hokuto-top__icon {
+  font-size: 1.15rem;
+  line-height: 1;
+  margin-bottom: 2px;
+}
+
+.hokuto-main {
+  padding-top: calc(60px + env(safe-area-inset-top));
+  padding-bottom: calc(76px + env(safe-area-inset-bottom));
+  min-height: 100vh;
+}
+.hokuto-main .note-shell {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 1rem 1rem 1.5rem;
+}
+
+.hokuto-bottom {
+  position: fixed;
+  inset: auto 0 0 0;
+  z-index: 50;
+  display: flex;
+  align-items: stretch;
+  height: calc(64px + env(safe-area-inset-bottom));
+  padding-bottom: env(safe-area-inset-bottom);
+  background: var(--bar-bg);
+  -webkit-backdrop-filter: saturate(180%) blur(10px);
+  backdrop-filter: saturate(180%) blur(10px);
+  border-top: 1px solid var(--border);
+}
+.hokuto-bottom__btn {
+  flex: 1;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  font-size: 0.7rem;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: none;
+  font-family: inherit;
+  padding: 4px 0;
+}
+.hokuto-bottom__btn:active { color: var(--accent); transform: scale(0.97); }
+.hokuto-bottom__icon {
+  font-size: 1.4rem;
+  line-height: 1;
+  margin-bottom: 2px;
+}
+
+/* ページタイトル（メニュー時のみ表示する大きい見出し） */
+.page-title {
+  margin: 0.5rem 0 1rem;
+  font-size: 1.6rem;
+  text-align: center;
+}
+
+/* §1〜§9 タイル（メニュー画面） */
+.section-tiles {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 10px;
+  margin: 1rem 0 1.5rem;
+}
+.section-tiles[hidden] { display: none; }
+.section-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 96px;
+  padding: 12px 10px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+  text-decoration: none;
+  color: var(--text);
+  transition: transform 0.1s ease, background 0.15s ease, border-color 0.15s ease;
+}
+.section-tile:hover { background: var(--card-hover); border-color: var(--accent); }
+.section-tile:active { transform: scale(0.97); background: var(--accent-weak); }
+.section-tile__no {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--accent);
+  line-height: 1;
+}
+.section-tile__name {
+  margin-top: 0.45rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-align: center;
+  line-height: 1.25;
+}
+
+/* セクション本体 */
+.section-page[hidden] { display: none; }
+.section-page > h2 {
+  margin-top: 0.4rem;
+}
+.back-to-menu {
+  position: sticky;
+  top: calc(60px + env(safe-area-inset-top));
+  display: inline-flex;
+  align-items: center;
+  padding: 0.4rem 0.85rem;
+  margin: 0 0 0.8rem;
+  border: none;
+  border-radius: 999px;
+  background: var(--accent-weak);
+  color: var(--accent);
+  font-weight: 700;
+  font-size: 0.88rem;
+  font-family: inherit;
+  cursor: pointer;
+  z-index: 40;
+  box-shadow: var(--shadow);
+}
+.back-to-menu:active { transform: scale(0.97); }
+
+/* §X.Y サブセクション折りたたみ */
+.sub-fold {
+  margin: 0.6rem 0;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+.sub-fold > summary {
+  cursor: pointer;
+  list-style: none;
+  padding: 14px 14px;
+  font-weight: 700;
+  font-size: 0.98rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 44px;
+}
+.sub-fold > summary::-webkit-details-marker { display: none; }
+.sub-fold > summary::before {
+  content: "▶";
+  color: var(--accent);
+  font-size: 0.8rem;
+  transition: transform 0.15s ease;
+  display: inline-block;
+}
+.sub-fold[open] > summary::before { transform: rotate(90deg); }
+.sub-fold[open] > summary { border-bottom: 1px solid var(--border); }
+.sub-fold__body { padding: 0.4rem 14px 14px; }
+.sub-fold__body > *:first-child { margin-top: 0.5rem; }
+.sub-fold__body > *:last-child { margin-bottom: 0; }
+
+/* メニュー画面に常時表示する緊急対応バナー（意識障害など） */
+.urgent-banner {
+  margin: 0.5rem 0 1.1rem;
+  padding: 0.95rem 1rem;
+  border-radius: var(--radius);
+  border-left: 4px solid var(--danger-border);
+  background: var(--danger-bg);
+  box-shadow: var(--shadow);
+}
+.urgent-banner__title {
+  margin: 0 0 0.45rem;
+  font-weight: 800;
+  color: var(--danger-border);
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+.urgent-banner ul {
+  margin: 0;
+  padding-left: 1.2rem;
+}
+.urgent-banner li {
+  margin: 0.25rem 0;
+  font-size: 0.92rem;
+}
+.urgent-banner[hidden] { display: none; }
+
+/* placeholder ページ用 */
+.placeholder-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  text-align: center;
+  color: var(--muted);
+}
+.placeholder-screen h1 {
+  margin: 0 0 0.5rem;
+  font-size: 1.4rem;
+  color: var(--text);
+}
+
+@media (max-width: 600px) {
+  .hokuto-main .note-shell { padding: 0.85rem 0.85rem 1.25rem; }
+  .section-tiles { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+  .section-tile { min-height: 88px; }
+  .section-tile__no { font-size: 1.35rem; }
+  .section-tile__name { font-size: 0.88rem; }
+  .page-title { font-size: 1.35rem; }
+  .hokuto-top__btn { min-width: 64px; font-size: 0.72rem; }
+}
+
+/* === Action header (always-visible immediate actions for disease detail pages) === */
+.action-header {
+  position: sticky;
+  top: calc(60px + env(safe-area-inset-top));
+  z-index: 30;
+  margin: 0 0 1.1rem 0;
+  padding: 12px 14px;
+  background: var(--accent-weak);
+  border: 1.5px solid var(--accent);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+}
+.action-header__title {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--accent);
+  margin: 0 0 0.5rem 0;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+.action-header__list {
+  margin: 0;
+  padding-left: 1.4rem;
+  font-size: 0.9rem;
+  line-height: 1.55;
+  color: var(--text);
+}
+.action-header__list > li { margin: 0.25rem 0; }
+.action-header__list strong { color: var(--accent); }
+
+/* When action-header is present, back-to-menu becomes inline (avoid sticky overlap) */
+.note-shell:has(.action-header) .back-to-menu {
+  position: static;
+}
+
+@media (max-width: 600px) {
+  .action-header { padding: 10px 12px; }
+  .action-header__title { font-size: 0.88rem; }
+  .action-header__list { font-size: 0.85rem; padding-left: 1.2rem; }
+}

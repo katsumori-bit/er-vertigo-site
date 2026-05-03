@@ -4,181 +4,304 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="color-scheme" content="light dark" />
-  <title>大腿骨近位部骨折</title>
+  <title>大腿骨近位部骨折 | ER ノート</title>
   <link rel="stylesheet" href="../er-note.css" />
 </head>
 <body>
-  <nav class="site-bar">
-    <a class="site-bar__back" href="../index.html">← 主訴ナビ</a>
-    <span class="site-bar__title">大腿骨近位部骨折</span>
+  <header class="hokuto-top">
+    <a class="hokuto-top__btn" href="../薬剤情報.html">
+      <span class="hokuto-top__icon">℞</span><span>薬剤情報</span>
+    </a>
+    <a class="hokuto-top__btn" href="../表計算.html">
+      <span class="hokuto-top__icon">⊞</span><span>表計算</span>
+    </a>
+  </header>
+
+  <main class="hokuto-main">
+    <article class="note-shell">
+      <h1 class="page-title">大腿骨近位部骨折</h1>
+
+      <!-- 即時アクションヘッダー -->
+      <div class="action-header">
+        <div class="action-header__title">⚡ 即時アクション</div>
+        <ol class="action-header__list">
+          <li><strong>転倒 + 動けない + 短縮外旋位</strong> で疑う（高齢者の「急に歩けない」も含む）</li>
+          <li><strong>AP + lat X 線</strong>で確定（隠匿骨折は <strong>CT / MRI</strong>）</li>
+          <li><strong>DVT 予防 + 疼痛管理（大腿神経ブロック）</strong> を ER で開始</li>
+          <li><strong>24-48 h 以内手術</strong>が予後改善 → 早期コンサルト</li>
+        </ol>
+      </div>
+
+      <!-- メニュータイル -->
+      <nav class="section-tiles" id="sectionMenu">
+        <a class="section-tile" href="#s1"><span class="section-tile__no">📊</span><span class="section-tile__name">疫学</span></a>
+        <a class="section-tile" href="#s2"><span class="section-tile__no">🦴</span><span class="section-tile__name">2 つの骨折を<br><small>区別する</small></span></a>
+        <a class="section-tile" href="#s3"><span class="section-tile__no">🩺</span><span class="section-tile__name">身体診察</span></a>
+        <a class="section-tile" href="#s4"><span class="section-tile__no">📷</span><span class="section-tile__name">画像<br><small>Garden 分類</small></span></a>
+        <a class="section-tile" href="#s5"><span class="section-tile__no">👻</span><span class="section-tile__name">Occult fracture<br><small>亡霊骨折</small></span></a>
+        <a class="section-tile" href="#s6"><span class="section-tile__no">🔩</span><span class="section-tile__name">インプラント<br><small>周囲骨折</small></span></a>
+        <a class="section-tile" href="#s7"><span class="section-tile__no">💪</span><span class="section-tile__name">筋挫傷<br><small>内転筋</small></span></a>
+        <a class="section-tile" href="#s8"><span class="section-tile__no">💉</span><span class="section-tile__name">マネジメント</span></a>
+        <a class="section-tile" href="#s9"><span class="section-tile__no">⚠️</span><span class="section-tile__name">やりがちな<br><small>ミス</small></span></a>
+      </nav>
+
+      <!-- 関連主訴（双方向リンク） -->
+      <details class="sub-fold" id="related-symptoms">
+        <summary>📞 この疾患が該当する主訴</summary>
+        <div class="sub-fold__body">
+          <ul>
+            <li><a class="wiki-link" href="../股関節痛.html">股関節痛</a> — 転倒後の典型主訴</li>
+            <li><a class="wiki-link" href="../転倒.html">転倒</a> — 高齢者転倒の最大の合併症</li>
+          </ul>
+        </div>
+      </details>
+
+      <!-- §1 疫学 -->
+      <section class="section-page" id="s1" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>📊 疫学</h2>
+        <ul>
+          <li>国内で <strong>約 20 万例/年</strong> のコモンディジーズ。</li>
+          <li>骨粗鬆症を背景とした脆弱性骨折の<strong>第 2 位</strong>（第 1 位は脊椎圧迫骨折）。</li>
+          <li>受傷機転は <strong>転倒 82.0% / 交通事故 9.9% / 原因不明 4.4%</strong>。</li>
+          <li>「なぜか急に歩けなくなった」で来院する内科受診例が 4.4% いる → <strong>転んでいなくても鑑別に挙げる</strong>。</li>
+        </ul>
+      </section>
+
+      <!-- §2 2 つの骨折を区別する -->
+      <section class="section-page" id="s2" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🦴 2 つの骨折を区別する</h2>
+        <div class="callout callout-check">
+          <div class="callout-title">非整形外科医の初期対応はどちらも同じ</div>
+          <div class="callout-body"><p>ただし<strong>コンサルトでは必ず区別</strong>する（整形外科の業界ルール）。「大腿骨近位部骨折」という単語はカルテ用語で、コンサルト時には使わない。</p></div>
+        </div>
+        <div class="table-wrap"><table><thead><tr><th>区分</th><th>骨折部位</th><th>治療</th></tr></thead><tbody><tr><td><strong>大腿骨頸部骨折</strong></td><td>関節包 <strong>内</strong></td><td>血流障害・偽関節化しやすい → 転位あれば<strong>人工骨頭置換</strong>、転位なければ内固定</td></tr><tr><td><strong>大腿骨転子部骨折</strong></td><td>関節包 <strong>外</strong></td><td>血流豊富で癒合しやすい → <strong>内固定</strong>（SHS / γ nail など）</td></tr><tr><td><strong>大腿骨転子下骨折</strong></td><td>関節包外のさらに遠位</td><td>稀。まず上の 2 つをマスター</td></tr></tbody></table></div>
+      </section>
+
+      <!-- §3 身体診察 -->
+      <section class="section-page" id="s3" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🩺 身体診察</h2>
+        <ul>
+          <li><strong>外旋位・短縮位</strong>：1 秒で判断できる。見たら身体所見は省略して Xp 直行可</li>
+          <li><strong>鼠径部・大転子部の圧痛</strong></li>
+          <li><strong>股関節の内旋・外旋で疼痛</strong>（他動運動で誘発）→ occult fracture の最も実用的な所見</li>
+          <li><strong>大転子部の新鮮皮下血腫</strong>（感度 56%、特異度は骨折なしでも 6%）</li>
+          <li><strong>聴性打診</strong>：恥骨結合に聴診器、膝蓋骨を打診して左右差（感度 79–96% / 特異度 86–95%）— 整形外科医はマイナーと捉えがち</li>
+        </ul>
+        <div class="callout callout-tip">
+          <div class="callout-title">痛くて動かせない高齢者は身体所見を省略してよい</div>
+          <div class="callout-body"><p>『80 歳女性 転倒』＋『外旋・短縮位』→ すぐに Xp 室へ直送。『身体所見 → 画像』ではなく『鑑別 → 画像 &amp; 身体所見』。</p></div>
+        </div>
+      </section>
+
+      <!-- §4 画像 -->
+      <section class="section-page" id="s4" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>📷 画像</h2>
+        <h3>まず撮るもの</h3>
+        <ul>
+          <li><strong>骨盤正面</strong> + <strong>股関節正面 + 軸位</strong>（ラウエンシュタイン位で代用する施設もある）</li>
+          <li>詳細な範囲は <a class="wiki-link" href="../股関節痛.html">股関節痛</a></li>
+        </ul>
+        <h3>Garden 分類（頸部骨折のみ）</h3>
+        <div class="table-wrap"><table><thead><tr><th>stage</th><th>所見</th><th>術式</th></tr></thead><tbody><tr><td><strong>I</strong></td><td>外反陥入型、不完全骨折</td><td>内固定（multiple cancellous screw）</td></tr><tr><td><strong>II</strong></td><td>完全骨折、転位なし</td><td>内固定</td></tr><tr><td><strong>III</strong></td><td>骨折面に部分的転位</td><td><strong>人工骨頭置換</strong></td></tr><tr><td><strong>IV</strong></td><td>完全な転位</td><td><strong>人工骨頭置換</strong></td></tr></tbody></table></div>
+        <ul>
+          <li>非整形外科医にとって Garden 分類は<strong>整形外科医とのコミュニケーションツール</strong>として重要。「Garden III の大腿骨頸部骨折です」と言えるとコンサルトが圧倒的にスムーズ。</li>
+          <li>転子部骨折の分類は<strong>覚えなくてよい</strong>（整形外科医は非整形医にこだわらない）。</li>
+        </ul>
+      </section>
+
+      <!-- §5 Occult fracture -->
+      <section class="section-page" id="s5" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>👻 Occult fracture（亡霊骨折）</h2>
+        <div class="callout callout-warning">
+          <div class="callout-title">Xp 陰性＝骨折なし ではない</div>
+          <div class="callout-body"><p>大腿骨近位部骨折の <strong>Xp 感度は 91.9–98.1%</strong>。<strong>2–10% は occult fracture</strong> となり、レントゲンに映らない。歩行できる例もあるため、「歩けたし Xp 正常だから帰宅」は訴訟リスク。</p></div>
+        </div>
+        <h3>疑い方 — 鑑別に挙げていれば気づける</h3>
+        <ol>
+          <li>高齢者 + 転倒 + 股関節痛 → <strong>大腿骨近位部骨折を鑑別に挙げる</strong></li>
+          <li>Xp で骨折線が見えない → occult の可能性を意識</li>
+          <li><strong>股関節の内外旋で疼痛</strong> or 大転子部圧痛 → occult 濃厚</li>
+        </ol>
+        <h3>MRI（ゴールデンスタンダード）</h3>
+        <ul>
+          <li>大腿骨近位部骨折に対して<strong>感度・特異度ほぼ 100%</strong></li>
+          <li><strong>T1 黒・STIR 白</strong>が新鮮骨折のサイン</li>
+          <li>正常骨 = STIR 黒 / T1 白。骨浮腫で白黒が逆転する</li>
+        </ul>
+        <h3>MRI が撮れない時 — CT で代用</h3>
+        <ul>
+          <li>夜間・休日で MRI 不可 → <strong>CT</strong> で評価可能</li>
+          <li><strong>前額断・矢状断・冠状断のすべてのスライス</strong>で確認</li>
+          <li><strong>2–3 スライス連続</strong> or <strong>骨皮質の途絶</strong>があれば骨折線として扱う</li>
+          <li>CT で骨折線が指摘できる率：
+            <ul>
+              <li>ガイドラインでは MRI 優位（CT 2% vs MRI 47% の報告あり）</li>
+              <li><strong>実臨床では CT も十分役立つ</strong>（夜間のマネジメント決定には有用）</li>
+            </ul>
+          </li>
+        </ul>
+        <h3>MRI も CT もない時</h3>
+        <ul>
+          <li>画像で否定できなければ<strong>歩行可でも帰宅させない</strong></li>
+          <li><strong>股関節の内外旋痛</strong>を他動的に評価し、疑えば整形外科へ入院依頼</li>
+          <li>「電話で整形にコンサルト：『内外旋で疼痛あり、occult fracture 疑い』」が通る殺し文句</li>
+        </ul>
+      </section>
+
+      <!-- §6 インプラント周囲骨折 -->
+      <section class="section-page" id="s6" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🔩 インプラント周囲骨折（大腿骨ステム周囲骨折）</h2>
+        <ul>
+          <li>大腿骨近位部骨折<strong>術後</strong>の転倒・患肢疼痛で<strong>必ず鑑別</strong></li>
+          <li>発生頻度 0.1–18%。術後高齢者の増加とともに急増</li>
+          <li>インプラントは折れない → <strong>インプラントの末端付近（骨幹部）</strong>で折れる</li>
+          <li>Occult も起こるので Xp 陰性でも CT 追加</li>
+        </ul>
+        <h3>原則</h3>
+        <div class="callout callout-check">
+          <div class="callout-title">インプラントを入れた病院で再手術する</div>
+          <div class="callout-body"><p>過去のインプラント情報・術式を知っている病院で手術するのが業界ルール。自院で術をしていなければ転院調整が必要。土日は bridge して週明けに転院依頼でよい。</p></div>
+        </div>
+      </section>
+
+      <!-- §7 筋挫傷（内転筋） -->
+      <section class="section-page" id="s7" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>💪 筋挫傷（内転筋）</h2>
+        <ul>
+          <li>転倒後股関節痛の <strong>Xp 陰性例の 61–65%</strong> で、MRI で筋挫傷所見あり</li>
+          <li>内外旋で疼痛誘発 → 大腿骨近位部骨折と身体所見では区別できない</li>
+          <li><strong>MRI で STIR 白</strong>が筋肉にある（骨にあれば occult 骨折）</li>
+          <li>治療：保存加療、安静度フリー。痛みで歩けなければ入院</li>
+        </ul>
+      </section>
+
+      <!-- §8 マネジメント -->
+      <section class="section-page" id="s8" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>💉 マネジメント</h2>
+        <h3>コンサルトのタイミング</h3>
+        <div class="table-wrap"><table><thead><tr><th>状況</th><th>対応</th></tr></thead><tbody><tr><td>日中・平日</td><td><strong>即時整形</strong>（手術は 48 時間以内、理想は 24 時間以内）</td></tr><tr><td>夜間・休日</td><td><strong>入院整形</strong> → 翌朝コンサルト、日中に手術</td></tr><tr><td>自院の手術室が埋まっている</td><td>転院調整（他院の整形と連携）</td></tr></tbody></table></div>
+        <ul>
+          <li>24 時間以内手術は 48 時間超手術より<strong>死亡率・合併症が少ない</strong>（NICE, AAOS）</li>
+          <li>実臨床では平均 39 時間、2/3 が 24 時間超（最大の遅延理由は手術室不足 61%）</li>
+        </ul>
+        <h3>疼痛管理</h3>
+        <ul>
+          <li><strong>アセトアミノフェン</strong>（アセリオ® 15 mg/kg 静注）— 第 1 選択</li>
+          <li><strong>大腿神経ブロック</strong> — 施行可能なら非常に有効（NICE 2023, AAOS）。詳細は <a class="wiki-link" href="大腿神経ブロック.html">大腿神経ブロック</a></li>
+          <li><strong>NSAIDs は避ける</strong>（高齢者の腎障害）</li>
+        </ul>
+        <h3>入院中の管理</h3>
+        <ul>
+          <li><strong>VTE 予防</strong>（術前・術後）</li>
+          <li><strong>譫妄対策</strong>（高齢者のハイリスク群）</li>
+          <li><strong>尿カテーテル早期抜去・早期離床</strong></li>
+          <li><strong>術後の骨粗鬆症治療開始</strong>（ビスホスホネート未処方なら導入機会）</li>
+        </ul>
+        <h3>出典</h3>
+        <ul>
+          <li><strong>NICE CG124</strong>（2023 updated）：Hip fracture: management.</li>
+          <li><strong>AAOS CPG</strong>：Management of Hip Fractures in Older Adults.</li>
+          <li><strong>増井伸高. 骨折ハンター. 中外医学社. 2019</strong>（第 2 章・第 3 章：高齢者・股関節痛ハンター）</li>
+          <li><strong>Stevens MA ほか.</strong> CT for occult hip fracture. <em>Radiographics.</em> 2003.</li>
+          <li><strong>Cabarrus MC ほか.</strong> MRI vs CT for occult hip fracture. <em>AJR.</em> 2008.</li>
+        </ul>
+        <h3>関連ページ</h3>
+        <ul>
+          <li><a class="wiki-link" href="../転倒.html">転倒</a></li>
+          <li><a class="wiki-link" href="../股関節痛.html">股関節痛</a></li>
+          <li><a class="wiki-link" href="脆弱性骨盤骨折.html">脆弱性骨盤骨折</a></li>
+          <li><a class="wiki-link" href="脊椎圧迫骨折.html">脊椎圧迫骨折</a></li>
+          <li><a class="wiki-link" href="骨粗鬆症治療.html">骨粗鬆症治療</a></li>
+        </ul>
+      </section>
+
+      <!-- §9 やりがちなミス -->
+      <section class="section-page" id="s9" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>⚠️ やりがちなミス</h2>
+        <ul>
+          <li>「歩けたから骨折なし」と帰宅させる → Occult で帰宅はトラブル・訴訟リスク</li>
+          <li>コンサルト時に「大腿骨近位部骨折」と伝える → 整形医は「頸部か転子部か」を聞きたい</li>
+          <li>Garden 分類を添えない → コンサルトが遅くなる</li>
+          <li><strong>インプラント術後の転倒</strong>で鑑別から漏らす</li>
+          <li>夜間 MRI にこだわりすぎる → CT で代用可</li>
+          <li>NSAIDs を出してしまう（腎機能悪化）</li>
+        </ul>
+      </section>
+
+    </article>
+  </main>
+
+  <nav class="hokuto-bottom">
+    <button class="hokuto-bottom__btn" type="button" id="navBack">
+      <span class="hokuto-bottom__icon">←</span><span>戻る</span>
+    </button>
+    <a class="hokuto-bottom__btn" href="../ツール.html">
+      <span class="hokuto-bottom__icon">⚙</span><span>ツール</span>
+    </a>
+    <a class="hokuto-bottom__btn" href="../index.html">
+      <span class="hokuto-bottom__icon">⌂</span><span>ホーム</span>
+    </a>
   </nav>
-  <article class="note-shell">
-    <header class="note-header">
-      <h1>大腿骨近位部骨折</h1>
-      <p class="source-badge">元: 臨床/ER/疾患詳細/大腿骨近位部骨折.md</p>
-    </header>
-    <details class="toc"><summary>目次（11 セクション）</summary><ol><li><a href="#疫学">疫学</a></li><li><a href="#2-つの骨折を区別する">2 つの骨折を区別する</a></li><li><a href="#身体診察">身体診察</a></li><li><a href="#画像">画像</a></li><li><a href="#occult-fracture亡霊骨折">Occult fracture（亡霊骨折）</a></li><li><a href="#インプラント周囲骨折大腿骨ステム周囲骨折">インプラント周囲骨折（大腿骨ステム周囲骨折）</a></li><li><a href="#筋挫傷内転筋">筋挫傷（内転筋）</a></li><li><a href="#マネジメント">マネジメント</a></li><li><a href="#やりがちなミス">やりがちなミス</a></li><li><a href="#出典">出典</a></li><li><a href="#関連ページ">関連ページ</a></li></ol></details>
-    <div class="md-body">
-<p>#ER #救急 #骨折 #大腿骨近位部骨折 #大腿骨頸部骨折 #大腿骨転子部骨折 #occult #Garden分類 #高齢者</p>
-<div class="callout callout-summary">
-<div class="callout-title">このページの使い方</div>
-<div class="callout-body"><ol>
-<li><strong>鑑別</strong>（転倒後股関節痛）に挙げて <strong>骨折線イメージ</strong>を持ってから Xp を読影</li>
-<li>Xp で見える骨折 → <strong>頸部 / 転子部の区別</strong> + <strong>Garden 分類</strong> → 整形コンサルト</li>
-<li>Xp で見えない → <strong>occult fracture</strong> を疑い、<strong>内外旋痛 → MRI（or CT）</strong></li>
-<li>目標は <strong>受傷後 48 時間以内（可能なら 24 時間以内）の手術</strong></li>
-</ol></div>
-</div>
-<hr>
-<h2 id="疫学">疫学</h2>
-<ul>
-<li>国内で <strong>約 20 万例/年</strong> のコモンディジーズ。</li>
-<li>骨粗鬆症を背景とした脆弱性骨折の<strong>第 2 位</strong>（第 1 位は脊椎圧迫骨折）。</li>
-<li>受傷機転は <strong>転倒 82.0% / 交通事故 9.9% / 原因不明 4.4%</strong>。</li>
-<li>「なぜか急に歩けなくなった」で来院する内科受診例が 4.4% いる → <strong>転んでいなくても鑑別に挙げる</strong>。</li>
-</ul>
-<hr>
-<h2 id="2-つの骨折を区別する">2 つの骨折を区別する</h2>
-<div class="callout callout-check">
-<div class="callout-title">非整形外科医の初期対応はどちらも同じ</div>
-<div class="callout-body"><p>ただし<strong>コンサルトでは必ず区別</strong>する（整形外科の業界ルール）。 「大腿骨近位部骨折」という単語はカルテ用語で、コンサルト時には使わない。</p></div>
-</div>
-<div class="table-wrap"><table><thead><tr><th>区分</th><th>骨折部位</th><th>治療</th></tr></thead><tbody><tr><td><strong>大腿骨頸部骨折</strong></td><td>関節包 <strong>内</strong></td><td>血流障害・偽関節化しやすい → 転位あれば<strong>人工骨頭置換</strong>、転位なければ内固定</td></tr><tr><td><strong>大腿骨転子部骨折</strong></td><td>関節包 <strong>外</strong></td><td>血流豊富で癒合しやすい → <strong>内固定</strong>（SHS / γ nail など）</td></tr><tr><td><strong>大腿骨転子下骨折</strong></td><td>関節包外のさらに遠位</td><td>稀。まず上の 2 つをマスター</td></tr></tbody></table></div>
-<hr>
-<h2 id="身体診察">身体診察</h2>
-<ul>
-<li><strong>外旋位・短縮位</strong>：1 秒で判断できる。見たら身体所見は省略して Xp 直行可</li>
-<li><strong>鼠径部・大転子部の圧痛</strong></li>
-<li><strong>股関節の内旋・外旋で疼痛</strong>（他動運動で誘発）→ occult fracture の最も実用的な所見</li>
-<li><strong>大転子部の新鮮皮下血腫</strong>（感度 56%、特異度は骨折なしでも 6%）</li>
-<li><strong>聴性打診</strong>：恥骨結合に聴診器、膝蓋骨を打診して左右差（感度 79–96% / 特異度 86–95%）— 整形外科医はマイナーと捉えがち</li>
-</ul>
-<div class="callout callout-tip">
-<div class="callout-title">痛くて動かせない高齢者は身体所見を省略してよい</div>
-<div class="callout-body"><p>『80 歳女性 転倒』＋『外旋・短縮位』→ すぐに Xp 室へ直送。 『身体所見 → 画像』ではなく『鑑別 → 画像 &amp; 身体所見』。</p></div>
-</div>
-<hr>
-<h2 id="画像">画像</h2>
-<h3 id="まず撮るもの">まず撮るもの</h3>
-<ul>
-<li><strong>骨盤正面</strong> + <strong>股関節正面 + 軸位</strong>（ラウエンシュタイン位で代用する施設もある）</li>
-<li>詳細な範囲は <a class="wiki-link" href="../股関節痛.html">股関節痛</a></li>
-</ul>
-<h3 id="garden-分類頸部骨折のみ">Garden 分類（頸部骨折のみ）</h3>
-<div class="table-wrap"><table><thead><tr><th>stage</th><th>所見</th><th>術式</th></tr></thead><tbody><tr><td><strong>I</strong></td><td>外反陥入型、不完全骨折</td><td>内固定（multiple cancellous screw）</td></tr><tr><td><strong>II</strong></td><td>完全骨折、転位なし</td><td>内固定</td></tr><tr><td><strong>III</strong></td><td>骨折面に部分的転位</td><td><strong>人工骨頭置換</strong></td></tr><tr><td><strong>IV</strong></td><td>完全な転位</td><td><strong>人工骨頭置換</strong></td></tr></tbody></table></div>
-<ul>
-<li>非整形外科医にとって Garden 分類は<strong>整形外科医とのコミュニケーションツール</strong>として重要。「Garden III の大腿骨頸部骨折です」と言えるとコンサルトが圧倒的にスムーズ。</li>
-<li>転子部骨折の分類は<strong>覚えなくてよい</strong>（整形外科医は非整形医にこだわらない）。</li>
-</ul>
-<hr>
-<h2 id="occult-fracture亡霊骨折">Occult fracture（亡霊骨折）</h2>
-<div class="callout callout-warning">
-<div class="callout-title">Xp 陰性＝骨折なし ではない</div>
-<div class="callout-body"><p>大腿骨近位部骨折の <strong>Xp 感度は 91.9–98.1%</strong>。 <strong>2–10% は occult fracture</strong> となり、レントゲンに映らない。 歩行できる例もあるため、「歩けたし Xp 正常だから帰宅」は訴訟リスク。</p></div>
-</div>
-<h3 id="疑い方-鑑別に挙げていれば気づける">疑い方 — 鑑別に挙げていれば気づける</h3>
-<ol>
-<li>高齢者 + 転倒 + 股関節痛 → <strong>大腿骨近位部骨折を鑑別に挙げる</strong></li>
-<li>Xp で骨折線が見えない → occult の可能性を意識</li>
-<li><strong>股関節の内外旋で疼痛</strong> or 大転子部圧痛 → occult 濃厚</li>
-</ol>
-<h3 id="mriゴールデンスタンダード">MRI（ゴールデンスタンダード）</h3>
-<ul>
-<li>大腿骨近位部骨折に対して<strong>感度・特異度ほぼ 100%</strong></li>
-<li><strong>T1 黒・STIR 白</strong>が新鮮骨折のサイン</li>
-<li>正常骨 = STIR 黒 / T1 白。骨浮腫で白黒が逆転する</li>
-</ul>
-<h3 id="mri-が撮れない時-ct-で代用">MRI が撮れない時 — CT で代用</h3>
-<ul>
-<li>夜間・休日で MRI 不可 → <strong>CT</strong> で評価可能</li>
-<li><strong>前額断・矢状断・冠状断のすべてのスライス</strong>で確認</li>
-<li><strong>2–3 スライス連続</strong> or <strong>骨皮質の途絶</strong>があれば骨折線として扱う</li>
-<li>CT で骨折線が指摘できる率：</li>
-<ul>
-<li>ガイドラインでは MRI 優位（CT 2% vs MRI 47% の報告あり）</li>
-<li><strong>実臨床では CT も十分役立つ</strong>（夜間のマネジメント決定には有用）</li>
-</ul>
-</ul>
-<h3 id="mri-も-ct-もない時">MRI も CT もない時</h3>
-<ul>
-<li>画像で否定できなければ<strong>歩行可でも帰宅させない</strong></li>
-<li><strong>股関節の内外旋痛</strong>を他動的に評価し、疑えば整形外科へ入院依頼</li>
-<li>「電話で整形にコンサルト：『内外旋で疼痛あり、occult fracture 疑い』」が通る殺し文句</li>
-</ul>
-<hr>
-<h2 id="インプラント周囲骨折大腿骨ステム周囲骨折">インプラント周囲骨折（大腿骨ステム周囲骨折）</h2>
-<ul>
-<li>大腿骨近位部骨折<strong>術後</strong>の転倒・患肢疼痛で<strong>必ず鑑別</strong></li>
-<li>発生頻度 0.1–18%。術後高齢者の増加とともに急増</li>
-<li>インプラントは折れない → <strong>インプラントの末端付近（骨幹部）</strong>で折れる</li>
-<li>Occult も起こるので Xp 陰性でも CT 追加</li>
-</ul>
-<h3 id="原則">原則</h3>
-<div class="callout callout-check">
-<div class="callout-title">インプラントを入れた病院で再手術する</div>
-<div class="callout-body"><p>過去のインプラント情報・術式を知っている病院で手術するのが業界ルール。 自院で術をしていなければ転院調整が必要。 土日は bridge して週明けに転院依頼でよい。</p></div>
-</div>
-<hr>
-<h2 id="筋挫傷内転筋">筋挫傷（内転筋）</h2>
-<ul>
-<li>転倒後股関節痛の <strong>Xp 陰性例の 61–65%</strong> で、MRI で筋挫傷所見あり</li>
-<li>内外旋で疼痛誘発 → 大腿骨近位部骨折と身体所見では区別できない</li>
-<li><strong>MRI で STIR 白</strong>が筋肉にある（骨にあれば occult 骨折）</li>
-<li>治療：保存加療、安静度フリー。痛みで歩けなければ入院</li>
-</ul>
-<hr>
-<h2 id="マネジメント">マネジメント</h2>
-<h3 id="コンサルトのタイミング">コンサルトのタイミング</h3>
-<div class="table-wrap"><table><thead><tr><th>状況</th><th>対応</th></tr></thead><tbody><tr><td>日中・平日</td><td><strong>即時整形</strong>（手術は 48 時間以内、理想は 24 時間以内）</td></tr><tr><td>夜間・休日</td><td><strong>入院整形</strong> → 翌朝コンサルト、日中に手術</td></tr><tr><td>自院の手術室が埋まっている</td><td>転院調整（他院の整形と連携）</td></tr></tbody></table></div>
-<ul>
-<li>24 時間以内手術は 48 時間超手術より<strong>死亡率・合併症が少ない</strong>（NICE, AAOS）</li>
-<li>実臨床では平均 39 時間、2/3 が 24 時間超（最大の遅延理由は手術室不足 61%）</li>
-</ul>
-<h3 id="疼痛管理">疼痛管理</h3>
-<ul>
-<li><strong>アセトアミノフェン</strong>（アセリオ® 15 mg/kg 静注）— 第 1 選択</li>
-<li><strong>大腿神経ブロック</strong> — 施行可能なら非常に有効（NICE 2023, AAOS）</li>
-<li><strong>NSAIDs は避ける</strong>（高齢者の腎障害）</li>
-</ul>
-<h3 id="入院中の管理">入院中の管理</h3>
-<ul>
-<li><strong>VTE 予防</strong>（術前・術後）</li>
-<li><strong>譫妄対策</strong>（高齢者のハイリスク群）</li>
-<li><strong>尿カテーテル早期抜去・早期離床</strong></li>
-<li><strong>術後の骨粗鬆症治療開始</strong>（ビスホスホネート未処方なら導入機会）</li>
-</ul>
-<hr>
-<h2 id="やりがちなミス">やりがちなミス</h2>
-<ul>
-<li>「歩けたから骨折なし」と帰宅させる → Occult で帰宅はトラブル・訴訟リスク</li>
-<li>コンサルト時に「大腿骨近位部骨折」と伝える → 整形医は「頸部か転子部か」を聞きたい</li>
-<li>Garden 分類を添えない → コンサルトが遅くなる</li>
-<li><strong>インプラント術後の転倒</strong>で鑑別から漏らす</li>
-<li>夜間 MRI にこだわりすぎる → CT で代用可</li>
-<li>NSAIDs を出してしまう（腎機能悪化）</li>
-</ul>
-<hr>
-<h2 id="出典">出典</h2>
-<ul>
-<li><strong>NICE CG124</strong>（2023 updated）：Hip fracture: management.</li>
-<li><strong>AAOS CPG</strong>：Management of Hip Fractures in Older Adults.</li>
-<li><strong>増井伸高. 骨折ハンター. 中外医学社. 2019</strong>（第 2 章・第 3 章：高齢者・股関節痛ハンター）</li>
-<li><strong>Stevens MA ほか.</strong> CT for occult hip fracture. <em>Radiographics.</em> 2003.</li>
-<li><strong>Cabarrus MC ほか.</strong> MRI vs CT for occult hip fracture. <em>AJR.</em> 2008.</li>
-</ul>
-<hr>
-<h2 id="関連ページ">関連ページ</h2>
-<ul>
-<li><a class="wiki-link" href="../転倒.html">転倒</a></li>
-<li><a class="wiki-link" href="../股関節痛.html">股関節痛</a></li>
-<li><a class="wiki-link" href="脆弱性骨盤骨折.html">脆弱性骨盤骨折</a></li>
-<li><a class="wiki-link" href="脊椎圧迫骨折.html">脊椎圧迫骨折</a></li>
-<li><a class="wiki-link" href="骨粗鬆症治療.html">骨粗鬆症治療</a></li>
-</ul>
-    </div>
-    <footer class="page-footer">
-      <a href="../index.html">↑ 主訴ナビへ戻る</a>
-    </footer>
-  </article>
+
+  <script>
+  (function(){
+    const menu = document.getElementById('sectionMenu');
+    const pages = document.querySelectorAll('.section-page');
+    const titleH1 = document.querySelector('.page-title');
+    const relatedSymp = document.getElementById('related-symptoms');
+
+    function showSection(id) {
+      menu.hidden = true;
+      if (titleH1) titleH1.hidden = true;
+      if (relatedSymp) relatedSymp.hidden = true;
+      pages.forEach(p => p.hidden = (p.id !== id));
+      window.scrollTo(0, 0);
+    }
+    function showMenu(scrollTarget) {
+      menu.hidden = false;
+      if (titleH1) titleH1.hidden = false;
+      if (relatedSymp) relatedSymp.hidden = false;
+      pages.forEach(p => p.hidden = true);
+      if (scrollTarget) {
+        if (scrollTarget.tagName === 'DETAILS') scrollTarget.open = true;
+        scrollTarget.scrollIntoView({behavior: 'instant', block: 'start'});
+      } else {
+        window.scrollTo(0, 0);
+      }
+    }
+    function syncFromHash() {
+      const id = (location.hash || '').replace('#','');
+      const target = id ? document.getElementById(id) : null;
+      if (target && target.classList.contains('section-page')) {
+        showSection(id);
+      } else if (target) {
+        showMenu(target);
+      } else {
+        showMenu();
+      }
+    }
+
+    window.addEventListener('hashchange', syncFromHash);
+    document.querySelectorAll('.back-to-menu').forEach(b => {
+      b.addEventListener('click', () => { history.pushState(null,'',location.pathname); showMenu(); });
+    });
+    const navBack = document.getElementById('navBack');
+    if (navBack) navBack.addEventListener('click', () => {
+      if (window.history.length > 1) history.back();
+      else window.location.href = '../index.html';
+    });
+
+    syncFromHash();
+  })();
+  </script>
 </body>
 </html>

@@ -4,28 +4,273 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="color-scheme" content="light dark" />
-  <title>膝の外傷・痛み</title>
+  <title>膝の外傷・痛み | ER ノート</title>
   <link rel="stylesheet" href="er-note.css" />
 </head>
 <body>
-  <nav class="site-bar">
-    <a class="site-bar__back" href="index.html">← 主訴ナビ</a>
-    <span class="site-bar__title">膝の外傷・痛み</span>
+  <header class="hokuto-top">
+    <a class="hokuto-top__btn" href="薬剤情報.html">
+      <span class="hokuto-top__icon">℞</span><span>薬剤情報</span>
+    </a>
+    <a class="hokuto-top__btn" href="表計算.html">
+      <span class="hokuto-top__icon">⊞</span><span>表計算</span>
+    </a>
+  </header>
+
+  <main class="hokuto-main">
+    <article class="note-shell">
+      <h1 class="page-title">膝の外傷・痛み</h1>
+
+      <!-- 即時アクションヘッダー（常時 sticky） -->
+      <div class="action-header">
+        <div class="action-header__title">⚡ 即時アクション</div>
+        <ol class="action-header__list">
+          <li><strong>血流・神経・コンパートメント</strong>を最初に確認（足背動脈、下腿感覚運動、腫脹・緊満）</li>
+          <li><strong>Ottawa Knee Rules</strong>：55歳以上 / 腓骨頭圧痛 / 膝蓋骨単独圧痛 / 90度屈曲不能 / 受傷直後と ER で 4 歩歩行不能 → X 線</li>
+          <li><strong>X 線は AP + lateral</strong>、脱臼疑いなら <strong>sunrise（skyline）</strong>追加</li>
+          <li><strong>膝蓋骨脱臼は速やかに整復</strong>、後外側 corner 損傷や膝関節脱臼は<strong>必ず MRI / 血管評価</strong></li>
+        </ol>
+      </div>
+
+      <!-- §1〜§7 メニュータイル -->
+      <nav class="section-tiles" id="sectionMenu">
+        <a class="section-tile" href="#s1"><span class="section-tile__no">🚨</span><span class="section-tile__name">Red flags<br><small>血管・神経・脱臼</small></span></a>
+        <a class="section-tile" href="#s2"><span class="section-tile__no">🩺</span><span class="section-tile__name">最小診察<br><small>+ Ottawa Knee Rules</small></span></a>
+        <a class="section-tile" href="#s3"><span class="section-tile__no">📷</span><span class="section-tile__name">画像検査<br><small>X 線 / CT / MRI</small></span></a>
+        <a class="section-tile" href="#s4"><span class="section-tile__no">🦴</span><span class="section-tile__name">主要鑑別<br><small>骨折・脱臼・靱帯</small></span></a>
+        <a class="section-tile" href="#s5"><span class="section-tile__no">📤</span><span class="section-tile__name">disposition</span></a>
+        <a class="section-tile" href="#s6"><span class="section-tile__no">⚠️</span><span class="section-tile__name">ピットフォール</span></a>
+        <a class="section-tile" href="#s7"><span class="section-tile__no">📚</span><span class="section-tile__name">出典・リンク</span></a>
+      </nav>
+
+      <!-- §1 Red flags -->
+      <section class="section-page" id="s1" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🚨 Red flags（致死・四肢温存に直結）</h2>
+
+        <h3>1 つでもあれば緊急対応</h3>
+        <ul>
+          <li><strong>足背動脈触知不良 / 足色蒼白・冷感</strong> → 膝関節脱臼や膝窩動脈損傷を疑う</li>
+          <li><strong>下腿コンパートメント緊満・激痛・受動伸展痛</strong> → コンパートメント症候群</li>
+          <li><strong>下腿の感覚脱失・足趾運動障害</strong> → 腓骨神経損傷など</li>
+          <li><strong>明らかな関節変形・大量関節血症</strong> → 脱臼・骨折を強く疑う</li>
+          <li><strong>開放創・大量出血</strong></li>
+          <li><strong>受傷後の高エネルギー外傷</strong>（交通外傷、転落）</li>
+        </ul>
+
+        <div class="callout callout-danger">
+          <div class="callout-title">膝関節脱臼は血管評価必須</div>
+          <div class="callout-body">
+            <p><strong>膝関節脱臼は自然整復していることがある</strong>。明らかな不安定性・大量関節血症を伴う高エネルギー外傷では、整復後でも<strong>膝窩動脈損傷</strong>を念頭に ABI 測定 / CT angio / 血管外科コンサルトを検討。</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- §2 最小診察 + Ottawa Knee Rules -->
+      <section class="section-page" id="s2" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🩺 最小診察 + Ottawa Knee Rules</h2>
+
+        <h3>その場で行う最小セット</h3>
+        <ul>
+          <li><strong>視診</strong>：腫脹、変形、皮膚色、開放創</li>
+          <li><strong>触診</strong>：膝蓋骨、腓骨頭、関節裂隙、大腿骨遠位、脛骨近位</li>
+          <li><strong>関節血症の有無</strong>（Ballottement）</li>
+          <li><strong>可動域</strong>：屈曲 / 伸展、伸展不能（伸筋装置損傷）</li>
+          <li><strong>不安定性テスト</strong>：Lachman / 前後引き出し / 内外反 / McMurray（必要に応じて疼痛緩和後）</li>
+          <li><strong>血流・神経</strong>：足背動脈、後脛骨動脈、下腿感覚運動</li>
+        </ul>
+
+        <div class="callout callout-tip">
+          <div class="callout-title">Ottawa Knee Rules（外傷時の X 線適応）</div>
+          <div class="callout-body">
+            <ul>
+              <li><strong>55 歳以上</strong></li>
+              <li><strong>腓骨頭の圧痛</strong></li>
+              <li><strong>膝蓋骨単独の圧痛</strong>（他に骨圧痛なし）</li>
+              <li><strong>膝の 90 度屈曲不能</strong></li>
+              <li><strong>受傷直後と ER で 4 歩歩行不能</strong>（跛行可でもよい）</li>
+            </ul>
+            <p>1 つでも該当 → X 線。すべて陰性なら骨折の可能性は極めて低い（感度ほぼ 100%）。</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- §3 画像検査 -->
+      <section class="section-page" id="s3" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>📷 画像検査</h2>
+
+        <h3>第一選択</h3>
+        <ul>
+          <li><strong>膝関節 AP + lateral</strong></li>
+          <li><strong>膝蓋骨脱臼疑い / 膝蓋骨骨折疑い</strong> → <strong>sunrise（skyline / merchant）</strong>追加</li>
+          <li><strong>脛骨高原骨折疑い</strong> → <strong>oblique view</strong>追加 / 評価不十分なら CT</li>
+        </ul>
+
+        <h3>追加画像</h3>
+        <ul>
+          <li><strong>CT</strong>：脛骨高原骨折の関節面評価、複雑骨折、術前計画</li>
+          <li><strong>MRI</strong>：靱帯・半月板・後外側 corner 損傷、骨挫傷、occult fracture、膝関節脱臼後の評価</li>
+          <li><strong>CT angio / ABI</strong>：膝関節脱臼で血管損傷を疑うとき</li>
+        </ul>
+
+        <div class="callout callout-warning">
+          <div class="callout-title">X 線陰性でも骨折はある</div>
+          <div class="callout-body">
+            <p>高齢者の脛骨高原骨折、膝蓋骨水平骨折、occult fracture は単純 X 線で見逃しやすい。<strong>荷重不能や強い関節血症が続く</strong>なら CT / MRI を追加。</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- §4 主要鑑別 -->
+      <section class="section-page" id="s4" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🦴 主要鑑別</h2>
+
+        <div class="table-wrap"><table>
+          <thead><tr><th>病態</th><th>手がかり</th><th>進む先</th></tr></thead>
+          <tbody>
+            <tr><td><strong>脛骨高原骨折</strong></td><td>転倒・側方衝撃後の荷重困難、関節血症、内外反不安定性</td><td><a class="wiki-link" href="疾患詳細/脛骨高原骨折.html">脛骨高原骨折</a></td></tr>
+            <tr><td><strong>膝蓋骨骨折・脱臼</strong></td><td>膝前面打撲、伸展障害、膝蓋骨高位 / 触知異常</td><td><a class="wiki-link" href="疾患詳細/膝蓋骨骨折・脱臼.html">膝蓋骨骨折・脱臼</a></td></tr>
+            <tr><td><strong>靱帯・半月板損傷</strong></td><td>X線で骨折なし、不安定性、ロッキング</td><td><a class="wiki-link" href="疾患詳細/膝靱帯・半月板損傷.html">膝靱帯・半月板損傷</a></td></tr>
+            <tr><td><strong>膝関節脱臼</strong></td><td>高エネルギー、明らかな変形 / 不安定性、血管損傷リスク</td><td>整形緊急 + 血管評価</td></tr>
+            <tr><td><strong>伸筋装置断裂</strong>（膝蓋腱・大腿四頭筋腱）</td><td>伸展不能、膝蓋骨上方 / 下方転位</td><td>整形コンサルト</td></tr>
+          </tbody>
+        </table></div>
+
+        <h3>関節血症の意味</h3>
+        <ul>
+          <li><strong>急性大量関節血症（受傷後数時間以内）</strong>：ACL 断裂・脛骨高原骨折・膝蓋骨脱臼が多い</li>
+          <li><strong>脂肪滴を伴う関節血症</strong>：関節内骨折を強く示唆</li>
+        </ul>
+      </section>
+
+      <!-- §5 disposition -->
+      <section class="section-page" id="s5" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>📤 disposition</h2>
+
+        <h3>帰宅を考えやすい</h3>
+        <ul>
+          <li>X 線 / Ottawa Knee Rules で骨折なし、神経血管異常なし、荷重可能</li>
+          <li>シーネ / 装具固定、松葉杖、安静・冷却・挙上指示</li>
+          <li>整形外来 1〜2 週で再診</li>
+        </ul>
+
+        <h3>整形コンサルト / 入院</h3>
+        <ul>
+          <li>骨折あり（脛骨高原・膝蓋骨など）</li>
+          <li>膝関節脱臼 / 整復後 / 血管損傷疑い</li>
+          <li>伸筋装置断裂、開放創</li>
+          <li>大量関節血症 + 強い不安定性、荷重不能</li>
+        </ul>
+
+        <h3>疼痛管理</h3>
+        <ul>
+          <li><strong>アセトアミノフェン</strong>を基本に、必要に応じてオピオイド短期使用</li>
+          <li>NSAIDs は腎機能 / 高齢で慎重</li>
+          <li>シーネ固定 + 冷却 + 挙上で疼痛が軽減することが多い</li>
+        </ul>
+      </section>
+
+      <!-- §6 ピットフォール -->
+      <section class="section-page" id="s6" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>⚠️ ピットフォール</h2>
+        <ul>
+          <li><strong>「自然整復した膝関節脱臼」を見逃す</strong> — 大量関節血症 + 不安定性 + 高エネルギーは血管評価</li>
+          <li><strong>X 線陰性で安心する</strong> — 脛骨高原 occult fracture や後外側 corner 損傷</li>
+          <li><strong>膝蓋骨脱臼の整復後に骨軟骨骨折を見逃す</strong> — 整復後も sunrise / MRI</li>
+          <li><strong>下腿コンパートメントを忘れる</strong> — 脛骨高原骨折・骨幹部骨折は要注意</li>
+          <li><strong>Ottawa Knee Rules を骨折以外に適用する</strong> — 急性外傷が前提、慢性痛には使わない</li>
+        </ul>
+      </section>
+
+      <!-- §7 出典・リンク -->
+      <section class="section-page" id="s7" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>📚 出典・リンク</h2>
+
+        <h3>主要文献</h3>
+        <ul>
+          <li><strong>Ottawa Knee Rules</strong>：Stiell IG et al. <em>JAMA</em>. 1996.</li>
+          <li>関節血症 / 膝靱帯損傷の評価：教科書・各疾患ページ参照</li>
+        </ul>
+
+        <h3>関連ページ</h3>
+        <ul>
+          <li><a class="wiki-link" href="転倒.html">転倒</a></li>
+          <li><a class="wiki-link" href="疾患詳細/脛骨高原骨折.html">脛骨高原骨折</a></li>
+          <li><a class="wiki-link" href="疾患詳細/膝蓋骨骨折・脱臼.html">膝蓋骨骨折・脱臼</a></li>
+          <li><a class="wiki-link" href="疾患詳細/膝靱帯・半月板損傷.html">膝靱帯・半月板損傷</a></li>
+        </ul>
+
+        <p>#ER #救急 #膝の外傷 #膝痛 #OttawaKneeRules #脛骨高原骨折 #膝蓋骨脱臼 #靱帯損傷</p>
+      </section>
+
+    </article>
+  </main>
+
+  <nav class="hokuto-bottom">
+    <button class="hokuto-bottom__btn" type="button" id="navBack">
+      <span class="hokuto-bottom__icon">←</span><span>戻る</span>
+    </button>
+    <a class="hokuto-bottom__btn" href="ツール.html">
+      <span class="hokuto-bottom__icon">⚙</span><span>ツール</span>
+    </a>
+    <a class="hokuto-bottom__btn" href="index.html">
+      <span class="hokuto-bottom__icon">⌂</span><span>ホーム</span>
+    </a>
   </nav>
-  <article class="note-shell">
-    <header class="note-header"><h1>膝の外傷・痛み</h1><p class="source-badge">更新元: HTML 直編集</p></header>
-    <div class="md-body">
-      <div class="callout callout-summary"><div class="callout-title">このページの使い方</div><div class="callout-body"><ol><li>荷重可否と関節血症を確認</li><li>骨折を先に除外し、陰性なら靱帯・半月板を考える</li><li>診断後に各疾患ページへ進む</li></ol></div></div>
-      <h2 id="主要鑑別">主要鑑別</h2>
-      <div class="table-wrap"><table><thead><tr><th>病態</th><th>手がかり</th><th>進む先</th></tr></thead><tbody>
-      <tr><td><strong>脛骨高原骨折</strong></td><td>転倒後の荷重困難、関節内痛</td><td><a class="wiki-link" href="疾患詳細/脛骨高原骨折.html">脛骨高原骨折</a></td></tr>
-      <tr><td><strong>膝蓋骨骨折・脱臼</strong></td><td>膝前面打撲、伸展障害</td><td><a class="wiki-link" href="疾患詳細/膝蓋骨骨折・脱臼.html">膝蓋骨骨折・脱臼</a></td></tr>
-      <tr><td><strong>靱帯・半月板損傷</strong></td><td>X線で骨折なし、不安定性</td><td><a class="wiki-link" href="疾患詳細/膝靱帯・半月板損傷.html">膝靱帯・半月板損傷</a></td></tr>
-      </tbody></table></div>
-      <h2 id="関連リンク">関連リンク</h2>
-      <ul><li><a class="wiki-link" href="転倒.html">転倒</a></li><li><a class="wiki-link" href="疾患詳細/脛骨高原骨折.html">脛骨高原骨折</a></li><li><a class="wiki-link" href="疾患詳細/膝蓋骨骨折・脱臼.html">膝蓋骨骨折・脱臼</a></li></ul>
-    </div>
-    <footer class="page-footer"><a href="index.html">↑ 主訴ナビへ戻る</a></footer>
-  </article>
+
+  <script>
+  (function(){
+    const menu = document.getElementById('sectionMenu');
+    const pages = document.querySelectorAll('.section-page');
+    const titleH1 = document.querySelector('.page-title');
+
+    function showSection(id) {
+      menu.hidden = true;
+      if (titleH1) titleH1.hidden = true;
+      pages.forEach(p => p.hidden = (p.id !== id));
+      window.scrollTo(0, 0);
+    }
+    function showMenu(scrollTarget) {
+      menu.hidden = false;
+      if (titleH1) titleH1.hidden = false;
+      pages.forEach(p => p.hidden = true);
+      if (scrollTarget) {
+        if (scrollTarget.tagName === 'DETAILS') scrollTarget.open = true;
+        scrollTarget.scrollIntoView({behavior: 'instant', block: 'start'});
+      } else {
+        window.scrollTo(0, 0);
+      }
+    }
+    function syncFromHash() {
+      const id = (location.hash || '').replace('#','');
+      const target = id ? document.getElementById(id) : null;
+      if (target && target.classList.contains('section-page')) {
+        showSection(id);
+      } else if (target) {
+        showMenu(target);
+      } else {
+        showMenu();
+      }
+    }
+
+    window.addEventListener('hashchange', syncFromHash);
+    document.querySelectorAll('.back-to-menu').forEach(b => {
+      b.addEventListener('click', () => { history.pushState(null,'',location.pathname); showMenu(); });
+    });
+    const navBack = document.getElementById('navBack');
+    if (navBack) navBack.addEventListener('click', () => {
+      if (window.history.length > 1) history.back();
+      else window.location.href = 'index.html';
+    });
+
+    syncFromHash();
+  })();
+  </script>
 </body>
 </html>
