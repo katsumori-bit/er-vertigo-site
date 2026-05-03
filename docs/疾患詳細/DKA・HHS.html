@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="color-scheme" content="light dark" />
+  <title>DKA・HHS | ER ノート</title>
+  <link rel="stylesheet" href="../er-note.css" />
+</head>
+<body>
+  <header class="hokuto-top">
+    <a class="hokuto-top__btn" href="../薬剤情報.html">
+      <span class="hokuto-top__icon">℞</span><span>薬剤情報</span>
+    </a>
+    <a class="hokuto-top__btn" href="../表計算.html">
+      <span class="hokuto-top__icon">⊞</span><span>表計算</span>
+    </a>
+  </header>
+
+  <main class="hokuto-main">
+    <article class="note-shell">
+      <h1 class="page-title">DKA・HHS</h1>
+
+      <!-- 即時アクションヘッダー（常時 sticky） -->
+      <div class="action-header">
+        <div class="action-header__title">⚡ 即時アクション</div>
+        <ol class="action-header__list">
+          <li><strong>NS または乳酸リンゲル液 1-1.5 L/時</strong> で補液開始（高度脱水例 7-10 L 不足）</li>
+          <li><strong>K 確認</strong>：≥ 3.3 mEq/L でインスリン開始可、&lt; 3.3 なら <strong>K 補充先行</strong></li>
+          <li><strong>インスリン R 0.1 U/kg/時 持続静注</strong>（または 0.14 U/kg/時 ボーラスなし）</li>
+          <li>血糖降下速度 <strong>50-75 mg/dL/時</strong> を維持。<strong>DKA 200 / HHS 300</strong> mg/dL で 5%糖加 + 0.45% NaCl に切替</li>
+        </ol>
+      </div>
+
+      <!-- §1〜§9 メニュータイル -->
+      <nav class="section-tiles" id="sectionMenu">
+        <a class="section-tile" href="#s1"><span class="section-tile__no">🩺</span><span class="section-tile__name">診断基準と誘因</span></a>
+        <a class="section-tile" href="#s2"><span class="section-tile__no">💧</span><span class="section-tile__name">補液療法</span></a>
+        <a class="section-tile" href="#s3"><span class="section-tile__no">⚡</span><span class="section-tile__name">K・リン補正</span></a>
+        <a class="section-tile" href="#s4"><span class="section-tile__no">💉</span><span class="section-tile__name">インスリン<br><small>急性期</small></span></a>
+        <a class="section-tile" href="#s5"><span class="section-tile__no">🔄</span><span class="section-tile__name">改善判定<br><small>血糖安定化後</small></span></a>
+        <a class="section-tile" href="#s6"><span class="section-tile__no">🏥</span><span class="section-tile__name">移行期<br><small>皮下注 / RABBIT</small></span></a>
+        <a class="section-tile" href="#s7"><span class="section-tile__no">➕</span><span class="section-tile__name">他の治療<br><small>NaHCO3</small></span></a>
+        <a class="section-tile" href="#s8"><span class="section-tile__no">📤</span><span class="section-tile__name">disposition</span></a>
+        <a class="section-tile" href="#s9"><span class="section-tile__no">⚠️</span><span class="section-tile__name">落とし穴</span></a>
+      </nav>
+
+      <!-- DKA vs HHS 対比表（メニュー画面下に常設） -->
+      <details class="sub-fold" id="hhs-comparison">
+        <summary>DKA と HHS の対比表</summary>
+        <div class="sub-fold__body">
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th></th><th>軽症 DKA</th><th>中等症 DKA</th><th>重症 DKA</th><th>HHS</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>血糖 (mg/dL)</td><td>&gt; 250</td><td>&gt; 250</td><td>&gt; 250</td><td>&gt; 600</td></tr>
+                <tr><td>動脈血 pH</td><td>7.25-7.30</td><td>7.00-7.24</td><td>&lt; 7.00</td><td>&gt; 7.30</td></tr>
+                <tr><td>HCO₃ (mEq/L)</td><td>15-18</td><td>10-15</td><td>&lt; 10</td><td>&gt; 18</td></tr>
+                <tr><td>尿/血清ケトン</td><td>陽性</td><td>陽性</td><td>陽性</td><td>陰性〜軽度上昇</td></tr>
+                <tr><td>有効血清浸透圧</td><td>さまざま</td><td>さまざま</td><td>さまざま</td><td>&gt; 320 mOsm/kg</td></tr>
+                <tr><td>AG</td><td>&gt; 10</td><td>&gt; 12</td><td>&gt; 12</td><td>さまざま</td></tr>
+                <tr><td>意識</td><td>清明</td><td>清明/混濁</td><td>昏迷/昏睡</td><td>昏迷/昏睡</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p style="font-size:0.85rem;color:var(--muted);margin-top:0.5rem;">有効血清浸透圧 = 2×[Na] + 血糖/18 ／ <em>Diabetes Care 2009;32:1335-43</em></p>
+        </div>
+      </details>
+
+      <!-- 関連主訴（双方向リンク） -->
+      <details class="sub-fold" id="related-symptoms">
+        <summary>📞 この疾患が該当する主訴</summary>
+        <div class="sub-fold__body">
+          <ul>
+            <li><a class="wiki-link" href="../意識障害.html">意識障害</a> — 高血糖性昏睡（HHS 典型 / DKA 重症例）</li>
+            <li><span class="wiki-missing">悪心・嘔吐</span> — euglycemic DKA、SGLT2 阻害薬使用中</li>
+            <li><span class="wiki-missing">腹痛</span> — DKA の腹痛、リパーゼ偽陽性に注意</li>
+            <li><span class="wiki-missing">倦怠感</span> — HHS の典型呈示、徐々に進行する高血糖</li>
+            <li><span class="wiki-missing">呼吸困難</span> — Kussmaul 呼吸（代償性過呼吸）</li>
+          </ul>
+        </div>
+      </details>
+
+      <!-- §1 診断基準と誘因 -->
+      <section class="section-page" id="s1" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🩺 診断基準と誘因</h2>
+
+        <h3>診断基準（要点）</h3>
+        <ul>
+          <li><strong>DKA</strong>：血糖 &gt; 250、pH &lt; 7.30、HCO₃ &lt; 18、ケトン陽性、AG &gt; 10</li>
+          <li><strong>HHS</strong>：血糖 &gt; 600、pH &gt; 7.30、有効血清浸透圧 &gt; 320 mOsm/kg、ケトン陰性〜軽度</li>
+          <li><strong>両者オーバーラップ</strong>することも多く、明確に区別困難な例あり</li>
+          <li>DKA は <strong>1 型糖尿病</strong>で多いが、<strong>10-30% は 2 型糖尿病</strong></li>
+        </ul>
+        <p>※ 詳細な区分はメニュー画面の「DKA と HHS の対比表」を参照。</p>
+
+        <h3>誘因（感染症が 20-25% で最多）</h3>
+        <ul>
+          <li><strong>感染症</strong>（誘因の 20-25%、最多）→ 培養・画像で必ず探す</li>
+          <li><strong>心筋梗塞・脳梗塞</strong>（心因性ストレスを伴う重症病態）</li>
+          <li><strong>膵炎・外傷・妊娠・脱水</strong></li>
+          <li><strong>インスリンアドヒアランス不良</strong>（自己中断・打ち忘れ）</li>
+          <li><strong>薬剤</strong>：ステロイド、サイアザイド、Ca チャネル阻害薬、β 遮断薬、フェニトイン、<strong>SGLT2 阻害薬</strong>（→ euglycemic DKA）、<strong>MARTA・アリピプラゾール</strong>、<strong>免疫チェックポイント阻害薬</strong></li>
+          <li>原因不明は DKA の 2-10%</li>
+        </ul>
+
+        <div class="callout callout-tip">
+          <div class="callout-title">劇症型 1 型糖尿病に注意</div>
+          <div class="callout-body"><p>免疫チェックポイント阻害薬の irAE では <strong>76% で 1 型糖尿病</strong>を発症し、その多くで DKA を合併（重症 39% / 中等症 20% / 軽症 11%）。薬剤開始から発症までの中央値は約 49 日（範囲 5-448 日）。</p></div>
+        </div>
+
+        <p style="font-size:0.85rem;color:var(--muted);"><em>Diabetes Care 2009;32:1335-43、Diabet Med 2019;36:1075-81、CMAJ 2003;168:859-66</em></p>
+      </section>
+
+      <!-- §2 補液療法 -->
+      <section class="section-page" id="s2" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>💧 補液療法</h2>
+
+        <p>DKA・HHS は高頻度に脱水を伴う。<strong>重症例で 7-10 L</strong> の脱水。</p>
+
+        <h3>初期補液（脱水度別）</h3>
+        <ul>
+          <li><strong>高度脱水</strong>：NS または<strong>乳酸リンゲル液 1-1.5 L/時</strong> 負荷</li>
+          <li><strong>軽度脱水</strong>：モニタリング、慎重補液</li>
+          <li><strong>心原性ショック</strong>：モニタリング・カテコラミン併用</li>
+        </ul>
+
+        <div class="callout callout-tip">
+          <div class="callout-title">乳酸リンゲル液 vs 生食</div>
+          <div class="callout-body"><p>救急 ICU の RCT サブ解析（172 例）で、<strong>リンゲル液群はアシドーシス改善が早く</strong>（13 h vs 16.9 h、HR 1.68）、<strong>インスリン投与期間も短縮</strong>（9.8 h vs 13.4 h、HR 1.45）。心臓に問題なければリンゲル液を選んでよい。<em>JAMA Netw Open 2020;3(11):e2024596</em></p></div>
+        </div>
+
+        <h3>液種選択（補正 Na 値で判断）</h3>
+        <ul>
+          <li><strong>Na 正常〜上昇</strong> → <strong>0.45% NaCl</strong> 250-500 mL/時</li>
+          <li><strong>低 Na 血症</strong> → <strong>NS または乳酸リンゲル</strong> 250-500 mL/時</li>
+          <li>補正 Na = 測定 Na + 1.6 × (血糖 − 100) / 100</li>
+        </ul>
+
+        <h3>糖加への切替</h3>
+        <ul>
+          <li><strong>DKA：血糖 200 mg/dL 到達</strong> → <strong>5% ブドウ糖 + 0.45% NaCl</strong>（1 号液で代用）<strong>150-250 mL/時</strong></li>
+          <li><strong>HHS：血糖 300 mg/dL 到達</strong> → 同上</li>
+          <li>切替の意味：低血糖回避しつつ <strong>インスリンを止めない</strong>（ケト消失まで継続）</li>
+          <li>1 号液で代用する場合は 1 号液 500 mL に 50% ブドウ糖 20 mL 混注で 5% 糖加に近くなる</li>
+        </ul>
+
+        <h3>注意点</h3>
+        <ul>
+          <li>補液負荷中は<strong>溢水</strong>に注意（特に心不全・腎不全合併）</li>
+          <li>1 日合計 <strong>3-6 L</strong> が目安、尿量・うっ血所見を見ながら調整</li>
+          <li>自尿確認（尿量 0.5 mL/kg/時 以上）後に <strong>K 補正開始</strong></li>
+        </ul>
+      </section>
+
+      <!-- §3 K・リン補正 -->
+      <section class="section-page" id="s3" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>⚡ K・リン補正</h2>
+
+        <h3>K 補正の原則</h3>
+        <ul>
+          <li>アシドーシスでは通常 K 値は上昇するが、治療前から <strong>5.4% は低 K 血症</strong>を伴う</li>
+          <li>インスリン開始後 <strong>1-2 時間で K 急速低下</strong>のリスク → <strong>1-2 時間毎に K 評価</strong></li>
+          <li>全経過を通して <strong>K 4-5 mEq/L</strong> 維持を目標</li>
+        </ul>
+
+        <h3>K 値別フロー</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>K 値 (mEq/L)</th><th>対応</th></tr></thead>
+            <tbody>
+              <tr><td><strong>&lt; 3.3</strong></td><td><strong>インスリン投与中止</strong>。KCl <strong>20-30 mEq/時</strong> で補充、3.3 以上を確認してインスリン再開</td></tr>
+              <tr><td><strong>3.3-5.2</strong></td><td>メイン補液 <strong>1 L 当たり KCl 20-30 mEq 混注</strong>、毎 2-4 h で再測</td></tr>
+              <tr><td><strong>&gt; 5.2</strong></td><td><strong>K 投与なし</strong>、2 時間後にフォロー</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>リン補正</h3>
+        <ul>
+          <li>DKA 初期は <strong>94.7% で高リン血症</strong>（&gt; 4 mg/dL）だが、治療とともに細胞内取り込みで低下</li>
+          <li><strong>リン &lt; 1 mg/dL かつ心不全/貧血/呼吸抑制</strong>がある場合のみ補正推奨</li>
+          <li>補正方法：メイン補液に <strong>リン酸二カリウム 20-30 mEq</strong> 混注</li>
+        </ul>
+
+        <p style="font-size:0.85rem;color:var(--muted);"><em>Diabetes Care 2009;32:1335-43、QJM 2012;105:337-43、Am J Med 1985;79:571-6</em></p>
+      </section>
+
+      <!-- §4 インスリン療法 -->
+      <section class="section-page" id="s4" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>💉 インスリン療法（急性期）</h2>
+
+        <h3>開始基準</h3>
+        <ul>
+          <li>使用：<strong>レギュラーインスリン（インスリン R）持続静注</strong></li>
+          <li><strong>K &gt; 3.3 mEq/L</strong> を確認してから開始</li>
+          <li>K &lt; 3.3 では投与せず K 補正を優先</li>
+        </ul>
+
+        <h3>投与量（どちらでもよい）</h3>
+        <ul>
+          <li><strong>方法 A</strong>：<strong>0.1 U/kg ボーラス</strong> → <strong>0.1 U/kg/時 持続静注</strong></li>
+          <li><strong>方法 B</strong>：ボーラスなしで <strong>0.14 U/kg/時 持続静注</strong></li>
+          <li>血糖改善効果は <strong>同等</strong>（Diabetes Care 2008;31:2081-5）</li>
+        </ul>
+
+        <h3>調整</h3>
+        <ul>
+          <li>投与後 <strong>1 時間で 10% 血糖低下なし</strong> → <strong>0.14 U/kg ボーラス追加</strong></li>
+          <li>目標：<strong>血糖降下速度 50-75 mg/dL/時</strong></li>
+          <li><strong>DKA：血糖 200 mg/dL 到達</strong> → インスリン <strong>0.02-0.05 U/kg/時に減量</strong>、5% 糖加 + 0.45% NaCl 切替</li>
+          <li><strong>HHS：血糖 300 mg/dL 到達</strong> → 同上</li>
+          <li>または超速効型インスリンアナログ <strong>0.1 U/kg を 2 時間毎皮下注</strong>に変更</li>
+        </ul>
+
+        <div class="callout callout-warning">
+          <div class="callout-title">高齢・腎不全患者は少なめから</div>
+          <div class="callout-body"><p>インスリン代謝が低下しているため、<strong>初期投与量を 0.5 倍程度</strong>から始めて反応を見る。</p></div>
+        </div>
+
+        <h3>血糖降下と脳浮腫リスク</h3>
+        <ul>
+          <li>血糖降下とともに <strong>有効血漿浸透圧が低下</strong>し、脳浮腫の可能性</li>
+          <li>有効血漿浸透圧 = <strong>2×[Na] + [K] + 血糖/18</strong> の変化を最小限にするよう補液・インスリンを調整</li>
+          <li>補正中の<strong>意識障害悪化・頭痛・嘔気</strong>は頭蓋内圧亢進症状として警戒</li>
+        </ul>
+      </section>
+
+      <!-- §5 改善判定・血糖安定化後 -->
+      <section class="section-page" id="s5" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🔄 改善判定・血糖安定化後</h2>
+
+        <h3>フォローのタイミング</h3>
+        <ul>
+          <li>血糖安定化後は <strong>2-4 時間毎</strong> に BUN・Cr・電解質・静脈血 pH・血糖をフォロー</li>
+          <li>血清リン値の変動にも注意（治療中に低リン血症を呈し得る）</li>
+        </ul>
+
+        <h3>DKA 改善判定（4 項目中 2 項目以上）</h3>
+        <ul>
+          <li>血糖 &lt; 200 mg/dL</li>
+          <li>HCO₃ ≥ 15 mEq/L</li>
+          <li>静脈血 pH &gt; 7.3</li>
+          <li>AG ≤ 12</li>
+        </ul>
+
+        <h3>HHS 改善判定</h3>
+        <ul>
+          <li>血糖 &lt; 200 mg/dL</li>
+          <li>意識障害改善</li>
+          <li>血清浸透圧（計算値）正常化</li>
+        </ul>
+
+        <h3>改善後の管理</h3>
+        <ul>
+          <li><strong>経口摂取再開</strong>、<strong>経口血糖降下薬の再開</strong>、<strong>インスリン定期打ちへの変更</strong>（→ §6 移行期）</li>
+          <li>インスリン投与方法変更時の血糖上昇を避けるため、<strong>定期打ち開始から最初の 1-2 時間は持続投与も併用</strong></li>
+        </ul>
+      </section>
+
+      <!-- §6 移行期（皮下注） -->
+      <section class="section-page" id="s6" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🏥 移行期（皮下注：RABBIT / basal plus）</h2>
+
+        <h3>目標血糖値</h3>
+        <ul>
+          <li>ADA: ICU・非 ICU ともに <strong>140-180 mg/dL</strong>（基本）</li>
+          <li>低血糖リスク低・状態安定 → <strong>110-140 mg/dL</strong> も許容</li>
+          <li>非 ICU 皮下注：空腹時 &lt; 140、随時 &lt; 180 mg/dL</li>
+          <li><strong>&lt; 110 mg/dL を目標にする必要はない</strong>（NICE-SUGAR で死亡率増）</li>
+        </ul>
+
+        <h3>レジメンの選び方</h3>
+        <ul>
+          <li><strong>SSI（スライディングスケール）単独は避ける</strong>（効果低い）</li>
+          <li><strong>RABBIT プロトコール（basal-bolus）</strong>：グラルギン + グルリジン</li>
+          <li><strong>basal plus レジメン</strong>：グラルギン + 食前血糖でグルリジン上乗せ（<strong>1 型には使わない</strong>）</li>
+          <li>RABBIT と basal plus の血糖コントロール効果・低血糖リスクは <strong>同等</strong>。<strong>basal plus が病棟で混乱が少ない</strong>（Diabetes Care 2013;36:2169-74）</li>
+        </ul>
+
+        <h3>インスリン 1 日量の目安</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>患者背景</th><th>1 日量</th></tr></thead>
+            <tbody>
+              <tr><td>1 型・痩せ</td><td>0.2 U/kg/日</td></tr>
+              <tr><td>2 型既往なし、軽度肥満、血糖 140-200</td><td>0.3 U/kg/日</td></tr>
+              <tr><td>2 型・肥満、血糖 140-200</td><td>0.4 U/kg/日</td></tr>
+              <tr><td>2 型・肥満・ステロイド使用中、血糖 201-400</td><td>0.5 U/kg/日</td></tr>
+              <tr><td>70 歳以上 / Cr 2-3 mg/dL</td><td>0.3 U/kg/日</td></tr>
+              <tr><td>Cr &gt; 3 mg/dL</td><td>要注意（0.1-0.2）</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout callout-tip">
+          <div class="callout-title">覚え方</div>
+          <div class="callout-body"><p>面倒なら「<strong>血糖 140-200 で 0.4 / 201-400 で 0.5 / 高齢・腎不全は 0.3</strong>」だけで運用可能。</p></div>
+        </div>
+
+        <h3>RABBIT プロトコール（要点）</h3>
+        <ul>
+          <li>経口血糖降下薬は中止</li>
+          <li>1 日量の <strong>半量をグラルギン（1 日 1 回）</strong>、<strong>もう半量を 3 等分のグルリジン（毎食直前）</strong></li>
+          <li>食前血糖 &gt; 140 mg/dL なら<strong>追加スライディングスケールでグルリジンを増量</strong></li>
+          <li>翌日からの調整：食前 &gt; 140 → グラルギン 20% 増、&lt; 70 → 20% 減</li>
+        </ul>
+
+        <h3>ICU 患者のインスリン持続静注（一例）</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>場面</th><th>血糖</th><th>対応</th></tr></thead>
+            <tbody>
+              <tr><td rowspan="4">ICU 入室時</td><td>&gt; 220</td><td>2-4 U/時で開始</td></tr>
+              <tr><td>180-220</td><td>1-2 U/時で開始</td></tr>
+              <tr><td>140-180</td><td>1 U/時 or 経過観察</td></tr>
+              <tr><td>&lt; 140</td><td>使用しない</td></tr>
+              <tr><td>低血糖時</td><td>40-60</td><td>インスリン中止、ブドウ糖 10 g 静注、1 時間以内再検</td></tr>
+              <tr><td></td><td>&lt; 40</td><td>インスリン中止、ブドウ糖 10 g 静注、1 時間以内再検</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>急性期疾患でのポイント</h3>
+        <ul>
+          <li>急性期入院では <strong>インスリンで管理</strong>（経口血糖降下薬は原則中止）</li>
+          <li>低血糖リスクの低い <strong>ビグアナイド・α-GI・DPP-4</strong> は併用しても問題少</li>
+          <li>FDA は心不全リスクある患者で <strong>アログリプチン・サキサグリプチン中止</strong>を勧告</li>
+        </ul>
+
+        <p style="font-size:0.85rem;color:var(--muted);"><em>Diabetes Care 2022;45(Suppl 1):S244-53、Crit Care Med 2006;34(9 Suppl):S291-300、Diabetes Care 2007;30:2181-6</em></p>
+      </section>
+
+      <!-- §7 他の治療（NaHCO3） -->
+      <section class="section-page" id="s7" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>➕ 他の治療（NaHCO3）</h2>
+
+        <h3>適応</h3>
+        <ul>
+          <li><strong>pH ≥ 7</strong> なら使用必要なし</li>
+          <li><strong>pH &lt; 7</strong> で使用検討（高度アシドーシスでカテコラミン感受性低下のため）</li>
+          <li>前向き RCT は存在せず、ADA はエキスパートオピニオンレベル</li>
+        </ul>
+
+        <h3>使用方法</h3>
+        <ul>
+          <li><strong>NaHCO₃ 100 mmol</strong>（メイロン 8.4% 100 mL）+ <strong>5% ブドウ糖 400 mL</strong> + <strong>KCl 20 mEq</strong> 混注</li>
+          <li><strong>2 時間で投与</strong></li>
+          <li>投与後 <strong>pH と K 値をチェック</strong></li>
+          <li>pH &lt; 7 のままなら再投与考慮</li>
+        </ul>
+
+        <div class="callout callout-warning">
+          <div class="callout-title">NaHCO3 の慎重論</div>
+          <div class="callout-body"><p><strong>pH ≥ 6.9</strong> では NaHCO3 投与しても血糖コントロール改善効果は認められず、<strong>低 K 血症リスク・脳浮腫リスク・ケトン体消失遅延リスク</strong>がある。意識障害・腎障害・血行動態破綻など適応を慎重に判断。<em>Front Endocrinol 2017;8:106</em></p></div>
+        </div>
+      </section>
+
+      <!-- §8 disposition -->
+      <section class="section-page" id="s8" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>📤 disposition</h2>
+
+        <h3>ICU</h3>
+        <ul>
+          <li>pH &lt; 7.0</li>
+          <li>重度意識障害（GCS 低下）</li>
+          <li>重度 K 異常（&lt; 3.3 or &gt; 5.5）</li>
+          <li>心呼吸動態不安定</li>
+          <li>妊娠合併</li>
+          <li>小児・若年（脳浮腫リスク）</li>
+        </ul>
+
+        <h3>HCU</h3>
+        <ul>
+          <li>上記 ICU 基準を満たさない軽症〜中等症 DKA</li>
+          <li>1-2 時間毎の電解質・血糖モニタリングが必要な間</li>
+        </ul>
+
+        <h3>一般病棟</h3>
+        <ul>
+          <li>DKA 改善判定後の継続管理</li>
+          <li>経口摂取再開・皮下注インスリンへの移行（→ §6 移行期）</li>
+        </ul>
+
+        <h3>HHS</h3>
+        <ul>
+          <li>基本 <strong>ICU/HCU</strong>（高齢・脱水重度・基礎疾患多いため）</li>
+          <li>感染症の合併を常に念頭に置く</li>
+        </ul>
+
+        <div class="callout callout-warning">
+          <div class="callout-title">帰宅は原則不可</div>
+          <div class="callout-body"><p>軽症 DKA でも入院（教育目的・誘因精査含む）。</p></div>
+        </div>
+      </section>
+
+      <!-- §9 落とし穴 -->
+      <section class="section-page" id="s9" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>⚠️ 落とし穴</h2>
+
+        <h3>脳浮腫（小児・若年に多い）</h3>
+        <ul>
+          <li>補正速度が過剰だと発症、<strong>頭痛・嘔気・意識低下</strong>で疑う</li>
+          <li>有効血漿浸透圧の変化を最小限にする補液・インスリン調整が予防</li>
+          <li>疑ったらマンニトール / 補液速度減</li>
+        </ul>
+
+        <h3>K の急変</h3>
+        <ul>
+          <li>インスリン開始で K が急速低下 → <strong>1-2 時間毎採血必須</strong></li>
+          <li>低 K 血症で呼吸筋麻痺・不整脈リスク上昇</li>
+        </ul>
+
+        <h3>ケト消失まで継続</h3>
+        <ul>
+          <li>血糖が正常化してもインスリンを止めない</li>
+          <li><strong>5% 糖加でインスリン継続</strong>、ケト消失と AG 改善まで</li>
+        </ul>
+
+        <h3>Euglycemic DKA（SGLT2 阻害薬）</h3>
+        <ul>
+          <li>血糖 &lt; 200 でも DKA あり得る（SGLT2 で尿糖排泄）</li>
+          <li><strong>悪心・嘔吐・腹痛・倦怠感・呼吸困難・意識障害</strong>で疑う</li>
+          <li>必ず <strong>尿ケトン or 血ガス分析</strong> を施行</li>
+          <li><em>CMAJ 2018;190(25):E766-8</em></li>
+        </ul>
+
+        <h3>リパーゼ・アミラーゼ偽陽性</h3>
+        <ul>
+          <li>DKA で <strong>29% にリパーゼ上昇、21% にアミラーゼ上昇</strong>がみられる</li>
+          <li>実際に画像で膵炎所見があるのは <strong>11% のみ</strong></li>
+          <li>安易に膵炎と決めず、画像所見と総合判断</li>
+        </ul>
+
+        <h3>劇症型 1 型糖尿病</h3>
+        <ul>
+          <li>劇症型 1 型では <strong>76.6% にアミラーゼ上昇、84.7% にリパーゼ上昇</strong></li>
+          <li>急性発症の DKA・ケトアシドーシスでこのパターンを見たら劇症型 1 型を疑う</li>
+        </ul>
+
+        <h3>妊娠時の DKA</h3>
+        <ul>
+          <li>妊娠は呼吸性アルカローシスベースのため、<strong>pH ≥ 7.30 でも DKA あり得る</strong></li>
+          <li>HCO3 と AG・ケトンで判断</li>
+        </ul>
+
+        <h3>免疫チェックポイント阻害薬の 1 型糖尿病</h3>
+        <ul>
+          <li>irAE で発症する 1 型糖尿病の <strong>76% が DKA を合併</strong></li>
+          <li>薬剤開始から発症までの中央値約 49 日（範囲 5-448 日）</li>
+        </ul>
+
+        <h3>アルコール性ケトアシドーシス</h3>
+        <ul>
+          <li>DKA との鑑別、ブドウ糖 + 生食で改善する</li>
+        </ul>
+      </section>
+
+    </article>
+  </main>
+
+  <nav class="hokuto-bottom">
+    <button class="hokuto-bottom__btn" type="button" id="navBack">
+      <span class="hokuto-bottom__icon">←</span><span>戻る</span>
+    </button>
+    <a class="hokuto-bottom__btn" href="../ツール.html">
+      <span class="hokuto-bottom__icon">⚙</span><span>ツール</span>
+    </a>
+    <a class="hokuto-bottom__btn" href="../index.html">
+      <span class="hokuto-bottom__icon">⌂</span><span>ホーム</span>
+    </a>
+  </nav>
+
+  <script>
+  (function(){
+    const menu = document.getElementById('sectionMenu');
+    const pages = document.querySelectorAll('.section-page');
+    const titleH1 = document.querySelector('.page-title');
+    const hhsComp = document.getElementById('hhs-comparison');
+    const relatedSymp = document.getElementById('related-symptoms');
+
+    function showSection(id) {
+      menu.hidden = true;
+      if (titleH1) titleH1.hidden = true;
+      if (hhsComp) hhsComp.hidden = true;
+      if (relatedSymp) relatedSymp.hidden = true;
+      pages.forEach(p => p.hidden = (p.id !== id));
+      window.scrollTo(0, 0);
+    }
+    function showMenu(scrollTarget) {
+      menu.hidden = false;
+      if (titleH1) titleH1.hidden = false;
+      if (hhsComp) hhsComp.hidden = false;
+      if (relatedSymp) relatedSymp.hidden = false;
+      pages.forEach(p => p.hidden = true);
+      // sub-fold を直接指定された場合はそこへスクロール（hhs-comparison など）
+      if (scrollTarget) {
+        // open the details if it is one
+        if (scrollTarget.tagName === 'DETAILS') scrollTarget.open = true;
+        scrollTarget.scrollIntoView({behavior: 'instant', block: 'start'});
+      } else {
+        window.scrollTo(0, 0);
+      }
+    }
+    function syncFromHash() {
+      const id = (location.hash || '').replace('#','');
+      const target = id ? document.getElementById(id) : null;
+      if (target && target.classList.contains('section-page')) {
+        showSection(id);
+      } else if (target) {
+        // section-page 以外（hhs-comparison / related-symptoms / action 等）に飛びたい
+        showMenu(target);
+      } else {
+        showMenu();
+      }
+    }
+
+    window.addEventListener('hashchange', syncFromHash);
+    document.querySelectorAll('.back-to-menu').forEach(b => {
+      b.addEventListener('click', () => { history.pushState(null,'',location.pathname); showMenu(); });
+    });
+    const navBack = document.getElementById('navBack');
+    if (navBack) navBack.addEventListener('click', () => {
+      // 履歴があれば戻る、なければ index へ fallback（直接 URL 起動・新規タブ対策）
+      if (window.history.length > 1) history.back();
+      else window.location.href = '../index.html';
+    });
+
+    syncFromHash();
+  })();
+  </script>
+</body>
+</html>

@@ -4,135 +4,257 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="color-scheme" content="light dark" />
-  <title>強い腹痛を呈する内科的疾患</title>
+  <title>強い腹痛を呈する内科的疾患 | ER ノート</title>
   <link rel="stylesheet" href="../er-note.css" />
 </head>
 <body>
-  <nav class="site-bar">
-    <a class="site-bar__back" href="../腹痛.html">← 腹痛へ戻る</a>
-    <span class="site-bar__title">強い腹痛を呈する内科的疾患</span>
+  <header class="hokuto-top">
+    <a class="hokuto-top__btn" href="../薬剤情報.html">
+      <span class="hokuto-top__icon">℞</span><span>薬剤情報</span>
+    </a>
+    <a class="hokuto-top__btn" href="../表計算.html">
+      <span class="hokuto-top__icon">⊞</span><span>表計算</span>
+    </a>
+  </header>
+
+  <main class="hokuto-main">
+    <article class="note-shell">
+      <h1 class="page-title">強い腹痛を呈する内科的疾患（Medical Diseases with Severe Abdominal Pain）</h1>
+
+      <!-- 即時アクションヘッダー -->
+      <div class="action-header">
+        <div class="action-header__title">⚡ 即時アクション</div>
+        <ol class="action-header__list">
+          <li><strong>血管系を CT で確認</strong>：<strong>大動脈解離 / 急性腸間膜虚血 / 脾梗塞</strong>（造影 CT・CTA で除外）</li>
+          <li><strong>内分泌・代謝を血液で除外</strong>：<strong>DKA / 副腎クリーゼ / 高 Ca 血症 / 急性ポルフィリン症</strong>（血糖・ケトン・コルチゾール・Ca・尿 PBG）</li>
+          <li><strong>感染・軟部組織</strong>：<strong>Fournier 壊死性筋膜炎</strong>（陰部診察）、<strong>SBP</strong>（腹水穿刺）、急性胆管炎</li>
+          <li><strong>外科紹介前に「内科的でも外科的でもない原因」を一通り吟味</strong>：negative laparotomy を減らす一方、本来手術疾患の見落としは絶対回避</li>
+        </ol>
+      </div>
+
+      <!-- §1〜§4 メニュータイル -->
+      <nav class="section-tiles" id="sectionMenu">
+        <a class="section-tile" href="#s1"><span class="section-tile__no">🫀</span><span class="section-tile__name">心窩部痛<br><small>上部穿孔様</small></span></a>
+        <a class="section-tile" href="#s2"><span class="section-tile__no">🫁</span><span class="section-tile__name">右季肋部痛<br><small>胆嚢炎様</small></span></a>
+        <a class="section-tile" href="#s3"><span class="section-tile__no">🦠</span><span class="section-tile__name">右下腹部痛<br><small>虫垂炎様</small></span></a>
+        <a class="section-tile" href="#s4"><span class="section-tile__no">🌐</span><span class="section-tile__name">汎発性腹膜炎様<br><small>広範な腹痛</small></span></a>
+      </nav>
+
+      <!-- マスター警告（メニュー画面に常設） -->
+      <details class="sub-fold" id="negative-laparotomy-warning">
+        <summary>⚠️ Negative laparotomy の前提</summary>
+        <div class="sub-fold__body">
+          <div class="callout callout-warning">
+            <div class="callout-body">
+              <p>本項の対象は<strong>「一見して手術が必要に見える腹痛だが、実は内科治療がメイン」</strong>の疾患群、いわば <strong>negative laparotomy の etiology</strong>。これらを知ることで不要な開腹を減らせる一方、<strong>生半可な知識で本来手術適応の疾患を内科疾患と誤診することは negative laparotomy よりはるかに罪が重い</strong>ことを肝に銘じる。</p>
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <!-- 関連主訴（双方向リンク） -->
+      <details class="sub-fold" id="related-symptoms">
+        <summary>📞 この疾患が該当する主訴</summary>
+        <div class="sub-fold__body">
+          <ul>
+            <li><a class="wiki-link" href="../腹痛.html">腹痛</a> — 内科的でも外科的でもない原因の鑑別フィルタ</li>
+            <li><a class="wiki-link" href="../嘔気・嘔吐.html">嘔気・嘔吐</a> — DKA・副腎不全・急性膵炎の症状</li>
+            <li><a class="wiki-link" href="../発熱.html">発熱</a> — SBP・PID・腎盂腎炎・肺炎</li>
+            <li><a class="wiki-link" href="../意識障害.html">意識障害</a> — 副腎クリーゼ・DKA・敗血症</li>
+          </ul>
+        </div>
+      </details>
+
+      <!-- §1 心窩部痛 -->
+      <section class="section-page" id="s1" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🫀 1. 上部消化管穿孔を疑わせる強い心窩部痛</h2>
+
+        <p>強い心窩部痛＋上腹部反跳痛があるが、典型的な「板状硬」とは言えないとき。</p>
+        <ul>
+          <li><strong>急性出血性びらん性胃炎（AGML）</strong></li>
+          <li><strong>胃アニサキス症</strong></li>
+        </ul>
+        <p><small>いずれも圧痛部位で軽い反跳痛を伴うことがあり注意。</small></p>
+
+        <h3>関連リンク</h3>
+        <ul>
+          <li><a class="wiki-link" href="上部消化管穿孔.html">上部消化管穿孔</a>（鑑別の対象）</li>
+          <li><a class="wiki-link" href="急性潰瘍・急性胃炎.html">急性潰瘍・急性胃炎</a>（AGML）</li>
+          <li><a class="wiki-link" href="アニサキス症.html">アニサキス症</a></li>
+        </ul>
+      </section>
+
+      <!-- §2 右季肋部痛 -->
+      <section class="section-page" id="s2" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🫁 2. 急性胆嚢炎を疑わせる右季肋部痛</h2>
+
+        <p>右季肋部に圧痛、右側胸部に叩打痛、画像で胆嚢壁が肥厚している。<strong>でも胆石はない</strong>……というとき。</p>
+
+        <h3>強い圧痛を伴うもの</h3>
+        <ul>
+          <li><strong>急性アルコール性肝炎</strong>（急激に腫大して被膜が引き延ばされて痛む。急性ウイルス性肝炎は通常無痛だが、アルコール性は右季肋部痛を伴うことがある）</li>
+          <li><strong>（痩せた女性の）右腎盂腎炎</strong>（前腹壁から腎までの距離が短いと腹痛として訴える）</li>
+          <li>肝湾曲部の大腸憩室炎</li>
+          <li><strong>右肺炎・膿胸</strong></li>
+          <li><strong>多発肝転移</strong>（急激に増大する際に痛みを伴うことがある）</li>
+        </ul>
+
+        <h3>痛みは強くないが「胆嚢炎のような画像」を呈するもの</h3>
+        <ul>
+          <li>急性肝炎（ウイルス性／薬剤性／アルコール性）</li>
+          <li><strong>SLE</strong></li>
+          <li><strong>川崎病</strong>（gallbladder hydrops、通常手術不要）</li>
+        </ul>
+
+        <div class="callout callout-tip">
+          <div class="callout-body">
+            <p>これらは「急性胆嚢炎」ではない。罹患部位は<strong>胆嚢ではなく肝臓</strong>。肝実質と被膜の間には疎な結合織がないため、肝臓からの滲出液は<strong>肝被膜下に溜まらず、胆嚢周囲の浮腫</strong>となる。<br>
+            画像で<strong>「壁の漿膜下浮腫がメインで内腔は緊満していない」</strong>なら胆嚢炎ではない。肝臓側はグリソン鞘に浮腫性肥厚を認める。</p>
+          </div>
+        </div>
+
+        <h3>関連リンク</h3>
+        <ul>
+          <li><a class="wiki-link" href="胆石症・急性胆嚢炎.html">胆石症・急性胆嚢炎</a>（鑑別の対象）</li>
+          <li><a class="wiki-link" href="腹痛をきたす胸部疾患.html">腹痛をきたす胸部疾患</a></li>
+        </ul>
+      </section>
+
+      <!-- §3 右下腹部痛 -->
+      <section class="section-page" id="s3" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🦠 3. 虫垂炎を思わせる右下腹部痛</h2>
+
+        <h3>強い圧痛・反跳痛を有するもの</h3>
+        <ul>
+          <li><strong>（若年女性）PID</strong></li>
+          <li><strong>盲腸憩室炎</strong></li>
+          <li><strong>回盲部炎（特に Yersinia 腸炎 ＝ pseudoappendicitis）</strong></li>
+          <li><strong>急性膵炎</strong>（炎症性浸出液が腸間膜根部に沿って回盲部へ伝わる）</li>
+        </ul>
+
+        <h3>内科治療メインではないが治療方針が変わるもの</h3>
+        <ul>
+          <li><strong>大腸閉塞</strong>：どこが閉塞してもラプラスの定理で<strong>盲腸が痛む</strong></li>
+        </ul>
+
+        <h3>関連リンク</h3>
+        <ul>
+          <li><a class="wiki-link" href="急性虫垂炎.html">急性虫垂炎</a>（鑑別の対象）</li>
+          <li><a class="wiki-link" href="急性憩室炎.html">急性憩室炎</a>（盲腸憩室炎）</li>
+        </ul>
+      </section>
+
+      <!-- §4 汎発性 -->
+      <section class="section-page" id="s4" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🌐 4. 汎発性腹膜炎を呈する広範な腹痛</h2>
+
+        <p>腹部全体的膨満＋強い自発痛＋「明らかな」反跳痛。このようなときでも<strong>内科治療が奏効する疾患</strong>がある。</p>
+
+        <ul>
+          <li><strong>急性膵炎</strong></li>
+          <li><strong>急性腸炎</strong>（細菌性腸炎、偽膜性腸炎などの重症型）</li>
+          <li><strong>特発性細菌性腹膜炎（SBP：spontaneous bacterial peritonitis）</strong></li>
+          <li><strong>血管炎に伴う虚血性腸炎（特に SLE：lupus enteritis）</strong></li>
+          <li><strong>急性副腎不全</strong></li>
+        </ul>
+
+        <div class="callout callout-warning">
+          <div class="callout-title">急性副腎不全</div>
+          <div class="callout-body">
+            <p>強い腹痛を引き起こすことがある。とくに<strong>アジソン病</strong>や<strong>長期ステロイド服用者の休薬時</strong>に出現することがある。</p>
+          </div>
+        </div>
+
+        <h3>関連リンク</h3>
+        <ul>
+          <li><a class="wiki-link" href="非感染性腸炎.html">非感染性腸炎</a>（lupus enteritis 等）</li>
+        </ul>
+
+        <h3>出典</h3>
+        <ul>
+          <li>窪田忠夫『フラッシュアップ急性腹症』第 2 版（中外医学社）— 章構成の踏襲元</li>
+          <li>Mathurin P, Lucey MR. <em>J Hepatol</em> 2012 — アルコール性肝炎管理</li>
+          <li>Martinez D, Lower R. <em>Clin Radiol</em> 1991 — SLE 漿膜炎が胆嚢炎類似</li>
+          <li>Suddleson EA, et al. <em>J Pediatr Surg</em> 1987 — 川崎病の胆嚢水腫</li>
+          <li>Perdikogianni C, et al. <em>Pediatr Surg Int</em> 2006 — Yersinia の pseudoappendicitis</li>
+          <li>Saint AL, et al. <em>Ann Fr Anesth Reanim</em> 2010 — 副腎皮質不全と腹痛</li>
+          <li>Wiltshire EJ, et al. <em>J Pediatr Child Health</em> 2004 — Addison 病の急性腹症</li>
+          <li>急性腹症診療ガイドライン 2015（日本腹部救急医学会）</li>
+        </ul>
+      </section>
+
+    </article>
+  </main>
+
+  <nav class="hokuto-bottom">
+    <button class="hokuto-bottom__btn" type="button" id="navBack">
+      <span class="hokuto-bottom__icon">←</span><span>戻る</span>
+    </button>
+    <a class="hokuto-bottom__btn" href="../ツール.html">
+      <span class="hokuto-bottom__icon">⚙</span><span>ツール</span>
+    </a>
+    <a class="hokuto-bottom__btn" href="../index.html">
+      <span class="hokuto-bottom__icon">⌂</span><span>ホーム</span>
+    </a>
   </nav>
-  <article class="note-shell">
-    <header class="note-header">
-      <h1>強い腹痛を呈する内科的疾患（Medical Diseases with Severe Abdominal Pain）</h1>
-      <p class="source-badge">元: 急性腹症 参考用.md（窪田『フラッシュアップ急性腹症』第 2 版）の章構成を踏襲した要約 ／ 補完出典は文末記載</p>
-    </header>
-    <details class="toc"><summary>目次（原著章順）</summary><ol>
-      <li><a href="#心窩部">上部消化管穿孔を疑わせる強い心窩部痛</a></li>
-      <li><a href="#右季肋部">急性胆嚢炎を疑わせる右季肋部痛</a></li>
-      <li><a href="#右下腹部">虫垂炎を思わせる右下腹部痛</a></li>
-      <li><a href="#汎発性">汎発性腹膜炎を呈する広範な腹痛</a></li>
-    </ol></details>
-    <div class="md-body">
 
-<p>#ER #救急 #腹痛 #negativelaparotomy #lupus #副腎不全</p>
+  <script>
+  (function(){
+    const menu = document.getElementById('sectionMenu');
+    const pages = document.querySelectorAll('.section-page');
+    const titleH1 = document.querySelector('.page-title');
+    const negLap = document.getElementById('negative-laparotomy-warning');
+    const relatedSymp = document.getElementById('related-symptoms');
 
-<div class="callout callout-warning">
-<div class="callout-body">
-本項の対象は<strong>「一見して手術が必要に見える腹痛だが、実は内科治療がメイン」</strong>の疾患群、いわば <strong>negative laparotomy の etiology</strong>。これらを知ることで不要な開腹を減らせる一方、<strong>生半可な知識で本来手術適応の疾患を内科疾患と誤診することは negative laparotomy よりはるかに罪が重い</strong>ことを肝に銘じる。
-</div>
-</div>
+    function showSection(id) {
+      menu.hidden = true;
+      if (titleH1) titleH1.hidden = true;
+      if (negLap) negLap.hidden = true;
+      if (relatedSymp) relatedSymp.hidden = true;
+      pages.forEach(p => p.hidden = (p.id !== id));
+      window.scrollTo(0, 0);
+    }
+    function showMenu(scrollTarget) {
+      menu.hidden = false;
+      if (titleH1) titleH1.hidden = false;
+      if (negLap) negLap.hidden = false;
+      if (relatedSymp) relatedSymp.hidden = false;
+      pages.forEach(p => p.hidden = true);
+      if (scrollTarget) {
+        if (scrollTarget.tagName === 'DETAILS') scrollTarget.open = true;
+        scrollTarget.scrollIntoView({behavior: 'instant', block: 'start'});
+      } else {
+        window.scrollTo(0, 0);
+      }
+    }
+    function syncFromHash() {
+      const id = (location.hash || '').replace('#','');
+      const target = id ? document.getElementById(id) : null;
+      if (target && target.classList.contains('section-page')) {
+        showSection(id);
+      } else if (target) {
+        showMenu(target);
+      } else {
+        showMenu();
+      }
+    }
 
-<h2 id="心窩部">1. 上部消化管穿孔を疑わせる強い心窩部痛</h2>
-<p>強い心窩部痛＋上腹部反跳痛があるが、典型的な「板状硬」とは言えないとき。</p>
-<ul>
-<li><strong>急性出血性びらん性胃炎（AGML）</strong></li>
-<li><strong>胃アニサキス症</strong></li>
-</ul>
-<p><small>いずれも圧痛部位で軽い反跳痛を伴うことがあり注意。</small></p>
-<hr>
+    window.addEventListener('hashchange', syncFromHash);
+    document.querySelectorAll('.back-to-menu').forEach(b => {
+      b.addEventListener('click', () => { history.pushState(null,'',location.pathname); showMenu(); });
+    });
+    const navBack = document.getElementById('navBack');
+    if (navBack) navBack.addEventListener('click', () => {
+      if (window.history.length > 1) history.back();
+      else window.location.href = '../index.html';
+    });
 
-<h2 id="右季肋部">2. 急性胆嚢炎を疑わせる右季肋部痛</h2>
-<p>右季肋部に圧痛、右側胸部に叩打痛、画像で胆嚢壁が肥厚している。<strong>でも胆石はない</strong>……というとき。</p>
-
-<h3>強い圧痛を伴うもの</h3>
-<ul>
-<li><strong>急性アルコール性肝炎</strong>（急激に腫大して被膜が引き延ばされて痛む。急性ウイルス性肝炎は通常無痛だが、アルコール性は右季肋部痛を伴うことがある）</li>
-<li><strong>（痩せた女性の）右腎盂腎炎</strong>（前腹壁から腎までの距離が短いと腹痛として訴える）</li>
-<li>肝湾曲部の大腸憩室炎</li>
-<li><strong>右肺炎・膿胸</strong></li>
-<li><strong>多発肝転移</strong>（急激に増大する際に痛みを伴うことがある）</li>
-</ul>
-
-<h3>痛みは強くないが「胆嚢炎のような画像」を呈するもの</h3>
-<ul>
-<li>急性肝炎（ウイルス性／薬剤性／アルコール性）</li>
-<li><strong>SLE</strong></li>
-<li><strong>川崎病</strong>（gallbladder hydrops、通常手術不要）</li>
-</ul>
-
-<div class="callout callout-tip">
-<div class="callout-body">
-これらは「急性胆嚢炎」ではない。罹患部位は<strong>胆嚢ではなく肝臓</strong>。肝実質と被膜の間には疎な結合織がないため、肝臓からの滲出液は<strong>肝被膜下に溜まらず、胆嚢周囲の浮腫</strong>となる。<br>
-画像で<strong>「壁の漿膜下浮腫がメインで内腔は緊満していない」</strong>なら胆嚢炎ではない。肝臓側はグリソン鞘に浮腫性肥厚を認める。
-</div>
-</div>
-<hr>
-
-<h2 id="右下腹部">3. 虫垂炎を思わせる右下腹部痛</h2>
-
-<h3>強い圧痛・反跳痛を有するもの</h3>
-<ul>
-<li><strong>（若年女性）PID</strong></li>
-<li><strong>盲腸憩室炎</strong></li>
-<li><strong>回盲部炎（特に Yersinia 腸炎 ＝ pseudoappendicitis）</strong></li>
-<li><strong>急性膵炎</strong>（炎症性浸出液が腸間膜根部に沿って回盲部へ伝わる）</li>
-</ul>
-
-<h3>内科治療メインではないが治療方針が変わるもの</h3>
-<ul>
-<li><strong>大腸閉塞</strong>：どこが閉塞してもラプラスの定理で<strong>盲腸が痛む</strong></li>
-</ul>
-<hr>
-
-<h2 id="汎発性">4. 汎発性腹膜炎を呈する広範な腹痛</h2>
-<p>腹部全体的膨満＋強い自発痛＋「明らかな」反跳痛。このようなときでも<strong>内科治療が奏効する疾患</strong>がある。</p>
-
-<ul>
-<li><strong>急性膵炎</strong></li>
-<li><strong>急性腸炎</strong>（細菌性腸炎、偽膜性腸炎などの重症型）</li>
-<li><strong>特発性細菌性腹膜炎（SBP：spontaneous bacterial peritonitis）</strong></li>
-<li><strong>血管炎に伴う虚血性腸炎（特に SLE：lupus enteritis）</strong></li>
-<li><strong>急性副腎不全</strong></li>
-</ul>
-
-<div class="callout callout-warning">
-<div class="callout-title">急性副腎不全</div>
-<div class="callout-body">
-強い腹痛を引き起こすことがある。とくに<strong>アジソン病</strong>や<strong>長期ステロイド服用者の休薬時</strong>に出現することがある。
-</div>
-</div>
-<hr>
-
-<h2>このページから張るリンク</h2>
-<ul>
-<li><a class="wiki-link" href="../腹痛.html">← 腹痛入口へ戻る</a></li>
-<li><a class="wiki-link" href="上部消化管穿孔.html">上部消化管穿孔</a>（鑑別の対象）</li>
-<li><a class="wiki-link" href="胆石症・急性胆嚢炎.html">胆石症・急性胆嚢炎</a>（鑑別の対象）</li>
-<li><a class="wiki-link" href="急性虫垂炎.html">急性虫垂炎</a>（鑑別の対象）</li>
-<li><a class="wiki-link" href="急性憩室炎.html">急性憩室炎</a>（盲腸憩室炎）</li>
-<li><a class="wiki-link" href="非感染性腸炎.html">非感染性腸炎</a>（lupus enteritis 等）</li>
-<li><a class="wiki-link" href="急性潰瘍・急性胃炎.html">急性潰瘍・急性胃炎</a>（AGML）</li>
-<li><a class="wiki-link" href="アニサキス症.html">アニサキス症</a></li>
-<li><a class="wiki-link" href="腹痛をきたす胸部疾患.html">腹痛をきたす胸部疾患</a></li>
-</ul>
-
-<h2>出典</h2>
-<ul>
-<li>窪田忠夫『フラッシュアップ急性腹症』第 2 版（中外医学社）— 章構成の踏襲元</li>
-<li>Mathurin P, Lucey MR. <em>J Hepatol</em> 2012 — アルコール性肝炎管理</li>
-<li>Martinez D, Lower R. <em>Clin Radiol</em> 1991 — SLE 漿膜炎が胆嚢炎類似</li>
-<li>Suddleson EA, et al. <em>J Pediatr Surg</em> 1987 — 川崎病の胆嚢水腫</li>
-<li>Perdikogianni C, et al. <em>Pediatr Surg Int</em> 2006 — Yersinia の pseudoappendicitis</li>
-<li>Saint AL, et al. <em>Ann Fr Anesth Reanim</em> 2010 — 副腎皮質不全と腹痛</li>
-<li>Wiltshire EJ, et al. <em>J Pediatr Child Health</em> 2004 — Addison 病の急性腹症</li>
-<li>急性腹症診療ガイドライン 2015（日本腹部救急医学会）</li>
-</ul>
-
-    </div>
-    <footer class="page-footer">
-      <a href="../index.html">↑ 主訴ナビへ戻る</a>
-    </footer>
-  </article>
+    syncFromHash();
+  })();
+  </script>
 </body>
 </html>

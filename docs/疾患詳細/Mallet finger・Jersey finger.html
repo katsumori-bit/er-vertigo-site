@@ -4,111 +4,239 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="color-scheme" content="light dark" />
-  <title>Mallet finger・Jersey finger</title>
+  <title>Mallet finger・Jersey finger | ER ノート</title>
   <link rel="stylesheet" href="../er-note.css" />
 </head>
 <body>
-  <nav class="site-bar">
-    <a class="site-bar__back" href="../index.html">← 主訴ナビ</a>
-    <span class="site-bar__title">Mallet finger・Jersey finger</span>
+  <header class="hokuto-top">
+    <a class="hokuto-top__btn" href="../薬剤情報.html">
+      <span class="hokuto-top__icon">℞</span><span>薬剤情報</span>
+    </a>
+    <a class="hokuto-top__btn" href="../表計算.html">
+      <span class="hokuto-top__icon">⊞</span><span>表計算</span>
+    </a>
+  </header>
+
+  <main class="hokuto-main">
+    <article class="note-shell">
+      <h1 class="page-title">Mallet finger・Jersey finger</h1>
+
+      <!-- 即時アクションヘッダー（常時 sticky） -->
+      <div class="action-header">
+        <div class="action-header__title">⚡ 即時アクション</div>
+        <ol class="action-header__list">
+          <li><strong>Mallet = DIP 伸展不能</strong>（伸筋腱付着部断裂） — 槌のように DIP が下垂</li>
+          <li><strong>Jersey = DIP 屈曲不能</strong>（屈筋腱 profundus 引き抜き、<strong>4 指（環指）最多</strong>）</li>
+          <li>X 線で<strong>骨片</strong>確認（Mallet は背側 bone vs soft tissue、Jersey は掌側骨片・腱退縮）</li>
+          <li>Mallet は<strong>副木 6-8 週</strong>（DIP 伸展位）、Jersey は<strong>手術</strong>（早期、7-10 日以内）</li>
+        </ol>
+      </div>
+
+      <!-- メニュータイル -->
+      <nav class="section-tiles" id="sectionMenu">
+        <a class="section-tile" href="#s1"><span class="section-tile__no">🔨</span><span class="section-tile__name">Mallet finger<br><small>受傷機転・所見</small></span></a>
+        <a class="section-tile" href="#s2"><span class="section-tile__no">🧪</span><span class="section-tile__name">Mallet 画像</span></a>
+        <a class="section-tile" href="#s3"><span class="section-tile__no">💉</span><span class="section-tile__name">Mallet マネジメント</span></a>
+        <a class="section-tile" href="#s4"><span class="section-tile__no">👕</span><span class="section-tile__name">Jersey finger<br><small>受傷機転・所見</small></span></a>
+        <a class="section-tile" href="#s5"><span class="section-tile__no">🧪</span><span class="section-tile__name">Jersey 画像・対応</span></a>
+        <a class="section-tile" href="#s6"><span class="section-tile__no">🔍</span><span class="section-tile__name">鑑別のコツ</span></a>
+        <a class="section-tile" href="#s7"><span class="section-tile__no">🏠</span><span class="section-tile__name">帰宅時の説明</span></a>
+        <a class="section-tile" href="#s8"><span class="section-tile__no">📚</span><span class="section-tile__name">出典</span></a>
+      </nav>
+
+      <!-- 関連主訴（双方向リンク） -->
+      <details class="sub-fold" id="related-symptoms">
+        <summary>📞 この疾患が該当する主訴</summary>
+        <div class="sub-fold__body">
+          <ul>
+            <li><a class="wiki-link" href="../手関節・手の外傷.html">手関節・手の外傷</a> — 突き指・指の自動運動不能</li>
+          </ul>
+        </div>
+      </details>
+
+      <!-- §1 Mallet finger -->
+      <section class="section-page" id="s1" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🔨 Mallet finger（槌指）</h2>
+        <h3>受傷機転</h3>
+        <ul>
+          <li><strong>DIP 関節に強制屈曲</strong>（ボール・布団シーツ・ドアで指先を突く）</li>
+          <li>伸筋腱終末部の断裂 ± 末節骨背側の撕脱骨折</li>
+        </ul>
+        <h3>身体所見</h3>
+        <ul>
+          <li><strong>DIP 関節の自動伸展不可</strong></li>
+          <li>他動伸展は可能（痛みあり）</li>
+          <li><strong>DIP が屈曲位で下垂</strong>（槌のよう）</li>
+        </ul>
+      </section>
+
+      <!-- §2 Mallet 画像 -->
+      <section class="section-page" id="s2" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🧪 Mallet 画像</h2>
+        <ul>
+          <li>末節骨側面像で<strong>背側の撕脱骨片</strong>を確認</li>
+          <li>関節面 1/3 以上の骨片 → 手術考慮</li>
+        </ul>
+      </section>
+
+      <!-- §3 Mallet マネジメント -->
+      <section class="section-page" id="s3" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>💉 Mallet マネジメント</h2>
+        <h3>保存（ほぼ全例）</h3>
+        <ul>
+          <li><strong>DIP 伸展位固定</strong>（過伸展ぎみ）、<strong>PIP は自由</strong></li>
+          <li><strong>stack splint</strong> or アルミシーネ</li>
+          <li><strong>6–8 週間完全固定</strong>、1 日も外さない（外すと再断裂）</li>
+          <li>その後さらに 2–4 週夜間固定</li>
+        </ul>
+        <h3>手術</h3>
+        <ul>
+          <li>関節面 <strong>1/3 以上</strong>の骨片</li>
+          <li>掌側亜脱臼を伴う</li>
+          <li>保存で改善しない chronic mallet</li>
+        </ul>
+      </section>
+
+      <!-- §4 Jersey finger -->
+      <section class="section-page" id="s4" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>👕 Jersey finger</h2>
+        <h3>受傷機転</h3>
+        <ul>
+          <li>ラグビー・アメフトで<strong>相手のジャージをつかんで指が引っ張られる</strong></li>
+          <li>深指屈筋腱の終末部断裂 ± 撕脱骨折</li>
+          <li><strong>環指に多い</strong>（指のつかみ方で環指に負荷がかかる）</li>
+        </ul>
+        <h3>身体所見</h3>
+        <ul>
+          <li><strong>DIP 関節の自動屈曲不可</strong></li>
+          <li>他の指を伸展位で保持させ、評価対象の DIP だけ屈曲できるかチェック</li>
+          <li><strong>他動屈曲は可能</strong></li>
+        </ul>
+      </section>
+
+      <!-- §5 Jersey 画像・対応 -->
+      <section class="section-page" id="s5" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🧪 Jersey 画像・ER 対応</h2>
+        <h3>画像</h3>
+        <ul>
+          <li>末節骨側面像で<strong>掌側の撕脱骨片</strong>を確認</li>
+          <li>腱の退縮位置（レベル）を MRI で評価することもある</li>
+        </ul>
+        <h3>マネジメント — <strong>ほぼ全例手術</strong></h3>
+        <ul>
+          <li>深指屈筋腱を早期に（<strong>7–10 日以内</strong>）再固定しないと予後不良</li>
+          <li>紹介は<strong>帰宅手術として 3–5 日以内</strong></li>
+        </ul>
+        <h4>ER での対応</h4>
+        <ol>
+          <li><strong>DIP 屈曲位のシーネ固定</strong></li>
+          <li><strong>即日〜数日以内</strong>に整形外科（手外科）へ紹介</li>
+        </ol>
+      </section>
+
+      <!-- §6 鑑別のコツ -->
+      <section class="section-page" id="s6" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🔍 鑑別のコツ</h2>
+        <div class="table-wrap"><table><thead><tr><th></th><th>Mallet</th><th>Jersey</th></tr></thead><tbody><tr><td>障害</td><td>自動<strong>伸展</strong>不可</td><td>自動<strong>屈曲</strong>不可</td></tr><tr><td>腱</td><td>伸筋腱</td><td>深指屈筋腱</td></tr><tr><td>受傷機転</td><td>突き指（屈曲強制）</td><td>引っ張られる（伸展強制）</td></tr><tr><td>多い指</td><td>どの指でも</td><td><strong>環指</strong></td></tr><tr><td>治療</td><td><strong>保存が原則</strong></td><td><strong>手術が原則</strong></td></tr></tbody></table></div>
+      </section>
+
+      <!-- §7 帰宅時の説明 -->
+      <section class="section-page" id="s7" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🏠 帰宅時の説明</h2>
+        <ul>
+          <li>Mallet は <strong>1 度でも外すと振り出しに戻る</strong> → 入浴・着替えも注意</li>
+          <li>皮膚トラブルで固定外れる場合は整形外科で代替法検討</li>
+          <li>Jersey は早期手術が必要 — 3–5 日以内に手外科</li>
+        </ul>
+      </section>
+
+      <!-- §8 出典 -->
+      <section class="section-page" id="s8" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>📚 出典</h2>
+        <ul>
+          <li><strong>増井伸高. 骨折ハンター. 中外医学社. 2019.</strong></li>
+          <li><strong>Lin JD, Strauch RJ.</strong> Closed soft tissue extensor mechanism injuries (mallet, boutonniere, and sagittal band). <em>J Hand Surg Am.</em> 2014.</li>
+          <li><strong>Leddy JP, Packer JW.</strong> Avulsion of the profundus tendon insertion in athletes. <em>J Hand Surg Am.</em> 1977.</li>
+        </ul>
+        <h3>関連</h3>
+        <ul>
+          <li><a class="wiki-link" href="../転倒.html">転倒</a> / <a class="wiki-link" href="PIP関節脱臼.html">PIP関節脱臼</a> / <a class="wiki-link" href="ゲームキーパー母指.html">ゲームキーパー母指</a></li>
+        </ul>
+      </section>
+
+    </article>
+  </main>
+
+  <nav class="hokuto-bottom">
+    <button class="hokuto-bottom__btn" type="button" id="navBack">
+      <span class="hokuto-bottom__icon">←</span><span>戻る</span>
+    </button>
+    <a class="hokuto-bottom__btn" href="../ツール.html">
+      <span class="hokuto-bottom__icon">⚙</span><span>ツール</span>
+    </a>
+    <a class="hokuto-bottom__btn" href="../index.html">
+      <span class="hokuto-bottom__icon">⌂</span><span>ホーム</span>
+    </a>
   </nav>
-  <article class="note-shell">
-    <header class="note-header">
-      <h1>Mallet finger・Jersey finger</h1>
-      <p class="source-badge">元: 臨床/ER/疾患詳細/Mallet finger・Jersey finger.md</p>
-    </header>
-    <details class="toc"><summary>目次（5 セクション）</summary><ol><li><a href="#mallet-finger槌指">Mallet finger（槌指）</a></li><li><a href="#jersey-finger">Jersey finger</a></li><li><a href="#鑑別のコツ">鑑別のコツ</a></li><li><a href="#出典">出典</a></li><li><a href="#関連">関連</a></li></ol></details>
-    <div class="md-body">
-<p>#腱損傷 #mallet #jersey #DIP #ER #指</p>
-<div class="callout callout-summary">
-<div class="callout-title">指の「自動で曲げ / 伸ばし ができない」= 腱損傷を疑う</div>
-<div class="callout-body"><ul>
-<li><strong>Mallet finger</strong>（槌指）：DIP <strong>伸展ができない</strong> → 伸筋腱断裂</li>
-<li><strong>Jersey finger</strong>：DIP <strong>屈曲ができない</strong> → 深指屈筋腱断裂（環指に多い）</li>
-<li>骨片を伴う場合あり（撕脱骨折）</li>
-<li>Mallet は <strong>シーネ固定で保存可</strong>、Jersey は <strong>帰宅手術が原則</strong></li>
-</ul></div>
-</div>
-<h2 id="mallet-finger槌指">Mallet finger（槌指）</h2>
-<h3 id="受傷機転">受傷機転</h3>
-<ul>
-<li><strong>DIP 関節に強制屈曲</strong>（ボール・布団シーツ・ドアで指先を突く）</li>
-<li>伸筋腱終末部の断裂 ± 末節骨背側の撕脱骨折</li>
-</ul>
-<h3 id="身体所見">身体所見</h3>
-<ul>
-<li><strong>DIP 関節の自動伸展不可</strong></li>
-<li>他動伸展は可能（痛みあり）</li>
-<li><strong>DIP が屈曲位で下垂</strong>（槌のよう）</li>
-</ul>
-<h3 id="画像">画像</h3>
-<ul>
-<li>末節骨 側面像で <strong>背側の撕脱骨片</strong> を確認</li>
-<li>関節面 1/3 以上の骨片 → 手術考慮</li>
-</ul>
-<h3 id="マネジメント">マネジメント</h3>
-<h4 id="保存ほぼ全例">保存（ほぼ全例）</h4>
-<ul>
-<li><strong>DIP 伸展位固定</strong>（過伸展ぎみ）、<strong>PIP は自由</strong></li>
-<li><strong>stack splint</strong> or アルミシーネ</li>
-<li><strong>6–8 週間完全固定</strong>、1 日も外さない（外すと再断裂）</li>
-<li>その後さらに 2–4 週夜間固定</li>
-</ul>
-<h4 id="手術">手術</h4>
-<ul>
-<li>関節面 <strong>1/3 以上</strong> の骨片</li>
-<li>掌側亜脱臼を伴う</li>
-<li>保存で改善しない chronic mallet</li>
-</ul>
-<h3 id="帰宅時の説明">帰宅時の説明</h3>
-<ul>
-<li><strong>1 度でも外すと振り出しに戻る</strong> → 入浴・着替えも注意</li>
-<li>皮膚トラブルで固定外れる場合は整形外科で代替法検討</li>
-</ul>
-<h2 id="jersey-finger">Jersey finger</h2>
-<h3 id="受傷機転">受傷機転</h3>
-<ul>
-<li>ラグビー・アメフトで <strong>相手のジャージをつかんで指が引っ張られる</strong></li>
-<li>深指屈筋腱の終末部断裂 ± 撕脱骨折</li>
-<li><strong>環指に多い</strong>（指のつかみ方で環指に負荷がかかる）</li>
-</ul>
-<h3 id="身体所見">身体所見</h3>
-<ul>
-<li><strong>DIP 関節の自動屈曲不可</strong></li>
-<li>他の指を伸展位で保持させ、評価対象の DIP だけ屈曲できるかチェック</li>
-<li><strong>他動屈曲は可能</strong></li>
-</ul>
-<h3 id="画像">画像</h3>
-<ul>
-<li>末節骨 側面像で <strong>掌側の撕脱骨片</strong> を確認</li>
-<li>腱の退縮位置（レベル）を MRI で評価することもある</li>
-</ul>
-<h3 id="マネジメント-ほぼ全例手術">マネジメント — <strong>ほぼ全例手術</strong></h3>
-<ul>
-<li>深指屈筋腱を早期に（<strong>7–10 日以内</strong>）再固定しないと予後不良</li>
-<li>紹介は <strong>帰宅手術として 3–5 日以内</strong></li>
-</ul>
-<h4 id="er-での対応">ER での対応</h4>
-<ol>
-<li><strong>DIP 屈曲位のシーネ固定</strong></li>
-<li><strong>即日〜数日以内</strong>に整形外科（手外科）へ紹介</li>
-</ol>
-<h2 id="鑑別のコツ">鑑別のコツ</h2>
-<div class="table-wrap"><table><thead><tr><th></th><th>Mallet</th><th>Jersey</th></tr></thead><tbody><tr><td>障害</td><td>自動<strong>伸展</strong>不可</td><td>自動<strong>屈曲</strong>不可</td></tr><tr><td>腱</td><td>伸筋腱</td><td>深指屈筋腱</td></tr><tr><td>受傷機転</td><td>突き指（屈曲強制）</td><td>引っ張られる（伸展強制）</td></tr><tr><td>多い指</td><td>どの指でも</td><td><strong>環指</strong></td></tr><tr><td>治療</td><td><strong>保存が原則</strong></td><td><strong>手術が原則</strong></td></tr></tbody></table></div>
-<h2 id="出典">出典</h2>
-<ul>
-<li><strong>増井伸高. 骨折ハンター. 中外医学社. 2019.</strong></li>
-<li><strong>Lin JD, Strauch RJ.</strong> Closed soft tissue extensor mechanism injuries (mallet, boutonniere, and sagittal band). <em>J Hand Surg Am.</em> 2014.</li>
-<li><strong>Leddy JP, Packer JW.</strong> Avulsion of the profundus tendon insertion in athletes. <em>J Hand Surg Am.</em> 1977.</li>
-</ul>
-<h2 id="関連">関連</h2>
-<ul>
-<li><a class="wiki-link" href="../転倒.html">転倒</a> / <a class="wiki-link" href="PIP関節脱臼.html">PIP関節脱臼</a> / <a class="wiki-link" href="ゲームキーパー母指.html">ゲームキーパー母指</a></li>
-</ul>
-    </div>
-    <footer class="page-footer">
-      <a href="../index.html">↑ 主訴ナビへ戻る</a>
-    </footer>
-  </article>
+
+  <script>
+  (function(){
+    const menu = document.getElementById('sectionMenu');
+    const pages = document.querySelectorAll('.section-page');
+    const titleH1 = document.querySelector('.page-title');
+    const relatedSymp = document.getElementById('related-symptoms');
+
+    function showSection(id) {
+      menu.hidden = true;
+      if (titleH1) titleH1.hidden = true;
+      if (relatedSymp) relatedSymp.hidden = true;
+      pages.forEach(p => p.hidden = (p.id !== id));
+      window.scrollTo(0, 0);
+    }
+    function showMenu(scrollTarget) {
+      menu.hidden = false;
+      if (titleH1) titleH1.hidden = false;
+      if (relatedSymp) relatedSymp.hidden = false;
+      pages.forEach(p => p.hidden = true);
+      if (scrollTarget) {
+        if (scrollTarget.tagName === 'DETAILS') scrollTarget.open = true;
+        scrollTarget.scrollIntoView({behavior: 'instant', block: 'start'});
+      } else {
+        window.scrollTo(0, 0);
+      }
+    }
+    function syncFromHash() {
+      const id = (location.hash || '').replace('#','');
+      const target = id ? document.getElementById(id) : null;
+      if (target && target.classList.contains('section-page')) {
+        showSection(id);
+      } else if (target) {
+        showMenu(target);
+      } else {
+        showMenu();
+      }
+    }
+
+    window.addEventListener('hashchange', syncFromHash);
+    document.querySelectorAll('.back-to-menu').forEach(b => {
+      b.addEventListener('click', () => { history.pushState(null,'',location.pathname); showMenu(); });
+    });
+    const navBack = document.getElementById('navBack');
+    if (navBack) navBack.addEventListener('click', () => {
+      if (window.history.length > 1) history.back();
+      else window.location.href = '../index.html';
+    });
+
+    syncFromHash();
+  })();
+  </script>
 </body>
 </html>

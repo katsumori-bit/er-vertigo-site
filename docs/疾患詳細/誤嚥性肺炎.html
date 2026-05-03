@@ -4,119 +4,266 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="color-scheme" content="light dark" />
-  <title>誤嚥性肺炎</title>
+  <title>誤嚥性肺炎 | ER ノート</title>
   <link rel="stylesheet" href="../er-note.css" />
 </head>
 <body>
-  <nav class="site-bar">
-    <a class="site-bar__back" href="../index.html">← 主訴ナビ</a>
-    <span class="site-bar__title">誤嚥性肺炎</span>
+  <header class="hokuto-top">
+    <a class="hokuto-top__btn" href="../薬剤情報.html">
+      <span class="hokuto-top__icon">℞</span><span>薬剤情報</span>
+    </a>
+    <a class="hokuto-top__btn" href="../表計算.html">
+      <span class="hokuto-top__icon">⊞</span><span>表計算</span>
+    </a>
+  </header>
+
+  <main class="hokuto-main">
+    <article class="note-shell">
+      <h1 class="page-title">誤嚥性肺炎</h1>
+
+      <!-- 即時アクションヘッダー（常時 sticky） -->
+      <div class="action-header">
+        <div class="action-header__title">⚡ 即時アクション</div>
+        <ol class="action-header__list">
+          <li><strong>意識・嚥下機能評価</strong>（嚥下スクリーニング）</li>
+          <li><strong>抗菌薬</strong>（市中：ABPC/SBT or セフトリアキソン；院内：Pip/Tazo or カルバペネム）、<strong>ルーチンに嫌気菌カバー不要</strong>（最近のエビデンス）</li>
+          <li><strong>NPO + 嚥下リハ + 食事姿勢調整</strong></li>
+          <li><strong>誤嚥性肺炎 vs 化学性肺臓炎</strong>の区別（後者は抗菌薬不要のことも）</li>
+        </ol>
+      </div>
+
+      <!-- メニュータイル -->
+      <nav class="section-tiles" id="sectionMenu">
+        <a class="section-tile" href="#s1"><span class="section-tile__no">📖</span><span class="section-tile__name">使い方<br><small>ページの位置</small></span></a>
+        <a class="section-tile" href="#s2"><span class="section-tile__no">🩺</span><span class="section-tile__name">いつ開くか<br><small>当院の患者像</small></span></a>
+        <a class="section-tile" href="#s3"><span class="section-tile__no">🧪</span><span class="section-tile__name">追加検討する検査</span></a>
+        <a class="section-tile" href="#s4"><span class="section-tile__no">💊</span><span class="section-tile__name">抗菌薬<br><small>当院方針</small></span></a>
+        <a class="section-tile" href="#s5"><span class="section-tile__no">🏥</span><span class="section-tile__name">入院管理<br><small>枠</small></span></a>
+        <a class="section-tile" href="#s6"><span class="section-tile__no">📅</span><span class="section-tile__name">フォロー</span></a>
+        <a class="section-tile" href="#s7"><span class="section-tile__no">📚</span><span class="section-tile__name">典型 CAP コラム</span></a>
+        <a class="section-tile" href="#s8"><span class="section-tile__no">🔗</span><span class="section-tile__name">リンク</span></a>
+        <a class="section-tile" href="#s9"><span class="section-tile__no">📰</span><span class="section-tile__name">出典</span></a>
+      </nav>
+
+      <!-- 関連主訴（双方向リンク） -->
+      <details class="sub-fold" id="related-symptoms">
+        <summary>📞 この疾患が該当する主訴</summary>
+        <div class="sub-fold__body">
+          <ul>
+            <li><a class="wiki-link" href="../呼吸困難.html">呼吸困難</a> — 浸潤による低酸素・努力呼吸</li>
+            <li><a class="wiki-link" href="../発熱.html">発熱</a> — 超高齢で「体動困難＋発熱」の主訴で来院</li>
+            <li><a class="wiki-link" href="../意識障害.html">意識障害</a> — 高齢者の誤嚥背景（脳梗塞後・認知症）</li>
+          </ul>
+        </div>
+      </details>
+
+      <!-- §1 ページの使い方 -->
+      <section class="section-page" id="s1" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>📖 ページの使い方</h2>
+        <div class="callout callout-summary">
+          <div class="callout-title">このページの使い方</div>
+          <div class="callout-body"><ol>
+            <li><strong><a class="wiki-link" href="../発熱.html">発熱</a> / <a class="wiki-link" href="../呼吸困難.html">呼吸困難</a></strong> で検査・画像まで終わり、<strong>誤嚥性肺炎として抗菌薬・入院方針を決める</strong>段階で開く</li>
+            <li><strong>COPD / 喘息 / 心不全</strong>に肺浸潤が乗っているときは、<strong>主軸は各疾患ページ</strong>、<strong>抗菌薬・肺炎まわりはここを足す</strong></li>
+            <li><strong>抗菌薬</strong>：当院の基本は<strong>セフトリアキソン</strong>（経験的治療）</li>
+            <li><strong>DNAR</strong>の検討は超高齢で頻繁 → <strong><a class="wiki-link" href="DNAR.html">DNAR</a></strong></li>
+            <li><strong>追加検査</strong>はここで本当に必要な分だけ（初療は別ページで済んでいる前提）</li>
+          </ol></div>
+        </div>
+      </section>
+
+      <!-- §2 いつこのページを開くか -->
+      <section class="section-page" id="s2" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🩺 いつこのページを開くか</h2>
+        <p><strong>胸部 X 線または CT で浸潤があり、当院の文脈では誤嚥性肺炎として経験的治療・入院を組み立てるとき</strong>。</p>
+        <p><a class="wiki-link" href="../発熱.html">発熱</a>・<a class="wiki-link" href="../呼吸困難.html">呼吸困難</a> のフローで、すでに <strong>バイタル・採血・尿検査・PCR</strong> などが進んでいる想定。<strong>このページでは追加分だけ</strong>を書く。</p>
+
+        <h3>当院の患者像（前提）</h3>
+        <ul>
+          <li><strong>超高齢</strong>で、発熱・体動困難・呼吸困難で受診が多い。<strong>本ページの主対象</strong>。</li>
+          <li><strong>CURB-65 / CRB-65 は使わない</strong>（スコアより<strong>臨床像と社会背景</strong>で入院を決めることが多い）。</li>
+          <li><strong>入院</strong>は、酸素要否に加え<strong>介護・独居・認知</strong>など<strong>社会的入院</strong>になりやすい。</li>
+          <li><strong>年齢が少し若い層</strong>では、<strong>COPD・喘息・心不全に肺浸潤が重なっている</strong>ことが多く、<strong><a class="wiki-link" href="COPD増悪.html">COPD増悪</a>・<a class="wiki-link" href="喘息増悪.html">喘息増悪</a>・<a class="wiki-link" href="急性心不全.html">急性心不全</a></strong> の方針を優先しつつ、<strong>抗菌薬・誤嚥対策・DNAR</strong>は本ページを参照する。</li>
+          <li><strong>気管挿管・人工呼吸を前提とした重症肺炎の記載はしない</strong>（当院の遭遇頻度を踏まえ、本ページでは扱わない）。</li>
+        </ul>
+      </section>
+
+      <!-- §3 追加で検討する検査 -->
+      <section class="section-page" id="s3" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🧪 追加で検討する検査</h2>
+        <p>初療ルートで済んでいる項目は繰り返さない。</p>
+        <div class="table-wrap"><table><thead><tr><th>検査</th><th>当院の考え方</th></tr></thead><tbody><tr><td><strong>尿中肺炎球菌抗原</strong></td><td><strong>よく行う</strong>。迅速で治療方針の補助になることが多い</td></tr><tr><td><strong>尿中レジオネラ抗原</strong></td><td><strong>レジオネラを臨床的に疑ったときだけ</strong>（陽性時の<strong>保健所・行政への届出</strong>など手続きが重くなるため、ルーチンにしない）</td></tr><tr><td><strong>血液培養</strong></td><td>重症感・入院・菌血症疑いで。抗菌薬前が望ましい</td></tr><tr><td><strong>胸部画像の経時</strong></td><td>改善判定・鑑別が必要なとき</td></tr></tbody></table></div>
+        <div class="callout callout-tip">
+          <div class="callout-title">レジオネラを疑う例</div>
+          <div class="callout-body"><p>下痢・低ナトリウム・相対的徐脈・意識変容、施設・温泉・旅行歴、集団発生の知識など。<strong>疑うから検査</strong>。</p></div>
+        </div>
+      </section>
+
+      <!-- §4 抗菌薬（当院） -->
+      <section class="section-page" id="s4" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>💊 抗菌薬（当院）</h2>
+
+        <h3>基本：セフトリアキソン（CTRX）</h3>
+        <p>経験的治療の<strong>第一選択</strong>とする。</p>
+
+        <h3>ユナシン（ABPC/SBT）からの移行について</h3>
+        <p>これまで<strong>嫌気性菌もカバー</strong>する目的でアンピシリン・スルバクタムを使っていたが、<strong>薬価上昇</strong>と<strong>運用の一本化</strong>により、<strong>セフトリアキソン中心</strong>に寄せている、という整理でよい。</p>
+        <p><strong>エビデンスを調べたときの整理（要約）</strong></p>
+        <ul>
+          <li><strong>非誤嚥リスクのない CAP</strong>を対象に、<strong>セフトリアキソン＋マクロライド</strong>と<strong>ABPC/SBT＋マクロライド</strong>を比較した<strong>オープンラベル準ランダム化試験</strong>では、<strong>治療終了時点の主要アウトカムに有意差なし</strong>（臨床有効率など）という報告がある。<em>BMC Pulm Med. 2020; PMC7275365</em></li>
+          <li>一方、<strong>誤嚥性肺炎</strong>について<strong>日本の DPC 全国データ</strong>で ABPC/SBT と第 3 世代セフェム（<strong>約 98% がセフトリアキソン</strong>）を比較した<strong>観察研究</strong>では、<strong>ABPC/SBT 群の入院死亡率・C. difficile 感染が低い</strong>との報告がある。<em>観察研究のため交絡あり。</em> PubMed 40716681 ほか</li>
+        </ul>
+        <p>→ <strong>「セフトリアキソンがユナシンに決して劣らない」とは文献だけでは言い切れない</strong>（誤嚥性では観察研究が逆方向）。<strong>当院方針として CTRX を基本</strong>とし、<strong>経過不良・口腔内壊死性感染の疑い・感染症科の指示</strong>などで ABPC/SBT や他薬を検討する、という位置づけがよい。</p>
+
+        <h3>マクロライド・非典型カバー</h3>
+        <p><strong>非典型を強く疑う・重症度で必要</strong>なら院内プロトコルに従い <strong>CTRX ＋ マクロライド</strong> 等を検討。誤嚥性のみで非典型が薄い場合は<strong>単剤 CTRX</strong> で進めることが多い、という運用でもよい（施設で統一）。</p>
+
+        <h3>腎機能・投与量</h3>
+        <p>セフトリアキソンの<strong>腎機能による調整</strong>は製品情報・院内マニュアルに従う。</p>
+      </section>
+
+      <!-- §5 入院管理（枠） -->
+      <section class="section-page" id="s5" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🏥 入院管理（枠）</h2>
+        <p>当院では初期対応医が<strong>しばらく主治医</strong>になりやすい前提（<a class="wiki-link" href="胆管結石.html">胆管結石</a> と同様の考え方）。</p>
+
+        <h3>オーダー・指示のチェック</h3>
+        <ul>
+          <li><strong>酸素</strong>：鼻カヌラ・マスクで<strong>目標 SpO2</strong>（COPD 併存は <a class="wiki-link" href="COPD増悪.html">COPD増悪</a> に合わせ 88–92% など）</li>
+          <li><strong>輸液</strong>：脱水・経口不可。<strong>心不全</strong>では過負荷に注意（<a class="wiki-link" href="急性心不全.html">急性心不全</a>）</li>
+          <li><strong>体位・誤嚥対策</strong>：食事・口腔ケア・嚥下評価の依頼（リハ・栄養）</li>
+          <li><strong>抗菌薬</strong>：上記。期間は<strong>臨床安定</strong>を見て短めに寄せることも多いが、誤嚥再発で延長もありうる</li>
+          <li><strong>血栓予防</strong>：寝たきりなら施設の VTE プロトコル</li>
+          <li><strong>DNAR</strong>：<strong><a class="wiki-link" href="DNAR.html">DNAR</a></strong>（超高齢・社会入院では早めに）</li>
+        </ul>
+      </section>
+
+      <!-- §6 フォロー -->
+      <section class="section-page" id="s6" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>📅 フォロー</h2>
+        <ul>
+          <li>悪化時は<strong>画像・培養・脱水</strong>の再評価</li>
+          <li>退院後は<strong>誤嚥リスクの再発</strong>・ワクチン・かかりつけ連携（可能なら）</li>
+        </ul>
+      </section>
+
+      <!-- §7 典型 CAP コラム -->
+      <section class="section-page" id="s7" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>📚 典型の市中肺炎（CAP）だけのとき</h2>
+        <details class="callout callout-abstract" open>
+          <summary>コラム：典型の市中肺炎（CAP）だけのとき</summary>
+          <div class="callout-body">
+            <p>当院では<strong>単独の典型 CAP は遭遇が少ない</strong>ため、本編は<strong>誤嚥性肺炎</strong>に寄せている。典型 CAP だけの症例では、必要なときだけ原典を当てる。</p>
+            <p><strong>診断のイメージ（IDSA/ATS 2019）</strong>：急性の全身症状 ＋ 呼吸器症状 ＋ <strong>画像の浸潤</strong>が整合する。</p>
+            <p><strong>CURB-65</strong>：若年〜中年の<strong>典型 CAP</strong>で入院判定に使われることが多いが、<strong>本ページの主対象（超高齢誤嚥）では用いない</strong>。</p>
+            <p><strong>重症 CAP・ICU 基準</strong>（歴史的には IDSA/ATS 2007 の主要・副次基準など）：<strong>挿管・昇圧薬</strong>が絡む。<strong>当院では稀な想定</strong>のため、本ページでは記載しない。</p>
+            <p><strong>治療期間（CAP の一般論）</strong>：IDSA/ATS 2019 では<strong>最短 5 日</strong>＋臨床安定で延長必須ではない、など。<strong>誤嚥性は個別</strong>になりやすい。</p>
+            <p><strong>フォロー画像</strong>：症状改善が速い典型 CAP では<strong>ルーチンの追跡 X 線は不要</strong>とされることが多い。喫煙・高齢・不全治癒疑いでは<strong>4–8 週</strong>の再検を個別に。</p>
+            <ul>
+              <li>Metlay JP ほか. <em>Am J Respir Crit Care Med.</em> 2019. <a class="wiki-link" href="https://doi.org/10.1164/rccm.201908-1581ST">doi:10.1164/rccm.201908-1581ST</a></li>
+              <li>Lim WS ほか. CURB-65. <em>Thorax.</em> 2004. <a class="wiki-link" href="https://doi.org/10.1136/thx.2003.011650">doi:10.1136/thx.2003.011650</a></li>
+            </ul>
+          </div>
+        </details>
+      </section>
+
+      <!-- §8 このページから張るリンク -->
+      <section class="section-page" id="s8" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🔗 このページから張るリンク</h2>
+        <ul>
+          <li><a class="wiki-link" href="../発熱.html">発熱</a></li>
+          <li><a class="wiki-link" href="../呼吸困難.html">呼吸困難</a></li>
+          <li><a class="wiki-link" href="急性心不全.html">急性心不全</a></li>
+          <li><a class="wiki-link" href="COPD増悪.html">COPD増悪</a></li>
+          <li><a class="wiki-link" href="喘息増悪.html">喘息増悪</a></li>
+          <li><a class="wiki-link" href="DNAR.html">DNAR</a></li>
+        </ul>
+      </section>
+
+      <!-- §9 出典 -->
+      <section class="section-page" id="s9" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>📰 出典（本ページで引用した比較研究ほか）</h2>
+        <ul>
+          <li><strong>CTRX＋マクロライド vs ABPC/SBT＋マクロライド（非誤嚥 CAP）</strong>：Shigemura Y ほか. <em>BMC Pulm Med.</em> 2020;20:158. <a class="wiki-link" href="https://pmc.ncbi.nlm.nih.gov/articles/PMC7275365/">PMC7275365</a></li>
+          <li><strong>誤嚥性肺炎：ABPC/SBT vs 第 3 世代セフェム（DPC、観察研究）</strong>：PubMed <a class="wiki-link" href="https://pubmed.ncbi.nlm.nih.gov/40716681/">40716681</a></li>
+          <li><strong>成人 CAP（診断・治療期間・フォロー画像）</strong>：Metlay JP ほか. IDSA/ATS 2019. <em>Am J Respir Crit Care Med.</em> 2019.</li>
+        </ul>
+      </section>
+
+    </article>
+  </main>
+
+  <nav class="hokuto-bottom">
+    <button class="hokuto-bottom__btn" type="button" id="navBack">
+      <span class="hokuto-bottom__icon">←</span><span>戻る</span>
+    </button>
+    <a class="hokuto-bottom__btn" href="../ツール.html">
+      <span class="hokuto-bottom__icon">⚙</span><span>ツール</span>
+    </a>
+    <a class="hokuto-bottom__btn" href="../index.html">
+      <span class="hokuto-bottom__icon">⌂</span><span>ホーム</span>
+    </a>
   </nav>
-  <article class="note-shell">
-    <header class="note-header">
-      <h1>誤嚥性肺炎</h1>
-      <p class="source-badge">元: 臨床/ER/疾患詳細/誤嚥性肺炎.md</p>
-    </header>
-    <details class="toc"><summary>目次（6 セクション）</summary><ol><li><a href="#いつこのページを開くか">いつこのページを開くか</a></li><li><a href="#追加で検討する検査">追加で検討する検査</a></li><li><a href="#抗菌薬当院">抗菌薬（当院）</a></li><li><a href="#入院管理枠">入院管理（枠）</a></li><li><a href="#このページから張るリンク">このページから張るリンク</a></li><li><a href="#出典本ページで引用した比較研究ほか">出典（本ページで引用した比較研究ほか）</a></li></ol></details>
-    <div class="md-body">
-<p>#ER #救急 #呼吸困難 #発熱 #誤嚥性肺炎 #吸入性肺炎 #CAP</p>
-<div class="callout callout-summary">
-<div class="callout-title">このページの使い方</div>
-<div class="callout-body"><ol>
-<li><strong><a class="wiki-link" href="../発熱.html">発熱</a> / <a class="wiki-link" href="../呼吸困難.html">呼吸困難</a></strong> で検査・画像まで終わり、<strong>誤嚥性肺炎として抗菌薬・入院方針を決める</strong>段階で開く</li>
-<li><strong>COPD / 喘息 / 心不全</strong>に肺浸潤が乗っているときは、<strong>主軸は各疾患ページ</strong>、<strong>抗菌薬・肺炎まわりはここを足す</strong></li>
-<li><strong>抗菌薬</strong>：当院の基本は<strong>セフトリアキソン</strong>（経験的治療）</li>
-<li><strong>DNAR</strong>の検討は超高齢で頻繁 → <strong><a class="wiki-link" href="DNAR.html">DNAR</a></strong></li>
-<li><strong>追加検査</strong>はここで本当に必要な分だけ（初療は別ページで済んでいる前提）</li>
-</ol></div>
-</div>
-<hr>
-<h2 id="いつこのページを開くか">いつこのページを開くか</h2>
-<p><strong>胸部 X 線または CT で浸潤があり、当院の文脈では誤嚥性肺炎として経験的治療・入院を組み立てるとき</strong>。</p>
-<p><a class="wiki-link" href="../発熱.html">発熱</a>・<a class="wiki-link" href="../呼吸困難.html">呼吸困難</a> のフローで、すでに <strong>バイタル・採血・尿検査・PCR</strong> などが進んでいる想定。<strong>このページでは追加分だけ</strong>を書く。</p>
-<h3 id="当院の患者像前提">当院の患者像（前提）</h3>
-<ul>
-<li><strong>超高齢</strong>で、発熱・体動困難・呼吸困難で受診が多い。<strong>本ページの主対象</strong>。</li>
-<li><strong>CURB-65 / CRB-65 は使わない</strong>（スコアより<strong>臨床像と社会背景</strong>で入院を決めることが多い）。</li>
-<li><strong>入院</strong>は、酸素要否に加え<strong>介護・独居・認知</strong>など<strong>社会的入院</strong>になりやすい。</li>
-<li><strong>年齢が少し若い層</strong>では、<strong>COPD・喘息・心不全に肺浸潤が重なっている</strong>ことが多く、<strong><a class="wiki-link" href="COPD増悪.html">COPD増悪</a>・<a class="wiki-link" href="喘息増悪.html">喘息増悪</a>・<a class="wiki-link" href="急性心不全.html">急性心不全</a></strong> の方針を優先しつつ、<strong>抗菌薬・誤嚥対策・DNAR</strong>は本ページを参照する。</li>
-<li><strong>気管挿管・人工呼吸を前提とした重症肺炎の記載はしない</strong>（当院の遭遇頻度を踏まえ、本ページでは扱わない）。</li>
-</ul>
-<hr>
-<h2 id="追加で検討する検査">追加で検討する検査</h2>
-<p>初療ルートで済んでいる項目は繰り返さない。</p>
-<div class="table-wrap"><table><thead><tr><th>検査</th><th>当院の考え方</th></tr></thead><tbody><tr><td><strong>尿中肺炎球菌抗原</strong></td><td><strong>よく行う</strong>。迅速で治療方針の補助になることが多い</td></tr><tr><td><strong>尿中レジオネラ抗原</strong></td><td><strong>レジオネラを臨床的に疑ったときだけ</strong>（陽性時の<strong>保健所・行政への届出</strong>など手続きが重くなるため、ルーチンにしない）</td></tr><tr><td><strong>血液培養</strong></td><td>重症感・入院・菌血症疑いで。抗菌薬前が望ましい</td></tr><tr><td><strong>胸部画像の経時</strong></td><td>改善判定・鑑別が必要なとき</td></tr></tbody></table></div>
-<div class="callout callout-tip">
-<div class="callout-title">レジオネラを疑う例</div>
-<div class="callout-body"><p>下痢・低ナトリウム・相対的徐脈・意識変容、施設・温泉・旅行歴、集団発生の知識など。<strong>疑うから検査</strong>。</p></div>
-</div>
-<hr>
-<h2 id="抗菌薬当院">抗菌薬（当院）</h2>
-<h3 id="基本セフトリアキソンctrx">基本：セフトリアキソン（CTRX）</h3>
-<p>経験的治療の<strong>第一選択</strong>とする。</p>
-<h3 id="ユナシンabpcsbtからの移行について">ユナシン（ABPC/SBT）からの移行について</h3>
-<p>これまで<strong>嫌気性菌もカバー</strong>する目的でアンピシリン・スルバクタムを使っていたが、<strong>薬価上昇</strong>と<strong>運用の一本化</strong>により、<strong>セフトリアキソン中心</strong>に寄せている、という整理でよい。</p>
-<p><strong>エビデンスを調べたときの整理（要約）</strong></p>
-<ul>
-<li><strong>非誤嚥リスクのない CAP</strong>を対象に、<strong>セフトリアキソン＋マクロライド</strong>と<strong>ABPC/SBT＋マクロライド</strong>を比較した<strong>オープンラベル準ランダム化試験</strong>では、<strong>治療終了時点の主要アウトカムに有意差なし</strong>（臨床有効率など）という報告がある。<em>BMC Pulm Med. 2020; PMC7275365</em></li>
-<li>一方、<strong>誤嚥性肺炎</strong>について<strong>日本の DPC 全国データ</strong>で ABPC/SBT と第 3 世代セフェム（<strong>約 98% がセフトリアキソン</strong>）を比較した<strong>観察研究</strong>では、<strong>ABPC/SBT 群の入院死亡率・C. difficile 感染が低い</strong>との報告がある。<em>観察研究のため交絡あり。</em> PubMed 40716681 ほか</li>
-</ul>
-<p>→ <strong>「セフトリアキソンがユナシンに決して劣らない」とは文献だけでは言い切れない</strong>（誤嚥性では観察研究が逆方向）。<strong>当院方針として CTRX を基本</strong>とし、<strong>経過不良・口腔内壊死性感染の疑い・感染症科の指示</strong>などで ABPC/SBT や他薬を検討する、という位置づけがよい。</p>
-<h3 id="マクロライド・非典型カバー">マクロライド・非典型カバー</h3>
-<p><strong>非典型を強く疑う・重症度で必要</strong>なら院内プロトコルに従い <strong>CTRX ＋ マクロライド</strong> 等を検討。誤嚥性のみで非典型が薄い場合は<strong>単剤 CTRX</strong> で進めることが多い、という運用でもよい（施設で統一）。</p>
-<h3 id="腎機能・投与量">腎機能・投与量</h3>
-<p>セフトリアキソンの<strong>腎機能による調整</strong>は製品情報・院内マニュアルに従う。</p>
-<hr>
-<h2 id="入院管理枠">入院管理（枠）</h2>
-<p>当院では初期対応医が<strong>しばらく主治医</strong>になりやすい前提（<a class="wiki-link" href="胆管結石.html">胆管結石</a> と同様の考え方）。</p>
-<h3 id="オーダー・指示のチェック">オーダー・指示のチェック</h3>
-<ul>
-<li><strong>酸素</strong>：鼻カヌラ・マスクで<strong>目標 SpO2</strong>（COPD 併存は <a class="wiki-link" href="COPD増悪.html">COPD増悪</a> に合わせ 88–92% など）</li>
-<li><strong>輸液</strong>：脱水・経口不可。<strong>心不全</strong>では過負荷に注意（<a class="wiki-link" href="急性心不全.html">急性心不全</a>）</li>
-<li><strong>体位・誤嚥対策</strong>：食事・口腔ケア・嚥下評価の依頼（リハ・栄養）</li>
-<li><strong>抗菌薬</strong>：上記。期間は<strong>臨床安定</strong>を見て短めに寄せることも多いが、誤嚥再発で延長もありうる</li>
-<li><strong>血栓予防</strong>：寝たきりなら施設の VTE プロトコル</li>
-<li><strong>DNAR</strong>：<strong><a class="wiki-link" href="DNAR.html">DNAR</a></strong>（超高齢・社会入院では早めに）</li>
-</ul>
-<h3 id="フォロー">フォロー</h3>
-<ul>
-<li>悪化時は<strong>画像・培養・脱水</strong>の再評価</li>
-<li>退院後は<strong>誤嚥リスクの再発</strong>・ワクチン・かかりつけ連携（可能なら）</li>
-</ul>
-<hr>
-<h2 id="このページから張るリンク">このページから張るリンク</h2>
-<ul>
-<li><a class="wiki-link" href="../発熱.html">発熱</a></li>
-<li><a class="wiki-link" href="../呼吸困難.html">呼吸困難</a></li>
-<li><a class="wiki-link" href="急性心不全.html">急性心不全</a></li>
-<li><a class="wiki-link" href="COPD増悪.html">COPD増悪</a></li>
-<li><a class="wiki-link" href="喘息増悪.html">喘息増悪</a></li>
-<li><a class="wiki-link" href="DNAR.html">DNAR</a></li>
-</ul>
-<hr>
-<details class="callout callout-abstract">
-<summary>コラム：典型の市中肺炎（CAP）だけのとき</summary><div class="callout-body"><p>当院では<strong>単独の典型 CAP は遭遇が少ない</strong>ため、本編は<strong>誤嚥性肺炎</strong>に寄せている。典型 CAP だけの症例では、必要なときだけ原典を当てる。</p>
-<p><strong>診断のイメージ（IDSA/ATS 2019）</strong>：急性の全身症状 ＋ 呼吸器症状 ＋ <strong>画像の浸潤</strong>が整合する。</p>
-<p><strong>CURB-65</strong>：若年〜中年の<strong>典型 CAP</strong>で入院判定に使われることが多いが、<strong>本ページの主対象（超高齢誤嚥）では用いない</strong>。</p>
-<p><strong>重症 CAP・ICU 基準</strong>（歴史的には IDSA/ATS 2007 の主要・副次基準など）：<strong>挿管・昇圧薬</strong>が絡む。<strong>当院では稀な想定</strong>のため、本ページでは記載しない。</p>
-<p><strong>治療期間（CAP の一般論）</strong>：IDSA/ATS 2019 では<strong>最短 5 日</strong>＋臨床安定で延長必須ではない、など。<strong>誤嚥性は個別</strong>になりやすい。</p>
-<p><strong>フォロー画像</strong>：症状改善が速い典型 CAP では<strong>ルーチンの追跡 X 線は不要</strong>とされることが多い。喫煙・高齢・不全治癒疑いでは<strong>4–8 週</strong>の再検を個別に。</p>
-<ul>
-<li>Metlay JP ほか. <em>Am J Respir Crit Care Med.</em> 2019. <a class="wiki-link" href="https://doi.org/10.1164/rccm.201908-1581ST">doi:10.1164/rccm.201908-1581ST</a></li>
-<li>Lim WS ほか. CURB-65. <em>Thorax.</em> 2004. <a class="wiki-link" href="https://doi.org/10.1136/thx.2003.011650">doi:10.1136/thx.2003.011650</a></li>
-</ul></div>
-</details>
-<hr>
-<h2 id="出典本ページで引用した比較研究ほか">出典（本ページで引用した比較研究ほか）</h2>
-<ul>
-<li><strong>CTRX＋マクロライド vs ABPC/SBT＋マクロライド（非誤嚥 CAP）</strong>：Shigemura Y ほか. <em>BMC Pulm Med.</em> 2020;20:158. <a class="wiki-link" href="https://pmc.ncbi.nlm.nih.gov/articles/PMC7275365/">PMC7275365</a></li>
-<li><strong>誤嚥性肺炎：ABPC/SBT vs 第 3 世代セフェム（DPC、観察研究）</strong>：PubMed <a class="wiki-link" href="https://pubmed.ncbi.nlm.nih.gov/40716681/">40716681</a></li>
-<li><strong>成人 CAP（診断・治療期間・フォロー画像）</strong>：Metlay JP ほか. IDSA/ATS 2019. <em>Am J Respir Crit Care Med.</em> 2019.</li>
-</ul>
-    </div>
-    <footer class="page-footer">
-      <a href="../index.html">↑ 主訴ナビへ戻る</a>
-    </footer>
-  </article>
+
+  <script>
+  (function(){
+    const menu = document.getElementById('sectionMenu');
+    const pages = document.querySelectorAll('.section-page');
+    const titleH1 = document.querySelector('.page-title');
+    const relatedSymp = document.getElementById('related-symptoms');
+
+    function showSection(id) {
+      menu.hidden = true;
+      if (titleH1) titleH1.hidden = true;
+      if (relatedSymp) relatedSymp.hidden = true;
+      pages.forEach(p => p.hidden = (p.id !== id));
+      window.scrollTo(0, 0);
+    }
+    function showMenu(scrollTarget) {
+      menu.hidden = false;
+      if (titleH1) titleH1.hidden = false;
+      if (relatedSymp) relatedSymp.hidden = false;
+      pages.forEach(p => p.hidden = true);
+      if (scrollTarget) {
+        if (scrollTarget.tagName === 'DETAILS') scrollTarget.open = true;
+        scrollTarget.scrollIntoView({behavior: 'instant', block: 'start'});
+      } else {
+        window.scrollTo(0, 0);
+      }
+    }
+    function syncFromHash() {
+      const id = (location.hash || '').replace('#','');
+      const target = id ? document.getElementById(id) : null;
+      if (target && target.classList.contains('section-page')) {
+        showSection(id);
+      } else if (target) {
+        showMenu(target);
+      } else {
+        showMenu();
+      }
+    }
+
+    window.addEventListener('hashchange', syncFromHash);
+    document.querySelectorAll('.back-to-menu').forEach(b => {
+      b.addEventListener('click', () => { history.pushState(null,'',location.pathname); showMenu(); });
+    });
+    const navBack = document.getElementById('navBack');
+    if (navBack) navBack.addEventListener('click', () => {
+      if (window.history.length > 1) history.back();
+      else window.location.href = '../index.html';
+    });
+
+    syncFromHash();
+  })();
+  </script>
 </body>
 </html>

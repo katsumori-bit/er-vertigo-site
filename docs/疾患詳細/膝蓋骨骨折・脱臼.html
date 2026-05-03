@@ -4,113 +4,245 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="color-scheme" content="light dark" />
-  <title>膝蓋骨骨折・脱臼</title>
+  <title>膝蓋骨骨折・脱臼 | ER ノート</title>
   <link rel="stylesheet" href="../er-note.css" />
 </head>
 <body>
-  <nav class="site-bar">
-    <a class="site-bar__back" href="../index.html">← 主訴ナビ</a>
-    <span class="site-bar__title">膝蓋骨骨折・脱臼</span>
+  <header class="hokuto-top">
+    <a class="hokuto-top__btn" href="../薬剤情報.html">
+      <span class="hokuto-top__icon">℞</span><span>薬剤情報</span>
+    </a>
+    <a class="hokuto-top__btn" href="../表計算.html">
+      <span class="hokuto-top__icon">⊞</span><span>表計算</span>
+    </a>
+  </header>
+
+  <main class="hokuto-main">
+    <article class="note-shell">
+      <h1 class="page-title">膝蓋骨骨折・脱臼</h1>
+
+      <!-- 即時アクションヘッダー（常時 sticky） -->
+      <div class="action-header">
+        <div class="action-header__title">⚡ 即時アクション</div>
+        <ol class="action-header__list">
+          <li><strong>伸展機能評価</strong>（自動伸展不可 → 伸展機構破綻）。膝直撃外傷 + 圧痛・段差・血腫で疑う</li>
+          <li><strong>AP + lat + sunrise（skyline）view</strong> 撮影。<strong>bipartite patella と区別</strong>（健側比較・辺縁平滑）</li>
+          <li><strong>脱臼は早期整復</strong>（膝伸展 + 内側に押す）。骨折は <strong>転位 ≥ 2 mm + 関節面段差</strong>で手術（tension band wiring）</li>
+          <li><strong>反復性膝蓋骨脱臼</strong>には <strong>MPFL 再建</strong>を整形外科で検討（初回後再発率 17–50%）</li>
+        </ol>
+      </div>
+
+      <!-- §1〜§5 メニュータイル -->
+      <nav class="section-tiles" id="sectionMenu">
+        <a class="section-tile" href="#s1"><span class="section-tile__no">🦴</span><span class="section-tile__name">膝蓋骨<br><small>骨折</small></span></a>
+        <a class="section-tile" href="#s2"><span class="section-tile__no">↪️</span><span class="section-tile__name">膝蓋骨<br><small>脱臼</small></span></a>
+        <a class="section-tile" href="#s3"><span class="section-tile__no">🔁</span><span class="section-tile__name">脱臼<br><small>再発リスク</small></span></a>
+        <a class="section-tile" href="#s4"><span class="section-tile__no">🏠</span><span class="section-tile__name">帰宅時<br><small>説明</small></span></a>
+        <a class="section-tile" href="#s5"><span class="section-tile__no">📚</span><span class="section-tile__name">出典<br><small>+ 関連</small></span></a>
+      </nav>
+
+      <!-- 関連主訴（双方向リンク） -->
+      <details class="sub-fold" id="related-symptoms">
+        <summary>📞 この疾患が該当する主訴</summary>
+        <div class="sub-fold__body">
+          <ul>
+            <li><span class="wiki-missing">膝の外傷・痛み</span> — 膝直撃外傷後の伸展不能・段差で疑う</li>
+            <li><a class="wiki-link" href="../転倒.html">転倒</a> — 膝をついた直達外力</li>
+          </ul>
+        </div>
+      </details>
+
+      <!-- §1 膝蓋骨骨折 -->
+      <section class="section-page" id="s1" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🦴 膝蓋骨骨折</h2>
+        <p>#骨折 #脱臼 #膝蓋骨 #ER #膝関節</p>
+
+        <div class="callout callout-summary">
+          <div class="callout-title">膝蓋骨骨折 = 膝直撃、膝伸展不能で疑う</div>
+          <div class="callout-body"><ul>
+            <li><strong>転倒で膝をつく</strong>直達外力</li>
+            <li><strong>膝伸展機構の破綻</strong>（肘頭骨折の膝版）</li>
+            <li>転位 ≥ 2 mm → 手術</li>
+            <li><strong>膝蓋骨脱臼</strong>は若年女性に多く、自然整復も多い</li>
+          </ul></div>
+        </div>
+
+        <h3>受傷機転</h3>
+        <ul>
+          <li><strong>膝を直接打つ</strong>（転倒・ダッシュボード外傷）</li>
+          <li>大腿四頭筋の強収縮による撕脱</li>
+        </ul>
+
+        <h3>身体所見</h3>
+        <ul>
+          <li><strong>膝蓋前面の圧痛・段差</strong></li>
+          <li><strong>膝関節の腫脹</strong>（血腫）</li>
+          <li><strong>膝関節の自動伸展不可</strong>（伸展機構破綻）</li>
+          <li>他動伸展は可能</li>
+        </ul>
+
+        <h3>画像</h3>
+        <ul>
+          <li>膝 2 方向 + <strong>skyline view（膝蓋骨軸射）</strong></li>
+          <li>二分膝蓋骨（bipartite patella）との鑑別：健側と比較、辺縁が平滑</li>
+          <li>転位の有無・方向を評価</li>
+        </ul>
+
+        <h3>マネジメント</h3>
+        <div class="table-wrap"><table><thead><tr><th>タイプ</th><th>所見</th><th>治療</th></tr></thead><tbody><tr><td>転位なし</td><td>伸展機構保たれる</td><td>膝伸展位ギプス / 装具で保存</td></tr><tr><td><strong>転位あり（≥ 2 mm）</strong></td><td>伸展不能</td><td><strong>帰宅手術</strong>（tension band wiring）</td></tr><tr><td>粉砕</td><td></td><td>手術 or 膝蓋骨摘除</td></tr></tbody></table></div>
+        <ul>
+          <li><strong>帰宅保存</strong>：膝伸展位ニーブレース 4–6 週、荷重可</li>
+          <li><strong>帰宅手術</strong>：シーネ固定して整形外科へ</li>
+        </ul>
+      </section>
+
+      <!-- §2 膝蓋骨脱臼 -->
+      <section class="section-page" id="s2" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>↪️ 膝蓋骨脱臼</h2>
+
+        <h3>受傷機転</h3>
+        <ul>
+          <li><strong>膝に外反 + 回旋ストレス</strong>（スポーツ中のピボット動作）</li>
+          <li><strong>若年女性・Q 角大きい</strong> に多い</li>
+          <li>外側への脱臼がほとんど（内側の MPFL 断裂）</li>
+        </ul>
+
+        <h3>身体所見</h3>
+        <ul>
+          <li>膝外側に膝蓋骨が逸脱</li>
+          <li>受診時にはすでに自然整復されていることが多い</li>
+          <li><strong>J sign</strong>：膝伸展で外側に飛び出す、屈曲で戻る（不安定性）</li>
+          <li><strong>MPFL 圧痛</strong>（膝蓋骨内側縁）</li>
+        </ul>
+
+        <h3>整復</h3>
+        <ul>
+          <li>受診時に脱臼していれば：<strong>膝を伸展 + 膝蓋骨を内側に押す</strong></li>
+          <li>通常は簡単に整復される</li>
+        </ul>
+
+        <h3>画像</h3>
+        <ul>
+          <li>レントゲン 2 方向 + skyline view</li>
+          <li><strong>内側膝蓋骨骨折 or 外側大腿骨外顆骨折</strong>（撕脱）を確認</li>
+          <li>MRI は後日（MPFL・軟骨損傷の評価）</li>
+        </ul>
+
+        <h3>マネジメント</h3>
+        <ul>
+          <li><strong>膝伸展位ブレース</strong>で固定 2–3 週</li>
+          <li>物理療法（大腿四頭筋 VMO 強化）</li>
+          <li>反復性脱臼 → 整形外科で MPFL 再建術を検討</li>
+        </ul>
+      </section>
+
+      <!-- §3 膝蓋骨脱臼の再発リスク -->
+      <section class="section-page" id="s3" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🔁 膝蓋骨脱臼の再発リスク</h2>
+        <ul>
+          <li>初回後の再発率 <strong>17–50%</strong></li>
+          <li>若年・Q 角大きい・家族歴ありで再発しやすい</li>
+          <li>MPFL 再建術を早期に検討すべきケースあり</li>
+        </ul>
+      </section>
+
+      <!-- §4 帰宅時の説明 -->
+      <section class="section-page" id="s4" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🏠 帰宅時の説明</h2>
+        <ul>
+          <li><strong>荷重は 2–3 週慎重に</strong>、装具の着脱厳守</li>
+          <li>脱臼後の関節内損傷（軟骨・半月板・MPFL）を疑えば MRI</li>
+          <li>1 週以内に整形外科外来</li>
+        </ul>
+      </section>
+
+      <!-- §5 出典 + 関連 -->
+      <section class="section-page" id="s5" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>📚 出典 + 関連</h2>
+
+        <h3>出典</h3>
+        <ul>
+          <li><strong>増井伸高. 骨折ハンター. 中外医学社. 2019.</strong></li>
+          <li><strong>Melvin JS, Mehta S.</strong> Patellar fractures in adults. <em>J Am Acad Orthop Surg.</em> 2011.</li>
+          <li><strong>Fithian DC ほか.</strong> Epidemiology and natural history of acute patellar dislocation. <em>Am J Sports Med.</em> 2004.</li>
+        </ul>
+
+        <h3>関連</h3>
+        <ul>
+          <li><a class="wiki-link" href="../転倒.html">転倒</a> / <a class="wiki-link" href="脛骨高原骨折.html">脛骨高原骨折</a> / <a class="wiki-link" href="膝靱帯・半月板損傷.html">膝靱帯・半月板損傷</a></li>
+        </ul>
+      </section>
+
+    </article>
+  </main>
+
+  <nav class="hokuto-bottom">
+    <button class="hokuto-bottom__btn" type="button" id="navBack">
+      <span class="hokuto-bottom__icon">←</span><span>戻る</span>
+    </button>
+    <a class="hokuto-bottom__btn" href="../ツール.html">
+      <span class="hokuto-bottom__icon">⚙</span><span>ツール</span>
+    </a>
+    <a class="hokuto-bottom__btn" href="../index.html">
+      <span class="hokuto-bottom__icon">⌂</span><span>ホーム</span>
+    </a>
   </nav>
-  <article class="note-shell">
-    <header class="note-header">
-      <h1>膝蓋骨骨折・脱臼</h1>
-      <p class="source-badge">元: 臨床/ER/疾患詳細/膝蓋骨骨折・脱臼.md</p>
-    </header>
-    <details class="toc"><summary>目次（6 セクション）</summary><ol><li><a href="#膝蓋骨骨折">膝蓋骨骨折</a></li><li><a href="#膝蓋骨脱臼">膝蓋骨脱臼</a></li><li><a href="#膝蓋骨脱臼の再発リスク">膝蓋骨脱臼の再発リスク</a></li><li><a href="#帰宅時の説明">帰宅時の説明</a></li><li><a href="#出典">出典</a></li><li><a href="#関連">関連</a></li></ol></details>
-    <div class="md-body">
-<p>#骨折 #脱臼 #膝蓋骨 #ER #膝関節</p>
-<div class="callout callout-summary">
-<div class="callout-title">膝蓋骨骨折 = 膝直撃、膝伸展不能で疑う</div>
-<div class="callout-body"><ul>
-<li><strong>転倒で膝をつく</strong>直達外力</li>
-<li><strong>膝伸展機構の破綻</strong>（肘頭骨折の膝版）</li>
-<li>転位 ≥ 2 mm → 手術</li>
-<li><strong>膝蓋骨脱臼</strong>は若年女性に多く、自然整復も多い</li>
-</ul></div>
-</div>
-<h2 id="膝蓋骨骨折">膝蓋骨骨折</h2>
-<h3 id="受傷機転">受傷機転</h3>
-<ul>
-<li><strong>膝を直接打つ</strong>（転倒・ダッシュボード外傷）</li>
-<li>大腿四頭筋の強収縮による撕脱</li>
-</ul>
-<h3 id="身体所見">身体所見</h3>
-<ul>
-<li><strong>膝蓋前面の圧痛・段差</strong></li>
-<li><strong>膝関節の腫脹</strong>（血腫）</li>
-<li><strong>膝関節の自動伸展不可</strong>（伸展機構破綻）</li>
-<li>他動伸展は可能</li>
-</ul>
-<h3 id="画像">画像</h3>
-<ul>
-<li>膝 2 方向 + <strong>skyline view（膝蓋骨軸射）</strong></li>
-<li>二分膝蓋骨（bipartite patella）との鑑別：健側と比較、辺縁が平滑</li>
-<li>転位の有無・方向を評価</li>
-</ul>
-<h3 id="マネジメント">マネジメント</h3>
-<div class="table-wrap"><table><thead><tr><th>タイプ</th><th>所見</th><th>治療</th></tr></thead><tbody><tr><td>転位なし</td><td>伸展機構保たれる</td><td>膝伸展位ギプス / 装具で保存</td></tr><tr><td><strong>転位あり（≥ 2 mm）</strong></td><td>伸展不能</td><td><strong>帰宅手術</strong>（tension band wiring）</td></tr><tr><td>粉砕</td><td></td><td>手術 or 膝蓋骨摘除</td></tr></tbody></table></div>
-<ul>
-<li><strong>帰宅保存</strong>：膝伸展位ニーブレース 4–6 週、荷重可</li>
-<li><strong>帰宅手術</strong>：シーネ固定して整形外科へ</li>
-</ul>
-<h2 id="膝蓋骨脱臼">膝蓋骨脱臼</h2>
-<h3 id="受傷機転">受傷機転</h3>
-<ul>
-<li><strong>膝に外反 + 回旋ストレス</strong>（スポーツ中のピボット動作）</li>
-<li><strong>若年女性・Q 角大きい</strong> に多い</li>
-<li>外側への脱臼がほとんど（内側の MPFL 断裂）</li>
-</ul>
-<h3 id="身体所見">身体所見</h3>
-<ul>
-<li>膝外側に膝蓋骨が逸脱</li>
-<li>受診時にはすでに自然整復されていることが多い</li>
-<li><strong>J sign</strong>：膝伸展で外側に飛び出す、屈曲で戻る（不安定性）</li>
-<li><strong>MPFL 圧痛</strong>（膝蓋骨内側縁）</li>
-</ul>
-<h3 id="整復">整復</h3>
-<ul>
-<li>受診時に脱臼していれば：<strong>膝を伸展 + 膝蓋骨を内側に押す</strong></li>
-<li>通常は簡単に整復される</li>
-</ul>
-<h3 id="画像">画像</h3>
-<ul>
-<li>レントゲン 2 方向 + skyline view</li>
-<li><strong>内側膝蓋骨骨折 or 外側大腿骨外顆骨折</strong>（撕脱）を確認</li>
-<li>MRI は後日（MPFL・軟骨損傷の評価）</li>
-</ul>
-<h3 id="マネジメント">マネジメント</h3>
-<ul>
-<li><strong>膝伸展位ブレース</strong>で固定 2–3 週</li>
-<li>物理療法（大腿四頭筋 VMO 強化）</li>
-<li>反復性脱臼 → 整形外科で MPFL 再建術を検討</li>
-</ul>
-<h2 id="膝蓋骨脱臼の再発リスク">膝蓋骨脱臼の再発リスク</h2>
-<ul>
-<li>初回後の再発率 <strong>17–50%</strong></li>
-<li>若年・Q 角大きい・家族歴ありで再発しやすい</li>
-<li>MPFL 再建術を早期に検討すべきケースあり</li>
-</ul>
-<h2 id="帰宅時の説明">帰宅時の説明</h2>
-<ul>
-<li><strong>荷重は 2–3 週慎重に</strong>、装具の着脱厳守</li>
-<li>脱臼後の関節内損傷（軟骨・半月板・MPFL）を疑えば MRI</li>
-<li>1 週以内に整形外科外来</li>
-</ul>
-<h2 id="出典">出典</h2>
-<ul>
-<li><strong>増井伸高. 骨折ハンター. 中外医学社. 2019.</strong></li>
-<li><strong>Melvin JS, Mehta S.</strong> Patellar fractures in adults. <em>J Am Acad Orthop Surg.</em> 2011.</li>
-<li><strong>Fithian DC ほか.</strong> Epidemiology and natural history of acute patellar dislocation. <em>Am J Sports Med.</em> 2004.</li>
-</ul>
-<h2 id="関連">関連</h2>
-<ul>
-<li><a class="wiki-link" href="../転倒.html">転倒</a> / <a class="wiki-link" href="脛骨高原骨折.html">脛骨高原骨折</a> / <a class="wiki-link" href="膝靱帯・半月板損傷.html">膝靱帯・半月板損傷</a></li>
-</ul>
-    </div>
-    <footer class="page-footer">
-      <a href="../index.html">↑ 主訴ナビへ戻る</a>
-    </footer>
-  </article>
+
+  <script>
+  (function(){
+    const menu = document.getElementById('sectionMenu');
+    const pages = document.querySelectorAll('.section-page');
+    const titleH1 = document.querySelector('.page-title');
+    const relatedSymp = document.getElementById('related-symptoms');
+
+    function showSection(id) {
+      menu.hidden = true;
+      if (titleH1) titleH1.hidden = true;
+      if (relatedSymp) relatedSymp.hidden = true;
+      pages.forEach(p => p.hidden = (p.id !== id));
+      window.scrollTo(0, 0);
+    }
+    function showMenu(scrollTarget) {
+      menu.hidden = false;
+      if (titleH1) titleH1.hidden = false;
+      if (relatedSymp) relatedSymp.hidden = false;
+      pages.forEach(p => p.hidden = true);
+      if (scrollTarget) {
+        if (scrollTarget.tagName === 'DETAILS') scrollTarget.open = true;
+        scrollTarget.scrollIntoView({behavior: 'instant', block: 'start'});
+      } else {
+        window.scrollTo(0, 0);
+      }
+    }
+    function syncFromHash() {
+      const id = (location.hash || '').replace('#','');
+      const target = id ? document.getElementById(id) : null;
+      if (target && target.classList.contains('section-page')) {
+        showSection(id);
+      } else if (target) {
+        showMenu(target);
+      } else {
+        showMenu();
+      }
+    }
+
+    window.addEventListener('hashchange', syncFromHash);
+    document.querySelectorAll('.back-to-menu').forEach(b => {
+      b.addEventListener('click', () => { history.pushState(null,'',location.pathname); showMenu(); });
+    });
+    const navBack = document.getElementById('navBack');
+    if (navBack) navBack.addEventListener('click', () => {
+      if (window.history.length > 1) history.back();
+      else window.location.href = '../index.html';
+    });
+
+    syncFromHash();
+  })();
+  </script>
 </body>
 </html>

@@ -4,122 +4,264 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="color-scheme" content="light dark" />
-  <title>踵骨骨折</title>
+  <title>踵骨骨折 | ER ノート</title>
   <link rel="stylesheet" href="../er-note.css" />
 </head>
 <body>
-  <nav class="site-bar">
-    <a class="site-bar__back" href="../index.html">← 主訴ナビ</a>
-    <span class="site-bar__title">踵骨骨折</span>
+  <header class="hokuto-top">
+    <a class="hokuto-top__btn" href="../薬剤情報.html">
+      <span class="hokuto-top__icon">℞</span><span>薬剤情報</span>
+    </a>
+    <a class="hokuto-top__btn" href="../表計算.html">
+      <span class="hokuto-top__icon">⊞</span><span>表計算</span>
+    </a>
+  </header>
+
+  <main class="hokuto-main">
+    <article class="note-shell">
+      <h1 class="page-title">踵骨骨折</h1>
+
+      <!-- 即時アクションヘッダー（常時 sticky） -->
+      <div class="action-header">
+        <div class="action-header__title">⚡ 即時アクション</div>
+        <ol class="action-header__list">
+          <li><strong>墜落・交通外傷</strong>で起こる</li>
+          <li>AP+lat+<strong>axial（Harris）</strong>+ <strong>CT 必須</strong></li>
+          <li><strong>Sanders 分類</strong>で評価</li>
+          <li><strong>脊椎圧迫骨折・骨盤骨折の合併</strong>に注意（高エネルギー外傷の連鎖）</li>
+        </ol>
+      </div>
+
+      <!-- メニュータイル -->
+      <nav class="section-tiles" id="sectionMenu">
+        <a class="section-tile" href="#s1"><span class="section-tile__no">💥</span><span class="section-tile__name">受傷機転</span></a>
+        <a class="section-tile" href="#s2"><span class="section-tile__no">🚨</span><span class="section-tile__name">高エネルギー<br><small>外傷の連鎖</small></span></a>
+        <a class="section-tile" href="#s3"><span class="section-tile__no">🩺</span><span class="section-tile__name">身体所見</span></a>
+        <a class="section-tile" href="#s4"><span class="section-tile__no">📷</span><span class="section-tile__name">画像<br><small>Böhler / CT</small></span></a>
+        <a class="section-tile" href="#s5"><span class="section-tile__no">📊</span><span class="section-tile__name">分類<br><small>Sanders</small></span></a>
+        <a class="section-tile" href="#s6"><span class="section-tile__no">💉</span><span class="section-tile__name">マネジメント</span></a>
+        <a class="section-tile" href="#s7"><span class="section-tile__no">⚠️</span><span class="section-tile__name">合併症</span></a>
+        <a class="section-tile" href="#s8"><span class="section-tile__no">🕳️</span><span class="section-tile__name">落とし穴</span></a>
+        <a class="section-tile" href="#s9"><span class="section-tile__no">🏠</span><span class="section-tile__name">帰宅時の説明<br><small>＋出典</small></span></a>
+      </nav>
+
+      <!-- 関連主訴（双方向リンク） -->
+      <details class="sub-fold" id="related-symptoms">
+        <summary>📞 この疾患が該当する主訴</summary>
+        <div class="sub-fold__body">
+          <ul>
+            <li><a class="wiki-link" href="../足関節・足部の外傷.html">足関節・足部の外傷</a> — 踵の強い圧痛・腫脹・荷重不能</li>
+            <li><a class="wiki-link" href="../転倒.html">転倒</a> — 高所からの飛び降り・墜落で発生</li>
+            <li><a class="wiki-link" href="脊椎圧迫骨折.html">脊椎圧迫骨折</a> — 高エネルギー外傷の連鎖で 10–15% に合併</li>
+          </ul>
+        </div>
+      </details>
+
+      <!-- §1 受傷機転 -->
+      <section class="section-page" id="s1" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>💥 受傷機転</h2>
+        <ul>
+          <li><strong>高所からの転落</strong>（屋根・梯子、2 階以上）</li>
+          <li>垂直軸圧が踵骨に伝達</li>
+          <li>交通事故（ダッシュボード損傷）</li>
+        </ul>
+      </section>
+
+      <!-- §2 高エネルギー外傷の連鎖 -->
+      <section class="section-page" id="s2" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🚨 高エネルギー外傷の連鎖</h2>
+        <div class="callout callout-danger">
+        <div class="callout-title">踵骨骨折を見たら必ず探すもの</div>
+        <div class="callout-body"><ol>
+        <li><strong>反対側の踵骨骨折</strong>（両側 10%）</li>
+        <li><strong>脊椎圧迫骨折・破裂骨折</strong>（10–15%）</li>
+        <li><strong>距骨骨折</strong></li>
+        <li><strong>下腿 / 大腿骨骨折</strong></li>
+        </ol>
+        <p>→ <strong>全脊椎 + 両下肢のレントゲン or 全身 CT</strong> を追加</p></div>
+        </div>
+      </section>
+
+      <!-- §3 身体所見 -->
+      <section class="section-page" id="s3" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🩺 身体所見</h2>
+        <ul>
+          <li><strong>踵の強い圧痛 + 腫脹 + 血腫</strong></li>
+          <li><strong>Mondor sign</strong>：足底・踵の皮下血腫（踵骨骨折に特異的）</li>
+          <li><strong>荷重不能</strong></li>
+          <li>皮膚損傷、<strong>コンパートメント症候群</strong>（足の内側）</li>
+        </ul>
+      </section>
+
+      <!-- §4 画像 -->
+      <section class="section-page" id="s4" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>📷 画像</h2>
+
+        <h3>レントゲン</h3>
+        <ul>
+          <li>踵骨 <strong>側面像・軸位像</strong></li>
+          <li><strong>Böhler 角</strong> &lt; 20°（正常 20–40°）→ 骨折</li>
+          <li><strong>Gissane 角</strong> &gt; 130° → 骨折</li>
+        </ul>
+
+        <h3>CT</h3>
+        <ul>
+          <li><strong>全例 CT</strong>（関節内進展評価、手術計画）</li>
+          <li><strong>Sanders 分類</strong>（関節内骨片数・位置で I–IV）</li>
+        </ul>
+      </section>
+
+      <!-- §5 分類 -->
+      <section class="section-page" id="s5" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>📊 分類</h2>
+
+        <h3>関節内 vs 関節外</h3>
+        <ul>
+          <li><strong>関節内 75%</strong>（距踵関節面を含む）</li>
+          <li>関節外 25%</li>
+        </ul>
+
+        <h3>Sanders 分類（関節内骨折、CT で判定）</h3>
+        <div class="table-wrap"><table><thead><tr><th>Type</th><th>所見</th><th>治療</th></tr></thead><tbody><tr><td>I</td><td>転位なし</td><td>保存</td></tr><tr><td><strong>II</strong></td><td>2 分割</td><td>帰宅手術</td></tr><tr><td><strong>III</strong></td><td>3 分割</td><td>帰宅手術</td></tr><tr><td><strong>IV</strong></td><td>粉砕</td><td>帰宅手術（距踵関節固定術の可能性）</td></tr></tbody></table></div>
+      </section>
+
+      <!-- §6 マネジメント -->
+      <section class="section-page" id="s6" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>💉 マネジメント</h2>
+
+        <h3>ER での対応</h3>
+        <ol>
+          <li><strong>全脊椎・両下肢・骨盤の評価</strong>（必要なら全身 CT）</li>
+          <li><strong>踵シーネ固定 + 挙上 + アイシング</strong></li>
+          <li><strong>皮膚損傷・コンパートメント症候群</strong>の確認</li>
+          <li><strong>整形外科コンサルト</strong></li>
+        </ol>
+
+        <h3>手術タイミング</h3>
+        <ul>
+          <li><strong>軟部組織の回復を待つ</strong>（血疱・腫脹が落ち着くまで 1–2 週）</li>
+          <li>Pilon 骨折同様 staged treatment</li>
+        </ul>
+
+        <h3>保存（転位なし）</h3>
+        <ul>
+          <li><strong>非荷重 10–12 週</strong></li>
+          <li>早期 ROM 訓練</li>
+        </ul>
+      </section>
+
+      <!-- §7 合併症 -->
+      <section class="section-page" id="s7" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>⚠️ 合併症</h2>
+        <div class="table-wrap"><table><thead><tr><th>合併症</th><th>背景</th></tr></thead><tbody><tr><td><strong>コンパートメント症候群</strong>（足）</td><td>踵骨骨折の 10%</td></tr><tr><td><strong>外傷性関節症</strong>（距踵関節）</td><td>関節内骨折で必発</td></tr><tr><td><strong>腓骨筋腱炎</strong>（踵骨外側の変形）</td><td>長期の慢性症状</td></tr><tr><td><strong>皮膚壊死</strong></td><td>早期手術のリスク</td></tr></tbody></table></div>
+      </section>
+
+      <!-- §8 落とし穴 -->
+      <section class="section-page" id="s8" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🕳️ 落とし穴</h2>
+        <ul>
+          <li><strong>「足首を挫いた」と受診して踵骨骨折</strong>（高所からの飛び降り自殺企図など）</li>
+          <li>側面像で Böhler 角を測定しないと見逃す</li>
+          <li><strong>脊椎圧迫・破裂骨折の合併</strong>を忘れる</li>
+        </ul>
+      </section>
+
+      <!-- §9 帰宅時の説明 ＋ 出典 ＋ 関連 -->
+      <section class="section-page" id="s9" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🏠 帰宅時の説明（保存例）</h2>
+        <ul>
+          <li><strong>完全非荷重 10–12 週</strong></li>
+          <li>松葉杖使用、足関節 ROM 訓練を早期開始</li>
+          <li>定期的な整形外科受診</li>
+        </ul>
+
+        <h3>出典</h3>
+        <ul>
+          <li><strong>増井伸高. 骨折ハンター. 中外医学社. 2019.</strong></li>
+          <li><strong>Sanders R ほか.</strong> Operative treatment of displaced intraarticular calcaneal fractures: long-term results. <em>Clin Orthop Relat Res.</em> 1993.</li>
+          <li><strong>Buckley R ほか.</strong> Operative compared with nonoperative treatment of displaced intra-articular calcaneal fractures. <em>J Bone Joint Surg Am.</em> 2002.</li>
+        </ul>
+
+        <h3>関連</h3>
+        <ul>
+          <li><a class="wiki-link" href="../転倒.html">転倒</a> / <a class="wiki-link" href="脊椎圧迫骨折.html">脊椎圧迫骨折</a> / <a class="wiki-link" href="脊椎破裂骨折.html">脊椎破裂骨折</a> / <a class="wiki-link" href="距骨骨折.html">距骨骨折</a> / <a class="wiki-link" href="Pilon骨折.html">Pilon骨折</a> / <a class="wiki-link" href="コンパートメント症候群.html">コンパートメント症候群</a></li>
+        </ul>
+      </section>
+
+    </article>
+  </main>
+
+  <nav class="hokuto-bottom">
+    <button class="hokuto-bottom__btn" type="button" id="navBack">
+      <span class="hokuto-bottom__icon">←</span><span>戻る</span>
+    </button>
+    <a class="hokuto-bottom__btn" href="../ツール.html">
+      <span class="hokuto-bottom__icon">⚙</span><span>ツール</span>
+    </a>
+    <a class="hokuto-bottom__btn" href="../index.html">
+      <span class="hokuto-bottom__icon">⌂</span><span>ホーム</span>
+    </a>
   </nav>
-  <article class="note-shell">
-    <header class="note-header">
-      <h1>踵骨骨折</h1>
-      <p class="source-badge">元: 臨床/ER/疾患詳細/踵骨骨折.md</p>
-    </header>
-    <details class="toc"><summary>目次（11 セクション）</summary><ol><li><a href="#受傷機転">受傷機転</a></li><li><a href="#高エネルギー外傷の連鎖">高エネルギー外傷の連鎖</a></li><li><a href="#身体所見">身体所見</a></li><li><a href="#画像">画像</a></li><li><a href="#分類">分類</a></li><li><a href="#マネジメント">マネジメント</a></li><li><a href="#合併症">合併症</a></li><li><a href="#落とし穴">落とし穴</a></li><li><a href="#帰宅時の説明保存例">帰宅時の説明（保存例）</a></li><li><a href="#出典">出典</a></li><li><a href="#関連">関連</a></li></ol></details>
-    <div class="md-body">
-<p>#骨折 #踵骨 #calcaneus #高エネルギー #脊椎 #ER</p>
-<div class="callout callout-summary">
-<div class="callout-title">踵骨骨折 = 「脊椎・反対側の踵」の合併を必ず疑う</div>
-<div class="callout-body"><ul>
-<li><strong>高所からの転落</strong>（垂直軸圧）で発生、若年男性に多い</li>
-<li><strong>脊椎圧迫骨折・破裂骨折の合併 10–15%</strong></li>
-<li><strong>両側踵骨骨折</strong>の合併もあり、反対側も必ずチェック</li>
-<li>CT で <strong>Sanders 分類</strong>、関節内進展が多い</li>
-<li>保存 or <strong>帰宅手術</strong>、Pilon と同じく staged treatment</li>
-</ul></div>
-</div>
-<h2 id="受傷機転">受傷機転</h2>
-<ul>
-<li><strong>高所からの転落</strong>（屋根・梯子、2 階以上）</li>
-<li>垂直軸圧が踵骨に伝達</li>
-<li>交通事故（ダッシュボード損傷）</li>
-</ul>
-<h2 id="高エネルギー外傷の連鎖">高エネルギー外傷の連鎖</h2>
-<div class="callout callout-danger">
-<div class="callout-title">踵骨骨折を見たら必ず探すもの</div>
-<div class="callout-body"><ol>
-<li><strong>反対側の踵骨骨折</strong>（両側 10%）</li>
-<li><strong>脊椎圧迫骨折・破裂骨折</strong>（10–15%）</li>
-<li><strong>距骨骨折</strong></li>
-<li><strong>下腿 / 大腿骨骨折</strong></li>
-</ol>
-<p>→ <strong>全脊椎 + 両下肢のレントゲン or 全身 CT</strong> を追加</p></div>
-</div>
-<h2 id="身体所見">身体所見</h2>
-<ul>
-<li><strong>踵の強い圧痛 + 腫脹 + 血腫</strong></li>
-<li><strong>Mondor sign</strong>：足底・踵の皮下血腫（踵骨骨折に特異的）</li>
-<li><strong>荷重不能</strong></li>
-<li>皮膚損傷、<strong>コンパートメント症候群</strong>（足の内側）</li>
-</ul>
-<h2 id="画像">画像</h2>
-<h3 id="レントゲン">レントゲン</h3>
-<ul>
-<li>踵骨 <strong>側面像・軸位像</strong></li>
-<li><strong>Böhler 角</strong> &lt; 20°（正常 20–40°）→ 骨折</li>
-<li><strong>Gissane 角</strong> &gt; 130° → 骨折</li>
-</ul>
-<h3 id="ct">CT</h3>
-<ul>
-<li><strong>全例 CT</strong>（関節内進展評価、手術計画）</li>
-<li><strong>Sanders 分類</strong>（関節内骨片数・位置で I–IV）</li>
-</ul>
-<h2 id="分類">分類</h2>
-<h3 id="関節内-vs-関節外">関節内 vs 関節外</h3>
-<ul>
-<li><strong>関節内 75%</strong>（距踵関節面を含む）</li>
-<li>関節外 25%</li>
-</ul>
-<h3 id="sanders-分類関節内骨折ct-で判定">Sanders 分類（関節内骨折、CT で判定）</h3>
-<div class="table-wrap"><table><thead><tr><th>Type</th><th>所見</th><th>治療</th></tr></thead><tbody><tr><td>I</td><td>転位なし</td><td>保存</td></tr><tr><td><strong>II</strong></td><td>2 分割</td><td>帰宅手術</td></tr><tr><td><strong>III</strong></td><td>3 分割</td><td>帰宅手術</td></tr><tr><td><strong>IV</strong></td><td>粉砕</td><td>帰宅手術（距踵関節固定術の可能性）</td></tr></tbody></table></div>
-<h2 id="マネジメント">マネジメント</h2>
-<h3 id="er-での対応">ER での対応</h3>
-<ol>
-<li><strong>全脊椎・両下肢・骨盤の評価</strong>（必要なら全身 CT）</li>
-<li><strong>踵シーネ固定 + 挙上 + アイシング</strong></li>
-<li><strong>皮膚損傷・コンパートメント症候群</strong>の確認</li>
-<li><strong>整形外科コンサルト</strong></li>
-</ol>
-<h3 id="手術タイミング">手術タイミング</h3>
-<ul>
-<li><strong>軟部組織の回復を待つ</strong>（血疱・腫脹が落ち着くまで 1–2 週）</li>
-<li>Pilon 骨折同様 staged treatment</li>
-</ul>
-<h3 id="保存転位なし">保存（転位なし）</h3>
-<ul>
-<li><strong>非荷重 10–12 週</strong></li>
-<li>早期 ROM 訓練</li>
-</ul>
-<h2 id="合併症">合併症</h2>
-<div class="table-wrap"><table><thead><tr><th>合併症</th><th>背景</th></tr></thead><tbody><tr><td><strong>コンパートメント症候群</strong>（足）</td><td>踵骨骨折の 10%</td></tr><tr><td><strong>外傷性関節症</strong>（距踵関節）</td><td>関節内骨折で必発</td></tr><tr><td><strong>腓骨筋腱炎</strong>（踵骨外側の変形）</td><td>長期の慢性症状</td></tr><tr><td><strong>皮膚壊死</strong></td><td>早期手術のリスク</td></tr></tbody></table></div>
-<h2 id="落とし穴">落とし穴</h2>
-<ul>
-<li><strong>「足首を挫いた」と受診して踵骨骨折</strong>（高所からの飛び降り自殺企図など）</li>
-<li>側面像で Böhler 角を測定しないと見逃す</li>
-<li><strong>脊椎圧迫・破裂骨折の合併</strong>を忘れる</li>
-</ul>
-<h2 id="帰宅時の説明保存例">帰宅時の説明（保存例）</h2>
-<ul>
-<li><strong>完全非荷重 10–12 週</strong></li>
-<li>松葉杖使用、足関節 ROM 訓練を早期開始</li>
-<li>定期的な整形外科受診</li>
-</ul>
-<h2 id="出典">出典</h2>
-<ul>
-<li><strong>増井伸高. 骨折ハンター. 中外医学社. 2019.</strong></li>
-<li><strong>Sanders R ほか.</strong> Operative treatment of displaced intraarticular calcaneal fractures: long-term results. <em>Clin Orthop Relat Res.</em> 1993.</li>
-<li><strong>Buckley R ほか.</strong> Operative compared with nonoperative treatment of displaced intra-articular calcaneal fractures. <em>J Bone Joint Surg Am.</em> 2002.</li>
-</ul>
-<h2 id="関連">関連</h2>
-<ul>
-<li><a class="wiki-link" href="../転倒.html">転倒</a> / <a class="wiki-link" href="脊椎圧迫骨折.html">脊椎圧迫骨折</a> / <a class="wiki-link" href="脊椎破裂骨折.html">脊椎破裂骨折</a> / <a class="wiki-link" href="距骨骨折.html">距骨骨折</a> / <a class="wiki-link" href="Pilon骨折.html">Pilon骨折</a> / <a class="wiki-link" href="コンパートメント症候群.html">コンパートメント症候群</a></li>
-</ul>
-    </div>
-    <footer class="page-footer">
-      <a href="../index.html">↑ 主訴ナビへ戻る</a>
-    </footer>
-  </article>
+
+  <script>
+  (function(){
+    const menu = document.getElementById('sectionMenu');
+    const pages = document.querySelectorAll('.section-page');
+    const titleH1 = document.querySelector('.page-title');
+    const relatedSymp = document.getElementById('related-symptoms');
+
+    function showSection(id) {
+      menu.hidden = true;
+      if (titleH1) titleH1.hidden = true;
+      if (relatedSymp) relatedSymp.hidden = true;
+      pages.forEach(p => p.hidden = (p.id !== id));
+      window.scrollTo(0, 0);
+    }
+    function showMenu(scrollTarget) {
+      menu.hidden = false;
+      if (titleH1) titleH1.hidden = false;
+      if (relatedSymp) relatedSymp.hidden = false;
+      pages.forEach(p => p.hidden = true);
+      if (scrollTarget) {
+        if (scrollTarget.tagName === 'DETAILS') scrollTarget.open = true;
+        scrollTarget.scrollIntoView({behavior: 'instant', block: 'start'});
+      } else {
+        window.scrollTo(0, 0);
+      }
+    }
+    function syncFromHash() {
+      const id = (location.hash || '').replace('#','');
+      const target = id ? document.getElementById(id) : null;
+      if (target && target.classList.contains('section-page')) {
+        showSection(id);
+      } else if (target) {
+        showMenu(target);
+      } else {
+        showMenu();
+      }
+    }
+
+    window.addEventListener('hashchange', syncFromHash);
+    document.querySelectorAll('.back-to-menu').forEach(b => {
+      b.addEventListener('click', () => { history.pushState(null,'',location.pathname); showMenu(); });
+    });
+    const navBack = document.getElementById('navBack');
+    if (navBack) navBack.addEventListener('click', () => {
+      if (window.history.length > 1) history.back();
+      else window.location.href = '../index.html';
+    });
+
+    syncFromHash();
+  })();
+  </script>
 </body>
 </html>

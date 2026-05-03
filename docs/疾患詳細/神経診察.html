@@ -4,95 +4,249 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="color-scheme" content="light dark" />
-  <title>神経診察</title>
+  <title>神経診察 | ER ノート</title>
   <link rel="stylesheet" href="../er-note.css" />
 </head>
 <body>
-  <nav class="site-bar">
-    <a class="site-bar__back" href="../index.html">← 主訴ナビ</a>
-    <span class="site-bar__title">神経診察</span>
+  <header class="hokuto-top">
+    <a class="hokuto-top__btn" href="../薬剤情報.html">
+      <span class="hokuto-top__icon">℞</span><span>薬剤情報</span>
+    </a>
+    <a class="hokuto-top__btn" href="../表計算.html">
+      <span class="hokuto-top__icon">⊞</span><span>表計算</span>
+    </a>
+  </header>
+
+  <main class="hokuto-main">
+    <article class="note-shell">
+      <h1 class="page-title">神経診察</h1>
+
+      <!-- 即時アクションヘッダー（常時 sticky） -->
+      <div class="action-header">
+        <div class="action-header__title">⚡ 即時アクション</div>
+        <ol class="action-header__list">
+          <li><strong>意識（GCS / JCS）</strong>から始める：呼びかけ反応・見当識（名前・場所・時間）</li>
+          <li><strong>脳神経 12 対</strong>を上から順に：瞳孔・眼球運動・顔面・構音・舌</li>
+          <li><strong>運動・感覚・腱反射</strong>で局在診断：Barré / 筋力 / 触覚 / DTR / Babinski</li>
+          <li><strong>協調運動・歩行・髄膜刺激徴候</strong>で全体像：指鼻・踵膝・歩行・Romberg</li>
+        </ol>
+      </div>
+
+      <!-- メニュータイル -->
+      <nav class="section-tiles" id="sectionMenu">
+        <a class="section-tile" href="#s1"><span class="section-tile__no">📋</span><span class="section-tile__name">使い方<br><small>ER / 入院</small></span></a>
+        <a class="section-tile" href="#s2"><span class="section-tile__no">🧠</span><span class="section-tile__name">意識・見当識</span></a>
+        <a class="section-tile" href="#s3"><span class="section-tile__no">👁️</span><span class="section-tile__name">脳神経<br><small>瞳孔〜舌</small></span></a>
+        <a class="section-tile" href="#s4"><span class="section-tile__no">💪</span><span class="section-tile__name">運動・Barré</span></a>
+        <a class="section-tile" href="#s5"><span class="section-tile__no">✋</span><span class="section-tile__name">感覚・腱反射</span></a>
+        <a class="section-tile" href="#s6"><span class="section-tile__no">🚶</span><span class="section-tile__name">協調・歩行</span></a>
+        <a class="section-tile" href="#s7"><span class="section-tile__no">🏥</span><span class="section-tile__name">入院・外来<br><small>位置づけ</small></span></a>
+        <a class="section-tile" href="#s8"><span class="section-tile__no">📚</span><span class="section-tile__name">出典</span></a>
+      </nav>
+
+      <!-- 関連主訴（双方向リンク） -->
+      <details class="sub-fold" id="related-symptoms">
+        <summary>📞 この疾患が該当する主訴</summary>
+        <div class="sub-fold__body">
+          <ul>
+            <li><a class="wiki-link" href="../意識障害.html">意識障害</a> — GCS / JCS と局在所見の経時比較</li>
+            <li><a class="wiki-link" href="../めまい.html">めまい</a> — 中枢徴候の系統的チェック</li>
+            <li><span class="wiki-missing">構音障害</span> — 脳神経・小脳・球麻痺の鑑別</li>
+            <li><a class="wiki-link" href="../頭痛.html">頭痛</a> — 髄膜刺激徴候・局在所見の確認</li>
+          </ul>
+        </div>
+      </details>
+
+      <!-- §1 使い方 -->
+      <section class="section-page" id="s1" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>📋 このページの使い方</h2>
+
+        <div class="callout callout-summary">
+          <div class="callout-title">このページの使い方</div>
+          <div class="callout-body"><ul>
+            <li><strong>ER</strong>：<a class="wiki-link" href="../頭痛.html">頭痛</a>・<a class="wiki-link" href="../意識障害.html">意識障害</a>・<a class="wiki-link" href="../めまい.html">めまい</a>などから飛んできたときの<strong>ベッドサイド手順</strong>として使う。</li>
+            <li><strong>入院／外来</strong>：「入院・外来での位置づけ」を参照（脳卒中・TIA など疾患別のフォローは各疾患ノートが本体）。</li>
+          </ul></div>
+        </div>
+      </section>
+
+      <!-- §2 意識・見当識 -->
+      <section class="section-page" id="s2" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🧠 意識・見当識</h2>
+
+        <ul>
+          <li>意識（呼びかけ反応）</li>
+          <li>見当識（名前・場所・時間）</li>
+        </ul>
+      </section>
+
+      <!-- §3 脳神経 -->
+      <section class="section-page" id="s3" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>👁️ 脳神経（瞳孔〜舌）</h2>
+
+        <ul>
+          <li>瞳孔（左右差・対光反射）</li>
+          <li>眼球運動（追視・複視）</li>
+          <li>顔面運動（眉上げ・歯見せ）</li>
+          <li>顔面感覚（左右差）</li>
+          <li>構音（ろれつ）</li>
+          <li>舌突出（偏位）</li>
+        </ul>
+      </section>
+
+      <!-- §4 運動・Barré -->
+      <section class="section-page" id="s4" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>💪 運動・Barré</h2>
+
+        <ul>
+          <li>上肢Barré（回内下垂）</li>
+          <li>手回内回外（回内ドリフト）</li>
+          <li>下肢挙上保持</li>
+        </ul>
+        <ul>
+          <li>筋力（左右差）</li>
+        </ul>
+      </section>
+
+      <!-- §5 感覚・腱反射 -->
+      <section class="section-page" id="s5" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>✋ 感覚・腱反射</h2>
+
+        <ul>
+          <li>表在感覚（触覚・左右差）</li>
+        </ul>
+        <ul>
+          <li>深部腱反射</li>
+          <li>Babinski</li>
+        </ul>
+      </section>
+
+      <!-- §6 協調・歩行 -->
+      <section class="section-page" id="s6" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🚶 協調運動・歩行</h2>
+
+        <ul>
+          <li>指鼻試験</li>
+          <li>踵膝試験</li>
+        </ul>
+        <ul>
+          <li>歩行</li>
+          <li>Romberg</li>
+        </ul>
+      </section>
+
+      <!-- §7 入院・外来 -->
+      <section class="section-page" id="s7" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🏥 入院・外来での位置づけ</h2>
+
+        <p>このリストは<strong>記録様式</strong>であり、<strong>オーダー内容そのものではない</strong>。入院後は<strong>疾患ごとのガイドライン</strong>に沿って指示を組み立て、神経所見は<strong>経時的に同じ項目で比較</strong>できるように記載する。</p>
+
+        <h3>脳梗塞・TIA（例）</h3>
+        <ul>
+          <li><strong>入院初期</strong>：<strong>NIHSS</strong>（標準化スコア）を用いるのが AHA/ASA ガイドラインの流れ（本ページの細かい動作チェックは補助的）</li>
+          <li><strong>オーダーの柱</strong>：再灌流療法の適応、<strong>抗血小板／抗凝固</strong>（病因に応じて）、<strong>血圧管理</strong>、血糖・体温、誤嚥評価、早期リハビリ（AHA/ASA 2019 急性期脳卒中ガイドライン）</li>
+          <li><strong>外来フォロー</strong>：<strong>二次予防</strong>（抗血小板、スタチン、血圧）、生活習慣、心房細動の有無 — <strong>AHA/ASA 2021 脳卒中・TIA 二次予防ガイドライン</strong></li>
+        </ul>
+
+        <h3>てんかん・意識障害の経過観察</h3>
+        <ul>
+          <li><strong>同じ神経項目を時間帯で追う</strong>（瞳孔・片麻痺の進行など）</li>
+          <li>具体的な薬剤オーダーは<strong>神経内科／脳外科</strong>のプロトコルに従う</li>
+        </ul>
+
+        <h3>末梢性めまいなど軽症で帰宅する例</h3>
+        <ul>
+          <li><strong>再診指示</strong>：中枢徴候が出たら受診（<a class="wiki-link" href="../めまい.html">めまい</a> の Red flags と整合）</li>
+        </ul>
+      </section>
+
+      <!-- §8 出典 -->
+      <section class="section-page" id="s8" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>📚 出典（入院・外来の「何を指示するか」の根拠）</h2>
+
+        <ul>
+          <li><strong>AHA/ASA 急性期脳卒中 2019</strong>：Powers WJ ほか. Guidelines for the Early Management of Patients With Acute Ischemic Stroke. <em>Stroke.</em> 2019.
+            <p><a class="wiki-link" href="https://doi.org/10.1161/STR.0000000000000211">https://doi.org/10.1161/STR.0000000000000211</a></p>
+          </li>
+          <li><strong>AHA/ASA 二次予防 2021</strong>：Kleindorfer D ほか. 2021 Guideline for the Prevention of Stroke in Patients With Stroke and Transient Ischemic Attack. <em>Stroke.</em> 2021.
+            <p><a class="wiki-link" href="https://doi.org/10.1161/STR.0000000000000375">https://doi.org/10.1161/STR.0000000000000375</a></p>
+          </li>
+        </ul>
+      </section>
+
+    </article>
+  </main>
+
+  <nav class="hokuto-bottom">
+    <button class="hokuto-bottom__btn" type="button" id="navBack">
+      <span class="hokuto-bottom__icon">←</span><span>戻る</span>
+    </button>
+    <a class="hokuto-bottom__btn" href="../ツール.html">
+      <span class="hokuto-bottom__icon">⚙</span><span>ツール</span>
+    </a>
+    <a class="hokuto-bottom__btn" href="../index.html">
+      <span class="hokuto-bottom__icon">⌂</span><span>ホーム</span>
+    </a>
   </nav>
-  <article class="note-shell">
-    <header class="note-header">
-      <h1>神経診察</h1>
-      <p class="source-badge">元: 臨床/ER/疾患詳細/神経診察.md</p>
-    </header>
-    <details class="toc"><summary>目次（3 セクション）</summary><ol><li><a href="#ベッドサイド手順チェックリスト">ベッドサイド手順（チェックリスト）</a></li><li><a href="#入院・外来での位置づけ">入院・外来での位置づけ</a></li><li><a href="#出典入院・外来の何を指示するかの根拠">出典（入院・外来の「何を指示するか」の根拠）</a></li></ol></details>
-    <div class="md-body">
-<h1 id="神経診察動作ベース">神経診察（動作ベース）</h1>
-<div class="callout callout-summary">
-<div class="callout-title">このページの使い方</div>
-<div class="callout-body"><ul>
-<li><strong>ER</strong>：<a class="wiki-link" href="../頭痛.html">頭痛</a>・<a class="wiki-link" href="../意識障害.html">意識障害</a>・<a class="wiki-link" href="../めまい.html">めまい</a>などから飛んできたときの<strong>ベッドサイド手順</strong>として使う。</li>
-<li><strong>入院／外来</strong>：下記「入院・外来での位置づけ」を参照（脳卒中・TIA など疾患別のフォローは各疾患ノートが本体）。</li>
-</ul></div>
-</div>
-<h2 id="ベッドサイド手順チェックリスト">ベッドサイド手順（チェックリスト）</h2>
-<ul>
-<li>意識（呼びかけ反応）</li>
-<li>見当識（名前・場所・時間）</li>
-</ul>
-<ul>
-<li>瞳孔（左右差・対光反射）</li>
-<li>眼球運動（追視・複視）</li>
-<li>顔面運動（眉上げ・歯見せ）</li>
-<li>顔面感覚（左右差）</li>
-<li>構音（ろれつ）</li>
-<li>舌突出（偏位）</li>
-</ul>
-<ul>
-<li>上肢Barré（回内下垂）</li>
-<li>手回内回外（回内ドリフト）</li>
-<li>下肢挙上保持</li>
-</ul>
-<ul>
-<li>筋力（左右差）</li>
-</ul>
-<ul>
-<li>表在感覚（触覚・左右差）</li>
-</ul>
-<ul>
-<li>深部腱反射</li>
-<li>Babinski</li>
-</ul>
-<ul>
-<li>指鼻試験</li>
-<li>踵膝試験</li>
-</ul>
-<ul>
-<li>歩行</li>
-<li>Romberg</li>
-</ul>
-<hr>
-<h2 id="入院・外来での位置づけ">入院・外来での位置づけ</h2>
-<p>このリストは<strong>記録様式</strong>であり、<strong>オーダー内容そのものではない</strong>。入院後は<strong>疾患ごとのガイドライン</strong>に沿って指示を組み立て、神経所見は<strong>経時的に同じ項目で比較</strong>できるように記載する。</p>
-<h3 id="脳梗塞・tia例">脳梗塞・TIA（例）</h3>
-<ul>
-<li><strong>入院初期</strong>：<strong>NIHSS</strong>（標準化スコア）を用いるのが AHA/ASA ガイドラインの流れ（本ページの細かい動作チェックは補助的）</li>
-<li><strong>オーダーの柱</strong>：再灌流療法の適応、<strong>抗血小板／抗凝固</strong>（病因に応じて）、<strong>血圧管理</strong>、血糖・体温、誤嚥評価、早期リハビリ（AHA/ASA 2019 急性期脳卒中ガイドライン）</li>
-<li><strong>外来フォロー</strong>：<strong>二次予防</strong>（抗血小板、スタチン、血圧）、生活習慣、心房細動の有無 — <strong>AHA/ASA 2021 脳卒中・TIA 二次予防ガイドライン</strong></li>
-</ul>
-<h3 id="てんかん・意識障害の経過観察">てんかん・意識障害の経過観察</h3>
-<ul>
-<li><strong>同じ神経項目を時間帯で追う</strong>（瞳孔・片麻痺の進行など）</li>
-<li>具体的な薬剤オーダーは<strong>神経内科／脳外科</strong>のプロトコルに従う</li>
-</ul>
-<h3 id="末梢性めまいなど軽症で帰宅する例">末梢性めまいなど軽症で帰宅する例</h3>
-<ul>
-<li><strong>再診指示</strong>：中枢徴候が出たら受診（<a class="wiki-link" href="../めまい.html">めまい</a> の Red flags と整合）</li>
-</ul>
-<hr>
-<h2 id="出典入院・外来の何を指示するかの根拠">出典（入院・外来の「何を指示するか」の根拠）</h2>
-<ul>
-<li><strong>AHA/ASA 急性期脳卒中 2019</strong>：Powers WJ ほか. Guidelines for the Early Management of Patients With Acute Ischemic Stroke. <em>Stroke.</em> 2019.</li>
-<p><a class="wiki-link" href="https://doi.org/10.1161/STR.0000000000000211">https://doi.org/10.1161/STR.0000000000000211</a></p>
-<li><strong>AHA/ASA 二次予防 2021</strong>：Kleindorfer D ほか. 2021 Guideline for the Prevention of Stroke in Patients With Stroke and Transient Ischemic Attack. <em>Stroke.</em> 2021.</li>
-<p><a class="wiki-link" href="https://doi.org/10.1161/STR.0000000000000375">https://doi.org/10.1161/STR.0000000000000375</a></p>
-</ul>
-    </div>
-    <footer class="page-footer">
-      <a href="../index.html">↑ 主訴ナビへ戻る</a>
-    </footer>
-  </article>
+
+  <script>
+  (function(){
+    const menu = document.getElementById('sectionMenu');
+    const pages = document.querySelectorAll('.section-page');
+    const titleH1 = document.querySelector('.page-title');
+    const relatedSymp = document.getElementById('related-symptoms');
+
+    function showSection(id) {
+      menu.hidden = true;
+      if (titleH1) titleH1.hidden = true;
+      if (relatedSymp) relatedSymp.hidden = true;
+      pages.forEach(p => p.hidden = (p.id !== id));
+      window.scrollTo(0, 0);
+    }
+    function showMenu(scrollTarget) {
+      menu.hidden = false;
+      if (titleH1) titleH1.hidden = false;
+      if (relatedSymp) relatedSymp.hidden = false;
+      pages.forEach(p => p.hidden = true);
+      if (scrollTarget) {
+        if (scrollTarget.tagName === 'DETAILS') scrollTarget.open = true;
+        scrollTarget.scrollIntoView({behavior: 'instant', block: 'start'});
+      } else {
+        window.scrollTo(0, 0);
+      }
+    }
+    function syncFromHash() {
+      const id = (location.hash || '').replace('#','');
+      const target = id ? document.getElementById(id) : null;
+      if (target && target.classList.contains('section-page')) {
+        showSection(id);
+      } else if (target) {
+        showMenu(target);
+      } else {
+        showMenu();
+      }
+    }
+
+    window.addEventListener('hashchange', syncFromHash);
+    document.querySelectorAll('.back-to-menu').forEach(b => {
+      b.addEventListener('click', () => { history.pushState(null,'',location.pathname); showMenu(); });
+    });
+    const navBack = document.getElementById('navBack');
+    if (navBack) navBack.addEventListener('click', () => {
+      if (window.history.length > 1) history.back();
+      else window.location.href = '../index.html';
+    });
+
+    syncFromHash();
+  })();
+  </script>
 </body>
 </html>

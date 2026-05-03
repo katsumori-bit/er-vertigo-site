@@ -4,275 +4,389 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="color-scheme" content="light dark" />
-  <title>急性膵炎</title>
+  <title>急性膵炎 | ER ノート</title>
   <link rel="stylesheet" href="../er-note.css" />
 </head>
 <body>
-  <nav class="site-bar">
-    <a class="site-bar__back" href="../腹痛.html">← 腹痛へ戻る</a>
-    <span class="site-bar__title">急性膵炎</span>
+  <header class="hokuto-top">
+    <a class="hokuto-top__btn" href="../薬剤情報.html">
+      <span class="hokuto-top__icon">℞</span><span>薬剤情報</span>
+    </a>
+    <a class="hokuto-top__btn" href="../表計算.html">
+      <span class="hokuto-top__icon">⊞</span><span>表計算</span>
+    </a>
+  </header>
+
+  <main class="hokuto-main">
+    <article class="note-shell">
+      <h1 class="page-title">急性膵炎</h1>
+
+      <!-- 即時アクションヘッダー（常時 sticky） -->
+      <div class="action-header">
+        <div class="action-header__title">⚡ 即時アクション</div>
+        <ol class="action-header__list">
+          <li><strong>Atlanta 2012 で診断（3 項目中 2 つ）</strong>：①典型的上腹部痛 ②リパーゼ／アミラーゼ &gt; 正常上限 3 倍 ③画像で膵炎像。<strong>BISAP で重症度判定</strong>（≥ 3 で HCU/ICU）</li>
+          <li><strong>補液（本丸）</strong>：内臓 fluid shift で 10 L 単位の脱水 → <strong>初期 48h は 5-10 mL/kg/h（250-300 mL/h）</strong>で開始、<strong>尿量 0.5-1 mL/kg/h</strong> 目標に滴定（過剰補液も避ける）</li>
+          <li><strong>予防的抗菌薬は不要</strong>（ACG 2013／AGA 2018）。重症壊死性膵炎でも同じ。感染合併は通常 10-14 日以降に顕在化 → US ガイド下穿刺培養</li>
+          <li><strong>胆石性膵炎 + 胆管炎合併 + 乳頭部嵌頓 → 24-72h 以内 ERCP + sphincterotomy</strong>。それ以外は同入院中の胆嚢摘出（軽症 1 週間以内）</li>
+        </ol>
+      </div>
+
+      <!-- メニュータイル -->
+      <nav class="section-tiles" id="sectionMenu">
+        <a class="section-tile" href="#s1"><span class="section-tile__no">📝</span><span class="section-tile__name">病歴<br><small>acute onset</small></span></a>
+        <a class="section-tile" href="#s2"><span class="section-tile__no">🩺</span><span class="section-tile__name">身体所見</span></a>
+        <a class="section-tile" href="#s3"><span class="section-tile__no">🔍</span><span class="section-tile__name">鑑別<br><small>vs 上部穿孔</small></span></a>
+        <a class="section-tile" href="#s4"><span class="section-tile__no">🧪</span><span class="section-tile__name">検査<br><small>酵素・画像</small></span></a>
+        <a class="section-tile" href="#s5"><span class="section-tile__no">✅</span><span class="section-tile__name">確定診断<br><small>Atlanta</small></span></a>
+        <a class="section-tile" href="#s6"><span class="section-tile__no">📊</span><span class="section-tile__name">重症度<br><small>BISAP</small></span></a>
+        <a class="section-tile" href="#s7"><span class="section-tile__no">💧</span><span class="section-tile__name">治療<br><small>補液・BST</small></span></a>
+        <a class="section-tile" href="#s8"><span class="section-tile__no">🫧</span><span class="section-tile__name">液貯留<br><small>4 分類</small></span></a>
+        <a class="section-tile" href="#s9"><span class="section-tile__no">🔪</span><span class="section-tile__name">胆嚢摘出</span></a>
+      </nav>
+
+      <!-- 関連主訴（双方向リンク） -->
+      <details class="sub-fold" id="related-symptoms">
+        <summary>📞 この疾患が該当する主訴</summary>
+        <div class="sub-fold__body">
+          <ul>
+            <li><a class="wiki-link" href="../腹痛.html">腹痛</a> — acute onset 上腹部痛・背部放散の典型疾患（左側腹部・右下腹部にも浸出液で圧痛波及）</li>
+            <li><a class="wiki-link" href="../嘔気・嘔吐.html">嘔気・嘔吐</a> — 約 90% に伴う</li>
+            <li><a class="wiki-link" href="../意識障害.html">意識障害</a> — 重症で出現、ACS・ARDS など合併症のシグナル</li>
+            <li><a class="wiki-link" href="../発熱.html">発熱</a> — 重症度に応じて出現、感染合併（10-14 日以降）の指標</li>
+          </ul>
+        </div>
+      </details>
+
+      <!-- §1 病歴 -->
+      <section class="section-page" id="s1" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>📝 病歴</h2>
+        <p><strong>要点：</strong>急性膵炎は <strong>acute onset の最典型疾患</strong>。発症様式（sudden か acute か）で上部消化管穿孔と分け、<strong>2 大原因＝アルコール・胆石</strong>を確認する。</p>
+        <ul>
+        <li><strong>発症様式：acute onset</strong>。「なんかお腹がオカシイ」と感じてから最強痛になるまで<strong>数分〜10 分</strong>かかる。スイッチを入れたような <strong>sudden</strong>（→ 上部消化管穿孔）や、ピークまで何時間もかかるのは膵炎らしくない。</li>
+        <li><strong>発症様式の聞き方</strong>：「急に痛くなりましたか？」は禁句（誰でも yes と答える）。「<em>変だと思ってから耐えられない痛みになるまで数分から 10 分くらいの間隔がありましたか？</em> それとも <em>誰かにスイッチを入れられたように一瞬で最強痛が来ましたか？</em>」のように区別できる聞き方をする。</li>
+        <li><strong>痛みの強さ・体位</strong>：本人から「何とかしてくれ」と要求される強さ。腹膜刺激症状で尿管結石のように身をよじれず<strong>同じ姿勢で耐える</strong>が、我慢できずたびたび体位変換する。古典的には<strong>膝胸位</strong>。</li>
+        <li><strong>悪心・嘔吐</strong>を約 <strong>90%</strong> に伴う。</li>
+        <li><strong>痛みの局在</strong>：通常は<strong>心窩部中心、背部放散は 50%</strong>。ただし炎症性浸出液が後腹膜・腸間膜を伝うため、<strong>左側腹部痛・右下腹部痛</strong>として来院することがある（身体所見の図参照）。</li>
+        <li><strong>持続時間</strong>：痛みは<strong>数日続く</strong>。数時間で軽快する痛みは膵炎らしくない。</li>
+        <li><strong>痛みが乏しい例外</strong>：腎移植後・腹膜透析中などでは痛みが弱いことがある。</li>
+        <li><strong>2 大原因＝アルコールと胆石</strong>。<strong>アルコール量は本人より家人</strong>から（大酒家ほど控えめに申告する）。発症は飲酒から<strong>1〜数日後</strong>で、前夜飲んでいなくても否定にはならない。胆石は既往と画像で確認。</li>
+        </ul>
+      </section>
+
+      <!-- §2 身体所見 -->
+      <section class="section-page" id="s2" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🩺 身体所見</h2>
+        <p><strong>要点：</strong>圧痛の最強点は心窩部〜左上腹部だが、<strong>後腹膜への浸出液の流れに沿って側腹部・右下腹部にも圧痛が及ぶ</strong>。</p>
+
+        <h3>① 膵炎自体の所見</h3>
+        <ul>
+        <li>腹部膨満、腸雑音低下</li>
+        <li><strong>心窩部〜左上腹部</strong>（膵臓のある場所）の圧痛が最強</li>
+        <li>重症例では反跳痛・筋性防御を呈し、<strong>汎発性腹膜炎様</strong>。<strong>上部消化管穿孔と誤診されることがある</strong></li>
+        </ul>
+        <div class="callout callout-note">
+        <div class="callout-title">膵酵素を含む浸出液は後腹膜・腸間膜を遠くまで流れる</div>
+        <div class="callout-body">
+        活性化膵酵素を含む炎症性浸出液は、膵から離れた部位まで進んで圧痛を作る。<strong>膵炎＝上腹部の病気</strong>と決めつけて触り方が浅いと所見を見落とす。
+        <ul>
+        <li><strong>① 膵尾部側</strong> → 結腸の背側（Toldt's fusion fascia 下層）→ <strong>左側腹部</strong></li>
+        <li><strong>② 膵頭部</strong> → 十二指腸背側 → <strong>右側腹部</strong></li>
+        <li><strong>③ 膵鈎部</strong> → 小腸間膜根部 → <strong>右下腹部</strong>（虫垂炎と誤認されうる）</li>
+        </ul>
+        出血性膵炎では浸出液が血性となり、皮下出血斑として <strong>Cullen 徴候</strong>（臍周囲）・<strong>Grey Turner 徴候</strong>（側腹部）が現れる。出現率は<strong>数 %</strong>と低い。
+        </div>
+        </div>
+
+        <h3>② 全身症状・併存症</h3>
+        <ul>
+        <li>重症度に応じて発熱・頻脈・低血圧・乏尿・呼吸不全・意識障害が出現</li>
+        <li><strong>黄疸</strong>：胆石性なら胆管炎合併を疑う。膵頭部腫脹による胆管圧排で閉塞性黄疸を呈することもある</li>
+        <li>アルコール性ではアルコール性肝障害が併存することが多い</li>
+        </ul>
+
+        <details class="section-fold"><summary>コラム：Acute on chronic 膵炎は重症化しにくい</summary>
+        <div class="callout-body">
+        肝硬変など高度肝機能異常をきたしているレベルでは、<strong>膵もすでに慢性膵炎ベースで萎縮（acute on chronic）</strong>が進んでおり、急性膵炎を起こしても<strong>重症化しないことが多い</strong>。同様に膵切除後も術直後を除けば重症膵炎にはなりにくい。一方、慢性膵炎ベースでは血清アミラーゼの上昇が乏しく、診断が遅れやすい点には注意。
+        </div>
+        </details>
+      </section>
+
+      <!-- §3 鑑別 -->
+      <section class="section-page" id="s3" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🔍 初期診断と鑑別疾患</h2>
+        <p><strong>要点：</strong>最大の鑑別は <strong>上部消化管穿孔</strong>。問診の最大鑑別点は <strong>sudden か acute か</strong>。</p>
+        <ul>
+        <li><strong>主な鑑別</strong>：上部消化管穿孔／胆石疾患／急性胃炎（出血性びらん・アニサキス）</li>
+        <li><strong>上部穿孔との鑑別</strong>：sudden onset = 穿孔、acute onset = 膵炎。逆もまた真。CT で膵炎像があれば膵炎と確定するが、画像所見が薄い軽症例ほど発症様式の聞き方がものをいう</li>
+        <li><strong>胆石疾患との鑑別</strong>：最強点・背部痛は<strong>胆石は右、膵炎は正中〜左</strong>。胆石発作は<strong>数時間で軽快</strong>、膵炎は<strong>数日続く</strong></li>
+        </ul>
+      </section>
+
+      <!-- §4 検査 -->
+      <section class="section-page" id="s4" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🧪 検査</h2>
+        <p><strong>要点：</strong>確定診断は<strong>膵酵素＋画像</strong>。<strong>CT は確定診断と原因（胆石）・重症度評価</strong>のために、<strong>US は胆石スクリーニング</strong>のために行う。</p>
+
+        <h3>血液</h3>
+        <ul>
+        <li><strong>リパーゼまたはアミラーゼ</strong>を測る（同時測定の意義は低く、どちらかでよい）</li>
+        <li><strong>アミラーゼ</strong>：発症 6〜12 時間で上昇、半減期 〜10 時間。<strong>上昇 ≠ 膵炎</strong>（腸管虚血・腸穿孔・腸閉塞・腎不全・家族性高 Amy 血症でも上昇）、<strong>正常 ≠ 膵炎の否定</strong>（発症早期・発症から時間経過・慢性膵炎での萎縮）。<strong>数値と重症度は比例しない</strong>が、3〜5 日経っても下がりが悪いと重症化や合併症（仮性嚢胞）を反映していることがある</li>
+        <li><strong>リパーゼ</strong>：感度がアミラーゼよりやや高く、上昇までの時間が短い（4〜8 時間）、半減期が長い → <strong>遅れて来院した症例で有用</strong></li>
+        <li>重症度評価のために CBC、CRP、電解質、Ca、LDH、AST/ALT・γGTP・ALP・ビリルビン、TG、乳酸、血液ガス、BUN/Cr などをセットで取る</li>
+        </ul>
+
+        <h3>尿</h3>
+        <ul>
+        <li><strong>腎機能</strong>：急性腎不全は警戒すべき初期合併症</li>
+        <li><strong>尿中アミラーゼ</strong>：血中よりピークが遅れる → 遅れて来院＋血清正常でも尿で膵炎を拾えることがある。家族性高アミラーゼ血症では血清高値だが尿は正常</li>
+        </ul>
+
+        <h3>単純 X 線</h3>
+        <p>陽性で診断、陰性で否定はできないが意味は理解しておく。</p>
+        <ul>
+        <li><strong>Sentinel loop sign</strong>：膵周囲の麻痺性小腸像</li>
+        <li><strong>Colon cut off sign</strong>：肥厚した後腹膜が横行結腸を中央で押しやり、ガス像が「途切れる」</li>
+        <li>胸部 X 線：左胸水・底部無気肺（局所影響）、肺浸潤（ALI/ARDS の全身反応）</li>
+        </ul>
+
+        <h3>腹部 CT（単純＋造影）</h3>
+        <ul>
+        <li>膵腫大・辺縁不整・周囲液貯留。<strong>Toldt 下層に沿って腎背側・結腸背側へ流れる像</strong></li>
+        <li>軽症では膵自体に変化が乏しく、<strong>腎筋膜上のわずかな浸出液のみが唯一の所見</strong>になることもある（病歴・所見が合えば軽症膵炎と判断できる）</li>
+        <li><strong>造影効果欠損 = 壊死</strong>（壊死性膵炎）</li>
+        <li>必ず<strong>単純 CT も撮影</strong>し、<strong>胆石・総胆管結石</strong>を確認。乳頭部嵌頓があれば胆石性膵炎。ただし結石が流れた後でも胆石性の否定はできない</li>
+        </ul>
+
+        <h3>腹部超音波</h3>
+        <ul>
+        <li>膵自体の評価は CT に劣る。重症ではガスで膵が見えず、両側腎筋膜上の fluid から推定する</li>
+        <li><strong>本目的は胆石スクリーニング</strong>と総胆管・胆嚢炎の評価（胆管炎合併のチェック）</li>
+        </ul>
+      </section>
+
+      <!-- §5 確定診断 -->
+      <section class="section-page" id="s5" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>✅ 確定診断と評価</h2>
+        <p><strong>要点：</strong>画像まで進めば軽症で迷うことはあっても、重症で確定できないことはまずない。<strong>次は原因検索と重症度評価</strong>。</p>
+        <div class="callout callout-info">
+        <div class="callout-title">Atlanta 2012 — 急性膵炎の診断（3 項目中 2 項目以上）</div>
+        <div class="callout-body">
+        <ol>
+        <li>急性発症の典型的な上腹部持続痛（しばしば背部放散）</li>
+        <li>血清リパーゼ（またはアミラーゼ）が正常上限の <strong>3 倍以上</strong></li>
+        <li>造影 CT・MRI・US での急性膵炎を示す画像所見</li>
+        </ol>
+        </div>
+        </div>
+      </section>
+
+      <!-- §6 重症度 -->
+      <section class="section-page" id="s6" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>📊 重症度評価</h2>
+        <p><strong>要点：</strong>「決定的な指標がない」のが急性膵炎の特長。複数のスコアで初期判断し、<strong>入院時に「大丈夫そう」と思わない</strong>こと自体が学ぶべきポイント。</p>
+
+        <h3>原因の見極め（治療方針が変わる）</h3>
+        <ul>
+        <li><strong>アルコール性</strong> → 離脱予防（後述）</li>
+        <li><strong>胆石性</strong> → 胆石への処置（ERCP の適応判断）</li>
+        </ul>
+
+        <div class="table-wrap"><table>
+        <thead><tr><th>胆石性を示唆する初診所見</th><th>該当数 → 胆石性の確率</th></tr></thead>
+        <tbody>
+        <tr><td>年齢 &gt; 50 歳／女性／s-Amy &gt; 4000／ALT &gt; 100／γGTP &gt; 300</td><td>1 項目：&lt; 5%、2 項目：50%、<strong>3 項目以上：90%</strong></td></tr>
+        </tbody></table></div>
+
+        <h3>Atlanta 重症度（経時的）</h3>
+        <div class="table-wrap"><table>
+        <thead><tr><th>分類</th><th>定義</th></tr></thead>
+        <tbody>
+        <tr><td><strong>軽症（mild）</strong></td><td>臓器不全なし、局所・全身合併症なし</td></tr>
+        <tr><td><strong>中等症（moderately severe）</strong></td><td>一過性臓器不全（&lt; 48h）または局所/全身合併症</td></tr>
+        <tr><td><strong>重症（severe）</strong></td><td>持続性臓器不全（≥ 48h）— 単一でも複数でも</td></tr>
+        </tbody></table></div>
+        <p>実用的には「一般病棟で問題なし＝軽症／一旦 ICU だが翌日退室＝中等症／2 日後もまだ ICU＝重症」と理解しておくとわかりやすい。</p>
+
+        <h3>BISAP（5 項目、入院 24h 以内に評価）</h3>
+        <ul>
+        <li>BUN &gt; 25 mg/dL ／ GCS &lt; 15 ／ SIRS あり ／ 年齢 &gt; 60 ／ 画像で液貯留あり</li>
+        <li><strong>0〜2 点：死亡率 &lt; 2%</strong>、<strong>3〜5 点：&gt; 15%</strong>。3 点以上で HCU/ICU 管理を考慮</li>
+        </ul>
+
+        <h3>臓器不全の指標（一般的な重症の目安）</h3>
+        <ul>
+        <li>ショック（収縮期血圧 &lt; 90 mmHg）／ PaO₂ ≤ 60 mmHg ／ 補液後 Cr &gt; 2 mg/dL ／ 消化管出血 &gt; 500 mL/24h</li>
+        <li>局所合併症の存在（壊死／膿瘍／仮性嚢胞）</li>
+        </ul>
+
+        <details class="section-fold"><summary>副スコア（Ranson／APACHE II／厚労省基準／CTSI）</summary>
+        <div class="callout-body">
+        <ul>
+        <li><strong>Ranson's criteria</strong>：48 時間経たないと完成せず、<strong>初期意思決定には使いにくい</strong></li>
+        <li><strong>APACHE II ≥ 8</strong> が重症の目安、20 で予想死亡率 35%。ICU での評価に汎用</li>
+        <li><strong>厚労省急性膵炎重症度判定基準</strong>：予後因子 9 項目で <strong>3 点以上が重症</strong>、または造影 CT Grade ≥ 2 で重症</li>
+        <li><strong>CTSI</strong>（Balthazar grade ＋ 壊死率）：合計 <strong>6 以上で重症</strong></li>
+        </ul>
+        </div>
+        </details>
+      </section>
+
+      <!-- §7 治療 -->
+      <section class="section-page" id="s7" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>💧 治療</h2>
+        <p><strong>要点：</strong>疾患特異的治療がなく <strong>Best Supportive Therapy（BST）</strong> に徹する。<strong>予防的抗菌薬は不要</strong>、<strong>早期 EN</strong>、<strong>胆石＋胆管炎の合併で 24h 以内 ERCP</strong>。</p>
+
+        <h3>来院初日の対応</h3>
+        <ul>
+        <li><strong>補液（本丸）</strong>：病態のメインは <strong>internal fluid shift による脱水</strong>（後腹膜の広範な浮腫で 10 L 単位の水分が逃げる）。<strong>初期 48h は 5〜10 mL/kg/h（250〜300 mL/h）</strong>などで開始し、<strong>尿量 0.5〜1 mL/kg/h</strong> を目標に滴定。決まった量はないので過剰補液も避ける</li>
+        <li><strong>絶食（NPO）</strong>：超急性期は NPO、状態が落ち着けば栄養再開</li>
+        <li><strong>鎮痛</strong>：<strong>オピオイド静注</strong>。腎機能低下に強い<strong>フェンタニル</strong>が使いやすい</li>
+        <li><strong>感染対策</strong>：<strong>重症壊死性膵炎であっても予防的抗菌薬は使用しない</strong>（ACG 2013／AGA 2018）。感染合併は通常 <strong>10〜14 日以降</strong>に顕在化する</li>
+        <li><strong>栄養</strong>：重症でも<strong>第 5〜7 病日から開始</strong>。TPN ではなく<strong>経鼻空腸チューブによる EN</strong> が推奨</li>
+        <li><strong>アルコール離脱予防</strong>：アルコール性なら必須。断酒 <strong>72〜96h 後がピーク</strong>。例：ジアゼパム 5 mg IV q8h</li>
+        <li><strong>PUD 予防</strong>：膵炎自体の予後には影響しない、一般的 PUD 予防に準じる</li>
+        <li><strong>モニター</strong>：呼吸（左胸水・無気肺・ARDS）、循環、尿量、電解質（低 Ca）・血糖、ACS 疑いでは<strong>膀胱内圧</strong>で IAH を追う</li>
+        </ul>
+
+        <h3>時系列でみる合併症と即コール基準</h3>
+        <div class="callout callout-danger">
+        <div class="callout-title">フェーズごとに「次に来る合併症」を予測する</div>
+        <div class="callout-body">
+        <ul>
+        <li><strong>初日：胆石性膵炎＋胆管炎合併＋乳頭部嵌頓</strong> → <strong>24h 以内 ERCP + sphincterotomy</strong>。それ以外は待機的</li>
+        <li><strong>入院〜2-3 日：ACS</strong>（腹部緊満・乏尿・ショック・mottling skin）。<strong>膀胱内圧 &gt; 25 mmHg = Grade IV ACS</strong> → <strong>開腹（TAC: temporary abdominal closure）</strong>で減圧。輸液・カテコラミンに反応しない</li>
+        <li><strong>〜1 週間</strong>：感染合併は通常 10〜14 日以降。1 週間の発熱でいきなりドレナージは判断が早い。敗血症像があれば <strong>US ガイド下穿刺培養</strong></li>
+        <li><strong>2〜4 週</strong>：液貯留の評価（次節）</li>
+        <li><strong>4〜8 週：仮性動脈瘤</strong>（多くは<strong>胃十二指腸動脈 GDA</strong>）。腹腔内炎症性瘢着で開腹止血は困難 → <strong>IVR（コイル塞栓）</strong></li>
+        <li><strong>数カ月後</strong>：<strong>脾静脈・上腸間膜静脈の血栓症</strong>。腹痛・下痢・体重減少が続けば疑う</li>
+        </ul>
+        </div>
+        </div>
+      </section>
+
+      <!-- §8 液貯留 -->
+      <section class="section-page" id="s8" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🫧 液貯留の評価（Atlanta 2012 で 4 分類）</h2>
+        <p><strong>要点：</strong>壊死の有無 × 被膜の有無の 2 軸で 4 分類。<strong>無症状の液貯留は触らない</strong>のが基本、感染・有症状なら<strong>step-up approach</strong>（経皮 → 内視鏡 → 外科）。</p>
+        <div class="table-wrap"><table>
+        <thead><tr><th>用語</th><th>時期</th><th>意味と対応</th></tr></thead>
+        <tbody>
+        <tr><td><strong>APFC</strong>（acute peripancreatic fluid collection）</td><td>4 週未満</td><td>壊死なし、被膜なし。<strong>治療介入なし</strong>、多くは自然吸収</td></tr>
+        <tr><td><strong>PP</strong>（pancreatic pseudocyst）</td><td>4 週以降</td><td>壊死なし、被膜あり。<strong>無症状なら経過観察</strong>、有症状で内視鏡的ドレナージ</td></tr>
+        <tr><td><strong>ANC</strong>（acute necrotic collection）</td><td>4 週未満</td><td>壊死を含む、被膜なし。<strong>感染証明されてもできれば 4 週まで待つ</strong></td></tr>
+        <tr><td><strong>WON</strong>（walled-off necrosis）</td><td>4 週以降</td><td>壊死を含む、被膜あり。感染合併で <strong>step-up approach</strong>。主膵管損傷あれば<strong>内瘻化</strong>（消化管へ）</td></tr>
+        </tbody></table></div>
+        <ul>
+        <li>ANC・WON の内容物は液体ではなく<strong>ねっとりしたデブリス</strong>であり、細径カテーテル（ピッグテイル）でドレナージできない</li>
+        <li>仮性動脈瘤の出血（GDA など）は急変要因 → 偶然見つけたら IVR コール</li>
+        </ul>
+      </section>
+
+      <!-- §9 胆嚢摘出 -->
+      <section class="section-page" id="s9" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🔪 胆嚢摘出術（胆石性膵炎）</h2>
+        <ul>
+        <li><strong>同一入院中</strong>に行う。軽症は 1 週間以内、重症は回復次第</li>
+        <li>退院後の待機は<strong>短期再発率が高く推奨されない</strong></li>
+        <li>術前の画像で胆石が確認できなくても、胆石性と判断されていれば手術しない理由にはならない</li>
+        </ul>
+
+        <h3>このページから張るリンク</h3>
+        <ul>
+        <li><a class="wiki-link" href="../腹痛.html">← 腹痛入口へ戻る</a></li>
+        <li><a class="wiki-link" href="急性胆管炎・総胆管結石症.html">急性胆管炎・総胆管結石症</a>（胆石性膵炎の合併・ERCP 適応の判断）</li>
+        <li><a class="wiki-link" href="胆石症・急性胆嚢炎.html">胆石症・急性胆嚢炎</a>（原因検索・同入院中胆嚢摘出）</li>
+        <li><a class="wiki-link" href="上部消化管穿孔.html">上部消化管穿孔</a>（最大の鑑別）</li>
+        <li><a class="wiki-link" href="急性虫垂炎.html">急性虫垂炎</a>（膵鈎部炎症の右下腹部圧痛と誤認しうる）</li>
+        </ul>
+
+        <h3>出典</h3>
+        <ul>
+        <li>窪田忠夫『フラッシュアップ急性腹症』第 2 版（中外医学社）— 章構成の踏襲元</li>
+        <li>Banks PA, et al. <em>Gut</em> 2013 — Atlanta 2012 改訂分類</li>
+        <li>Tenner S, et al. <em>Am J Gastroenterol</em> 2013 — ACG 急性膵炎ガイドライン</li>
+        <li>AGA Institute. <em>Gastroenterology</em> 2018 — 初期管理ガイドライン</li>
+        <li>厚生労働省急性膵炎重症度判定基準（2008 改訂）</li>
+        <li>WSACS（World Society of the Abdominal Compartment Syndrome）— ACS 定義</li>
+        <li>急性腹症診療ガイドライン 2015（日本腹部救急医学会）</li>
+        </ul>
+      </section>
+
+    </article>
+  </main>
+
+  <nav class="hokuto-bottom">
+    <button class="hokuto-bottom__btn" type="button" id="navBack">
+      <span class="hokuto-bottom__icon">←</span><span>戻る</span>
+    </button>
+    <a class="hokuto-bottom__btn" href="../ツール.html">
+      <span class="hokuto-bottom__icon">⚙</span><span>ツール</span>
+    </a>
+    <a class="hokuto-bottom__btn" href="../index.html">
+      <span class="hokuto-bottom__icon">⌂</span><span>ホーム</span>
+    </a>
   </nav>
-  <article class="note-shell">
-    <header class="note-header">
-      <h1>急性膵炎</h1>
-      <p class="source-badge">元: 急性腹症 参考用.md（窪田『フラッシュアップ急性腹症』第 2 版）の章構成を踏襲した要約 ／ 補完出典は文末記載</p>
-    </header>
-    <details class="toc"><summary>目次（原著章順）</summary><ol>
-      <li><a href="#病歴">病歴</a></li>
-      <li><a href="#身体所見">身体所見</a></li>
-      <li><a href="#初期診断">初期診断と鑑別疾患</a></li>
-      <li><a href="#検査">検査</a></li>
-      <li><a href="#確定診断">確定診断と評価</a></li>
-      <li><a href="#重症度">重症度評価</a></li>
-      <li><a href="#治療">治療</a></li>
-      <li><a href="#液貯留">液貯留の評価</a></li>
-      <li><a href="#胆摘">胆嚢摘出術</a></li>
-    </ol></details>
-    <div class="md-body">
 
-<p>#ER #救急 #腹痛 #膵炎 #Atlanta #BISAP</p>
+  <script>
+  (function(){
+    const menu = document.getElementById('sectionMenu');
+    const pages = document.querySelectorAll('.section-page');
+    const titleH1 = document.querySelector('.page-title');
+    const relatedSymp = document.getElementById('related-symptoms');
 
-<h2 id="病歴">病歴</h2>
-<p><strong>要点：</strong>急性膵炎は <strong>acute onset の最典型疾患</strong>。発症様式（sudden か acute か）で上部消化管穿孔と分け、<strong>2 大原因＝アルコール・胆石</strong>を確認する。</p>
-<ul>
-<li><strong>発症様式：acute onset</strong>。「なんかお腹がオカシイ」と感じてから最強痛になるまで<strong>数分〜10 分</strong>かかる。スイッチを入れたような <strong>sudden</strong>（→ 上部消化管穿孔）や、ピークまで何時間もかかるのは膵炎らしくない。</li>
-<li><strong>発症様式の聞き方</strong>：「急に痛くなりましたか？」は禁句（誰でも yes と答える）。「<em>変だと思ってから耐えられない痛みになるまで数分から 10 分くらいの間隔がありましたか？</em> それとも <em>誰かにスイッチを入れられたように一瞬で最強痛が来ましたか？</em>」のように区別できる聞き方をする。</li>
-<li><strong>痛みの強さ・体位</strong>：本人から「何とかしてくれ」と要求される強さ。腹膜刺激症状で尿管結石のように身をよじれず<strong>同じ姿勢で耐える</strong>が、我慢できずたびたび体位変換する。古典的には<strong>膝胸位</strong>。</li>
-<li><strong>悪心・嘔吐</strong>を約 <strong>90%</strong> に伴う。</li>
-<li><strong>痛みの局在</strong>：通常は<strong>心窩部中心、背部放散は 50%</strong>。ただし炎症性浸出液が後腹膜・腸間膜を伝うため、<strong>左側腹部痛・右下腹部痛</strong>として来院することがある（身体所見の図参照）。</li>
-<li><strong>持続時間</strong>：痛みは<strong>数日続く</strong>。数時間で軽快する痛みは膵炎らしくない。</li>
-<li><strong>痛みが乏しい例外</strong>：腎移植後・腹膜透析中などでは痛みが弱いことがある。</li>
-<li><strong>2 大原因＝アルコールと胆石</strong>。<strong>アルコール量は本人より家人</strong>から（大酒家ほど控えめに申告する）。発症は飲酒から<strong>1〜数日後</strong>で、前夜飲んでいなくても否定にはならない。胆石は既往と画像で確認。</li>
-</ul>
-<hr>
+    function showSection(id) {
+      menu.hidden = true;
+      if (titleH1) titleH1.hidden = true;
+      if (relatedSymp) relatedSymp.hidden = true;
+      pages.forEach(p => p.hidden = (p.id !== id));
+      window.scrollTo(0, 0);
+    }
+    function showMenu(scrollTarget) {
+      menu.hidden = false;
+      if (titleH1) titleH1.hidden = false;
+      if (relatedSymp) relatedSymp.hidden = false;
+      pages.forEach(p => p.hidden = true);
+      if (scrollTarget) {
+        if (scrollTarget.tagName === 'DETAILS') scrollTarget.open = true;
+        scrollTarget.scrollIntoView({behavior: 'instant', block: 'start'});
+      } else {
+        window.scrollTo(0, 0);
+      }
+    }
+    function syncFromHash() {
+      const id = (location.hash || '').replace('#','');
+      const target = id ? document.getElementById(id) : null;
+      if (target && target.classList.contains('section-page')) {
+        showSection(id);
+      } else if (target) {
+        showMenu(target);
+      } else {
+        showMenu();
+      }
+    }
 
-<h2 id="身体所見">身体所見</h2>
-<p><strong>要点：</strong>圧痛の最強点は心窩部〜左上腹部だが、<strong>後腹膜への浸出液の流れに沿って側腹部・右下腹部にも圧痛が及ぶ</strong>。</p>
+    window.addEventListener('hashchange', syncFromHash);
+    document.querySelectorAll('.back-to-menu').forEach(b => {
+      b.addEventListener('click', () => { history.pushState(null,'',location.pathname); showMenu(); });
+    });
+    const navBack = document.getElementById('navBack');
+    if (navBack) navBack.addEventListener('click', () => {
+      if (window.history.length > 1) history.back();
+      else window.location.href = '../index.html';
+    });
 
-<h3>① 膵炎自体の所見</h3>
-<ul>
-<li>腹部膨満、腸雑音低下</li>
-<li><strong>心窩部〜左上腹部</strong>（膵臓のある場所）の圧痛が最強</li>
-<li>重症例では反跳痛・筋性防御を呈し、<strong>汎発性腹膜炎様</strong>。<strong>上部消化管穿孔と誤診されることがある</strong></li>
-</ul>
-<div class="callout callout-note">
-<div class="callout-title">膵酵素を含む浸出液は後腹膜・腸間膜を遠くまで流れる</div>
-<div class="callout-body">
-活性化膵酵素を含む炎症性浸出液は、膵から離れた部位まで進んで圧痛を作る。<strong>膵炎＝上腹部の病気</strong>と決めつけて触り方が浅いと所見を見落とす。
-<ul>
-<li><strong>① 膵尾部側</strong> → 結腸の背側（Toldt's fusion fascia 下層）→ <strong>左側腹部</strong></li>
-<li><strong>② 膵頭部</strong> → 十二指腸背側 → <strong>右側腹部</strong></li>
-<li><strong>③ 膵鈎部</strong> → 小腸間膜根部 → <strong>右下腹部</strong>（虫垂炎と誤認されうる）</li>
-</ul>
-出血性膵炎では浸出液が血性となり、皮下出血斑として <strong>Cullen 徴候</strong>（臍周囲）・<strong>Grey Turner 徴候</strong>（側腹部）が現れる。出現率は<strong>数 %</strong>と低い。
-</div>
-</div>
-
-<h3>② 全身症状・併存症</h3>
-<ul>
-<li>重症度に応じて発熱・頻脈・低血圧・乏尿・呼吸不全・意識障害が出現</li>
-<li><strong>黄疸</strong>：胆石性なら胆管炎合併を疑う。膵頭部腫脹による胆管圧排で閉塞性黄疸を呈することもある</li>
-<li>アルコール性ではアルコール性肝障害が併存することが多い</li>
-</ul>
-
-<details class="section-fold"><summary>コラム：Acute on chronic 膵炎は重症化しにくい</summary>
-<div class="callout-body">
-肝硬変など高度肝機能異常をきたしているレベルでは、<strong>膵もすでに慢性膵炎ベースで萎縮（acute on chronic）</strong>が進んでおり、急性膵炎を起こしても<strong>重症化しないことが多い</strong>。同様に膵切除後も術直後を除けば重症膵炎にはなりにくい。一方、慢性膵炎ベースでは血清アミラーゼの上昇が乏しく、診断が遅れやすい点には注意。
-</div>
-</details>
-<hr>
-
-<h2 id="初期診断">初期診断と鑑別疾患</h2>
-<p><strong>要点：</strong>最大の鑑別は <strong>上部消化管穿孔</strong>。問診の最大鑑別点は <strong>sudden か acute か</strong>。</p>
-<ul>
-<li><strong>主な鑑別</strong>：上部消化管穿孔／胆石疾患／急性胃炎（出血性びらん・アニサキス）</li>
-<li><strong>上部穿孔との鑑別</strong>：sudden onset = 穿孔、acute onset = 膵炎。逆もまた真。CT で膵炎像があれば膵炎と確定するが、画像所見が薄い軽症例ほど発症様式の聞き方がものをいう</li>
-<li><strong>胆石疾患との鑑別</strong>：最強点・背部痛は<strong>胆石は右、膵炎は正中〜左</strong>。胆石発作は<strong>数時間で軽快</strong>、膵炎は<strong>数日続く</strong></li>
-</ul>
-<hr>
-
-<h2 id="検査">検査</h2>
-<p><strong>要点：</strong>確定診断は<strong>膵酵素＋画像</strong>。<strong>CT は確定診断と原因（胆石）・重症度評価</strong>のために、<strong>US は胆石スクリーニング</strong>のために行う。</p>
-
-<h3>血液</h3>
-<ul>
-<li><strong>リパーゼまたはアミラーゼ</strong>を測る（同時測定の意義は低く、どちらかでよい）</li>
-<li><strong>アミラーゼ</strong>：発症 6〜12 時間で上昇、半減期 〜10 時間。<strong>上昇 ≠ 膵炎</strong>（腸管虚血・腸穿孔・腸閉塞・腎不全・家族性高 Amy 血症でも上昇）、<strong>正常 ≠ 膵炎の否定</strong>（発症早期・発症から時間経過・慢性膵炎での萎縮）。<strong>数値と重症度は比例しない</strong>が、3〜5 日経っても下がりが悪いと重症化や合併症（仮性嚢胞）を反映していることがある</li>
-<li><strong>リパーゼ</strong>：感度がアミラーゼよりやや高く、上昇までの時間が短い（4〜8 時間）、半減期が長い → <strong>遅れて来院した症例で有用</strong></li>
-<li>重症度評価のために CBC、CRP、電解質、Ca、LDH、AST/ALT・γGTP・ALP・ビリルビン、TG、乳酸、血液ガス、BUN/Cr などをセットで取る</li>
-</ul>
-
-<h3>尿</h3>
-<ul>
-<li><strong>腎機能</strong>：急性腎不全は警戒すべき初期合併症</li>
-<li><strong>尿中アミラーゼ</strong>：血中よりピークが遅れる → 遅れて来院＋血清正常でも尿で膵炎を拾えることがある。家族性高アミラーゼ血症では血清高値だが尿は正常</li>
-</ul>
-
-<h3>単純 X 線</h3>
-<p>陽性で診断、陰性で否定はできないが意味は理解しておく。</p>
-<ul>
-<li><strong>Sentinel loop sign</strong>：膵周囲の麻痺性小腸像</li>
-<li><strong>Colon cut off sign</strong>：肥厚した後腹膜が横行結腸を中央で押しやり、ガス像が「途切れる」</li>
-<li>胸部 X 線：左胸水・底部無気肺（局所影響）、肺浸潤（ALI/ARDS の全身反応）</li>
-</ul>
-
-<h3>腹部 CT（単純＋造影）</h3>
-<ul>
-<li>膵腫大・辺縁不整・周囲液貯留。<strong>Toldt 下層に沿って腎背側・結腸背側へ流れる像</strong></li>
-<li>軽症では膵自体に変化が乏しく、<strong>腎筋膜上のわずかな浸出液のみが唯一の所見</strong>になることもある（病歴・所見が合えば軽症膵炎と判断できる）</li>
-<li><strong>造影効果欠損 = 壊死</strong>（壊死性膵炎）</li>
-<li>必ず<strong>単純 CT も撮影</strong>し、<strong>胆石・総胆管結石</strong>を確認。乳頭部嵌頓があれば胆石性膵炎。ただし結石が流れた後でも胆石性の否定はできない</li>
-</ul>
-
-<h3>腹部超音波</h3>
-<ul>
-<li>膵自体の評価は CT に劣る。重症ではガスで膵が見えず、両側腎筋膜上の fluid から推定する</li>
-<li><strong>本目的は胆石スクリーニング</strong>と総胆管・胆嚢炎の評価（胆管炎合併のチェック）</li>
-</ul>
-<hr>
-
-<h2 id="確定診断">確定診断と評価</h2>
-<p><strong>要点：</strong>画像まで進めば軽症で迷うことはあっても、重症で確定できないことはまずない。<strong>次は原因検索と重症度評価</strong>。</p>
-<div class="callout callout-info">
-<div class="callout-title">Atlanta 2012 — 急性膵炎の診断（3 項目中 2 項目以上）</div>
-<div class="callout-body">
-<ol>
-<li>急性発症の典型的な上腹部持続痛（しばしば背部放散）</li>
-<li>血清リパーゼ（またはアミラーゼ）が正常上限の <strong>3 倍以上</strong></li>
-<li>造影 CT・MRI・US での急性膵炎を示す画像所見</li>
-</ol>
-</div>
-</div>
-<hr>
-
-<h2 id="重症度">重症度評価</h2>
-<p><strong>要点：</strong>「決定的な指標がない」のが急性膵炎の特長。複数のスコアで初期判断し、<strong>入院時に「大丈夫そう」と思わない</strong>こと自体が学ぶべきポイント。</p>
-
-<h3>原因の見極め（治療方針が変わる）</h3>
-<ul>
-<li><strong>アルコール性</strong> → 離脱予防（後述）</li>
-<li><strong>胆石性</strong> → 胆石への処置（ERCP の適応判断）</li>
-</ul>
-
-<div class="table-wrap"><table>
-<thead><tr><th>胆石性を示唆する初診所見</th><th>該当数 → 胆石性の確率</th></tr></thead>
-<tbody>
-<tr><td>年齢 &gt; 50 歳／女性／s-Amy &gt; 4000／ALT &gt; 100／γGTP &gt; 300</td><td>1 項目：&lt; 5%、2 項目：50%、<strong>3 項目以上：90%</strong></td></tr>
-</tbody></table></div>
-
-<h3>Atlanta 重症度（経時的）</h3>
-<div class="table-wrap"><table>
-<thead><tr><th>分類</th><th>定義</th></tr></thead>
-<tbody>
-<tr><td><strong>軽症（mild）</strong></td><td>臓器不全なし、局所・全身合併症なし</td></tr>
-<tr><td><strong>中等症（moderately severe）</strong></td><td>一過性臓器不全（&lt; 48h）または局所/全身合併症</td></tr>
-<tr><td><strong>重症（severe）</strong></td><td>持続性臓器不全（≥ 48h）— 単一でも複数でも</td></tr>
-</tbody></table></div>
-<p>実用的には「一般病棟で問題なし＝軽症／一旦 ICU だが翌日退室＝中等症／2 日後もまだ ICU＝重症」と理解しておくとわかりやすい。</p>
-
-<h3>BISAP（5 項目、入院 24h 以内に評価）</h3>
-<ul>
-<li>BUN &gt; 25 mg/dL ／ GCS &lt; 15 ／ SIRS あり ／ 年齢 &gt; 60 ／ 画像で液貯留あり</li>
-<li><strong>0〜2 点：死亡率 &lt; 2%</strong>、<strong>3〜5 点：&gt; 15%</strong>。3 点以上で HCU/ICU 管理を考慮</li>
-</ul>
-
-<h3>臓器不全の指標（一般的な重症の目安）</h3>
-<ul>
-<li>ショック（収縮期血圧 &lt; 90 mmHg）／ PaO₂ ≤ 60 mmHg ／ 補液後 Cr &gt; 2 mg/dL ／ 消化管出血 &gt; 500 mL/24h</li>
-<li>局所合併症の存在（壊死／膿瘍／仮性嚢胞）</li>
-</ul>
-
-<details class="section-fold"><summary>副スコア（Ranson／APACHE II／厚労省基準／CTSI）</summary>
-<div class="callout-body">
-<ul>
-<li><strong>Ranson's criteria</strong>：48 時間経たないと完成せず、<strong>初期意思決定には使いにくい</strong></li>
-<li><strong>APACHE II ≥ 8</strong> が重症の目安、20 で予想死亡率 35%。ICU での評価に汎用</li>
-<li><strong>厚労省急性膵炎重症度判定基準</strong>：予後因子 9 項目で <strong>3 点以上が重症</strong>、または造影 CT Grade ≥ 2 で重症</li>
-<li><strong>CTSI</strong>（Balthazar grade ＋ 壊死率）：合計 <strong>6 以上で重症</strong></li>
-</ul>
-</div>
-</details>
-<hr>
-
-<h2 id="治療">治療</h2>
-<p><strong>要点：</strong>疾患特異的治療がなく <strong>Best Supportive Therapy（BST）</strong> に徹する。<strong>予防的抗菌薬は不要</strong>、<strong>早期 EN</strong>、<strong>胆石＋胆管炎の合併で 24h 以内 ERCP</strong>。</p>
-
-<h3>来院初日の対応</h3>
-<ul>
-<li><strong>補液（本丸）</strong>：病態のメインは <strong>internal fluid shift による脱水</strong>（後腹膜の広範な浮腫で 10 L 単位の水分が逃げる）。<strong>初期 48h は 5〜10 mL/kg/h（250〜300 mL/h）</strong>などで開始し、<strong>尿量 0.5〜1 mL/kg/h</strong> を目標に滴定。決まった量はないので過剰補液も避ける</li>
-<li><strong>絶食（NPO）</strong>：超急性期は NPO、状態が落ち着けば栄養再開</li>
-<li><strong>鎮痛</strong>：<strong>オピオイド静注</strong>。腎機能低下に強い<strong>フェンタニル</strong>が使いやすい</li>
-<li><strong>感染対策</strong>：<strong>重症壊死性膵炎であっても予防的抗菌薬は使用しない</strong>（ACG 2013／AGA 2018）。感染合併は通常 <strong>10〜14 日以降</strong>に顕在化する</li>
-<li><strong>栄養</strong>：重症でも<strong>第 5〜7 病日から開始</strong>。TPN ではなく<strong>経鼻空腸チューブによる EN</strong> が推奨</li>
-<li><strong>アルコール離脱予防</strong>：アルコール性なら必須。断酒 <strong>72〜96h 後がピーク</strong>。例：ジアゼパム 5 mg IV q8h</li>
-<li><strong>PUD 予防</strong>：膵炎自体の予後には影響しない、一般的 PUD 予防に準じる</li>
-<li><strong>モニター</strong>：呼吸（左胸水・無気肺・ARDS）、循環、尿量、電解質（低 Ca）・血糖、ACS 疑いでは<strong>膀胱内圧</strong>で IAH を追う</li>
-</ul>
-
-<h3>時系列でみる合併症と即コール基準</h3>
-<div class="callout callout-danger">
-<div class="callout-title">フェーズごとに「次に来る合併症」を予測する</div>
-<div class="callout-body">
-<ul>
-<li><strong>初日：胆石性膵炎＋胆管炎合併＋乳頭部嵌頓</strong> → <strong>24h 以内 ERCP + sphincterotomy</strong>。それ以外は待機的</li>
-<li><strong>入院〜2-3 日：ACS</strong>（腹部緊満・乏尿・ショック・mottling skin）。<strong>膀胱内圧 &gt; 25 mmHg = Grade IV ACS</strong> → <strong>開腹（TAC: temporary abdominal closure）</strong>で減圧。輸液・カテコラミンに反応しない</li>
-<li><strong>〜1 週間</strong>：感染合併は通常 10〜14 日以降。1 週間の発熱でいきなりドレナージは判断が早い。敗血症像があれば <strong>US ガイド下穿刺培養</strong></li>
-<li><strong>2〜4 週</strong>：液貯留の評価（次節）</li>
-<li><strong>4〜8 週：仮性動脈瘤</strong>（多くは<strong>胃十二指腸動脈 GDA</strong>）。腹腔内炎症性瘢着で開腹止血は困難 → <strong>IVR（コイル塞栓）</strong></li>
-<li><strong>数カ月後</strong>：<strong>脾静脈・上腸間膜静脈の血栓症</strong>。腹痛・下痢・体重減少が続けば疑う</li>
-</ul>
-</div>
-</div>
-<hr>
-
-<h2 id="液貯留">液貯留の評価（Atlanta 2012 で 4 分類）</h2>
-<p><strong>要点：</strong>壊死の有無 × 被膜の有無の 2 軸で 4 分類。<strong>無症状の液貯留は触らない</strong>のが基本、感染・有症状なら<strong>step-up approach</strong>（経皮 → 内視鏡 → 外科）。</p>
-<div class="table-wrap"><table>
-<thead><tr><th>用語</th><th>時期</th><th>意味と対応</th></tr></thead>
-<tbody>
-<tr><td><strong>APFC</strong>（acute peripancreatic fluid collection）</td><td>4 週未満</td><td>壊死なし、被膜なし。<strong>治療介入なし</strong>、多くは自然吸収</td></tr>
-<tr><td><strong>PP</strong>（pancreatic pseudocyst）</td><td>4 週以降</td><td>壊死なし、被膜あり。<strong>無症状なら経過観察</strong>、有症状で内視鏡的ドレナージ</td></tr>
-<tr><td><strong>ANC</strong>（acute necrotic collection）</td><td>4 週未満</td><td>壊死を含む、被膜なし。<strong>感染証明されてもできれば 4 週まで待つ</strong></td></tr>
-<tr><td><strong>WON</strong>（walled-off necrosis）</td><td>4 週以降</td><td>壊死を含む、被膜あり。感染合併で <strong>step-up approach</strong>。主膵管損傷あれば<strong>内瘻化</strong>（消化管へ）</td></tr>
-</tbody></table></div>
-<ul>
-<li>ANC・WON の内容物は液体ではなく<strong>ねっとりしたデブリス</strong>であり、細径カテーテル（ピッグテイル）でドレナージできない</li>
-<li>仮性動脈瘤の出血（GDA など）は急変要因 → 偶然見つけたら IVR コール</li>
-</ul>
-<hr>
-
-<h2 id="胆摘">胆嚢摘出術（胆石性膵炎）</h2>
-<ul>
-<li><strong>同一入院中</strong>に行う。軽症は 1 週間以内、重症は回復次第</li>
-<li>退院後の待機は<strong>短期再発率が高く推奨されない</strong></li>
-<li>術前の画像で胆石が確認できなくても、胆石性と判断されていれば手術しない理由にはならない</li>
-</ul>
-<hr>
-
-<h2>このページから張るリンク</h2>
-<ul>
-<li><a class="wiki-link" href="../腹痛.html">← 腹痛入口へ戻る</a></li>
-<li><a class="wiki-link" href="急性胆管炎・総胆管結石症.html">急性胆管炎・総胆管結石症</a>（胆石性膵炎の合併・ERCP 適応の判断）</li>
-<li><a class="wiki-link" href="胆石症・急性胆嚢炎.html">胆石症・急性胆嚢炎</a>（原因検索・同入院中胆嚢摘出）</li>
-<li><a class="wiki-link" href="上部消化管穿孔.html">上部消化管穿孔</a>（最大の鑑別）</li>
-<li><a class="wiki-link" href="急性虫垂炎.html">急性虫垂炎</a>（膵鈎部炎症の右下腹部圧痛と誤認しうる）</li>
-</ul>
-
-<h2>出典</h2>
-<ul>
-<li>窪田忠夫『フラッシュアップ急性腹症』第 2 版（中外医学社）— 章構成の踏襲元</li>
-<li>Banks PA, et al. <em>Gut</em> 2013 — Atlanta 2012 改訂分類</li>
-<li>Tenner S, et al. <em>Am J Gastroenterol</em> 2013 — ACG 急性膵炎ガイドライン</li>
-<li>AGA Institute. <em>Gastroenterology</em> 2018 — 初期管理ガイドライン</li>
-<li>厚生労働省急性膵炎重症度判定基準（2008 改訂）</li>
-<li>WSACS（World Society of the Abdominal Compartment Syndrome）— ACS 定義</li>
-<li>急性腹症診療ガイドライン 2015（日本腹部救急医学会）</li>
-</ul>
-
-    </div>
-    <footer class="page-footer">
-      <a href="../index.html">↑ 主訴ナビへ戻る</a>
-    </footer>
-  </article>
+    syncFromHash();
+  })();
+  </script>
 </body>
 </html>

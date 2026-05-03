@@ -4,110 +4,221 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="color-scheme" content="light dark" />
-  <title>急性潰瘍・急性胃炎</title>
+  <title>急性潰瘍・急性胃炎 | ER ノート</title>
   <link rel="stylesheet" href="../er-note.css" />
 </head>
 <body>
-  <nav class="site-bar">
-    <a class="site-bar__back" href="../腹痛.html">← 腹痛へ戻る</a>
-    <span class="site-bar__title">急性潰瘍・急性胃炎</span>
+  <header class="hokuto-top">
+    <a class="hokuto-top__btn" href="../薬剤情報.html">
+      <span class="hokuto-top__icon">℞</span><span>薬剤情報</span>
+    </a>
+    <a class="hokuto-top__btn" href="../表計算.html">
+      <span class="hokuto-top__icon">⊞</span><span>表計算</span>
+    </a>
+  </header>
+
+  <main class="hokuto-main">
+    <article class="note-shell">
+      <h1 class="page-title">急性潰瘍・急性胃炎</h1>
+
+      <!-- 即時アクションヘッダー -->
+      <div class="action-header">
+        <div class="action-header__title">⚡ 即時アクション</div>
+        <ol class="action-header__list">
+          <li><strong>出血徴候（吐血・タール便・Hb 低下）</strong> → <strong>緊急 EGD</strong>（バイタル安定後、輸液・輸血と並行）</li>
+          <li><strong>NSAIDs / アスピリン / アルコール / ストレス</strong>を聴取（急性胃粘膜病変・AGML の主要誘因）</li>
+          <li><strong>PPI 開始（IV → 経口）</strong>：出血疑いは IV、軽症は PO 切替</li>
+          <li><strong>H. pylori 検査・除菌・止血後管理</strong>：再発予防に必須</li>
+        </ol>
+      </div>
+
+      <!-- メニュータイル -->
+      <nav class="section-tiles" id="sectionMenu">
+        <a class="section-tile" href="#s1"><span class="section-tile__no">🩹</span><span class="section-tile__name">急性潰瘍<br><small>4 合併症</small></span></a>
+        <a class="section-tile" href="#s2"><span class="section-tile__no">🔥</span><span class="section-tile__name">急性胃炎<br><small>AGML / アニサキス</small></span></a>
+        <a class="section-tile" href="#s3"><span class="section-tile__no">📷</span><span class="section-tile__name">画像比較<br><small>潰瘍 / 胃炎 / 癌</small></span></a>
+        <a class="section-tile" href="#s4"><span class="section-tile__no">🔗</span><span class="section-tile__name">関連リンク<br><small>+ 出典</small></span></a>
+      </nav>
+
+      <!-- 関連主訴 -->
+      <details class="sub-fold" id="related-symptoms">
+        <summary>📞 この疾患が該当する主訴</summary>
+        <div class="sub-fold__body">
+          <ul>
+            <li><a class="wiki-link" href="../腹痛.html">腹痛</a> — 上腹部痛の鑑別（除外診断的）</li>
+            <li><span class="wiki-missing">吐血</span> — 出血性 AGML / 潰瘍出血</li>
+            <li><a class="wiki-link" href="../嘔気・嘔吐.html">嘔気・嘔吐</a> — 胃出口部閉塞では大量間欠的嘔吐</li>
+          </ul>
+        </div>
+      </details>
+
+      <!-- §0 上腹部痛の鑑別位置づけ -->
+      <details class="sub-fold" id="diff-context">
+        <summary>上腹部痛の鑑別における位置づけ</summary>
+        <div class="sub-fold__body">
+          <p>上腹部痛の鑑別だが、急性腸炎と同様に<strong>除外診断的に考える疾患</strong>。<strong>上部消化管穿孔／胆石疾患／急性膵炎／急性虫垂炎</strong>などの否定が先で、これらを差し置いて一発診断できても自慢にはならない。</p>
+        </div>
+      </details>
+
+      <!-- §1 急性潰瘍 -->
+      <section class="section-page" id="s1" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🩹 急性潰瘍（Acute peptic ulcer）</h2>
+
+        <h3>主座と無症状性</h3>
+        <ul>
+          <li>胃／十二指腸が主座、<strong>幽門部・球部に多い</strong>（近位空腸にも発生）</li>
+          <li>潰瘍があるだけで自覚症状を伴うことは少なく、<strong>潰瘍の 70% は無症状</strong></li>
+          <li>とくに<strong>高齢者では腹痛の原因になることが少ない</strong></li>
+          <li>増悪時・合併症時に有症状となる</li>
+        </ul>
+
+        <h3>増悪時の事象</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>合併症</th><th>特徴</th></tr></thead>
+          <tbody>
+            <tr><td><strong>① 穿孔（Perforation）</strong></td><td>強い腹痛 → <a class="wiki-link" href="上部消化管穿孔.html">上部消化管穿孔</a>参照</td></tr>
+            <tr><td><strong>② 穿通（Penetration）</strong></td><td>幽門部・球部後壁の潰瘍が<strong>膵頭部に穿通</strong>するパターンが典型。<strong>強い自発痛だが反跳痛・筋性防御は伴わない</strong></td></tr>
+            <tr><td><strong>③ 出血（Bleeding）</strong></td><td>通常<strong>痛みを伴わない</strong></td></tr>
+            <tr><td><strong>④ 胃出口部閉塞（Gastric outlet obstruction）</strong></td><td>間欠的な大量嘔吐が症状、<strong>痛みは伴わない</strong></td></tr>
+          </tbody>
+        </table></div>
+
+        <h3>画像所見</h3>
+        <ul>
+          <li>CT・US で<strong>局在性のある浮腫性肥厚性変化</strong>として捉えられる</li>
+          <li><strong>大きな胃潰瘍は胃癌との区別が難しい</strong></li>
+        </ul>
+      </section>
+
+      <!-- §2 急性胃炎 -->
+      <section class="section-page" id="s2" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🔥 急性胃炎（Acute gastritis）</h2>
+        <p>胃炎全般には諸説・細分類があるがここでは触れない。<strong>強い痛みを生じるのは主に 2 つ</strong>。それ以外の胃炎は<strong>通常痛くない</strong>と考えるのが無難。</p>
+
+        <h3>① 出血性びらん（Acute hemorrhagic erosion / 急性出血性びらん性胃炎）</h3>
+        <ul>
+          <li>本邦の <strong>AGML（acute gastric mucosal lesion）</strong> がこれに該当</li>
+          <li>臨床像：<strong>消化管穿孔を危惧させる強い上腹部痛</strong>になることがある</li>
+          <li>粘膜病変なので通常は圧痛のみで反跳痛・筋性防御を伴わないが、<strong>軽い反跳痛があるケースは珍しくない</strong>
+            <ul>
+              <li>胃壁と腹壁の間に遮るものがないため、反跳痛を確かめると胃壁ごと揺らされて陽性に出ると考えられる</li>
+              <li><strong>部位を変えて確かめると汎発性腹膜炎でないことが確認</strong>できる</li>
+            </ul>
+          </li>
+          <li>急性期内視鏡：<strong>出血で黒く変化した粘膜病変</strong>。所詮粘膜病変なので<strong>数日後の内視鏡では「異常なし」</strong>になりうる</li>
+          <li>主な誘因：<strong>アルコール／NSAIDs／化学療法／鉄剤</strong></li>
+        </ul>
+
+        <h3>② 胃アニサキス症（Anisakiasis gastropathy）</h3>
+        <p><a class="wiki-link" href="アニサキス症.html">アニサキス症</a>を参照。</p>
+      </section>
+
+      <!-- §3 画像比較 -->
+      <section class="section-page" id="s3" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>📷 2 疾患の画像比較</h2>
+        <ul>
+          <li>両疾患ともに画像はほぼ同じ：<strong>胃壁に全周性の浮腫性肥厚性変化</strong></li>
+          <li><strong>潰瘍との違い</strong>：壁肥厚の<strong>範囲が広い</strong></li>
+          <li><strong>胃癌との違い</strong>：<strong>粘膜浮腫がメイン</strong>（胃癌は全層性肥厚で全層性に造影効果）</li>
+        </ul>
+      </section>
+
+      <!-- §4 関連リンク・出典 -->
+      <section class="section-page" id="s4" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🔗 関連リンク / 出典</h2>
+
+        <h3>このページから張るリンク</h3>
+        <ul>
+          <li><a class="wiki-link" href="../腹痛.html">← 腹痛入口へ戻る</a></li>
+          <li><a class="wiki-link" href="上部消化管穿孔.html">上部消化管穿孔</a>（最大の鑑別）</li>
+          <li><a class="wiki-link" href="急性膵炎.html">急性膵炎</a>（除外）</li>
+          <li><a class="wiki-link" href="胆石症・急性胆嚢炎.html">胆石症・急性胆嚢炎</a>（除外）</li>
+          <li><a class="wiki-link" href="アニサキス症.html">アニサキス症</a>（胃アニサキス症）</li>
+        </ul>
+
+        <h3>出典</h3>
+        <ul>
+          <li>窪田忠夫『フラッシュアップ急性腹症』第 2 版（中外医学社）— 章構成の踏襲元</li>
+          <li>Lu CL, et al. <em>Gastrointest Endosc</em> 2004 — Silent peptic ulcer 70%</li>
+          <li>Hilton D, et al. <em>Am J Gastroenterol</em> 2001 — 高齢者の無痛潰瘍</li>
+          <li>Franke A, et al. <em>Dig Dis</em> 2005 — アルコール関連胃疾患</li>
+          <li>Haig A, Driman DK. <em>Histopathology</em> 2006 — 鉄剤による胃障害</li>
+          <li>急性腹症診療ガイドライン 2015（日本腹部救急医学会）</li>
+        </ul>
+      </section>
+
+    </article>
+  </main>
+
+  <nav class="hokuto-bottom">
+    <button class="hokuto-bottom__btn" type="button" id="navBack">
+      <span class="hokuto-bottom__icon">←</span><span>戻る</span>
+    </button>
+    <a class="hokuto-bottom__btn" href="../ツール.html">
+      <span class="hokuto-bottom__icon">⚙</span><span>ツール</span>
+    </a>
+    <a class="hokuto-bottom__btn" href="../index.html">
+      <span class="hokuto-bottom__icon">⌂</span><span>ホーム</span>
+    </a>
   </nav>
-  <article class="note-shell">
-    <header class="note-header">
-      <h1>急性潰瘍・急性胃炎（Acute Peptic Ulcer & Acute Gastritis）</h1>
-      <p class="source-badge">元: 急性腹症 参考用.md（窪田『フラッシュアップ急性腹症』第 2 版）の章構成を踏襲した要約 ／ 補完出典は文末記載</p>
-    </header>
-    <details class="toc"><summary>目次（原著章順）</summary><ol>
-      <li><a href="#急性潰瘍">急性潰瘍</a></li>
-      <li><a href="#急性胃炎">急性胃炎</a></li>
-    </ol></details>
-    <div class="md-body">
 
-<p>#ER #救急 #腹痛 #急性潰瘍 #急性胃炎 #AGML #除外診断</p>
+  <script>
+  (function(){
+    const menu = document.getElementById('sectionMenu');
+    const pages = document.querySelectorAll('.section-page');
+    const titleH1 = document.querySelector('.page-title');
+    const relatedSymp = document.getElementById('related-symptoms');
+    const diffCtx = document.getElementById('diff-context');
 
-<div class="callout callout-warning">
-<div class="callout-body">
-上腹部痛の鑑別だが、急性腸炎と同様に<strong>除外診断的に考える疾患</strong>。<strong>上部消化管穿孔／胆石疾患／急性膵炎／急性虫垂炎</strong>などの否定が先で、これらを差し置いて一発診断できても自慢にはならない。
-</div>
-</div>
+    function showSection(id) {
+      menu.hidden = true;
+      if (titleH1) titleH1.hidden = true;
+      if (relatedSymp) relatedSymp.hidden = true;
+      if (diffCtx) diffCtx.hidden = true;
+      pages.forEach(p => p.hidden = (p.id !== id));
+      window.scrollTo(0, 0);
+    }
+    function showMenu(scrollTarget) {
+      menu.hidden = false;
+      if (titleH1) titleH1.hidden = false;
+      if (relatedSymp) relatedSymp.hidden = false;
+      if (diffCtx) diffCtx.hidden = false;
+      pages.forEach(p => p.hidden = true);
+      if (scrollTarget) {
+        if (scrollTarget.tagName === 'DETAILS') scrollTarget.open = true;
+        scrollTarget.scrollIntoView({behavior: 'instant', block: 'start'});
+      } else {
+        window.scrollTo(0, 0);
+      }
+    }
+    function syncFromHash() {
+      const id = (location.hash || '').replace('#','');
+      const target = id ? document.getElementById(id) : null;
+      if (target && target.classList.contains('section-page')) {
+        showSection(id);
+      } else if (target) {
+        showMenu(target);
+      } else {
+        showMenu();
+      }
+    }
 
-<h2 id="急性潰瘍">1. 急性潰瘍（Acute peptic ulcer）</h2>
+    window.addEventListener('hashchange', syncFromHash);
+    document.querySelectorAll('.back-to-menu').forEach(b => {
+      b.addEventListener('click', () => { history.pushState(null,'',location.pathname); showMenu(); });
+    });
+    const navBack = document.getElementById('navBack');
+    if (navBack) navBack.addEventListener('click', () => {
+      if (window.history.length > 1) history.back();
+      else window.location.href = '../index.html';
+    });
 
-<h3>主座と無症状性</h3>
-<ul>
-<li>胃／十二指腸が主座、<strong>幽門部・球部に多い</strong>（近位空腸にも発生）</li>
-<li>潰瘍があるだけで自覚症状を伴うことは少なく、<strong>潰瘍の 70% は無症状</strong></li>
-<li>とくに<strong>高齢者では腹痛の原因になることが少ない</strong></li>
-<li>増悪時・合併症時に有症状となる</li>
-</ul>
-
-<h3>増悪時の事象</h3>
-<div class="table-wrap"><table>
-<thead><tr><th>合併症</th><th>特徴</th></tr></thead>
-<tbody>
-<tr><td><strong>① 穿孔（Perforation）</strong></td><td>強い腹痛 → <a class="wiki-link" href="上部消化管穿孔.html">上部消化管穿孔</a>参照</td></tr>
-<tr><td><strong>② 穿通（Penetration）</strong></td><td>幽門部・球部後壁の潰瘍が<strong>膵頭部に穿通</strong>するパターンが典型。<strong>強い自発痛だが反跳痛・筋性防御は伴わない</strong></td></tr>
-<tr><td><strong>③ 出血（Bleeding）</strong></td><td>通常<strong>痛みを伴わない</strong></td></tr>
-<tr><td><strong>④ 胃出口部閉塞（Gastric outlet obstruction）</strong></td><td>間欠的な大量嘔吐が症状、<strong>痛みは伴わない</strong></td></tr>
-</tbody></table></div>
-
-<h3>画像所見</h3>
-<ul>
-<li>CT・US で<strong>局在性のある浮腫性肥厚性変化</strong>として捉えられる</li>
-<li><strong>大きな胃潰瘍は胃癌との区別が難しい</strong></li>
-</ul>
-<hr>
-
-<h2 id="急性胃炎">2. 急性胃炎（Acute gastritis）</h2>
-<p>胃炎全般には諸説・細分類があるがここでは触れない。<strong>強い痛みを生じるのは主に 2 つ</strong>。それ以外の胃炎は<strong>通常痛くない</strong>と考えるのが無難。</p>
-
-<h3>① 出血性びらん（Acute hemorrhagic erosion / 急性出血性びらん性胃炎）</h3>
-<ul>
-<li>本邦の <strong>AGML（acute gastric mucosal lesion）</strong> がこれに該当</li>
-<li>臨床像：<strong>消化管穿孔を危惧させる強い上腹部痛</strong>になることがある</li>
-<li>粘膜病変なので通常は圧痛のみで反跳痛・筋性防御を伴わないが、<strong>軽い反跳痛があるケースは珍しくない</strong>
-<ul>
-<li>胃壁と腹壁の間に遮るものがないため、反跳痛を確かめると胃壁ごと揺らされて陽性に出ると考えられる</li>
-<li><strong>部位を変えて確かめると汎発性腹膜炎でないことが確認</strong>できる</li>
-</ul></li>
-<li>急性期内視鏡：<strong>出血で黒く変化した粘膜病変</strong>。所詮粘膜病変なので<strong>数日後の内視鏡では「異常なし」</strong>になりうる</li>
-<li>主な誘因：<strong>アルコール／NSAIDs／化学療法／鉄剤</strong></li>
-</ul>
-
-<h3>② 胃アニサキス症（Anisakiasis gastropathy）</h3>
-<p><a class="wiki-link" href="アニサキス症.html">アニサキス症</a>を参照。</p>
-
-<h3>2 疾患の画像比較</h3>
-<ul>
-<li>両疾患ともに画像はほぼ同じ：<strong>胃壁に全周性の浮腫性肥厚性変化</strong></li>
-<li><strong>潰瘍との違い</strong>：壁肥厚の<strong>範囲が広い</strong></li>
-<li><strong>胃癌との違い</strong>：<strong>粘膜浮腫がメイン</strong>（胃癌は全層性肥厚で全層性に造影効果）</li>
-</ul>
-<hr>
-
-<h2>このページから張るリンク</h2>
-<ul>
-<li><a class="wiki-link" href="../腹痛.html">← 腹痛入口へ戻る</a></li>
-<li><a class="wiki-link" href="上部消化管穿孔.html">上部消化管穿孔</a>（最大の鑑別）</li>
-<li><a class="wiki-link" href="急性膵炎.html">急性膵炎</a>（除外）</li>
-<li><a class="wiki-link" href="胆石症・急性胆嚢炎.html">胆石症・急性胆嚢炎</a>（除外）</li>
-<li><a class="wiki-link" href="アニサキス症.html">アニサキス症</a>（胃アニサキス症）</li>
-</ul>
-
-<h2>出典</h2>
-<ul>
-<li>窪田忠夫『フラッシュアップ急性腹症』第 2 版（中外医学社）— 章構成の踏襲元</li>
-<li>Lu CL, et al. <em>Gastrointest Endosc</em> 2004 — Silent peptic ulcer 70%</li>
-<li>Hilton D, et al. <em>Am J Gastroenterol</em> 2001 — 高齢者の無痛潰瘍</li>
-<li>Franke A, et al. <em>Dig Dis</em> 2005 — アルコール関連胃疾患</li>
-<li>Haig A, Driman DK. <em>Histopathology</em> 2006 — 鉄剤による胃障害</li>
-<li>急性腹症診療ガイドライン 2015（日本腹部救急医学会）</li>
-</ul>
-
-    </div>
-    <footer class="page-footer">
-      <a href="../index.html">↑ 主訴ナビへ戻る</a>
-    </footer>
-  </article>
+    syncFromHash();
+  })();
+  </script>
 </body>
 </html>

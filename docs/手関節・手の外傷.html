@@ -4,28 +4,416 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="color-scheme" content="light dark" />
-  <title>手関節・手の外傷</title>
+  <title>手関節・手の外傷 | ER ノート</title>
   <link rel="stylesheet" href="er-note.css" />
 </head>
 <body>
-  <nav class="site-bar">
-    <a class="site-bar__back" href="index.html">← 主訴ナビ</a>
-    <span class="site-bar__title">手関節・手の外傷</span>
+  <header class="hokuto-top">
+    <a class="hokuto-top__btn" href="薬剤情報.html">
+      <span class="hokuto-top__icon">℞</span><span>薬剤情報</span>
+    </a>
+    <a class="hokuto-top__btn" href="表計算.html">
+      <span class="hokuto-top__icon">⊞</span><span>表計算</span>
+    </a>
+  </header>
+
+  <main class="hokuto-main">
+    <article class="note-shell">
+      <h1 class="page-title">手関節・手の外傷</h1>
+
+      <!-- 即時アクションヘッダー（常時 sticky） -->
+      <div class="action-header">
+        <div class="action-header__title">⚡ 即時アクション</div>
+        <ol class="action-header__list">
+          <li><strong>危険サイン</strong>（橈骨動脈触知低下 / SpO2 末梢低下 / 正中・尺骨・橈骨神経障害 / コンパートメント徴候 / 開放骨折）→ <strong>整形即コンサルト</strong></li>
+          <li><strong>必須 X-line：手関節 AP + 側面</strong>。舟状骨疑い（嗅ぎたばこ窩圧痛）は <strong>scaphoid view 追加</strong></li>
+          <li><strong>冷却 + 挙上 + 副木固定 + 鎮痛</strong>（NSAIDs / アセトアミノフェン）</li>
+          <li><strong>Mallet / Jersey / Bennett / ゲームキーパー母指</strong>は<strong>専門コール</strong>、血行障害は入院</li>
+        </ol>
+      </div>
+
+      <!-- メニュータイル -->
+      <nav class="section-tiles" id="sectionMenu">
+        <a class="section-tile" href="#s1"><span class="section-tile__no">🚨</span><span class="section-tile__name">Red flags<br><small>血流・神経・開放</small></span></a>
+        <a class="section-tile" href="#s2"><span class="section-tile__no">🩺</span><span class="section-tile__name">最小診察<br><small>神経血管・圧痛部位</small></span></a>
+        <a class="section-tile" href="#s3"><span class="section-tile__no">📷</span><span class="section-tile__name">X-line の置き方</span></a>
+        <a class="section-tile" href="#s4"><span class="section-tile__no">🦴</span><span class="section-tile__name">主要鑑別<br><small>骨折・脱臼</small></span></a>
+        <a class="section-tile" href="#s5"><span class="section-tile__no">✋</span><span class="section-tile__name">指の特殊外傷<br><small>Mallet / Jersey ほか</small></span></a>
+        <a class="section-tile" href="#s6"><span class="section-tile__no">🩹</span><span class="section-tile__name">初期固定・鎮痛</span></a>
+        <a class="section-tile" href="#s7"><span class="section-tile__no">📤</span><span class="section-tile__name">disposition</span></a>
+        <a class="section-tile" href="#s8"><span class="section-tile__no">⚠️</span><span class="section-tile__name">ピットフォール</span></a>
+        <a class="section-tile" href="#s9"><span class="section-tile__no">📚</span><span class="section-tile__name">関連リンク</span></a>
+      </nav>
+
+      <!-- §1 Red flags -->
+      <section class="section-page" id="s1" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🚨 Red flags（血流・神経・開放）</h2>
+
+        <h3>血流</h3>
+        <ul>
+          <li>橈骨動脈・尺骨動脈触知の左右差、毛細血管再充満時間の延長</li>
+          <li>末梢 SpO2 低下、患肢冷感・蒼白</li>
+          <li>整復不能な変形 + 血流障害 → <strong>緊急整復・整形コール</strong></li>
+        </ul>
+
+        <h3>神経</h3>
+        <ul>
+          <li><strong>正中神経</strong>：母指対立、示指掌側のしびれ</li>
+          <li><strong>尺骨神経</strong>：小指外転・指内転、小指側のしびれ</li>
+          <li><strong>橈骨神経</strong>：手関節背屈（drop hand）、母指・示指間背側のしびれ</li>
+        </ul>
+
+        <h3>その他</h3>
+        <ul>
+          <li>開放骨折（皮膚損傷 + 骨折線）→ 抗菌薬 + 破傷風 + 整形コール</li>
+          <li>強い前腕緊満・激痛・受動指伸展で増悪 → <strong>コンパートメント症候群</strong>を疑う</li>
+        </ul>
+
+        <div class="callout callout-danger">
+          <div class="callout-title">1 つでもあれば即整形コンサルト</div>
+          <div class="callout-body">
+            <p>主な緊急鑑別：</p>
+            <ul>
+              <li><span class="wiki-missing">手のコンパートメント症候群</span> / <span class="wiki-missing">前腕コンパートメント症候群</span></li>
+              <li><span class="wiki-missing">開放骨折</span> / <span class="wiki-missing">橈骨動脈損傷</span> / <span class="wiki-missing">手の神経損傷</span></li>
+              <li>整復不能な<a class="wiki-link" href="疾患詳細/上肢骨折の固定/橈骨遠位端骨折.html">橈骨遠位端骨折</a></li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- §2 最小診察 -->
+      <section class="section-page" id="s2" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🩺 最小診察（神経血管・圧痛部位）</h2>
+
+        <h3>その場で行う最小セット</h3>
+        <ul>
+          <li><strong>視診</strong>：変形・腫脹・皮膚損傷・色調</li>
+          <li><strong>触診</strong>：橈骨遠位端、嗅ぎたばこ窩、舟状骨結節、月状骨、第 1〜5 中手骨基部・骨幹・頭部</li>
+          <li><strong>可動域</strong>：手関節屈伸・橈尺屈、各指の MP / PIP / DIP 屈伸</li>
+          <li><strong>神経</strong>：正中・尺骨・橈骨の運動 + 知覚（左右差確認）</li>
+          <li><strong>血管</strong>：橈骨・尺骨動脈触知、毛細血管再充満、末梢 SpO2、皮膚色調</li>
+          <li><strong>腱</strong>：屈筋腱（FDP / FDS）、伸筋腱の独立運動</li>
+        </ul>
+
+        <div class="callout callout-tip">
+          <div class="callout-title">舟状骨スクリーニング</div>
+          <div class="callout-body"><p><strong>嗅ぎたばこ窩圧痛 + 舟状骨結節圧痛 + 母指軸圧痛</strong>のいずれかがあれば舟状骨骨折を強く疑う。初回 X-line 陰性でも sugar-tong 副木で固定し、<strong>10〜14 日後に再撮影</strong>または MRI / CT。</p></div>
+          </div>
+
+        <div class="callout callout-warning">
+          <div class="callout-title">忘れがちな診察</div>
+          <div class="callout-body">
+            <ul>
+              <li>FDP は PIP 固定下に DIP 屈曲を確認</li>
+              <li>FDS は対側の指を伸展位で固定し PIP 屈曲を確認</li>
+              <li>母指 MP の<strong>尺側側副靱帯</strong>（ゲームキーパー母指）の不安定性</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- §3 X-line の置き方 -->
+      <section class="section-page" id="s3" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>📷 X-line の置き方</h2>
+
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>部位</th><th>基本撮影</th><th>追加</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><strong>手関節</strong></td>
+                <td>AP + 側面</td>
+                <td>舟状骨疑い → <strong>scaphoid view</strong>（尺屈位 PA）</td>
+              </tr>
+              <tr>
+                <td><strong>手・中手骨</strong></td>
+                <td>AP + 斜位 + 側面</td>
+                <td>第 5 中手骨頚部疑い（boxer's fracture）</td>
+              </tr>
+              <tr>
+                <td><strong>指</strong></td>
+                <td>指単独で AP + 側面</td>
+                <td>関節内骨折は CT 追加</td>
+              </tr>
+              <tr>
+                <td><strong>母指</strong></td>
+                <td>AP + 側面</td>
+                <td>Bennett / Rolando は CMC 関節を含めて撮影</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout callout-warning">
+          <div class="callout-title">陰性でも油断しない</div>
+          <div class="callout-body">
+            <ul>
+              <li><strong>舟状骨骨折</strong>は初回 X-line で 10〜30% が偽陰性 → 圧痛があれば固定 + 再評価</li>
+              <li><strong>月状骨周囲脱臼 / 月状骨脱臼</strong>は側面で見落としやすい（lunate の三角形配置に注意）</li>
+              <li>橈骨遠位端骨折で<strong>尺骨茎状突起骨折</strong>を伴うことが多い</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- §4 主要鑑別 -->
+      <section class="section-page" id="s4" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🦴 主要鑑別（骨折・脱臼）</h2>
+
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>病態</th><th>手がかり</th><th>進む先</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><strong>橈骨遠位端骨折</strong></td>
+                <td>FOOSH 後の手関節変形・圧痛、dinner fork 変形</td>
+                <td><a class="wiki-link" href="疾患詳細/上肢骨折の固定/橈骨遠位端骨折.html">橈骨遠位端骨折</a></td>
+              </tr>
+              <tr>
+                <td><strong>舟状骨骨折</strong></td>
+                <td>嗅ぎたばこ窩圧痛、初回 X-line 陰性あり</td>
+                <td><a class="wiki-link" href="疾患詳細/舟状骨骨折.html">舟状骨骨折</a></td>
+              </tr>
+              <tr>
+                <td><strong>中手骨・指骨外傷</strong></td>
+                <td>手背腫脹、限局圧痛、回旋変形</td>
+                <td><a class="wiki-link" href="疾患詳細/上肢骨折の固定/手・指の骨折.html">手・指の骨折</a></td>
+              </tr>
+              <tr>
+                <td><strong>月状骨周囲脱臼</strong></td>
+                <td>高エネルギー外傷、手関節腫脹、正中神経症状</td>
+                <td><span class="wiki-missing">月状骨周囲脱臼</span></td>
+              </tr>
+              <tr>
+                <td><strong>Bennett / Rolando 骨折</strong></td>
+                <td>母指 CMC 関節の関節内骨折、軸圧痛</td>
+                <td><span class="wiki-missing">Bennett骨折</span> / <span class="wiki-missing">Rolando骨折</span></td>
+              </tr>
+              <tr>
+                <td><strong>boxer's fracture</strong></td>
+                <td>第 5 中手骨頚部、握り拳で殴打、knuckle 消失</td>
+                <td><a class="wiki-link" href="疾患詳細/上肢骨折の固定/手・指の骨折.html">手・指の骨折</a></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- §5 指の特殊外傷 -->
+      <section class="section-page" id="s5" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>✋ 指の特殊外傷（専門コール）</h2>
+
+        <details class="sub-fold">
+          <summary>Mallet finger（槌指）</summary>
+          <div class="sub-fold__body">
+            <ul>
+              <li>DIP 伸展不能、屈曲位で固定</li>
+              <li>骨片を伴わなければ <strong>DIP 完全伸展位での副木固定 6〜8 週間</strong>（PIP は自由）</li>
+              <li>関節面 1/3 以上の骨片 / 掌側亜脱臼 → 整形コンサルト</li>
+              <li>詳細 → <span class="wiki-missing">Mallet finger</span></li>
+            </ul>
+          </div>
+        </details>
+
+        <details class="sub-fold">
+          <summary>Jersey finger（FDP 断裂）</summary>
+          <div class="sub-fold__body">
+            <ul>
+              <li>FDP の付着部断裂、DIP 単独屈曲不能</li>
+              <li>環指が最多、ジャージを掴んだ瞬間に発生</li>
+              <li><strong>緊急手術適応</strong>（早期再建が望ましい）→ 整形即コール</li>
+              <li>詳細 → <span class="wiki-missing">Jersey finger</span></li>
+            </ul>
+          </div>
+        </details>
+
+        <details class="sub-fold">
+          <summary>Bennett 骨折（母指 CMC 関節内骨折）</summary>
+          <div class="sub-fold__body">
+            <ul>
+              <li>母指 CMC 関節の関節内骨折 + 亜脱臼</li>
+              <li>軸圧痛、母指基部の腫脹</li>
+              <li>整形コンサルト（多くは観血的整復・内固定）</li>
+              <li>詳細 → <span class="wiki-missing">Bennett骨折</span></li>
+            </ul>
+          </div>
+        </details>
+
+        <details class="sub-fold">
+          <summary>ゲームキーパー / スキーヤー母指</summary>
+          <div class="sub-fold__body">
+            <ul>
+              <li>母指 MP 関節<strong>尺側側副靱帯</strong>損傷</li>
+              <li>母指外転・橈屈ストレスで疼痛 + 不安定性</li>
+              <li>Stener 病変では靱帯が母指内転筋腱膜に絡まり<strong>手術適応</strong></li>
+              <li>詳細 → <span class="wiki-missing">ゲームキーパー母指</span> / <span class="wiki-missing">Stener病変</span></li>
+            </ul>
+          </div>
+        </details>
+
+        <details class="sub-fold">
+          <summary>PIP 関節脱臼・骨折脱臼</summary>
+          <div class="sub-fold__body">
+            <ul>
+              <li>背側脱臼が多い、整復後は伸展制限副木</li>
+              <li>関節面 30% 以上の骨片 → 整形コンサルト</li>
+              <li>詳細 → <span class="wiki-missing">PIP関節脱臼</span></li>
+            </ul>
+          </div>
+        </details>
+      </section>
+
+      <!-- §6 初期固定・鎮痛 -->
+      <section class="section-page" id="s6" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🩹 初期固定・鎮痛</h2>
+
+        <h3>固定の選び方</h3>
+        <ul>
+          <li><strong>橈骨遠位端骨折</strong>：sugar-tong 副木 / volar 副木</li>
+          <li><strong>舟状骨骨折疑い</strong>：母指を含めた thumb spica 副木</li>
+          <li><strong>中手骨頚部骨折</strong>：ulnar gutter 副木（MP 70°屈曲位）</li>
+          <li><strong>指骨骨折</strong>：buddy taping または aluminum 副木</li>
+          <li><strong>Mallet finger</strong>：DIP 完全伸展位（Stack 副木）</li>
+        </ul>
+
+        <h3>鎮痛</h3>
+        <ul>
+          <li>第一選択：<strong>アセトアミノフェン 内服</strong>、必要時 NSAIDs（出血傾向・腎機能に注意）</li>
+          <li>整復前：オピオイド静注 + 局所麻酔（hematoma block）</li>
+          <li>冷却 + 挙上を併用</li>
+        </ul>
+
+        <div class="callout callout-tip">
+          <div class="callout-title">固定後は必ず再評価</div>
+          <div class="callout-body"><p>副木装着後に<strong>神経血管所見を再確認</strong>。指先の色・温度・知覚・運動を本人にも教え、悪化時は受診と説明する。</p></div>
+        </div>
+      </section>
+
+      <!-- §7 disposition -->
+      <section class="section-page" id="s7" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>📤 disposition</h2>
+
+        <h3>帰宅を考えやすい</h3>
+        <ul>
+          <li>転位の少ない閉鎖骨折で副木固定済み</li>
+          <li>神経血管異常なし、疼痛コントロール可能</li>
+          <li>整形外来受診（数日〜1 週間以内）が確実</li>
+        </ul>
+
+        <h3>入院 / 整形コンサルト</h3>
+        <ul>
+          <li>開放骨折 / 血行障害 / コンパートメント疑い</li>
+          <li>整復不能な脱臼・骨折</li>
+          <li>月状骨周囲脱臼、Jersey finger</li>
+          <li>多発外傷 / 高齢で疼痛コントロール困難</li>
+          <li>夜間で整形対応不能 + 再評価必要例</li>
+        </ul>
+      </section>
+
+      <!-- §8 ピットフォール -->
+      <section class="section-page" id="s8" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>⚠️ ピットフォール</h2>
+
+        <ul>
+          <li><strong>初回 X-line 陰性で舟状骨骨折を見逃す</strong> — 圧痛があれば固定 + 再評価</li>
+          <li><strong>月状骨周囲脱臼を AP のみで見落とす</strong> — 側面像で lunate の配置を確認</li>
+          <li><strong>Mallet finger を「打撲」で帰す</strong> — DIP 単独伸展を確認</li>
+          <li><strong>母指 UCL 損傷を捻挫扱い</strong> — Stener 病変は手術適応</li>
+          <li><strong>固定後の神経血管チェックを忘れる</strong> — 装着前後で必ず比較</li>
+          <li><strong>指の回旋変形を見逃す</strong> — 屈曲位で爪面と中手骨の整列を確認</li>
+        </ul>
+      </section>
+
+      <!-- §9 関連リンク -->
+      <section class="section-page" id="s9" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>📚 関連リンク</h2>
+
+        <h3>関連ページ</h3>
+        <ul>
+          <li><a class="wiki-link" href="疾患詳細/上肢骨折の固定/橈骨遠位端骨折.html">橈骨遠位端骨折</a></li>
+          <li><a class="wiki-link" href="疾患詳細/舟状骨骨折.html">舟状骨骨折</a></li>
+          <li><a class="wiki-link" href="疾患詳細/上肢骨折の固定/手・指の骨折.html">手・指の骨折</a></li>
+          <li><a class="wiki-link" href="転倒.html">転倒</a></li>
+          <li><span class="wiki-missing">Mallet finger</span> / <span class="wiki-missing">Jersey finger</span> / <span class="wiki-missing">Bennett骨折</span> / <span class="wiki-missing">Rolando骨折</span></li>
+          <li><span class="wiki-missing">ゲームキーパー母指</span> / <span class="wiki-missing">Stener病変</span> / <span class="wiki-missing">PIP関節脱臼</span></li>
+          <li><span class="wiki-missing">月状骨周囲脱臼</span> / <span class="wiki-missing">手のコンパートメント症候群</span></li>
+        </ul>
+
+        <p>#ER #救急 #手関節 #手の外傷 #橈骨遠位端骨折 #舟状骨骨折 #整形外科 #FOOSH</p>
+      </section>
+
+    </article>
+  </main>
+
+  <nav class="hokuto-bottom">
+    <button class="hokuto-bottom__btn" type="button" id="navBack">
+      <span class="hokuto-bottom__icon">←</span><span>戻る</span>
+    </button>
+    <a class="hokuto-bottom__btn" href="ツール.html">
+      <span class="hokuto-bottom__icon">⚙</span><span>ツール</span>
+    </a>
+    <a class="hokuto-bottom__btn" href="index.html">
+      <span class="hokuto-bottom__icon">⌂</span><span>ホーム</span>
+    </a>
   </nav>
-  <article class="note-shell">
-    <header class="note-header"><h1>手関節・手の外傷</h1><p class="source-badge">更新元: HTML 直編集</p></header>
-    <div class="md-body">
-      <div class="callout callout-summary"><div class="callout-title">このページの使い方</div><div class="callout-body"><ol><li>変形・開放創・神経血管を確認</li><li>FOOSH なら骨折を優先して評価</li><li>診断後に各疾患ページへ進む</li></ol></div></div>
-      <h2 id="主要鑑別">主要鑑別</h2>
-      <div class="table-wrap"><table><thead><tr><th>病態</th><th>手がかり</th><th>進む先</th></tr></thead><tbody>
-      <tr><td><strong>橈骨遠位端骨折</strong></td><td>手をついた後の変形・圧痛</td><td><a class="wiki-link" href="疾患詳細/上肢骨折の固定/橈骨遠位端骨折.html">橈骨遠位端骨折</a></td></tr>
-      <tr><td><strong>舟状骨骨折</strong></td><td>嗅ぎたばこ窩圧痛、初回 Xp 陰性あり</td><td><a class="wiki-link" href="疾患詳細/舟状骨骨折.html">舟状骨骨折</a></td></tr>
-      <tr><td><strong>中手骨・指骨外傷</strong></td><td>手背腫脹、限局圧痛</td><td><a class="wiki-link" href="疾患詳細/上肢骨折の固定/手・指の骨折.html">手・指の骨折</a></td></tr>
-      </tbody></table></div>
-      <h2 id="関連リンク">関連リンク</h2>
-      <ul><li><a class="wiki-link" href="転倒.html">転倒</a></li><li><a class="wiki-link" href="疾患詳細/上肢骨折の固定/橈骨遠位端骨折.html">橈骨遠位端骨折</a></li><li><a class="wiki-link" href="疾患詳細/舟状骨骨折.html">舟状骨骨折</a></li></ul>
-    </div>
-    <footer class="page-footer"><a href="index.html">↑ 主訴ナビへ戻る</a></footer>
-  </article>
+
+  <script>
+  (function(){
+    const menu = document.getElementById('sectionMenu');
+    const pages = document.querySelectorAll('.section-page');
+    const titleH1 = document.querySelector('.page-title');
+
+    function showSection(id) {
+      menu.hidden = true;
+      if (titleH1) titleH1.hidden = true;
+      pages.forEach(p => p.hidden = (p.id !== id));
+      window.scrollTo(0, 0);
+    }
+    function showMenu(scrollTarget) {
+      menu.hidden = false;
+      if (titleH1) titleH1.hidden = false;
+      pages.forEach(p => p.hidden = true);
+      if (scrollTarget) {
+        if (scrollTarget.tagName === 'DETAILS') scrollTarget.open = true;
+        scrollTarget.scrollIntoView({behavior: 'instant', block: 'start'});
+      } else {
+        window.scrollTo(0, 0);
+      }
+    }
+    function syncFromHash() {
+      const id = (location.hash || '').replace('#','');
+      const target = id ? document.getElementById(id) : null;
+      if (target && target.classList.contains('section-page')) {
+        showSection(id);
+      } else if (target) {
+        showMenu(target);
+      } else {
+        showMenu();
+      }
+    }
+
+    window.addEventListener('hashchange', syncFromHash);
+    document.querySelectorAll('.back-to-menu').forEach(b => {
+      b.addEventListener('click', () => { history.pushState(null,'',location.pathname); showMenu(); });
+    });
+    const navBack = document.getElementById('navBack');
+    if (navBack) navBack.addEventListener('click', () => {
+      if (window.history.length > 1) history.back();
+      else window.location.href = 'index.html';
+    });
+
+    syncFromHash();
+  })();
+  </script>
 </body>
 </html>

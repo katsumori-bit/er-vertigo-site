@@ -4,89 +4,224 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="color-scheme" content="light dark" />
-  <title>循環器コンサルトの判断</title>
+  <title>循環器コンサルトの判断 | ER ノート</title>
   <link rel="stylesheet" href="../er-note.css" />
 </head>
 <body>
-  <nav class="site-bar">
-    <a class="site-bar__back" href="../index.html">← 主訴ナビ</a>
-    <span class="site-bar__title">循環器コンサルトの判断</span>
+  <header class="hokuto-top">
+    <a class="hokuto-top__btn" href="../薬剤情報.html">
+      <span class="hokuto-top__icon">℞</span><span>薬剤情報</span>
+    </a>
+    <a class="hokuto-top__btn" href="../表計算.html">
+      <span class="hokuto-top__icon">⊞</span><span>表計算</span>
+    </a>
+  </header>
+
+  <main class="hokuto-main">
+    <article class="note-shell">
+      <h1 class="page-title">循環器コンサルトの判断</h1>
+
+      <!-- 即時アクションヘッダー（常時 sticky） -->
+      <div class="action-header">
+        <div class="action-header__title">⚡ 即時アクション</div>
+        <ol class="action-header__list">
+          <li><strong>STEMI / 致死性不整脈（VT, VF, 完全 AVB）</strong>は<strong>即コール</strong> — 外来に逃がさない</li>
+          <li><strong>急性心不全（Killip Ⅲ-Ⅳ）</strong>：肺水腫・心原性ショック領域は同日コール</li>
+          <li><strong>心原性ショック</strong>：低血圧 + 末梢冷感 + 意識障害 + 乏尿 → ICU と並走で循環器コール</li>
+          <li><strong>弁膜症急性増悪 / 大動脈解離 / 肺塞栓</strong>：循環器・心臓外科・血管外科の橋渡しを即時に</li>
+        </ol>
+      </div>
+
+      <!-- メニュータイル -->
+      <nav class="section-tiles" id="sectionMenu">
+        <a class="section-tile" href="#s1"><span class="section-tile__no">🧭</span><span class="section-tile__name">基本方針</span></a>
+        <a class="section-tile" href="#s2"><span class="section-tile__no">🔀</span><span class="section-tile__name">分岐表</span></a>
+        <a class="section-tile" href="#s3"><span class="section-tile__no">🏥</span><span class="section-tile__name">診療所に振る<br><small>最低条件</small></span></a>
+        <a class="section-tile" href="#s4"><span class="section-tile__no">📞</span><span class="section-tile__name">電話前テンプレ<br><small>1分</small></span></a>
+        <a class="section-tile" href="#s5"><span class="section-tile__no">📝</span><span class="section-tile__name">退院時の書面</span></a>
+        <a class="section-tile" href="#s6"><span class="section-tile__no">⚠️</span><span class="section-tile__name">ピットフォール</span></a>
+        <a class="section-tile" href="#s7"><span class="section-tile__no">🔗</span><span class="section-tile__name">関連リンク</span></a>
+      </nav>
+
+      <!-- 関連主訴（双方向リンク） -->
+      <details class="sub-fold" id="related-symptoms">
+        <summary>📞 この疾患が該当する主訴</summary>
+        <div class="sub-fold__body">
+          <ul>
+            <li><a class="wiki-link" href="../胸痛.html">胸痛</a> — STEMI / NSTE-ACS / 大動脈解離 / 肺塞栓の振り分け</li>
+            <li><a class="wiki-link" href="../呼吸困難.html">呼吸困難</a> — 急性心不全 Killip Ⅲ-Ⅳ・肺塞栓・肺水腫</li>
+            <li><a class="wiki-link" href="../意識消失.html">失神（意識消失）</a> — 心原性失神（VT/VF・完全 AVB・大動脈狭窄など）</li>
+            <li><span class="wiki-missing">動悸</span> — 新規 AF・VT・心房粗動など</li>
+          </ul>
+        </div>
+      </details>
+
+      <!-- §1 基本方針 -->
+      <section class="section-page" id="s1" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🧭 基本方針</h2>
+        <div class="callout callout-summary">
+          <div class="callout-title">一行で</div>
+          <div class="callout-body"><p><strong>入院中の初回評価責任は原則 院内循環器に寄せる。退院後のフォロー分岐は評価が終わってから。</strong></p></div>
+        </div>
+        <p>戻る: <a class="wiki-link" href="../入院時心電図.html">入院時心電図</a></p>
+        <ul>
+          <li>入院中に拾った異常心電図 → <strong>初回評価は院内（循環器）</strong></li>
+          <li>退院後に「診療所で十分 / 外来循環器 / 侵襲を含む精査」のどれかに振り分ける</li>
+        </ul>
+      </section>
+
+      <!-- §2 分岐表 -->
+      <section class="section-page" id="s2" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🔀 分岐表</h2>
+        <div class="table-wrap"><table>
+          <thead><tr><th>状況</th><th>アクション</th></tr></thead>
+          <tbody>
+            <tr><td>即相談圏（<a class="wiki-link" href="STEMI.html">STEMI</a> / <a class="wiki-link" href="de Winterパターン.html">de Winterパターン</a> / <a class="wiki-link" href="後壁梗塞.html">後壁梗塞</a> / <a class="wiki-link" href="高度房室ブロック.html">高度房室ブロック</a>（完全房室ブロック・Mobitz II） / <a class="wiki-link" href="交代性脚ブロック.html">交代性脚ブロック</a> / <a class="wiki-link" href="高K血症心電図.html">高K血症心電図</a> / <a class="wiki-link" href="Brugada心電図.html">Brugada心電図</a> Type 1 + 背景 / 重度 <a class="wiki-link" href="QT延長.html">QT延長</a> / VT/VF）</td><td><strong>院内急性経路</strong>。外来に逃がさない</td></tr>
+            <tr><td>同日圏（<a class="wiki-link" href="Wellens症候群.html">Wellens症候群</a> / NSTE-ACS 疑い / 新規 AF / 新規 LVH + 心不全 / <a class="wiki-link" href="二枝ブロック.html">二枝ブロック</a> + Ⅰ度房室ブロック）</td><td><strong>同日循環器コンサルト</strong></td></tr>
+            <tr><td>灰ゾーン（軽微 ST 変化、境界例）</td><td><strong>旧ECG + 薬 + 最小ラボ</strong>（<a class="wiki-link" href="旧心電図と内服確認.html">旧心電図と内服確認</a>） → 48時間以内に循環器</td></tr>
+            <tr><td>旧ECG同一で安定、急性リスクなし</td><td>退院後は <strong>かかりつけ / 診療所</strong> フォローでよいことが多い</td></tr>
+            <tr><td>生活習慣病管理が主、心電図は軽微</td><td><strong>かかりつけ主、循環器はオプション</strong></td></tr>
+            <tr><td>ペーシング / ICD / アブレーション / 冠動脈介入の議論</td><td><strong>循環器が主役</strong>（診療所では決めない）</td></tr>
+          </tbody>
+        </table></div>
+      </section>
+
+      <!-- §3 診療所に振るための最低条件 -->
+      <section class="section-page" id="s3" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🏥 「診療所に振る」ための最低条件</h2>
+        <p>以下を <strong>すべて満たす</strong> ときに現実的：</p>
+        <ol>
+          <li>急性症候なし（胸痛・失神・意識障害・喘鳴・血圧不安定なし）</li>
+          <li>トロポニン陰性（必要なら）、電解質正常</li>
+          <li>旧ECGと同一、または説明可能な安定所見</li>
+          <li>危険薬の変更なし（QT延長薬・房室結節作用薬・Naチャネル作用薬）</li>
+          <li>帰宅後の再受診指示が明確（症状トリガーを文書化）</li>
+        </ol>
+      </section>
+
+      <!-- §4 電話前テンプレ -->
+      <section class="section-page" id="s4" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>📞 電話前に揃える情報（1分テンプレ）</h2>
+        <ul>
+          <li>年齢、性別、主訴、バイタル、意識</li>
+          <li>入院（予定）理由</li>
+          <li><strong>心電図所見の要約</strong>（即相談所見／伝導／QTc／電解質所見）</li>
+          <li><strong>旧ECG との比較</strong>（ありなし、違いの有無）</li>
+          <li><strong>内服</strong>（房室結節・QT・Na チャネル・利尿）</li>
+          <li><strong>最小ラボ</strong>（K / Mg / Ca、トロポニン、Cr）</li>
+          <li>これまでにやった介入（モニター、ルート、投薬）</li>
+          <li>相談したい具体的な質問（ペーシングの要否 / カテの要否 / 薬剤中止の可否）</li>
+        </ul>
+      </section>
+
+      <!-- §5 退院時の書面 -->
+      <section class="section-page" id="s5" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>📝 退院時の書面で必ず書くこと</h2>
+        <ul>
+          <li>現在の心電図所見と <strong>旧との比較結果</strong></li>
+          <li>内服変更の有無、QT / 徐脈に関する注意</li>
+          <li>次回フォロー先：<strong>循環器外来 or かかりつけ</strong></li>
+          <li>症状トリガー：失神・動悸・胸痛・呼吸困難 → 即受診</li>
+        </ul>
+      </section>
+
+      <!-- §6 ピットフォール -->
+      <section class="section-page" id="s6" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>⚠️ ピットフォール</h2>
+        <ul>
+          <li>「かかりつけで見てもらってください」と、評価を終わらせずに投げる</li>
+          <li>退院時サマリで心電図所見を省く</li>
+          <li>夜間の当直が「循環器には明日相談」として朝を待つ（即相談圏の見落とし）</li>
+          <li>逆に、旧同一・無症状・安定の心電図で夜間オンコールを叩く（過剰）</li>
+        </ul>
+      </section>
+
+      <!-- §7 関連 -->
+      <section class="section-page" id="s7" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🔗 関連</h2>
+        <ul>
+          <li><a class="wiki-link" href="../入院時心電図.html">入院時心電図</a></li>
+          <li><a class="wiki-link" href="旧心電図と内服確認.html">旧心電図と内服確認</a></li>
+          <li><a class="wiki-link" href="STEMI.html">STEMI</a></li>
+          <li><a class="wiki-link" href="Wellens症候群.html">Wellens症候群</a></li>
+          <li><a class="wiki-link" href="高度房室ブロック.html">高度房室ブロック</a></li>
+          <li><a class="wiki-link" href="交代性脚ブロック.html">交代性脚ブロック</a></li>
+          <li><a class="wiki-link" href="二枝ブロック.html">二枝ブロック</a></li>
+        </ul>
+      </section>
+
+    </article>
+  </main>
+
+  <nav class="hokuto-bottom">
+    <button class="hokuto-bottom__btn" type="button" id="navBack">
+      <span class="hokuto-bottom__icon">←</span><span>戻る</span>
+    </button>
+    <a class="hokuto-bottom__btn" href="../ツール.html">
+      <span class="hokuto-bottom__icon">⚙</span><span>ツール</span>
+    </a>
+    <a class="hokuto-bottom__btn" href="../index.html">
+      <span class="hokuto-bottom__icon">⌂</span><span>ホーム</span>
+    </a>
   </nav>
-  <article class="note-shell">
-    <header class="note-header">
-      <h1>循環器コンサルトの判断</h1>
-      <p class="source-badge">元: 臨床/ER/疾患詳細/循環器コンサルトの判断.md</p>
-    </header>
-    <details class="toc"><summary>目次（7 セクション）</summary><ol><li><a href="#基本方針">基本方針</a></li><li><a href="#分岐表">分岐表</a></li><li><a href="#診療所に振るための最低条件">「診療所に振る」ための最低条件</a></li><li><a href="#電話前に揃える情報1分テンプレ">電話前に揃える情報（1分テンプレ）</a></li><li><a href="#退院時の書面で必ず書くこと">退院時の書面で必ず書くこと</a></li><li><a href="#ピットフォール">ピットフォール</a></li><li><a href="#関連">関連</a></li></ol></details>
-    <div class="md-body">
-<p>#ER #心電図 #コンサルト #循環器 #地域連携</p>
-<div class="callout callout-summary">
-<div class="callout-title">一行で</div>
-<div class="callout-body"><p><strong>入院中の初回評価責任は原則 院内循環器に寄せる。退院後のフォロー分岐は評価が終わってから。</strong></p></div>
-</div>
-<p>戻る: <a class="wiki-link" href="../入院時心電図.html">入院時心電図</a></p>
-<hr>
-<h2 id="基本方針">基本方針</h2>
-<ul>
-<li>入院中に拾った異常心電図 → <strong>初回評価は院内（循環器）</strong></li>
-<li>退院後に「診療所で十分 / 外来循環器 / 侵襲を含む精査」のどれかに振り分ける</li>
-</ul>
-<hr>
-<h2 id="分岐表">分岐表</h2>
-<div class="table-wrap"><table><thead><tr><th>状況</th><th>アクション</th></tr></thead><tbody><tr><td>即相談圏（<a class="wiki-link" href="STEMI.html">STEMI</a> / <a class="wiki-link" href="de Winterパターン.html">de Winterパターン</a> / <a class="wiki-link" href="後壁梗塞.html">後壁梗塞</a> / <a class="wiki-link" href="高度房室ブロック.html">高度房室ブロック</a>（完全房室ブロック・Mobitz II） / <a class="wiki-link" href="交代性脚ブロック.html">交代性脚ブロック</a> / <a class="wiki-link" href="高K血症心電図.html">高K血症心電図</a> / <a class="wiki-link" href="Brugada心電図.html">Brugada心電図</a> Type 1 + 背景 / 重度 <a class="wiki-link" href="QT延長.html">QT延長</a> / VT/VF）</td><td><strong>院内急性経路</strong>。外来に逃がさない</td></tr><tr><td>同日圏（<a class="wiki-link" href="Wellens症候群.html">Wellens症候群</a> / NSTE-ACS 疑い / 新規 AF / 新規 LVH + 心不全 / <a class="wiki-link" href="二枝ブロック.html">二枝ブロック</a> + Ⅰ度房室ブロック）</td><td><strong>同日循環器コンサルト</strong></td></tr><tr><td>灰ゾーン（軽微 ST 変化、境界例）</td><td><strong>旧ECG + 薬 + 最小ラボ</strong>（<a class="wiki-link" href="旧心電図と内服確認.html">旧心電図と内服確認</a>） → 48時間以内に循環器</td></tr><tr><td>旧ECG同一で安定、急性リスクなし</td><td>退院後は <strong>かかりつけ / 診療所</strong> フォローでよいことが多い</td></tr><tr><td>生活習慣病管理が主、心電図は軽微</td><td><strong>かかりつけ主、循環器はオプション</strong></td></tr><tr><td>ペーシング / ICD / アブレーション / 冠動脈介入の議論</td><td><strong>循環器が主役</strong>（診療所では決めない）</td></tr></tbody></table></div>
-<hr>
-<h2 id="診療所に振るための最低条件">「診療所に振る」ための最低条件</h2>
-<p>以下を <strong>すべて満たす</strong> ときに現実的：</p>
-<ol>
-<li>急性症候なし（胸痛・失神・意識障害・喘鳴・血圧不安定なし）</li>
-<li>トロポニン陰性（必要なら）、電解質正常</li>
-<li>旧ECGと同一、または説明可能な安定所見</li>
-<li>危険薬の変更なし（QT延長薬・房室結節作用薬・Naチャネル作用薬）</li>
-<li>帰宅後の再受診指示が明確（症状トリガーを文書化）</li>
-</ol>
-<hr>
-<h2 id="電話前に揃える情報1分テンプレ">電話前に揃える情報（1分テンプレ）</h2>
-<ul>
-<li>年齢、性別、主訴、バイタル、意識</li>
-<li>入院（予定）理由</li>
-<li><strong>心電図所見の要約</strong>（即相談所見／伝導／QTc／電解質所見）</li>
-<li><strong>旧ECG との比較</strong>（ありなし、違いの有無）</li>
-<li><strong>内服</strong>（房室結節・QT・Na チャネル・利尿）</li>
-<li><strong>最小ラボ</strong>（K / Mg / Ca、トロポニン、Cr）</li>
-<li>これまでにやった介入（モニター、ルート、投薬）</li>
-<li>相談したい具体的な質問（ペーシングの要否 / カテの要否 / 薬剤中止の可否）</li>
-</ul>
-<hr>
-<h2 id="退院時の書面で必ず書くこと">退院時の書面で必ず書くこと</h2>
-<ul>
-<li>現在の心電図所見と <strong>旧との比較結果</strong></li>
-<li>内服変更の有無、QT / 徐脈に関する注意</li>
-<li>次回フォロー先：<strong>循環器外来 or かかりつけ</strong></li>
-<li>症状トリガー：失神・動悸・胸痛・呼吸困難 → 即受診</li>
-</ul>
-<hr>
-<h2 id="ピットフォール">ピットフォール</h2>
-<ul>
-<li>「かかりつけで見てもらってください」と、評価を終わらせずに投げる</li>
-<li>退院時サマリで心電図所見を省く</li>
-<li>夜間の当直が「循環器には明日相談」として朝を待つ（即相談圏の見落とし）</li>
-<li>逆に、旧同一・無症状・安定の心電図で夜間オンコールを叩く（過剰）</li>
-</ul>
-<hr>
-<h2 id="関連">関連</h2>
-<ul>
-<li><a class="wiki-link" href="../入院時心電図.html">入院時心電図</a></li>
-<li><a class="wiki-link" href="旧心電図と内服確認.html">旧心電図と内服確認</a></li>
-<li><a class="wiki-link" href="STEMI.html">STEMI</a></li>
-<li><a class="wiki-link" href="Wellens症候群.html">Wellens症候群</a></li>
-<li><a class="wiki-link" href="高度房室ブロック.html">高度房室ブロック</a></li>
-<li><a class="wiki-link" href="交代性脚ブロック.html">交代性脚ブロック</a></li>
-<li><a class="wiki-link" href="二枝ブロック.html">二枝ブロック</a></li>
-</ul>
-    </div>
-    <footer class="page-footer">
-      <a href="../index.html">↑ 主訴ナビへ戻る</a>
-    </footer>
-  </article>
+
+  <script>
+  (function(){
+    const menu = document.getElementById('sectionMenu');
+    const pages = document.querySelectorAll('.section-page');
+    const titleH1 = document.querySelector('.page-title');
+    const relatedSymp = document.getElementById('related-symptoms');
+
+    function showSection(id) {
+      menu.hidden = true;
+      if (titleH1) titleH1.hidden = true;
+      if (relatedSymp) relatedSymp.hidden = true;
+      pages.forEach(p => p.hidden = (p.id !== id));
+      window.scrollTo(0, 0);
+    }
+    function showMenu(scrollTarget) {
+      menu.hidden = false;
+      if (titleH1) titleH1.hidden = false;
+      if (relatedSymp) relatedSymp.hidden = false;
+      pages.forEach(p => p.hidden = true);
+      if (scrollTarget) {
+        if (scrollTarget.tagName === 'DETAILS') scrollTarget.open = true;
+        scrollTarget.scrollIntoView({behavior: 'instant', block: 'start'});
+      } else {
+        window.scrollTo(0, 0);
+      }
+    }
+    function syncFromHash() {
+      const id = (location.hash || '').replace('#','');
+      const target = id ? document.getElementById(id) : null;
+      if (target && target.classList.contains('section-page')) {
+        showSection(id);
+      } else if (target) {
+        showMenu(target);
+      } else {
+        showMenu();
+      }
+    }
+
+    window.addEventListener('hashchange', syncFromHash);
+    document.querySelectorAll('.back-to-menu').forEach(b => {
+      b.addEventListener('click', () => { history.pushState(null,'',location.pathname); showMenu(); });
+    });
+    const navBack = document.getElementById('navBack');
+    if (navBack) navBack.addEventListener('click', () => {
+      if (window.history.length > 1) history.back();
+      else window.location.href = '../index.html';
+    });
+
+    syncFromHash();
+  })();
+  </script>
 </body>
 </html>

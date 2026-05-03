@@ -4,198 +4,313 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="color-scheme" content="light dark" />
-  <title>STEC・EHEC</title>
+  <title>STEC・EHEC | ER ノート</title>
   <link rel="stylesheet" href="../er-note.css" />
 </head>
 <body>
-  <nav class="site-bar">
-    <a class="site-bar__back" href="../index.html">← 主訴ナビ</a>
-    <span class="site-bar__title">STEC・EHEC</span>
+  <header class="hokuto-top">
+    <a class="hokuto-top__btn" href="../薬剤情報.html">
+      <span class="hokuto-top__icon">℞</span><span>薬剤情報</span>
+    </a>
+    <a class="hokuto-top__btn" href="../表計算.html">
+      <span class="hokuto-top__icon">⊞</span><span>表計算</span>
+    </a>
+  </header>
+
+  <main class="hokuto-main">
+    <article class="note-shell">
+      <h1 class="page-title">STEC・EHEC</h1>
+
+      <!-- 即時アクションヘッダー（常時 sticky） -->
+      <div class="action-header">
+        <div class="action-header__title">⚡ 即時アクション</div>
+        <ol class="action-header__list">
+          <li><strong>血便 + 腹痛、発熱は乏しい</strong>特徴</li>
+          <li><strong>抗菌薬・止痢薬は禁忌</strong>（HUS リスク増）</li>
+          <li><strong>HUS（血小板減少 + Cre 上昇 + 溶血性貧血）</strong>を毎日チェック</li>
+          <li>保健所届出 + 接触者調査</li>
+        </ol>
+      </div>
+
+      <!-- メニュータイル -->
+      <nav class="section-tiles" id="sectionMenu">
+        <a class="section-tile" href="#s1"><span class="section-tile__no">🦠</span><span class="section-tile__name">病態<br><small>HUS 含む</small></span></a>
+        <a class="section-tile" href="#s2"><span class="section-tile__no">📝</span><span class="section-tile__name">臨床像</span></a>
+        <a class="section-tile" href="#s3"><span class="section-tile__no">🧪</span><span class="section-tile__name">診断</span></a>
+        <a class="section-tile" href="#s4"><span class="section-tile__no">💊</span><span class="section-tile__name">治療</span></a>
+        <a class="section-tile" href="#s5"><span class="section-tile__no">📋</span><span class="section-tile__name">公衆衛生<br><small>届出</small></span></a>
+        <a class="section-tile" href="#s6"><span class="section-tile__no">🏥</span><span class="section-tile__name">ER 実務<br><small>帰宅指導</small></span></a>
+        <a class="section-tile" href="#s7"><span class="section-tile__no">⚠️</span><span class="section-tile__name">やりがちな<br>ミス</span></a>
+      </nav>
+
+      <!-- 関連主訴（双方向リンク） -->
+      <details class="sub-fold" id="related-symptoms">
+        <summary>📞 この疾患が該当する主訴</summary>
+        <div class="sub-fold__body">
+          <ul>
+            <li><a class="wiki-link" href="../下痢.html">下痢</a></li>
+            <li><a class="wiki-link" href="../血便・下血.html">血便・下血</a></li>
+            <li><a class="wiki-link" href="../腹痛.html">腹痛</a></li>
+            <li><a class="wiki-link" href="../意識障害.html">意識障害</a>（HUS）</li>
+          </ul>
+        </div>
+      </details>
+
+      <!-- §1 病態 -->
+      <section class="section-page" id="s1" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🦠 病態</h2>
+        <ul>
+          <li><strong>腸管出血性大腸菌（STEC: Shiga toxin–producing E. coli / EHEC: enterohemorrhagic E. coli）</strong></li>
+          <li><strong>志賀毒素（Shiga toxin、Stx1 / Stx2）</strong> が病原性の本体</li>
+          <li><strong>O157:H7</strong> が代表だが、O26、O111、O103、O121、O145 など非 O157 STEC も増加</li>
+          <li>感染源：<strong>生肉（特に牛ひき肉）</strong>、<strong>生野菜</strong>、<strong>未殺菌乳・果汁</strong>、<strong>井戸水・プール・動物接触</strong>、<strong>患者からの二次感染</strong></li>
+          <li>潜伏期：<strong>3–4 日</strong>（1–10 日の幅）</li>
+          <li>感染力が強い（<strong>少量の菌で感染</strong>：~50–100 個）</li>
+        </ul>
+        <h3>HUS（溶血性尿毒症症候群）</h3>
+        <ul>
+          <li>STEC 感染の <strong>5–15%</strong> に発症（<strong>特に 5 歳未満の小児・高齢者</strong>）</li>
+          <li>発症は<strong>下痢発症から 5–10 日後</strong>が多い</li>
+          <li><strong>三徴</strong>：
+            <ul>
+              <li><strong>微小血管症性溶血性貧血</strong>（破砕赤血球）</li>
+              <li><strong>血小板減少</strong></li>
+              <li><strong>急性腎障害（AKI）</strong></li>
+            </ul>
+          </li>
+          <li>予後：成人致死率 ~5%、小児では透析必要例多い</li>
+        </ul>
+      </section>
+
+      <!-- §2 臨床像 -->
+      <section class="section-page" id="s2" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>📝 臨床像</h2>
+        <ul>
+          <li><strong>激しい腹痛</strong>（しばしば持続性）</li>
+          <li><strong>水様下痢 → 1–2 日で血便</strong>（肉眼的鮮血便のこともある）</li>
+          <li><strong>発熱は乏しい〜なし</strong>（重要な手がかり、他の細菌性腸炎との鑑別点）</li>
+          <li>嘔吐は伴うことあり</li>
+          <li>HUS：下痢発症 5–10 日後の <strong>乏尿、浮腫、点状出血、意識変容</strong></li>
+        </ul>
+        <div class="callout callout-danger">
+          <div class="callout-title">STEC を疑うパターン</div>
+          <div class="callout-body"><ul>
+          <li><strong>血便 + 強い腹痛 + 発熱乏しい</strong></li>
+          <li><strong>生肉・ハンバーガー・生野菜・未殺菌乳の食歴</strong></li>
+          <li><strong>集団発生、家族内発症</strong></li>
+          <li><strong>5 歳未満の小児、高齢者</strong></li>
+          <li><strong>下痢発症から 5–10 日後の乏尿・血小板減少</strong></li>
+          </ul></div>
+        </div>
+      </section>
+
+      <!-- §3 診断 -->
+      <section class="section-page" id="s3" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🧪 診断</h2>
+        <ul>
+          <li><strong>便培養</strong>：MacConkey 寒天 + ソルビトール（O157 はソルビトール非発酵）</li>
+          <li><strong>志賀毒素検出</strong>：EIA、PCR</li>
+          <li><strong>血清型検査</strong>：O157、非 O157 を分類</li>
+          <li><strong>血液検査</strong>：CBC（破砕赤血球・血小板）、Cr、LDH、ハプトグロビン、間接ビリルビン、凝固</li>
+          <li><strong>尿検査</strong>：蛋白尿、血尿</li>
+          <li><strong>画像</strong>：強い腹痛があれば造影 CT で結腸壁肥厚、虚血性変化を確認</li>
+        </ul>
+        <div class="callout callout-tip">
+          <div class="callout-title">血便 + 発熱乏しい + 強い腹痛は STEC を必ず一度疑う</div>
+          <div class="callout-body"><p>他の細菌性腸炎（カンピロ・サルモネラ・シゲラ）は<strong>発熱が顕著</strong>なことが多い。 「血便なのに発熱が乏しい」は STEC を強く示唆する。</p></div>
+        </div>
+      </section>
+
+      <!-- §4 治療 -->
+      <section class="section-page" id="s4" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>💊 治療</h2>
+        <h3>原則</h3>
+        <div class="callout callout-danger">
+          <div class="callout-title">抗菌薬と止痢薬は避ける</div>
+          <div class="callout-body"><ul>
+          <li><strong>抗菌薬</strong>：菌の溶解で <strong>志賀毒素の放出が増加 → HUS リスク上昇</strong>
+            <ul>
+              <li>特に小児ではエビデンスが明確</li>
+              <li>成人では議論の余地はあるが、<strong>疑い段階では避ける</strong>のが安全</li>
+            </ul>
+          </li>
+          <li><strong>ロペラミド等の止痢薬</strong>：腸管内での毒素停滞 → HUS・toxic megacolon リスク</li>
+          <li><strong>NSAIDs も避ける</strong>（腎機能悪化）</li>
+          </ul></div>
+        </div>
+        <h3>支持療法（本体）</h3>
+        <ul>
+          <li><strong>十分な補液</strong>（細胞外液の早期点滴は HUS 進展リスクを下げる可能性あり、特に小児）
+            <ul><li>過剰輸液にも注意</li></ul>
+          </li>
+          <li><strong>電解質補正</strong></li>
+          <li><strong>疼痛管理</strong>（NSAIDs は避ける、アセトアミノフェンを基本）</li>
+          <li><strong>制吐</strong>（必要に応じてオンダンセトロン）</li>
+        </ul>
+        <h3>HUS 発症時</h3>
+        <ul>
+          <li><strong>入院 + 腎臓内科・血液内科コンサルト</strong></li>
+          <li><strong>AKI 管理</strong>：透析を含む</li>
+          <li><strong>輸血</strong>：Hb &lt;7 g/dL（小児は &lt;6 g/dL）の閾値を目安、<strong>血小板輸血は出血時のみ</strong>（消費を煽る）</li>
+          <li><strong>エクリズマブ</strong>：非典型 HUS（aHUS）に有効、典型 STEC-HUS では限定的</li>
+          <li><strong>血漿交換</strong>：典型 STEC-HUS では有効性は確立せず</li>
+        </ul>
+      </section>
+
+      <!-- §5 公衆衛生・届出 -->
+      <section class="section-page" id="s5" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>📋 公衆衛生・届出</h2>
+        <div class="callout callout-warning">
+          <div class="callout-title">3 類感染症 — 直ちに届出</div>
+          <div class="callout-body"><ul>
+          <li><strong>腸管出血性大腸菌感染症（O157 等）</strong>：感染症法 3 類、<strong>直ちに</strong>保健所へ届出</li>
+          <li><strong>無症候保菌者も届出対象</strong></li>
+          <li><strong>就業制限</strong>：飲食物の製造・販売・調理・接客、保育、医療、介護は <strong>菌陰性化（連続 2 回陰性）まで就業制限</strong></li>
+          <li><strong>学校保健安全法</strong>：第 3 種学校感染症、<strong>症状が消失し菌陰性化するまで出席停止</strong></li>
+          <li><strong>集団発生は保健所と連携して原因食材を特定</strong></li>
+          </ul></div>
+        </div>
+      </section>
+
+      <!-- §6 ER 実務 -->
+      <section class="section-page" id="s6" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🏥 ER での実務的な動き</h2>
+        <ol>
+          <li><strong>疑う</strong>：血便 + 強い腹痛 + 発熱乏しい、食歴</li>
+          <li><strong>隔離</strong>：個室、接触感染対策（特に小児・施設利用者と同居）</li>
+          <li><strong>検査</strong>：便培養（O157 含む）、志賀毒素 EIA / PCR</li>
+          <li><strong>採血</strong>：CBC、Cr、LDH、ハプトグロビン、ビリルビン、凝固、電解質</li>
+          <li><strong>画像</strong>：強い腹痛・腹膜刺激があれば造影 CT</li>
+          <li><strong>治療</strong>：補液、疼痛管理、<strong>抗菌薬と止痢薬は避ける</strong></li>
+          <li><strong>入院判断</strong>
+            <ul>
+              <li>小児・高齢者・HUS リスク高 → 入院</li>
+              <li>重症脱水・AKI・血小板減少傾向 → 入院</li>
+              <li>軽症成人 → 厳重な外来フォロー（毎日採血、HUS 発症監視）</li>
+            </ul>
+          </li>
+          <li><strong>保健所届出</strong></li>
+          <li><strong>家族・接触者の聞き取り</strong></li>
+        </ol>
+
+        <h3>帰宅指導（軽症の成人）</h3>
+        <ul>
+          <li><strong>再診基準</strong>
+            <ul>
+              <li>尿量減少、浮腫</li>
+              <li>強い倦怠感、皮膚の出血斑</li>
+              <li>意識変容、けいれん</li>
+              <li>強い腹痛の悪化、発熱の悪化、血便の悪化</li>
+            </ul>
+          </li>
+          <li><strong>数日後の採血フォロー</strong>：CBC、Cr、LDH、血小板（HUS 発症監視）</li>
+          <li><strong>手洗い・タオル分け</strong>（家族内感染予防）</li>
+          <li><strong>就業制限の説明</strong></li>
+        </ul>
+
+        <h3>関連ページ</h3>
+        <ul>
+          <li><a class="wiki-link" href="急性胃腸炎.html">急性胃腸炎</a></li>
+          <li><a class="wiki-link" href="CDI.html">CDI</a></li>
+        </ul>
+
+        <h3>出典</h3>
+        <ul>
+          <li><strong>IDSA 2017</strong>：Shane AL ほか. IDSA Clinical Practice Guidelines for Infectious Diarrhea. <em>Clin Infect Dis.</em> 2017;65(12):e45–e80.（<strong>STEC への抗菌薬非推奨</strong>）</li>
+          <li><strong>Wong CS ほか</strong>：Risk of HUS after antibiotic treatment of E. coli O157:H7 infections. <em>NEJM.</em> 2000;342:1930–1936.（<strong>抗菌薬で HUS リスク上昇のランドマーク研究</strong>）</li>
+          <li><strong>Freedman SB ほか</strong>：Shiga Toxin-Producing Escherichia coli Infection, Antibiotics, and Risk of Developing HUS. <em>Clin Infect Dis.</em> 2016.</li>
+          <li><strong>CDC</strong>：E. coli (Escherichia coli) — STEC guidance.</li>
+          <li><strong>国立感染症研究所</strong>：腸管出血性大腸菌感染症 — 病原微生物検出情報・届出基準.</li>
+          <li><strong>感染症法</strong>：3 類感染症 — 腸管出血性大腸菌感染症.</li>
+          <li><strong>学校保健安全法施行規則</strong>：第 3 種学校感染症.</li>
+        </ul>
+      </section>
+
+      <!-- §7 やりがちなミス -->
+      <section class="section-page" id="s7" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>⚠️ やりがちなミス</h2>
+        <ul>
+          <li><strong>血便 + 強い腹痛で「細菌性腸炎」とまとめてキノロン処方</strong>（HUS リスク↑）</li>
+          <li><strong>ロペラミドを処方</strong>（HUS リスク↑）</li>
+          <li><strong>下痢発症 1 週間後の HUS を見逃す</strong>（再診基準を伝えていない）</li>
+          <li><strong>NSAIDs を疼痛管理で使う</strong>（腎悪化）</li>
+          <li><strong>保健所への届出を忘れる</strong></li>
+          <li><strong>接触感染対策を怠る</strong>（家族内・施設内で広がる）</li>
+        </ul>
+      </section>
+
+    </article>
+  </main>
+
+  <nav class="hokuto-bottom">
+    <button class="hokuto-bottom__btn" type="button" id="navBack">
+      <span class="hokuto-bottom__icon">←</span><span>戻る</span>
+    </button>
+    <a class="hokuto-bottom__btn" href="../ツール.html">
+      <span class="hokuto-bottom__icon">⚙</span><span>ツール</span>
+    </a>
+    <a class="hokuto-bottom__btn" href="../index.html">
+      <span class="hokuto-bottom__icon">⌂</span><span>ホーム</span>
+    </a>
   </nav>
-  <article class="note-shell">
-    <header class="note-header">
-      <h1>STEC・EHEC</h1>
-      <p class="source-badge">元: 臨床/ER/疾患詳細/STEC・EHEC.md</p>
-    </header>
-    <details class="toc"><summary>目次（10 セクション）</summary><ol><li><a href="#病態">病態</a></li><li><a href="#臨床像">臨床像</a></li><li><a href="#診断">診断</a></li><li><a href="#治療">治療</a></li><li><a href="#公衆衛生・届出">公衆衛生・届出</a></li><li><a href="#er-での実務的な動き">ER での実務的な動き</a></li><li><a href="#やりがちなミス">やりがちなミス</a></li><li><a href="#帰宅指導軽症の成人">帰宅指導（軽症の成人）</a></li><li><a href="#出典">出典</a></li><li><a href="#関連ページ">関連ページ</a></li></ol></details>
-    <div class="md-body">
-<p>#ER #救急 #STEC #EHEC #O157 #HUS #血便 #感染性腸炎</p>
-<div class="callout callout-summary">
-<div class="callout-title">このページの使い方</div>
-<div class="callout-body"><ol>
-<li><strong><a class="wiki-link" href="../下痢.html">下痢</a> / <a class="wiki-link" href="../血便・下血.html">血便・下血</a> / <a class="wiki-link" href="../腹痛.html">腹痛</a></strong> で「血便 + 強い腹痛、生肉食歴、小児・高齢」を見たら開く</li>
-<li><strong>抗菌薬と止痢薬を避ける</strong>（HUS リスク）</li>
-<li><strong>HUS のサイン</strong>（貧血・血小板減少・AKI）を早期に拾う</li>
-<li><strong>3 類感染症</strong>として <strong>直ちに保健所へ届出</strong></li>
-<li>治療の本体は <strong>補液 + 経過観察 + 合併症管理</strong></li>
-</ol></div>
-</div>
-<hr>
-<h2 id="病態">病態</h2>
-<ul>
-<li><strong>腸管出血性大腸菌（STEC: Shiga toxin–producing E. coli / EHEC: enterohemorrhagic E. coli）</strong></li>
-<li><strong>志賀毒素（Shiga toxin、Stx1 / Stx2）</strong> が病原性の本体</li>
-<li><strong>O157:H7</strong> が代表だが、O26、O111、O103、O121、O145 など非 O157 STEC も増加</li>
-<li>感染源：<strong>生肉（特に牛ひき肉）</strong>、<strong>生野菜</strong>、<strong>未殺菌乳・果汁</strong>、<strong>井戸水・プール・動物接触</strong>、<strong>患者からの二次感染</strong></li>
-<li>潜伏期：<strong>3–4 日</strong>（1–10 日の幅）</li>
-<li>感染力が強い（<strong>少量の菌で感染</strong>：~50–100 個）</li>
-</ul>
-<h3 id="hus溶血性尿毒症症候群">HUS（溶血性尿毒症症候群）</h3>
-<ul>
-<li>STEC 感染の <strong>5–15%</strong> に発症（<strong>特に 5 歳未満の小児・高齢者</strong>）</li>
-<li>発症は<strong>下痢発症から 5–10 日後</strong>が多い</li>
-<li><strong>三徴</strong>：</li>
-<ul>
-<li><strong>微小血管症性溶血性貧血</strong>（破砕赤血球）</li>
-<li><strong>血小板減少</strong></li>
-<li><strong>急性腎障害（AKI）</strong></li>
-</ul>
-<li>予後：成人致死率 ~5%、小児では透析必要例多い</li>
-</ul>
-<hr>
-<h2 id="臨床像">臨床像</h2>
-<ul>
-<li><strong>激しい腹痛</strong>（しばしば持続性）</li>
-<li><strong>水様下痢 → 1–2 日で血便</strong>（肉眼的鮮血便のこともある）</li>
-<li><strong>発熱は乏しい〜なし</strong>（重要な手がかり、他の細菌性腸炎との鑑別点）</li>
-<li>嘔吐は伴うことあり</li>
-<li>HUS：下痢発症 5–10 日後の <strong>乏尿、浮腫、点状出血、意識変容</strong></li>
-</ul>
-<div class="callout callout-danger">
-<div class="callout-title">STEC を疑うパターン</div>
-<div class="callout-body"><ul>
-<li><strong>血便 + 強い腹痛 + 発熱乏しい</strong></li>
-<li><strong>生肉・ハンバーガー・生野菜・未殺菌乳の食歴</strong></li>
-<li><strong>集団発生、家族内発症</strong></li>
-<li><strong>5 歳未満の小児、高齢者</strong></li>
-<li><strong>下痢発症から 5–10 日後の乏尿・血小板減少</strong></li>
-</ul></div>
-</div>
-<hr>
-<h2 id="診断">診断</h2>
-<ul>
-<li><strong>便培養</strong>：MacConkey 寒天 + ソルビトール（O157 はソルビトール非発酵）</li>
-<li><strong>志賀毒素検出</strong>：EIA、PCR</li>
-<li><strong>血清型検査</strong>：O157、非 O157 を分類</li>
-<li><strong>血液検査</strong>：CBC（破砕赤血球・血小板）、Cr、LDH、ハプトグロビン、間接ビリルビン、凝固</li>
-<li><strong>尿検査</strong>：蛋白尿、血尿</li>
-<li><strong>画像</strong>：強い腹痛があれば造影 CT で結腸壁肥厚、虚血性変化を確認</li>
-</ul>
-<div class="callout callout-tip">
-<div class="callout-title">血便 + 発熱乏しい + 強い腹痛は STEC を必ず一度疑う</div>
-<div class="callout-body"><p>他の細菌性腸炎（カンピロ・サルモネラ・シゲラ）は<strong>発熱が顕著</strong>なことが多い。 「血便なのに発熱が乏しい」は STEC を強く示唆する。</p></div>
-</div>
-<hr>
-<h2 id="治療">治療</h2>
-<h3 id="原則">原則</h3>
-<div class="callout callout-danger">
-<div class="callout-title">抗菌薬と止痢薬は避ける</div>
-<div class="callout-body"><ul>
-<li><strong>抗菌薬</strong>：菌の溶解で <strong>志賀毒素の放出が増加 → HUS リスク上昇</strong></li>
-<ul>
-<li>特に小児ではエビデンスが明確</li>
-<li>成人では議論の余地はあるが、<strong>疑い段階では避ける</strong>のが安全</li>
-</ul>
-<li><strong>ロペラミド等の止痢薬</strong>：腸管内での毒素停滞 → HUS・toxic megacolon リスク</li>
-<li><strong>NSAIDs も避ける</strong>（腎機能悪化）</li>
-</ul></div>
-</div>
-<h3 id="支持療法本体">支持療法（本体）</h3>
-<ul>
-<li><strong>十分な補液</strong>（細胞外液の早期点滴は HUS 進展リスクを下げる可能性あり、特に小児）</li>
-<ul>
-<li>過剰輸液にも注意</li>
-</ul>
-<li><strong>電解質補正</strong></li>
-<li><strong>疼痛管理</strong>（NSAIDs は避ける、アセトアミノフェンを基本）</li>
-<li><strong>制吐</strong>（必要に応じてオンダンセトロン）</li>
-</ul>
-<h3 id="hus-発症時">HUS 発症時</h3>
-<ul>
-<li><strong>入院 + 腎臓内科・血液内科コンサルト</strong></li>
-<li><strong>AKI 管理</strong>：透析を含む</li>
-<li><strong>輸血</strong>：Hb &lt;7 g/dL（小児は &lt;6 g/dL）の閾値を目安、<strong>血小板輸血は出血時のみ</strong>（消費を煽る）</li>
-<li><strong>エクリズマブ</strong>：非典型 HUS（aHUS）に有効、典型 STEC-HUS では限定的</li>
-<li><strong>血漿交換</strong>：典型 STEC-HUS では有効性は確立せず</li>
-</ul>
-<hr>
-<h2 id="公衆衛生・届出">公衆衛生・届出</h2>
-<div class="callout callout-warning">
-<div class="callout-title">3 類感染症 — 直ちに届出</div>
-<div class="callout-body"><ul>
-<li><strong>腸管出血性大腸菌感染症（O157 等）</strong>：感染症法 3 類、<strong>直ちに</strong>保健所へ届出</li>
-<li><strong>無症候保菌者も届出対象</strong></li>
-<li><strong>就業制限</strong>：飲食物の製造・販売・調理・接客、保育、医療、介護は <strong>菌陰性化（連続 2 回陰性）まで就業制限</strong></li>
-<li><strong>学校保健安全法</strong>：第 3 種学校感染症、<strong>症状が消失し菌陰性化するまで出席停止</strong></li>
-<li><strong>集団発生は保健所と連携して原因食材を特定</strong></li>
-</ul></div>
-</div>
-<hr>
-<h2 id="er-での実務的な動き">ER での実務的な動き</h2>
-<ol>
-<li><strong>疑う</strong>：血便 + 強い腹痛 + 発熱乏しい、食歴</li>
-<li><strong>隔離</strong>：個室、接触感染対策（特に小児・施設利用者と同居）</li>
-<li><strong>検査</strong>：便培養（O157 含む）、志賀毒素 EIA / PCR</li>
-<li><strong>採血</strong>：CBC、Cr、LDH、ハプトグロビン、ビリルビン、凝固、電解質</li>
-<li><strong>画像</strong>：強い腹痛・腹膜刺激があれば造影 CT</li>
-<li><strong>治療</strong>：補液、疼痛管理、<strong>抗菌薬と止痢薬は避ける</strong></li>
-<li><strong>入院判断</strong></li>
-<ul>
-<li>小児・高齢者・HUS リスク高 → 入院</li>
-<li>重症脱水・AKI・血小板減少傾向 → 入院</li>
-<li>軽症成人 → 厳重な外来フォロー（毎日採血、HUS 発症監視）</li>
-</ul>
-<li><strong>保健所届出</strong></li>
-<li><strong>家族・接触者の聞き取り</strong></li>
-</ol>
-<hr>
-<h2 id="やりがちなミス">やりがちなミス</h2>
-<ul>
-<li><strong>血便 + 強い腹痛で「細菌性腸炎」とまとめてキノロン処方</strong>（HUS リスク↑）</li>
-<li><strong>ロペラミドを処方</strong>（HUS リスク↑）</li>
-<li><strong>下痢発症 1 週間後の HUS を見逃す</strong>（再診基準を伝えていない）</li>
-<li><strong>NSAIDs を疼痛管理で使う</strong>（腎悪化）</li>
-<li><strong>保健所への届出を忘れる</strong></li>
-<li><strong>接触感染対策を怠る</strong>（家族内・施設内で広がる）</li>
-</ul>
-<hr>
-<h2 id="帰宅指導軽症の成人">帰宅指導（軽症の成人）</h2>
-<ul>
-<li><strong>再診基準</strong></li>
-<ul>
-<li>尿量減少、浮腫</li>
-<li>強い倦怠感、皮膚の出血斑</li>
-<li>意識変容、けいれん</li>
-<li>強い腹痛の悪化、発熱の悪化、血便の悪化</li>
-</ul>
-<li><strong>数日後の採血フォロー</strong>：CBC、Cr、LDH、血小板（HUS 発症監視）</li>
-<li><strong>手洗い・タオル分け</strong>（家族内感染予防）</li>
-<li><strong>就業制限の説明</strong></li>
-</ul>
-<hr>
-<h2 id="出典">出典</h2>
-<ul>
-<li><strong>IDSA 2017</strong>：Shane AL ほか. IDSA Clinical Practice Guidelines for Infectious Diarrhea. <em>Clin Infect Dis.</em> 2017;65(12):e45–e80.（<strong>STEC への抗菌薬非推奨</strong>）</li>
-<li><strong>Wong CS ほか</strong>：Risk of HUS after antibiotic treatment of E. coli O157:H7 infections. <em>NEJM.</em> 2000;342:1930–1936.（<strong>抗菌薬で HUS リスク上昇のランドマーク研究</strong>）</li>
-<li><strong>Freedman SB ほか</strong>：Shiga Toxin-Producing Escherichia coli Infection, Antibiotics, and Risk of Developing HUS. <em>Clin Infect Dis.</em> 2016.</li>
-<li><strong>CDC</strong>：E. coli (Escherichia coli) — STEC guidance.</li>
-<li><strong>国立感染症研究所</strong>：腸管出血性大腸菌感染症 — 病原微生物検出情報・届出基準.</li>
-<li><strong>感染症法</strong>：3 類感染症 — 腸管出血性大腸菌感染症.</li>
-<li><strong>学校保健安全法施行規則</strong>：第 3 種学校感染症.</li>
-</ul>
-<hr>
-<h2 id="関連ページ">関連ページ</h2>
-<ul>
-<li><a class="wiki-link" href="../下痢.html">下痢</a></li>
-<li><a class="wiki-link" href="../血便・下血.html">血便・下血</a></li>
-<li><a class="wiki-link" href="../腹痛.html">腹痛</a></li>
-<li><a class="wiki-link" href="急性胃腸炎.html">急性胃腸炎</a></li>
-<li><a class="wiki-link" href="CDI.html">CDI</a></li>
-</ul>
-    </div>
-    <footer class="page-footer">
-      <a href="../index.html">↑ 主訴ナビへ戻る</a>
-    </footer>
-  </article>
+
+  <script>
+  (function(){
+    const menu = document.getElementById('sectionMenu');
+    const pages = document.querySelectorAll('.section-page');
+    const titleH1 = document.querySelector('.page-title');
+    const relatedSymp = document.getElementById('related-symptoms');
+
+    function showSection(id) {
+      menu.hidden = true;
+      if (titleH1) titleH1.hidden = true;
+      if (relatedSymp) relatedSymp.hidden = true;
+      pages.forEach(p => p.hidden = (p.id !== id));
+      window.scrollTo(0, 0);
+    }
+    function showMenu(scrollTarget) {
+      menu.hidden = false;
+      if (titleH1) titleH1.hidden = false;
+      if (relatedSymp) relatedSymp.hidden = false;
+      pages.forEach(p => p.hidden = true);
+      if (scrollTarget) {
+        if (scrollTarget.tagName === 'DETAILS') scrollTarget.open = true;
+        scrollTarget.scrollIntoView({behavior: 'instant', block: 'start'});
+      } else {
+        window.scrollTo(0, 0);
+      }
+    }
+    function syncFromHash() {
+      const id = (location.hash || '').replace('#','');
+      const target = id ? document.getElementById(id) : null;
+      if (target && target.classList.contains('section-page')) {
+        showSection(id);
+      } else if (target) {
+        showMenu(target);
+      } else {
+        showMenu();
+      }
+    }
+
+    window.addEventListener('hashchange', syncFromHash);
+    document.querySelectorAll('.back-to-menu').forEach(b => {
+      b.addEventListener('click', () => { history.pushState(null,'',location.pathname); showMenu(); });
+    });
+    const navBack = document.getElementById('navBack');
+    if (navBack) navBack.addEventListener('click', () => {
+      if (window.history.length > 1) history.back();
+      else window.location.href = '../index.html';
+    });
+
+    syncFromHash();
+  })();
+  </script>
 </body>
 </html>

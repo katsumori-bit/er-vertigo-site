@@ -4,97 +4,229 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="color-scheme" content="light dark" />
-  <title>頭痛の対症療法</title>
+  <title>頭痛の対症療法 | ER ノート</title>
   <link rel="stylesheet" href="../er-note.css" />
 </head>
 <body>
-  <nav class="site-bar">
-    <a class="site-bar__back" href="../index.html">← 主訴ナビ</a>
-    <span class="site-bar__title">頭痛の対症療法</span>
-  </nav>
-  <article class="note-shell">
-    <header class="note-header">
-      <h1>頭痛の対症療法</h1>
-      <p class="source-badge">元: 臨床/ER/疾患詳細/頭痛の対症療法.md</p>
-    </header>
-    <details class="toc"><summary>目次（5 セクション）</summary><ol><li><a href="#片頭痛急性期">片頭痛（急性期）</a></li><li><a href="#緊張型頭痛">緊張型頭痛</a></li><li><a href="#群発頭痛急性期">群発頭痛（急性期）</a></li><li><a href="#出典">出典</a></li><li><a href="#関連ページ">関連ページ</a></li></ol></details>
-    <div class="md-body">
-<p>#ER #救急 #頭痛 #片頭痛 #群発頭痛 #緊張型頭痛 #対症療法</p>
-<div class="callout callout-summary">
-<div class="callout-title">このページの使い方</div>
-<div class="callout-body"><ol>
-<li><strong>二次性頭痛を除外してから</strong>開く（<a class="wiki-link" href="../頭痛.html">頭痛</a> で赤旗を外す）</li>
-<li><strong>片頭痛・緊張型・群発</strong>の急性期治療と再燃予防</li>
-<li>ED 内の静注レジメンと帰宅時処方セットを載せる</li>
-</ol></div>
-</div>
-<hr>
-<h2 id="片頭痛急性期">片頭痛（急性期）</h2>
-<p>AHS 2016 / AAN 2015 で急性片頭痛の ED 治療は<strong>ドパミン拮抗薬 + NSAIDs / トリプタン</strong>が有力。<strong>オピオイドは第一選択にしない</strong>。</p>
-<h3 id="ed-内静注">ED 内（静注）</h3>
-<ul>
-<li><strong>メトクロプラミド 10 mg IV</strong>（錐体外路症状・QT 延長に注意、必要に応じてジフェンヒドラミン併用）</li>
-<li><strong>プロクロルペラジン（ノバミン）10 mg IV</strong>（日本では静注製剤が限定的、筋注 or 経口で代用）</li>
-<li><strong>スマトリプタン 3 mg 皮下注</strong>（心血管リスクあれば避ける。24 時間以内のエルゴタミン併用禁忌）</li>
-<li><strong>NSAIDs</strong>：ケトロラク 30 mg IV（本邦未承認）／ロピオン 50 mg IV</li>
-<li><strong>アセトアミノフェン IV（アセリオ）1000 mg 15 分点滴</strong>（妊婦・NSAIDs 禁忌で）</li>
-<li><strong>輸液（生食 500–1000 mL）</strong>：脱水を伴うとき</li>
-<li><strong>デキサメタゾン 4–10 mg IV</strong>：<strong>再燃予防</strong>に併用（72 時間以内の再発を減らす）</li>
-<li><strong>モルヒネ / ペンタゾシン / トラマドールは避ける</strong>（慢性化・乱用性頭痛のリスク）</li>
-</ul>
-<h3 id="帰宅時処方成人・腎肝正常・35-日分">帰宅時処方（成人・腎肝正常・3–5 日分）</h3>
+  <header class="hokuto-top">
+    <a class="hokuto-top__btn" href="../薬剤情報.html">
+      <span class="hokuto-top__icon">℞</span><span>薬剤情報</span>
+    </a>
+    <a class="hokuto-top__btn" href="../表計算.html">
+      <span class="hokuto-top__icon">⊞</span><span>表計算</span>
+    </a>
+  </header>
+
+  <main class="hokuto-main">
+    <article class="note-shell">
+      <h1 class="page-title">頭痛の対症療法</h1>
+
+      <!-- 即時アクションヘッダー（常時 sticky） -->
+      <div class="action-header">
+        <div class="action-header__title">⚡ 即時アクション</div>
+        <ol class="action-header__list">
+          <li>まず <strong>red flags（SAH / 髄膜炎 / GCA）を除外</strong>：<a class="wiki-link" href="../頭痛.html">頭痛</a> で赤旗を外してから対症療法へ</li>
+          <li><strong>NSAIDs</strong>（ロキソプロフェン 60 mg、ジクロフェナク）or <strong>アセトアミノフェン 1000 mg</strong></li>
+          <li><strong>制吐薬</strong>：メトクロプラミド 10 mg、ハロペリドール 2.5 mg（同時投与で相乗効果）</li>
+          <li>難治例で <strong>トリプタン</strong>（片頭痛確定後）、<strong>DHE / バルプロ酸 / マグネシウム</strong> 検討</li>
+        </ol>
+      </div>
+
+      <!-- メニュータイル -->
+      <nav class="section-tiles" id="sectionMenu">
+        <a class="section-tile" href="#s1"><span class="section-tile__no">📋</span><span class="section-tile__name">使い方<br><small>red flag 除外後</small></span></a>
+        <a class="section-tile" href="#s2"><span class="section-tile__no">💉</span><span class="section-tile__name">片頭痛<br><small>ED 静注</small></span></a>
+        <a class="section-tile" href="#s3"><span class="section-tile__no">📝</span><span class="section-tile__name">片頭痛<br><small>帰宅処方</small></span></a>
+        <a class="section-tile" href="#s4"><span class="section-tile__no">🔄</span><span class="section-tile__name">緊張型頭痛</span></a>
+        <a class="section-tile" href="#s5"><span class="section-tile__no">🫁</span><span class="section-tile__name">群発頭痛<br><small>酸素 + 皮下注</small></span></a>
+        <a class="section-tile" href="#s6"><span class="section-tile__no">📚</span><span class="section-tile__name">出典・関連</span></a>
+      </nav>
+
+      <!-- 関連主訴（双方向リンク） -->
+      <details class="sub-fold" id="related-symptoms">
+        <summary>📞 この疾患が該当する主訴</summary>
+        <div class="sub-fold__body">
+          <ul>
+            <li><a class="wiki-link" href="../頭痛.html">頭痛</a> — red flag 除外後の急性期対症療法・帰宅処方</li>
+          </ul>
+        </div>
+      </details>
+
+      <!-- §1 使い方 -->
+      <section class="section-page" id="s1" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>📋 このページの使い方</h2>
+
+        <div class="callout callout-summary">
+          <div class="callout-title">このページの使い方</div>
+          <div class="callout-body"><ol>
+            <li><strong>二次性頭痛を除外してから</strong>開く（<a class="wiki-link" href="../頭痛.html">頭痛</a> で赤旗を外す）</li>
+            <li><strong>片頭痛・緊張型・群発</strong>の急性期治療と再燃予防</li>
+            <li>ED 内の静注レジメンと帰宅時処方セットを載せる</li>
+          </ol></div>
+        </div>
+      </section>
+
+      <!-- §2 片頭痛 ED 静注 -->
+      <section class="section-page" id="s2" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>💉 片頭痛（急性期）— ED 内静注</h2>
+
+        <p>AHS 2016 / AAN 2015 で急性片頭痛の ED 治療は<strong>ドパミン拮抗薬 + NSAIDs / トリプタン</strong>が有力。<strong>オピオイドは第一選択にしない</strong>。</p>
+
+        <h3>ED 内（静注）</h3>
+        <ul>
+          <li><strong>メトクロプラミド 10 mg IV</strong>（錐体外路症状・QT 延長に注意、必要に応じてジフェンヒドラミン併用）</li>
+          <li><strong>プロクロルペラジン（ノバミン）10 mg IV</strong>（日本では静注製剤が限定的、筋注 or 経口で代用）</li>
+          <li><strong>スマトリプタン 3 mg 皮下注</strong>（心血管リスクあれば避ける。24 時間以内のエルゴタミン併用禁忌）</li>
+          <li><strong>NSAIDs</strong>：ケトロラク 30 mg IV（本邦未承認）／ロピオン 50 mg IV</li>
+          <li><strong>アセトアミノフェン IV（アセリオ）1000 mg 15 分点滴</strong>（妊婦・NSAIDs 禁忌で）</li>
+          <li><strong>輸液（生食 500–1000 mL）</strong>：脱水を伴うとき</li>
+          <li><strong>デキサメタゾン 4–10 mg IV</strong>：<strong>再燃予防</strong>に併用（72 時間以内の再発を減らす）</li>
+          <li><strong>モルヒネ / ペンタゾシン / トラマドールは避ける</strong>（慢性化・乱用性頭痛のリスク）</li>
+        </ul>
+      </section>
+
+      <!-- §3 片頭痛 帰宅処方 -->
+      <section class="section-page" id="s3" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>📝 片頭痛 — 帰宅時処方</h2>
+
+        <h3>帰宅時処方（成人・腎肝正常・3–5 日分）</h3>
 <pre><code>・スマトリプタン錠 50 mg     1回1錠 頭痛時頓用 2時間空けて 1日2回まで
                              （心血管リスク・妊娠・SSRI 併用注意）
 ・ロキソプロフェン錠 60 mg   1回1錠 頭痛時頓用 6時間空けて 1日3回まで
                              （腎機能・消化管出血リスク・妊娠後期禁忌）
 ・カロナール錠 500 mg        1回1錠 頭痛時頓用 4–6時間空けて 1日4回まで
 ・ドンペリドン錠 10 mg       1回1錠 悪心時頓用 1日3回まで</code></pre>
-<ul>
-<li><strong>頭痛頻度が月 8 日以上</strong> or <strong>急性期薬が月 10–15 日以上</strong>になっていれば<strong>予防薬の導入</strong>を検討（頭痛外来紹介）</li>
-<li><strong>薬物乱用性頭痛（MOH）</strong>：NSAIDs/アセトアミノフェン 15 日/月以上、トリプタン/エルゴタミン 10 日/月以上で発症</li>
-</ul>
-<div class="callout callout-warning">
-<div class="callout-title">トリプタンの注意</div>
-<div class="callout-body"><ul>
-<li><strong>禁忌</strong>：冠動脈疾患、脳梗塞既往、コントロール不良高血圧、妊娠、片麻痺性片頭痛、エルゴタミン 24 時間以内</li>
-<li><strong>SSRI/SNRI 併用でセロトニン症候群</strong>（頻度低いが重要）</li>
-<li><strong>服用は頭痛開始後早めに</strong>（遅れると効果低下）</li>
-</ul></div>
-</div>
-<hr>
-<h2 id="緊張型頭痛">緊張型頭痛</h2>
-<ul>
-<li><strong>アセトアミノフェン 500–1000 mg</strong> or <strong>NSAIDs</strong>（ロキソプロフェン 60 mg）頓用</li>
-<li><strong>慢性化・乱用</strong>に注意。<strong>月 10–15 日以上の使用は予防薬導入</strong>を</li>
-</ul>
-<hr>
-<h2 id="群発頭痛急性期">群発頭痛（急性期）</h2>
-<ul>
-<li><strong>酸素 100% 12–15 L/min リザーバーマスクで 15–20 分</strong>：第一選択（NNT 低く、副作用少ない）</li>
-<li><strong>スマトリプタン 3 mg 皮下注</strong> or <strong>6 mg</strong>：発作頓挫</li>
-<li><strong>予防</strong>：ベラパミル、ステロイドテーパー（頭痛外来へ紹介）</li>
-</ul>
-<p>詳細・診断基準 → <span class="wiki-missing">群発頭痛</span></p>
-<hr>
-<h2 id="出典">出典</h2>
-<ul>
-<li><strong>AHS 2016</strong>：Orr SL ほか. Management of Adults With Acute Migraine in the Emergency Department. <em>Headache.</em> 2016;56(6):911–940.（ED での急性片頭痛治療）</li>
-<li><strong>AAN 2015</strong>：Marmura MJ ほか. Acute Treatment of Migraine in Adults. <em>Headache.</em> 2015.</li>
-<li><strong>慢性頭痛の診療ガイドライン 2021（日本神経学会・日本頭痛学会）</strong></li>
-<li><strong>ICHD-3</strong>：International Classification of Headache Disorders, 3rd edition.</li>
-</ul>
-<hr>
-<h2 id="関連ページ">関連ページ</h2>
-<ul>
-<li><a class="wiki-link" href="../頭痛.html">頭痛</a></li>
-<li><span class="wiki-missing">片頭痛</span></li>
-<li><span class="wiki-missing">群発頭痛</span></li>
-<li><span class="wiki-missing">巨細胞性動脈炎</span></li>
-</ul>
-    </div>
-    <footer class="page-footer">
-      <a href="../index.html">↑ 主訴ナビへ戻る</a>
-    </footer>
-  </article>
+
+        <ul>
+          <li><strong>頭痛頻度が月 8 日以上</strong> or <strong>急性期薬が月 10–15 日以上</strong>になっていれば<strong>予防薬の導入</strong>を検討（頭痛外来紹介）</li>
+          <li><strong>薬物乱用性頭痛（MOH）</strong>：NSAIDs/アセトアミノフェン 15 日/月以上、トリプタン/エルゴタミン 10 日/月以上で発症</li>
+        </ul>
+
+        <div class="callout callout-warning">
+          <div class="callout-title">トリプタンの注意</div>
+          <div class="callout-body"><ul>
+            <li><strong>禁忌</strong>：冠動脈疾患、脳梗塞既往、コントロール不良高血圧、妊娠、片麻痺性片頭痛、エルゴタミン 24 時間以内</li>
+            <li><strong>SSRI/SNRI 併用でセロトニン症候群</strong>（頻度低いが重要）</li>
+            <li><strong>服用は頭痛開始後早めに</strong>（遅れると効果低下）</li>
+          </ul></div>
+        </div>
+      </section>
+
+      <!-- §4 緊張型頭痛 -->
+      <section class="section-page" id="s4" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🔄 緊張型頭痛</h2>
+
+        <ul>
+          <li><strong>アセトアミノフェン 500–1000 mg</strong> or <strong>NSAIDs</strong>（ロキソプロフェン 60 mg）頓用</li>
+          <li><strong>慢性化・乱用</strong>に注意。<strong>月 10–15 日以上の使用は予防薬導入</strong>を</li>
+        </ul>
+      </section>
+
+      <!-- §5 群発頭痛 -->
+      <section class="section-page" id="s5" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🫁 群発頭痛（急性期）</h2>
+
+        <ul>
+          <li><strong>酸素 100% 12–15 L/min リザーバーマスクで 15–20 分</strong>：第一選択（NNT 低く、副作用少ない）</li>
+          <li><strong>スマトリプタン 3 mg 皮下注</strong> or <strong>6 mg</strong>：発作頓挫</li>
+          <li><strong>予防</strong>：ベラパミル、ステロイドテーパー（頭痛外来へ紹介）</li>
+        </ul>
+
+        <p>詳細・診断基準 → <span class="wiki-missing">群発頭痛</span></p>
+      </section>
+
+      <!-- §6 出典・関連 -->
+      <section class="section-page" id="s6" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>📚 出典・関連ページ</h2>
+
+        <h3>出典</h3>
+        <ul>
+          <li><strong>AHS 2016</strong>：Orr SL ほか. Management of Adults With Acute Migraine in the Emergency Department. <em>Headache.</em> 2016;56(6):911–940.（ED での急性片頭痛治療）</li>
+          <li><strong>AAN 2015</strong>：Marmura MJ ほか. Acute Treatment of Migraine in Adults. <em>Headache.</em> 2015.</li>
+          <li><strong>慢性頭痛の診療ガイドライン 2021（日本神経学会・日本頭痛学会）</strong></li>
+          <li><strong>ICHD-3</strong>：International Classification of Headache Disorders, 3rd edition.</li>
+        </ul>
+
+        <h3>関連ページ</h3>
+        <ul>
+          <li><a class="wiki-link" href="../頭痛.html">頭痛</a></li>
+          <li><span class="wiki-missing">片頭痛</span></li>
+          <li><span class="wiki-missing">群発頭痛</span></li>
+          <li><span class="wiki-missing">巨細胞性動脈炎</span></li>
+        </ul>
+      </section>
+
+    </article>
+  </main>
+
+  <nav class="hokuto-bottom">
+    <button class="hokuto-bottom__btn" type="button" id="navBack">
+      <span class="hokuto-bottom__icon">←</span><span>戻る</span>
+    </button>
+    <a class="hokuto-bottom__btn" href="../ツール.html">
+      <span class="hokuto-bottom__icon">⚙</span><span>ツール</span>
+    </a>
+    <a class="hokuto-bottom__btn" href="../index.html">
+      <span class="hokuto-bottom__icon">⌂</span><span>ホーム</span>
+    </a>
+  </nav>
+
+  <script>
+  (function(){
+    const menu = document.getElementById('sectionMenu');
+    const pages = document.querySelectorAll('.section-page');
+    const titleH1 = document.querySelector('.page-title');
+    const relatedSymp = document.getElementById('related-symptoms');
+
+    function showSection(id) {
+      menu.hidden = true;
+      if (titleH1) titleH1.hidden = true;
+      if (relatedSymp) relatedSymp.hidden = true;
+      pages.forEach(p => p.hidden = (p.id !== id));
+      window.scrollTo(0, 0);
+    }
+    function showMenu(scrollTarget) {
+      menu.hidden = false;
+      if (titleH1) titleH1.hidden = false;
+      if (relatedSymp) relatedSymp.hidden = false;
+      pages.forEach(p => p.hidden = true);
+      if (scrollTarget) {
+        if (scrollTarget.tagName === 'DETAILS') scrollTarget.open = true;
+        scrollTarget.scrollIntoView({behavior: 'instant', block: 'start'});
+      } else {
+        window.scrollTo(0, 0);
+      }
+    }
+    function syncFromHash() {
+      const id = (location.hash || '').replace('#','');
+      const target = id ? document.getElementById(id) : null;
+      if (target && target.classList.contains('section-page')) {
+        showSection(id);
+      } else if (target) {
+        showMenu(target);
+      } else {
+        showMenu();
+      }
+    }
+
+    window.addEventListener('hashchange', syncFromHash);
+    document.querySelectorAll('.back-to-menu').forEach(b => {
+      b.addEventListener('click', () => { history.pushState(null,'',location.pathname); showMenu(); });
+    });
+    const navBack = document.getElementById('navBack');
+    if (navBack) navBack.addEventListener('click', () => {
+      if (window.history.length > 1) history.back();
+      else window.location.href = '../index.html';
+    });
+
+    syncFromHash();
+  })();
+  </script>
 </body>
 </html>

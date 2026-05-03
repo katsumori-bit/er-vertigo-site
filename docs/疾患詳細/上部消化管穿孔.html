@@ -4,240 +4,353 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="color-scheme" content="light dark" />
-  <title>上部消化管穿孔</title>
+  <title>上部消化管穿孔 | ER ノート</title>
   <link rel="stylesheet" href="../er-note.css" />
 </head>
 <body>
-  <nav class="site-bar">
-    <a class="site-bar__back" href="../腹痛.html">← 腹痛へ戻る</a>
-    <span class="site-bar__title">上部消化管穿孔</span>
+  <header class="hokuto-top">
+    <a class="hokuto-top__btn" href="../薬剤情報.html">
+      <span class="hokuto-top__icon">℞</span><span>薬剤情報</span>
+    </a>
+    <a class="hokuto-top__btn" href="../表計算.html">
+      <span class="hokuto-top__icon">⊞</span><span>表計算</span>
+    </a>
+  </header>
+
+  <main class="hokuto-main">
+    <article class="note-shell">
+      <h1 class="page-title">上部消化管穿孔（Upper GI Perforation）</h1>
+
+      <!-- 即時アクションヘッダー -->
+      <div class="action-header">
+        <div class="action-header__title">⚡ 即時アクション</div>
+        <ol class="action-header__list">
+          <li><strong>胸部正面立位 X-線 + 腹部 CT で free air 検索</strong>（X-線で 85% 検出、Falciform / Rigler's sign も確認）</li>
+          <li><strong>NPO + NG チューブで胃内減圧</strong>、IV 補液（脱水補正）、<strong>IV PPI</strong>、経験的抗菌薬（ABPC/SBT 等）</li>
+          <li><strong>Boey score でリスク評価</strong>（術前ショック / 大きな腹腔内汚染 / 24 h 以上経過 = 各 1 点）</li>
+          <li><strong>外科コール</strong>：原則は緊急手術（大網充填）。Crofts 基準に合えば保存的治療も検討、ただし「中止基準」を必ず先に決める</li>
+        </ol>
+      </div>
+
+      <!-- §1〜§7 メニュータイル -->
+      <nav class="section-tiles" id="sectionMenu">
+        <a class="section-tile" href="#s1"><span class="section-tile__no">🩺</span><span class="section-tile__name">分類と病態</span></a>
+        <a class="section-tile" href="#s2"><span class="section-tile__no">📝</span><span class="section-tile__name">病歴<br><small>hunger pain</small></span></a>
+        <a class="section-tile" href="#s3"><span class="section-tile__no">👐</span><span class="section-tile__name">身体所見<br><small>板状硬</small></span></a>
+        <a class="section-tile" href="#s4"><span class="section-tile__no">🔍</span><span class="section-tile__name">初期診断と鑑別</span></a>
+        <a class="section-tile" href="#s5"><span class="section-tile__no">🧪</span><span class="section-tile__name">検査<br><small>X-線 / CT</small></span></a>
+        <a class="section-tile" href="#s6"><span class="section-tile__no">✅</span><span class="section-tile__name">確定診断</span></a>
+        <a class="section-tile" href="#s7"><span class="section-tile__no">💊</span><span class="section-tile__name">治療方針<br><small>保存 vs 手術</small></span></a>
+      </nav>
+
+      <!-- 関連主訴（双方向リンク） -->
+      <details class="sub-fold" id="related-symptoms">
+        <summary>📞 この疾患が該当する主訴</summary>
+        <div class="sub-fold__body">
+          <ul>
+            <li><a class="wiki-link" href="../腹痛.html">腹痛</a> — 突然発症の上腹部激痛、自力歩行不能</li>
+            <li><a class="wiki-link" href="../発熱.html">発熱</a> — 第三相（12 h 以降）で発熱、後壁穿通の膿瘍化</li>
+            <li><a class="wiki-link" href="../嘔気・嘔吐.html">嘔気・嘔吐</a> — 痛みに伴う反射性嘔吐</li>
+            <li><a class="wiki-link" href="../吐血.html">吐血</a> — 背景の消化性潰瘍出血を伴う場合</li>
+          </ul>
+        </div>
+      </details>
+
+      <!-- §1 分類と病態 -->
+      <section class="section-page" id="s1" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🩺 分類と病態</h2>
+
+        <p>上部消化管穿孔のなかで圧倒的に多いのは<strong>十二指腸球部前壁の穿孔</strong>。以下は基本的に<strong>穿孔性十二指腸潰瘍</strong>を念頭に置く。</p>
+
+        <h3>① 疾患</h3>
+        <ul>
+          <li>胃潰瘍／胃癌／十二指腸潰瘍 — 頻度は<strong>十二指腸潰瘍が圧倒的</strong></li>
+          <li>胃潰瘍は <strong>Modified Johnson 分類</strong>（Type I：胃角部／II：胃角＋十二指腸／III：幽門部／IV：高位潰瘍／V：薬剤性 NSAIDs など）</li>
+        </ul>
+
+        <h3>② 病態 — 上部と下部はここが違う</h3>
+        <p>漏出液のほとんどが胃液で<strong>通常無菌</strong>。<strong>すぐに敗血症にはならない</strong>。痛みは強いが治療反応性がよく重症度は低い。一方で致死的になるまで日数がかかるため、我慢して時間が経つと<strong>高浸透圧液による腹水シフトで著しい脱水・ショック</strong>として運ばれる（下部の敗血症性ショックとは違う）。</p>
+
+        <div class="callout callout-note">
+          <div class="callout-title">時間経過の 3 相</div>
+          <div class="callout-body">
+            <ul>
+              <li><strong>第一相（〜2 h）</strong>：突然発症、胃酸の腹膜刺激による上腹部激痛が全体に広がる → 板状硬。来院の多数</li>
+              <li><strong>第二相（2〜12 h）</strong>：板状硬で強痛が遷延。受診は少ない。<strong>この時点で大網などに被覆</strong>されれば第三相に進まず自然治癒</li>
+              <li><strong>第三相（12 h〜）</strong>：発熱・脱水進行。痛みや腹部症状はむしろマイルドになるが全身状態は増悪</li>
+            </ul>
+          </div>
+        </div>
+
+        <h3>③ 穿通（penetration）</h3>
+        <p>全層性の穴があくが周囲臓器に直接潰瘍が浸潤するため穿孔の形を取らない。<strong>後壁潰瘍に多い</strong>。十二指腸後壁の穿通は自然治癒せず<strong>後腹膜・網嚢腔の膿瘍</strong>になり、原因不明の発熱／敗血症で見つかる膿瘍を見たら鑑別にあげる。</p>
+      </section>
+
+      <!-- §2 病歴 -->
+      <section class="section-page" id="s2" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>📝 病歴</h2>
+
+        <p><strong>要点：</strong>「<strong>突然発症の上腹部激痛で自力歩行不能</strong>」が典型。<strong>空腹時痛（hunger pain）</strong>を必ず引き出す。</p>
+        <ul>
+          <li>発症数日〜数週間前から<strong>空腹時の心窩部痛</strong>あるいは違和感を自覚しているのが典型</li>
+          <li>発症は<strong>突然はじまる上腹部激痛</strong>。痛みのため自力歩行できず救急車来院、悪心嘔吐もしばしば</li>
+        </ul>
+
+        <div class="callout callout-tip">
+          <div class="callout-title">Hunger pain の引き出し方</div>
+          <div class="callout-body">
+            <p>「空腹時痛はあったか」と直接聞くと多くは「No」と返る。<strong>「1〜2 週間前から夜中や夕方、お腹がすいたとき、痛いまではいかなくても心窩部に変な感じはなかったか？」</strong>と尋ねると「ある」と返ることが多い。フリーエアを見つけて満足せず、etiology まで追う。</p>
+          </div>
+        </div>
+
+        <ul>
+          <li><strong>食後痛（post prandial pain）</strong>なら胃潰瘍を疑う</li>
+          <li><strong>急性膵炎との鑑別</strong>は問診で：<strong>sudden onset = 穿孔／acute onset = 膵炎</strong>。「急に痛くなりましたか」は禁句（誰でも yes）。<strong>「ある瞬間にスイッチを入れたように」か「数分かけて」か</strong>を区別できる聞き方をする</li>
+          <li><strong>リスクファクター</strong>：NSAIDs／ステロイド／タバコ／ストレスフルな生活</li>
+          <li><strong>可能性を下げる因子</strong>：PPI／H2 ブロッカー使用中、ピロリ除菌後、胃手術後（迷走神経切断や胃亜全摘で実質的に減酸手術になっている）</li>
+        </ul>
+      </section>
+
+      <!-- §3 身体所見 -->
+      <section class="section-page" id="s3" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>👐 身体所見</h2>
+
+        <p><strong>要点：</strong><strong>板状硬（board-like rigidity）を取りに行く</strong>。これを所見で判断できることが、救急室で消化管穿孔を診るときの最初のステップ。</p>
+        <ul>
+          <li><strong>仰臥位がとれず座位</strong>のことが多い（仰臥位だと腹壁が伸びて腹膜刺激が増悪）。診察時は膝屈曲しゆっくり仰臥位にする工夫</li>
+          <li><strong>腸雑音低下</strong>、聴取できないことも</li>
+          <li><strong>板状硬</strong>＋上腹部の強い圧痛</li>
+          <li><strong>板状硬では反跳痛がむしろわかりにくい</strong>（揺れる余裕がない）。下部消化管穿孔のほうが反跳痛は明瞭</li>
+          <li>腹直筋の厚みで防御の硬さに差が出る（若年男性に多い疾患で硬く出やすい、高齢者は弱くても腹膜炎の程度を反映していない）</li>
+          <li>大網・肝下面・肝円索で被覆されると<strong>痛みのピークを越え、筋性防御や反跳痛が消える</strong>（フリーエアはあっても）</li>
+        </ul>
+      </section>
+
+      <!-- §4 初期診断と鑑別 -->
+      <section class="section-page" id="s4" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🔍 初期診断と鑑別疾患</h2>
+
+        <p>診断の基本は<strong>身体所見</strong>。「板状硬」をもって上部消化管穿孔と判断し、<strong>検査に時間を費やさずコンサルト</strong>する。</p>
+        <ul>
+          <li><strong>鑑別</strong>：急性膵炎／胆石疾患／急性出血性びらん性胃炎／胃アニサキス症／下部消化管穿孔</li>
+          <li>胆石・胃疾患は強い自発痛でも<strong>板状硬にはならない</strong>。重症膵炎で炎症が後腹膜から腹壁側に回り込めば汎発性腹膜炎になり得る</li>
+          <li>姿勢は「上部穿孔＝座位、膵炎＝胸膝位」とされるが、結局腰をかがめている点では同じで逆もありうる</li>
+        </ul>
+      </section>
+
+      <!-- §5 検査 -->
+      <section class="section-page" id="s5" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🧪 検査</h2>
+
+        <h3>血液</h3>
+        <ul>
+          <li>特異的所見なし。十二指腸からの漏出で<strong>膵酵素が上昇</strong>することはある</li>
+          <li>付随所見の評価（潰瘍・癌の貧血、<strong>internal fluid shift による脱水</strong>と電解質）</li>
+        </ul>
+
+        <h3>単純 X 線（第一選択は胸部正面立位）</h3>
+        <ul>
+          <li><strong>85% でフリーエアを証明できる</strong></li>
+          <li>立位 5 分以上保持で<strong>1 cc のエアでも指摘可能</strong>とされるが、現実の感度はそこまで高くない</li>
+          <li>感度を下げる条件：立位保持できない／エアが周囲臓器でパッキング／読影者の技量</li>
+          <li><strong>臥位でも見える所見</strong>：<strong>Falciform ligament sign</strong>（肝鎌状靭帯が明瞭）／<strong>Rigler's sign</strong>（腸管外壁が浮き出る）</li>
+          <li>若年で典型病歴＋フリーエア確認 → <strong>追加画像なしで手術へ</strong>進める</li>
+        </ul>
+
+        <h3>腹部超音波</h3>
+        <ul>
+          <li>十二指腸球部前壁は肝下面に接するので<strong>画出しやすい</strong></li>
+          <li>限局した壁の浮腫性肥厚（低エコー）＋潰瘍底のエア（高エコー）が壁外まで連続 → 穿孔と部位の同時診断が可能</li>
+          <li>熟練者ならば微量フリーエアも同定可（プローブ圧迫で消える高エコーシャドー＝フリーエア、変わらないなら腸管内ガス）</li>
+          <li>胃体部より口側・後壁病変は深部で画出困難</li>
+        </ul>
+
+        <h3>腹部 CT</h3>
+        <ul>
+          <li>フリーエア検出率は高い。潰瘍は局在性のある浮腫性肥厚（造影効果のある肥厚は胃癌の可能性）</li>
+          <li>典型例の十二指腸潰瘍の穿孔は 5 mm 程度で<strong>穿孔部自体は見えないことも</strong></li>
+          <li><strong>CT でも見えないフリーエア（≒ 8%）</strong>あり、「フリーエアなし＝穿孔なし」とは言えない</li>
+        </ul>
+
+        <div class="callout callout-tip">
+          <div class="callout-title">CT の本当の意義</div>
+          <div class="callout-body">
+            <p>症状の強い穿孔疑い症例で <strong>「手術ではない他疾患を見逃さない」</strong> こと。代表は<strong>急性膵炎</strong>。X 線で見えないほどのエアしかなく症状が軽い穿孔は<strong>保存治癒する可能性が高い</strong>。逆に大量フリーエアで腹部全体に炎症が広がっている症例では CT で局在を特定できないことも珍しくない。</p>
+          </div>
+        </div>
+
+        <h3>上部消化管内視鏡・上部消化管造影</h3>
+        <ul>
+          <li>内視鏡：穿孔疑いでも現代では必ずしも禁忌でない。<strong>保存治療前提</strong>で穿孔の確認、あるいは大網充填による治療まで報告あり。手術決定なら不要</li>
+          <li>上部造影：他で穿孔を証明できないときに考慮。エアは漏れても水は漏れないことや、来院時すでにシールされていることもあり管外漏出像が必ず得られるわけではない</li>
+        </ul>
+      </section>
+
+      <!-- §6 確定診断 -->
+      <section class="section-page" id="s6" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>✅ 確定診断</h2>
+
+        <p>身体所見＋画像（フリーエア）で確定。<strong>フリーエアのない消化管穿孔</strong>も 10% 弱存在するため、強い臨床疑いがあるなら<strong>他疾患と判明しないかぎり穿孔を鑑別から外さない</strong>。<strong>審査腹腔鏡</strong>もオプション。</p>
+
+        <details class="section-fold"><summary>消化管穿孔ではないフリーエアの原因</summary>
+          <div class="callout-body">
+            <ul>
+              <li><strong>腹腔内病変</strong>：腸管気腫症（PIP）／ガス産生菌感染（細菌性腹膜炎、膿瘍破裂、子宮留膿腫穿孔、気腫性胆嚢炎）／腹部操作（穿刺・腹膜透析・子宮操作）／術後</li>
+              <li><strong>胸腔由来</strong>：陽圧人工換気</li>
+            </ul>
+            <small>※ 大腸菌などの通性嫌気性菌でもガス産生は起こる。</small>
+          </div>
+        </details>
+      </section>
+
+      <!-- §7 治療方針 -->
+      <section class="section-page" id="s7" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>💊 治療方針</h2>
+
+        <p><strong>要点：</strong>消化管穿孔の原則は「診断つき次第手術」。<strong>上部は保存治療という選択肢が存在する</strong>のが下部との違い。</p>
+
+        <h3>① 非手術（保存）治療</h3>
+        <p>奏効するケースが昔から知られているが、<strong>明確な施行基準がない</strong>のが最大の問題。Crofts らの基準は<strong>発症 24 時間以上</strong>で疼痛が十分局在し、水溶性造影剤で漏出が止まっており、24 時間以内は頻回診察、<strong>70 歳以上は不適</strong>。</p>
+
+        <div class="table-wrap"><table>
+          <thead><tr><th>来院タイミング</th><th>保存治療施行基準（例）</th></tr></thead>
+          <tbody>
+            <tr><td><strong>発症早期</strong></td><td>① 70 歳未満／② コミュニケーション可能（痛み程度を評価できる）／③ 重篤な既往なし／④ 発症時刻が明らか／⑤ バイタル正常</td></tr>
+            <tr><td><strong>数日後来院</strong></td><td>① 自覚症状が改善傾向／② 汎発性腹膜炎ではない</td></tr>
+          </tbody>
+        </table></div>
+
+        <p><strong>保存治療の内容（例）</strong>：絶飲食／補液・脱水補正／NG 減圧（必須でないかも）／抗潰瘍薬（PPI／H2 ブロッカー）／抗菌薬（ABPC/SBT など）。</p>
+
+        <div class="callout callout-warning">
+          <div class="callout-title">最も重要なのは「中止基準」</div>
+          <div class="callout-body">
+            <p>基準を治療開始前に決めておかないと、奏効していなくてもダラダラ続いてしまう。</p>
+            <ul>
+              <li>バイタル・循環の変動（呼吸異常／低血圧／頻脈／尿量低下／高熱）</li>
+              <li>痛みが改善しない</li>
+              <li>腹部所見が改善しない</li>
+            </ul>
+            <p><strong>発症から 12 時間を超えて手術すると死亡率・合併症率が有意に上昇</strong>するとの報告があるため、<strong>入院半日以内</strong>には保存継続可能か再評価する。<br>
+            高齢者・全身不良を理由に手術を回避するのは標準的でない（保存治療の死亡率が 30% との報告あり）。</p>
+          </div>
+        </div>
+
+        <h3>② 穿孔性十二指腸潰瘍の手術</h3>
+        <ul>
+          <li>ほとんどが<strong>球部前壁穿孔</strong>。第一選択は<strong>大網充填による穿孔部閉鎖術</strong>（パンチで穴をあけたような円形の小孔が典型）</li>
+          <li><strong>腹腔鏡下手術</strong>は手術時間こそ長いが、術後疼痛・入院期間・創感染で開腹より優れる</li>
+        </ul>
+
+        <h3>③ 穿孔性胃潰瘍の手術</h3>
+        <ul>
+          <li>第一選択は<strong>穿孔部を含む幽門側胃切除</strong>。Type II・III では<strong>減酸手術（迷走神経切断 or 亜全摘）</strong>を併用</li>
+          <li>耐術不能なら部分切除／大網充填＋生検（biopsy + patch closure）</li>
+          <li>本邦の胃癌手術はリンパ節郭清を重視、穿孔時切除より<strong>診断・病期確定後の再手術</strong>を好む傾向</li>
+        </ul>
+
+        <h3>④ 重症例（第三相）の手術</h3>
+        <ul>
+          <li>発症から数日経過、重度の脱水からショック</li>
+          <li><strong>慌てて手術場に駆け込まない</strong> — 体重の 10%（60 kg なら 6 L）の喪失があり得る。麻酔導入で循環虚脱・心停止のリスク</li>
+          <li>術前にこの<strong>2/3 程度（4 L 前後）は補液</strong>してから手術。術式は救命第一</li>
+        </ul>
+
+        <h3>⑤ 難治性十二指腸潰瘍</h3>
+        <ul>
+          <li>大きな穿孔／高度狭窄／2 度目の穿孔／治療中の発症／除菌後の発症／薬物療法困難 — このような場合は<strong>減酸手術（V&amp;P：vagotomy + pyloroplasty／V&amp;A：vagotomy + antrectomy）</strong>を考慮</li>
+        </ul>
+
+        <h3>このページから張るリンク</h3>
+        <ul>
+          <li><a class="wiki-link" href="急性膵炎.html">急性膵炎</a>（最大の鑑別、sudden vs acute）</li>
+          <li><a class="wiki-link" href="胆石症・急性胆嚢炎.html">胆石症・急性胆嚢炎</a>（強い自発痛だが板状硬にならない）</li>
+          <li><a class="wiki-link" href="アニサキス症.html">アニサキス症</a>（鑑別）</li>
+          <li><a class="wiki-link" href="急性潰瘍・急性胃炎.html">急性潰瘍・急性胃炎</a>（背景疾患）</li>
+          <li><a class="wiki-link" href="下部消化管穿孔.html">下部消化管穿孔</a>（板状硬にならず反跳痛が明瞭）</li>
+        </ul>
+
+        <h3>出典</h3>
+        <ul>
+          <li>窪田忠夫『フラッシュアップ急性腹症』第 2 版（中外医学社）— 章構成の踏襲元</li>
+          <li>Crofts TJ, et al. <em>N Engl J Med</em> 1989 — 保存治療の比較</li>
+          <li>Sanabria A, et al. <em>Cochrane Database Syst Rev</em> — 腹腔鏡 vs 開腹</li>
+          <li>急性腹症診療ガイドライン 2015（日本腹部救急医学会）</li>
+        </ul>
+      </section>
+
+    </article>
+  </main>
+
+  <nav class="hokuto-bottom">
+    <button class="hokuto-bottom__btn" type="button" id="navBack">
+      <span class="hokuto-bottom__icon">←</span><span>戻る</span>
+    </button>
+    <a class="hokuto-bottom__btn" href="../ツール.html">
+      <span class="hokuto-bottom__icon">⚙</span><span>ツール</span>
+    </a>
+    <a class="hokuto-bottom__btn" href="../index.html">
+      <span class="hokuto-bottom__icon">⌂</span><span>ホーム</span>
+    </a>
   </nav>
-  <article class="note-shell">
-    <header class="note-header">
-      <h1>上部消化管穿孔（Upper GI Perforation）</h1>
-      <p class="source-badge">元: 急性腹症 参考用.md（窪田『フラッシュアップ急性腹症』第 2 版）の章構成を踏襲した要約 ／ 補完出典は文末記載</p>
-    </header>
-    <details class="toc"><summary>目次(原著章順)</summary><ol>
-      <li><a href="#分類">分類と病態</a></li>
-      <li><a href="#病歴">病歴</a></li>
-      <li><a href="#身体所見">身体所見</a></li>
-      <li><a href="#初期診断">初期診断と鑑別疾患</a></li>
-      <li><a href="#検査">検査</a></li>
-      <li><a href="#確定診断">確定診断</a></li>
-      <li><a href="#治療">治療方針</a></li>
-    </ol></details>
-    <div class="md-body">
 
-<p>#ER #救急 #腹痛 #穿孔 #十二指腸潰瘍 #フリーエア</p>
+  <script>
+  (function(){
+    const menu = document.getElementById('sectionMenu');
+    const pages = document.querySelectorAll('.section-page');
+    const titleH1 = document.querySelector('.page-title');
+    const relatedSymp = document.getElementById('related-symptoms');
 
-<p>上部消化管穿孔のなかで圧倒的に多いのは<strong>十二指腸球部前壁の穿孔</strong>。以下は基本的に<strong>穿孔性十二指腸潰瘍</strong>を念頭に置く。</p>
+    function showSection(id) {
+      menu.hidden = true;
+      if (titleH1) titleH1.hidden = true;
+      if (relatedSymp) relatedSymp.hidden = true;
+      pages.forEach(p => p.hidden = (p.id !== id));
+      window.scrollTo(0, 0);
+    }
+    function showMenu(scrollTarget) {
+      menu.hidden = false;
+      if (titleH1) titleH1.hidden = false;
+      if (relatedSymp) relatedSymp.hidden = false;
+      pages.forEach(p => p.hidden = true);
+      if (scrollTarget) {
+        if (scrollTarget.tagName === 'DETAILS') scrollTarget.open = true;
+        scrollTarget.scrollIntoView({behavior: 'instant', block: 'start'});
+      } else {
+        window.scrollTo(0, 0);
+      }
+    }
+    function syncFromHash() {
+      const id = (location.hash || '').replace('#','');
+      const target = id ? document.getElementById(id) : null;
+      if (target && target.classList.contains('section-page')) {
+        showSection(id);
+      } else if (target) {
+        showMenu(target);
+      } else {
+        showMenu();
+      }
+    }
 
-<h2 id="分類">分類と病態</h2>
+    window.addEventListener('hashchange', syncFromHash);
+    document.querySelectorAll('.back-to-menu').forEach(b => {
+      b.addEventListener('click', () => { history.pushState(null,'',location.pathname); showMenu(); });
+    });
+    const navBack = document.getElementById('navBack');
+    if (navBack) navBack.addEventListener('click', () => {
+      if (window.history.length > 1) history.back();
+      else window.location.href = '../index.html';
+    });
 
-<h3>① 疾患</h3>
-<ul>
-<li>胃潰瘍／胃癌／十二指腸潰瘍 — 頻度は<strong>十二指腸潰瘍が圧倒的</strong></li>
-<li>胃潰瘍は <strong>Modified Johnson 分類</strong>（Type I：胃角部／II：胃角＋十二指腸／III：幽門部／IV：高位潰瘍／V：薬剤性 NSAIDs など）</li>
-</ul>
-
-<h3>② 病態 — 上部と下部はここが違う</h3>
-<p>漏出液のほとんどが胃液で<strong>通常無菌</strong>。<strong>すぐに敗血症にはならない</strong>。痛みは強いが治療反応性がよく重症度は低い。一方で致死的になるまで日数がかかるため、我慢して時間が経つと<strong>高浸透圧液による腹水シフトで著しい脱水・ショック</strong>として運ばれる（下部の敗血症性ショックとは違う）。</p>
-
-<div class="callout callout-note">
-<div class="callout-title">時間経過の 3 相</div>
-<div class="callout-body">
-<ul>
-<li><strong>第一相（〜2 h）</strong>：突然発症、胃酸の腹膜刺激による上腹部激痛が全体に広がる → 板状硬。来院の多数</li>
-<li><strong>第二相（2〜12 h）</strong>：板状硬で強痛が遷延。受診は少ない。<strong>この時点で大網などに被覆</strong>されれば第三相に進まず自然治癒</li>
-<li><strong>第三相（12 h〜）</strong>：発熱・脱水進行。痛みや腹部症状はむしろマイルドになるが全身状態は増悪</li>
-</ul>
-</div>
-</div>
-
-<h3>③ 穿通（penetration）</h3>
-<p>全層性の穴があくが周囲臓器に直接潰瘍が浸潤するため穿孔の形を取らない。<strong>後壁潰瘍に多い</strong>。十二指腸後壁の穿通は自然治癒せず<strong>後腹膜・網嚢腔の膿瘍</strong>になり、原因不明の発熱／敗血症で見つかる膿瘍を見たら鑑別にあげる。</p>
-<hr>
-
-<h2 id="病歴">病歴</h2>
-<p><strong>要点：</strong>「<strong>突然発症の上腹部激痛で自力歩行不能</strong>」が典型。<strong>空腹時痛（hunger pain）</strong>を必ず引き出す。</p>
-<ul>
-<li>発症数日〜数週間前から<strong>空腹時の心窩部痛</strong>あるいは違和感を自覚しているのが典型</li>
-<li>発症は<strong>突然はじまる上腹部激痛</strong>。痛みのため自力歩行できず救急車来院、悪心嘔吐もしばしば</li>
-</ul>
-
-<div class="callout callout-tip">
-<div class="callout-title">Hunger pain の引き出し方</div>
-<div class="callout-body">
-「空腹時痛はあったか」と直接聞くと多くは「No」と返る。<strong>「1〜2 週間前から夜中や夕方、お腹がすいたとき、痛いまではいかなくても心窩部に変な感じはなかったか？」</strong>と尋ねると「ある」と返ることが多い。フリーエアを見つけて満足せず、etiology まで追う。
-</div>
-</div>
-
-<ul>
-<li><strong>食後痛（post prandial pain）</strong>なら胃潰瘍を疑う</li>
-<li><strong>急性膵炎との鑑別</strong>は問診で：<strong>sudden onset = 穿孔／acute onset = 膵炎</strong>。「急に痛くなりましたか」は禁句（誰でも yes）。<strong>「ある瞬間にスイッチを入れたように」か「数分かけて」か</strong>を区別できる聞き方をする</li>
-<li><strong>リスクファクター</strong>：NSAIDs／ステロイド／タバコ／ストレスフルな生活</li>
-<li><strong>可能性を下げる因子</strong>：PPI／H2 ブロッカー使用中、ピロリ除菌後、胃手術後（迷走神経切断や胃亜全摘で実質的に減酸手術になっている）</li>
-</ul>
-<hr>
-
-<h2 id="身体所見">身体所見</h2>
-<p><strong>要点：</strong><strong>板状硬（board-like rigidity）を取りに行く</strong>。これを所見で判断できることが、救急室で消化管穿孔を診るときの最初のステップ。</p>
-<ul>
-<li><strong>仰臥位がとれず座位</strong>のことが多い（仰臥位だと腹壁が伸びて腹膜刺激が増悪）。診察時は膝屈曲しゆっくり仰臥位にする工夫</li>
-<li><strong>腸雑音低下</strong>、聴取できないことも</li>
-<li><strong>板状硬</strong>＋上腹部の強い圧痛</li>
-<li><strong>板状硬では反跳痛がむしろわかりにくい</strong>（揺れる余裕がない）。下部消化管穿孔のほうが反跳痛は明瞭</li>
-<li>腹直筋の厚みで防御の硬さに差が出る（若年男性に多い疾患で硬く出やすい、高齢者は弱くても腹膜炎の程度を反映していない）</li>
-<li>大網・肝下面・肝円索で被覆されると<strong>痛みのピークを越え、筋性防御や反跳痛が消える</strong>（フリーエアはあっても）</li>
-</ul>
-<hr>
-
-<h2 id="初期診断">初期診断と鑑別疾患</h2>
-<p>診断の基本は<strong>身体所見</strong>。「板状硬」をもって上部消化管穿孔と判断し、<strong>検査に時間を費やさずコンサルト</strong>する。</p>
-<ul>
-<li><strong>鑑別</strong>：急性膵炎／胆石疾患／急性出血性びらん性胃炎／胃アニサキス症／下部消化管穿孔</li>
-<li>胆石・胃疾患は強い自発痛でも<strong>板状硬にはならない</strong>。重症膵炎で炎症が後腹膜から腹壁側に回り込めば汎発性腹膜炎になり得る</li>
-<li>姿勢は「上部穿孔＝座位、膵炎＝胸膝位」とされるが、結局腰をかがめている点では同じで逆もありうる</li>
-</ul>
-<hr>
-
-<h2 id="検査">検査</h2>
-
-<h3>血液</h3>
-<ul>
-<li>特異的所見なし。十二指腸からの漏出で<strong>膵酵素が上昇</strong>することはある</li>
-<li>付随所見の評価（潰瘍・癌の貧血、<strong>internal fluid shift による脱水</strong>と電解質）</li>
-</ul>
-
-<h3>単純 X 線（第一選択は胸部正面立位）</h3>
-<ul>
-<li><strong>85% でフリーエアを証明できる</strong></li>
-<li>立位 5 分以上保持で<strong>1 cc のエアでも指摘可能</strong>とされるが、現実の感度はそこまで高くない</li>
-<li>感度を下げる条件：立位保持できない／エアが周囲臓器でパッキング／読影者の技量</li>
-<li><strong>臥位でも見える所見</strong>：<strong>Falciform ligament sign</strong>（肝鎌状靭帯が明瞭）／<strong>Rigler's sign</strong>（腸管外壁が浮き出る）</li>
-<li>若年で典型病歴＋フリーエア確認 → <strong>追加画像なしで手術へ</strong>進める</li>
-</ul>
-
-<h3>腹部超音波</h3>
-<ul>
-<li>十二指腸球部前壁は肝下面に接するので<strong>画出しやすい</strong></li>
-<li>限局した壁の浮腫性肥厚（低エコー）＋潰瘍底のエア（高エコー）が壁外まで連続 → 穿孔と部位の同時診断が可能</li>
-<li>熟練者ならば微量フリーエアも同定可（プローブ圧迫で消える高エコーシャドー＝フリーエア、変わらないなら腸管内ガス）</li>
-<li>胃体部より口側・後壁病変は深部で画出困難</li>
-</ul>
-
-<h3>腹部 CT</h3>
-<ul>
-<li>フリーエア検出率は高い。潰瘍は局在性のある浮腫性肥厚（造影効果のある肥厚は胃癌の可能性）</li>
-<li>典型例の十二指腸潰瘍の穿孔は 5 mm 程度で<strong>穿孔部自体は見えないことも</strong></li>
-<li><strong>CT でも見えないフリーエア（≒ 8%）</strong>あり、「フリーエアなし＝穿孔なし」とは言えない</li>
-</ul>
-
-<div class="callout callout-tip">
-<div class="callout-title">CT の本当の意義</div>
-<div class="callout-body">
-症状の強い穿孔疑い症例で <strong>「手術ではない他疾患を見逃さない」</strong> こと。代表は<strong>急性膵炎</strong>。X 線で見えないほどのエアしかなく症状が軽い穿孔は<strong>保存治癒する可能性が高い</strong>。逆に大量フリーエアで腹部全体に炎症が広がっている症例では CT で局在を特定できないことも珍しくない。
-</div>
-</div>
-
-<h3>上部消化管内視鏡・上部消化管造影</h3>
-<ul>
-<li>内視鏡：穿孔疑いでも現代では必ずしも禁忌でない。<strong>保存治療前提</strong>で穿孔の確認、あるいは大網充填による治療まで報告あり。手術決定なら不要</li>
-<li>上部造影：他で穿孔を証明できないときに考慮。エアは漏れても水は漏れないことや、来院時すでにシールされていることもあり管外漏出像が必ず得られるわけではない</li>
-</ul>
-<hr>
-
-<h2 id="確定診断">確定診断</h2>
-<p>身体所見＋画像（フリーエア）で確定。<strong>フリーエアのない消化管穿孔</strong>も 10% 弱存在するため、強い臨床疑いがあるなら<strong>他疾患と判明しないかぎり穿孔を鑑別から外さない</strong>。<strong>審査腹腔鏡</strong>もオプション。</p>
-
-<details class="section-fold"><summary>消化管穿孔ではないフリーエアの原因</summary>
-<div class="callout-body">
-<ul>
-<li><strong>腹腔内病変</strong>：腸管気腫症（PIP）／ガス産生菌感染（細菌性腹膜炎、膿瘍破裂、子宮留膿腫穿孔、気腫性胆嚢炎）／腹部操作（穿刺・腹膜透析・子宮操作）／術後</li>
-<li><strong>胸腔由来</strong>：陽圧人工換気</li>
-</ul>
-<small>※ 大腸菌などの通性嫌気性菌でもガス産生は起こる。</small>
-</div>
-</details>
-<hr>
-
-<h2 id="治療">治療方針</h2>
-<p><strong>要点：</strong>消化管穿孔の原則は「診断つき次第手術」。<strong>上部は保存治療という選択肢が存在する</strong>のが下部との違い。</p>
-
-<h3>① 非手術（保存）治療</h3>
-<p>奏効するケースが昔から知られているが、<strong>明確な施行基準がない</strong>のが最大の問題。Crofts らの基準は<strong>発症 24 時間以上</strong>で疼痛が十分局在し、水溶性造影剤で漏出が止まっており、24 時間以内は頻回診察、<strong>70 歳以上は不適</strong>。</p>
-
-<div class="table-wrap"><table>
-<thead><tr><th>来院タイミング</th><th>保存治療施行基準（例）</th></tr></thead>
-<tbody>
-<tr><td><strong>発症早期</strong></td><td>① 70 歳未満／② コミュニケーション可能（痛み程度を評価できる）／③ 重篤な既往なし／④ 発症時刻が明らか／⑤ バイタル正常</td></tr>
-<tr><td><strong>数日後来院</strong></td><td>① 自覚症状が改善傾向／② 汎発性腹膜炎ではない</td></tr>
-</tbody></table></div>
-
-<p><strong>保存治療の内容（例）</strong>：絶飲食／補液・脱水補正／NG 減圧（必須でないかも）／抗潰瘍薬（PPI／H2 ブロッカー）／抗菌薬（ABPC/SBT など）。</p>
-
-<div class="callout callout-warning">
-<div class="callout-title">最も重要なのは「中止基準」</div>
-<div class="callout-body">
-基準を治療開始前に決めておかないと、奏効していなくてもダラダラ続いてしまう。
-<ul>
-<li>バイタル・循環の変動（呼吸異常／低血圧／頻脈／尿量低下／高熱）</li>
-<li>痛みが改善しない</li>
-<li>腹部所見が改善しない</li>
-</ul>
-<strong>発症から 12 時間を超えて手術すると死亡率・合併症率が有意に上昇</strong>するとの報告があるため、<strong>入院半日以内</strong>には保存継続可能か再評価する。<br>
-高齢者・全身不良を理由に手術を回避するのは標準的でない（保存治療の死亡率が 30% との報告あり）。
-</div>
-</div>
-
-<h3>② 穿孔性十二指腸潰瘍の手術</h3>
-<ul>
-<li>ほとんどが<strong>球部前壁穿孔</strong>。第一選択は<strong>大網充填による穿孔部閉鎖術</strong>（パンチで穴をあけたような円形の小孔が典型）</li>
-<li><strong>腹腔鏡下手術</strong>は手術時間こそ長いが、術後疼痛・入院期間・創感染で開腹より優れる</li>
-</ul>
-
-<h3>③ 穿孔性胃潰瘍の手術</h3>
-<ul>
-<li>第一選択は<strong>穿孔部を含む幽門側胃切除</strong>。Type II・III では<strong>減酸手術（迷走神経切断 or 亜全摘）</strong>を併用</li>
-<li>耐術不能なら部分切除／大網充填＋生検（biopsy + patch closure）</li>
-<li>本邦の胃癌手術はリンパ節郭清を重視、穿孔時切除より<strong>診断・病期確定後の再手術</strong>を好む傾向</li>
-</ul>
-
-<h3>④ 重症例（第三相）の手術</h3>
-<ul>
-<li>発症から数日経過、重度の脱水からショック</li>
-<li><strong>慌てて手術場に駆け込まない</strong> — 体重の 10%（60 kg なら 6 L）の喪失があり得る。麻酔導入で循環虚脱・心停止のリスク</li>
-<li>術前にこの<strong>2/3 程度（4 L 前後）は補液</strong>してから手術。術式は救命第一</li>
-</ul>
-
-<h3>⑤ 難治性十二指腸潰瘍</h3>
-<ul>
-<li>大きな穿孔／高度狭窄／2 度目の穿孔／治療中の発症／除菌後の発症／薬物療法困難 — このような場合は<strong>減酸手術（V&amp;P：vagotomy + pyloroplasty／V&amp;A：vagotomy + antrectomy）</strong>を考慮</li>
-</ul>
-<hr>
-
-<h2>このページから張るリンク</h2>
-<ul>
-<li><a class="wiki-link" href="../腹痛.html">← 腹痛入口へ戻る</a></li>
-<li><a class="wiki-link" href="急性膵炎.html">急性膵炎</a>（最大の鑑別、sudden vs acute）</li>
-<li><a class="wiki-link" href="胆石症・急性胆嚢炎.html">胆石症・急性胆嚢炎</a>（強い自発痛だが板状硬にならない）</li>
-<li><a class="wiki-link" href="アニサキス症.html">アニサキス症</a>（鑑別）</li>
-<li><a class="wiki-link" href="急性潰瘍・急性胃炎.html">急性潰瘍・急性胃炎</a>（背景疾患）</li>
-<li><a class="wiki-link" href="下部消化管穿孔.html">下部消化管穿孔</a>（板状硬にならず反跳痛が明瞭）</li>
-</ul>
-
-<h2>出典</h2>
-<ul>
-<li>窪田忠夫『フラッシュアップ急性腹症』第 2 版（中外医学社）— 章構成の踏襲元</li>
-<li>Crofts TJ, et al. <em>N Engl J Med</em> 1989 — 保存治療の比較</li>
-<li>Sanabria A, et al. <em>Cochrane Database Syst Rev</em> — 腹腔鏡 vs 開腹</li>
-<li>急性腹症診療ガイドライン 2015（日本腹部救急医学会）</li>
-</ul>
-
-    </div>
-    <footer class="page-footer">
-      <a href="../index.html">↑ 主訴ナビへ戻る</a>
-    </footer>
-  </article>
+    syncFromHash();
+  })();
+  </script>
 </body>
 </html>

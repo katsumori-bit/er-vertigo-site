@@ -4,36 +4,73 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="color-scheme" content="light dark" />
-  <title>足関節痛</title>
+  <title>足関節痛 | ER ノート</title>
   <link rel="stylesheet" href="../er-note.css" />
 </head>
 <body>
-  <nav class="site-bar">
-    <a class="site-bar__back" href="../index.html">← 主訴ナビ</a>
-    <span class="site-bar__title">足関節痛</span>
-  </nav>
-  <article class="note-shell">
-    <header class="note-header">
-      <h1>足関節痛</h1>
-      <p class="source-badge">更新元: HTML 直編集</p>
-    </header>
-    <details class="toc"><summary>目次（8 セクション）</summary><ol><li><a href="#鑑別ナビゲーション">鑑別ナビゲーション</a></li><li><a href="#ottawa-ankle-rulesレントゲン撮影基準">Ottawa Ankle Rules（レントゲン撮影基準）</a></li><li><a href="#身体所見のチェック項目">身体所見のチェック項目</a></li><li><a href="#捻挫でも疑うべき骨折">捻挫でも疑うべき骨折</a></li><li><a href="#初期対応rice">初期対応（RICE）</a></li><li><a href="#disposition">Disposition</a></li><li><a href="#出典">出典</a></li><li><a href="#関連詳細ページ">関連詳細ページ</a></li></ol></details>
-    <div class="md-body">
-<p>#足関節 #ナビゲーション #ER #Ottawa #捻挫</p>
-<div class="callout callout-summary">
-<div class="callout-title">このページは「詳細プロトコル」</div>
-<div class="callout-body"><ul>
-<li>部位の入口から来た場合は、まず <a class="wiki-link" href="../足関節・足部の外傷.html">足関節・足部の外傷</a> で鑑別を絞る。</li>
-<li>本ページでは <strong>Ottawa ルール・診察手順・見逃し回避</strong> を詳しく確認する。</li>
-<li>入口に戻るときは <a class="wiki-link" href="../足関節・足部の外傷.html">足関節・足部の外傷</a> へ。</li>
-</ul></div>
-</div>
-<div class="callout callout-tip">
-<div class="callout-title">使い分け</div>
-<div class="callout-body"><p><strong>入口ハブ</strong>：<a class="wiki-link" href="../足関節・足部の外傷.html">足関節・足部の外傷</a> / <strong>詳細プロトコル</strong>：このページ（足関節痛）</p></div>
-</div>
-<h2 id="鑑別ナビゲーション">鑑別ナビゲーション</h2>
-<pre><code>足関節痛
+  <header class="hokuto-top">
+    <a class="hokuto-top__btn" href="../薬剤情報.html">
+      <span class="hokuto-top__icon">℞</span><span>薬剤情報</span>
+    </a>
+    <a class="hokuto-top__btn" href="../表計算.html">
+      <span class="hokuto-top__icon">⊞</span><span>表計算</span>
+    </a>
+  </header>
+
+  <main class="hokuto-main">
+    <article class="note-shell">
+      <h1 class="page-title">足関節痛</h1>
+
+      <!-- 即時アクションヘッダー（常時 sticky） -->
+      <div class="action-header">
+        <div class="action-header__title">⚡ 即時アクション</div>
+        <ol class="action-header__list">
+          <li><strong>外傷 vs 非外傷</strong>を区別</li>
+          <li><strong>慢性 vs 急性</strong></li>
+          <li><strong>Achilles tendinopathy / 痛風 / 関節炎 / 神経痛</strong> などを鑑別</li>
+          <li><strong>MRI / 関節穿刺</strong>（化膿性関節炎・痛風結晶）</li>
+        </ol>
+      </div>
+
+      <!-- メニュータイル -->
+      <nav class="section-tiles" id="sectionMenu">
+        <a class="section-tile" href="#s1"><span class="section-tile__no">🧭</span><span class="section-tile__name">鑑別ナビ<br><small>受傷機転別</small></span></a>
+        <a class="section-tile" href="#s2"><span class="section-tile__no">📐</span><span class="section-tile__name">Ottawa<br><small>撮影基準</small></span></a>
+        <a class="section-tile" href="#s3"><span class="section-tile__no">🩺</span><span class="section-tile__name">身体所見<br><small>部位別</small></span></a>
+        <a class="section-tile" href="#s4"><span class="section-tile__no">⚠️</span><span class="section-tile__name">捻挫様骨折<br><small>見逃し</small></span></a>
+        <a class="section-tile" href="#s5"><span class="section-tile__no">💉</span><span class="section-tile__name">初期対応<br><small>RICE</small></span></a>
+        <a class="section-tile" href="#s6"><span class="section-tile__no">📤</span><span class="section-tile__name">disposition</span></a>
+        <a class="section-tile" href="#s7"><span class="section-tile__no">📚</span><span class="section-tile__name">出典<br><small>関連</small></span></a>
+      </nav>
+
+      <!-- 関連主訴（双方向リンク） -->
+      <details class="sub-fold" id="related-symptoms">
+        <summary>📞 この疾患が該当する主訴</summary>
+        <div class="sub-fold__body">
+          <ul>
+            <li><a class="wiki-link" href="../足関節・足部の外傷.html">足関節・足部の外傷</a> — 入口ハブから本詳細プロトコルへ</li>
+          </ul>
+        </div>
+      </details>
+
+      <!-- 使い分けメモ（メニュー画面下に常設） -->
+      <details class="sub-fold" id="usage-note">
+        <summary>このページは「詳細プロトコル」</summary>
+        <div class="sub-fold__body">
+          <ul>
+            <li>部位の入口から来た場合は、まず <a class="wiki-link" href="../足関節・足部の外傷.html">足関節・足部の外傷</a> で鑑別を絞る。</li>
+            <li>本ページでは <strong>Ottawa ルール・診察手順・見逃し回避</strong> を詳しく確認する。</li>
+            <li>入口に戻るときは <a class="wiki-link" href="../足関節・足部の外傷.html">足関節・足部の外傷</a> へ。</li>
+          </ul>
+          <p><strong>使い分け</strong>：<strong>入口ハブ</strong>：<a class="wiki-link" href="../足関節・足部の外傷.html">足関節・足部の外傷</a> / <strong>詳細プロトコル</strong>：このページ（足関節痛）</p>
+        </div>
+      </details>
+
+      <!-- §1 鑑別ナビゲーション -->
+      <section class="section-page" id="s1" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🧭 鑑別ナビゲーション</h2>
+        <pre><code>足関節痛
 ├─ 内反捻挫（内側に足がねじれる）
 │   ├─ ATFL 損傷（最多） → [[ATFL損傷]]
 │   ├─ 足関節外果骨折（果部骨折）→ [[足関節果部骨折]]
@@ -49,66 +86,166 @@
 │   ├─ 距骨骨折 → [[距骨骨折]]
 │   └─ リスフラン脱臼骨折 → [[リスフラン関節脱臼骨折]]
 └─ アキレス腱損傷（後方）→ [[アキレス腱損傷]]</code></pre>
-<h2 id="ottawa-ankle-rulesレントゲン撮影基準">Ottawa Ankle Rules（レントゲン撮影基準）</h2>
-<div class="callout callout-check">
-<div class="callout-title">以下のいずれかに該当すれば撮影</div>
-<div class="callout-body"><h3 id="足関節レントゲン撮影基準">足関節レントゲン撮影基準</h3>
-<ol>
-<li><strong>外果・内果の尖端および後縁 6 cm の圧痛</strong></li>
-<li><strong>受傷直後 + ER で合計 4 歩歩けない</strong></li>
-</ol>
-<h3 id="足部中足骨レントゲン撮影基準">足部（中足骨）レントゲン撮影基準</h3>
-<ol>
-<li><strong>第 5 中足骨基部の圧痛</strong></li>
-<li><strong>舟状骨の圧痛</strong></li>
-<li><strong>受傷直後 + ER で合計 4 歩歩けない</strong></li>
-</ol></div>
-</div>
-<ul>
-<li><strong>感度 99%、特異度 40% 前後</strong></li>
-<li>2 歳以上から適用可</li>
-<li>陰性なら骨折の可能性は非常に低い → 捻挫として治療</li>
-</ul>
-<h2 id="身体所見のチェック項目">身体所見のチェック項目</h2>
-<div class="table-wrap"><table><thead><tr><th>部位</th><th>所見</th><th>疑う病態</th></tr></thead><tbody><tr><td>前距腓靱帯（ATFL）</td><td>外果前下方の圧痛</td><td><a class="wiki-link" href="ATFL損傷.html">ATFL損傷</a></td></tr><tr><td>外果（遠位腓骨）</td><td>圧痛・腫脹</td><td><a class="wiki-link" href="足関節果部骨折.html">足関節果部骨折</a></td></tr><tr><td>内果</td><td>圧痛</td><td><a class="wiki-link" href="足関節果部骨折.html">足関節果部骨折</a></td></tr><tr><td><strong>腓骨近位端</strong>（膝下）</td><td><strong>圧痛</strong></td><td><strong><a class="wiki-link" href="Maisonneuve骨折.html">Maisonneuve骨折</a></strong></td></tr><tr><td>第 5 中足骨基部</td><td>圧痛</td><td><a class="wiki-link" href="第5中足骨近位端骨折.html">第5中足骨近位端骨折</a></td></tr><tr><td>踵</td><td>軸圧痛</td><td><a class="wiki-link" href="踵骨骨折.html">踵骨骨折</a></td></tr><tr><td>距骨</td><td>背側の圧痛</td><td><a class="wiki-link" href="距骨骨折.html">距骨骨折</a></td></tr><tr><td>中足部</td><td>圧痛・変形</td><td><a class="wiki-link" href="リスフラン関節脱臼骨折.html">リスフラン関節脱臼骨折</a></td></tr><tr><td>アキレス腱</td><td>欠損・Thompson test 陽性</td><td><a class="wiki-link" href="アキレス腱損傷.html">アキレス腱損傷</a></td></tr></tbody></table></div>
-<h2 id="捻挫でも疑うべき骨折">捻挫でも疑うべき骨折</h2>
-<h3 id="高エネルギー外傷">高エネルギー外傷</h3>
-<ul>
-<li><strong>Pilon 骨折</strong>（高所からの着地、軸圧）</li>
-<li><strong>距骨骨折・踵骨骨折</strong></li>
-</ul>
-<h3 id="見逃し多い骨折">見逃し多い骨折</h3>
-<div class="table-wrap"><table><thead><tr><th>骨折</th><th>落とし穴</th></tr></thead><tbody><tr><td><strong>Maisonneuve 骨折</strong></td><td>足関節痛として受診しても <strong>腓骨近位端</strong>に骨折</td></tr><tr><td><strong>第 5 中足骨基部骨折</strong></td><td>捻挫と間違われやすい</td></tr><tr><td><strong>リスフラン関節脱臼骨折</strong></td><td>中足部の圧痛・体重負荷不能で疑う</td></tr><tr><td><strong>距骨頸部骨折</strong></td><td>距骨骨折は無腐性壊死のリスク大</td></tr></tbody></table></div>
-<h2 id="初期対応rice">初期対応（RICE）</h2>
-<ul>
-<li><strong>Rest</strong>：松葉杖で非荷重 or 部分荷重</li>
-<li><strong>Ice</strong>：20 分 x 数回/日</li>
-<li><strong>Compression</strong>：弾性包帯</li>
-<li><strong>Elevation</strong>：挙上</li>
-</ul>
-<h2 id="disposition">Disposition</h2>
-<ul>
-<li>骨折なし・捻挫のみ → <strong>帰宅保存</strong>、装具 + RICE、数日後再評価</li>
-<li><strong>果部骨折・Maisonneuve・リスフラン・距骨・踵骨</strong> → 整形外科紹介（多くは帰宅手術）</li>
-<li><strong>Pilon 骨折・開放骨折</strong> → <strong>即時整形 / 入院整形</strong></li>
-</ul>
-<h2 id="出典">出典</h2>
-<ul>
-<li><strong>増井伸高. 骨折ハンター. 中外医学社. 2019.</strong></li>
-<li><strong>Stiell IG ほか.</strong> Implementation of the Ottawa ankle rules. <em>JAMA.</em> 1994.</li>
-<li><strong>Bachmann LM ほか.</strong> Accuracy of Ottawa ankle rules to exclude fractures of the ankle and mid-foot. <em>BMJ.</em> 2003.</li>
-</ul>
-<h2 id="関連詳細ページ">関連詳細ページ</h2>
-<ul>
-<li><a class="wiki-link" href="../足関節・足部の外傷.html">足関節・足部の外傷（入口ハブ）</a></li>
-<li><a class="wiki-link" href="ATFL損傷.html">ATFL損傷</a> / <a class="wiki-link" href="足関節果部骨折.html">足関節果部骨折</a> / <a class="wiki-link" href="Maisonneuve骨折.html">Maisonneuve骨折</a> / <a class="wiki-link" href="Pilon骨折.html">Pilon骨折</a></li>
-<li><a class="wiki-link" href="距骨骨折.html">距骨骨折</a> / <a class="wiki-link" href="踵骨骨折.html">踵骨骨折</a> / <a class="wiki-link" href="リスフラン関節脱臼骨折.html">リスフラン関節脱臼骨折</a></li>
-<li><a class="wiki-link" href="第5中足骨近位端骨折.html">第5中足骨近位端骨折</a> / <a class="wiki-link" href="アキレス腱損傷.html">アキレス腱損傷</a></li>
-</ul>
-    </div>
-    <footer class="page-footer">
-      <a href="../index.html">↑ 主訴ナビへ戻る</a>
-    </footer>
-  </article>
+      </section>
+
+      <!-- §2 Ottawa Ankle Rules -->
+      <section class="section-page" id="s2" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>📐 Ottawa Ankle Rules（レントゲン撮影基準）</h2>
+        <div class="callout callout-check">
+          <div class="callout-title">以下のいずれかに該当すれば撮影</div>
+          <div class="callout-body">
+            <h3 id="足関節レントゲン撮影基準">足関節レントゲン撮影基準</h3>
+            <ol>
+              <li><strong>外果・内果の尖端および後縁 6 cm の圧痛</strong></li>
+              <li><strong>受傷直後 + ER で合計 4 歩歩けない</strong></li>
+            </ol>
+            <h3 id="足部中足骨レントゲン撮影基準">足部（中足骨）レントゲン撮影基準</h3>
+            <ol>
+              <li><strong>第 5 中足骨基部の圧痛</strong></li>
+              <li><strong>舟状骨の圧痛</strong></li>
+              <li><strong>受傷直後 + ER で合計 4 歩歩けない</strong></li>
+            </ol>
+          </div>
+        </div>
+        <ul>
+          <li><strong>感度 99%、特異度 40% 前後</strong></li>
+          <li>2 歳以上から適用可</li>
+          <li>陰性なら骨折の可能性は非常に低い → 捻挫として治療</li>
+        </ul>
+      </section>
+
+      <!-- §3 身体所見のチェック項目 -->
+      <section class="section-page" id="s3" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🩺 身体所見のチェック項目</h2>
+        <div class="table-wrap"><table><thead><tr><th>部位</th><th>所見</th><th>疑う病態</th></tr></thead><tbody><tr><td>前距腓靱帯（ATFL）</td><td>外果前下方の圧痛</td><td><a class="wiki-link" href="ATFL損傷.html">ATFL損傷</a></td></tr><tr><td>外果（遠位腓骨）</td><td>圧痛・腫脹</td><td><a class="wiki-link" href="足関節果部骨折.html">足関節果部骨折</a></td></tr><tr><td>内果</td><td>圧痛</td><td><a class="wiki-link" href="足関節果部骨折.html">足関節果部骨折</a></td></tr><tr><td><strong>腓骨近位端</strong>（膝下）</td><td><strong>圧痛</strong></td><td><strong><a class="wiki-link" href="Maisonneuve骨折.html">Maisonneuve骨折</a></strong></td></tr><tr><td>第 5 中足骨基部</td><td>圧痛</td><td><a class="wiki-link" href="第5中足骨近位端骨折.html">第5中足骨近位端骨折</a></td></tr><tr><td>踵</td><td>軸圧痛</td><td><a class="wiki-link" href="踵骨骨折.html">踵骨骨折</a></td></tr><tr><td>距骨</td><td>背側の圧痛</td><td><a class="wiki-link" href="距骨骨折.html">距骨骨折</a></td></tr><tr><td>中足部</td><td>圧痛・変形</td><td><a class="wiki-link" href="リスフラン関節脱臼骨折.html">リスフラン関節脱臼骨折</a></td></tr><tr><td>アキレス腱</td><td>欠損・Thompson test 陽性</td><td><a class="wiki-link" href="アキレス腱損傷.html">アキレス腱損傷</a></td></tr></tbody></table></div>
+      </section>
+
+      <!-- §4 捻挫でも疑うべき骨折 -->
+      <section class="section-page" id="s4" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>⚠️ 捻挫でも疑うべき骨折</h2>
+
+        <h3>高エネルギー外傷</h3>
+        <ul>
+          <li><strong>Pilon 骨折</strong>（高所からの着地、軸圧）</li>
+          <li><strong>距骨骨折・踵骨骨折</strong></li>
+        </ul>
+
+        <h3>見逃し多い骨折</h3>
+        <div class="table-wrap"><table><thead><tr><th>骨折</th><th>落とし穴</th></tr></thead><tbody><tr><td><strong>Maisonneuve 骨折</strong></td><td>足関節痛として受診しても <strong>腓骨近位端</strong>に骨折</td></tr><tr><td><strong>第 5 中足骨基部骨折</strong></td><td>捻挫と間違われやすい</td></tr><tr><td><strong>リスフラン関節脱臼骨折</strong></td><td>中足部の圧痛・体重負荷不能で疑う</td></tr><tr><td><strong>距骨頸部骨折</strong></td><td>距骨骨折は無腐性壊死のリスク大</td></tr></tbody></table></div>
+      </section>
+
+      <!-- §5 初期対応（RICE） -->
+      <section class="section-page" id="s5" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>💉 初期対応（RICE）</h2>
+        <ul>
+          <li><strong>Rest</strong>：松葉杖で非荷重 or 部分荷重</li>
+          <li><strong>Ice</strong>：20 分 x 数回/日</li>
+          <li><strong>Compression</strong>：弾性包帯</li>
+          <li><strong>Elevation</strong>：挙上</li>
+        </ul>
+      </section>
+
+      <!-- §6 Disposition -->
+      <section class="section-page" id="s6" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>📤 Disposition</h2>
+        <ul>
+          <li>骨折なし・捻挫のみ → <strong>帰宅保存</strong>、装具 + RICE、数日後再評価</li>
+          <li><strong>果部骨折・Maisonneuve・リスフラン・距骨・踵骨</strong> → 整形外科紹介（多くは帰宅手術）</li>
+          <li><strong>Pilon 骨折・開放骨折</strong> → <strong>即時整形 / 入院整形</strong></li>
+        </ul>
+      </section>
+
+      <!-- §7 出典・関連 -->
+      <section class="section-page" id="s7" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>📚 出典</h2>
+        <ul>
+          <li><strong>増井伸高. 骨折ハンター. 中外医学社. 2019.</strong></li>
+          <li><strong>Stiell IG ほか.</strong> Implementation of the Ottawa ankle rules. <em>JAMA.</em> 1994.</li>
+          <li><strong>Bachmann LM ほか.</strong> Accuracy of Ottawa ankle rules to exclude fractures of the ankle and mid-foot. <em>BMJ.</em> 2003.</li>
+        </ul>
+        <h3>関連詳細ページ</h3>
+        <ul>
+          <li><a class="wiki-link" href="../足関節・足部の外傷.html">足関節・足部の外傷（入口ハブ）</a></li>
+          <li><a class="wiki-link" href="ATFL損傷.html">ATFL損傷</a> / <a class="wiki-link" href="足関節果部骨折.html">足関節果部骨折</a> / <a class="wiki-link" href="Maisonneuve骨折.html">Maisonneuve骨折</a> / <a class="wiki-link" href="Pilon骨折.html">Pilon骨折</a></li>
+          <li><a class="wiki-link" href="距骨骨折.html">距骨骨折</a> / <a class="wiki-link" href="踵骨骨折.html">踵骨骨折</a> / <a class="wiki-link" href="リスフラン関節脱臼骨折.html">リスフラン関節脱臼骨折</a></li>
+          <li><a class="wiki-link" href="第5中足骨近位端骨折.html">第5中足骨近位端骨折</a> / <a class="wiki-link" href="アキレス腱損傷.html">アキレス腱損傷</a></li>
+        </ul>
+      </section>
+
+    </article>
+  </main>
+
+  <nav class="hokuto-bottom">
+    <button class="hokuto-bottom__btn" type="button" id="navBack">
+      <span class="hokuto-bottom__icon">←</span><span>戻る</span>
+    </button>
+    <a class="hokuto-bottom__btn" href="../ツール.html">
+      <span class="hokuto-bottom__icon">⚙</span><span>ツール</span>
+    </a>
+    <a class="hokuto-bottom__btn" href="../index.html">
+      <span class="hokuto-bottom__icon">⌂</span><span>ホーム</span>
+    </a>
+  </nav>
+
+  <script>
+  (function(){
+    const menu = document.getElementById('sectionMenu');
+    const pages = document.querySelectorAll('.section-page');
+    const titleH1 = document.querySelector('.page-title');
+    const relatedSymp = document.getElementById('related-symptoms');
+    const usageNote = document.getElementById('usage-note');
+
+    function showSection(id) {
+      menu.hidden = true;
+      if (titleH1) titleH1.hidden = true;
+      if (relatedSymp) relatedSymp.hidden = true;
+      if (usageNote) usageNote.hidden = true;
+      pages.forEach(p => p.hidden = (p.id !== id));
+      window.scrollTo(0, 0);
+    }
+    function showMenu(scrollTarget) {
+      menu.hidden = false;
+      if (titleH1) titleH1.hidden = false;
+      if (relatedSymp) relatedSymp.hidden = false;
+      if (usageNote) usageNote.hidden = false;
+      pages.forEach(p => p.hidden = true);
+      if (scrollTarget) {
+        if (scrollTarget.tagName === 'DETAILS') scrollTarget.open = true;
+        scrollTarget.scrollIntoView({behavior: 'instant', block: 'start'});
+      } else {
+        window.scrollTo(0, 0);
+      }
+    }
+    function syncFromHash() {
+      const id = (location.hash || '').replace('#','');
+      const target = id ? document.getElementById(id) : null;
+      if (target && target.classList.contains('section-page')) {
+        showSection(id);
+      } else if (target) {
+        showMenu(target);
+      } else {
+        showMenu();
+      }
+    }
+
+    window.addEventListener('hashchange', syncFromHash);
+    document.querySelectorAll('.back-to-menu').forEach(b => {
+      b.addEventListener('click', () => { history.pushState(null,'',location.pathname); showMenu(); });
+    });
+    const navBack = document.getElementById('navBack');
+    if (navBack) navBack.addEventListener('click', () => {
+      if (window.history.length > 1) history.back();
+      else window.location.href = '../index.html';
+    });
+
+    syncFromHash();
+  })();
+  </script>
 </body>
 </html>
