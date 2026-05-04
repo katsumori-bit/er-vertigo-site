@@ -100,6 +100,26 @@
       background: color-mix(in srgb, var(--text) 5%, var(--surface));
       border-style: dashed;
     }
+    .dx-node--external {
+      text-decoration: none;
+      color: var(--text);
+      border-style: dashed;
+      position: relative;
+      background: color-mix(in srgb, var(--accent) 6%, var(--surface));
+      transition: background-color 120ms ease;
+    }
+    .dx-node--external::after {
+      content: "↗";
+      position: absolute;
+      top: 4px;
+      right: 8px;
+      font-size: 12px;
+      color: var(--accent);
+      opacity: 0.85;
+    }
+    .dx-node--external:hover {
+      background: color-mix(in srgb, var(--accent) 14%, var(--surface));
+    }
 
     /* レイヤー（横一列に揃える） */
     .dx-layer {
@@ -338,6 +358,33 @@
           <p class="flow-canvas__hint">↔ 横スクロール可 / 実線＝確定後の決定 / 破線＝フォールバック</p>
           <div class="dx-flow" role="group" aria-label="めまい単純化診療フロー">
 
+            <!-- L0: 本当にめまいか？（前失神除外） -->
+            <div class="dx-layer dx-layer--root">
+              <div class="dx-node dx-node--decision">
+                <div class="dx-node__title">本当にめまいか？</div>
+                <div class="dx-node__sub">前失神（presyncope）を除外</div>
+              </div>
+            </div>
+
+            <!-- L0 の分岐: 前失神疑い / 真のめまい -->
+            <div class="dx-fork">
+              <div class="dx-fork__leg">
+                <span class="dx-fork__label">前失神疑い</span>
+              </div>
+              <div class="dx-fork__leg">
+                <span class="dx-fork__label">真のめまい</span>
+              </div>
+            </div>
+
+            <!-- L0 → 前失神は外部フローへ／真のめまいは L1 へ -->
+            <div class="dx-layer dx-layer--branch">
+              <a class="dx-node dx-node--external" href="意識消失.html">
+                <div class="dx-node__title">意識消失フローへ</div>
+                <div class="dx-node__sub">眼前暗黒感 / 立位悪化 / 動悸・胸痛</div>
+              </a>
+              <div class="dx-arrow"><span class="dx-arrow__label">↓ 真のめまい</span></div>
+            </div>
+
             <!-- L1: ルート判定 -->
             <div class="dx-layer dx-layer--root">
               <div class="dx-node dx-node--decision">
@@ -354,13 +401,13 @@
             <!-- L2: 中間判定（誘因 / AVS-HINTS） -->
             <div class="dx-layer dx-layer--branch">
               <div class="dx-node dx-node--decision">
-                <div class="dx-node__title">誘因の有無</div>
-                <div class="dx-node__sub">EVS</div>
+                <div class="dx-node__title">EVS</div>
+                <div class="dx-node__sub">TIA・不整脈を意識</div>
               </div>
               <div>
                 <div class="dx-node dx-node--decision">
                   <div class="dx-node__title">AVS</div>
-                  <div class="dx-node__sub">急性持続性めまい</div>
+                  <div class="dx-node__sub">歩けないなら入院</div>
                 </div>
                 <div class="dx-hints-row">
                   <div class="dx-hints-row__line" aria-hidden="true"></div>
