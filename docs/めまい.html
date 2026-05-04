@@ -311,121 +311,98 @@
       margin-bottom: 2px;
     }
 
-    /* === 420px 以下：1列折り返し === */
-    @media (max-width: 420px) {
-      .dx-flow { min-width: 0; }
-      .flow-canvas { overflow-x: hidden; }
-      .dx-layer--branch,
-      .dx-layer--syndrome,
-      .dx-layer--avs-judge,
-      .dx-layer--workup { grid-template-columns: 1fr; }
-      .dx-fork,
-      .dx-fork--quad,
-      .dx-fork--triple { grid-template-columns: 1fr; gap: 8px; }
-      .dx-fork::before,
-      .dx-fork--quad::before,
-      .dx-fork--triple::before { display: none; }
-      .dx-fork__leg { min-height: 28px; }
-      .dx-fork__leg::before { width: 2px; height: 18px; flex: none; }
-      .dx-hints-row { grid-template-columns: 1fr; }
-      .dx-hints-row__line { display: none; }
-      .dx-fallback { flex-direction: column; align-items: stretch; text-align: center; }
-    }
-
-    /* === スマホ用 縦カード版 === */
-    .dx-m-flow { display: none; }
-
-    .dx-m-node {
-      border: 1.5px solid color-mix(in srgb, var(--text) 22%, transparent);
-      border-radius: 10px;
-      background: var(--surface);
-      padding: 10px 12px;
-      margin: 6px 0;
-      box-shadow: 0 1px 2px var(--shadow, rgba(0,0,0,0.06));
-    }
-    .dx-m-node__title { font-weight: 700; font-size: 14.5px; line-height: 1.4; }
-    .dx-m-node__sub { font-size: 12px; color: var(--muted); margin-top: 2px; line-height: 1.45; }
-
-    .dx-m-node.is-decision {
-      background: color-mix(in srgb, var(--accent) 12%, var(--surface));
-      border-color: var(--accent);
-    }
-    .dx-m-node.is-judge {
-      border-style: dashed;
-      border-radius: 999px;
-      text-align: center;
-      font-weight: 700;
-      font-size: 13px;
-      background: var(--accent-weak, color-mix(in srgb, var(--accent) 14%, var(--surface)));
-      border-color: var(--accent);
-      padding: 8px 14px;
-    }
-    .dx-m-node.is-danger {
-      background: color-mix(in srgb, #c0392b 14%, var(--surface));
-      border-color: #c0392b;
-    }
-    .dx-m-node.is-danger .dx-m-node__title { color: #c0392b; }
-    .dx-m-node.is-action {
-      background: color-mix(in srgb, var(--text) 5%, var(--surface));
-      border-style: dashed;
-    }
-    .dx-m-node.is-external {
-      display: block;
-      text-decoration: none;
-      color: var(--text);
-      border-style: dashed;
-      position: relative;
-      background: color-mix(in srgb, var(--accent) 6%, var(--surface));
-    }
-    .dx-m-node.is-external::after {
-      content: "↗";
-      position: absolute;
-      top: 6px;
-      right: 10px;
-      font-size: 13px;
-      color: var(--accent);
-    }
-
-    .dx-m-branch {
-      margin: 4px 0 6px;
-    }
-    .dx-m-branch__leg {
-      position: relative;
-      border-left: 3px solid color-mix(in srgb, var(--accent) 45%, transparent);
-      padding: 6px 0 6px 14px;
-      margin-left: 8px;
-    }
-    .dx-m-branch__leg.is-primary { border-left-color: color-mix(in srgb, var(--text) 30%, transparent); }
-    .dx-m-branch__label {
-      display: inline-block;
-      font-size: 11.5px;
-      font-weight: 700;
-      letter-spacing: 0.04em;
-      color: var(--accent);
-      background: color-mix(in srgb, var(--accent) 12%, var(--surface));
-      padding: 2px 10px;
-      border-radius: 999px;
-      margin-bottom: 4px;
-    }
-    .dx-m-branch__label.is-arrow::after { content: " ↓"; }
-
-    .dx-m-fallback {
-      margin-top: 12px;
-      border: 1.5px dashed color-mix(in srgb, var(--text) 35%, transparent);
-      border-radius: 10px;
-      padding: 8px 12px;
-      font-size: 12.5px;
-      color: var(--text);
-      background: color-mix(in srgb, var(--text) 3%, var(--surface));
-      line-height: 1.5;
-    }
-
-    /* 出し分け */
+    /* === スマホ：PC 版フローを縮小して全体を一望できるよう調整 === */
+    /* 1列折り潰しはしない。地図的な俯瞰を保ったまま、フォント・余白を縮小 */
     @media (max-width: 600px) {
-      .dx-m-flow { display: block; }
-      .dx-flow { display: none; }
-      .flow-canvas__hint { display: none; }
-      .flow-canvas { overflow-x: hidden; padding: 12px 8px 14px; }
+      .dx-flow {
+        min-width: 0;
+        font-size: 11px;
+        padding: 2px 0 6px;
+      }
+      .flow-canvas {
+        overflow-x: hidden;
+        padding: 8px 6px 12px;
+      }
+      .flow-canvas__hint { font-size: 0.62rem; margin-bottom: 0.35rem; }
+
+      /* ノード */
+      .dx-node {
+        padding: 4px 5px;
+        min-height: 28px;
+        border-radius: 7px;
+        gap: 1px;
+        box-shadow: 0 1px 1px var(--shadow, rgba(0,0,0,0.05));
+      }
+      .dx-node__title { font-size: 10.5px; line-height: 1.22; }
+      .dx-node__sub   { font-size: 9px;    line-height: 1.25; }
+      .dx-node--decision { border-radius: 8px; }
+      .dx-node--judge {
+        padding: 3px 7px;
+        min-height: 22px;
+        font-size: 10px;
+      }
+      .dx-node--external::after { top: 2px; right: 4px; font-size: 9px; }
+
+      /* レイヤー間ギャップ */
+      .dx-layer { gap: 6px; }
+      .dx-layer--root > * { max-width: none; width: 100%; }
+
+      /* 矢印 */
+      .dx-arrow { min-height: 24px; margin: 1px 0; }
+      .dx-arrow::before { min-height: 20px; width: 1.5px; }
+      .dx-arrow::after {
+        border-left-width: 4px;
+        border-right-width: 4px;
+        border-top-width: 6px;
+      }
+      .dx-arrow__label {
+        font-size: 8.5px;
+        padding: 0 4px;
+        line-height: 1.4;
+      }
+
+      /* フォーク */
+      .dx-fork { min-height: 22px; }
+      .dx-fork::before { height: 1.5px; }
+      .dx-fork__leg { min-height: 22px; padding-top: 2px; padding-bottom: 2px; font-size: 9px; }
+      .dx-fork__leg::before { width: 1.5px; }
+      .dx-fork__leg::after {
+        border-left-width: 4px;
+        border-right-width: 4px;
+        border-top-width: 6px;
+      }
+      .dx-fork__label {
+        font-size: 8.5px;
+        padding: 0 4px;
+        margin-bottom: 0;
+      }
+
+      /* HINTS 横線 */
+      .dx-hints-row { gap: 6px; margin-top: 2px; }
+      .dx-hints-row__line { height: 1.5px; }
+
+      /* 4分岐・3分岐 fork */
+      .dx-fork--quad::before { left: 12.5%; right: 12.5%; }
+      .dx-fork--triple::before { left: 16.66%; right: 16.66%; }
+
+      /* メモ */
+      .dx-note { padding: 4px 7px; font-size: 9.5px; }
+
+      /* フォールバック横並び */
+      .dx-fallback {
+        padding: 6px 8px;
+        gap: 5px;
+        font-size: 9.5px;
+      }
+      .dx-fallback__arrow { font-size: 13px; }
+      .dx-fallback__target {
+        padding: 2px 6px;
+        font-size: 9.5px;
+        border-radius: 5px;
+      }
+
+      /* グループ見出し */
+      .dx-group-title { font-size: 9.5px; }
     }
   </style>
 </head>
@@ -451,8 +428,8 @@
         </div>
 
         <div class="flow-canvas">
-          <p class="flow-canvas__hint">↔ 横スクロール可 / 実線＝確定後の決定 / 破線＝フォールバック</p>
-          <div class="dx-flow" role="group" aria-label="めまい単純化診療フロー" aria-hidden="true">
+          <p class="flow-canvas__hint">実線＝確定後の決定 ／ 破線＝フォールバック</p>
+          <div class="dx-flow" role="group" aria-label="めまい単純化診療フロー">
 
             <!-- L0: 本当にめまいか？（前失神除外） -->
             <div class="dx-layer dx-layer--root">
@@ -596,123 +573,6 @@
               <span class="dx-fallback__label">三半規管・前庭いずれも疑われない場合</span>
               <span class="dx-fallback__arrow" aria-hidden="true">⇢</span>
               <span class="dx-fallback__target">頭部画像検査へ</span>
-            </div>
-
-          </div>
-
-          <!-- スマホ用 縦カード版（PC版は上で aria-hidden="true"、こちらが SR canonical） -->
-          <div class="dx-m-flow" role="group" aria-label="めまい単純化診療フロー">
-
-            <!-- L0: 本当にめまいか？ -->
-            <div class="dx-m-node is-decision">
-              <div class="dx-m-node__title">本当にめまいか？</div>
-              <div class="dx-m-node__sub">前失神（presyncope）を除外</div>
-            </div>
-            <div class="dx-m-branch">
-              <div class="dx-m-branch__leg">
-                <span class="dx-m-branch__label">前失神疑い</span>
-                <a class="dx-m-node is-external" href="意識消失.html" aria-label="意識消失フローへ（別ページ）">
-                  <div class="dx-m-node__title">意識消失フローへ</div>
-                  <div class="dx-m-node__sub">眼前暗黒感 / 立位悪化 / 動悸・胸痛</div>
-                </a>
-              </div>
-              <div class="dx-m-branch__leg is-primary">
-                <span class="dx-m-branch__label is-arrow">真のめまい</span>
-              </div>
-            </div>
-
-            <!-- L1: めまいは持続している？ -->
-            <div class="dx-m-node is-decision">
-              <div class="dx-m-node__title">めまいは持続している？</div>
-            </div>
-
-            <div class="dx-m-branch">
-
-              <!-- 非持続性 → EVS -->
-              <div class="dx-m-branch__leg">
-                <span class="dx-m-branch__label">非持続性</span>
-                <div class="dx-m-node is-decision">
-                  <div class="dx-m-node__title">EVS</div>
-                  <div class="dx-m-node__sub">TIA・不整脈を意識</div>
-                </div>
-                <div class="dx-m-node is-decision">
-                  <div class="dx-m-node__title">誘因の有無？</div>
-                </div>
-
-                <div class="dx-m-branch">
-                  <div class="dx-m-branch__leg">
-                    <span class="dx-m-branch__label">誘因なし</span>
-                    <div class="dx-m-node">
-                      <div class="dx-m-node__title">その他</div>
-                      <div class="dx-m-node__sub">前庭性片頭痛 / TIA</div>
-                    </div>
-                  </div>
-                  <div class="dx-m-branch__leg">
-                    <span class="dx-m-branch__label">誘因あり</span>
-                    <div class="dx-m-node">
-                      <div class="dx-m-node__title">三半規管 BPPV</div>
-                      <div class="dx-m-node__sub">t-EVS</div>
-                    </div>
-                    <div class="dx-m-node is-action">
-                      <div class="dx-m-node__title">誘発法 → 耳石置換法</div>
-                      <div class="dx-m-node__sub">画像不要 / 起立性低血圧も鑑別</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <!-- 持続性 → AVS -->
-              <div class="dx-m-branch__leg">
-                <span class="dx-m-branch__label">持続性</span>
-                <div class="dx-m-node is-decision">
-                  <div class="dx-m-node__title">AVS</div>
-                  <div class="dx-m-node__sub">歩けないなら入院</div>
-                </div>
-                <div class="dx-m-node is-judge">HINTS で判別</div>
-
-                <div class="dx-m-branch">
-                  <div class="dx-m-branch__leg">
-                    <span class="dx-m-branch__label">前庭性</span>
-                    <div class="dx-m-node">
-                      <div class="dx-m-node__title">前庭神経炎</div>
-                      <div class="dx-m-node__sub">末梢パターン</div>
-                    </div>
-                  </div>
-                  <div class="dx-m-branch__leg">
-                    <span class="dx-m-branch__label">中枢性</span>
-                    <div class="dx-m-node is-danger">
-                      <div class="dx-m-node__title">脳血管障害</div>
-                      <div class="dx-m-node__sub">中枢パターン・要警戒</div>
-                    </div>
-                    <div class="dx-m-node is-decision">
-                      <div class="dx-m-node__title">頭部画像検査</div>
-                      <div class="dx-m-node__sub">CT + MRI</div>
-                    </div>
-                    <div class="dx-m-branch">
-                      <div class="dx-m-branch__leg">
-                        <span class="dx-m-branch__label">陰性</span>
-                        <div class="dx-m-node">
-                          <div class="dx-m-node__title">原則入院</div>
-                          <div class="dx-m-node__sub">48時間後 MRI 再検 / 歩ければ外来も検討</div>
-                        </div>
-                      </div>
-                      <div class="dx-m-branch__leg">
-                        <span class="dx-m-branch__label">陽性</span>
-                        <div class="dx-m-node is-danger">
-                          <div class="dx-m-node__title">入院</div>
-                          <div class="dx-m-node__sub">脳血管障害確定</div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-            </div>
-
-            <!-- フォールバック -->
-            <div class="dx-m-fallback" role="note">
-              <strong>三半規管・前庭いずれも疑われない場合</strong> → 頭部画像検査へ
             </div>
 
           </div>
