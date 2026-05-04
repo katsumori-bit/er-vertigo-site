@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git commit -m ' *)",
+      "Bash(git push *)",
+      "Bash(gh pr create --base main --head claude/musing-knuth-a089c7 --title 'docs: めまいページの「即時アクション」を「診療フロー」に刷新' --body ' *)",
+      "PowerShell(gh --version)",
+      "Bash(git fetch *)"
+    ]
+  }
+}
