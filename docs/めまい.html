@@ -642,6 +642,38 @@
       .dx-rule { font-size: 11px; padding: 6px 8px; line-height: 1.4; }
       .dx-rule__tag { font-size: 9px; padding: 0 5px; }
     }
+
+    /* === Phase 3: ノードをタップ可能化 + section-tiles 非表示 === */
+    a.dx-node {
+      text-decoration: none;
+      color: inherit;
+      cursor: pointer;
+      transition: transform 80ms ease, box-shadow 120ms ease;
+    }
+    a.dx-node:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 3px 6px var(--shadow, rgba(0,0,0,0.12));
+    }
+    a.dx-node:active { transform: translateY(0); }
+    a.dx-node:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+    a.dx-node::after {
+      content: "›";
+      position: absolute;
+      top: 3px;
+      right: 6px;
+      font-size: 12px;
+      color: color-mix(in srgb, var(--text) 40%, transparent);
+      font-weight: 700;
+    }
+    a.dx-node--danger::after { color: #c0392b; }
+    a.dx-node--decision::after { color: var(--accent); }
+    a.dx-node { position: relative; }
+
+    /* §メニュータイル非表示（ノードタップで全到達できる） */
+    .section-tiles { display: none !important; }
   </style>
 </head>
 <body>
@@ -707,10 +739,10 @@
 
             <!-- L0: 本当にめまいか？（前失神除外） -->
             <div class="dx-layer dx-layer--root">
-              <div class="dx-node dx-node--decision">
+              <a class="dx-node dx-node--decision" href="#s4">
                 <div class="dx-node__title">本当にめまいか？</div>
                 <div class="dx-node__sub">前失神（presyncope）を除外</div>
-              </div>
+              </a>
             </div>
 
             <!-- L0 の分岐: 前失神疑い / 真のめまい -->
@@ -734,9 +766,9 @@
 
             <!-- L1: ルート判定 -->
             <div class="dx-layer dx-layer--root">
-              <div class="dx-node dx-node--decision">
+              <a class="dx-node dx-node--decision" href="#s2">
                 <div class="dx-node__title">めまいは持続しているか？</div>
-              </div>
+              </a>
             </div>
 
             <!-- 持続性 vs 非持続性 -->
@@ -747,18 +779,18 @@
 
             <!-- L2: 中間判定（誘因 / AVS-HINTS） -->
             <div class="dx-layer dx-layer--branch">
-              <div class="dx-node dx-node--decision">
+              <a class="dx-node dx-node--decision" href="#s2">
                 <div class="dx-node__title">EVS</div>
                 <div class="dx-node__sub">TIA・不整脈を意識</div>
-              </div>
+              </a>
               <div>
-                <div class="dx-node dx-node--decision">
+                <a class="dx-node dx-node--decision" href="#s4">
                   <div class="dx-node__title">AVS</div>
                   <div class="dx-node__sub">歩けないなら入院</div>
-                </div>
+                </a>
                 <div class="dx-hints-row">
                   <div class="dx-hints-row__line" aria-hidden="true"></div>
-                  <div class="dx-node dx-node--judge">HINTS で判別</div>
+                  <a class="dx-node dx-node--judge" href="#s3">HINTS で判別</a>
                   <div class="dx-hints-row__line" aria-hidden="true"></div>
                 </div>
               </div>
@@ -778,22 +810,22 @@
 
             <!-- L3: 症候群レイヤー（4つを横一列に揃える） -->
             <div class="dx-layer dx-layer--syndrome">
-              <div class="dx-node">
+              <a class="dx-node" href="#s5">
                 <div class="dx-node__title">その他</div>
                 <div class="dx-node__sub">前庭性片頭痛 / TIA</div>
-              </div>
-              <div class="dx-node">
+              </a>
+              <a class="dx-node" href="#s5">
                 <div class="dx-node__title">三半規管 BPPV</div>
                 <div class="dx-node__sub">t-EVS</div>
-              </div>
-              <div class="dx-node">
+              </a>
+              <a class="dx-node" href="#s5">
                 <div class="dx-node__title">前庭神経炎</div>
                 <div class="dx-node__sub">末梢パターン</div>
-              </div>
-              <div class="dx-node dx-node--danger">
+              </a>
+              <a class="dx-node dx-node--danger" href="#s1">
                 <div class="dx-node__title">脳血管障害</div>
                 <div class="dx-node__sub">中枢パターン・要警戒</div>
-              </div>
+              </a>
             </div>
 
             <!-- L3 → L4 への矢印（BPPV と 中枢のみ "疑い" で次工程へ） -->
@@ -806,14 +838,14 @@
             <!-- L4: 処置・検査レイヤー -->
             <div class="dx-layer dx-layer--syndrome">
               <div></div>
-              <div class="dx-node dx-node--action">
+              <a class="dx-node dx-node--action" href="#s4">
                 <div class="dx-node__title">誘発法 → 耳石置換法</div>
                 <div class="dx-node__sub">画像検査必要なし<br>起立性低血圧も鑑別</div>
-              </div>
-              <div class="dx-node dx-node--decision dx-span-right2">
+              </a>
+              <a class="dx-node dx-node--decision dx-span-right2" href="#s6">
                 <div class="dx-node__title">頭部画像検査</div>
                 <div class="dx-node__sub">CT + MRI</div>
-              </div>
+              </a>
             </div>
 
             <!-- L4 → L5：陰性／陽性 分岐（cols 3-4 に拡張） -->
@@ -831,14 +863,14 @@
               <div></div>
               <div></div>
               <div class="dx-layer dx-layer--workup dx-span-right2" style="gap:10px;">
-                <div class="dx-node">
+                <a class="dx-node" href="#s7">
                   <div class="dx-node__title">原則入院</div>
                   <div class="dx-node__sub">48時間後 MRI 再検<br>歩ける場合は外来フローも検討</div>
-                </div>
-                <div class="dx-node dx-node--danger">
+                </a>
+                <a class="dx-node dx-node--danger" href="#s7">
                   <div class="dx-node__title">入院</div>
                   <div class="dx-node__sub">脳血管障害確定</div>
-                </div>
+                </a>
               </div>
             </div>
 
@@ -959,7 +991,7 @@
 
       <!-- §1 Red flags -->
       <section class="section-page" id="s1" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
+        <button class="back-to-menu" type="button">← フローへ戻る</button>
         <h2>🚨 中枢性確認（red flags で末梢で片付けない）</h2>
 
         <h3>これがあれば末梢で片付けない</h3>
@@ -989,7 +1021,7 @@
 
       <!-- §2 TiTrATE -->
       <section class="section-page" id="s2" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
+        <button class="back-to-menu" type="button">← フローへ戻る</button>
         <h2>🎯 めまいの分類（4症候群）</h2>
 
         <p>「回る vs ふわふわ」の<strong>質</strong>より、<strong>持続時間・反復性・誘因・随伴症状・ターゲット診察</strong>で分類する。</p>
@@ -1032,7 +1064,7 @@
 
       <!-- §3 最小診察 + HINTS -->
       <section class="section-page" id="s3" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
+        <button class="back-to-menu" type="button">← フローへ戻る</button>
         <h2>🩺 最小診察 + HINTS</h2>
 
         <h3>その場で行う最小セット</h3>
@@ -1065,7 +1097,7 @@
 
       <!-- §4 症候群別の対応 -->
       <section class="section-page" id="s4" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
+        <button class="back-to-menu" type="button">← フローへ戻る</button>
         <h2>🔄 症候群別の対応</h2>
 
         <details class="sub-fold">
@@ -1127,7 +1159,7 @@
 
       <!-- §5 疾患別ポイント -->
       <section class="section-page" id="s5" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
+        <button class="back-to-menu" type="button">← フローへ戻る</button>
         <h2>🧠 疾患別ポイント（入口）</h2>
 
         <div class="table-wrap">
@@ -1166,7 +1198,7 @@
 
       <!-- §6 検査の置き方 -->
       <section class="section-page" id="s6" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
+        <button class="back-to-menu" type="button">← フローへ戻る</button>
         <h2>🔬 検査の置き方</h2>
 
         <ul>
@@ -1184,7 +1216,7 @@
 
       <!-- §7 disposition -->
       <section class="section-page" id="s7" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
+        <button class="back-to-menu" type="button">← フローへ戻る</button>
         <h2>📤 disposition</h2>
 
         <h3>帰宅を考えやすい</h3>
@@ -1206,7 +1238,7 @@
 
       <!-- §8 ピットフォール -->
       <section class="section-page" id="s8" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
+        <button class="back-to-menu" type="button">← フローへ戻る</button>
         <h2>⚠️ ピットフォール</h2>
 
         <ul>
@@ -1221,7 +1253,7 @@
 
       <!-- §9 出典・リンク -->
       <section class="section-page" id="s9" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
+        <button class="back-to-menu" type="button">← フローへ戻る</button>
         <h2>📚 出典・リンク</h2>
 
         <h3>主要文献</h3>
