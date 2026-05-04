@@ -7,7 +7,7 @@
   <title>めまい | ER ノート</title>
   <link rel="stylesheet" href="er-note.css" />
   <style>
-    /* 診療フロー（このページ専用の上書き） */
+    /* 単純化診療フロー（このページ専用） */
     .flow-box {
       position: static;
       cursor: pointer;
@@ -25,15 +25,111 @@
       color: var(--muted);
       letter-spacing: 0.02em;
     }
-    .flow-box .mermaid {
-      background: var(--surface, #fff);
-      border-radius: 8px;
-      padding: 10px;
-      margin-top: 0.5rem;
-      overflow-x: auto;
-      text-align: center;
+
+    /* === dx-flow: HTML/CSS 縦カラム型フロー === */
+    .dx-flow { display: flex; flex-direction: column; gap: 0.7rem; margin-top: 0.6rem; }
+    .dx-flow__q {
+      align-self: center;
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: #fff;
+      background: var(--accent);
+      padding: 0.45rem 1.1rem;
+      border-radius: 999px;
+      box-shadow: var(--shadow);
     }
-    .flow-box .mermaid svg { max-width: 100%; height: auto; }
+    .dx-flow__cols {
+      display: grid;
+      gap: 0.6rem;
+      grid-template-columns: 1fr;
+    }
+    @media (min-width: 640px) {
+      .dx-flow__cols { grid-template-columns: 1fr 1fr; }
+    }
+
+    .dx-col {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      padding: 0.6rem 0.6rem 0.7rem;
+      border-radius: 12px;
+      background: color-mix(in srgb, var(--surface) 92%, transparent);
+      border: 1.5px solid var(--accent);
+    }
+    .dx-col--peripheral { border-color: #4a90e2; }
+    .dx-col--avs { border-color: #e26a4a; }
+
+    .dx-col__tag {
+      align-self: center;
+      display: inline-block;
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      padding: 3px 12px;
+      border-radius: 999px;
+      background: var(--surface);
+      border: 1.5px solid currentColor;
+    }
+    .dx-col--peripheral .dx-col__tag { color: #4a90e2; }
+    .dx-col--avs .dx-col__tag { color: #e26a4a; }
+
+    .dx-card {
+      background: var(--surface);
+      border: 1px solid color-mix(in srgb, var(--text) 12%, transparent);
+      border-radius: 8px;
+      padding: 0.55rem 0.7rem;
+    }
+    .dx-card--q { text-align: center; font-weight: 700; }
+    .dx-card--peripheral { border-left: 4px solid #4a90e2; }
+    .dx-card--central { border-left: 4px solid #e26a4a; background: color-mix(in srgb, #e26a4a 6%, var(--surface)); }
+
+    .dx-card__title { font-weight: 700; font-size: 0.92rem; line-height: 1.35; margin: 0; }
+    .dx-card__note { color: var(--muted); font-size: 0.78rem; margin: 0.2rem 0 0; line-height: 1.4; }
+
+    .dx-branch__label {
+      display: inline-block;
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      color: var(--muted);
+      margin-bottom: 0.3rem;
+    }
+
+    .dx-arrow { text-align: center; font-size: 0.78rem; color: var(--muted); margin: 0.25rem 0; }
+
+    .dx-action {
+      margin-top: 0.35rem;
+      padding: 0.4rem 0.6rem;
+      background: color-mix(in srgb, #2eb872 14%, transparent);
+      border-left: 3px solid #2eb872;
+      border-radius: 4px;
+      font-weight: 700;
+      font-size: 0.86rem;
+    }
+    .dx-notes { margin: 0.3rem 0 0; padding-left: 1.1rem; font-size: 0.76rem; color: var(--muted); line-height: 1.5; }
+    .dx-notes li { margin: 0.1rem 0; }
+
+    .dx-result { display: flex; flex-direction: column; gap: 0.3rem; margin-top: 0.4rem; }
+    .dx-result__row {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 0.55rem;
+      align-items: start;
+      padding: 0.4rem 0.55rem;
+      background: color-mix(in srgb, var(--text) 5%, transparent);
+      border-radius: 6px;
+      font-size: 0.82rem;
+      line-height: 1.4;
+    }
+    .dx-result__label {
+      font-weight: 800;
+      padding: 1px 8px;
+      border-radius: 4px;
+      white-space: nowrap;
+      font-size: 0.76rem;
+    }
+    .dx-result__label--neg { background: color-mix(in srgb, #4a90e2 18%, transparent); color: #4a90e2; }
+    .dx-result__label--pos { background: color-mix(in srgb, #e26a4a 22%, transparent); color: #e26a4a; }
   </style>
 </head>
 <body>
@@ -50,36 +146,70 @@
     <article class="note-shell">
       <h1 class="page-title">めまい</h1>
 
-      <!-- 診療フロー（タップで閉じる／サブセクション表示時は非表示） -->
-      <div class="action-header flow-box" id="flowBox" role="button" tabindex="0" aria-label="診療フローを閉じる">
+      <!-- 単純化診療フロー（タップで閉じる／サブセクション表示時は非表示） -->
+      <div class="action-header flow-box" id="flowBox" role="button" tabindex="0" aria-label="単純化診療フローを閉じる">
         <div class="action-header__title flow-box__title">
-          <span>🗺 診療フロー</span>
+          <span>🗺 単純化診療フロー</span>
           <span class="flow-box__hint">タップで閉じる ✕</span>
         </div>
-        <div class="mermaid">
-flowchart TD
-  Start["めまいは持続しているか？"]
-  Cause{"誘因の有無"}
-  Other["その他<br>前庭片頭痛・TIA"]
-  BPPV["三半規管<br>BPPV"]
-  Epley["誘発法 → 耳石置換法<br>※画像検査不要<br>※起立性低血圧も鑑別"]
-  Vest["前庭<br>前庭神経炎"]
-  Central["中枢<br>脳血管障害"]
-  Img["頭部画像検査<br>CT + MRI"]
-  AdmObs["原則入院・48時間後 MRI 再検<br>※歩ける場合は外来フローも検討"]
-  Adm["入院"]
 
-  Start -->|非持続性| Cause
-  Start -->|"持続性<br>AVS"| Vest
-  Start -->|"持続性<br>AVS"| Central
-  Cause -->|誘因なし| Other
-  Cause -->|誘因あり| BPPV
-  BPPV -->|疑い| Epley
-  Vest <-->|HINTS| Central
-  Central -->|疑い| Img
-  Vest -.->|"三半規管・前庭<br>いずれも疑われない場合"| Img
-  Img -->|陰性| AdmObs
-  Img -->|陽性| Adm
+        <div class="dx-flow">
+          <div class="dx-flow__q">めまいは持続している？</div>
+
+          <div class="dx-flow__cols">
+            <!-- 非持続性カラム -->
+            <section class="dx-col dx-col--peripheral">
+              <span class="dx-col__tag">非持続性</span>
+
+              <div class="dx-card dx-card--q">誘因の有無</div>
+
+              <div class="dx-card">
+                <div class="dx-branch__label">誘因なし</div>
+                <div class="dx-card__title">その他</div>
+                <div class="dx-card__note">前庭性片頭痛 / TIA など</div>
+              </div>
+
+              <div class="dx-card dx-card--peripheral">
+                <div class="dx-branch__label">誘因あり</div>
+                <div class="dx-card__title">三半規管 BPPV</div>
+                <div class="dx-arrow">↓ 疑い</div>
+                <div class="dx-action">誘発法 → 耳石置換法</div>
+                <ul class="dx-notes">
+                  <li>画像検査は不要</li>
+                  <li>起立性低血圧も鑑別</li>
+                </ul>
+              </div>
+            </section>
+
+            <!-- 持続性 (AVS) カラム -->
+            <section class="dx-col dx-col--avs">
+              <span class="dx-col__tag">持続性（AVS）</span>
+
+              <div class="dx-card dx-card--q">HINTS で前庭 / 中枢を判別</div>
+
+              <div class="dx-card dx-card--peripheral">
+                <div class="dx-branch__label">前庭性</div>
+                <div class="dx-card__title">前庭神経炎</div>
+              </div>
+
+              <div class="dx-card dx-card--central">
+                <div class="dx-branch__label">中枢性 / 判断困難</div>
+                <div class="dx-card__title">脳血管障害</div>
+                <div class="dx-arrow">↓ 疑い</div>
+                <div class="dx-action">頭部画像（CT + MRI）</div>
+                <div class="dx-result">
+                  <div class="dx-result__row">
+                    <span class="dx-result__label dx-result__label--pos">陽性</span>
+                    <span>入院</span>
+                  </div>
+                  <div class="dx-result__row">
+                    <span class="dx-result__label dx-result__label--neg">陰性</span>
+                    <span>原則入院・48時間後 MRI 再検<br><span style="color:var(--muted);font-size:0.76rem;">※ 歩ければ外来フローも検討</span></span>
+                  </div>
+                </div>
+              </div>
+            </section>
+          </div>
         </div>
       </div>
 
@@ -397,12 +527,6 @@ flowchart TD
     </a>
   </nav>
 
-  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
-  <script>
-    if (window.mermaid) {
-      mermaid.initialize({ startOnLoad: true, theme: 'default', securityLevel: 'loose', flowchart: { useMaxWidth: true, htmlLabels: true } });
-    }
-  </script>
   <script>
   (function(){
     const menu = document.getElementById('sectionMenu');
