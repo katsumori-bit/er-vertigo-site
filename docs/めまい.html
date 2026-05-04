@@ -88,13 +88,19 @@
           <div class="mermaid">
 flowchart TD
   Start["めまいは持続しているか？"]
-  Cause{"誘因の有無"}
-  Other["その他<br>前庭性片頭痛・TIA"]
-  BPPV["<b>三半規管</b><br>BPPV"]
-  Epley["誘発法 → 耳石置換法<br>※画像検査不要<br>※起立性低血圧も鑑別"]
   Img["頭部画像検査<br>CT + MRI"]
   AdmObs["原則入院・48時間後 MRI 再検<br>※歩ける場合は外来フローも検討"]
   Adm["入院"]
+
+  subgraph EVS["非持続性（EVS）"]
+    Cause{"誘因の有無"}
+    BPPV["<b>三半規管</b><br>BPPV"]
+    Other["その他<br>前庭性片頭痛・TIA"]
+    Epley["誘発法 → 耳石置換法<br>※画像検査不要<br>※起立性低血圧も鑑別"]
+    Cause -->|誘因あり| BPPV
+    Cause -->|誘因なし| Other
+    BPPV -->|疑い| Epley
+  end
 
   subgraph AVS["持続性（AVS）"]
     direction LR
@@ -103,25 +109,18 @@ flowchart TD
     Vest <-->|HINTS| Central
   end
 
-  Start -->|非持続性| Cause
+  Start -->|非持続性| EVS
   Start -->|持続性| AVS
-  Cause -->|誘因なし| Other
-  Cause -->|誘因あり| BPPV
-  BPPV -->|疑い| Epley
   Central -->|疑い| Img
-  Vest -.->|"三半規管・前庭<br>いずれも疑われない場合"| Img
+  AVS -.->|"三半規管・前庭<br>いずれも疑われない場合"| Img
   Img -->|陰性| AdmObs
   Img -->|陽性| Adm
 
-  classDef central fill:#fde7e1,stroke:#e26a4a,stroke-width:2px,color:#2a2a2a;
-  classDef peripheral fill:#e3eefa,stroke:#4a90e2,stroke-width:2px,color:#2a2a2a;
-  classDef action fill:#e1f4e7,stroke:#2eb872,stroke-width:2px,color:#2a2a2a;
-  classDef admit fill:#fbe1e1,stroke:#c0392b,stroke-width:2px,color:#2a2a2a;
+  classDef danger fill:#fde7e1,stroke:#c0392b,stroke-width:2px,color:#2a2a2a;
+  classDef benign fill:#e3eefa,stroke:#4a90e2,stroke-width:2px,color:#2a2a2a;
 
-  class BPPV,Vest,Other peripheral;
-  class Central central;
-  class Epley,Img action;
-  class Adm,AdmObs admit;
+  class Central,Adm,AdmObs danger;
+  class BPPV,Vest,Other benign;
           </div>
         </div>
       </div>
