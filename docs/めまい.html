@@ -531,6 +531,117 @@
       .dx-checklist__sub { font-size: 10px; }
       .dx-checklist__reset { font-size: 9.5px; padding: 1px 6px; }
     }
+
+    /* === Phase 2: L2 トリガー連動ルールカード === */
+    .dx-rules-l2 {
+      margin-top: 12px;
+      background: var(--surface);
+      border-radius: 10px;
+      border: 1.5px solid color-mix(in srgb, #c0392b 35%, transparent);
+      padding: 10px 14px;
+    }
+    .dx-rules-l2 > summary {
+      cursor: pointer;
+      font-weight: 800;
+      font-size: 13.5px;
+      list-style: none;
+      user-select: none;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: #c0392b;
+    }
+    .dx-rules-l2 > summary::-webkit-details-marker { display: none; }
+    .dx-rules-l2 > summary::before {
+      content: "▶";
+      font-size: 10px;
+      color: #c0392b;
+      transition: transform 150ms ease;
+      flex-shrink: 0;
+    }
+    .dx-rules-l2[open] > summary::before { transform: rotate(90deg); }
+    .dx-rules-l2__intro {
+      font-size: 11px;
+      color: var(--muted);
+      margin: 8px 0 4px;
+      line-height: 1.5;
+    }
+    .dx-rules-l2__group {
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--muted);
+      margin: 12px 0 5px;
+      padding: 0;
+      letter-spacing: 0.06em;
+    }
+    .dx-rules-l2__list {
+      list-style: none;
+      margin: 0 0 4px;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+    .dx-rule {
+      background: color-mix(in srgb, var(--text) 4%, var(--surface));
+      border-left: 3px solid color-mix(in srgb, var(--text) 28%, transparent);
+      border-radius: 6px;
+      padding: 7px 10px;
+      font-size: 12px;
+      line-height: 1.45;
+    }
+    .dx-rule.is-critical {
+      background: color-mix(in srgb, #c0392b 6%, var(--surface));
+      border-left-color: #c0392b;
+    }
+    .dx-rule.is-pitfall {
+      background: color-mix(in srgb, #d68910 7%, var(--surface));
+      border-left-color: #d68910;
+    }
+    .dx-rule__if {
+      font-weight: 700;
+      color: var(--text);
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .dx-rule__tag {
+      display: inline-block;
+      font-size: 9.5px;
+      font-weight: 800;
+      padding: 1px 7px;
+      border-radius: 999px;
+      background: color-mix(in srgb, var(--text) 12%, var(--surface));
+      color: var(--muted);
+      letter-spacing: 0.08em;
+      flex-shrink: 0;
+    }
+    .dx-rule.is-critical .dx-rule__tag {
+      background: color-mix(in srgb, #c0392b 18%, var(--surface));
+      color: #c0392b;
+    }
+    .dx-rule.is-pitfall .dx-rule__tag {
+      background: color-mix(in srgb, #d68910 20%, var(--surface));
+      color: #b87900;
+    }
+    .dx-rule__then {
+      margin-top: 3px;
+      color: var(--text);
+    }
+    .dx-rule__then strong {
+      color: var(--accent);
+    }
+    .dx-rule.is-critical .dx-rule__then strong { color: #c0392b; }
+
+    @media (max-width: 600px) {
+      .dx-rules-l2 { padding: 8px 10px; }
+      .dx-rules-l2 > summary { font-size: 12px; }
+      .dx-rules-l2__intro { font-size: 10px; }
+      .dx-rules-l2__group { font-size: 10px; margin-top: 10px; }
+      .dx-rule { font-size: 11px; padding: 6px 8px; line-height: 1.4; }
+      .dx-rule__tag { font-size: 9px; padding: 0 5px; }
+    }
   </style>
 </head>
 <body>
@@ -739,6 +850,97 @@
             </div>
 
           </div>
+
+          <!-- L2: トリガー連動の注意（条件で意識すべきこと） -->
+          <details class="dx-rules-l2" id="rulesL2Panel">
+            <summary>⚠️ トリガー連動の注意（条件で意識）</summary>
+            <p class="dx-rules-l2__intro">特定の状況に出会ったら必ず思い出すべき注意点。フローの判断と並行して意識する。</p>
+
+            <h4 class="dx-rules-l2__group">致死的疾患を疑うトリガー</h4>
+            <ul class="dx-rules-l2__list">
+              <li class="dx-rule is-critical">
+                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>抗凝固薬内服</span></div>
+                <div class="dx-rule__then">中枢性（出血性卒中・椎骨動脈解離）を<strong>強く疑う</strong>。CT 閾値を下げる</div>
+              </li>
+              <li class="dx-rule is-critical">
+                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>強い後頭部痛 / 頸部痛</span></div>
+                <div class="dx-rule__then"><strong>椎骨動脈解離・SAH</strong> を必ず想起。画像評価へ</div>
+              </li>
+              <li class="dx-rule is-critical">
+                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>胸痛 / 動悸 / 失神前合併</span></div>
+                <div class="dx-rule__then"><strong>循環器ルートへ分岐</strong>。心原性失神・不整脈・大動脈解離。ECG・モニター</div>
+              </li>
+              <li class="dx-rule is-critical">
+                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>持続性 + 難聴 / 耳鳴</span></div>
+                <div class="dx-rule__then"><strong>AICA 梗塞</strong> を必ず鑑別。「難聴=末梢」と決めつけない</div>
+              </li>
+              <li class="dx-rule is-critical">
+                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>抗凝固服用 + 軽微外傷歴</span></div>
+                <div class="dx-rule__then">慢性硬膜下血腫・外傷性出血を想起。<strong>頭部 CT 閾値を下げる</strong></div>
+              </li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">分類・判断のトリガー</h4>
+            <ul class="dx-rules-l2__list">
+              <li class="dx-rule">
+                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>高齢 + 多血管リスク</span></div>
+                <div class="dx-rule__then">AVS で末梢示唆所見でも<strong>中枢を優先</strong>して評価</div>
+              </li>
+              <li class="dx-rule">
+                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>AVS で HINTS 判定困難（中間例）</span></div>
+                <div class="dx-rule__then"><strong>中枢扱いとして MRI へ</strong>（後悔最小化）</div>
+              </li>
+              <li class="dx-rule">
+                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>典型的でない BPPV（眼振非典型・反応乏しい）</span></div>
+                <div class="dx-rule__then">t-EVS と決め打ちせず、<strong>中枢の可能性を保持</strong></div>
+              </li>
+              <li class="dx-rule">
+                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>症状改善後の評価</span></div>
+                <div class="dx-rule__then">改善 = 末梢の保証ではない。<strong>TIA・Ménière 発作後</strong>を考慮、観察継続</div>
+              </li>
+              <li class="dx-rule">
+                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>回転性主訴</span></div>
+                <div class="dx-rule__then">末梢を直感で選ばず<strong>TiTrATE で再分類</strong>（後方循環梗塞も回転性で来る）</div>
+              </li>
+              <li class="dx-rule">
+                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>反復性短時間 + 体位誘発</span></div>
+                <div class="dx-rule__then"><strong>Dix-Hallpike</strong> 適応判断。後半規管 BPPV なら Epley</div>
+              </li>
+              <li class="dx-rule">
+                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>高齢 / 脱水 / 利尿薬 / 前失神型</span></div>
+                <div class="dx-rule__then"><strong>静脈採血 + 12誘導 ECG</strong> を追加</div>
+              </li>
+              <li class="dx-rule">
+                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>頭部 CT 正常 + 後方循環疑い</span></div>
+                <div class="dx-rule__then">中枢除外にはならない。<strong>MRI/MRA・再評価</strong></div>
+              </li>
+              <li class="dx-rule">
+                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>MRI 早期陰性 + 強い臨床疑い</span></div>
+                <div class="dx-rule__then"><strong>24-48h 後再撮影</strong>、入院観察</div>
+              </li>
+              <li class="dx-rule">
+                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>独居 / フォロー困難</span></div>
+                <div class="dx-rule__then"><strong>帰宅閾値を上げる</strong>。disposition の重要トリガー</div>
+              </li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">ピットフォール（決め打ち回避）</h4>
+            <ul class="dx-rules-l2__list">
+              <li class="dx-rule is-pitfall">
+                <div class="dx-rule__if"><span class="dx-rule__tag">⚠</span><span>HINTS の誤適用</span></div>
+                <div class="dx-rule__then">HINTS は<strong>AVS 限定</strong>。t-EVS（BPPV など）への流用は適応外</div>
+              </li>
+              <li class="dx-rule is-pitfall">
+                <div class="dx-rule__if"><span class="dx-rule__tag">⚠</span><span>「歩けないめまい」を軽視</span></div>
+                <div class="dx-rule__then">体幹失調は<strong>中枢性の重要所見</strong>。歩行不能・起立不能は中枢扱いの強い根拠</div>
+              </li>
+              <li class="dx-rule is-pitfall">
+                <div class="dx-rule__if"><span class="dx-rule__tag">⚠</span><span>BPPV と決めた後の持続性</span></div>
+                <div class="dx-rule__then">Epley 後も改善せず持続するなら<strong>分類を疑う</strong>。AVS への再評価も</div>
+              </li>
+            </ul>
+          </details>
+
         </div>
       </div>
 
@@ -1103,7 +1305,7 @@
     }
 
     // L0 ルール / L1 開閉状態を localStorage で復元
-    ['rulesPanel', 'checklistPanel'].forEach(id => {
+    ['rulesPanel', 'checklistPanel', 'rulesL2Panel'].forEach(id => {
       const el = document.getElementById(id);
       if (!el) return;
       const key = `mema-${id}-open-v1`;
