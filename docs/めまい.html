@@ -405,26 +405,33 @@
       .dx-group-title { font-size: 9.5px; }
     }
 
-    /* === Phase 1: L0 ルールパネル + L1 全例実施チェックリスト === */
-    .dx-prelude {
+    /* === 来院後チェック区切り + チェックリスト === */
+    .dx-arrival-divider {
+      margin: 18px 0 8px;
       display: flex;
-      flex-direction: column;
-      gap: 8px;
-      margin-bottom: 0.7rem;
+      align-items: center;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 11.5px;
+      font-weight: 800;
+      letter-spacing: 0.1em;
     }
-    .dx-rules,
+    .dx-arrival-divider::before,
+    .dx-arrival-divider::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: color-mix(in srgb, var(--text) 18%, transparent);
+    }
+
     .dx-checklist {
       background: var(--surface);
       border-radius: 10px;
       border: 1.5px solid color-mix(in srgb, var(--text) 14%, transparent);
       padding: 10px 14px;
       box-shadow: 0 1px 2px var(--shadow, rgba(0,0,0,0.04));
+      margin-bottom: 8px;
     }
-    .dx-rules {
-      border-color: var(--accent);
-      background: color-mix(in srgb, var(--accent) 5%, var(--surface));
-    }
-    .dx-rules > summary,
     .dx-checklist > summary {
       cursor: pointer;
       font-weight: 800;
@@ -436,9 +443,7 @@
       gap: 6px;
       color: var(--text);
     }
-    .dx-rules > summary::-webkit-details-marker,
     .dx-checklist > summary::-webkit-details-marker { display: none; }
-    .dx-rules > summary::before,
     .dx-checklist > summary::before {
       content: "▶";
       font-size: 10px;
@@ -446,19 +451,7 @@
       transition: transform 150ms ease;
       flex-shrink: 0;
     }
-    .dx-rules[open] > summary::before,
     .dx-checklist[open] > summary::before { transform: rotate(90deg); }
-
-    .dx-rules__list {
-      margin: 8px 0 2px;
-      padding-left: 1.4rem;
-      font-size: 12.5px;
-      line-height: 1.55;
-      color: var(--text);
-    }
-    .dx-rules__list li { margin: 4px 0; }
-    .dx-rules__list strong { color: var(--accent); }
-    .dx-rules__list em { font-style: normal; color: #c0392b; font-weight: 700; }
 
     .dx-checklist__head {
       display: flex;
@@ -522,14 +515,12 @@
 
     /* スマホ調整 */
     @media (max-width: 600px) {
-      .dx-rules,
       .dx-checklist { padding: 8px 10px; }
-      .dx-rules > summary,
       .dx-checklist > summary { font-size: 12px; }
-      .dx-rules__list { font-size: 11.5px; padding-left: 1.2rem; }
       .dx-checklist__list li { font-size: 11.5px; }
       .dx-checklist__sub { font-size: 10px; }
       .dx-checklist__reset { font-size: 9.5px; padding: 1px 6px; }
+      .dx-arrival-divider { font-size: 10px; margin: 14px 0 6px; }
     }
 
     /* === Phase 2: L2 トリガー連動ルールカード === */
@@ -699,42 +690,6 @@
 
         <div class="flow-canvas">
 
-          <!-- L0: 使用ルール（来院前の必読原則） -->
-          <section class="dx-prelude" aria-label="フローチャート使用ルール">
-            <details class="dx-rules" id="rulesPanel" open>
-              <summary>📋 使用ルール（必読）</summary>
-              <ol class="dx-rules__list">
-                <li><strong>分類で workflow が決まる</strong>：TiTrATE（持続/反復・誘因・発症様式）で進行ルートが規定される。<em>最初に分類を決める</em></li>
-                <li><strong>L1 は全例必須</strong>：下のチェックリストを<em>分類前に完了</em>させる</li>
-                <li><strong>中間例は中枢扱い</strong>：HINTS が判定困難・末梢に合わない要素が一つでもあれば中枢ルートへ送る（後悔最小化）</li>
-                <li><strong>Red flag は trigger</strong>：気付いて停止する。詳細は該当ノードで確認</li>
-              </ol>
-            </details>
-
-            <!-- L1: 全例実施チェックリスト -->
-            <details class="dx-checklist" id="checklistPanel" open>
-              <summary>
-                <span class="dx-checklist__head" style="flex:1;">
-                  <span>✅ 全例で実施・確認（来院時）</span>
-                  <button type="button" class="dx-checklist__reset" id="checklistReset" aria-label="チェックをすべて外す">リセット</button>
-                </span>
-              </summary>
-              <ul class="dx-checklist__list">
-                <li><label><input type="checkbox" data-key="vital"> <span><strong>バイタル</strong> <span class="dx-checklist__sub">BP（左右差）・HR・RR・SpO2・体温</span></span></label></li>
-                <li><label><input type="checkbox" data-key="bs"> <span><strong>指尖血糖</strong> <span class="dx-checklist__sub">採血より優先・低血糖除外</span></span></label></li>
-                <li><label><input type="checkbox" data-key="gait"> <span><strong>歩行 / 起立観察</strong> <span class="dx-checklist__sub">中枢徴候の最強スクリーニング</span></span></label></li>
-                <li><label><input type="checkbox" data-key="nys"> <span><strong>自発眼振</strong> <span class="dx-checklist__sub">注視方向性・方向交代性</span></span></label></li>
-                <li><label><input type="checkbox" data-key="neuro"> <span><strong>全般神経診察</strong> <span class="dx-checklist__sub">脳神経・四肢運動感覚・小脳・構音</span></span></label></li>
-                <li><label><input type="checkbox" data-key="time"> <span><strong>症状時間プロファイル</strong> <span class="dx-checklist__sub">持続/反復・duration・誘因・発症様式</span></span></label></li>
-                <li><label><input type="checkbox" data-key="med"> <span><strong>薬剤歴</strong> <span class="dx-checklist__sub">降圧・利尿・抗凝固・抗てんかん・耳毒性</span></span></label></li>
-                <li><label><input type="checkbox" data-key="risk"> <span><strong>血管リスク問診</strong> <span class="dx-checklist__sub">HT / DM / DL / AF / 喫煙 / 既往</span></span></label></li>
-                <li><label><input type="checkbox" data-key="syncope"> <span><strong>前失神 / 不整脈問診</strong> <span class="dx-checklist__sub">眼前暗黒感・動悸・労作誘発・突然の意識消失</span></span></label></li>
-                <li><label><input type="checkbox" data-key="redflag"> <span><strong>Red flag 確認</strong> <span class="dx-checklist__sub">後頭部痛・複視・構音・片麻痺・意識変容・外傷・抗凝固</span></span></label></li>
-              </ul>
-            </details>
-          </section>
-
-          <p class="flow-canvas__hint">実線＝確定後の決定 ／ 破線＝フォールバック</p>
           <div class="dx-flow" role="group" aria-label="めまい単純化診療フロー">
 
             <!-- L0: 本当にめまいか？（前失神除外） -->
@@ -882,6 +837,42 @@
             </div>
 
           </div>
+
+          <!-- 来院後の手順：問診 + 身体診察 -->
+          <div class="dx-arrival-divider"><span>来院後のチェック</span></div>
+
+          <details class="dx-checklist" id="historyPanel">
+            <summary>
+              <span class="dx-checklist__head" style="flex:1;">
+                <span>🗣 問診（来院後に実施）</span>
+                <button type="button" class="dx-checklist__reset" aria-label="問診チェックをすべて外す">リセット</button>
+              </span>
+            </summary>
+            <ul class="dx-checklist__list">
+              <li><label><input type="checkbox" data-key="h-time"> <span><strong>症状時間プロファイル</strong> <span class="dx-checklist__sub">持続/反復・duration・誘因・発症様式</span></span></label></li>
+              <li><label><input type="checkbox" data-key="h-med"> <span><strong>薬剤歴</strong> <span class="dx-checklist__sub">降圧・利尿・抗凝固・抗てんかん・耳毒性</span></span></label></li>
+              <li><label><input type="checkbox" data-key="h-risk"> <span><strong>血管リスク</strong> <span class="dx-checklist__sub">HT / DM / DL / AF / 喫煙 / 脳梗塞既往</span></span></label></li>
+              <li><label><input type="checkbox" data-key="h-syncope"> <span><strong>前失神 / 不整脈の既往</strong> <span class="dx-checklist__sub">眼前暗黒感・動悸・労作誘発・突然の意識消失</span></span></label></li>
+              <li><label><input type="checkbox" data-key="h-trauma"> <span><strong>頭部外傷歴</strong> <span class="dx-checklist__sub">赤旗：解離 / 硬膜下血腫を意識</span></span></label></li>
+            </ul>
+          </details>
+
+          <details class="dx-checklist" id="examPanel">
+            <summary>
+              <span class="dx-checklist__head" style="flex:1;">
+                <span>🔍 身体診察（来院後に実施）</span>
+                <button type="button" class="dx-checklist__reset" aria-label="身体診察チェックをすべて外す">リセット</button>
+              </span>
+            </summary>
+            <ul class="dx-checklist__list">
+              <li><label><input type="checkbox" data-key="e-vital"> <span><strong>バイタル</strong> <span class="dx-checklist__sub">BP（左右差）・HR・RR・SpO2・体温</span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-bs"> <span><strong>指尖血糖</strong> <span class="dx-checklist__sub">採血より優先・低血糖除外</span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-gait"> <span><strong>歩行 / 起立観察</strong> <span class="dx-checklist__sub">中枢徴候の最強スクリーニング</span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-nys"> <span><strong>自発眼振</strong> <span class="dx-checklist__sub">注視方向性・方向交代性</span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-neuro"> <span><strong>全般神経診察</strong> <span class="dx-checklist__sub">脳神経・運動感覚・小脳・構音</span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-headneck"> <span><strong>後頭部痛 / 頸部痛 確認</strong> <span class="dx-checklist__sub">赤旗：椎骨動脈解離 / SAH</span></span></label></li>
+            </ul>
+          </details>
 
           <!-- L2: トリガー連動の注意（条件で意識すべきこと） -->
           <details class="dx-rules-l2" id="rulesL2Panel">
@@ -1310,34 +1301,35 @@
       });
     }
 
-    // L1 チェックリスト：localStorage 永続化 + リセット
-    const checklist = document.querySelectorAll('.dx-checklist__list input[type="checkbox"]');
-    if (checklist.length) {
-      const STORAGE_KEY = 'mema-dx-checklist-v1';
-      let stored = {};
-      try { stored = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); } catch (_) {}
-      checklist.forEach(cb => {
-        const key = cb.dataset.key;
-        if (stored[key]) cb.checked = true;
-        cb.addEventListener('change', () => {
-          stored[key] = cb.checked;
-          localStorage.setItem(STORAGE_KEY, JSON.stringify(stored));
-        });
+    // 来院後チェックリスト：localStorage 永続化 + per-panel リセット
+    const STORAGE_KEY = 'mema-dx-checklist-v2';
+    let stored = {};
+    try { stored = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); } catch (_) {}
+    const allBoxes = document.querySelectorAll('.dx-checklist__list input[type="checkbox"]');
+    allBoxes.forEach(cb => {
+      const key = cb.dataset.key;
+      if (stored[key]) cb.checked = true;
+      cb.addEventListener('change', () => {
+        if (cb.checked) stored[key] = true; else delete stored[key];
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(stored));
       });
-      const resetBtn = document.getElementById('checklistReset');
-      if (resetBtn) {
-        resetBtn.addEventListener('click', (e) => {
-          e.preventDefault();
-          e.stopPropagation();
-          checklist.forEach(cb => cb.checked = false);
-          stored = {};
-          localStorage.removeItem(STORAGE_KEY);
+    });
+    document.querySelectorAll('.dx-checklist__reset').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const details = btn.closest('details');
+        if (!details) return;
+        details.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+          cb.checked = false;
+          delete stored[cb.dataset.key];
         });
-      }
-    }
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(stored));
+      });
+    });
 
-    // L0 ルール / L1 開閉状態を localStorage で復元
-    ['rulesPanel', 'checklistPanel', 'rulesL2Panel'].forEach(id => {
+    // パネル開閉状態を localStorage で復元
+    ['historyPanel', 'examPanel', 'rulesL2Panel'].forEach(id => {
       const el = document.getElementById(id);
       if (!el) return;
       const key = `mema-${id}-open-v1`;
