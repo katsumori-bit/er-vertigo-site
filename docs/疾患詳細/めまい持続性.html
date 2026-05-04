@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="color-scheme" content="light dark" />
+  <title>めまい持続性判定（AVS / EVS） | ER ノート</title>
+  <link rel="stylesheet" href="../er-note.css" />
+</head>
+<body>
+  <header class="hokuto-top">
+    <a class="hokuto-top__btn" href="../薬剤情報.html">
+      <span class="hokuto-top__icon">℞</span><span>薬剤情報</span>
+    </a>
+    <a class="hokuto-top__btn" href="../表計算.html">
+      <span class="hokuto-top__icon">⊞</span><span>表計算</span>
+    </a>
+  </header>
+
+  <main class="hokuto-main">
+    <article class="note-shell">
+      <h1 class="page-title">めまい持続性判定（AVS / EVS）</h1>
+
+      <div class="action-header">
+        <div class="action-header__title">⚡ 即時アクション</div>
+        <ol class="action-header__list">
+          <li><strong>持続性 (AVS)</strong> = 急性発症 + <strong>24時間以上持続</strong>するめまい + 眼振 + 歩行不安定</li>
+          <li><strong>反復性 (EVS)</strong> = 発作的に<strong>繰り返す</strong>めまい（発作間は無症状）</li>
+          <li>持続時間の目安：<strong>&lt;1分</strong>=t-EVS（BPPV）／<strong>数分〜数時間</strong>=s-EVS（Ménière・前庭性片頭痛）／<strong>24時間以上</strong>=AVS</li>
+          <li>「<strong>今も続いているか？</strong>」と「<strong>これまでの経過は？</strong>」を分けて聞く</li>
+        </ol>
+      </div>
+
+      <nav class="section-tiles" id="sectionMenu">
+        <a class="section-tile" href="#s1"><span class="section-tile__no">📚</span><span class="section-tile__name">分類の整理<br><small>AVS / EVS</small></span></a>
+        <a class="section-tile" href="#s2"><span class="section-tile__no">⏱</span><span class="section-tile__name">持続時間<br><small>目安表</small></span></a>
+        <a class="section-tile" href="#s3"><span class="section-tile__no">🗣</span><span class="section-tile__name">問診のコツ</span></a>
+        <a class="section-tile" href="#s4"><span class="section-tile__no">🔀</span><span class="section-tile__name">分類後の流れ</span></a>
+        <a class="section-tile" href="#s5"><span class="section-tile__no">🤔</span><span class="section-tile__name">判別困難例</span></a>
+        <a class="section-tile" href="#s6"><span class="section-tile__no">⚠️</span><span class="section-tile__name">ピットフォール</span></a>
+      </nav>
+
+      <details class="sub-fold" id="related-symptoms">
+        <summary>📞 この疾患が該当する主訴</summary>
+        <div class="sub-fold__body">
+          <ul>
+            <li><a class="wiki-link" href="../めまい.html">めまい</a> —「めまいは持続しているか？」ノードから到達</li>
+          </ul>
+        </div>
+      </details>
+
+      <section class="section-page" id="s1" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>📚 AVS / EVS 分類の整理</h2>
+
+        <p>TiTrATE 思想（Newman-Toker, 2015）では、めまいの<strong>「質」（回るか・ふわふわか）ではなく「時間と誘因」</strong>で症候群を分類する。これにより workflow（HINTS を使うか、Dix-Hallpike を使うか等）が決まる。</p>
+
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>症候群</th><th>定義</th><th>典型代表疾患</th><th>workflow</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><strong>失神前型</strong></td>
+                <td>眼前暗黒感・立位悪化・動悸など</td>
+                <td>不整脈、起立性低血圧、出血、心原性</td>
+                <td><a class="wiki-link" href="../意識消失.html">意識消失フロー</a></td>
+              </tr>
+              <tr>
+                <td><strong>AVS</strong><br>（急性持続性）</td>
+                <td><strong>急性発症 + 24時間以上持続</strong> + 眼振 + 歩行不安定</td>
+                <td><a class="wiki-link" href="前庭神経炎.html">前庭神経炎</a>、<a class="wiki-link" href="後方循環梗塞.html">後方循環梗塞</a>、AICA 梗塞</td>
+                <td>HINTS で前庭/中枢を判別</td>
+              </tr>
+              <tr>
+                <td><strong>t-EVS</strong><br>（誘発性）</td>
+                <td>頭位変換などで誘発、<strong>数秒〜1分</strong>で消失、発作間は無症状</td>
+                <td><a class="wiki-link" href="BPPV.html">BPPV</a></td>
+                <td>Dix-Hallpike → Epley 法</td>
+              </tr>
+              <tr>
+                <td><strong>s-EVS</strong><br>（自発反復）</td>
+                <td>誘因なく自発的に発作、<strong>数分〜数時間</strong>、発作間は無症状</td>
+                <td>Ménière 病、前庭性片頭痛、TIA、不整脈</td>
+                <td>背景・反復頻度・随伴で個別評価</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout callout-tip">
+          <div class="callout-title">分類できれば workflow が決まる</div>
+          <div class="callout-body"><p>「持続しているか？」だけで <strong>AVS（24h+）vs EVS（発作）</strong> に大別できる。EVS の中はさらに「誘因あり / なし」で t / s に分ける。</p></div>
+        </div>
+      </section>
+
+      <section class="section-page" id="s2" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>⏱ 持続時間の目安表</h2>
+
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>持続時間</th><th>典型分類</th><th>代表疾患</th></tr></thead>
+            <tbody>
+              <tr><td><strong>数秒〜1分</strong></td><td>t-EVS（誘発性）</td><td>BPPV（頭位変換で誘発）</td></tr>
+              <tr><td><strong>数分（5〜30分）</strong></td><td>s-EVS</td><td>TIA、前庭性片頭痛 軽症</td></tr>
+              <tr><td><strong>20分〜12時間</strong></td><td>s-EVS</td><td>Ménière 病、前庭性片頭痛</td></tr>
+              <tr><td><strong>数時間〜24時間未満</strong></td><td>s-EVS の延長 or 早期 AVS</td><td>境界例（s-EVS 重症 or AVS 初期）</td></tr>
+              <tr><td><strong>24時間以上持続</strong></td><td><strong>AVS</strong>（急性持続性）</td><td>前庭神経炎、後方循環梗塞</td></tr>
+              <tr><td>慢性持続（&gt;1ヶ月）</td><td>慢性めまい</td><td>慢性前庭機能不全、機能性、薬剤性</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>「持続している」の解釈</h3>
+        <ul>
+          <li><strong>診察時にもめまいが続いている</strong>のが AVS の典型</li>
+          <li>来院時に軽快していても、<strong>24時間以上連続していた</strong>なら AVS の workflow</li>
+          <li>診察時に症状なし、過去 1 日に発作 → 反復性（EVS）の可能性</li>
+        </ul>
+
+        <div class="callout callout-warning">
+          <div class="callout-title">境界例（24時間前後）の扱い</div>
+          <div class="callout-body"><p>持続時間が 12〜24 時間で「AVS とも EVS とも言いにくい」場合、<strong>AVS として扱う</strong>のが安全（後方循環梗塞の見逃し回避）。</p></div>
+        </div>
+      </section>
+
+      <section class="section-page" id="s3" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🗣 問診のコツ</h2>
+
+        <h3>2 つを分けて聞く</h3>
+        <ol>
+          <li><strong>今もめまいは続いていますか？</strong>（現在の状態）</li>
+          <li><strong>始まってから一度も止まらず続いていましたか？</strong>（経過）</li>
+        </ol>
+        <p>2 つの答えで分類が決まる：</p>
+        <ul>
+          <li>① Yes + ② Yes（連続して持続）→ <strong>AVS</strong></li>
+          <li>① No + ② No（発作と発作の合間あり）→ <strong>EVS</strong></li>
+          <li>① No + ② Yes（連続だったが今は治まった）→ <strong>AVS の改善期</strong>（HINTS 困難、慎重に）</li>
+        </ul>
+
+        <h3>誘因の聞き方</h3>
+        <ul>
+          <li><strong>頭の向きを変えて起こる？</strong> → t-EVS（BPPV）</li>
+          <li>立った時・坐った時に起こる？ → 起立性低血圧（前失神型）</li>
+          <li>何もなく突然始まる？ → AVS or s-EVS</li>
+        </ul>
+
+        <h3>反復性を疑うサイン</h3>
+        <ul>
+          <li>「昨日も似たことが」「以前にもあった」</li>
+          <li>耳鳴・難聴を伴う発作 → Ménière</li>
+          <li>頭痛と一緒に → 前庭性片頭痛</li>
+          <li>短時間（数分〜30分）で完全に治る → s-EVS / TIA</li>
+        </ul>
+
+        <h3>持続性 (AVS) を疑うサイン</h3>
+        <ul>
+          <li>「ずっと続いている」「治らない」</li>
+          <li>悪心・嘔吐が強い、来院時も眼振あり</li>
+          <li>歩行・起立が困難</li>
+        </ul>
+      </section>
+
+      <section class="section-page" id="s4" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🔀 分類後の流れ</h2>
+
+        <h3>AVS（持続性）</h3>
+        <ul>
+          <li>→ <strong>HINTS</strong> で前庭神経炎 vs 中枢性脳血管障害を判別</li>
+          <li><a class="wiki-link" href="HINTS.html">HINTS</a> で末梢パターン → <a class="wiki-link" href="前庭神経炎.html">前庭神経炎</a></li>
+          <li>HINTS で中枢パターン or 判断困難 → <a class="wiki-link" href="後方循環梗塞.html">後方循環梗塞</a> として MRI/MRA</li>
+          <li>「<strong>歩けないなら入院</strong>」が原則</li>
+        </ul>
+
+        <h3>t-EVS（誘発性）</h3>
+        <ul>
+          <li>→ <strong>Dix-Hallpike</strong> で BPPV を確認</li>
+          <li>陽性 → <a class="wiki-link" href="BPPV.html">Epley 法</a>で治療、画像不要</li>
+          <li>非典型的眼振 / 反応乏しい → 中枢性も鑑別</li>
+        </ul>
+
+        <h3>s-EVS（自発反復）</h3>
+        <ul>
+          <li>→ 反復頻度・持続時間・随伴症状で個別評価</li>
+          <li>耳症状あり：Ménière 病</li>
+          <li>頭痛伴う：前庭性片頭痛</li>
+          <li>血管リスク高 + 数分の発作：TIA を強く疑う</li>
+          <li>動悸・失神前様：不整脈評価（ECG / ホルター）</li>
+        </ul>
+      </section>
+
+      <section class="section-page" id="s5" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🤔 判別困難例の扱い</h2>
+
+        <h3>BPPV と AVS の中間例</h3>
+        <ul>
+          <li>BPPV と診断したが症状が長引く → 中枢性の可能性あり</li>
+          <li>頭位変換でも誘発されるが「自発的にも続く」 → AVS 寄り</li>
+          <li><strong>判別困難 = 中枢扱い</strong>で MRI/MRA（後悔最小化）</li>
+        </ul>
+
+        <h3>「24時間前後」の境界例</h3>
+        <ul>
+          <li>20 時間続いて軽快、3 時間後に再発 → 単純に AVS or EVS で割り切れない</li>
+          <li>来院時に軽快していても、<strong>連続持続歴があれば AVS の workflow</strong></li>
+          <li>HINTS は「現在も眼振あり」が前提なので、軽快期は HINTS 不可 → 画像重視</li>
+        </ul>
+
+        <h3>高齢者の不明瞭な訴え</h3>
+        <ul>
+          <li>持続時間が曖昧な場合、「今朝起きてからずっと？」「昨日の夜から？」など具体的な参照点で聞き直す</li>
+          <li>家族・付き添いから時系列を確認</li>
+        </ul>
+
+        <div class="callout callout-warning">
+          <div class="callout-title">判別困難な時の鉄則</div>
+          <div class="callout-body"><p><strong>判別困難 = 中枢として扱う</strong>。後方循環梗塞を末梢で片付けると致命的。MRI/MRA でクリアにしてから帰宅判断。</p></div>
+        </div>
+      </section>
+
+      <section class="section-page" id="s6" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>⚠️ ピットフォール</h2>
+
+        <ul>
+          <li><strong>「今めまいない」だけで反復性と決める</strong> — 24時間以上持続歴があれば AVS</li>
+          <li><strong>短時間 = BPPV と決め打ち</strong> — TIA も数分、後方循環の小発作もある</li>
+          <li><strong>境界例（12〜24h）を EVS 扱い</strong> — AVS 寄りで安全側に</li>
+          <li><strong>BPPV 後の持続感を「BPPV 後遺症」で済ます</strong> — 中枢性の可能性</li>
+          <li><strong>「いつから？」だけで判断</strong> — 連続性（途中で止まったか）も必ず確認</li>
+          <li><strong>慢性のふらつきを AVS と扱う</strong> — AVS は急性発症が必須</li>
+        </ul>
+
+        <h3>関連リンク</h3>
+        <ul>
+          <li><a class="wiki-link" href="../めまい.html">めまい（フローチャート）</a></li>
+          <li><a class="wiki-link" href="めまいか前失神か.html">めまい vs 前失神の見極め</a></li>
+          <li><a class="wiki-link" href="HINTS.html">HINTS</a>（AVS 判別）</li>
+          <li><a class="wiki-link" href="BPPV.html">BPPV</a>（t-EVS）</li>
+          <li><a class="wiki-link" href="前庭神経炎.html">前庭神経炎</a>（AVS 末梢）</li>
+          <li><a class="wiki-link" href="後方循環梗塞.html">後方循環梗塞</a>（AVS 中枢）</li>
+        </ul>
+      </section>
+
+    </article>
+  </main>
+
+  <nav class="hokuto-bottom">
+    <button class="hokuto-bottom__btn" type="button" id="navBack">
+      <span class="hokuto-bottom__icon">←</span><span>戻る</span>
+    </button>
+    <a class="hokuto-bottom__btn" href="../ツール.html">
+      <span class="hokuto-bottom__icon">⚙</span><span>ツール</span>
+    </a>
+    <a class="hokuto-bottom__btn" href="../index.html">
+      <span class="hokuto-bottom__icon">⌂</span><span>ホーム</span>
+    </a>
+  </nav>
+
+  <script>
+  (function(){
+    const menu = document.getElementById('sectionMenu');
+    const pages = document.querySelectorAll('.section-page');
+    const titleH1 = document.querySelector('.page-title');
+
+    function showSection(id) {
+      menu.hidden = true;
+      if (titleH1) titleH1.hidden = true;
+      pages.forEach(p => p.hidden = (p.id !== id));
+      window.scrollTo(0, 0);
+    }
+    function showMenu() {
+      menu.hidden = false;
+      if (titleH1) titleH1.hidden = false;
+      pages.forEach(p => p.hidden = true);
+      window.scrollTo(0, 0);
+    }
+    function syncFromHash() {
+      const id = (location.hash || '').replace('#','');
+      const target = id ? document.getElementById(id) : null;
+      if (target && target.classList.contains('section-page')) showSection(id);
+      else showMenu();
+    }
+    window.addEventListener('hashchange', syncFromHash);
+    document.querySelectorAll('.back-to-menu').forEach(b => {
+      b.addEventListener('click', () => { history.pushState(null,'',location.pathname); showMenu(); });
+    });
+    const navBack = document.getElementById('navBack');
+    if (navBack) navBack.addEventListener('click', () => {
+      if (window.history.length > 1) history.back();
+      else window.location.href = '../index.html';
+    });
+    syncFromHash();
+  })();
+  </script>
+</body>
+</html>
