@@ -30,11 +30,11 @@
       border: 1px solid color-mix(in srgb, var(--text) 20%, transparent);
     }
 
-    /* スクロール可能な Mermaid キャンバス */
+    /* ===== 診療フロー（HTML+CSS Grid 版） ===== */
     .flow-canvas {
       background: var(--surface);
       border-radius: 10px;
-      padding: 14px 8px;
+      padding: 14px 10px 18px;
       margin-top: 0.55rem;
       overflow-x: auto;
       overflow-y: hidden;
@@ -45,21 +45,272 @@
       font-size: 0.72rem;
       color: var(--muted);
       text-align: center;
-      margin: 0 0 0.4rem 0;
+      margin: 0 0 0.6rem 0;
     }
-    .flow-canvas .mermaid {
-      min-width: 720px; /* スマホでも文字が潰れない最低幅 */
-      text-align: center;
-    }
-    .flow-canvas .mermaid svg { max-width: none !important; height: auto; }
 
-    /* Mermaid のフォントサイズと色を読みやすく */
-    .flow-canvas .mermaid .nodeLabel,
-    .flow-canvas .mermaid .edgeLabel {
-      font-size: 14px !important;
-      line-height: 1.45 !important;
+    .dx-flow {
+      min-width: 720px;
+      margin: 0 auto;
+      padding: 4px 6px 8px;
+      font-size: 14px;
+      line-height: 1.45;
+      color: var(--text);
+      font-family: inherit;
     }
-    .flow-canvas .mermaid .cluster .nodeLabel { font-weight: 700; }
+
+    /* ノード共通 */
+    .dx-node {
+      background: var(--surface);
+      border: 1.5px solid color-mix(in srgb, var(--text) 22%, transparent);
+      border-radius: 10px;
+      padding: 8px 12px;
+      text-align: center;
+      box-shadow: 0 1px 2px var(--shadow, rgba(0,0,0,0.06));
+      min-height: 38px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+    }
+    .dx-node__title { font-weight: 700; font-size: 13.5px; }
+    .dx-node__sub   { font-size: 11.5px; color: var(--muted); font-weight: 500; }
+
+    /* ノード種別 */
+    .dx-node--decision {
+      background: color-mix(in srgb, var(--accent) 12%, var(--surface));
+      border-color: var(--accent);
+      border-radius: 14px;
+    }
+    .dx-node--judge {
+      background: var(--accent-weak, color-mix(in srgb, var(--accent) 14%, var(--surface)));
+      border: 1.5px dashed var(--accent);
+      border-radius: 999px;
+      padding: 6px 14px;
+      font-weight: 700;
+      min-height: 32px;
+    }
+    .dx-node--danger {
+      background: color-mix(in srgb, #c0392b 14%, var(--surface));
+      border-color: #c0392b;
+      color: var(--text);
+    }
+    .dx-node--danger .dx-node__title { color: #c0392b; }
+    .dx-node--action {
+      background: color-mix(in srgb, var(--text) 5%, var(--surface));
+      border-style: dashed;
+    }
+
+    /* レイヤー（横一列に揃える） */
+    .dx-layer {
+      display: grid;
+      gap: 14px;
+      align-items: stretch;
+      margin: 0;
+    }
+    .dx-layer--root   { grid-template-columns: 1fr; justify-items: center; }
+    .dx-layer--root > * { max-width: 360px; }
+    .dx-layer--branch { grid-template-columns: 1fr 1fr; }
+    .dx-layer--syndrome { grid-template-columns: 1fr 1fr 1fr 1fr; }
+    .dx-layer--avs-judge { grid-template-columns: 1fr 1fr 1fr; align-items: center; }
+    .dx-layer--workup  { grid-template-columns: 1fr 1fr; }
+
+    /* 矢印（縦の単純コネクタ） */
+    .dx-arrow {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      margin: 4px 0;
+      min-height: 44px;
+      color: var(--muted);
+      font-size: 11.5px;
+      font-weight: 600;
+    }
+    .dx-arrow::before {
+      content: "";
+      width: 2px;
+      height: 100%;
+      min-height: 38px;
+      background: color-mix(in srgb, var(--text) 35%, transparent);
+    }
+
+    /* グリッドユーティリティ */
+    .dx-span-right2 { grid-column: 3 / 5; }
+    .dx-arrow::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      width: 0; height: 0;
+      border-left: 5px solid transparent;
+      border-right: 5px solid transparent;
+      border-top: 7px solid color-mix(in srgb, var(--text) 35%, transparent);
+    }
+    .dx-arrow--dashed::before {
+      background: repeating-linear-gradient(
+        to bottom,
+        color-mix(in srgb, var(--text) 35%, transparent) 0 4px,
+        transparent 4px 8px
+      );
+    }
+    .dx-arrow__label {
+      background: var(--surface);
+      padding: 1px 8px;
+      border-radius: 999px;
+      border: 1px solid color-mix(in srgb, var(--text) 18%, transparent);
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      white-space: nowrap;
+      z-index: 1;
+    }
+
+    /* 分岐用 Y 字（左右の枝） */
+    .dx-fork {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      position: relative;
+      min-height: 38px;
+      margin: 2px 0 4px;
+    }
+    .dx-fork::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 25%; right: 25%;
+      height: 2px;
+      background: color-mix(in srgb, var(--text) 35%, transparent);
+    }
+    .dx-fork__leg {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      padding-top: 4px;
+      padding-bottom: 4px;
+      font-size: 11.5px;
+      font-weight: 600;
+      color: var(--muted);
+      min-height: 36px;
+    }
+    .dx-fork__leg::before {
+      content: "";
+      width: 2px;
+      flex: 1;
+      background: color-mix(in srgb, var(--text) 35%, transparent);
+    }
+    .dx-fork__leg::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      width: 0; height: 0;
+      border-left: 5px solid transparent;
+      border-right: 5px solid transparent;
+      border-top: 7px solid color-mix(in srgb, var(--text) 35%, transparent);
+    }
+    .dx-fork__label {
+      background: var(--surface);
+      padding: 1px 8px;
+      border-radius: 999px;
+      border: 1px solid color-mix(in srgb, var(--text) 18%, transparent);
+      margin-bottom: 2px;
+      z-index: 1;
+    }
+
+    /* 4分岐フォーク（症候群レイヤー用） */
+    .dx-fork--quad { grid-template-columns: repeat(4, 1fr); }
+    .dx-fork--quad::before { left: 12.5%; right: 12.5%; }
+
+    /* 3分岐フォーク（HINTS から左右へ） */
+    .dx-fork--triple { grid-template-columns: 1fr 1fr 1fr; }
+    .dx-fork--triple::before { left: 16.66%; right: 16.66%; }
+
+    /* メモブロック */
+    .dx-note {
+      background: color-mix(in srgb, var(--text) 4%, var(--surface));
+      border-left: 3px solid color-mix(in srgb, var(--text) 25%, transparent);
+      border-radius: 6px;
+      padding: 6px 10px;
+      font-size: 11.5px;
+      color: var(--muted);
+      text-align: left;
+      margin-top: 8px;
+    }
+
+    /* HINTS 判定バッジ専用 */
+    .dx-hints-row {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 14px;
+      align-items: center;
+      margin-top: 6px;
+    }
+    .dx-hints-row__line {
+      height: 2px;
+      background: color-mix(in srgb, var(--text) 30%, transparent);
+    }
+
+    /* 破線フォールバック（横方向） */
+    .dx-fallback {
+      margin-top: 14px;
+      padding: 10px 12px;
+      border: 1.5px dashed color-mix(in srgb, var(--text) 35%, transparent);
+      border-radius: 10px;
+      background: color-mix(in srgb, var(--text) 3%, var(--surface));
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .dx-fallback__label { flex: 1; }
+    .dx-fallback__arrow {
+      font-size: 18px;
+      color: color-mix(in srgb, var(--text) 50%, transparent);
+    }
+    .dx-fallback__target {
+      font-weight: 700;
+      color: var(--text);
+      padding: 4px 10px;
+      border: 1.5px solid color-mix(in srgb, var(--text) 30%, transparent);
+      border-radius: 8px;
+      background: var(--surface);
+    }
+
+    /* セクションタイトル（症候群グループ見出し） */
+    .dx-group-title {
+      grid-column: 1 / -1;
+      text-align: center;
+      font-size: 11.5px;
+      font-weight: 700;
+      color: var(--muted);
+      letter-spacing: 0.04em;
+      margin-top: 4px;
+      margin-bottom: 2px;
+    }
+
+    /* === 420px 以下：1列折り返し === */
+    @media (max-width: 420px) {
+      .dx-flow { min-width: 0; }
+      .flow-canvas { overflow-x: hidden; }
+      .dx-layer--branch,
+      .dx-layer--syndrome,
+      .dx-layer--avs-judge,
+      .dx-layer--workup { grid-template-columns: 1fr; }
+      .dx-fork,
+      .dx-fork--quad,
+      .dx-fork--triple { grid-template-columns: 1fr; gap: 8px; }
+      .dx-fork::before,
+      .dx-fork--quad::before,
+      .dx-fork--triple::before { display: none; }
+      .dx-fork__leg { min-height: 28px; }
+      .dx-fork__leg::before { width: 2px; height: 18px; flex: none; }
+      .dx-hints-row { grid-template-columns: 1fr; }
+      .dx-hints-row__line { display: none; }
+      .dx-fallback { flex-direction: column; align-items: stretch; text-align: center; }
+    }
   </style>
 </head>
 <body>
@@ -84,43 +335,126 @@
         </div>
 
         <div class="flow-canvas">
-          <p class="flow-canvas__hint">↔ 横スクロール / ピンチで拡大できます</p>
-          <div class="mermaid">
-flowchart TD
-  Start["めまいは持続しているか？"]
-  Img["頭部画像検査<br>CT + MRI"]
-  AdmObs["原則入院・48時間後 MRI 再検<br>※歩ける場合は外来フローも検討"]
-  Adm["入院"]
+          <p class="flow-canvas__hint">↔ 横スクロール可 / 実線＝確定後の決定 / 破線＝フォールバック</p>
+          <div class="dx-flow" role="group" aria-label="めまい単純化診療フロー">
 
-  subgraph EVS["非持続性（EVS）"]
-    Cause{"誘因の有無"}
-    BPPV["<b>三半規管</b><br>BPPV"]
-    Other["その他<br>前庭性片頭痛・TIA"]
-    Epley["誘発法 → 耳石置換法<br>※画像検査不要<br>※起立性低血圧も鑑別"]
-    Cause -->|誘因あり| BPPV
-    Cause -->|誘因なし| Other
-    BPPV -->|疑い| Epley
-  end
+            <!-- L1: ルート判定 -->
+            <div class="dx-layer dx-layer--root">
+              <div class="dx-node dx-node--decision">
+                <div class="dx-node__title">めまいは持続しているか？</div>
+              </div>
+            </div>
 
-  subgraph AVS["持続性（AVS）"]
-    direction LR
-    Vest["<b>前庭</b><br>前庭神経炎"]
-    Central["<b>中枢</b><br>脳血管障害"]
-    Vest <-->|HINTS| Central
-  end
+            <!-- 持続性 vs 非持続性 -->
+            <div class="dx-fork">
+              <div class="dx-fork__leg"><span class="dx-fork__label">非持続性</span></div>
+              <div class="dx-fork__leg"><span class="dx-fork__label">持続性</span></div>
+            </div>
 
-  Start -->|非持続性| EVS
-  Start -->|持続性| AVS
-  Central -->|疑い| Img
-  AVS -.->|"三半規管・前庭<br>いずれも疑われない場合"| Img
-  Img -->|陰性| AdmObs
-  Img -->|陽性| Adm
+            <!-- L2: 中間判定（誘因 / AVS-HINTS） -->
+            <div class="dx-layer dx-layer--branch">
+              <div class="dx-node dx-node--decision">
+                <div class="dx-node__title">誘因の有無</div>
+                <div class="dx-node__sub">EVS</div>
+              </div>
+              <div>
+                <div class="dx-node dx-node--decision">
+                  <div class="dx-node__title">AVS</div>
+                  <div class="dx-node__sub">急性持続性めまい</div>
+                </div>
+                <div class="dx-hints-row">
+                  <div class="dx-hints-row__line" aria-hidden="true"></div>
+                  <div class="dx-node dx-node--judge">HINTS で判別</div>
+                  <div class="dx-hints-row__line" aria-hidden="true"></div>
+                </div>
+              </div>
+            </div>
 
-  classDef danger fill:#fde7e1,stroke:#c0392b,stroke-width:2px,color:#2a2a2a;
-  classDef benign fill:#e3eefa,stroke:#4a90e2,stroke-width:2px,color:#2a2a2a;
+            <!-- 中間分岐：左 EVS 2分岐 / 右 AVS 2分岐 -->
+            <div class="dx-layer dx-layer--branch" style="margin-top:6px;">
+              <div class="dx-fork">
+                <div class="dx-fork__leg"><span class="dx-fork__label">誘因なし</span></div>
+                <div class="dx-fork__leg"><span class="dx-fork__label">誘因あり</span></div>
+              </div>
+              <div class="dx-fork">
+                <div class="dx-fork__leg"><span class="dx-fork__label">前庭性</span></div>
+                <div class="dx-fork__leg"><span class="dx-fork__label">中枢性</span></div>
+              </div>
+            </div>
 
-  class Central,Adm,AdmObs danger;
-  class BPPV,Vest,Other benign;
+            <!-- L3: 症候群レイヤー（4つを横一列に揃える） -->
+            <div class="dx-layer dx-layer--syndrome">
+              <div class="dx-node">
+                <div class="dx-node__title">その他</div>
+                <div class="dx-node__sub">前庭性片頭痛 / TIA</div>
+              </div>
+              <div class="dx-node">
+                <div class="dx-node__title">三半規管 BPPV</div>
+                <div class="dx-node__sub">t-EVS</div>
+              </div>
+              <div class="dx-node">
+                <div class="dx-node__title">前庭神経炎</div>
+                <div class="dx-node__sub">末梢パターン</div>
+              </div>
+              <div class="dx-node dx-node--danger">
+                <div class="dx-node__title">脳血管障害</div>
+                <div class="dx-node__sub">中枢パターン・要警戒</div>
+              </div>
+            </div>
+
+            <!-- L3 → L4 への矢印（BPPV と 中枢のみ "疑い" で次工程へ） -->
+            <div class="dx-layer dx-layer--syndrome" style="gap:14px; margin-top:2px;">
+              <div></div>
+              <div class="dx-arrow"><span class="dx-arrow__label">疑い</span></div>
+              <div class="dx-arrow dx-span-right2"><span class="dx-arrow__label">疑い</span></div>
+            </div>
+
+            <!-- L4: 処置・検査レイヤー -->
+            <div class="dx-layer dx-layer--syndrome">
+              <div></div>
+              <div class="dx-node dx-node--action">
+                <div class="dx-node__title">誘発法 → 耳石置換法</div>
+                <div class="dx-node__sub">画像検査必要なし<br>起立性低血圧も鑑別</div>
+              </div>
+              <div class="dx-node dx-node--decision dx-span-right2">
+                <div class="dx-node__title">頭部画像検査</div>
+                <div class="dx-node__sub">CT + MRI</div>
+              </div>
+            </div>
+
+            <!-- L4 → L5：陰性／陽性 分岐（cols 3-4 に拡張） -->
+            <div class="dx-layer dx-layer--syndrome">
+              <div></div>
+              <div></div>
+              <div class="dx-fork dx-span-right2">
+                <div class="dx-fork__leg"><span class="dx-fork__label">陰性</span></div>
+                <div class="dx-fork__leg"><span class="dx-fork__label">陽性</span></div>
+              </div>
+            </div>
+
+            <!-- L5: disposition（cols 3-4 に拡張して窮屈さを解消） -->
+            <div class="dx-layer dx-layer--syndrome">
+              <div></div>
+              <div></div>
+              <div class="dx-layer dx-layer--workup dx-span-right2" style="gap:10px;">
+                <div class="dx-node">
+                  <div class="dx-node__title">原則入院</div>
+                  <div class="dx-node__sub">48時間後 MRI 再検<br>歩ける場合は外来フローも検討</div>
+                </div>
+                <div class="dx-node dx-node--danger">
+                  <div class="dx-node__title">入院</div>
+                  <div class="dx-node__sub">脳血管障害確定</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- フォールバック（破線） -->
+            <div class="dx-fallback" role="note">
+              <span class="dx-fallback__label">三半規管・前庭いずれも疑われない場合</span>
+              <span class="dx-fallback__arrow" aria-hidden="true">⇢</span>
+              <span class="dx-fallback__target">頭部画像検査へ</span>
+            </div>
+
           </div>
         </div>
       </div>
@@ -439,25 +773,6 @@ flowchart TD
     </a>
   </nav>
 
-  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
-  <script>
-    if (window.mermaid) {
-      const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      mermaid.initialize({
-        startOnLoad: true,
-        theme: isDark ? 'dark' : 'default',
-        securityLevel: 'loose',
-        flowchart: {
-          useMaxWidth: false,
-          htmlLabels: true,
-          nodeSpacing: 50,
-          rankSpacing: 55,
-          curve: 'basis'
-        },
-        themeVariables: { fontSize: '14px' }
-      });
-    }
-  </script>
   <script>
   (function(){
     const menu = document.getElementById('sectionMenu');
