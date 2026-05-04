@@ -6,6 +6,35 @@
   <meta name="color-scheme" content="light dark" />
   <title>めまい | ER ノート</title>
   <link rel="stylesheet" href="er-note.css" />
+  <style>
+    /* 診療フロー（このページ専用の上書き） */
+    .flow-box {
+      position: static;
+      cursor: pointer;
+      user-select: none;
+    }
+    .flow-box__title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+    }
+    .flow-box__hint {
+      font-size: 0.72rem;
+      font-weight: 500;
+      color: var(--muted);
+      letter-spacing: 0.02em;
+    }
+    .flow-box .mermaid {
+      background: var(--surface, #fff);
+      border-radius: 8px;
+      padding: 10px;
+      margin-top: 0.5rem;
+      overflow-x: auto;
+      text-align: center;
+    }
+    .flow-box .mermaid svg { max-width: 100%; height: auto; }
+  </style>
 </head>
 <body>
   <header class="hokuto-top">
@@ -21,21 +50,43 @@
     <article class="note-shell">
       <h1 class="page-title">めまい</h1>
 
-      <!-- 即時アクションヘッダー（常時 sticky） -->
-      <div class="action-header">
-        <div class="action-header__title">⚡ 即時アクション</div>
-        <ol class="action-header__list">
-          <li><strong>歩けない / 神経所見 / 後頭部痛 / 抗凝固薬</strong> → 中枢性疑い → <strong>MRI/MRA</strong></li>
-          <li><strong>TiTrATE で 4 症候群</strong>に分類：失神前 / AVS / t-EVS / s-EVS</li>
-          <li><strong>HINTS は AVS 限定</strong>、CT は<strong>後方循環虚血の除外に弱い</strong></li>
-          <li>BPPV は <strong>Dix-Hallpike → Epley</strong>、前庭抑制薬を漫然使わない</li>
-        </ol>
+      <!-- 診療フロー（タップで閉じる／サブセクション表示時は非表示） -->
+      <div class="action-header flow-box" id="flowBox" role="button" tabindex="0" aria-label="診療フローを閉じる">
+        <div class="action-header__title flow-box__title">
+          <span>🗺 診療フロー</span>
+          <span class="flow-box__hint">タップで閉じる ✕</span>
+        </div>
+        <div class="mermaid">
+flowchart TD
+  Start["めまいは持続しているか？"]
+  Cause{"誘因の有無"}
+  Other["その他<br>前庭片頭痛・TIA"]
+  BPPV["三半規管<br>BPPV"]
+  Epley["誘発法 → 耳石置換法<br>※画像検査不要<br>※起立性低血圧も鑑別"]
+  Vest["前庭<br>前庭神経炎"]
+  Central["中枢<br>脳血管障害"]
+  Img["頭部画像検査<br>CT + MRI"]
+  AdmObs["原則入院・48時間後 MRI 再検<br>※歩ける場合は外来フローも検討"]
+  Adm["入院"]
+
+  Start -->|非持続性| Cause
+  Start -->|"持続性<br>AVS"| Vest
+  Start -->|"持続性<br>AVS"| Central
+  Cause -->|誘因なし| Other
+  Cause -->|誘因あり| BPPV
+  BPPV -->|疑い| Epley
+  Vest <-->|HINTS| Central
+  Central -->|疑い| Img
+  Vest -.->|"三半規管・前庭<br>いずれも疑われない場合"| Img
+  Img -->|陰性| AdmObs
+  Img -->|陽性| Adm
+        </div>
       </div>
 
       <!-- §1〜§9 メニュータイル -->
       <nav class="section-tiles" id="sectionMenu">
-        <a class="section-tile" href="#s1"><span class="section-tile__no">🚨</span><span class="section-tile__name">Red flags<br><small>致死疾患を外す</small></span></a>
-        <a class="section-tile" href="#s2"><span class="section-tile__no">🎯</span><span class="section-tile__name">TiTrATE<br><small>症候群分類</small></span></a>
+        <a class="section-tile" href="#s1"><span class="section-tile__no">🚨</span><span class="section-tile__name">中枢性確認<br><small>red flags で末梢で片付けない</small></span></a>
+        <a class="section-tile" href="#s2"><span class="section-tile__no">🎯</span><span class="section-tile__name">めまいの分類<br><small>4症候群に分ける</small></span></a>
         <a class="section-tile" href="#s3"><span class="section-tile__no">🩺</span><span class="section-tile__name">最小診察<br><small>+ HINTS</small></span></a>
         <a class="section-tile" href="#s4"><span class="section-tile__no">🔄</span><span class="section-tile__name">症候群別<br><small>workflow</small></span></a>
         <a class="section-tile" href="#s5"><span class="section-tile__no">🧠</span><span class="section-tile__name">疾患別<br><small>BPPV / 前庭神経炎 ほか</small></span></a>
@@ -48,7 +99,7 @@
       <!-- §1 Red flags -->
       <section class="section-page" id="s1" hidden>
         <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🚨 Red flags（致死疾患を外す）</h2>
+        <h2>🚨 中枢性確認（red flags で末梢で片付けない）</h2>
 
         <h3>これがあれば末梢で片付けない</h3>
         <ul>
@@ -78,7 +129,7 @@
       <!-- §2 TiTrATE -->
       <section class="section-page" id="s2" hidden>
         <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🎯 TiTrATE 症候群分類</h2>
+        <h2>🎯 めまいの分類（4症候群）</h2>
 
         <p>「回る vs ふわふわ」の<strong>質</strong>より、<strong>持続時間・反復性・誘因・随伴症状・ターゲット診察</strong>で分類する。</p>
 
@@ -346,21 +397,42 @@
     </a>
   </nav>
 
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>
+    if (window.mermaid) {
+      mermaid.initialize({ startOnLoad: true, theme: 'default', securityLevel: 'loose', flowchart: { useMaxWidth: true, htmlLabels: true } });
+    }
+  </script>
   <script>
   (function(){
     const menu = document.getElementById('sectionMenu');
     const pages = document.querySelectorAll('.section-page');
     const titleH1 = document.querySelector('.page-title');
+    const flowBox = document.getElementById('flowBox');
+    let flowDismissed = false;
+
+    if (flowBox) {
+      const dismiss = () => {
+        flowDismissed = true;
+        flowBox.hidden = true;
+      };
+      flowBox.addEventListener('click', dismiss);
+      flowBox.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); dismiss(); }
+      });
+    }
 
     function showSection(id) {
       menu.hidden = true;
       if (titleH1) titleH1.hidden = true;
+      if (flowBox) flowBox.hidden = true;
       pages.forEach(p => p.hidden = (p.id !== id));
       window.scrollTo(0, 0);
     }
     function showMenu(scrollTarget) {
       menu.hidden = false;
       if (titleH1) titleH1.hidden = false;
+      if (flowBox && !flowDismissed) flowBox.hidden = false;
       pages.forEach(p => p.hidden = true);
       if (scrollTarget) {
         if (scrollTarget.tagName === 'DETAILS') scrollTarget.open = true;
