@@ -331,6 +331,102 @@
       .dx-hints-row__line { display: none; }
       .dx-fallback { flex-direction: column; align-items: stretch; text-align: center; }
     }
+
+    /* === スマホ用 縦カード版 === */
+    .dx-m-flow { display: none; }
+
+    .dx-m-node {
+      border: 1.5px solid color-mix(in srgb, var(--text) 22%, transparent);
+      border-radius: 10px;
+      background: var(--surface);
+      padding: 10px 12px;
+      margin: 6px 0;
+      box-shadow: 0 1px 2px var(--shadow, rgba(0,0,0,0.06));
+    }
+    .dx-m-node__title { font-weight: 700; font-size: 14.5px; line-height: 1.4; }
+    .dx-m-node__sub { font-size: 12px; color: var(--muted); margin-top: 2px; line-height: 1.45; }
+
+    .dx-m-node.is-decision {
+      background: color-mix(in srgb, var(--accent) 12%, var(--surface));
+      border-color: var(--accent);
+    }
+    .dx-m-node.is-judge {
+      border-style: dashed;
+      border-radius: 999px;
+      text-align: center;
+      font-weight: 700;
+      font-size: 13px;
+      background: var(--accent-weak, color-mix(in srgb, var(--accent) 14%, var(--surface)));
+      border-color: var(--accent);
+      padding: 8px 14px;
+    }
+    .dx-m-node.is-danger {
+      background: color-mix(in srgb, #c0392b 14%, var(--surface));
+      border-color: #c0392b;
+    }
+    .dx-m-node.is-danger .dx-m-node__title { color: #c0392b; }
+    .dx-m-node.is-action {
+      background: color-mix(in srgb, var(--text) 5%, var(--surface));
+      border-style: dashed;
+    }
+    .dx-m-node.is-external {
+      display: block;
+      text-decoration: none;
+      color: var(--text);
+      border-style: dashed;
+      position: relative;
+      background: color-mix(in srgb, var(--accent) 6%, var(--surface));
+    }
+    .dx-m-node.is-external::after {
+      content: "↗";
+      position: absolute;
+      top: 6px;
+      right: 10px;
+      font-size: 13px;
+      color: var(--accent);
+    }
+
+    .dx-m-branch {
+      margin: 4px 0 6px;
+    }
+    .dx-m-branch__leg {
+      position: relative;
+      border-left: 3px solid color-mix(in srgb, var(--accent) 45%, transparent);
+      padding: 6px 0 6px 14px;
+      margin-left: 8px;
+    }
+    .dx-m-branch__leg.is-primary { border-left-color: color-mix(in srgb, var(--text) 30%, transparent); }
+    .dx-m-branch__label {
+      display: inline-block;
+      font-size: 11.5px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      color: var(--accent);
+      background: color-mix(in srgb, var(--accent) 12%, var(--surface));
+      padding: 2px 10px;
+      border-radius: 999px;
+      margin-bottom: 4px;
+    }
+    .dx-m-branch__label.is-arrow::after { content: " ↓"; }
+
+    .dx-m-fallback {
+      margin-top: 12px;
+      border: 1.5px dashed color-mix(in srgb, var(--text) 35%, transparent);
+      border-radius: 10px;
+      padding: 8px 12px;
+      font-size: 12.5px;
+      color: var(--text);
+      background: color-mix(in srgb, var(--text) 3%, var(--surface));
+      line-height: 1.5;
+    }
+
+    /* 出し分け */
+    @media (max-width: 600px) {
+      .dx-m-flow { display: block; }
+      .dx-flow { display: none; }
+      .flow-canvas__hint { display: none; }
+      .flow-canvas { overflow-x: hidden; padding: 12px 8px 14px; }
+    }
   </style>
 </head>
 <body>
@@ -356,7 +452,7 @@
 
         <div class="flow-canvas">
           <p class="flow-canvas__hint">↔ 横スクロール可 / 実線＝確定後の決定 / 破線＝フォールバック</p>
-          <div class="dx-flow" role="group" aria-label="めまい単純化診療フロー">
+          <div class="dx-flow" role="group" aria-label="めまい単純化診療フロー" aria-hidden="true">
 
             <!-- L0: 本当にめまいか？（前失神除外） -->
             <div class="dx-layer dx-layer--root">
@@ -500,6 +596,123 @@
               <span class="dx-fallback__label">三半規管・前庭いずれも疑われない場合</span>
               <span class="dx-fallback__arrow" aria-hidden="true">⇢</span>
               <span class="dx-fallback__target">頭部画像検査へ</span>
+            </div>
+
+          </div>
+
+          <!-- スマホ用 縦カード版（PC版は上で aria-hidden="true"、こちらが SR canonical） -->
+          <div class="dx-m-flow" role="group" aria-label="めまい単純化診療フロー">
+
+            <!-- L0: 本当にめまいか？ -->
+            <div class="dx-m-node is-decision">
+              <div class="dx-m-node__title">本当にめまいか？</div>
+              <div class="dx-m-node__sub">前失神（presyncope）を除外</div>
+            </div>
+            <div class="dx-m-branch">
+              <div class="dx-m-branch__leg">
+                <span class="dx-m-branch__label">前失神疑い</span>
+                <a class="dx-m-node is-external" href="意識消失.html" aria-label="意識消失フローへ（別ページ）">
+                  <div class="dx-m-node__title">意識消失フローへ</div>
+                  <div class="dx-m-node__sub">眼前暗黒感 / 立位悪化 / 動悸・胸痛</div>
+                </a>
+              </div>
+              <div class="dx-m-branch__leg is-primary">
+                <span class="dx-m-branch__label is-arrow">真のめまい</span>
+              </div>
+            </div>
+
+            <!-- L1: めまいは持続している？ -->
+            <div class="dx-m-node is-decision">
+              <div class="dx-m-node__title">めまいは持続している？</div>
+            </div>
+
+            <div class="dx-m-branch">
+
+              <!-- 非持続性 → EVS -->
+              <div class="dx-m-branch__leg">
+                <span class="dx-m-branch__label">非持続性</span>
+                <div class="dx-m-node is-decision">
+                  <div class="dx-m-node__title">EVS</div>
+                  <div class="dx-m-node__sub">TIA・不整脈を意識</div>
+                </div>
+                <div class="dx-m-node is-decision">
+                  <div class="dx-m-node__title">誘因の有無？</div>
+                </div>
+
+                <div class="dx-m-branch">
+                  <div class="dx-m-branch__leg">
+                    <span class="dx-m-branch__label">誘因なし</span>
+                    <div class="dx-m-node">
+                      <div class="dx-m-node__title">その他</div>
+                      <div class="dx-m-node__sub">前庭性片頭痛 / TIA</div>
+                    </div>
+                  </div>
+                  <div class="dx-m-branch__leg">
+                    <span class="dx-m-branch__label">誘因あり</span>
+                    <div class="dx-m-node">
+                      <div class="dx-m-node__title">三半規管 BPPV</div>
+                      <div class="dx-m-node__sub">t-EVS</div>
+                    </div>
+                    <div class="dx-m-node is-action">
+                      <div class="dx-m-node__title">誘発法 → 耳石置換法</div>
+                      <div class="dx-m-node__sub">画像不要 / 起立性低血圧も鑑別</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 持続性 → AVS -->
+              <div class="dx-m-branch__leg">
+                <span class="dx-m-branch__label">持続性</span>
+                <div class="dx-m-node is-decision">
+                  <div class="dx-m-node__title">AVS</div>
+                  <div class="dx-m-node__sub">歩けないなら入院</div>
+                </div>
+                <div class="dx-m-node is-judge">HINTS で判別</div>
+
+                <div class="dx-m-branch">
+                  <div class="dx-m-branch__leg">
+                    <span class="dx-m-branch__label">前庭性</span>
+                    <div class="dx-m-node">
+                      <div class="dx-m-node__title">前庭神経炎</div>
+                      <div class="dx-m-node__sub">末梢パターン</div>
+                    </div>
+                  </div>
+                  <div class="dx-m-branch__leg">
+                    <span class="dx-m-branch__label">中枢性</span>
+                    <div class="dx-m-node is-danger">
+                      <div class="dx-m-node__title">脳血管障害</div>
+                      <div class="dx-m-node__sub">中枢パターン・要警戒</div>
+                    </div>
+                    <div class="dx-m-node is-decision">
+                      <div class="dx-m-node__title">頭部画像検査</div>
+                      <div class="dx-m-node__sub">CT + MRI</div>
+                    </div>
+                    <div class="dx-m-branch">
+                      <div class="dx-m-branch__leg">
+                        <span class="dx-m-branch__label">陰性</span>
+                        <div class="dx-m-node">
+                          <div class="dx-m-node__title">原則入院</div>
+                          <div class="dx-m-node__sub">48時間後 MRI 再検 / 歩ければ外来も検討</div>
+                        </div>
+                      </div>
+                      <div class="dx-m-branch__leg">
+                        <span class="dx-m-branch__label">陽性</span>
+                        <div class="dx-m-node is-danger">
+                          <div class="dx-m-node__title">入院</div>
+                          <div class="dx-m-node__sub">脳血管障害確定</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- フォールバック -->
+            <div class="dx-m-fallback" role="note">
+              <strong>三半規管・前庭いずれも疑われない場合</strong> → 頭部画像検査へ
             </div>
 
           </div>
