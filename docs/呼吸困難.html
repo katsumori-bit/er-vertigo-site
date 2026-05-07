@@ -72,8 +72,10 @@
     .dx-layer--root   { grid-template-columns: 1fr; justify-items: center; }
     .dx-layer--root > * { max-width: 360px; }
     .dx-layer--branch { grid-template-columns: 1fr 1fr; }
+    .dx-layer--tri    { grid-template-columns: repeat(3, 1fr); }
     .dx-layer--quad   { grid-template-columns: repeat(4, 1fr); }
     .dx-layer--quint  { grid-template-columns: repeat(5, 1fr); }
+    .dx-layer--hex    { grid-template-columns: repeat(6, 1fr); }
 
     .dx-arrow {
       display: flex; flex-direction: column;
@@ -143,8 +145,10 @@
       .dx-node--external::after { top: 2px; right: 4px; font-size: 9px; }
       .dx-layer { gap: 5px; }
       .dx-layer--root > * { max-width: none; width: 100%; }
+      .dx-layer--tri  { grid-template-columns: repeat(3, 1fr); }
       .dx-layer--quad { grid-template-columns: 1fr 1fr; }
       .dx-layer--quint { grid-template-columns: repeat(3, 1fr); }
+      .dx-layer--hex   { grid-template-columns: repeat(3, 1fr); }
       .dx-arrow { min-height: 22px; margin: 1px 0; }
       .dx-arrow::before { min-height: 18px; width: 1.5px; }
       .dx-arrow::after { border-left-width: 4px; border-right-width: 4px; border-top-width: 6px; }
@@ -175,61 +179,54 @@
       <!-- 診療フロー -->
       <div class="action-header flow-box" id="flowBox">
         <div class="action-header__title flow-box__title">
-          <span>🗺 呼吸困難の診療フロー</span>
+          <span>🗺 呼吸困難の診療フロー（ABCD → 同時並行 → 鑑別並列）</span>
         </div>
         <div class="flow-canvas">
-          <p class="flow-canvas__hint">即動く致死疾患を外す → 全例セット → 4 軸 first → 当てはまらなければ PE/気胸/その他</p>
+          <p class="flow-canvas__hint">ABCD 評価＋酸素方針 → 6 項目同時並行 → 4 軸 + 並走 3 を並列に考える</p>
           <div class="dx-flow" role="group" aria-label="呼吸困難の診療フロー">
 
-            <!-- L0: 即動く -->
+            <!-- L0: ABCD 評価 -->
             <div class="dx-layer dx-layer--root">
               <a class="dx-node dx-node--danger" href="#s1">
-                <div class="dx-node__title">🚨 鑑別の前に治療を先行</div>
-                <div class="dx-node__sub">緊張性気胸 / アナフィラキシー / 急性肺水腫 / 呼吸疲弊・CO2 ナルコーシス</div>
-              </a>
-            </div>
-
-            <div class="dx-arrow"><span class="dx-arrow__label">否定 → 全例セット</span></div>
-
-            <!-- L1: いつでもやること -->
-            <div class="dx-layer dx-layer--root">
-              <a class="dx-node dx-node--action" href="#s2">
-                <div class="dx-node__title">全例セット</div>
-                <div class="dx-node__sub">SpO2＋呼吸仕事量／酸素（COPD 88–92%、他 94–98%）</div>
+                <div class="dx-node__title">🚨 ABCD 評価</div>
+                <div class="dx-node__sub">気道 / 呼吸 / 循環 / 意識＋酸素方針（COPD 88–92% / 他 94–98%）</div>
               </a>
             </div>
 
             <div class="dx-arrow"><span class="dx-arrow__label">↓ 同時並行</span></div>
 
-            <!-- L2: 検査セット -->
-            <div class="dx-layer dx-layer--branch">
-              <a class="dx-node dx-node--action" href="#s5">
-                <div class="dx-node__title">血液検査</div>
-                <div class="dx-node__sub">血ガス / BNP / トロポニン / D-dimer</div>
-              </a>
-              <a class="dx-node dx-node--action" href="#s6">
-                <div class="dx-node__title">ECG ＋ 胸部 X 線</div>
-                <div class="dx-node__sub">心不全/PE/気胸/肺炎所見</div>
-              </a>
-            </div>
-
-            <div class="dx-arrow"><span class="dx-arrow__label">↓ 問診＋聴診で 4 軸絞り</span></div>
-
-            <!-- L2.5: 問診と聴診の補助 -->
-            <div class="dx-layer dx-layer--branch">
+            <!-- L1: 6 項目同時並行 -->
+            <div class="dx-layer dx-layer--hex">
               <a class="dx-node dx-node--action" href="#s3">
-                <div class="dx-node__title">問診で方向決定</div>
-                <div class="dx-node__sub">突然/数日/既往/喫煙/感染</div>
+                <div class="dx-node__title">問診</div>
+                <div class="dx-node__sub">発症様式／既往／喫煙</div>
               </a>
               <a class="dx-node dx-node--action" href="#s4">
-                <div class="dx-node__title">聴診</div>
-                <div class="dx-node__sub">湿性ラ音 / 喘鳴 / 片側消失 / 連続性</div>
+                <div class="dx-node__title">身体診察</div>
+                <div class="dx-node__sub">聴診／呼吸仕事量／浮腫</div>
+              </a>
+              <a class="dx-node dx-node--action" href="#s5">
+                <div class="dx-node__title">血液検査</div>
+                <div class="dx-node__sub">血ガス／必要に応じて BNP・Tn・D-d</div>
+              </a>
+              <a class="dx-node dx-node--action" href="#s6">
+                <div class="dx-node__title">心電図</div>
+                <div class="dx-node__sub">ST / 不整脈 / 右心負荷</div>
+              </a>
+              <a class="dx-node dx-node--action" href="#s6">
+                <div class="dx-node__title">エコー</div>
+                <div class="dx-node__sub">BLUE プロトコル<br>EF / IVC / RV</div>
+              </a>
+              <a class="dx-node dx-node--action" href="#s6">
+                <div class="dx-node__title">放射線画像</div>
+                <div class="dx-node__sub">CXR ± CT</div>
               </a>
             </div>
 
-            <div class="dx-arrow"><span class="dx-arrow__label">4 軸 first</span></div>
+            <div class="dx-arrow"><span class="dx-arrow__label">鑑別を並列で考える</span></div>
 
-            <!-- L3: 4 軸 quad -->
+            <!-- L2a: 最頻 4 軸 -->
+            <p class="flow-canvas__hint" style="margin:6px 0 4px;font-weight:700;">最頻 4 軸 — 呼吸困難の大部分をカバー</p>
             <div class="dx-layer dx-layer--quad">
               <a class="dx-node dx-node--external" href="疾患詳細/急性心不全.html">
                 <div class="dx-node__title">心不全</div>
@@ -237,7 +234,7 @@
               </a>
               <a class="dx-node dx-node--external" href="疾患詳細/COPD増悪.html">
                 <div class="dx-node__title">COPD 増悪</div>
-                <div class="dx-node__sub">呼気延長・連続性<br>樽状胸郭・喫煙歴</div>
+                <div class="dx-node__sub">呼気延長・連続性<br>喫煙歴</div>
               </a>
               <a class="dx-node dx-node--external" href="疾患詳細/喘息増悪.html">
                 <div class="dx-node__title">喘息発作</div>
@@ -249,47 +246,22 @@
               </a>
             </div>
 
-            <div class="dx-arrow"><span class="dx-arrow__label">合わない or 辻褄不一致 → 必ず疑う</span></div>
+            <div class="dx-arrow"><span class="dx-arrow__label">並走で常に意識</span></div>
 
-            <!-- L4: 4 軸に当てはまらないとき -->
-            <div class="dx-layer dx-layer--quint">
-              <a class="dx-node dx-node--danger" href="#s7">
+            <!-- L2b: 並走 3 -->
+            <p class="flow-canvas__hint" style="margin:6px 0 4px;font-weight:700;">並走で常に意識する 3 — 4 軸を否定してから考えるのではない</p>
+            <div class="dx-layer dx-layer--tri">
+              <a class="dx-node dx-node--warn" href="#s3">
                 <div class="dx-node__title">PE</div>
-                <div class="dx-node__sub">突然・頻脈<br>D-dimer / 術後</div>
+                <div class="dx-node__sub">突然・頻脈<br>術後／臥床／担癌</div>
               </a>
-              <a class="dx-node dx-node--danger" href="#s7">
+              <a class="dx-node dx-node--warn" href="#s4">
                 <div class="dx-node__title">気胸</div>
-                <div class="dx-node__sub">片側消失<br>突然発症</div>
+                <div class="dx-node__sub">片側呼吸音消失<br>突然・若年やせ型</div>
               </a>
-              <a class="dx-node dx-node--danger" href="#s7">
-                <div class="dx-node__title">アナフィラキシー</div>
-                <div class="dx-node__sub">皮膚・喉頭<br>アドレナリン IM</div>
-              </a>
-              <a class="dx-node dx-node--warn" href="#s7">
-                <div class="dx-node__title">ACS</div>
-                <div class="dx-node__sub">胸痛主体<br>ECG 変化</div>
-              </a>
-              <a class="dx-node dx-node--warn" href="#s7">
-                <div class="dx-node__title">代謝性アシドーシス</div>
-                <div class="dx-node__sub">DKA / 腎不全 / 中毒</div>
-              </a>
-            </div>
-
-            <!-- L4.5: ILD -->
-            <div class="dx-arrow"><span class="dx-arrow__label">ILD 既往＋両側浸潤</span></div>
-            <div class="dx-layer dx-layer--root">
               <a class="dx-node dx-node--external" href="疾患詳細/間質性肺炎急性増悪.html">
                 <div class="dx-node__title">間質性肺炎急性増悪</div>
-                <div class="dx-node__sub">ILD 既往 + 急性両側浸潤</div>
-              </a>
-            </div>
-
-            <!-- 合流：disposition -->
-            <div class="dx-arrow"><span class="dx-arrow__label">合流</span></div>
-            <div class="dx-layer dx-layer--root">
-              <a class="dx-node dx-node--decision" href="#s7">
-                <div class="dx-node__title">📤 disposition</div>
-                <div class="dx-node__sub">分岐先疾患ページへ</div>
+                <div class="dx-node__sub">ILD 既往<br>両側 GGO</div>
               </a>
             </div>
           </div>
@@ -298,46 +270,60 @@
 
       <!-- §タイル（フロー直リンクで代替、CSS で非表示） -->
       <nav class="section-tiles" id="sectionMenu">
-        <a class="section-tile" href="#s1"><span class="section-tile__no">🚨</span><span class="section-tile__name">即動く<br><small>致死疾患・先行治療</small></span></a>
-        <a class="section-tile" href="#s2"><span class="section-tile__no">🩺</span><span class="section-tile__name">いつでもやること<br><small>バイタル・呼吸仕事量・酸素</small></span></a>
-        <a class="section-tile" href="#s3"><span class="section-tile__no">🎯</span><span class="section-tile__name">問診で方向決定<br><small>4 軸：心不全 / COPD / 喘息 / 肺炎</small></span></a>
-        <a class="section-tile" href="#s4"><span class="section-tile__no">👂</span><span class="section-tile__name">聴診</span></a>
-        <a class="section-tile" href="#s5"><span class="section-tile__no">🩸</span><span class="section-tile__name">血液検査<br><small>血ガス / BNP / トロポニン</small></span></a>
-        <a class="section-tile" href="#s6"><span class="section-tile__no">📈</span><span class="section-tile__name">ECG + 胸部 X 線</span></a>
-        <a class="section-tile" href="#s7"><span class="section-tile__no">🔀</span><span class="section-tile__name">ここで分岐<br><small>疾患ページへ</small></span></a>
+        <a class="section-tile" href="#s1"><span class="section-tile__no">🚨</span><span class="section-tile__name">ABCD 評価<br><small>気道/呼吸/循環/意識＋酸素方針</small></span></a>
+        <a class="section-tile" href="#s3"><span class="section-tile__no">🎯</span><span class="section-tile__name">問診</span></a>
+        <a class="section-tile" href="#s4"><span class="section-tile__no">👂</span><span class="section-tile__name">身体診察</span></a>
+        <a class="section-tile" href="#s5"><span class="section-tile__no">🩸</span><span class="section-tile__name">血液検査</span></a>
+        <a class="section-tile" href="#s6"><span class="section-tile__no">📈</span><span class="section-tile__name">画像系（ECG / CXR / POCUS）</span></a>
         <a class="section-tile" href="#s8"><span class="section-tile__no">⚠️</span><span class="section-tile__name">やりがちなミス</span></a>
         <a class="section-tile" href="#s9"><span class="section-tile__no">📚</span><span class="section-tile__name">出典・リンク</span></a>
       </nav>
 
-      <!-- §1 即動く（red flags + 先行治療） -->
+      <!-- §1 ABCD 評価 -->
       <section class="section-page" id="s1" hidden>
         <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🚨 鑑別の前に治療を先行する</h2>
+        <h2>🚨 ABCD 評価</h2>
+
+        <p>呼吸困難の最初の数十秒で見るのは <strong>気道 / 呼吸 / 循環 / 意識</strong>。SpO2・呼吸仕事量・酸素方針もすべてここに含まれる。</p>
+
+        <h3>A：気道（Airway）</h3>
+        <ul>
+          <li><strong>stridor（吸気性喘鳴）／嗄声／舌・口唇浮腫</strong> → 上気道閉塞・<strong>アナフィラキシー</strong>を疑う → <strong>アドレナリン 0.3–0.5 mg IM</strong>を遅らせない</li>
+          <li>いびき様呼吸 → 舌根沈下・意識障害合併 → 体位調整・気道確保</li>
+          <li>喉頭浮腫サイン（喉のつかえ感・嚥下困難）→ 早期挿管考慮</li>
+        </ul>
+
+        <h3>B：呼吸（Breathing）</h3>
+        <ul>
+          <li><strong>SpO2・呼吸数・呼吸仕事量</strong>を同時に見る（数値だけでなく見た目の苦しさ・会話の可否）</li>
+          <li>補助筋使用・陥没呼吸・起坐呼吸・会話途切れ・チアノーゼ</li>
+          <li><strong>酸素方針</strong>：COPD 疑い <strong>SpO2 88–92%</strong>／それ以外 <strong>94–98%</strong>（過剰投与は CO2 貯留・吸収性無気肺）</li>
+        </ul>
 
         <div class="callout callout-danger">
-          <div class="callout-title">この時点で即動く</div>
+          <div class="callout-title">B で即動く所見と治療</div>
           <div class="callout-body"><ul>
-            <li>ぐったり / 会話不能 / チアノーゼ</li>
-            <li>SpO2 が保てない / 呼吸疲弊</li>
-            <li>ショック所見（低血圧・冷汗・頻脈）</li>
-            <li>片側呼吸音消失 → <strong>緊張性気胸として減圧</strong></li>
-            <li>吸気性喘鳴 + 皮膚症状 → <strong>アナフィラキシーとしてアドレナリン IM</strong></li>
-            <li>ピンク泡沫痰 + 起坐呼吸 + 高血圧 → <strong>急性肺水腫として NIV</strong></li>
-          </ul>
-          <p>→ これらは鑑別の前に治療を先行する</p></div>
+            <li><strong>片側呼吸音消失 + 頸静脈怒張 + ショック</strong> → 緊張性気胸 → <strong>第 2 肋間鎖骨中線で穿刺脱気</strong></li>
+            <li><strong>ピンク泡沫痰 + 起坐呼吸 + 高血圧</strong> → 急性肺水腫 → <strong>NIV（CPAP/BiPAP）+ 硝酸薬 + ループ利尿薬</strong></li>
+            <li><strong>silent chest（呼吸音ほぼ消失）</strong> → 重症喘息 → β2 刺激薬連続吸入 + ステロイド静注 + 早期挿管準備</li>
+            <li><strong>SpO2 が酸素投与でも保てない / 呼吸疲弊</strong> → 早期挿管</li>
+          </ul></div>
         </div>
-      </section>
 
-      <!-- §2 いつでも・いかなる時でもやること -->
-      <section class="section-page" id="s2" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🩺 いつでも・いかなる時でもやること</h2>
-
+        <h3>C：循環（Circulation）</h3>
         <ul>
-          <li><strong>バイタルサインを全部見る</strong>：SpO2・RR・HR・BP・BT・意識レベル</li>
-          <li><strong>呼吸仕事量を評価する</strong>：補助筋使用、陥没呼吸、起坐呼吸、会話困難</li>
-          <li><strong>カルテに記載する</strong>：数値だけでなく、見た目の苦しさ・会話の可否も記録</li>
-          <li>低酸素があれば酸素開始（COPD 疑いなら SpO2 88–92%、それ以外は 94–98%）</li>
+          <li><strong>BP・HR・脈触知・皮膚（冷汗・蒼白）</strong></li>
+          <li><strong>頸静脈怒張</strong>：心不全・心タンポナーデ・緊張性気胸・PE（右心負荷）</li>
+          <li><strong>下腿浮腫・片側下腿腫脹</strong>：心不全 / DVT・PE</li>
+          <li>ショック所見 → ルート 2 本・モニタ・アドレナリン or 輸液</li>
+        </ul>
+
+        <h3>D：意識（Disability）</h3>
+        <ul>
+          <li>GCS、見当識、傾眠</li>
+          <li><strong>CO2 ナルコーシス所見</strong>（傾眠・羽ばたき振戦・縮瞳）：原因は COPD・神経筋・薬物（オピオイド）→ 過剰酸素投与は撤退、原因に対して BiPAP / 拮抗薬</li>
+          <li>低酸素性興奮（落ち着きがない・暴れる）は CO2 ナルコーシスの前段階</li>
+          <li>低血糖を必ず除外</li>
         </ul>
       </section>
 
@@ -346,7 +332,7 @@
         <button class="back-to-menu" type="button">← メニューへ</button>
         <h2>🎯 問診で方向を決める</h2>
 
-        <p>呼吸困難の鑑別は多いが、<strong>メインの4つ</strong>で大部分をカバーできる。 明らかに違う主訴（外傷、アナフィラキシー、異物など）を除き、まずこの4つで考える。</p>
+        <p>呼吸困難の鑑別は <strong>最頻 4 軸</strong>と<strong>並走で常に意識する 3</strong>を並列に考える。明らかに違う主訴（外傷・異物）はまず除外。</p>
 
         <div class="table-wrap"><table>
           <thead><tr><th>疑う疾患</th><th>聞くこと</th></tr></thead>
@@ -355,64 +341,102 @@
             <tr><td><strong>COPD</strong></td><td>喫煙歴、COPD の既往・診断歴、在宅酸素、前回の増悪</td></tr>
             <tr><td><strong>喘息</strong></td><td>喘息の既往、アレルギー歴、吸入薬の使用状況、発作パターン</td></tr>
             <tr><td><strong>誤嚥性肺炎</strong>（肺浸潤）</td><td>発熱、咳・痰、悪寒、経過の長さ（詳細は → <a class="wiki-link" href="疾患詳細/誤嚥性肺炎.html">誤嚥性肺炎</a>）</td></tr>
+            <tr><td><strong>肺塞栓（PE）</strong></td><td><strong>突然発症の呼吸困難・頻脈・胸痛</strong>、術後／長期臥床／担癌／長距離移動／妊娠・産褥／ピル使用、片側下腿腫脹・痛み、DVT 既往</td></tr>
+            <tr><td><strong>気胸</strong></td><td><strong>突然発症の片側胸痛＋呼吸困難</strong>、若年やせ型 or COPD・喫煙・気胸既往、外傷／中心静脈穿刺後／胸腔穿刺後</td></tr>
+            <tr><td><strong>間質性肺炎急性増悪</strong></td><td>ILD の既往（IPF など）、亜急性経過（数日〜数週）、空咳、感冒様症状の先行</td></tr>
           </tbody>
         </table></div>
 
         <div class="callout callout-tip">
-          <div class="callout-title">一見 COPD でも心不全のことがある</div>
-          <div class="callout-body"><p>喫煙歴のある高齢者で喘鳴 →「COPD だろう」と決めつけない。 <strong>BNP が高ければ心不全を合併している</strong>。 <strong>心筋梗塞が心不全の増悪因子</strong>になっていることもある。 だから<strong>トロポニンと BNP は最初から出す</strong>。</p></div>
+          <div class="callout-title">「4 軸を否定してから PE を考える」のは遅い</div>
+          <div class="callout-body"><p>PE・気胸・間質性肺炎急性増悪は<strong>最初から並列に疑う</strong>。「COPD だろう」と決めつけない高齢者は心不全・PE 合併の可能性も意識する。<strong>BNP・トロポニン・D-dimer は鑑別に応じて取捨選択</strong>（詳細 → <a class="wiki-link" href="#s5">血液検査</a>）。</p></div>
         </div>
       </section>
 
-      <!-- §4 聴診 -->
+      <!-- §4 身体診察 -->
       <section class="section-page" id="s4" hidden>
         <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>👂 聴診</h2>
+        <h2>👂 身体診察</h2>
 
+        <p>聴診だけでなく、<strong>呼吸仕事量・皮膚・心音・末梢の所見</strong>を組み合わせて方向性を固める。</p>
+
+        <h3>呼吸仕事量</h3>
         <ul>
-          <li><strong>湿性ラ音（crackles）</strong> → 心不全・肺炎</li>
-          <li><strong>喘鳴(wheeze)</strong> → 喘息・COPD（ただし心不全の cardiac wheeze もある）</li>
-          <li><strong>呼吸音減弱・消失</strong> → 気胸・胸水・重症喘息（silent chest）</li>
+          <li>補助筋使用（胸鎖乳突筋・斜角筋）、陥没呼吸（鎖骨上窩・肋間）、起坐呼吸</li>
+          <li>会話困難（一文話せない＝重症）、表情・チアノーゼ</li>
+        </ul>
+
+        <h3>聴診</h3>
+        <ul>
+          <li><strong>湿性ラ音（crackles）</strong> → 心不全・肺炎・ILD</li>
+          <li><strong>喘鳴（wheeze、連続性ラ音）</strong> → 喘息・COPD（ただし心不全の cardiac wheeze もある）</li>
+          <li><strong>呼吸音減弱・片側消失</strong> → <strong>気胸</strong>・胸水・重症喘息（silent chest）</li>
           <li><strong>局所性ラ音</strong> → 肺炎</li>
           <li><strong>stridor（吸気性喘鳴）</strong> → 上気道閉塞・アナフィラキシー</li>
+          <li><strong>fine crackles（velcro 様）</strong> → ILD・間質性肺炎急性増悪</li>
         </ul>
-        <p>聴診所見と問診を合わせて、方向性を固める。</p>
+
+        <h3>皮膚・粘膜</h3>
+        <ul>
+          <li>じんま疹・口唇舌浮腫 → アナフィラキシー</li>
+          <li>チアノーゼ（中心性／末梢性）</li>
+          <li>発汗・冷汗・蒼白 → ショック・ACS</li>
+        </ul>
+
+        <h3>心音・頸静脈・末梢</h3>
+        <ul>
+          <li><strong>S3（奔馬調律）／新規雑音</strong> → 心不全・弁膜症急性増悪</li>
+          <li><strong>頸静脈怒張</strong> → 心不全・心タンポナーデ・緊張性気胸・PE（右心負荷）</li>
+          <li><strong>下腿浮腫（両側）</strong> → 心不全</li>
+          <li><strong>片側下腿腫脹・圧痛・Homans 徴候</strong> → DVT/PE</li>
+          <li><strong>胸壁圧痛</strong>：気胸の片側胸壁、肋骨骨折の合併、外傷後</li>
+        </ul>
       </section>
 
       <!-- §5 血液検査 -->
       <section class="section-page" id="s5" hidden>
         <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🩸 血液検査を提出する</h2>
+        <h2>🩸 血液検査</h2>
 
-        <p>聴診の後、以下をまとめて提出する。</p>
+        <h3>最初にまとめて出すもの（全例）</h3>
         <ul>
           <li><strong>血液ガス（VBG ± ABG）</strong>：低酸素 vs 高 CO2 vs 代謝性アシドーシスの判定</li>
-          <li><strong>BNP / NT-proBNP</strong>：心不全の評価</li>
-          <li><strong>トロポニン</strong>：ACS の除外、心不全の増悪因子としての MI 評価</li>
           <li><strong>CRP</strong>：感染の評価</li>
           <li><strong>血算 + 分画</strong>：感染・貧血</li>
           <li><strong>生化（腎機能・電解質）</strong>：全身評価</li>
         </ul>
 
-        <div class="callout callout-warning">
-          <div class="callout-title">なぜ全部出すのか</div>
-          <div class="callout-body"><p>「これだろう」と決めてから追加で出すより、<strong>最初にまとめて出す方が診断の遅れを防げる</strong>。 COPD に見えて心不全、心不全の裏に心筋梗塞 — こういうオーバーラップは珍しくない。</p></div>
+        <h3>鑑別に応じて取捨選択するもの</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>検査</th><th>出すべき場面</th><th>不要な場面</th></tr></thead>
+          <tbody>
+            <tr><td><strong>BNP / NT-proBNP</strong></td><td>心不全 ↔ COPD で迷う／高齢者の呼吸困難／喘鳴の原因が不明</td><td>明らかな若年喘息発作・既知 COPD の典型増悪</td></tr>
+            <tr><td><strong>トロポニン</strong></td><td>ACS が鑑別に入る／心不全の増悪因子として MI 評価／高齢者・冠危険因子あり</td><td>若年喘息・気胸の典型例</td></tr>
+            <tr><td><strong>D-dimer</strong></td><td>Wells / Geneva スコアで PE 確率が中等度以下（除外目的）</td><td>高確率群は <strong>image first（造影 CT）</strong>／高齢者・担癌・術後では偽陽性多くスコア優先</td></tr>
+            <tr><td><strong>培養（血培・喀痰）</strong></td><td>発熱＋浸潤影／敗血症疑い</td><td>明らかな心不全・喘息・気胸</td></tr>
+          </tbody>
+        </table></div>
+
+        <div class="callout callout-tip">
+          <div class="callout-title">「決めつけ」と「過剰検査」の中間を狙う</div>
+          <div class="callout-body"><p>COPD に見えて心不全合併・心不全の裏に MI — こういうオーバーラップを拾うために<strong>必要なものは出す</strong>。一方、若年喘息に BNP・トロポニン・D-dimer をルーチンで出すのは過剰。<strong>問診と身体所見で 2〜3 疾患に絞ってから疾患特異的検査を追加</strong>するのが ER の標準。</p></div>
         </div>
       </section>
 
-      <!-- §6 ECG + 胸部X線 -->
+      <!-- §6 画像系評価 -->
       <section class="section-page" id="s6" hidden>
         <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>📈 すぐに心電図と胸部 X 線</h2>
+        <h2>📈 画像系評価（心電図 / 胸部 X 線 / POCUS）</h2>
 
-        <p>血液検査と<strong>並行してすぐ施行する</strong>。</p>
+        <p>血液検査と<strong>並行してすぐ施行する</strong>。3 つを組み合わせて鑑別を絞り込む。</p>
 
         <h3>心電図で見るもの</h3>
         <ul>
           <li><strong>ST 変化</strong> → ACS</li>
           <li><strong>頻脈性不整脈（AF rapid、VT）</strong></li>
-          <li><strong>右心負荷パターン</strong> → PE を示唆</li>
+          <li><strong>右心負荷パターン（S1Q3T3、右軸偏位、V1-V3 陰性 T、新規右脚ブロック）</strong> → PE を示唆</li>
           <li><strong>高度伝導障害（完全房室ブロック、Mobitz II、交代性脚ブロック など）</strong></li>
+          <li>低電位 → 心嚢液貯留・心タンポナーデ</li>
         </ul>
 
         <h3>胸部 X 線で見るもの</h3>
@@ -420,42 +444,34 @@
           <li><strong>肺水腫パターン</strong>（bat wing、Kerley B、胸水） → 心不全</li>
           <li><strong>局所浸潤影</strong> → 肺炎</li>
           <li><strong>両側びまん性 GGO / 間質影</strong> → ILD 急性増悪・肺水腫・ARDS の鑑別へ</li>
-          <li><strong>片側透過性亢進 / 肺虚脱</strong> → 気胸</li>
+          <li><strong>片側透過性亢進 / 肺虚脱</strong> → 気胸（少量気胸は CXR で見逃すこともある）</li>
           <li><strong>胸水</strong></li>
+          <li>PE は CXR がほぼ正常なことが多い（陰性所見でも除外できない）</li>
+        </ul>
+
+        <h3>POCUS（ベッドサイドエコー）</h3>
+
+        <div class="callout callout-tip">
+          <div class="callout-title">BLUE protocol（Lichtenstein）— 肺エコーで急性呼吸困難を分類</div>
+          <div class="callout-body"><ul>
+            <li><strong>A プロファイル</strong>（A-line 優位 + lung sliding あり）→ <strong>喘息／COPD</strong></li>
+            <li><strong>B プロファイル</strong>（両側 B-line 優位）→ <strong>心原性肺水腫</strong>（感度・特異度ともに高い）</li>
+            <li><strong>A/B プロファイルまたは C プロファイル</strong>（局所コンソリデーション）→ <strong>肺炎</strong></li>
+            <li><strong>A プロファイル + DVT 所見</strong> → <strong>肺塞栓</strong>を強く示唆</li>
+            <li><strong>lung sliding 消失 + lung point</strong> → <strong>気胸</strong>（CXR より高感度）</li>
+          </ul></div>
+        </div>
+
+        <h4>心エコーで見るもの</h4>
+        <ul>
+          <li><strong>EF</strong>：低下 → 収縮不全心不全（HFrEF）／保たれていれば HFpEF・PE・他原因も考慮</li>
+          <li><strong>IVC 径と呼吸性変動</strong>：拡張＋呼吸性変動なし → 右心系過負荷／虚脱 → 脱水・出血</li>
+          <li><strong>RV strain（D-shape、RV ≧ LV、McConnell sign）</strong> → <strong>急性 PE</strong>を示唆</li>
+          <li>心嚢液貯留 → 心タンポナーデ</li>
+          <li>新規弁膜症（重症 MR・AR）→ 急性肺水腫の原因</li>
         </ul>
       </section>
 
-      <!-- §7 ここで分岐する -->
-      <section class="section-page" id="s7" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🔀 ここで分岐する</h2>
-
-        <p><strong>この段階で方向性が決まる</strong> → それぞれのリンクに進む。</p>
-
-        <div class="table-wrap"><table>
-          <thead><tr><th>方向性</th><th>進むリンク</th></tr></thead>
-          <tbody>
-            <tr><td>心不全を疑う</td><td>→ <a class="wiki-link" href="疾患詳細/急性心不全.html">急性心不全</a></td></tr>
-            <tr><td>COPD 増悪を疑う</td><td>→ <a class="wiki-link" href="疾患詳細/COPD増悪.html">COPD増悪</a></td></tr>
-            <tr><td>喘息発作を疑う</td><td>→ <a class="wiki-link" href="疾患詳細/喘息増悪.html">喘息増悪</a></td></tr>
-            <tr><td>誤嚥性肺炎（肺浸潤）を疑う</td><td>→ <a class="wiki-link" href="疾患詳細/誤嚥性肺炎.html">誤嚥性肺炎</a></td></tr>
-            <tr><td>ILD 既往 + 急性の両側浸潤</td><td>→ <a class="wiki-link" href="疾患詳細/間質性肺炎急性増悪.html">間質性肺炎急性増悪</a></td></tr>
-          </tbody>
-        </table></div>
-
-        <div class="callout callout-danger">
-          <div class="callout-title">4 つに当てはまらないとき</div>
-          <div class="callout-body"><p>上記 4 つに合わない、または所見の辻褄が合わないときは<strong>以下を必ず考える</strong>。</p>
-          <ul>
-            <li><strong>肺塞栓（PE）</strong>：突然発症、頻脈、胸痛、D-dimer 上昇、術後・臥床・DVT → <span class="wiki-missing">肺塞栓</span></li>
-            <li><strong>気胸</strong>：片側呼吸音低下、突然発症 → <span class="wiki-missing">気胸</span></li>
-            <li><strong>アナフィラキシー</strong>：皮膚症状、喉頭浮腫 → <span class="wiki-missing">アナフィラキシー</span></li>
-            <li><strong>ACS</strong>：胸痛主体、ECG 変化 → <span class="wiki-missing">ACS</span></li>
-            <li><strong>代謝性アシドーシス</strong>：DKA、腎不全、中毒 → <span class="wiki-missing">代謝性アシドーシス</span></li>
-          </ul>
-          <p><strong>特に PE は聴診も X 線も正常なことが多い。</strong> 呼吸困難の原因が見つからない、頻脈が説明できない、リスク因子がある → 必ず疑う。</p></div>
-        </div>
-      </section>
 
       <!-- §8 やりがちなミス -->
       <section class="section-page" id="s8" hidden>
