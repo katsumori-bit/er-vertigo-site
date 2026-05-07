@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="color-scheme" content="light dark" />
+  <title>体幹・背部の外傷 | ER ノート</title>
+  <link rel="stylesheet" href="er-note.css" />
+  <style>
+    /* 単純化診療フロー（このページ専用） */
+    .flow-box { position: static; user-select: none; }
+    .flow-box__title {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 0.5rem; cursor: pointer; padding: 2px 0;
+    }
+    .flow-box__hint {
+      font-size: 0.72rem; font-weight: 600; color: var(--muted);
+      letter-spacing: 0.02em; padding: 2px 8px; border-radius: 999px;
+      border: 1px solid color-mix(in srgb, var(--text) 20%, transparent);
+    }
+
+    /* ===== 診療フロー本体 ===== */
+    .flow-canvas {
+      background: var(--surface); border-radius: 10px;
+      padding: 14px 10px 18px; margin-top: 0.55rem;
+      overflow-x: auto; overflow-y: hidden;
+      -webkit-overflow-scrolling: touch; touch-action: pan-x pan-y pinch-zoom;
+    }
+    .dx-flow {
+      min-width: 720px; margin: 0 auto; padding: 4px 6px 8px;
+      font-size: 14px; line-height: 1.45; color: var(--text); font-family: inherit;
+    }
+
+    /* ノード共通 */
+    .dx-node {
+      background: var(--surface);
+      border: 1.5px solid color-mix(in srgb, var(--text) 22%, transparent);
+      border-radius: 10px; padding: 8px 12px; text-align: center;
+      box-shadow: 0 1px 2px var(--shadow, rgba(0,0,0,0.06));
+      min-height: 38px;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 2px;
+    }
+    .dx-node__title { font-weight: 700; font-size: 13.5px; }
+    .dx-node__sub   { font-size: 11.5px; color: var(--muted); font-weight: 500; }
+
+    .dx-node--decision {
+      background: color-mix(in srgb, var(--accent) 12%, var(--surface));
+      border-color: var(--accent); border-radius: 14px;
+    }
+    .dx-node--judge {
+      background: var(--accent-weak, color-mix(in srgb, var(--accent) 14%, var(--surface)));
+      border: 1.5px dashed var(--accent); border-radius: 999px;
+      padding: 6px 14px; font-weight: 700; min-height: 32px;
+    }
+    .dx-node--danger {
+      background: color-mix(in srgb, #c0392b 14%, var(--surface));
+      border-color: #c0392b;
+    }
+    .dx-node--danger .dx-node__title { color: #c0392b; }
+    .dx-node--action {
+      background: color-mix(in srgb, var(--text) 5%, var(--surface));
+      border-style: dashed;
+    }
+    .dx-node--external {
+      text-decoration: none; color: var(--text); border-style: dashed;
+      position: relative;
+      background: color-mix(in srgb, var(--accent) 6%, var(--surface));
+      transition: background-color 120ms ease;
+    }
+    .dx-node--external::after {
+      content: "↗"; position: absolute; top: 4px; right: 8px;
+      font-size: 12px; color: var(--accent); opacity: 0.85;
+    }
+
+    /* レイヤー */
+    .dx-layer {
+      display: grid; gap: 14px; align-items: stretch; margin: 0;
+    }
+    .dx-layer--root   { grid-template-columns: 1fr; justify-items: center; }
+    .dx-layer--root > * { max-width: 360px; }
+    .dx-layer--branch { grid-template-columns: 1fr 1fr; }
+    .dx-layer--quad   { grid-template-columns: repeat(4, 1fr); }
+
+    /* 矢印 */
+    .dx-arrow {
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      position: relative; margin: 4px 0; min-height: 44px;
+      color: var(--muted); font-size: 11.5px; font-weight: 600;
+    }
+    .dx-arrow::before {
+      content: ""; width: 2px; height: 100%; min-height: 38px;
+      background: color-mix(in srgb, var(--text) 35%, transparent);
+    }
+    .dx-arrow::after {
+      content: ""; position: absolute; bottom: 0;
+      width: 0; height: 0;
+      border-left: 5px solid transparent; border-right: 5px solid transparent;
+      border-top: 7px solid color-mix(in srgb, var(--text) 35%, transparent);
+    }
+    .dx-arrow__label {
+      background: var(--surface); padding: 1px 8px; border-radius: 999px;
+      border: 1px solid color-mix(in srgb, var(--text) 18%, transparent);
+      position: absolute; left: 50%; top: 50%;
+      transform: translate(-50%, -50%); white-space: nowrap; z-index: 1;
+    }
+
+    /* 分岐 Y 字 */
+    .dx-fork {
+      display: grid; grid-template-columns: 1fr 1fr;
+      position: relative; min-height: 38px; margin: 2px 0 4px;
+    }
+    .dx-fork::before {
+      content: ""; position: absolute;
+      top: 0; left: 25%; right: 25%; height: 2px;
+      background: color-mix(in srgb, var(--text) 35%, transparent);
+    }
+    .dx-fork__leg {
+      position: relative; display: flex; flex-direction: column;
+      align-items: center; justify-content: flex-end;
+      padding-top: 4px; padding-bottom: 4px;
+      font-size: 11.5px; font-weight: 600; color: var(--muted); min-height: 36px;
+    }
+    .dx-fork__leg::before {
+      content: ""; width: 2px; flex: 1;
+      background: color-mix(in srgb, var(--text) 35%, transparent);
+    }
+    .dx-fork__leg::after {
+      content: ""; position: absolute; bottom: 0;
+      width: 0; height: 0;
+      border-left: 5px solid transparent; border-right: 5px solid transparent;
+      border-top: 7px solid color-mix(in srgb, var(--text) 35%, transparent);
+    }
+    .dx-fork__label {
+      background: var(--surface); padding: 1px 8px; border-radius: 999px;
+      border: 1px solid color-mix(in srgb, var(--text) 18%, transparent);
+      margin-bottom: 2px; z-index: 1;
+    }
+    .dx-fork--quad { grid-template-columns: repeat(4, 1fr); }
+    .dx-fork--quad::before { left: 12.5%; right: 12.5%; }
+
+    /* 4列の疾患ツリー */
+    .dx-trees {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 12px; align-items: start; margin-top: 4px;
+    }
+    .dx-tree { display: flex; flex-direction: column; gap: 6px; }
+    .dx-tree__group {
+      font-size: 11px; font-weight: 700; color: var(--muted);
+      text-align: center; padding: 6px 0 2px; margin-top: 4px;
+      border-bottom: 1px dashed color-mix(in srgb, var(--text) 22%, transparent);
+      letter-spacing: 0.02em;
+    }
+    .dx-tree__group:first-child { margin-top: 0; }
+
+    /* メモ */
+    .dx-note {
+      background: color-mix(in srgb, var(--text) 4%, var(--surface));
+      border-left: 3px solid color-mix(in srgb, var(--text) 25%, transparent);
+      border-radius: 6px; padding: 6px 10px;
+      font-size: 11.5px; color: var(--muted);
+      text-align: left; margin-top: 4px;
+    }
+
+    /* タップ可能ノード */
+    a.dx-node {
+      text-decoration: none; color: inherit; cursor: pointer;
+      transition: transform 80ms ease, box-shadow 120ms ease;
+      position: relative;
+    }
+    a.dx-node:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 3px 6px var(--shadow, rgba(0,0,0,0.12));
+    }
+    a.dx-node:active { transform: translateY(0); }
+    a.dx-node:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+    a.dx-node::after {
+      content: "›"; position: absolute; top: 3px; right: 6px;
+      font-size: 12px; color: color-mix(in srgb, var(--text) 40%, transparent);
+      font-weight: 700;
+    }
+    a.dx-node--danger::after { color: #c0392b; }
+    a.dx-node--decision::after { color: var(--accent); }
+
+    /* スマホ */
+    @media (max-width: 600px) {
+      .dx-flow { min-width: 0; font-size: 11px; padding: 2px 0 6px; }
+      .flow-canvas { overflow-x: hidden; padding: 8px 6px 12px; }
+
+      .dx-node { padding: 4px 5px; min-height: 28px; border-radius: 7px; gap: 1px;
+        box-shadow: 0 1px 1px var(--shadow, rgba(0,0,0,0.05)); }
+      .dx-node__title { font-size: 10.5px; line-height: 1.22; }
+      .dx-node__sub   { font-size: 9px;    line-height: 1.25; }
+      .dx-node--decision { border-radius: 8px; }
+      .dx-node--judge { padding: 3px 7px; min-height: 22px; font-size: 10px; }
+      .dx-node--external::after { top: 2px; right: 4px; font-size: 9px; }
+
+      .dx-layer { gap: 6px; }
+      .dx-layer--root > * { max-width: none; width: 100%; }
+
+      .dx-arrow { min-height: 24px; margin: 1px 0; }
+      .dx-arrow::before { min-height: 20px; width: 1.5px; }
+      .dx-arrow::after { border-left-width: 4px; border-right-width: 4px; border-top-width: 6px; }
+      .dx-arrow__label { font-size: 8.5px; padding: 0 4px; line-height: 1.4; }
+
+      .dx-fork { min-height: 22px; }
+      .dx-fork::before { height: 1.5px; }
+      .dx-fork__leg { min-height: 22px; padding-top: 2px; padding-bottom: 2px; font-size: 9px; }
+      .dx-fork__leg::before { width: 1.5px; }
+      .dx-fork__leg::after { border-left-width: 4px; border-right-width: 4px; border-top-width: 6px; }
+      .dx-fork__label { font-size: 8.5px; padding: 0 4px; margin-bottom: 0; }
+      .dx-fork--quad::before { left: 12.5%; right: 12.5%; }
+
+      .dx-trees { gap: 4px; }
+      .dx-tree { gap: 3px; }
+      .dx-tree__group { font-size: 8.5px; padding: 4px 0 1px; margin-top: 2px; }
+      .dx-note { padding: 4px 7px; font-size: 9.5px; }
+
+      a.dx-node::after { top: 1px; right: 3px; font-size: 9px; }
+    }
+
+    /* === 来院後チェック === */
+    .dx-arrival-divider {
+      margin: 18px 0 8px; display: flex; align-items: center; gap: 10px;
+      color: var(--muted); font-size: 11.5px; font-weight: 800; letter-spacing: 0.1em;
+    }
+    .dx-arrival-divider::before, .dx-arrival-divider::after {
+      content: ""; flex: 1; height: 1px;
+      background: color-mix(in srgb, var(--text) 18%, transparent);
+    }
+    .dx-checklist {
+      background: var(--surface); border-radius: 10px;
+      border: 1.5px solid color-mix(in srgb, var(--text) 14%, transparent);
+      padding: 10px 14px;
+      box-shadow: 0 1px 2px var(--shadow, rgba(0,0,0,0.04));
+      margin-bottom: 8px;
+    }
+    .dx-checklist > summary {
+      cursor: pointer; font-weight: 800; font-size: 13.5px;
+      list-style: none; user-select: none;
+      display: flex; align-items: center; gap: 6px; color: var(--text);
+    }
+    .dx-checklist > summary::-webkit-details-marker { display: none; }
+    .dx-checklist > summary::before {
+      content: "▶"; font-size: 10px; color: var(--muted);
+      transition: transform 150ms ease; flex-shrink: 0;
+    }
+    .dx-checklist[open] > summary::before { transform: rotate(90deg); }
+    .dx-checklist__head {
+      display: flex; align-items: center; justify-content: space-between; gap: 8px;
+    }
+    .dx-checklist__reset {
+      font-size: 10.5px; color: var(--muted);
+      background: transparent;
+      border: 1px solid color-mix(in srgb, var(--text) 18%, transparent);
+      border-radius: 999px; padding: 1px 8px; cursor: pointer; font-weight: 600;
+    }
+    .dx-checklist__reset:hover { background: color-mix(in srgb, var(--text) 5%, transparent); }
+    .dx-checklist__list { list-style: none; margin: 8px 0 2px; padding: 0; }
+    .dx-checklist__list li { margin: 0; font-size: 12.5px; line-height: 1.45; }
+    .dx-checklist__list label {
+      display: flex; align-items: flex-start; gap: 8px; cursor: pointer;
+      padding: 5px 6px; border-radius: 5px;
+      transition: background-color 100ms ease;
+    }
+    .dx-checklist__list label:hover { background: color-mix(in srgb, var(--text) 4%, transparent); }
+    .dx-checklist__list input[type="checkbox"] { margin-top: 3px; flex-shrink: 0; accent-color: var(--accent); }
+    .dx-checklist__list label:has(input:checked) { color: var(--muted); }
+    .dx-checklist__list label:has(input:checked) strong {
+      color: var(--muted); text-decoration: line-through;
+      text-decoration-color: color-mix(in srgb, var(--muted) 50%, transparent);
+    }
+    .dx-checklist__sub { color: var(--muted); font-size: 11px; font-weight: 500; }
+
+    @media (max-width: 600px) {
+      .dx-checklist { padding: 8px 10px; }
+      .dx-checklist > summary { font-size: 12px; }
+      .dx-checklist__list li { font-size: 11.5px; }
+      .dx-checklist__sub { font-size: 10px; }
+      .dx-checklist__reset { font-size: 9.5px; padding: 1px 6px; }
+      .dx-arrival-divider { font-size: 10px; margin: 14px 0 6px; }
+    }
+
+    /* === トリガー連動ルール === */
+    .dx-rules-l2 {
+      margin-top: 12px;
+      background: var(--surface); border-radius: 10px;
+      border: 1.5px solid color-mix(in srgb, #c0392b 35%, transparent);
+      padding: 10px 14px;
+    }
+    .dx-rules-l2 > summary {
+      cursor: pointer; font-weight: 800; font-size: 13.5px;
+      list-style: none; user-select: none;
+      display: flex; align-items: center; gap: 6px; color: #c0392b;
+    }
+    .dx-rules-l2 > summary::-webkit-details-marker { display: none; }
+    .dx-rules-l2 > summary::before {
+      content: "▶"; font-size: 10px; color: #c0392b;
+      transition: transform 150ms ease; flex-shrink: 0;
+    }
+    .dx-rules-l2[open] > summary::before { transform: rotate(90deg); }
+    .dx-rules-l2__intro { font-size: 11px; color: var(--muted); margin: 8px 0 4px; line-height: 1.5; }
+    .dx-rules-l2__group {
+      font-size: 11px; font-weight: 800; color: var(--muted);
+      margin: 12px 0 5px; padding: 0; letter-spacing: 0.06em;
+    }
+    .dx-rules-l2__list {
+      list-style: none; margin: 0 0 4px; padding: 0;
+      display: flex; flex-direction: column; gap: 5px;
+    }
+    .dx-rule {
+      background: color-mix(in srgb, var(--text) 4%, var(--surface));
+      border-left: 3px solid color-mix(in srgb, var(--text) 28%, transparent);
+      border-radius: 6px; padding: 7px 10px;
+      font-size: 12px; line-height: 1.45;
+    }
+    .dx-rule.is-critical {
+      background: color-mix(in srgb, #c0392b 6%, var(--surface));
+      border-left-color: #c0392b;
+    }
+    .dx-rule.is-pitfall {
+      background: color-mix(in srgb, #d68910 7%, var(--surface));
+      border-left-color: #d68910;
+    }
+    .dx-rule__if {
+      font-weight: 700; color: var(--text);
+      display: flex; align-items: baseline; gap: 6px; flex-wrap: wrap;
+    }
+    .dx-rule__tag {
+      display: inline-block; font-size: 9.5px; font-weight: 800;
+      padding: 1px 7px; border-radius: 999px;
+      background: color-mix(in srgb, var(--text) 12%, var(--surface));
+      color: var(--muted); letter-spacing: 0.08em; flex-shrink: 0;
+    }
+    .dx-rule.is-critical .dx-rule__tag {
+      background: color-mix(in srgb, #c0392b 18%, var(--surface)); color: #c0392b;
+    }
+    .dx-rule.is-pitfall .dx-rule__tag {
+      background: color-mix(in srgb, #d68910 20%, var(--surface)); color: #b87900;
+    }
+    .dx-rule__then { margin-top: 3px; color: var(--text); }
+    .dx-rule__then strong { color: var(--accent); }
+    .dx-rule.is-critical .dx-rule__then strong { color: #c0392b; }
+
+    @media (max-width: 600px) {
+      .dx-rules-l2 { padding: 8px 10px; }
+      .dx-rules-l2 > summary { font-size: 12px; }
+      .dx-rules-l2__intro { font-size: 10px; }
+      .dx-rules-l2__group { font-size: 10px; margin-top: 10px; }
+      .dx-rule { font-size: 11px; padding: 6px 8px; line-height: 1.4; }
+      .dx-rule__tag { font-size: 9px; padding: 0 5px; }
+    }
+
+    /* 撮影方向の備忘 */
+    .dx-imaging {
+      margin-top: 12px;
+      background: var(--surface); border-radius: 10px;
+      border: 1.5px solid color-mix(in srgb, var(--text) 14%, transparent);
+      padding: 10px 14px;
+    }
+    .dx-imaging > summary {
+      cursor: pointer; font-weight: 800; font-size: 13.5px;
+      list-style: none; user-select: none;
+      display: flex; align-items: center; gap: 6px; color: var(--text);
+    }
+    .dx-imaging > summary::-webkit-details-marker { display: none; }
+    .dx-imaging > summary::before {
+      content: "▶"; font-size: 10px; color: var(--muted);
+      transition: transform 150ms ease; flex-shrink: 0;
+    }
+    .dx-imaging[open] > summary::before { transform: rotate(90deg); }
+    .dx-imaging__list {
+      margin: 8px 0 0; padding-left: 1.2em; font-size: 12.5px; line-height: 1.55;
+    }
+    .dx-imaging__list li { margin: 2px 0; }
+    @media (max-width: 600px) {
+      .dx-imaging { padding: 8px 10px; }
+      .dx-imaging > summary { font-size: 12px; }
+      .dx-imaging__list { font-size: 11.5px; }
+    }
+
+    /* §メニュータイル非表示 */
+    .section-tiles { display: none !important; }
+  </style>
+</head>
+<body>
+  <header class="hokuto-top">
+    <a class="hokuto-top__btn" href="薬剤情報.html">
+      <span class="hokuto-top__icon">℞</span><span>薬剤情報</span>
+    </a>
+    <a class="hokuto-top__btn" href="表計算.html">
+      <span class="hokuto-top__icon">⊞</span><span>表計算</span>
+    </a>
+  </header>
+
+  <main class="hokuto-main">
+    <article class="note-shell">
+      <h1 class="page-title">体幹・背部の外傷</h1>
+
+      <!-- 単純化診療フロー -->
+      <div class="action-header flow-box" id="flowBox">
+        <div class="action-header__title flow-box__title" id="flowBoxClose" role="button" tabindex="0" aria-label="診療フローを閉じる">
+          <span>🗺 単純化診療フロー</span>
+          <span class="flow-box__hint">タップで閉じる ✕</span>
+        </div>
+
+        <div class="flow-canvas">
+          <div class="dx-flow" role="group" aria-label="体幹・背部外傷の単純化診療フロー">
+
+            <!-- L0: Red flags -->
+            <div class="dx-layer dx-layer--root">
+              <a class="dx-node dx-node--decision dx-node--danger" href="#redflags">
+                <div class="dx-node__title">🚨 Red flags 確認</div>
+                <div class="dx-node__sub">馬尾／フレイルチェスト／緊張性気胸／大動脈損傷</div>
+              </a>
+            </div>
+
+            <div class="dx-fork">
+              <div class="dx-fork__leg"><span class="dx-fork__label">あり</span></div>
+              <div class="dx-fork__leg"><span class="dx-fork__label">なし</span></div>
+            </div>
+
+            <div class="dx-layer dx-layer--branch">
+              <a class="dx-node dx-node--danger" href="#redflags">
+                <div class="dx-node__title">緊急対応</div>
+                <div class="dx-node__sub">緊急 MRI／胸腔ドレナージ／造影 CT</div>
+              </a>
+              <div class="dx-arrow"><span class="dx-arrow__label">↓ 痛みの主座で絞る</span></div>
+            </div>
+
+            <!-- L1: 痛みの主座 -->
+            <div class="dx-layer dx-layer--root">
+              <div class="dx-node dx-node--judge">痛みの主座は？</div>
+            </div>
+
+            <div class="dx-fork dx-fork--quad">
+              <div class="dx-fork__leg"><span class="dx-fork__label">背部・腰背部</span></div>
+              <div class="dx-fork__leg"><span class="dx-fork__label">胸部・側胸部</span></div>
+              <div class="dx-fork__leg"><span class="dx-fork__label">骨盤・鼠径部</span></div>
+              <div class="dx-fork__leg"><span class="dx-fork__label">下肢神経症状</span></div>
+            </div>
+
+            <!-- L2/L3: 4列の疾患ツリー -->
+            <div class="dx-trees">
+
+              <!-- 1) 背部・腰背部 -->
+              <div class="dx-tree">
+                <div class="dx-tree__group">高齢者・軽微外傷</div>
+                <a class="dx-node" href="疾患詳細/脊椎圧迫骨折.html">
+                  <div class="dx-node__title">脊椎圧迫骨折</div>
+                  <div class="dx-node__sub">しりもち／椎体楔形／MRI で新鮮判定</div>
+                </a>
+                <a class="dx-node" href="疾患詳細/脆弱性骨盤骨折.html">
+                  <div class="dx-node__title">脆弱性骨盤骨折</div>
+                  <div class="dx-node__sub">恥骨・坐骨・仙骨。骨盤痛もあり</div>
+                </a>
+
+                <div class="dx-tree__group">高エネ外傷</div>
+                <a class="dx-node dx-node--danger" href="疾患詳細/脊椎破裂骨折.html">
+                  <div class="dx-node__title">脊椎破裂骨折</div>
+                  <div class="dx-node__sub">後方成分破綻／神経症状で即整形</div>
+                </a>
+                <a class="dx-node" href="疾患詳細/腰椎横突起骨折.html">
+                  <div class="dx-node__title">腰椎横突起骨折</div>
+                  <div class="dx-node__sub">腎損傷併発を必ず鑑別</div>
+                </a>
+                <a class="dx-node dx-node--danger" href="疾患詳細/頸椎損傷.html">
+                  <div class="dx-node__title">頸椎損傷</div>
+                  <div class="dx-node__sub">受傷直後から固定・脱臼骨折</div>
+                </a>
+
+                <div class="dx-tree__group">軽症（除外診断）</div>
+                <div class="dx-node">
+                  <div class="dx-node__title">腰部筋挫傷・椎間関節捻挫</div>
+                  <div class="dx-node__sub">骨折・神経症状を除外して診断</div>
+                </div>
+              </div>
+
+              <!-- 2) 胸部・側胸部 -->
+              <div class="dx-tree">
+                <div class="dx-tree__group">直達外力・転倒</div>
+                <a class="dx-node" href="疾患詳細/肋骨骨折.html">
+                  <div class="dx-node__title">肋骨骨折</div>
+                  <div class="dx-node__sub">第1-3＝高エネ示唆／第10-12＝肝脾腎</div>
+                </a>
+
+                <div class="dx-tree__group">高エネ外傷</div>
+                <a class="dx-node dx-node--danger" href="疾患詳細/胸骨骨折.html">
+                  <div class="dx-node__title">胸骨骨折</div>
+                  <div class="dx-node__sub">心臓打撲・大動脈損傷を必ず鑑別</div>
+                </a>
+                <a class="dx-node dx-node--danger" href="疾患詳細/肋骨骨折.html">
+                  <div class="dx-node__title">フレイルチェスト</div>
+                  <div class="dx-node__sub">3 本以上 × 2 か所／奇異呼吸</div>
+                </a>
+
+                <div class="dx-tree__group">合併損傷</div>
+                <div class="dx-node">
+                  <div class="dx-node__title">気胸・血胸・肺挫傷</div>
+                  <div class="dx-node__sub">胸部 X 線＋エコーで初期評価</div>
+                </div>
+              </div>
+
+              <!-- 3) 骨盤・鼠径部 -->
+              <div class="dx-tree">
+                <div class="dx-tree__group">高齢者軽微外傷</div>
+                <a class="dx-node" href="疾患詳細/脆弱性骨盤骨折.html">
+                  <div class="dx-node__title">脆弱性骨盤骨折</div>
+                  <div class="dx-node__sub">恥骨・坐骨・仙骨。歩行困難</div>
+                </a>
+
+                <div class="dx-tree__group">高エネ外傷</div>
+                <a class="dx-node dx-node--danger" href="疾患詳細/脆弱性骨盤骨折.html">
+                  <div class="dx-node__title">不安定型骨盤骨折</div>
+                  <div class="dx-node__sub">出血源／骨盤バンド／TAE 検討</div>
+                </a>
+
+                <div class="dx-tree__group">鑑別</div>
+                <a class="dx-node" href="疾患詳細/大腿骨近位部骨折.html">
+                  <div class="dx-node__title">大腿骨近位部骨折</div>
+                  <div class="dx-node__sub">鼠径部痛＋外旋短縮位で疑う</div>
+                </a>
+                <div class="dx-note">高齢者の鼠径部痛は<strong>仙骨不全骨折</strong>と<strong>大腿骨頸部骨折</strong>を必ずペアで考える</div>
+              </div>
+
+              <!-- 4) 下肢神経症状 -->
+              <div class="dx-tree">
+                <div class="dx-tree__group">緊急対応</div>
+                <a class="dx-node dx-node--danger" href="#redflags">
+                  <div class="dx-node__title">馬尾症候群</div>
+                  <div class="dx-node__sub">鞍状感覚低下／尿閉／両下肢麻痺</div>
+                </a>
+
+                <div class="dx-tree__group">頸部過伸展機転</div>
+                <a class="dx-node dx-node--danger" href="疾患詳細/頸椎損傷.html">
+                  <div class="dx-node__title">中心性脊髄損傷</div>
+                  <div class="dx-node__sub">高齢者の軽微外傷でも発症</div>
+                </a>
+                <div class="dx-note">上肢優位の麻痺・しびれ。<strong>頸髄症の既往</strong>に転倒で発症が典型</div>
+              </div>
+
+            </div>
+
+          </div>
+
+          <!-- 来院後チェック -->
+          <div class="dx-arrival-divider"><span>来院後のチェック</span></div>
+
+          <details class="dx-checklist" id="historyPanel">
+            <summary>
+              <span class="dx-checklist__head" style="flex:1;">
+                <span>🗣 問診（来院後に実施）</span>
+                <button type="button" class="dx-checklist__reset" aria-label="問診チェックをすべて外す">リセット</button>
+              </span>
+            </summary>
+            <ul class="dx-checklist__list">
+              <li><label><input type="checkbox" data-key="h-energy"> <span><strong>受傷エネルギー</strong> <span class="dx-checklist__sub">転落の高さ／速度／直接打撲か</span></span></label></li>
+              <li><label><input type="checkbox" data-key="h-mech"> <span><strong>受傷機転の方向</strong> <span class="dx-checklist__sub">軸圧／屈曲／回旋／側胸部直撃</span></span></label></li>
+              <li><label><input type="checkbox" data-key="h-osteo"> <span><strong>骨粗鬆症・ステロイド使用歴</strong> <span class="dx-checklist__sub">脊椎圧迫骨折・脆弱性骨盤骨折の検査前確率を上げる</span></span></label></li>
+              <li><label><input type="checkbox" data-key="h-anticoag"> <span><strong>抗凝固薬・抗血小板薬</strong> <span class="dx-checklist__sub">後腹膜・胸腔内出血の遷延進行に直結</span></span></label></li>
+              <li><label><input type="checkbox" data-key="h-bowel"> <span><strong>排尿・排便障害／鞍状感覚</strong> <span class="dx-checklist__sub">馬尾症候群を疑う</span></span></label></li>
+              <li><label><input type="checkbox" data-key="h-breath"> <span><strong>呼吸困難・咳嗽時の痛み</strong> <span class="dx-checklist__sub">気胸・フレイルチェスト・無気肺</span></span></label></li>
+              <li><label><input type="checkbox" data-key="h-walk"> <span><strong>受傷前 ADL／受傷後の歩行可否</strong> <span class="dx-checklist__sub">入院適応の決定因子</span></span></label></li>
+              <li><label><input type="checkbox" data-key="h-hema"> <span><strong>血尿・腹部膨満</strong> <span class="dx-checklist__sub">腎損傷／後腹膜出血を疑う</span></span></label></li>
+            </ul>
+          </details>
+
+          <details class="dx-checklist" id="examPanel">
+            <summary>
+              <span class="dx-checklist__head" style="flex:1;">
+                <span>🔍 身体診察（来院後に実施）</span>
+                <button type="button" class="dx-checklist__reset" aria-label="身体診察チェックをすべて外す">リセット</button>
+              </span>
+            </summary>
+            <ul class="dx-checklist__list">
+              <li><label><input type="checkbox" data-key="e-vital"> <span><strong>バイタル・呼吸数・SpO2</strong> <span class="dx-checklist__sub">高エネ外傷では多発外傷を意識</span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-cfps"> <span><strong>叩打痛（CFPS）</strong> <span class="dx-checklist__sub">脊椎圧迫骨折の感度 87%／特異度 90%</span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-paraspinal"> <span><strong>傍脊柱筋（椎体から 1-2 cm 外側）の圧痛</strong> <span class="dx-checklist__sub">腰椎横突起骨折を示唆</span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-rib"> <span><strong>肋骨各レベルの圧痛・叩打痛</strong> <span class="dx-checklist__sub">深呼吸・咳嗽で増悪。骨片可動性</span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-paradox"> <span><strong>奇異呼吸の有無</strong> <span class="dx-checklist__sub">フレイルチェストの除外</span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-sternum"> <span><strong>胸骨正中の圧痛・段差</strong> <span class="dx-checklist__sub">胸骨骨折＋心臓打撲を意識</span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-pelvis"> <span><strong>骨盤コンプレッション</strong> <span class="dx-checklist__sub">恥骨・坐骨の圧痛</span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-flank"> <span><strong>側腹部・腎部の打診痛</strong> <span class="dx-checklist__sub">第10-12 肋骨骨折＋腎損傷</span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-saddle"> <span><strong>鞍状感覚・肛門括約筋トーヌス</strong> <span class="dx-checklist__sub">馬尾症候群</span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-neuro"> <span><strong>四肢の MMT・感覚・反射</strong> <span class="dx-checklist__sub">脊髄圧迫・中心性脊髄損傷</span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-skin"> <span><strong>皮下血腫・タイヤ痕・シートベルトサイン</strong> <span class="dx-checklist__sub">深部臓器損傷を示唆</span></span></label></li>
+            </ul>
+          </details>
+
+          <!-- トリガー連動の注意 -->
+          <details class="dx-rules-l2" id="rulesL2Panel">
+            <summary>⚠️ トリガー連動の注意（条件で意識）</summary>
+            <p class="dx-rules-l2__intro">特定の状況に出会ったら必ず思い出すべき注意点。フローの判断と並行して意識する。</p>
+
+            <h4 class="dx-rules-l2__group">緊急トリガー</h4>
+            <ul class="dx-rules-l2__list">
+              <li class="dx-rule is-critical" id="redflags">
+                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>鞍状感覚低下／尿閉／両下肢麻痺</span></div>
+                <div class="dx-rule__then"><strong>馬尾症候群</strong>を疑う。緊急 MRI と整形・脳外コンサル</div>
+              </li>
+              <li class="dx-rule is-critical">
+                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>連続 3 本以上の肋骨が 2 か所で骨折＋奇異呼吸</span></div>
+                <div class="dx-rule__then"><strong>フレイルチェスト</strong>。気道・呼吸管理、整形・呼吸器外科</div>
+              </li>
+              <li class="dx-rule is-critical">
+                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>呼吸不全＋頸静脈怒張＋気管偏位</span></div>
+                <div class="dx-rule__then"><strong>緊張性気胸</strong>。即座に胸腔穿刺（針減圧）→ ドレナージ</div>
+              </li>
+              <li class="dx-rule is-critical">
+                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>胸骨骨折＋ECG 異常／トロポニン陽性</span></div>
+                <div class="dx-rule__then"><strong>心臓打撲</strong>。心電図モニター入院、循環器コンサル</div>
+              </li>
+              <li class="dx-rule is-critical">
+                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>高エネ＋胸部痛＋縦隔拡大</span></div>
+                <div class="dx-rule__then"><strong>大動脈損傷</strong>を疑う。造影 CT・心臓血管外科コンサル</div>
+              </li>
+              <li class="dx-rule is-critical">
+                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>腰椎横突起骨折＋ショック</span></div>
+                <div class="dx-rule__then"><strong>後腹膜出血・腎損傷</strong>。緊急造影 CT、IVR 待機</div>
+              </li>
+              <li class="dx-rule is-critical">
+                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>開放性骨盤骨折</span></div>
+                <div class="dx-rule__then">即時手術。創処置・抗菌薬・破傷風予防、整形・外科同時コール</div>
+              </li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">画像の閾値を下げる</h4>
+            <ul class="dx-rules-l2__list">
+              <li class="dx-rule">
+                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>高齢者の腰背部痛＋骨粗鬆症</span></div>
+                <div class="dx-rule__then">レントゲン陰性でも<strong>脊椎圧迫骨折疑い</strong>。MRI で新鮮判定（STIR 高信号／T1 低信号）</div>
+              </li>
+              <li class="dx-rule">
+                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>高エネ受傷機転＋傍脊柱筋圧痛</span></div>
+                <div class="dx-rule__then">レントゲンでは見えない。<strong>CT を実施</strong>して横突起骨折・破裂骨折を評価</div>
+              </li>
+              <li class="dx-rule">
+                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>第1-3 肋骨骨折／胸骨骨折</span></div>
+                <div class="dx-rule__then">高エネ示唆。<strong>造影 CT</strong>で大動脈・縦隔・心臓を評価</div>
+              </li>
+              <li class="dx-rule">
+                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>第10-12 肋骨骨折</span></div>
+                <div class="dx-rule__then"><strong>肝（右）／脾（左）／腎</strong>損傷を必ず造影 CT で確認</div>
+              </li>
+              <li class="dx-rule">
+                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>高齢者の鼠径部痛＋歩行困難</span></div>
+                <div class="dx-rule__then">レントゲン正常でも<strong>仙骨不全骨折／大腿骨頸部潜在骨折</strong>を疑い、CT・MRI 検討</div>
+              </li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">入院・帰宅判断</h4>
+            <ul class="dx-rules-l2__list">
+              <li class="dx-rule">
+                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>肋骨骨折 4 本以上／高齢者／呼吸合併症</span></div>
+                <div class="dx-rule__then"><strong>入院</strong>（鎮痛・呼吸理学療法・酸素管理）</div>
+              </li>
+              <li class="dx-rule">
+                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>脊椎圧迫骨折で日常生活困難</span></div>
+                <div class="dx-rule__then">疾患の確定診断より<strong>ADL を基準に入院判断</strong>。整形・PVP も選択肢</div>
+              </li>
+              <li class="dx-rule">
+                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>抗凝固／抗血小板薬内服中の体幹外傷</span></div>
+                <div class="dx-rule__then">遷延性出血のリスク高。<strong>初期 CT 陰性でも経過観察入院</strong>を考慮</div>
+              </li>
+              <li class="dx-rule">
+                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>腰椎横突起骨折で疼痛強度高</span></div>
+                <div class="dx-rule__then">原則保存だが<strong>入院整形か帰宅か患者と相談</strong>。治療効果は同等</div>
+              </li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">ピットフォール</h4>
+            <ul class="dx-rules-l2__list">
+              <li class="dx-rule is-pitfall">
+                <div class="dx-rule__if"><span class="dx-rule__tag">⚠</span><span>胸部 X 線で「肋骨骨折なし」</span></div>
+                <div class="dx-rule__then">X 線では<strong>肋骨骨折は写りにくい</strong>。臨床所見があれば臨床診断で先に進める</div>
+              </li>
+              <li class="dx-rule is-pitfall">
+                <div class="dx-rule__if"><span class="dx-rule__tag">⚠</span><span>レントゲンで楔形＝新鮮骨折と即決</span></div>
+                <div class="dx-rule__then">脊椎圧迫骨折の楔形は<strong>陳旧性が多い</strong>。MRI が新鮮判定のゴールド</div>
+              </li>
+              <li class="dx-rule is-pitfall">
+                <div class="dx-rule__if"><span class="dx-rule__tag">⚠</span><span>全身 CT で他部位の重篤損傷あり</span></div>
+                <div class="dx-rule__then"><strong>横突起骨折・小肋骨骨折</strong>は隠れて見逃されがち。後で読み返す</div>
+              </li>
+              <li class="dx-rule is-pitfall">
+                <div class="dx-rule__if"><span class="dx-rule__tag">⚠</span><span>胸骨骨折を「単独」と確定</span></div>
+                <div class="dx-rule__then">高エネ示唆。<strong>心電図・トロポニン・心エコー</strong>を必ず追加</div>
+              </li>
+              <li class="dx-rule is-pitfall">
+                <div class="dx-rule__if"><span class="dx-rule__tag">⚠</span><span>高齢者の軽微外傷後の頸部痛</span></div>
+                <div class="dx-rule__then">中心性脊髄損傷／頸髄症の急性増悪を見逃さない。<strong>頸椎 MRI</strong>を検討</div>
+              </li>
+              <li class="dx-rule is-pitfall">
+                <div class="dx-rule__if"><span class="dx-rule__tag">⚠</span><span>「肋骨バンド」をルーチン処方</span></div>
+                <div class="dx-rule__then">無気肺・肺炎を誘発。<strong>鎮痛＋深呼吸促し</strong>を優先</div>
+              </li>
+            </ul>
+          </details>
+
+          <!-- 撮影方向の備忘 -->
+          <details class="dx-imaging" id="imagingPanel">
+            <summary>📷 撮影方向の備忘</summary>
+            <ul class="dx-imaging__list">
+              <li><strong>胸部 X 線</strong>：PA + 側面（肋骨骨折／気胸／血胸／縦隔拡大）</li>
+              <li><strong>胸椎・腰椎</strong>：正面＋側面 2 方向（圧迫・破裂で椎体高 / 後壁ライン）</li>
+              <li><strong>骨盤</strong>：AP（恥坐骨）＋必要に応じて inlet / outlet 像</li>
+              <li><strong>胸骨</strong>：胸骨側面像＋胸部側面 X 線</li>
+              <li><strong>CT 推奨閾値</strong>：高エネ受傷／神経症状あり／高齢者で痛み遷延／第1-3 肋骨骨折／胸骨骨折／側腹部痛＋血尿</li>
+              <li><strong>MRI</strong>：脊椎圧迫骨折の新鮮判定（STIR・T1）／馬尾症候群／脊髄圧迫</li>
+              <li><strong>FAST／eFAST</strong>：体幹高エネ外傷の初期スクリーニング（腹腔内出血・気胸）</li>
+            </ul>
+          </details>
+
+        </div>
+      </div>
+
+    </article>
+  </main>
+
+  <nav class="hokuto-bottom">
+    <button class="hokuto-bottom__btn" type="button" id="navBack">
+      <span class="hokuto-bottom__icon">←</span><span>戻る</span>
+    </button>
+    <a class="hokuto-bottom__btn" href="ツール.html">
+      <span class="hokuto-bottom__icon">⚙</span><span>ツール</span>
+    </a>
+    <a class="hokuto-bottom__btn" href="index.html">
+      <span class="hokuto-bottom__icon">⌂</span><span>ホーム</span>
+    </a>
+  </nav>
+
+  <script>
+  (function(){
+    const flowBox = document.getElementById('flowBox');
+    const flowBoxClose = document.getElementById('flowBoxClose');
+
+    if (flowBox && flowBoxClose) {
+      const dismiss = () => { flowBox.hidden = true; };
+      flowBoxClose.addEventListener('click', dismiss);
+      flowBoxClose.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); dismiss(); }
+      });
+    }
+
+    // 来院後チェックリスト：localStorage 永続化 + per-panel リセット
+    const STORAGE_KEY = 'trunk-back-dx-checklist-v1';
+    let stored = {};
+    try { stored = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); } catch (_) {}
+    const allBoxes = document.querySelectorAll('.dx-checklist__list input[type="checkbox"]');
+    allBoxes.forEach(cb => {
+      const key = cb.dataset.key;
+      if (stored[key]) cb.checked = true;
+      cb.addEventListener('change', () => {
+        if (cb.checked) stored[key] = true; else delete stored[key];
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(stored));
+      });
+    });
+    document.querySelectorAll('.dx-checklist__reset').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const details = btn.closest('details');
+        if (!details) return;
+        details.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+          cb.checked = false;
+          delete stored[cb.dataset.key];
+        });
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(stored));
+      });
+    });
+
+    // パネル開閉状態を localStorage で復元
+    ['historyPanel', 'examPanel', 'rulesL2Panel', 'imagingPanel'].forEach(id => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      const key = `trunk-back-${id}-open-v1`;
+      const saved = localStorage.getItem(key);
+      if (saved !== null) el.open = saved === '1';
+      el.addEventListener('toggle', () => {
+        localStorage.setItem(key, el.open ? '1' : '0');
+      });
+    });
+
+    const navBack = document.getElementById('navBack');
+    if (navBack) navBack.addEventListener('click', () => {
+      if (window.history.length > 1) history.back();
+      else window.location.href = 'index.html';
+    });
+  })();
+  </script>
+</body>
+</html>

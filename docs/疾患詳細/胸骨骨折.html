@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="color-scheme" content="light dark" />
+  <title>胸骨骨折 | ER ノート</title>
+  <link rel="stylesheet" href="../er-note.css" />
+  <style>
+    /* ============ クイックタップ（3 つを開閉トリガー） ============ */
+    .dx-quick {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px;
+      margin: 10px 0 4px;
+    }
+    .dx-quick__btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      padding: 10px 6px;
+      border-radius: 10px;
+      background: color-mix(in srgb, var(--accent) 10%, var(--surface));
+      border: 1.5px solid var(--accent);
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 13px;
+      line-height: 1.2;
+      text-align: center;
+      cursor: pointer;
+      transition: background 120ms ease;
+    }
+    .dx-quick__btn:hover {
+      background: color-mix(in srgb, var(--accent) 18%, var(--surface));
+    }
+    .dx-quick__icon { font-size: 20px; }
+    .dx-quick__sub {
+      font-size: 10.5px;
+      font-weight: 500;
+      color: var(--muted);
+    }
+
+    /* ============ 同時評価 3 列（血管・神経・典型像） ============ */
+    .dx-tri {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+      margin: 6px 0 4px;
+      align-items: start;
+    }
+    .dx-tri__card {
+      background: var(--surface);
+      border-radius: 10px;
+      padding: 10px 12px;
+      border: 1.5px solid color-mix(in srgb, var(--text) 18%, transparent);
+    }
+    .dx-tri__card--vasc { border-color: #c0392b; background: color-mix(in srgb, #c0392b 6%, var(--surface)); }
+    .dx-tri__card--neuro { border-color: #b5651d; background: color-mix(in srgb, #b5651d 6%, var(--surface)); }
+    .dx-tri__card--typical { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 6%, var(--surface)); }
+    .dx-tri__title {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 800;
+      font-size: 13.5px;
+      margin-bottom: 4px;
+    }
+    .dx-tri__card--vasc .dx-tri__title { color: #c0392b; }
+    .dx-tri__card--neuro .dx-tri__title { color: #b5651d; }
+    .dx-tri__list {
+      margin: 0;
+      padding-left: 18px;
+      font-size: 12.5px;
+      line-height: 1.5;
+    }
+    .dx-tri__list li { margin: 2px 0; }
+
+    /* details 形式の血管/神経カード：summary にチェック印、開閉時の挙動 */
+    details.dx-tri__card { padding: 0; }
+    details.dx-tri__card > summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 10px 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 800;
+      font-size: 13.5px;
+    }
+    details.dx-tri__card > summary::-webkit-details-marker { display: none; }
+    details.dx-tri__card > summary::after {
+      content: "▸";
+      margin-left: auto;
+      font-size: 12px;
+      color: var(--muted);
+      transition: transform 120ms ease;
+    }
+    details.dx-tri__card[open] > summary::after { transform: rotate(90deg); }
+    details.dx-tri__card--vasc > summary { color: #c0392b; }
+    details.dx-tri__card--neuro > summary { color: #b5651d; }
+    details.dx-tri__card > .dx-tri__list { padding: 0 14px 12px 30px; }
+    details.dx-tri__card > .dx-tri__hint {
+      padding: 0 14px 6px 30px;
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    /* ============ 大きな details ボックス（画像/治療方針/コンサル文） ============ */
+    details.dx-box {
+      background: var(--surface);
+      border: 1.5px solid color-mix(in srgb, var(--text) 18%, transparent);
+      border-radius: 10px;
+      margin: 10px 0;
+      scroll-margin-top: 8px;
+    }
+    details.dx-box > summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 12px 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 800;
+      font-size: 14.5px;
+    }
+    details.dx-box > summary::-webkit-details-marker { display: none; }
+    details.dx-box > summary::after {
+      content: "▸";
+      margin-left: auto;
+      font-size: 13px;
+      color: var(--muted);
+      transition: transform 120ms ease;
+    }
+    details.dx-box[open] > summary::after { transform: rotate(90deg); }
+    details.dx-box[open] {
+      border-color: var(--accent);
+    }
+    details.dx-box > .dx-box__body {
+      padding: 0 14px 14px;
+    }
+
+    /* スマホで 1 列に */
+    @media (max-width: 640px) {
+      .dx-quick { gap: 6px; }
+      .dx-quick__btn { padding: 8px 4px; font-size: 11.5px; border-radius: 8px; }
+      .dx-quick__icon { font-size: 17px; }
+      .dx-quick__sub { font-size: 9.5px; }
+
+      .dx-tri { grid-template-columns: 1fr; gap: 8px; }
+      .dx-tri__card { padding: 8px 10px; }
+      details.dx-tri__card > summary { padding: 8px 10px; font-size: 12.5px; }
+      details.dx-tri__card > .dx-tri__list { padding: 0 12px 10px 26px; }
+      .dx-tri__title { font-size: 12.5px; }
+      .dx-tri__list { font-size: 12px; }
+
+      details.dx-box > summary { padding: 10px 12px; font-size: 13.5px; }
+      details.dx-box > .dx-box__body { padding: 0 12px 12px; }
+    }
+
+    /* ============ 区切り帯（最小限） ============ */
+    .dx-step {
+      margin: 18px 0 6px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 11.5px;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+    }
+    .dx-step::before, .dx-step::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: color-mix(in srgb, var(--text) 18%, transparent);
+    }
+
+    /* コピペ用テンプレ */
+    .dx-template {
+      background: color-mix(in srgb, var(--text) 4%, var(--surface));
+      border-left: 3px solid var(--accent);
+      border-radius: 6px;
+      padding: 10px 12px;
+      margin: 6px 0 0;
+      font-size: 13px;
+      line-height: 1.6;
+      white-space: pre-wrap;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+    .dx-template__hint {
+      font-size: 11px;
+      color: var(--muted);
+      margin: 0 0 4px;
+    }
+  </style>
+</head>
+<body>
+  <header class="hokuto-top">
+    <a class="hokuto-top__btn" href="../薬剤情報.html">
+      <span class="hokuto-top__icon">℞</span><span>薬剤情報</span>
+    </a>
+    <a class="hokuto-top__btn" href="../表計算.html">
+      <span class="hokuto-top__icon">⊞</span><span>表計算</span>
+    </a>
+  </header>
+
+  <main class="hokuto-main">
+    <article class="note-shell">
+      <h1 class="page-title">胸骨骨折</h1>
+
+      <!-- スマホですぐ開きたい 3 つ -->
+      <nav class="dx-quick" aria-label="クイックタップ">
+        <button class="dx-quick__btn" type="button" data-target="img-read">
+          <span>画像の見方</span>
+          <span class="dx-quick__sub">側面像 / CT / ECG</span>
+        </button>
+        <button class="dx-quick__btn" type="button" data-target="plan">
+          <span>治療方針</span>
+          <span class="dx-quick__sub">心臓打撲を必ず除外</span>
+        </button>
+        <button class="dx-quick__btn" type="button" data-target="consult">
+          <span>コンサル文</span>
+          <span class="dx-quick__sub">そのまま貼れる</span>
+        </button>
+      </nav>
+
+      <!-- 同時評価 3 列：典型像は常時、血管・神経は折りたたみ -->
+      <div class="dx-step"><span>同時並行で評価する 3 軸</span></div>
+      <div class="dx-tri">
+
+        <div class="dx-tri__card dx-tri__card--typical">
+          <div class="dx-tri__title">典型像</div>
+          <ul class="dx-tri__list">
+            <li>受傷機転：高エネルギー外傷（交通外傷でハンドル打撲・墜落）</li>
+            <li>胸骨圧迫蘇生（CPR）後の医原性骨折も</li>
+            <li>所見：胸骨正中の圧痛・腫脹、皮下血腫・棒状腫脹で気づく</li>
+            <li>呼吸時痛・体動時痛</li>
+            <li>段差・偏位を触知することがある</li>
+            <li><strong>単独胸骨骨折は稀</strong>。背景に重篤な合併損傷が潜む</li>
+          </ul>
+        </div>
+
+        <details class="dx-tri__card dx-tri__card--vasc">
+          <summary>血管・心臓（必ず鑑別）</summary>
+          <p class="dx-tri__hint">胸骨骨折は<strong>高エネ示唆のサイン</strong>。心臓・大動脈・気道の損傷を必ずセットで評価。</p>
+          <ul class="dx-tri__list">
+            <li><strong>心臓打撲（心挫傷）</strong>：12 誘導 ECG・トロポニン・心エコー</li>
+            <li>不整脈（心室性期外収縮、房室ブロック）、ST 変化</li>
+            <li><strong>大動脈損傷</strong>：縦隔拡大、左血胸、上肢血圧左右差 → 造影 CT</li>
+            <li>気管・食道損傷：縦隔気腫、皮下気腫、嚥下時痛</li>
+            <li>心嚢液貯留・心タンポナーデ：FAST／心エコーで評価</li>
+          </ul>
+        </details>
+
+        <details class="dx-tri__card dx-tri__card--neuro">
+          <summary>呼吸・脊椎</summary>
+          <p class="dx-tri__hint">前方衝撃 → 後方反力で<strong>胸椎</strong>も折れる。呼吸抑制と脊椎をセットで。</p>
+          <ul class="dx-tri__list">
+            <li>胸椎圧迫骨折・破裂骨折の合併（前方圧迫＋後方反跳）</li>
+            <li>SpO2 低下、頻呼吸、肺挫傷の併発</li>
+            <li>気管支断裂：縦隔気腫＋持続性気胸 → 気管支鏡</li>
+            <li>強い疼痛で浅呼吸 → 無気肺・肺炎</li>
+          </ul>
+        </details>
+      </div>
+
+      <!-- 画像の見方 -->
+      <details class="dx-box" id="img-read">
+        <summary><span>画像の見方</span></summary>
+        <div class="dx-box__body">
+          <ul>
+            <li><strong>胸部側面 X 線／胸骨側面像</strong>：胸骨の段差・転位（PA 像では重なって見えにくい）</li>
+            <li><strong>胸部 CT</strong>：骨折部位・転位の精密評価、合併損傷検索（多くのケースで CT で初診断）</li>
+            <li>骨折好発部位：胸骨体（中部）が最多、次いで胸骨柄</li>
+            <li>必ず追うチェック：
+              <ul>
+                <li><strong>縦隔拡大</strong>（胸部 X 線で 8 cm 以上 / 胸郭幅の 25% 以上）→ 大動脈損傷</li>
+                <li>気管偏位、左主気管支圧排</li>
+                <li>左血胸、心嚢液貯留</li>
+                <li>胸椎椎体高、後壁ライン</li>
+                <li>気管・気管支壁の連続性、縦隔気腫</li>
+              </ul>
+            </li>
+            <li><strong>12 誘導 ECG</strong>：必須。新規不整脈・ST 変化・房室ブロック</li>
+            <li><strong>トロポニン</strong>：陽性なら心臓打撲を強く示唆。陰性なら除外価値が高い</li>
+            <li><strong>心エコー</strong>：壁運動異常・心嚢液・弁損傷</li>
+            <li>FAST／eFAST：心嚢液・腹腔内出血・気胸の初期スクリーニング</li>
+          </ul>
+        </div>
+      </details>
+
+      <!-- 治療方針 -->
+      <details class="dx-box" id="plan">
+        <summary><span>治療方針（合併損傷の有無で大きく分岐）</span></summary>
+        <div class="dx-box__body">
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>分類</th><th>所見</th><th>マネジメント</th><th>ER の動き</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>単独・転位なし／心電図正常／トロポニン陰性</td>
+                  <td>胸骨痛のみ、合併損傷の所見なし</td>
+                  <td><strong>外来観察</strong>（鎮痛）</td>
+                  <td>ECG・トロポニン陰性確認後に帰宅、再受診基準を説明</td>
+                </tr>
+                <tr>
+                  <td><strong>心臓打撲合併</strong></td>
+                  <td>新規不整脈／トロポニン陽性／壁運動異常</td>
+                  <td><strong>循環器入院（モニター管理）</strong></td>
+                  <td>持続心電図、循環動態管理、循環器コンサル</td>
+                </tr>
+                <tr>
+                  <td><strong>大動脈損傷</strong></td>
+                  <td>縦隔拡大、造影 CT で intimal flap・偽腔</td>
+                  <td><strong>心臓血管外科緊急</strong></td>
+                  <td>降圧（β遮断）、鎮痛、即時コール</td>
+                </tr>
+                <tr>
+                  <td>転位・偏位大／呼吸障害</td>
+                  <td>段差大、呼吸抑制、フレイル類似</td>
+                  <td><strong>手術検討</strong>（呼吸器外科 or 心臓血管外科）</td>
+                  <td>鎮痛・酸素、入院管理</td>
+                </tr>
+                <tr>
+                  <td>気胸・血胸合併</td>
+                  <td>呼吸音減弱、X 線・CT で空気・血液</td>
+                  <td><strong>胸腔ドレナージ</strong></td>
+                  <td>サイズ・症状で適応判断</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3>ER で打つ手</h3>
+          <ul>
+            <li><strong>胸骨骨折を見たら必ず</strong>：12 誘導 ECG、トロポニン、心エコー、造影 CT を 1 セットで</li>
+            <li>鎮痛：アセトアミノフェン、NSAIDs（出血・腎機能を確認）、必要に応じてオピオイド</li>
+            <li>区域麻酔：傍胸骨ブロック、硬膜外鎮痛も選択肢</li>
+            <li>心電図モニター：心臓打撲を否定するまで継続。陽性ならモニター入院</li>
+            <li>大動脈損傷を疑う所見が一つでもあれば<strong>造影 CT を躊躇しない</strong></li>
+            <li>胸椎合併骨折のチェック（背部圧痛、神経所見）を忘れない</li>
+            <li>退院時指導：呼吸困難・動悸・失神で再受診</li>
+          </ul>
+        </div>
+      </details>
+
+      <!-- コンサル文 -->
+      <details class="dx-box" id="consult">
+        <summary><span>コンサル文（カルテに貼る）</span></summary>
+        <div class="dx-box__body">
+          <p class="dx-template__hint">『他科コンサルト実践マニュアル』の院内紹介状フォーマットに準拠（【目的】【疾患】【既往歴】【内服薬】【ADL】【現病歴】）。心臓打撲合併は循環器内科、転位例・呼吸障害は呼吸器外科、大動脈損傷は心臓血管外科。</p>
+          <div class="dx-template">【目的】胸骨骨折＋[心臓打撲／呼吸障害／大動脈損傷] のご相談・ご加療依頼。
+【疾患】#1 胸骨骨折（[胸骨柄／胸骨体／剣状突起]、転位 [なし／あり]）
+　　　　#2 [心臓打撲／大動脈損傷／胸椎骨折／気胸／血胸／肺挫傷]
+【既往歴】[特記事項なし／虚血性心疾患／○○]
+【内服薬】[なし／ワーファリン／DOAC ○○／抗血小板薬 ○○]
+【ADL（受傷前）】[独歩／杖／介助歩行／車椅子]
+【現病歴】[年齢]歳[男/女]性。[受傷機転：交通外傷でハンドル打撲／墜落／CPR 後]で受傷し、[来院経緯]で来院。
+ ・身体所見：胸骨正中の圧痛・腫脹、段差 [なし／あり]
+ ・呼吸：呼吸数 ○、SpO2 ○%、副雑音 [なし／あり]
+ ・循環：HR ○、BP ○/○、上肢左右差 [なし／あり]
+ ・心電図：[正常／不整脈／ST 変化／房室ブロック]
+ ・トロポニン：[陰性／陽性 ○○]
+ ・心エコー：[壁運動正常／異常／心嚢液]
+ ・画像：胸部 X 線／CT で胸骨骨折、縦隔 [正常／拡大]、合併損傷 [なし／○○]
+ ・ER 処置：鎮痛、心電図モニター、酸素、ドレナージ [済／未]
+よろしくお願いいたします。</div>
+        </div>
+      </details>
+
+      <!-- 関連ハブ -->
+      <details class="dx-box">
+        <summary><span>関連ハブ・隣接疾患</span></summary>
+        <div class="dx-box__body">
+          <ul>
+            <li>主訴入口：<a class="wiki-link" href="../体幹・背部の外傷.html">体幹・背部の外傷</a> ／ <a class="wiki-link" href="../転倒.html">転倒</a></li>
+            <li>隣接疾患：<a class="wiki-link" href="肋骨骨折.html">肋骨骨折</a> ／ <a class="wiki-link" href="脊椎圧迫骨折.html">脊椎圧迫骨折</a> ／ <a class="wiki-link" href="脊椎破裂骨折.html">脊椎破裂骨折</a></li>
+            <li>必ずセット：心臓打撲（循環器コンサル）、大動脈損傷（心臓血管外科）</li>
+          </ul>
+        </div>
+      </details>
+
+      <!-- 出典 -->
+      <details class="dx-box">
+        <summary><span>出典</span></summary>
+        <div class="dx-box__body">
+          <ul>
+            <li>日本外傷学会／日本救急医学会 監修. 外傷初期診療ガイドライン JATEC. へるす出版.</li>
+            <li>Brookes JG ほか. Sternal fractures: a retrospective analysis of 272 cases. <em>J Trauma.</em> 1993.</li>
+            <li>Schultz JM ほか. Blunt cardiac injury. <em>Crit Care Clin.</em> 2004.</li>
+            <li>Eastern Association for the Surgery of Trauma (EAST). Practice Management Guideline: Blunt Cardiac Injury.</li>
+          </ul>
+        </div>
+      </details>
+
+    </article>
+  </main>
+
+  <nav class="hokuto-bottom">
+    <button class="hokuto-bottom__btn" type="button" id="navBack">
+      <span class="hokuto-bottom__icon">←</span><span>戻る</span>
+    </button>
+    <a class="hokuto-bottom__btn" href="../ツール.html">
+      <span class="hokuto-bottom__icon">⚙</span><span>ツール</span>
+    </a>
+    <a class="hokuto-bottom__btn" href="../index.html">
+      <span class="hokuto-bottom__icon">⌂</span><span>ホーム</span>
+    </a>
+  </nav>
+
+  <script>
+  (function(){
+    // クイックタップで対応 details を開いてスクロール
+    document.querySelectorAll('.dx-quick__btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.dataset.target;
+        const target = document.getElementById(id);
+        if (!target) return;
+        target.open = true;
+        target.scrollIntoView({behavior: 'smooth', block: 'start'});
+      });
+    });
+
+    const navBack = document.getElementById('navBack');
+    if (navBack) navBack.addEventListener('click', () => {
+      if (window.history.length > 1) history.back();
+      else window.location.href = '../index.html';
+    });
+  })();
+  </script>
+</body>
+</html>
