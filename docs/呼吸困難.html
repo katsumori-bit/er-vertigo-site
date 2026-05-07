@@ -213,11 +213,11 @@
                 <div class="dx-node__title">心電図</div>
                 <div class="dx-node__sub">ST / 不整脈 / 右心負荷</div>
               </a>
-              <a class="dx-node dx-node--action" href="#s6">
+              <a class="dx-node dx-node--action" href="#s6e">
                 <div class="dx-node__title">エコー</div>
                 <div class="dx-node__sub">BLUE プロトコル<br>EF / IVC / RV</div>
               </a>
-              <a class="dx-node dx-node--action" href="#s6">
+              <a class="dx-node dx-node--action" href="#s6r">
                 <div class="dx-node__title">放射線画像</div>
                 <div class="dx-node__sub">CXR ± CT</div>
               </a>
@@ -274,7 +274,9 @@
         <a class="section-tile" href="#s3"><span class="section-tile__no">🎯</span><span class="section-tile__name">問診</span></a>
         <a class="section-tile" href="#s4"><span class="section-tile__no">👂</span><span class="section-tile__name">身体診察</span></a>
         <a class="section-tile" href="#s5"><span class="section-tile__no">🩸</span><span class="section-tile__name">血液検査</span></a>
-        <a class="section-tile" href="#s6"><span class="section-tile__no">📈</span><span class="section-tile__name">画像系（ECG / CXR / POCUS）</span></a>
+        <a class="section-tile" href="#s6"><span class="section-tile__no">📈</span><span class="section-tile__name">心電図</span></a>
+        <a class="section-tile" href="#s6e"><span class="section-tile__no">🫁</span><span class="section-tile__name">エコー（POCUS）</span></a>
+        <a class="section-tile" href="#s6r"><span class="section-tile__no">📷</span><span class="section-tile__name">放射線画像（CXR / CT）</span></a>
         <a class="section-tile" href="#s8"><span class="section-tile__no">⚠️</span><span class="section-tile__name">やりがちなミス</span></a>
         <a class="section-tile" href="#s9"><span class="section-tile__no">📚</span><span class="section-tile__name">出典・リンク</span></a>
       </nav>
@@ -428,53 +430,89 @@
         </div>
       </section>
 
-      <!-- §6 画像系評価 -->
+      <!-- §6 心電図 -->
       <section class="section-page" id="s6" hidden>
         <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>📈 画像系評価（心電図 / 胸部 X 線 / POCUS）</h2>
+        <h2>📈 心電図</h2>
 
-        <p>血液検査と<strong>並行してすぐ施行する</strong>。3 つを組み合わせて鑑別を絞り込む。</p>
+        <p>ABCD が落ち着いた瞬間に <strong>最優先で回す</strong>。介入余地が最大の心筋梗塞を拾うため。</p>
 
-        <h3>心電図で見るもの</h3>
         <ul>
-          <li><strong>ST 変化</strong> → ACS</li>
-          <li><strong>頻脈性不整脈（AF rapid、VT）</strong></li>
+          <li><strong>ST 変化（上昇 / 低下）</strong> → ACS（再灌流で予後が一番変わる）</li>
+          <li><strong>頻脈性不整脈（AF rapid、VT、SVT）</strong> → 心不全増悪因子・血行動態破綻</li>
           <li><strong>右心負荷パターン（S1Q3T3、右軸偏位、V1-V3 陰性 T、新規右脚ブロック）</strong> → PE を示唆</li>
-          <li><strong>高度伝導障害（完全房室ブロック、Mobitz II、交代性脚ブロック など）</strong></li>
-          <li>低電位 → 心嚢液貯留・心タンポナーデ</li>
+          <li><strong>高度伝導障害</strong>（完全房室ブロック、Mobitz II、交代性脚ブロック）→ 徐脈性心不全</li>
+          <li><strong>低電位</strong> → 心嚢液貯留・心タンポナーデ</li>
+          <li>新規 LVH・電気軸変化 → 慢性心疾患の素地</li>
         </ul>
-
-        <h3>胸部 X 線で見るもの</h3>
-        <ul>
-          <li><strong>肺水腫パターン</strong>（bat wing、Kerley B、胸水） → 心不全</li>
-          <li><strong>局所浸潤影</strong> → 肺炎</li>
-          <li><strong>両側びまん性 GGO / 間質影</strong> → ILD 急性増悪・肺水腫・ARDS の鑑別へ</li>
-          <li><strong>片側透過性亢進 / 肺虚脱</strong> → 気胸（少量気胸は CXR で見逃すこともある）</li>
-          <li><strong>胸水</strong></li>
-          <li>PE は CXR がほぼ正常なことが多い（陰性所見でも除外できない）</li>
-        </ul>
-
-        <h3>POCUS（ベッドサイドエコー）</h3>
 
         <div class="callout callout-tip">
-          <div class="callout-title">BLUE protocol（Lichtenstein）— 肺エコーで急性呼吸困難を分類</div>
+          <div class="callout-title">「呼吸困難」で来た MI を逃さない</div>
+          <div class="callout-body"><p>高齢者・糖尿病・女性は<strong>胸痛なしの ACS（dyspnea-equivalent）</strong>が典型。呼吸困難のみで来院しても <strong>初期 ECG＋トロポニンを必ず</strong>。</p></div>
+        </div>
+      </section>
+
+      <!-- §6e エコー（POCUS） -->
+      <section class="section-page" id="s6e" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🫁 エコー（POCUS）</h2>
+
+        <p>肺エコー＋心エコーで <strong>4 軸＋並走 3</strong> の鑑別を一気に絞り込める。</p>
+
+        <h3>肺エコー（BLUE protocol）</h3>
+        <div class="callout callout-tip">
+          <div class="callout-title">Lichtenstein 流：プロファイルで急性呼吸困難を分類</div>
           <div class="callout-body"><ul>
             <li><strong>A プロファイル</strong>（A-line 優位 + lung sliding あり）→ <strong>喘息／COPD</strong></li>
             <li><strong>B プロファイル</strong>（両側 B-line 優位）→ <strong>心原性肺水腫</strong>（感度・特異度ともに高い）</li>
-            <li><strong>A/B プロファイルまたは C プロファイル</strong>（局所コンソリデーション）→ <strong>肺炎</strong></li>
+            <li><strong>A/B または C プロファイル</strong>（局所コンソリデーション）→ <strong>肺炎</strong></li>
             <li><strong>A プロファイル + DVT 所見</strong> → <strong>肺塞栓</strong>を強く示唆</li>
             <li><strong>lung sliding 消失 + lung point</strong> → <strong>気胸</strong>（CXR より高感度）</li>
           </ul></div>
         </div>
 
-        <h4>心エコーで見るもの</h4>
+        <h3>心エコー</h3>
         <ul>
-          <li><strong>EF</strong>：低下 → 収縮不全心不全（HFrEF）／保たれていれば HFpEF・PE・他原因も考慮</li>
+          <li><strong>EF</strong>：低下 → HFrEF／保たれていれば HFpEF・PE・他原因も考慮</li>
           <li><strong>IVC 径と呼吸性変動</strong>：拡張＋呼吸性変動なし → 右心系過負荷／虚脱 → 脱水・出血</li>
           <li><strong>RV strain（D-shape、RV ≧ LV、McConnell sign）</strong> → <strong>急性 PE</strong>を示唆</li>
           <li>心嚢液貯留 → 心タンポナーデ</li>
           <li>新規弁膜症（重症 MR・AR）→ 急性肺水腫の原因</li>
         </ul>
+
+        <h3>下肢静脈エコー（DVT スクリーン）</h3>
+        <ul>
+          <li>大腿静脈・膝窩静脈の <strong>2 点圧迫法</strong>で簡便に DVT を拾える</li>
+          <li>陽性なら PE の可能性が大きく上がる</li>
+        </ul>
+      </section>
+
+      <!-- §6r 放射線画像 -->
+      <section class="section-page" id="s6r" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>📷 放射線画像</h2>
+
+        <h3>胸部 X 線（CXR）</h3>
+        <ul>
+          <li><strong>肺水腫パターン</strong>（bat wing、Kerley B、胸水） → 心不全</li>
+          <li><strong>局所浸潤影</strong> → 肺炎</li>
+          <li><strong>両側びまん性 GGO / 間質影</strong> → ILD 急性増悪・肺水腫・ARDS</li>
+          <li><strong>片側透過性亢進 / 肺虚脱</strong> → 気胸（少量気胸は見逃しあり、POCUS 併用）</li>
+          <li><strong>胸水</strong>、心拡大、縦隔拡大</li>
+          <li>PE は CXR ほぼ正常なことが多い（陰性でも除外不可）</li>
+        </ul>
+
+        <h3>胸部 CT（造影 / 単純）</h3>
+        <ul>
+          <li><strong>造影 CT</strong>：PE 確定診断（Wells/Geneva 高確率群）、大動脈解離、縦隔病変</li>
+          <li><strong>単純 CT（HRCT）</strong>：ILD 急性増悪、肺炎の精査、CXR で説明できない呼吸困難</li>
+          <li>腎機能・造影剤アレルギーで判断</li>
+        </ul>
+
+        <div class="callout callout-warning">
+          <div class="callout-title">CXR 正常でも安心しない</div>
+          <div class="callout-body"><p>PE は CXR・聴診ともに正常なことが多い。<strong>頻脈・低酸素・原因不明</strong>＋リスク（術後・臥床・担癌・妊娠）があれば <strong>造影 CT を先行</strong>（D-dimer をスキップしてよい）。</p></div>
+        </div>
       </section>
 
 
