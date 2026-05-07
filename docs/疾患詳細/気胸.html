@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="color-scheme" content="light dark" />
+  <title>気胸 | ER ノート</title>
+  <link rel="stylesheet" href="../er-note.css" />
+</head>
+<body>
+  <header class="hokuto-top">
+    <a class="hokuto-top__btn" href="../薬剤情報.html">
+      <span class="hokuto-top__icon">℞</span><span>薬剤情報</span>
+    </a>
+    <a class="hokuto-top__btn" href="../表計算.html">
+      <span class="hokuto-top__icon">⊞</span><span>表計算</span>
+    </a>
+  </header>
+
+  <main class="hokuto-main">
+    <article class="note-shell">
+      <h1 class="page-title">気胸</h1>
+
+      <!-- 即時アクションヘッダー（常時 sticky） -->
+      <div class="action-header">
+        <div class="action-header__title">⚡ 即時アクション</div>
+        <ol class="action-header__list">
+          <li><strong>緊張性気胸は臨床診断</strong>：片側呼吸音消失＋頸静脈怒張＋低血圧／ショック → <strong>画像を待たず第 2 肋間鎖骨中線（または第 4-5 肋間前腋窩線）で減圧穿刺</strong></li>
+          <li><strong>突然発症の片側胸痛＋呼吸困難</strong> → CXR / POCUS で診断（POCUS：lung sliding 消失＋lung point は CXR より高感度）</li>
+          <li><strong>分類を即決</strong>：自然気胸（PSP / SSP）／外傷性／医原性 — その後の治療方針が変わる</li>
+          <li><strong>大きさ・症状・基礎疾患で治療を選ぶ</strong>：観察 → 酸素 → カテーテル脱気 → 胸腔ドレナージ → 手術（VATS）</li>
+        </ol>
+      </div>
+
+      <!-- メニュータイル -->
+      <nav class="section-tiles" id="sectionMenu">
+        <a class="section-tile" href="#s1"><span class="section-tile__no">📋</span><span class="section-tile__name">前提<br><small>呼吸困難から</small></span></a>
+        <a class="section-tile" href="#s2"><span class="section-tile__no">🗂️</span><span class="section-tile__name">分類<br><small>PSP/SSP/外傷/医原</small></span></a>
+        <a class="section-tile" href="#s3"><span class="section-tile__no">🔬</span><span class="section-tile__name">診断<br><small>CXR / POCUS / CT</small></span></a>
+        <a class="section-tile" href="#s4"><span class="section-tile__no">💉</span><span class="section-tile__name">治療判断<br><small>観察/脱気/ドレーン</small></span></a>
+        <a class="section-tile" href="#s5"><span class="section-tile__no">🚨</span><span class="section-tile__name">緊張性気胸の対応</span></a>
+        <a class="section-tile" href="#s6"><span class="section-tile__no">🏥</span><span class="section-tile__name">入院・帰宅・再発予防</span></a>
+        <a class="section-tile" href="#s7"><span class="section-tile__no">⚠️</span><span class="section-tile__name">やりがちなミス</span></a>
+        <a class="section-tile" href="#s8"><span class="section-tile__no">📞</span><span class="section-tile__name">コンサル文</span></a>
+        <a class="section-tile" href="#s9"><span class="section-tile__no">📚</span><span class="section-tile__name">出典・関連リンク</span></a>
+      </nav>
+
+      <!-- 関連主訴（双方向リンク） -->
+      <details class="sub-fold" id="related-symptoms">
+        <summary>📞 この疾患が該当する主訴</summary>
+        <div class="sub-fold__body">
+          <ul>
+            <li><a class="wiki-link" href="../呼吸困難.html">呼吸困難</a> — 突然発症、片側呼吸音減弱・消失</li>
+            <li><a class="wiki-link" href="../胸痛.html">胸痛</a> — 片側胸痛、安静時・突然発症</li>
+            <li><a class="wiki-link" href="../体幹・背部の外傷.html">体幹・背部の外傷</a> — 外傷性気胸（肋骨骨折合併・穿通外傷）</li>
+          </ul>
+        </div>
+      </details>
+
+      <!-- §1 前提 -->
+      <section class="section-page" id="s1" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>📋 前提</h2>
+        <div class="callout callout-summary">
+          <div class="callout-title">このページの使い方</div>
+          <div class="callout-body"><ol>
+            <li><a class="wiki-link" href="../呼吸困難.html">呼吸困難</a> や <a class="wiki-link" href="../胸痛.html">胸痛</a> から気胸を疑った時点で開く</li>
+            <li>まず <strong>緊張性気胸かどうか</strong>を判断 — 画像を待たず減圧する判断</li>
+            <li>次に<strong>分類（PSP / SSP / 外傷 / 医原）</strong>と<strong>大きさ</strong>で治療を選ぶ</li>
+            <li>呼吸器外科への引き継ぎ時にコンサル文を整える</li>
+          </ol></div>
+        </div>
+        <p><a class="wiki-link" href="../呼吸困難.html">呼吸困難</a> のフローに沿って以下が済んでいる想定：</p>
+        <ul>
+          <li>バイタル・モニター装着、SpO2、呼吸数</li>
+          <li>胸部 X 線（吸気立位）・必要なら POCUS</li>
+          <li>外傷例では <a class="wiki-link" href="../体幹・背部の外傷.html">体幹・背部の外傷</a> ルートで全身評価</li>
+        </ul>
+        <div class="callout callout-warning">
+          <div class="callout-title">緊張性気胸を見逃さない 3 徴</div>
+          <div class="callout-body"><p><strong>片側呼吸音消失＋頸静脈怒張＋ショック</strong>。気管偏位は遅い徴候。<strong>診断は臨床、画像は不要</strong>。</p></div>
+        </div>
+      </section>
+
+      <!-- §2 分類 -->
+      <section class="section-page" id="s2" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🗂️ 分類</h2>
+
+        <div class="table-wrap"><table>
+          <thead><tr><th>種類</th><th>背景</th><th>方針の特徴</th></tr></thead>
+          <tbody>
+            <tr><td><strong>PSP（原発性自然気胸）</strong></td><td>若年・やせ型・喫煙、基礎肺疾患なし、apical bleb 破裂</td><td>多くは保存的・カテーテル脱気で対応可。再発率 30% 程度</td></tr>
+            <tr><td><strong>SSP（続発性自然気胸）</strong></td><td>COPD・喘息・嚢胞性肺疾患・肺癌・間質性肺炎・結核・HIV／PCP・LAM</td><td><strong>ほぼ全例胸腔ドレナージ</strong>。基礎疾患のため呼吸予備能低く重症化しやすい</td></tr>
+            <tr><td><strong>外傷性</strong></td><td>鈍的：肋骨骨折合併が多い／穿通：刺創・銃創</td><td>原則ドレーン。<a class="wiki-link" href="肋骨骨折.html">肋骨骨折</a>・血胸・肺挫傷の合併評価</td></tr>
+            <tr><td><strong>医原性</strong></td><td>CV カテーテル穿刺、胸腔穿刺、経気管支生検、人工呼吸器（バロトラウマ）</td><td>小さく無症状なら観察可。バロトラウマ性は緊張性に進行しやすい</td></tr>
+            <tr><td><strong>緊張性気胸</strong></td><td>外傷性・医原性・人工呼吸下、まれに自然気胸からも</td><td><strong>臨床診断で即減圧</strong>。CXR を待たない</td></tr>
+            <tr><td><strong>月経随伴性気胸</strong></td><td>20-40 代女性、月経 72 時間以内、横隔膜・胸膜内膜症</td><td>右側に多い。婦人科と連携、再発予防の薬物療法</td></tr>
+          </tbody>
+        </table></div>
+
+        <div class="callout callout-tip">
+          <div class="callout-title">PSP / SSP の典型像</div>
+          <div class="callout-body"><ul>
+            <li><strong>PSP</strong>：10-30 代男性、長身やせ型、喫煙者。安静時・軽労作で突然発症</li>
+            <li><strong>SSP</strong>：50 歳以上、COPD・喫煙歴。同じ気胸でも酸素需要・症状が PSP より重い</li>
+          </ul></div>
+        </div>
+      </section>
+
+      <!-- §3 診断 -->
+      <section class="section-page" id="s3" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🔬 診断</h2>
+
+        <h3>胸部 X 線（CXR）— 吸気立位 PA</h3>
+        <ul>
+          <li><strong>visceral pleural line</strong> の同定（外側に肺紋理がない透亮域）</li>
+          <li>仰臥位では「deep sulcus sign」（横隔膜陰影鋭利化）に注意</li>
+          <li>呼気像は感度を上げるが、ルーチンでは不要（BTS 2010 でも推奨されない）</li>
+        </ul>
+
+        <h3>大きさ評価</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>基準</th><th>測り方</th><th>カットオフ</th></tr></thead>
+          <tbody>
+            <tr><td><strong>BTS 2010</strong></td><td>肺門部レベルで肺辺縁から胸壁内側まで</td><td>2 cm 以上＝大、未満＝小</td></tr>
+            <tr><td><strong>ACCP 2001</strong></td><td>肺尖から胸郭頂部まで</td><td>3 cm 以上＝大、未満＝小</td></tr>
+            <tr><td><strong>Light index</strong></td><td>ヘミトラックス容積に対する％（容積比）</td><td>研究用</td></tr>
+          </tbody>
+        </table></div>
+
+        <h3>POCUS（lung ultrasound）</h3>
+        <div class="callout callout-tip">
+          <div class="callout-title">仰臥位・救急現場で CXR より高感度</div>
+          <div class="callout-body"><ul>
+            <li><strong>lung sliding 消失</strong>（リアルタイム動画で胸膜の動きが見えない）</li>
+            <li><strong>B ライン消失</strong>（A ラインのみ）</li>
+            <li><strong>lung point</strong>：気胸境界の動的所見、特異度ほぼ 100%</li>
+            <li>M モードで「<strong>barcode / stratosphere sign</strong>」（正常は seashore sign）</li>
+            <li>外傷の eFAST に組み込まれている</li>
+          </ul></div>
+        </div>
+
+        <h3>胸部 CT</h3>
+        <ul>
+          <li>少量気胸・bleb / bulla の評価、外傷例の精査、再発の手術判断</li>
+          <li>初発の小さな PSP では必須ではない</li>
+        </ul>
+
+        <h3>身体所見</h3>
+        <ul>
+          <li>患側の<strong>呼吸音減弱・消失</strong>、打診で<strong>鼓音</strong></li>
+          <li>緊張性では<strong>頸静脈怒張・気管偏位（健側へ）・ショック</strong></li>
+          <li>大きい気胸では患側胸郭の運動低下</li>
+        </ul>
+      </section>
+
+      <!-- §4 治療判断 -->
+      <section class="section-page" id="s4" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>💉 治療判断</h2>
+
+        <h3>判断ロジック（BTS 2010 ベース、簡略）</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>状況</th><th>方針</th></tr></thead>
+          <tbody>
+            <tr><td><strong>緊張性気胸</strong></td><td><strong>即減圧穿刺 → 胸腔ドレナージ</strong>（§5 参照）</td></tr>
+            <tr><td>PSP・小さい・無症状</td><td><strong>経過観察＋酸素</strong>（高濃度酸素で吸収速度 4 倍）。外来観察可</td></tr>
+            <tr><td>PSP・大きい or 有症状</td><td><strong>カテーテル脱気</strong>（needle aspiration）が第一選択（BTS 2010）。失敗で胸腔ドレナージ</td></tr>
+            <tr><td>SSP（基礎肺疾患あり）</td><td>原則 <strong>胸腔ドレナージ</strong>。小さくて無症状でも入院観察</td></tr>
+            <tr><td>外傷性</td><td>原則 <strong>胸腔ドレナージ</strong>（occult な小さい医原性除く）</td></tr>
+            <tr><td>医原性・小さい・無症状</td><td>観察＋酸素</td></tr>
+            <tr><td>持続的空気漏れ 5-7 日以上</td><td><strong>胸腔鏡手術（VATS）</strong>を呼吸器外科にコンサル</td></tr>
+          </tbody>
+        </table></div>
+
+        <h3>カテーテル脱気（needle aspiration）</h3>
+        <ul>
+          <li>第 2 肋間鎖骨中線または第 4-5 肋間前腋窩線</li>
+          <li>16-18 G の留置針 / 専用キット → 三方活栓 → シリンジで吸引</li>
+          <li>2.5 L まで吸引して再 CXR、改善なければドレナージへ</li>
+        </ul>
+
+        <h3>胸腔ドレナージ</h3>
+        <ul>
+          <li>挿入部位：<strong>safe triangle</strong>（前腋窩線・中腋窩線・第 5 肋間より上）</li>
+          <li>サイズ：<strong>小径（8-14 Fr）</strong>でも自然気胸では十分（BTS 2010）。大量空気漏れ・血胸合併・人工呼吸下では大径</li>
+          <li>水封 ± 持続吸引（-10〜-20 cmH2O）</li>
+          <li>気漏停止＋肺再膨張で抜去判断、クランプ試験は施設による</li>
+        </ul>
+
+        <h3>酸素療法</h3>
+        <ul>
+          <li>高濃度酸素で<strong>胸腔内空気の吸収を促進</strong>（窒素勾配が大きくなる）</li>
+          <li>SpO2 の必要性とは別に、観察例でも酸素を併用する考え方</li>
+          <li>COPD 合併では <a class="wiki-link" href="COPD増悪.html">COPD増悪</a> に倣い目標 SpO2 88-92%</li>
+        </ul>
+
+        <div class="callout callout-warning">
+          <div class="callout-title">再膨張性肺水腫（RPE）に注意</div>
+          <div class="callout-body"><p>長時間虚脱した肺を急速に再膨張すると<strong>同側の肺水腫</strong>を起こすことがある。大量・長期間の気胸では<strong>初期吸引量を絞る</strong>、持続吸引を急にかけない。</p></div>
+        </div>
+      </section>
+
+      <!-- §5 緊張性気胸の対応 -->
+      <section class="section-page" id="s5" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🚨 緊張性気胸の対応</h2>
+
+        <div class="callout callout-danger">
+          <div class="callout-title">画像を待たない</div>
+          <div class="callout-body"><p>片側呼吸音消失＋頸静脈怒張＋ショックの 3 徴で<strong>臨床診断</strong>。CXR を撮りに行く時間で患者は死ぬ。<strong>その場で減圧</strong>する。</p></div>
+        </div>
+
+        <h3>減圧穿刺（needle decompression）</h3>
+        <ul>
+          <li><strong>第一選択部位：第 4-5 肋間前腋窩線</strong>（ATLS 10 版で推奨。第 2 肋間より成功率が高いとの報告）</li>
+          <li>従来：第 2 肋間鎖骨中線（やせ型・小児では現在も妥当）</li>
+          <li>14-16 G の留置針を上肋骨上縁に沿って穿刺</li>
+          <li>「シューッ」と空気が抜けるのを確認 → 三方活栓でクランプ → 速やかに胸腔ドレナージへ移行</li>
+        </ul>
+
+        <h3>finger thoracostomy（指による開放）</h3>
+        <ul>
+          <li>外傷現場・人工呼吸下で減圧穿刺が無効なときの代替</li>
+          <li>第 4-5 肋間前腋窩線で皮切 → 鈍的剥離 → 胸膜貫通 → 指で確認</li>
+          <li>その後にドレナージ留置</li>
+        </ul>
+
+        <h3>減圧後の流れ</h3>
+        <ul>
+          <li>必ず <strong>胸腔ドレナージ</strong>を留置（穿刺だけでは再緊張する）</li>
+          <li>減圧後の CXR で評価、人工呼吸器使用中は陽圧で進行しやすいので継続観察</li>
+          <li>呼吸器外科 / 救急に引き継ぎ</li>
+        </ul>
+
+        <div class="callout callout-warning">
+          <div class="callout-title">人工呼吸器装着中の急変</div>
+          <div class="callout-body"><p>気道内圧上昇・低血圧・SpO2 低下が同時に来たら緊張性気胸を想起。気管チューブ閉塞・主気管支挿入・PE と並んで「機械的トラブル」の鑑別に必ず入れる。</p></div>
+        </div>
+      </section>
+
+      <!-- §6 入院・帰宅・再発予防 -->
+      <section class="section-page" id="s6" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🏥 入院・帰宅・再発予防</h2>
+
+        <h3>入院</h3>
+        <ul>
+          <li>胸腔ドレナージ留置例（PSP・SSP・外傷・医原性すべて）</li>
+          <li>SSP は小さくても入院（呼吸予備能低い、進行リスク）</li>
+          <li>カテーテル脱気で改善しても、症状残存・酸素需要・社会的事情で入院</li>
+        </ul>
+
+        <h3>帰宅判断（小さい PSP・無症状）</h3>
+        <ul>
+          <li>大きさ &lt; 2 cm（BTS）、症状軽度、SpO2 良好</li>
+          <li>家族・公共交通圏内・遠方でない、増悪時に再来できる</li>
+          <li>翌日〜2-3 日後に外来 CXR 再検</li>
+          <li>増悪時の即受診（呼吸困難の悪化、急な胸痛）を必ず説明</li>
+        </ul>
+
+        <h3>再発予防</h3>
+        <ul>
+          <li><strong>禁煙</strong>：PSP の最大の修正可能因子（再発率を大きく下げる）</li>
+          <li>PSP <strong>2 回目以降</strong> / 持続的気漏 / 両側性 / 職業的にハイリスク（パイロット・ダイバー）→ <strong>胸膜癒着術 or VATS による bullectomy + 胸膜固定</strong></li>
+          <li>気胸後の<strong>飛行機搭乗</strong>：完全消失確認後、目安は<strong>X 線で消失から 1 週間以上、術後は 2 週間以上</strong>（学会により差。BTS は 1 週間、米国胸部学会・航空医学では条件付き）</li>
+          <li>気胸後の<strong>スキューバダイビング</strong>：手術しない限り原則永久に禁止（BTS）</li>
+          <li>激しい運動・重量挙げは消失確認まで控える</li>
+        </ul>
+
+        <h3>外来フォロー</h3>
+        <ul>
+          <li>退院後 1-2 週で再 CXR、症状確認</li>
+          <li>SSP は基礎肺疾患のフォローを並行（COPD・間質性肺炎など）</li>
+          <li>月経随伴性は婦人科でホルモン療法・子宮内膜症評価</li>
+        </ul>
+      </section>
+
+      <!-- §7 やりがちなミス -->
+      <section class="section-page" id="s7" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>⚠️ やりがちなミス</h2>
+        <div class="callout callout-danger">
+          <div class="callout-title">気胸で見落としやすいパターン</div>
+          <div class="callout-body"><ul>
+            <li><strong>緊張性気胸を画像で確認しようとする</strong>：診断は臨床、減圧はその場で</li>
+            <li><strong>仰臥位 CXR で気胸を見逃す</strong>：仰臥位では空気が前胸部に集まり、deep sulcus sign が手がかり。POCUS 併用が確実</li>
+            <li><strong>SSP を「小さい気胸」で帰宅</strong>：基礎肺疾患があれば原則入院</li>
+            <li><strong>ドレナージ後に陰圧吸引を急にかける</strong>：再膨張性肺水腫のリスク</li>
+            <li><strong>禁煙指導を忘れる</strong>：再発予防の最重要因子</li>
+            <li><strong>月経随伴性気胸を見落とす</strong>：右側・反復・若年女性で月経との関連を聞く</li>
+            <li><strong>第 2 肋間穿刺で皮下脂肪が厚くて届かない</strong>：第 4-5 肋間前腋窩線（ATLS 10 推奨）の方が成功しやすい</li>
+            <li><strong>胸壁圧痛を筋骨格痛と決める</strong>：気胸・肋骨骨折・肺塞栓も鑑別</li>
+            <li><strong>人工呼吸器装着中の急変で気胸を考えない</strong>：気道内圧↑・低血圧・SpO2↓ の三徴で必ず想起</li>
+            <li><strong>退院時のフライト・ダイビング指導を忘れる</strong>：再発・致命的増悪の原因になる</li>
+          </ul></div>
+        </div>
+      </section>
+
+      <!-- §8 コンサル文 -->
+      <section class="section-page" id="s8" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>📞 コンサル文（カルテに貼る）</h2>
+        <p>『他科コンサルト実践マニュアル』の院内紹介状フォーマットに準拠（【目的】【疾患】【既往歴】【内服薬】【ADL】【現病歴】）。<strong>緊張性気胸の初期対応は救急科</strong>、<strong>ドレナージ後の管理・再発予防・手術は呼吸器外科</strong>へ。</p>
+
+        <h3>呼吸器外科宛て（PSP / SSP / 外傷性のドレナージ後）</h3>
+        <div class="callout callout-summary">
+          <div class="callout-body">
+<pre>【目的】[右／左]気胸（[PSP／SSP／外傷性／医原性]）の入院加療相談。
+【疾患】#1 [右／左]気胸（[PSP／SSP／外傷性／医原性]、[初発／○ 回目]）
+　　　　#2 [基礎肺疾患：COPD／間質性肺炎／肺癌／なし]
+　　　　#3 [合併損傷：肋骨骨折／血胸／肺挫傷／なし]
+【既往歴】[特記事項なし／気胸既往（○ 年前、[同側／反対側]）／○○]
+【内服薬】[なし／○○]
+【ADL（発症前）】[独歩／杖／介助／車椅子]
+【現病歴】[年齢]歳[男／女]性。[受診経緯：突然の片側胸痛・呼吸困難／外傷／○○]で来院。
+ ・バイタル：BP ○/○、HR ○、RR ○、SpO2 ○%（room air／O2 ○ L）、体温 ○
+ ・身体所見：[右／左]呼吸音減弱・消失、打診鼓音、頸静脈怒張 [なし／あり]、胸壁圧痛 [なし／あり]
+ ・喫煙歴：[なし／○ 本×○ 年]、体格：身長 ○ cm、体重 ○ kg
+ ・画像：CXR で[右／左]気胸（BTS 基準で[肺尖〜胸壁 ○ cm／&lt; 2 cm／≥ 2 cm]）、CT で [bleb / bulla あり／なし／○○]
+ ・POCUS：lung sliding 消失、lung point [あり／なし]
+ ・ER 処置：[酸素 ○ L／カテーテル脱気（○ mL 排気）／胸腔ドレナージ留置（[右／左] 第 ○ 肋間 ○ 線、○ Fr、水封 ± 吸引 -○ cmH2O）]
+ ・気漏：[あり／なし]、肺再膨張：[良好／部分的／不良]
+ ・合併損傷：[なし／○○]
+よろしくお願いいたします。</pre>
+          </div>
+        </div>
+
+        <h3>救急科宛て（緊張性気胸の初期対応・受け入れ）</h3>
+        <div class="callout callout-summary">
+          <div class="callout-body">
+<pre>【目的】緊張性気胸の初期対応・集中管理のご依頼。
+【疾患】#1 [右／左]緊張性気胸（[原因：外傷／医原性／自然／人工呼吸下]）
+　　　　#2 [合併：肋骨骨折／血胸／ショック／心停止後／○○]
+【既往歴】[特記事項なし／○○]
+【内服薬】[なし／○○]
+【現病歴】[年齢]歳[男／女]性。[受診経緯／発生状況]。
+ ・到着時バイタル：BP ○/○、HR ○、RR ○、SpO2 ○%、意識 GCS ○
+ ・3 徴：[右／左]呼吸音消失、頸静脈怒張、ショック → 臨床診断で減圧
+ ・減圧穿刺：[第 4-5 肋間前腋窩線／第 2 肋間鎖骨中線] にて 14 G 留置針、空気漏出を確認
+ ・減圧後バイタル：BP ○/○、HR ○、SpO2 ○%
+ ・胸腔ドレナージ：[留置済（○ Fr、水封）／準備中]
+ ・CXR（減圧後）：[肺再膨張良好／部分的／○○]
+ ・人工呼吸：[なし／装着中（モード ○、PEEP ○）]
+よろしくお願いいたします。</pre>
+          </div>
+        </div>
+      </section>
+
+      <!-- §9 出典・関連リンク -->
+      <section class="section-page" id="s9" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>📚 出典・関連リンク</h2>
+
+        <h3>主要ガイドライン</h3>
+        <ul>
+          <li><strong>BTS 2010</strong>：MacDuff A ほか. Management of spontaneous pneumothorax: British Thoracic Society pleural disease guideline 2010. <em>Thorax.</em> 2010;65(Suppl 2):ii18-ii31.
+            <p><a class="wiki-link" href="https://doi.org/10.1136/thx.2010.136986">https://doi.org/10.1136/thx.2010.136986</a></p>
+          </li>
+          <li><strong>ACCP 2001</strong>：Baumann MH ほか. Management of spontaneous pneumothorax: an American College of Chest Physicians Delphi consensus statement. <em>Chest.</em> 2001;119:590-602.</li>
+          <li><strong>ATLS 10th edition</strong>：American College of Surgeons. Advanced Trauma Life Support — needle decompression site update（第 4-5 肋間前腋窩線）.</li>
+          <li><strong>BTS Pleural Disease 2023 update</strong>：Roberts ME ほか. <em>Thorax.</em> 2023.</li>
+          <li><strong>UpToDate</strong>：Treatment of primary spontaneous pneumothorax / Treatment of secondary spontaneous pneumothorax / Pneumothorax in adults: epidemiology and etiology</li>
+        </ul>
+
+        <h3>POCUS・診断補助</h3>
+        <ul>
+          <li>Lichtenstein DA ほか. BLUE protocol. <em>Chest.</em> 2008.</li>
+          <li>Volpicelli G ほか. International evidence-based recommendations for point-of-care lung ultrasound. <em>Intensive Care Med.</em> 2012.</li>
+        </ul>
+
+        <h3>このページから張るリンク</h3>
+        <ul>
+          <li><a class="wiki-link" href="../呼吸困難.html">呼吸困難</a></li>
+          <li><a class="wiki-link" href="../胸痛.html">胸痛</a></li>
+          <li><a class="wiki-link" href="../体幹・背部の外傷.html">体幹・背部の外傷</a></li>
+          <li><a class="wiki-link" href="肺塞栓.html">肺塞栓</a></li>
+          <li><a class="wiki-link" href="肋骨骨折.html">肋骨骨折</a></li>
+          <li><a class="wiki-link" href="COPD増悪.html">COPD増悪</a></li>
+        </ul>
+      </section>
+
+    </article>
+  </main>
+
+  <nav class="hokuto-bottom">
+    <button class="hokuto-bottom__btn" type="button" id="navBack">
+      <span class="hokuto-bottom__icon">←</span><span>戻る</span>
+    </button>
+    <a class="hokuto-bottom__btn" href="../ツール.html">
+      <span class="hokuto-bottom__icon">⚙</span><span>ツール</span>
+    </a>
+    <a class="hokuto-bottom__btn" href="../index.html">
+      <span class="hokuto-bottom__icon">⌂</span><span>ホーム</span>
+    </a>
+  </nav>
+
+  <script>
+  (function(){
+    const menu = document.getElementById('sectionMenu');
+    const pages = document.querySelectorAll('.section-page');
+    const titleH1 = document.querySelector('.page-title');
+    const relatedSymp = document.getElementById('related-symptoms');
+
+    function showSection(id) {
+      menu.hidden = true;
+      if (titleH1) titleH1.hidden = true;
+      if (relatedSymp) relatedSymp.hidden = true;
+      pages.forEach(p => p.hidden = (p.id !== id));
+      window.scrollTo(0, 0);
+    }
+    function showMenu(scrollTarget) {
+      menu.hidden = false;
+      if (titleH1) titleH1.hidden = false;
+      if (relatedSymp) relatedSymp.hidden = false;
+      pages.forEach(p => p.hidden = true);
+      if (scrollTarget) {
+        if (scrollTarget.tagName === 'DETAILS') scrollTarget.open = true;
+        scrollTarget.scrollIntoView({behavior: 'instant', block: 'start'});
+      } else {
+        window.scrollTo(0, 0);
+      }
+    }
+    function syncFromHash() {
+      const id = (location.hash || '').replace('#','');
+      const target = id ? document.getElementById(id) : null;
+      if (target && target.classList.contains('section-page')) {
+        showSection(id);
+      } else if (target) {
+        showMenu(target);
+      } else {
+        showMenu();
+      }
+    }
+
+    window.addEventListener('hashchange', syncFromHash);
+    document.querySelectorAll('.back-to-menu').forEach(b => {
+      b.addEventListener('click', () => { history.pushState(null,'',location.pathname); showMenu(); });
+    });
+    const navBack = document.getElementById('navBack');
+    if (navBack) navBack.addEventListener('click', () => {
+      if (window.history.length > 1) history.back();
+      else window.location.href = '../index.html';
+    });
+
+    syncFromHash();
+  })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="color-scheme" content="light dark" />
+  <title>肺塞栓 | ER ノート</title>
+  <link rel="stylesheet" href="../er-note.css" />
+</head>
+<body>
+  <header class="hokuto-top">
+    <a class="hokuto-top__btn" href="../薬剤情報.html">
+      <span class="hokuto-top__icon">℞</span><span>薬剤情報</span>
+    </a>
+    <a class="hokuto-top__btn" href="../表計算.html">
+      <span class="hokuto-top__icon">⊞</span><span>表計算</span>
+    </a>
+  </header>
+
+  <main class="hokuto-main">
+    <article class="note-shell">
+      <h1 class="page-title">肺塞栓（PE）</h1>
+
+      <!-- 即時アクションヘッダー（常時 sticky） -->
+      <div class="action-header">
+        <div class="action-header__title">⚡ 即時アクション</div>
+        <ol class="action-header__list">
+          <li><strong>ショック合併（hypotension・心停止寸前）</strong> → <strong>massive PE</strong> として即座に対応 → 全身性血栓溶解療法 or IVR / 外科的血栓除去を循環器・心臓血管外科にコール</li>
+          <li><strong>突然発症の呼吸困難＋頻脈＋低酸素</strong> → <strong>Wells / 改訂 Geneva スコア</strong>で前確率を評価 → 中・高確率はそのまま画像へ</li>
+          <li><strong>高確率群は D-dimer をスキップして造影 CT 直行</strong>（D-dimer は低・中等度確率の除外目的でのみ有用、年齢調整カットオフを使う）</li>
+          <li><strong>リスク因子の確認</strong>：術後・長期臥床・担癌・妊娠/産褥・経口避妊薬／ホルモン補充・DVT 既往・遺伝性血栓性素因・長距離移動・肥満</li>
+        </ol>
+      </div>
+
+      <!-- メニュータイル -->
+      <nav class="section-tiles" id="sectionMenu">
+        <a class="section-tile" href="#s1"><span class="section-tile__no">📋</span><span class="section-tile__name">前提<br><small>呼吸困難から</small></span></a>
+        <a class="section-tile" href="#s2"><span class="section-tile__no">🧮</span><span class="section-tile__name">前確率評価<br><small>Wells / Geneva</small></span></a>
+        <a class="section-tile" href="#s3"><span class="section-tile__no">🔬</span><span class="section-tile__name">検査の流れ<br><small>D-dimer / CT / V/Q</small></span></a>
+        <a class="section-tile" href="#s4"><span class="section-tile__no">📊</span><span class="section-tile__name">重症度分類<br><small>massive / submassive</small></span></a>
+        <a class="section-tile" href="#s5"><span class="section-tile__no">💊</span><span class="section-tile__name">治療<br><small>抗凝固 / 溶解 / IVR</small></span></a>
+        <a class="section-tile" href="#s6"><span class="section-tile__no">🏥</span><span class="section-tile__name">入院・帰宅判断</span></a>
+        <a class="section-tile" href="#s7"><span class="section-tile__no">⚠️</span><span class="section-tile__name">やりがちなミス</span></a>
+        <a class="section-tile" href="#s8"><span class="section-tile__no">📞</span><span class="section-tile__name">コンサル文</span></a>
+        <a class="section-tile" href="#s9"><span class="section-tile__no">📚</span><span class="section-tile__name">出典・関連リンク</span></a>
+      </nav>
+
+      <!-- 関連主訴（双方向リンク） -->
+      <details class="sub-fold" id="related-symptoms">
+        <summary>📞 この疾患が該当する主訴</summary>
+        <div class="sub-fold__body">
+          <ul>
+            <li><a class="wiki-link" href="../呼吸困難.html">呼吸困難</a> — 突然発症、頻脈・低酸素を伴う</li>
+            <li><a class="wiki-link" href="../胸痛.html">胸痛</a> — 胸膜痛として（梗塞性）／massive では中心性胸痛</li>
+            <li><a class="wiki-link" href="../意識消失.html">意識消失</a> — 失神は massive PE のサインになりうる（右心拍出低下）</li>
+          </ul>
+        </div>
+      </details>
+
+      <!-- §1 前提 -->
+      <section class="section-page" id="s1" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>📋 前提</h2>
+        <div class="callout callout-summary">
+          <div class="callout-title">このページの使い方</div>
+          <div class="callout-body"><ol>
+            <li><a class="wiki-link" href="../呼吸困難.html">呼吸困難</a> や <a class="wiki-link" href="../胸痛.html">胸痛</a> から PE を疑った時点で開く</li>
+            <li>まず <strong>Wells / 改訂 Geneva スコア</strong>で前確率を決め、<strong>D-dimer の使い方</strong>を判断する</li>
+            <li><strong>ショックがあれば D-dimer に時間を使わず、bedside POCUS と造影 CT に直行</strong></li>
+            <li>診断確定後の<strong>重症度分類（massive / submassive / low-risk）</strong>で治療強度を決める</li>
+          </ol></div>
+        </div>
+        <p><a class="wiki-link" href="../呼吸困難.html">呼吸困難</a> のフローに沿って以下が済んでいる想定：</p>
+        <ul>
+          <li>バイタル・モニター装着、SpO2、呼吸数</li>
+          <li>血液検査（血ガス・トロポニン・BNP・D-dimer の検討）</li>
+          <li>12 誘導心電図（S1Q3T3、洞性頻脈、新規右脚ブロック、V1-V3 陰性 T などの右心負荷所見）</li>
+          <li>胸部 X 線（多くは非特異的、Westermark 徴候や Hampton's hump はまれ）</li>
+        </ul>
+        <div class="callout callout-tip">
+          <div class="callout-title">PE は X 線も聴診も正常なことが多い</div>
+          <div class="callout-body"><p>頻脈・低酸素の原因が他で説明できないとき、リスク因子の確認とスコア評価を機械的に通すのが最大の予防策。</p></div>
+        </div>
+      </section>
+
+      <!-- §2 前確率評価 -->
+      <section class="section-page" id="s2" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🧮 前確率評価（Wells / 改訂 Geneva）</h2>
+
+        <h3>Wells スコア（PE 用）</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>項目</th><th>点</th></tr></thead>
+          <tbody>
+            <tr><td>DVT の臨床所見・症状</td><td>3.0</td></tr>
+            <tr><td>PE 以外の診断が同等以下に考えにくい</td><td>3.0</td></tr>
+            <tr><td>HR &gt; 100/min</td><td>1.5</td></tr>
+            <tr><td>4 週以内の手術 or 3 日以上の臥床</td><td>1.5</td></tr>
+            <tr><td>DVT/PE の既往</td><td>1.5</td></tr>
+            <tr><td>喀血</td><td>1.0</td></tr>
+            <tr><td>担癌（治療中・6 ヶ月以内・緩和）</td><td>1.0</td></tr>
+          </tbody>
+        </table></div>
+        <ul>
+          <li><strong>3 段階法</strong>：低 (&lt;2) / 中 (2-6) / 高 (&gt;6)</li>
+          <li><strong>2 段階法</strong>：PE 不利（≤4）／PE 有利（&gt;4）</li>
+        </ul>
+
+        <h3>改訂 Geneva スコア（簡易版）</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>項目</th><th>点</th></tr></thead>
+          <tbody>
+            <tr><td>65 歳以上</td><td>1</td></tr>
+            <tr><td>DVT/PE の既往</td><td>1</td></tr>
+            <tr><td>1 ヶ月以内の手術 or 下肢骨折</td><td>1</td></tr>
+            <tr><td>担癌（活動性）</td><td>1</td></tr>
+            <tr><td>片側下腿痛</td><td>1</td></tr>
+            <tr><td>喀血</td><td>1</td></tr>
+            <tr><td>HR 75-94</td><td>1</td></tr>
+            <tr><td>HR ≥ 95</td><td>2</td></tr>
+            <tr><td>下腿の片側浮腫＋圧痛</td><td>1</td></tr>
+          </tbody>
+        </table></div>
+        <ul>
+          <li><strong>低（0-1）／中（2-4）／高（≥5）</strong></li>
+        </ul>
+
+        <h3>PERC ルール（外来低リスクで D-dimer も省略可）</h3>
+        <div class="callout callout-tip">
+          <div class="callout-title">PERC で全否定できれば PE はかなり低い</div>
+          <div class="callout-body">
+            <p>外来・低リスク群（ゲシュタルトで &lt;15%）で 8 項目が <strong>全て陰性</strong>なら D-dimer も省略してよい：</p>
+            <ul>
+              <li>50 歳未満</li>
+              <li>HR &lt; 100</li>
+              <li>SpO2 ≥ 95%（室内気）</li>
+              <li>片側下腿腫脹なし</li>
+              <li>喀血なし</li>
+              <li>4 週以内の外傷・手術なし</li>
+              <li>DVT/PE 既往なし</li>
+              <li>エストロゲン使用なし</li>
+            </ul>
+          </div>
+        </div>
+        <div class="callout callout-warning">
+          <div class="callout-title">高齢・担癌・術後はスコアが当てにならない</div>
+          <div class="callout-body"><p>D-dimer は偽陽性が多くなるので、こういう群では<strong>スコアより画像</strong>の閾値を低くする。</p></div>
+        </div>
+      </section>
+
+      <!-- §3 検査の流れ -->
+      <section class="section-page" id="s3" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🔬 検査の流れ</h2>
+
+        <h3>D-dimer</h3>
+        <ul>
+          <li><strong>低・中等度確率の除外</strong>に使う（高感度・低特異度）</li>
+          <li><strong>50 歳未満</strong>：500 ng/mL 未満で除外</li>
+          <li><strong>50 歳以上</strong>：<strong>年齢 × 10 ng/mL</strong> をカットオフに（年齢調整 D-dimer、ESC 2019）</li>
+          <li><strong>高確率群は測定する意味が薄い</strong>（陰性でも除外できない）→ 直接造影 CT</li>
+          <li>YEARS アルゴリズムなどでさらに省略する報告もあるが、迷ったら撮る</li>
+        </ul>
+
+        <h3>造影 CT 肺動脈撮影（CTPA） — gold standard</h3>
+        <ul>
+          <li>感度・特異度ともに高く、肺動脈の血栓を直接描出</li>
+          <li><strong>右心負荷所見</strong>（RV/LV 比 ≥ 1.0、IVS 偏位）が予後評価にも使える</li>
+          <li>禁忌：造影剤アレルギー、重度腎機能障害、妊娠（胎児被ばくは V/Q より少ないとも）</li>
+        </ul>
+
+        <h3>肺換気血流シンチ（V/Q スキャン）</h3>
+        <ul>
+          <li>造影禁忌（腎不全・造影剤アレルギー）の代替</li>
+          <li>胸部 X 線が正常な若年・妊婦で有用</li>
+          <li>解釈は「正常／低確率／中等度／高確率」（PIOPED 基準）</li>
+        </ul>
+
+        <h3>下肢静脈エコー（DVT 検索）</h3>
+        <ul>
+          <li>近位 DVT が見つかれば PE を強く支持（近位 DVT は治療方針が PE と同等）</li>
+          <li>圧迫法（CUS）：大腿静脈・膝窩静脈の圧迫不能で診断</li>
+        </ul>
+
+        <h3>POCUS（bedside echo）</h3>
+        <div class="callout callout-tip">
+          <div class="callout-title">不安定患者の bedside で当てる</div>
+          <div class="callout-body"><ul>
+            <li><strong>RV 拡大（RV/LV ≥ 1）</strong>、<strong>D-shape</strong>（左室短軸像で IVS が左室側に押される）</li>
+            <li><strong>McConnell sign</strong>：RV 自由壁の壁運動低下＋心尖部の動きは保たれる（PE にやや特異的）</li>
+            <li><strong>IVC 拡張・呼吸性変動消失</strong> → 右心圧上昇</li>
+            <li>下肢 DVT の同時評価で診断補強</li>
+            <li><strong>RV 機能正常で massive PE は考えにくい</strong>（ショックの原因が他にあるサイン）</li>
+          </ul></div>
+        </div>
+
+        <h3>心電図</h3>
+        <ul>
+          <li>最多は<strong>洞性頻脈</strong></li>
+          <li><strong>S1Q3T3</strong>（古典的だが感度低い）</li>
+          <li>右軸偏位、V1-V3 陰性 T、新規右脚ブロック</li>
+          <li>右心負荷パターンは予後不良のサイン</li>
+        </ul>
+
+        <h3>血液マーカー（重症度評価）</h3>
+        <ul>
+          <li><strong>トロポニン</strong>：陽性 → 心筋傷害 → submassive 以上</li>
+          <li><strong>BNP / NT-proBNP</strong>：上昇 → RV 機能障害示唆</li>
+        </ul>
+      </section>
+
+      <!-- §4 重症度分類 -->
+      <section class="section-page" id="s4" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>📊 重症度分類</h2>
+
+        <h3>3 群分類（ESC 2019 / AHA 2011）</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>群</th><th>定義</th><th>初期治療の方向</th></tr></thead>
+          <tbody>
+            <tr><td><strong>High-risk（massive）</strong></td><td>持続的低血圧（SBP &lt; 90 or 40 mmHg 以上の低下が 15 分以上）／心停止／ショック</td><td><strong>全身性血栓溶解</strong>（禁忌なら IVR / 外科血栓除去）</td></tr>
+            <tr><td><strong>Intermediate-risk（submassive）</strong></td><td>血圧は保たれるが、RV 機能障害 ± トロポニン陽性。<br>High：RV 障害<strong>＋</strong>トロポニン陽性／Low：どちらか一方</td><td>抗凝固＋慎重観察。代償破綻なら救助的血栓溶解</td></tr>
+            <tr><td><strong>Low-risk</strong></td><td>血圧維持＋RV 機能正常＋トロポニン陰性／PESI Class I-II / sPESI 0</td><td>抗凝固のみ。条件次第で外来管理可</td></tr>
+          </tbody>
+        </table></div>
+
+        <h3>PESI（Pulmonary Embolism Severity Index）</h3>
+        <ul>
+          <li>年齢、性別、担癌、心不全既往、慢性肺疾患、HR ≥ 110、SBP &lt; 100、呼吸数 ≥ 30、体温 &lt; 36℃、意識変容、SpO2 &lt; 90%</li>
+          <li>5 段階（Class I-V）：30 日死亡率を予測</li>
+        </ul>
+
+        <h3>sPESI（簡易版）</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>項目</th><th>該当で 1 点</th></tr></thead>
+          <tbody>
+            <tr><td>年齢 &gt; 80 歳</td><td>1</td></tr>
+            <tr><td>担癌</td><td>1</td></tr>
+            <tr><td>慢性心肺疾患</td><td>1</td></tr>
+            <tr><td>HR ≥ 110</td><td>1</td></tr>
+            <tr><td>SBP &lt; 100</td><td>1</td></tr>
+            <tr><td>SpO2 &lt; 90%</td><td>1</td></tr>
+          </tbody>
+        </table></div>
+        <ul>
+          <li><strong>0 点 → 30 日死亡 1% 程度の低リスク</strong>（外来管理候補）</li>
+          <li><strong>≥ 1 点 → 入院</strong></li>
+        </ul>
+
+        <div class="callout callout-warning">
+          <div class="callout-title">submassive こそ判断が難しい</div>
+          <div class="callout-body"><p>初期は血圧維持されているが、数時間で代償破綻することがある。<strong>RV 機能 + トロポニン</strong>で submassive と判定したら、ICU/HCU 級のモニタリングと血栓溶解の準備を整える。</p></div>
+        </div>
+      </section>
+
+      <!-- §5 治療 -->
+      <section class="section-page" id="s5" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>💊 治療</h2>
+
+        <h3>初期抗凝固（全例）</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>状況</th><th>第一選択</th></tr></thead>
+          <tbody>
+            <tr><td>血行動態安定・腎機能良好</td><td><strong>DOAC</strong>：エドキサバン／リバーロキサバン／アピキサバン（後二者は単剤開始可）</td></tr>
+            <tr><td>重症・腎機能不良・血栓溶解候補</td><td><strong>未分画ヘパリン（UFH）静注</strong>（aPTT で調節、急変への対応容易）</td></tr>
+            <tr><td>担癌</td><td><strong>低分子ヘパリン（LMWH）</strong>または DOAC（消化管癌では出血リスク考慮）</td></tr>
+            <tr><td>妊娠</td><td><strong>LMWH</strong>（DOAC・ワーファリンは禁忌）</td></tr>
+            <tr><td>HIT（ヘパリン起因性血小板減少）</td><td><strong>アルガトロバン</strong> など非ヘパリン抗凝固</td></tr>
+          </tbody>
+        </table></div>
+
+        <h3>High-risk（massive）— 血栓溶解 / IVR / 外科</h3>
+        <ul>
+          <li><strong>全身性血栓溶解療法</strong>：モンテプラーゼ（本邦保険適用）、tPA / アルテプラーゼ</li>
+          <li><strong>禁忌</strong>：頭蓋内出血既往、3 ヶ月以内の脳卒中、活動性出血、最近の頭部外傷・手術、大動脈解離など</li>
+          <li>禁忌や治療抵抗例は <strong>カテーテル血栓除去 / 局所血栓溶解（IVR）</strong> または <strong>外科的血栓除去</strong>を循環器・心臓血管外科にコール</li>
+          <li>循環不安定なら <strong>ECMO（VA-ECMO）</strong>を bridging に検討</li>
+        </ul>
+
+        <h3>Intermediate-high（submassive）</h3>
+        <ul>
+          <li>原則は<strong>抗凝固＋ICU/HCU モニタリング</strong></li>
+          <li>代償破綻（低血圧化）したら救助的血栓溶解</li>
+          <li>カテーテル治療の選択肢も近年増加（適応は施設・チームの判断）</li>
+        </ul>
+
+        <h3>Low-risk</h3>
+        <ul>
+          <li>DOAC 単剤で外来 / 短期入院管理が可能なケースも</li>
+          <li>HESTIA 基準・sPESI 0 で外来管理候補を選別</li>
+        </ul>
+
+        <h3>抗凝固期間</h3>
+        <ul>
+          <li><strong>誘発性 PE（一過性リスク）</strong>：3 ヶ月</li>
+          <li><strong>特発性／持続性リスク</strong>：3 ヶ月以上、出血リスクとのバランスで延長検討</li>
+          <li><strong>担癌・遺伝性血栓性素因（高リスク）</strong>：原則無期限</li>
+          <li>長期継続では DOAC 減量レジメ（リバーロキサバン 10 mg、アピキサバン 2.5 mg×2）も選択肢</li>
+        </ul>
+
+        <h3>下大静脈フィルター（IVC filter）</h3>
+        <ul>
+          <li>適応：<strong>抗凝固禁忌の急性近位 DVT/PE</strong>、抗凝固下での再発</li>
+          <li>原則 <strong>retrievable（回収可能）</strong>を入れて、抗凝固再開後に抜去</li>
+          <li>長期留置の有益性は限定的</li>
+        </ul>
+
+        <h3>DVT の同時治療</h3>
+        <ul>
+          <li>近位 DVT は PE と同レジメ</li>
+          <li>遠位（下腿）DVT 単独は症例ごとに判断（症状あり・伸展リスクあれば抗凝固）</li>
+          <li>離床はバイタル安定後早期に（旧来の絶対安静は推奨されない）</li>
+        </ul>
+      </section>
+
+      <!-- §6 入院・帰宅判断 -->
+      <section class="section-page" id="s6" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🏥 入院・帰宅判断</h2>
+
+        <h3>入院（ICU/HCU レベル）</h3>
+        <ul>
+          <li><strong>High-risk</strong>：必ず ICU、循環器・心臓血管外科に即連絡</li>
+          <li><strong>Intermediate-high</strong>：ICU/HCU、血栓溶解の準備を整えた病棟</li>
+          <li>抗凝固禁忌・出血合併・腎不全・担癌活動性</li>
+        </ul>
+
+        <h3>一般病棟入院</h3>
+        <ul>
+          <li>Intermediate-low / Low-risk で社会的サポートが弱い場合</li>
+          <li>初回 PE で内服管理に不慣れ</li>
+        </ul>
+
+        <h3>外来管理候補（HESTIA / sPESI 0）</h3>
+        <ul>
+          <li>血圧維持・SpO2 良好・RV 機能正常・トロポニン陰性</li>
+          <li>出血リスク低い、腎機能保たれている、内服管理可能</li>
+          <li>家族・近隣のサポートがあり、急変時に来院できる</li>
+          <li>強い疼痛・酸素需要・重い併存疾患がない</li>
+        </ul>
+
+        <div class="callout callout-warning">
+          <div class="callout-title">退院時に必ず説明すること</div>
+          <div class="callout-body"><ul>
+            <li>抗凝固薬の<strong>飲み忘れ厳禁</strong>、出血徴候（黒色便・血尿・歯肉出血・打撲斑）への注意</li>
+            <li>呼吸困難・胸痛・失神・片側下腿腫脹で<strong>即受診</strong>（再発・進行のサイン）</li>
+            <li>誘発因子の改善（術後・臥床は早期離床、長距離移動は飲水・足首運動）</li>
+            <li>1-2 週後に外来フォロー、必要に応じて専門外来（循環器・血液）へ</li>
+          </ul></div>
+        </div>
+      </section>
+
+      <!-- §7 やりがちなミス -->
+      <section class="section-page" id="s7" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>⚠️ やりがちなミス</h2>
+        <div class="callout callout-danger">
+          <div class="callout-title">PE で見落としやすいパターン</div>
+          <div class="callout-body"><ul>
+            <li><strong>胸部 X 線・聴診が正常で安心する</strong>：PE は両方正常が普通。<strong>頻脈・低酸素・原因不明</strong>でリスクがあれば疑う</li>
+            <li><strong>D-dimer 陰性で必ず除外できる</strong>と誤解：<strong>高確率群は陰性でも除外不可</strong>。スコアと組み合わせる</li>
+            <li><strong>失神を「迷走神経反射」で片付ける</strong>：高齢・術後・担癌の失神は massive PE / RV 不全のサインのことがある</li>
+            <li><strong>ショックを敗血症・脱水と決めつける</strong>：原因不明のショック＋頻脈＋低酸素は PE を必ず鑑別に</li>
+            <li><strong>担癌患者の D-dimer を信用する</strong>：偽陽性が多く、スコアと画像で判断</li>
+            <li><strong>抗凝固開始の遅れ</strong>：診断確定前でも、確率が高ければ画像待ちの間にヘパリンを開始してよい（ESC 2019）</li>
+            <li><strong>massive PE で血栓溶解禁忌を理由に手をこまねく</strong>：禁忌なら IVR・外科・ECMO を即連絡</li>
+            <li><strong>下肢の左右差を診ない</strong>：DVT の身体所見（片側腫脹・圧痛）は重要</li>
+            <li><strong>妊婦に CT を躊躇しすぎる</strong>：診断遅れは母体死亡のリスク。被ばく相談を理由に診断を引き延ばさない</li>
+            <li><strong>外来低リスクで PERC を使わない</strong>：D-dimer の偽陽性で過剰検査につながる</li>
+          </ul></div>
+        </div>
+      </section>
+
+      <!-- §8 コンサル文 -->
+      <section class="section-page" id="s8" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>📞 コンサル文（カルテに貼る）</h2>
+        <p>『他科コンサルト実践マニュアル』の院内紹介状フォーマットに準拠（【目的】【疾患】【既往歴】【内服薬】【ADL】【現病歴】）。<strong>抗凝固薬の有無</strong>は出血リスク評価に直結するので必ず明記。</p>
+
+        <h3>循環器内科 / 心臓血管外科宛て（high-risk・submassive）</h3>
+        <div class="callout callout-summary">
+          <div class="callout-body">
+<pre>【目的】肺塞栓（[high-risk／intermediate-high]）の入院加療・血栓溶解／IVR の適応相談。
+【疾患】#1 急性肺塞栓（[両側／右／左]肺動脈、[主幹／葉／区域])
+　　　　#2 [近位 DVT（[右／左]大腿〜膝窩）／なし]
+　　　　#3 [担癌／術後／妊娠／○○]
+【既往歴】[特記事項なし／DVT・PE 既往／出血性疾患／○○]
+【内服薬】[なし／抗凝固薬 ○○／抗血小板薬 ○○／経口避妊薬／ホルモン補充]
+【ADL（発症前）】[独歩／杖／介助／車椅子]
+【現病歴】[年齢]歳[男／女]性。[受診経緯：突然の呼吸困難／胸痛／失神／ショック]で来院。
+ ・バイタル：BP ○/○、HR ○、RR ○、SpO2 ○%（room air／O2 ○ L）、体温 ○
+ ・身体所見：頸静脈怒張 [なし／あり]、片側下腿腫脹 [なし／あり]、心音 [P2 亢進など]
+ ・心電図：[洞性頻脈／S1Q3T3／V1-V3 陰性 T／新規右脚ブロック／その他]
+ ・血液：D-dimer ○ ng/mL、トロポニン ○、BNP/NT-proBNP ○、Cre ○、Hb ○、Plt ○
+ ・画像：造影 CT で[両側／右／左]肺動脈に血栓、RV/LV 比 ○、IVS 偏位 [あり／なし]
+ ・POCUS：RV 拡大 [あり／なし]、D-shape [あり／なし]、McConnell sign [あり／なし]、IVC ○ mm
+ ・重症度：[High-risk／Intermediate-high／Intermediate-low／Low]、sPESI ○ 点
+ ・ER 処置：ヘパリン静注 [済／未]（○ 単位 bolus → ○ 単位/h）、酸素 ○ L、ルート ○ G
+ ・血栓溶解禁忌チェック：頭蓋内出血既往・3 ヶ月以内脳卒中・活動性出血・最近の手術 [いずれもなし／○○あり]
+よろしくお願いいたします。</pre>
+          </div>
+        </div>
+
+        <h3>呼吸器内科宛て（low-risk / 入院抗凝固管理）</h3>
+        <div class="callout callout-summary">
+          <div class="callout-body">
+<pre>【目的】肺塞栓（low-risk／intermediate-low）の入院抗凝固管理のご依頼。
+【疾患】#1 急性肺塞栓（[区域／亜区域]、片側）
+　　　　#2 [DVT 合併／なし]
+【既往歴】[特記事項なし／○○]
+【内服薬】[なし／○○]
+【ADL（発症前）】[独歩／○○]
+【現病歴】[年齢]歳[男／女]性。[突然の呼吸困難／胸膜痛]で来院。
+ ・バイタル：BP ○/○、HR ○、RR ○、SpO2 ○%（room air）、体温 ○
+ ・身体所見：頸静脈怒張なし、片側下腿腫脹 [なし／あり]
+ ・血液：D-dimer ○、トロポニン陰性、BNP 軽度上昇／正常、Cre ○
+ ・画像：造影 CT で[区域／亜区域]肺動脈血栓、RV/LV 比 &lt; 1.0
+ ・重症度：sPESI ○ 点（low-risk）、RV 機能正常
+ ・ER 処置：[エドキサバン／リバーロキサバン／アピキサバン]開始、酸素 [不要／○ L]
+ ・出血リスク評価：[低／中／高]
+よろしくお願いいたします。</pre>
+          </div>
+        </div>
+      </section>
+
+      <!-- §9 出典・関連リンク -->
+      <section class="section-page" id="s9" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>📚 出典・関連リンク</h2>
+
+        <h3>主要ガイドライン</h3>
+        <ul>
+          <li><strong>ESC 2019</strong>：Konstantinides SV ほか. 2019 ESC Guidelines for the diagnosis and management of acute pulmonary embolism. <em>Eur Heart J.</em> 2020;41:543-603.
+            <p><a class="wiki-link" href="https://doi.org/10.1093/eurheartj/ehz405">https://doi.org/10.1093/eurheartj/ehz405</a></p>
+          </li>
+          <li><strong>AHA 2011</strong>：Jaff MR ほか. Management of Massive and Submassive Pulmonary Embolism. <em>Circulation.</em> 2011;123:1788-1830.
+            <p><a class="wiki-link" href="https://doi.org/10.1161/CIR.0b013e318214914f">https://doi.org/10.1161/CIR.0b013e318214914f</a></p>
+          </li>
+          <li><strong>CHEST 2021</strong>：Stevens SM ほか. Antithrombotic Therapy for VTE Disease. <em>Chest.</em> 2021;160:e545-e608.
+            <p><a class="wiki-link" href="https://doi.org/10.1016/j.chest.2021.07.055">https://doi.org/10.1016/j.chest.2021.07.055</a></p>
+          </li>
+          <li><strong>ASH 2018-2020</strong>：American Society of Hematology guidelines for VTE management.</li>
+          <li><strong>UpToDate</strong>：Acute pulmonary embolism — clinical presentation, diagnosis, treatment</li>
+        </ul>
+
+        <h3>参考スコア</h3>
+        <ul>
+          <li>Wells PS ほか. <em>Thromb Haemost.</em> 2000.</li>
+          <li>Le Gal G ほか. Revised Geneva score. <em>Ann Intern Med.</em> 2006.</li>
+          <li>Kline JA ほか. PERC rule. <em>J Thromb Haemost.</em> 2008.</li>
+          <li>Aujesky D ほか. PESI / sPESI. <em>Am J Respir Crit Care Med.</em> 2005 / <em>Arch Intern Med.</em> 2010.</li>
+          <li>Zondag W ほか. HESTIA criteria. <em>J Thromb Haemost.</em> 2011.</li>
+        </ul>
+
+        <h3>このページから張るリンク</h3>
+        <ul>
+          <li><a class="wiki-link" href="../呼吸困難.html">呼吸困難</a></li>
+          <li><a class="wiki-link" href="../胸痛.html">胸痛</a></li>
+          <li><a class="wiki-link" href="../意識消失.html">意識消失</a></li>
+          <li><a class="wiki-link" href="気胸.html">気胸</a></li>
+          <li><a class="wiki-link" href="急性心不全.html">急性心不全</a></li>
+        </ul>
+      </section>
+
+    </article>
+  </main>
+
+  <nav class="hokuto-bottom">
+    <button class="hokuto-bottom__btn" type="button" id="navBack">
+      <span class="hokuto-bottom__icon">←</span><span>戻る</span>
+    </button>
+    <a class="hokuto-bottom__btn" href="../ツール.html">
+      <span class="hokuto-bottom__icon">⚙</span><span>ツール</span>
+    </a>
+    <a class="hokuto-bottom__btn" href="../index.html">
+      <span class="hokuto-bottom__icon">⌂</span><span>ホーム</span>
+    </a>
+  </nav>
+
+  <script>
+  (function(){
+    const menu = document.getElementById('sectionMenu');
+    const pages = document.querySelectorAll('.section-page');
+    const titleH1 = document.querySelector('.page-title');
+    const relatedSymp = document.getElementById('related-symptoms');
+
+    function showSection(id) {
+      menu.hidden = true;
+      if (titleH1) titleH1.hidden = true;
+      if (relatedSymp) relatedSymp.hidden = true;
+      pages.forEach(p => p.hidden = (p.id !== id));
+      window.scrollTo(0, 0);
+    }
+    function showMenu(scrollTarget) {
+      menu.hidden = false;
+      if (titleH1) titleH1.hidden = false;
+      if (relatedSymp) relatedSymp.hidden = false;
+      pages.forEach(p => p.hidden = true);
+      if (scrollTarget) {
+        if (scrollTarget.tagName === 'DETAILS') scrollTarget.open = true;
+        scrollTarget.scrollIntoView({behavior: 'instant', block: 'start'});
+      } else {
+        window.scrollTo(0, 0);
+      }
+    }
+    function syncFromHash() {
+      const id = (location.hash || '').replace('#','');
+      const target = id ? document.getElementById(id) : null;
+      if (target && target.classList.contains('section-page')) {
+        showSection(id);
+      } else if (target) {
+        showMenu(target);
+      } else {
+        showMenu();
+      }
+    }
+
+    window.addEventListener('hashchange', syncFromHash);
+    document.querySelectorAll('.back-to-menu').forEach(b => {
+      b.addEventListener('click', () => { history.pushState(null,'',location.pathname); showMenu(); });
+    });
+    const navBack = document.getElementById('navBack');
+    if (navBack) navBack.addEventListener('click', () => {
+      if (window.history.length > 1) history.back();
+      else window.location.href = '../index.html';
+    });
+
+    syncFromHash();
+  })();
+  </script>
+</body>
+</html>
