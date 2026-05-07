@@ -6,6 +6,196 @@
   <meta name="color-scheme" content="light dark" />
   <title>肩鎖関節脱臼 | ER ノート</title>
   <link rel="stylesheet" href="../er-note.css" />
+  <style>
+    /* ============ クイックタップ（3 つを開閉トリガー） ============ */
+    .dx-quick {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px;
+      margin: 10px 0 4px;
+    }
+    .dx-quick__btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      padding: 10px 6px;
+      border-radius: 10px;
+      background: color-mix(in srgb, var(--accent) 10%, var(--surface));
+      border: 1.5px solid var(--accent);
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 13px;
+      line-height: 1.2;
+      text-align: center;
+      cursor: pointer;
+      transition: background 120ms ease;
+    }
+    .dx-quick__btn:hover {
+      background: color-mix(in srgb, var(--accent) 18%, var(--surface));
+    }
+    .dx-quick__icon { font-size: 20px; }
+    .dx-quick__sub {
+      font-size: 10.5px;
+      font-weight: 500;
+      color: var(--muted);
+    }
+
+    /* ============ 同時評価 3 列（血管・神経・典型像） ============ */
+    .dx-tri {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+      margin: 6px 0 4px;
+      align-items: start;
+    }
+    .dx-tri__card {
+      background: var(--surface);
+      border-radius: 10px;
+      padding: 10px 12px;
+      border: 1.5px solid color-mix(in srgb, var(--text) 18%, transparent);
+    }
+    .dx-tri__card--vasc { border-color: #c0392b; background: color-mix(in srgb, #c0392b 6%, var(--surface)); }
+    .dx-tri__card--neuro { border-color: #b5651d; background: color-mix(in srgb, #b5651d 6%, var(--surface)); }
+    .dx-tri__card--typical { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 6%, var(--surface)); }
+    .dx-tri__title {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 800;
+      font-size: 13.5px;
+      margin-bottom: 4px;
+    }
+    .dx-tri__card--vasc .dx-tri__title { color: #c0392b; }
+    .dx-tri__card--neuro .dx-tri__title { color: #b5651d; }
+    .dx-tri__list {
+      margin: 0;
+      padding-left: 18px;
+      font-size: 12.5px;
+      line-height: 1.5;
+    }
+    .dx-tri__list li { margin: 2px 0; }
+
+    /* details 形式の血管/神経カード：summary にチェック印、開閉時の挙動 */
+    details.dx-tri__card { padding: 0; }
+    details.dx-tri__card > summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 10px 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 800;
+      font-size: 13.5px;
+    }
+    details.dx-tri__card > summary::-webkit-details-marker { display: none; }
+    details.dx-tri__card > summary::after {
+      content: "▸";
+      margin-left: auto;
+      font-size: 12px;
+      color: var(--muted);
+      transition: transform 120ms ease;
+    }
+    details.dx-tri__card[open] > summary::after { transform: rotate(90deg); }
+    details.dx-tri__card--vasc > summary { color: #c0392b; }
+    details.dx-tri__card--neuro > summary { color: #b5651d; }
+    details.dx-tri__card > .dx-tri__list { padding: 0 14px 12px 30px; }
+    details.dx-tri__card > .dx-tri__hint {
+      padding: 0 14px 6px 30px;
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    /* ============ 大きな details ボックス（画像/治療方針/コンサル文） ============ */
+    details.dx-box {
+      background: var(--surface);
+      border: 1.5px solid color-mix(in srgb, var(--text) 18%, transparent);
+      border-radius: 10px;
+      margin: 10px 0;
+      scroll-margin-top: 8px;
+    }
+    details.dx-box > summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 12px 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 800;
+      font-size: 14.5px;
+    }
+    details.dx-box > summary::-webkit-details-marker { display: none; }
+    details.dx-box > summary::after {
+      content: "▸";
+      margin-left: auto;
+      font-size: 13px;
+      color: var(--muted);
+      transition: transform 120ms ease;
+    }
+    details.dx-box[open] > summary::after { transform: rotate(90deg); }
+    details.dx-box[open] {
+      border-color: var(--accent);
+    }
+    details.dx-box > .dx-box__body {
+      padding: 0 14px 14px;
+    }
+
+    /* スマホで 1 列に */
+    @media (max-width: 640px) {
+      .dx-quick { gap: 6px; }
+      .dx-quick__btn { padding: 8px 4px; font-size: 11.5px; border-radius: 8px; }
+      .dx-quick__icon { font-size: 17px; }
+      .dx-quick__sub { font-size: 9.5px; }
+
+      .dx-tri { grid-template-columns: 1fr; gap: 8px; }
+      .dx-tri__card { padding: 8px 10px; }
+      details.dx-tri__card > summary { padding: 8px 10px; font-size: 12.5px; }
+      details.dx-tri__card > .dx-tri__list { padding: 0 12px 10px 26px; }
+      .dx-tri__title { font-size: 12.5px; }
+      .dx-tri__list { font-size: 12px; }
+
+      details.dx-box > summary { padding: 10px 12px; font-size: 13.5px; }
+      details.dx-box > .dx-box__body { padding: 0 12px 12px; }
+    }
+
+    /* ============ 区切り帯（最小限） ============ */
+    .dx-step {
+      margin: 18px 0 6px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 11.5px;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+    }
+    .dx-step::before, .dx-step::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: color-mix(in srgb, var(--text) 18%, transparent);
+    }
+
+    /* コピペ用テンプレ */
+    .dx-template {
+      background: color-mix(in srgb, var(--text) 4%, var(--surface));
+      border-left: 3px solid var(--accent);
+      border-radius: 6px;
+      padding: 10px 12px;
+      margin: 6px 0 0;
+      font-size: 13px;
+      line-height: 1.6;
+      white-space: pre-wrap;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+    .dx-template__hint {
+      font-size: 11px;
+      color: var(--muted);
+      margin: 0 0 4px;
+    }
+  </style>
 </head>
 <body>
   <header class="hokuto-top">
@@ -21,138 +211,185 @@
     <article class="note-shell">
       <h1 class="page-title">肩鎖関節脱臼</h1>
 
-      <!-- 即時アクションヘッダー（常時 sticky） -->
-      <div class="action-header">
-        <div class="action-header__title">⚡ 即時アクション</div>
-        <ol class="action-header__list">
-          <li><strong>Rockwood 分類（Ⅰ-Ⅵ）</strong>を意識：ER では <strong>Ⅰ-Ⅱ（保存）/ Ⅲ-Ⅴ（手術考慮）</strong> の二分でまず判断</li>
-          <li><strong>X 線</strong>：肩 AP + 必要に応じて <strong>stress view（垂下位 X 線、両側比較）</strong>。肩峰下端と鎖骨下端の距離 ≥ 13 mm で Type Ⅲ 以上</li>
-          <li><strong>治療方針</strong>：<strong>Ⅰ-Ⅱ は保存</strong>（三角巾 ± バストバンド）／<strong>Ⅲ は議論あり</strong>（職業・趣味で判断）／<strong>Ⅳ-Ⅵ は手術</strong></li>
-          <li><strong>鎖骨遠位端骨折と鑑別</strong>：圧痛部位（鎖骨外側端 vs 鎖骨中央）と X 線で区別、固定具も異なる</li>
-        </ol>
-      </div>
-
-      <!-- メニュータイル -->
-      <nav class="section-tiles" id="sectionMenu">
-        <a class="section-tile" href="#s1"><span class="section-tile__no">🦴</span><span class="section-tile__name">解剖</span></a>
-        <a class="section-tile" href="#s2"><span class="section-tile__no">📊</span><span class="section-tile__name">Rockwood<br>分類</span></a>
-        <a class="section-tile" href="#s3"><span class="section-tile__no">🩺</span><span class="section-tile__name">身体所見<br><small>ピアノキー</small></span></a>
-        <a class="section-tile" href="#s4"><span class="section-tile__no">🔍</span><span class="section-tile__name">診断</span></a>
-        <a class="section-tile" href="#s5"><span class="section-tile__no">🩹</span><span class="section-tile__name">マネジメント</span></a>
-        <a class="section-tile" href="#s6"><span class="section-tile__no">⚖️</span><span class="section-tile__name">鎖骨骨折<br>との違い</span></a>
-        <a class="section-tile" href="#s7"><span class="section-tile__no">📖</span><span class="section-tile__name">出典</span></a>
+      <!-- スマホですぐ開きたい 3 つ -->
+      <nav class="dx-quick" aria-label="クイックタップ">
+        <button class="dx-quick__btn" type="button" data-target="img-read">
+          <span>画像の見方</span>
+          <span class="dx-quick__sub">立位両側比較撮影</span>
+        </button>
+        <button class="dx-quick__btn" type="button" data-target="plan">
+          <span>治療方針</span>
+          <span class="dx-quick__sub">Rockwood 分類</span>
+        </button>
+        <button class="dx-quick__btn" type="button" data-target="consult">
+          <span>コンサル文</span>
+          <span class="dx-quick__sub">そのまま貼れる</span>
+        </button>
       </nav>
 
-      <!-- 関連主訴（双方向リンク） -->
-      <details class="sub-fold" id="related-symptoms">
-        <summary>📞 この疾患が該当する主訴</summary>
-        <div class="sub-fold__body">
+      <!-- 同時評価 3 列：典型像は常時、血管・神経は折りたたみ -->
+      <div class="dx-step"><span>同時並行で評価する 3 軸</span></div>
+      <div class="dx-tri">
+
+        <div class="dx-tri__card dx-tri__card--typical">
+          <div class="dx-tri__title">典型像</div>
+          <ul class="dx-tri__list">
+            <li>若年男性：自転車・コンタクトスポーツで肩外側から転倒</li>
+            <li>所見：<strong>鎖骨遠位の階段状隆起</strong>（ピアノキー徴候）</li>
+            <li>肩鎖関節の限局性圧痛、上肢挙上で疼痛増強</li>
+            <li>鎖骨骨折と同時受傷もありうる（鎖骨遠位 1/3 をスクリーニング）</li>
+            <li>見逃しやすい：軽症（I 度・II 度）は自覚症状軽く保存治療</li>
+          </ul>
+        </div>
+
+        <details class="dx-tri__card dx-tri__card--vasc">
+          <summary>血管</summary>
+          <p class="dx-tri__hint">肩鎖関節脱臼単独では<strong>血管損傷は通常まれ</strong>。ただし高エネ外傷では念のため確認。</p>
+          <ul class="dx-tri__list">
+            <li><strong>橈骨動脈</strong>を左右で触知比較</li>
+            <li>鎖骨遠位の腫脹・血腫の程度</li>
+            <li>高エネ外傷では鎖骨下動静脈損傷を念頭に（皮下血腫・呼吸状態）</li>
+            <li>記録に残す（コンサル時に必要）</li>
+          </ul>
+        </details>
+
+        <details class="dx-tri__card dx-tri__card--neuro">
+          <summary>神経</summary>
+          <p class="dx-tri__hint">単独では<strong>神経損傷は通常まれ</strong>。ただし上肢の運動感覚障害があれば腕神経叢損傷を疑う。</p>
+          <ul class="dx-tri__list">
+            <li>上肢運動：肩外転・肘屈伸・手関節背屈・指の動き</li>
+            <li>感覚：上肢全体（上腕外側・前腕・手指）</li>
+            <li>運動感覚障害ありなら<strong>腕神経叢損傷</strong>合併を疑う → 即整形コンサルト</li>
+            <li>記録に残す（責任分界点）</li>
+          </ul>
+        </details>
+      </div>
+
+      <!-- 画像の見方 -->
+      <details class="dx-box" id="img-read">
+        <summary><span>画像の見方</span></summary>
+        <div class="dx-box__body">
           <ul>
-            <li><a class="wiki-link" href="../肩の外傷・痛み.html">肩の外傷・痛み</a> — 鎖骨外側端の圧痛・ピアノキーサインで疑う</li>
-            <li><a class="wiki-link" href="../転倒.html">転倒</a> — コンタクトスポーツや転倒で受傷、男性に多い</li>
+            <li><strong>立位 ＋ 両側肩鎖関節の同時撮影</strong>（左右比較が決定的）
+              <ul>
+                <li>仰臥位だと重力負荷がかからず転位を過小評価する</li>
+                <li>上肢を下垂したまま、撮影範囲を肩鎖関節まで広げる</li>
+                <li>必要なら<strong>負荷撮影</strong>(5–10 kg 重錘を握らせて撮影)</li>
+              </ul>
+            </li>
+            <li>必ず追うポイント：
+              <ul>
+                <li><strong>烏口鎖骨距離（CC distance）</strong>：左右差 25–50 % が III 度以上の目安</li>
+                <li><strong>鎖骨遠位端の上方転位</strong></li>
+                <li>鎖骨遠位 1/3 骨折・大結節骨折の合併</li>
+                <li>気胸・肋骨骨折（高エネでは胸部全体を確認）</li>
+              </ul>
+            </li>
+            <li>急性期に CT・MRI は基本不要（手術適応確定や後日評価で）</li>
           </ul>
         </div>
       </details>
 
-      <!-- §1 解剖 -->
-      <section class="section-page" id="s1" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🦴 解剖</h2>
+      <!-- 治療方針 -->
+      <details class="dx-box" id="plan">
+        <summary><span>治療方針（Rockwood 分類 × 5 択）</span></summary>
+        <div class="dx-box__body">
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>Rockwood</th><th>所見</th><th>5 択マネジメント</th><th>ER の動き</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>I 度</td>
+                  <td>肩鎖靭帯捻挫、転位なし</td>
+                  <td><strong>帰宅保存</strong></td>
+                  <td>三角巾、外来翌日以降</td>
+                </tr>
+                <tr>
+                  <td>II 度</td>
+                  <td>肩鎖靭帯断裂、烏口鎖骨靭帯は温存、軽度上方転位</td>
+                  <td><strong>帰宅保存</strong></td>
+                  <td>三角巾、整形外来へ</td>
+                </tr>
+                <tr>
+                  <td><strong>III 度</strong></td>
+                  <td>両靭帯断裂、CC 距離 25–100 % 増大</td>
+                  <td><strong>帰宅保存 or 帰宅手術</strong>（議論あり）</td>
+                  <td>三角巾、整形外来へ（手術適応の議論）</td>
+                </tr>
+                <tr>
+                  <td><strong>IV–VI 度</strong></td>
+                  <td>後方／高度上方／下方転位、CC 距離 100 % 以上</td>
+                  <td><strong>入院手術</strong>（観血的整復固定）</td>
+                  <td>整形 cons.（早期）</td>
+                </tr>
+                <tr>
+                  <td><strong>開放／神経血管合併</strong></td>
+                  <td>創あり／腕神経叢障害</td>
+                  <td><strong>即時整形</strong></td>
+                  <td>破傷風・抗菌薬</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
 
-        <div class="callout callout-summary">
-          <div class="callout-title">肩鎖関節脱臼 = レントゲン + 身体所見の合わせ技</div>
-          <div class="callout-body"><ul>
-            <li>コンタクトスポーツや転倒で受傷、<strong>男性に多い</strong>（男女比 5:1）</li>
-            <li>レントゲンの <strong>特異度 90%、感度 41%</strong> → 画像だけでは除外不可</li>
-            <li><strong>ピアノキーサイン</strong> + 肩鎖関節圧痛で疑う</li>
-            <li>三角巾 ± バストバンド固定で帰宅保存／帰宅手術</li>
-          </ul></div>
+          <h3>ER で打つ手</h3>
+          <ul>
+            <li><strong>三角巾固定</strong>（上肢を吊って肩鎖関節への負荷軽減）</li>
+            <li>鎮痛：アセトアミノフェン or NSAIDs（高齢・腎機能で調整）</li>
+            <li>クーリング、患部安静</li>
+            <li>鎖骨バンドは現在は推奨されない（疼痛増・優位性なし）</li>
+            <li>I・II 度：翌日以降の整形外来でフォロー</li>
+            <li>III 度以上：整形外科外来で手術適応を検討（職業・利き手・スポーツ歴で個別判断）</li>
+            <li>IV–VI 度：当日中の整形コンサルトが望ましい</li>
+          </ul>
         </div>
+      </details>
 
-        <ul>
-          <li>肩峰（肩甲骨）と鎖骨外側部の関節</li>
-          <li><strong>3 本の強固な靱帯</strong>（肩鎖靱帯・烏口鎖骨靱帯 2 本）で結合</li>
-          <li>可動性はほぼなく、靱帯損傷の数と転位方向で分類</li>
-        </ul>
-      </section>
+      <!-- コンサル文 -->
+      <details class="dx-box" id="consult">
+        <summary><span>コンサル文（カルテに貼る）</span></summary>
+        <div class="dx-box__body">
+          <p class="dx-template__hint">『他科コンサルト実践マニュアル』の院内紹介状フォーマットに準拠（【目的】【疾患】【既往歴】【内服薬】【ADL】【現病歴】）。鎖骨骨折／肩鎖関節脱臼は「開放骨折や神経血管損傷の合併を疑う場合はすみやかにコンサルト、それらがなければ三角巾固定で翌日整形外科外来」が基本。</p>
+          <div class="dx-template">【目的】[整形外科外来でのフォロー依頼／観血的整復固定のご相談（IV–VI 度）]。
+【疾患】#1 右肩鎖関節脱臼 Rockwood [I／II／III／IV／V／VI] 度（[骨折合併なし／鎖骨遠位骨折／○○]）
+【既往歴】[特記事項なし／○○]
+【内服薬】[なし／ワーファリン／DOAC ○○／抗血小板薬 ○○]
+【ADL（受傷前）】[独歩／杖／介助歩行／車椅子]、[利き手／非利き手]、[スポーツ歴：○○]
+【現病歴】[年齢]歳[男/女]性。[受傷機転：自転車転倒で肩外側打撲／コンタクトスポーツ／高エネ外傷]で受傷し、[来院経緯]で来院。
+ ・身体所見：肩鎖関節の階段状変形（ピアノキー徴候）、限局性圧痛
+ ・血管：橈骨動脈 [良好／弱／触知不能]
+ ・神経：上肢運動感覚 [問題なし／○○]、腕神経叢障害 [なし／疑い]
+ ・画像：立位両側肩鎖関節 Xp で[CC 距離増大 ○○ %／鎖骨遠位上方転位]、骨折合併 [なし／○○]
+ ・ER 処置：三角巾固定、患部クーリング、鎮痛
+よろしくお願いいたします。</div>
+        </div>
+      </details>
 
-      <!-- §2 Rockwood 分類 -->
-      <section class="section-page" id="s2" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>📊 Rockwood 分類（非整形外科医用の簡略版）</h2>
-        <p>非整形外科医は <strong>Type I / II と III / V の 2 つに分ける</strong>だけで OK。</p>
-        <div class="table-wrap"><table><thead><tr><th>Type</th><th>状態</th><th>転位</th><th>治療方針</th></tr></thead><tbody><tr><td><strong>I / II</strong></td><td>肩鎖関節は連結保たれる</td><td>なし〜軽度</td><td>保存</td></tr><tr><td><strong>III 以上</strong></td><td>烏口鎖骨靱帯断裂、鎖骨が挙上</td><td><strong>13 mm 以上</strong></td><td>手術考慮</td></tr></tbody></table></div>
-        <ul>
-          <li>判定は <strong>肩関節正面像で肩峰下端と鎖骨下端の距離</strong></li>
-          <li><strong>&lt; 13 mm → Type I / II</strong></li>
-          <li><strong>≥ 13 mm → Type III 以上</strong></li>
-        </ul>
-      </section>
+      <!-- 関連ハブ -->
+      <details class="dx-box">
+        <summary><span>関連ハブ・隣接疾患</span></summary>
+        <div class="dx-box__body">
+          <ul>
+            <li>主訴入口：<a class="wiki-link" href="../肩の外傷・痛み.html">肩の外傷・痛み</a> ／ <a class="wiki-link" href="../転倒.html">転倒</a></li>
+            <li>隣接疾患：<a class="wiki-link" href="鎖骨骨折.html">鎖骨骨折</a> ／ <a class="wiki-link" href="肩関節脱臼.html">肩関節脱臼</a> ／ <a class="wiki-link" href="腱板損傷.html">腱板損傷</a></li>
+            <li>合併症対応：気胸・肋骨骨折（高エネ）</li>
+          </ul>
+        </div>
+      </details>
 
-      <!-- §3 身体所見 -->
-      <section class="section-page" id="s3" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🩺 身体所見</h2>
-        <ul>
-          <li><strong>肩鎖関節の圧痛</strong></li>
-          <li><strong>ピアノキーサイン</strong>：飛び上がった鎖骨外側端をポコポコ押せる → Type III 以上を示唆</li>
-          <li><strong>変形</strong>：鎖骨外側が皮下に盛り上がって見える（Type III 以上）</li>
-        </ul>
-      </section>
-
-      <!-- §4 診断 -->
-      <section class="section-page" id="s4" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🔍 診断</h2>
-        <ul>
-          <li>レントゲンは感度 41% と低い → 身体所見と画像の合わせ技で診断</li>
-          <li>Type I / II では転位がなく画像正常 → <strong>肩鎖関節の圧痛だけで疑い診断</strong></li>
-          <li>迷う場合はストレス撮影（重り付き撮影）が有用だが、ER では必須でない</li>
-        </ul>
-      </section>
-
-      <!-- §5 マネジメント -->
-      <section class="section-page" id="s5" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🩹 マネジメント</h2>
-
-        <h3>固定は三角巾 ± バストバンド</h3>
-        <ul>
-          <li><strong>クラビクルバンドは使わない</strong>（鎖骨骨折との違い）</li>
-          <li>Type I：約 1 週間固定</li>
-          <li>Type II：約 3 週間固定</li>
-          <li>Type III 以上：<strong>帰宅手術</strong> または <strong>帰宅保存</strong>、仕事・趣味に応じて整形外科で判断</li>
-        </ul>
-
-        <h3>紹介状のコツ</h3>
-        <ul>
-          <li>「転位はないが、肩鎖関節に強い圧痛があり臨床的に肩鎖関節脱臼を疑いました」</li>
-          <li><strong>上肢運動に関わる趣味や職業</strong>を記載（手術適応の判断材料）</li>
-        </ul>
-      </section>
-
-      <!-- §6 鎖骨骨折との違い -->
-      <section class="section-page" id="s6" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>⚖️ 鎖骨骨折との違い</h2>
-        <div class="table-wrap"><table><thead><tr><th></th><th>鎖骨骨折</th><th>肩鎖関節脱臼</th></tr></thead><tbody><tr><td>圧痛部位</td><td>鎖骨中央 or 内側 1/3</td><td>肩鎖関節（鎖骨外側端）</td></tr><tr><td>変形</td><td>鎖骨中央の段差</td><td>鎖骨外側の挙上</td></tr><tr><td>レントゲン</td><td>明確骨折が多い</td><td>転位なければ正常</td></tr><tr><td>固定</td><td>クラビクルバンド可</td><td><strong>三角巾 ± バストバンドのみ</strong></td></tr></tbody></table></div>
-      </section>
-
-      <!-- §7 出典 -->
-      <section class="section-page" id="s7" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>📖 出典</h2>
-        <ul>
-          <li><strong>増井伸高. 骨折ハンター. 中外医学社. 2019.</strong></li>
-          <li><strong>Mazzocca AD ほか.</strong> Evaluation and treatment of acromioclavicular joint injuries. <em>Am J Sports Med.</em> 2007.</li>
-          <li><strong>Rockwood CA</strong> classification of AC joint injuries.</li>
-        </ul>
-
-        <h3>関連</h3>
-        <ul>
-          <li><a class="wiki-link" href="../転倒.html">転倒</a> / <a class="wiki-link" href="上肢骨折の固定/鎖骨骨折.html">鎖骨骨折</a> / <a class="wiki-link" href="肩関節脱臼.html">肩関節脱臼</a></li>
-        </ul>
-      </section>
+      <!-- 出典 -->
+      <details class="dx-box">
+        <summary><span>出典</span></summary>
+        <div class="dx-box__body">
+          <ul>
+            <li>「他科コンサルト実践マニュアル」（医書ジェイピー）整形外科 鎖骨骨折／肩鎖関節脱臼 の項.</li>
+            <li>Ersen A, et al: Bone Joint J, 97-B: 1562-1565, 2015.</li>
+            <li>Rockwood CA Jr. Disorders of the acromioclavicular joint.</li>
+          </ul>
+        </div>
+      </details>
 
     </article>
   </main>
@@ -171,53 +408,21 @@
 
   <script>
   (function(){
-    const menu = document.getElementById('sectionMenu');
-    const pages = document.querySelectorAll('.section-page');
-    const titleH1 = document.querySelector('.page-title');
-    const relatedSymp = document.getElementById('related-symptoms');
-
-    function showSection(id) {
-      menu.hidden = true;
-      if (titleH1) titleH1.hidden = true;
-      if (relatedSymp) relatedSymp.hidden = true;
-      pages.forEach(p => p.hidden = (p.id !== id));
-      window.scrollTo(0, 0);
-    }
-    function showMenu(scrollTarget) {
-      menu.hidden = false;
-      if (titleH1) titleH1.hidden = false;
-      if (relatedSymp) relatedSymp.hidden = false;
-      pages.forEach(p => p.hidden = true);
-      if (scrollTarget) {
-        if (scrollTarget.tagName === 'DETAILS') scrollTarget.open = true;
-        scrollTarget.scrollIntoView({behavior: 'instant', block: 'start'});
-      } else {
-        window.scrollTo(0, 0);
-      }
-    }
-    function syncFromHash() {
-      const id = (location.hash || '').replace('#','');
-      const target = id ? document.getElementById(id) : null;
-      if (target && target.classList.contains('section-page')) {
-        showSection(id);
-      } else if (target) {
-        showMenu(target);
-      } else {
-        showMenu();
-      }
-    }
-
-    window.addEventListener('hashchange', syncFromHash);
-    document.querySelectorAll('.back-to-menu').forEach(b => {
-      b.addEventListener('click', () => { history.pushState(null,'',location.pathname); showMenu(); });
+    document.querySelectorAll('.dx-quick__btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.dataset.target;
+        const target = document.getElementById(id);
+        if (!target) return;
+        target.open = true;
+        target.scrollIntoView({behavior: 'smooth', block: 'start'});
+      });
     });
+
     const navBack = document.getElementById('navBack');
     if (navBack) navBack.addEventListener('click', () => {
       if (window.history.length > 1) history.back();
       else window.location.href = '../index.html';
     });
-
-    syncFromHash();
   })();
   </script>
 </body>

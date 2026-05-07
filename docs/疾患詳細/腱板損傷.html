@@ -6,6 +6,196 @@
   <meta name="color-scheme" content="light dark" />
   <title>腱板損傷 | ER ノート</title>
   <link rel="stylesheet" href="../er-note.css" />
+  <style>
+    /* ============ クイックタップ（3 つを開閉トリガー） ============ */
+    .dx-quick {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px;
+      margin: 10px 0 4px;
+    }
+    .dx-quick__btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      padding: 10px 6px;
+      border-radius: 10px;
+      background: color-mix(in srgb, var(--accent) 10%, var(--surface));
+      border: 1.5px solid var(--accent);
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 13px;
+      line-height: 1.2;
+      text-align: center;
+      cursor: pointer;
+      transition: background 120ms ease;
+    }
+    .dx-quick__btn:hover {
+      background: color-mix(in srgb, var(--accent) 18%, var(--surface));
+    }
+    .dx-quick__icon { font-size: 20px; }
+    .dx-quick__sub {
+      font-size: 10.5px;
+      font-weight: 500;
+      color: var(--muted);
+    }
+
+    /* ============ 同時評価 3 列（血管・神経・典型像） ============ */
+    .dx-tri {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+      margin: 6px 0 4px;
+      align-items: start;
+    }
+    .dx-tri__card {
+      background: var(--surface);
+      border-radius: 10px;
+      padding: 10px 12px;
+      border: 1.5px solid color-mix(in srgb, var(--text) 18%, transparent);
+    }
+    .dx-tri__card--vasc { border-color: #c0392b; background: color-mix(in srgb, #c0392b 6%, var(--surface)); }
+    .dx-tri__card--neuro { border-color: #b5651d; background: color-mix(in srgb, #b5651d 6%, var(--surface)); }
+    .dx-tri__card--typical { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 6%, var(--surface)); }
+    .dx-tri__title {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 800;
+      font-size: 13.5px;
+      margin-bottom: 4px;
+    }
+    .dx-tri__card--vasc .dx-tri__title { color: #c0392b; }
+    .dx-tri__card--neuro .dx-tri__title { color: #b5651d; }
+    .dx-tri__list {
+      margin: 0;
+      padding-left: 18px;
+      font-size: 12.5px;
+      line-height: 1.5;
+    }
+    .dx-tri__list li { margin: 2px 0; }
+
+    /* details 形式の血管/神経カード：summary にチェック印、開閉時の挙動 */
+    details.dx-tri__card { padding: 0; }
+    details.dx-tri__card > summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 10px 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 800;
+      font-size: 13.5px;
+    }
+    details.dx-tri__card > summary::-webkit-details-marker { display: none; }
+    details.dx-tri__card > summary::after {
+      content: "▸";
+      margin-left: auto;
+      font-size: 12px;
+      color: var(--muted);
+      transition: transform 120ms ease;
+    }
+    details.dx-tri__card[open] > summary::after { transform: rotate(90deg); }
+    details.dx-tri__card--vasc > summary { color: #c0392b; }
+    details.dx-tri__card--neuro > summary { color: #b5651d; }
+    details.dx-tri__card > .dx-tri__list { padding: 0 14px 12px 30px; }
+    details.dx-tri__card > .dx-tri__hint {
+      padding: 0 14px 6px 30px;
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    /* ============ 大きな details ボックス（画像/治療方針/コンサル文） ============ */
+    details.dx-box {
+      background: var(--surface);
+      border: 1.5px solid color-mix(in srgb, var(--text) 18%, transparent);
+      border-radius: 10px;
+      margin: 10px 0;
+      scroll-margin-top: 8px;
+    }
+    details.dx-box > summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 12px 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 800;
+      font-size: 14.5px;
+    }
+    details.dx-box > summary::-webkit-details-marker { display: none; }
+    details.dx-box > summary::after {
+      content: "▸";
+      margin-left: auto;
+      font-size: 13px;
+      color: var(--muted);
+      transition: transform 120ms ease;
+    }
+    details.dx-box[open] > summary::after { transform: rotate(90deg); }
+    details.dx-box[open] {
+      border-color: var(--accent);
+    }
+    details.dx-box > .dx-box__body {
+      padding: 0 14px 14px;
+    }
+
+    /* スマホで 1 列に */
+    @media (max-width: 640px) {
+      .dx-quick { gap: 6px; }
+      .dx-quick__btn { padding: 8px 4px; font-size: 11.5px; border-radius: 8px; }
+      .dx-quick__icon { font-size: 17px; }
+      .dx-quick__sub { font-size: 9.5px; }
+
+      .dx-tri { grid-template-columns: 1fr; gap: 8px; }
+      .dx-tri__card { padding: 8px 10px; }
+      details.dx-tri__card > summary { padding: 8px 10px; font-size: 12.5px; }
+      details.dx-tri__card > .dx-tri__list { padding: 0 12px 10px 26px; }
+      .dx-tri__title { font-size: 12.5px; }
+      .dx-tri__list { font-size: 12px; }
+
+      details.dx-box > summary { padding: 10px 12px; font-size: 13.5px; }
+      details.dx-box > .dx-box__body { padding: 0 12px 12px; }
+    }
+
+    /* ============ 区切り帯（最小限） ============ */
+    .dx-step {
+      margin: 18px 0 6px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 11.5px;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+    }
+    .dx-step::before, .dx-step::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: color-mix(in srgb, var(--text) 18%, transparent);
+    }
+
+    /* コピペ用テンプレ */
+    .dx-template {
+      background: color-mix(in srgb, var(--text) 4%, var(--surface));
+      border-left: 3px solid var(--accent);
+      border-radius: 6px;
+      padding: 10px 12px;
+      margin: 6px 0 0;
+      font-size: 13px;
+      line-height: 1.6;
+      white-space: pre-wrap;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+    .dx-template__hint {
+      font-size: 11px;
+      color: var(--muted);
+      margin: 0 0 4px;
+    }
+  </style>
 </head>
 <body>
   <header class="hokuto-top">
@@ -21,157 +211,191 @@
     <article class="note-shell">
       <h1 class="page-title">腱板損傷</h1>
 
-      <!-- 即時アクションヘッダー（常時 sticky） -->
-      <div class="action-header">
-        <div class="action-header__title">⚡ 即時アクション</div>
-        <ol class="action-header__list">
-          <li><strong>外傷性 vs 変性</strong>を判定：急性 10% / 慢性 90%、50 歳以上で無症候性損傷も増加（70 歳以上で半数）</li>
-          <li><strong>身体所見で疑う</strong>：<strong>painful arc / empty can（drop arm）/ Hawkins</strong>、internal rotation lag が 1 つでも陽性なら強疑い</li>
-          <li><strong>確定診断は US / MRI</strong>（完全断裂で感度 90% 前後）。ER では確定不要、臨床診断 → 紹介で十分</li>
-          <li><strong>方針</strong>：高齢は<strong>保存（三角巾 + 鎮痛）</strong>が基本（44–88%）／若年・肉体労働は<strong>手術検討</strong>として整形外科紹介</li>
-        </ol>
-      </div>
-
-      <!-- メニュータイル -->
-      <nav class="section-tiles" id="sectionMenu">
-        <a class="section-tile" href="#s1"><span class="section-tile__no">🦴</span><span class="section-tile__name">腱板とは</span></a>
-        <a class="section-tile" href="#s2"><span class="section-tile__no">📚</span><span class="section-tile__name">疫学</span></a>
-        <a class="section-tile" href="#s3"><span class="section-tile__no">⚡</span><span class="section-tile__name">受傷機転</span></a>
-        <a class="section-tile" href="#s4"><span class="section-tile__no">🩺</span><span class="section-tile__name">身体所見<br><small>4 テスト</small></span></a>
-        <a class="section-tile" href="#s5"><span class="section-tile__no">🖼️</span><span class="section-tile__name">画像</span></a>
-        <a class="section-tile" href="#s6"><span class="section-tile__no">🩹</span><span class="section-tile__name">マネジメント</span></a>
-        <a class="section-tile" href="#s7"><span class="section-tile__no">📝</span><span class="section-tile__name">紹介状の<br>コツ</span></a>
-        <a class="section-tile" href="#s8"><span class="section-tile__no">📖</span><span class="section-tile__name">出典</span></a>
+      <!-- スマホですぐ開きたい 3 つ -->
+      <nav class="dx-quick" aria-label="クイックタップ">
+        <button class="dx-quick__btn" type="button" data-target="img-read">
+          <span>画像の見方</span>
+          <span class="dx-quick__sub">Xp / US / MRI</span>
+        </button>
+        <button class="dx-quick__btn" type="button" data-target="plan">
+          <span>治療方針</span>
+          <span class="dx-quick__sub">外来フォロー基本</span>
+        </button>
+        <button class="dx-quick__btn" type="button" data-target="consult">
+          <span>コンサル文</span>
+          <span class="dx-quick__sub">外来フォロー依頼</span>
+        </button>
       </nav>
 
-      <!-- 関連主訴（双方向リンク） -->
-      <details class="sub-fold" id="related-symptoms">
-        <summary>📞 この疾患が該当する主訴</summary>
-        <div class="sub-fold__body">
+      <!-- 同時評価 3 列：典型像は常時、血管・神経は折りたたみ -->
+      <div class="dx-step"><span>同時並行で評価する 3 軸</span></div>
+      <div class="dx-tri">
+
+        <div class="dx-tri__card dx-tri__card--typical">
+          <div class="dx-tri__title">典型像</div>
+          <ul class="dx-tri__list">
+            <li><strong>加齢性（変性断裂）</strong>：60 歳以上、明確な外傷なし／軽微な動作で発症、夜間痛・挙上時痛</li>
+            <li><strong>急性外傷性</strong>：転倒で手をつく・肩を打つ、若年〜中年の急性発症</li>
+            <li>所見：<strong>painful arc</strong>（外転 60–120 °）、肩前方〜外側の鈍痛</li>
+            <li>誘発テスト：
+              <ul>
+                <li><strong>drop arm test</strong>：90° 外転位を保持できない（棘上筋断裂）</li>
+                <li><strong>lift-off test</strong>：背中で手を離せない（肩甲下筋）</li>
+                <li><strong>ER lag sign</strong>：外旋位を保持できない（棘下筋・小円筋）</li>
+                <li>empty can test（棘上筋）</li>
+              </ul>
+            </li>
+            <li>初回受診で<strong>肩関節脱臼・大結節骨折を必ず除外</strong></li>
+          </ul>
+        </div>
+
+        <details class="dx-tri__card dx-tri__card--vasc">
+          <summary>血管</summary>
+          <p class="dx-tri__hint">腱板損傷は<strong>血管との関連は薄い</strong>。ただし急性外傷性では他病態の合併も念頭に。</p>
+          <ul class="dx-tri__list">
+            <li>橈骨動脈触知（左右比較）：通常は問題なし</li>
+            <li>急性外傷時のみ脱臼骨折・上腕骨近位端骨折の合併を除外</li>
+            <li>夜間痛が強くても血管由来は考えにくい（参考所見として記録）</li>
+          </ul>
+        </details>
+
+        <details class="dx-tri__card dx-tri__card--neuro">
+          <summary>神経</summary>
+          <p class="dx-tri__hint">腱板損傷は<strong>神経損傷とは関係薄い</strong>。鑑別として頸椎症・腋窩神経麻痺を考慮する程度。</p>
+          <ul class="dx-tri__list">
+            <li>三角筋脱力＋外側上腕感覚低下 → <strong>腋窩神経麻痺</strong>（脱臼後など）の方を疑う</li>
+            <li>頸部からの放散痛・しびれ → <strong>頸椎症</strong>を鑑別</li>
+            <li>腱板損傷では運動制限はあるが、神経学的に末梢神経領域の麻痺は出ない</li>
+            <li>記録に「神経学的異常なし」と残す</li>
+          </ul>
+        </details>
+      </div>
+
+      <!-- 画像の見方 -->
+      <details class="dx-box" id="img-read">
+        <summary><span>画像の見方</span></summary>
+        <div class="dx-box__body">
           <ul>
-            <li><a class="wiki-link" href="../肩の外傷・痛み.html">肩の外傷・痛み</a> — 骨折・脱臼を除外した後の最終鑑別、4 つの負荷テストで疑う</li>
+            <li><strong>肩 Xp 3 方向（AP / Y view / 腋窩位）</strong>でまず脱臼・骨折を除外
+              <ul>
+                <li>急性外傷では特に大結節骨折・肩関節脱臼の見逃しに注意</li>
+              </ul>
+            </li>
+            <li>Xp で見るポイント（腱板損傷の間接所見）：
+              <ul>
+                <li><strong>acromiohumeral distance（AHD）の狭小化</strong>（&lt; 7 mm で広範囲断裂示唆）</li>
+                <li>大結節の cyst・硬化（慢性変性）</li>
+                <li>肩峰の形態（type III hooked acromion）</li>
+                <li>変形性肩関節症の有無</li>
+              </ul>
+            </li>
+            <li>急性期に CT は基本不要</li>
+            <li><strong>確定診断は MRI または超音波</strong>（外来で施行が基本、ER で必須ではない）</li>
+            <li>ER の役割：脱臼・骨折を除外したら、外来で MRI/US 評価へつなぐ</li>
           </ul>
         </div>
       </details>
 
-      <!-- §1 腱板とは -->
-      <section class="section-page" id="s1" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🦴 腱板とは</h2>
+      <!-- 治療方針 -->
+      <details class="dx-box" id="plan">
+        <summary><span>治療方針（5 択）</span></summary>
+        <div class="dx-box__body">
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>分類</th><th>所見</th><th>5 択マネジメント</th><th>ER の動き</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>変性断裂（高齢）</td>
+                  <td>60 歳以上、夜間痛・挙上時痛、外傷なし</td>
+                  <td><strong>帰宅保存</strong></td>
+                  <td>三角巾、整形外来 1–2 週後</td>
+                </tr>
+                <tr>
+                  <td>不全断裂</td>
+                  <td>painful arc あり、drop arm 陰性</td>
+                  <td><strong>帰宅保存</strong></td>
+                  <td>三角巾＋鎮痛、整形外来</td>
+                </tr>
+                <tr>
+                  <td><strong>急性外傷性完全断裂（若年）</strong></td>
+                  <td>明確な外傷、drop arm 陽性、急性発症</td>
+                  <td><strong>帰宅手術</strong>（早期手術が望ましい）</td>
+                  <td>三角巾、整形外来早期</td>
+                </tr>
+                <tr>
+                  <td>脱臼／骨折合併</td>
+                  <td>大結節骨折・肩関節脱臼との合併</td>
+                  <td>合併病態に準じる（<a class="wiki-link" href="肩関節脱臼.html">肩関節脱臼</a>等）</td>
+                  <td>合併病態を優先処置</td>
+                </tr>
+                <tr>
+                  <td>偽性麻痺</td>
+                  <td>挙上不能・広範囲断裂示唆</td>
+                  <td><strong>帰宅手術</strong>（手術検討）</td>
+                  <td>整形外来早期、MRI 予約</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
 
-        <div class="callout callout-summary">
-          <div class="callout-title">腱板損傷 = 肩外傷で骨折・脱臼がないときの最終鑑別</div>
-          <div class="callout-body"><ul>
-            <li>肩外傷で <strong>鎖骨・上腕骨・肩鎖関節</strong> を除外した後に疑う</li>
-            <li><strong>レントゲン・CT では診断できない</strong>（軟部組織）</li>
-            <li>エコー・MRI は完全断裂に有用、部分断裂では感度が下がる</li>
-            <li>ER では <strong>身体所見で疑い</strong> → 三角巾固定 → 整形外科紹介で十分</li>
-          </ul></div>
+          <h3>ER で打つ手</h3>
+          <ul>
+            <li><strong>三角巾固定</strong>（疼痛軽減、過度の固定は拘縮を招くので短期間）</li>
+            <li>鎮痛：アセトアミノフェン or NSAIDs（高齢・腎機能で調整）</li>
+            <li>クーリング（急性期）／温罨法（慢性期）</li>
+            <li>関節内ステロイド注射は ER では原則施行せず、整形外来で判断</li>
+            <li>夜間でも帰宅可：脱臼・骨折を除外できれば緊急性は低い</li>
+            <li>整形外科外来でフォロー（MRI / US 評価、リハビリ、手術適応の判断）</li>
+            <li>急性外傷性の若年完全断裂は<strong>早期手術が成績良好</strong>とされ、外来予約は早めに</li>
+          </ul>
         </div>
+      </details>
 
-        <ul>
-          <li>上腕骨頭を肩甲臼に引き寄せて安定化する <strong>4 つの小筋</strong></li>
-          <li>前方から：<strong>肩甲下筋・棘上筋・棘下筋・小円筋</strong></li>
-          <li>英語で rotator cuff（回転させる袖口）</li>
-        </ul>
-      </section>
-
-      <!-- §2 疫学 -->
-      <section class="section-page" id="s2" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>📚 疫学</h2>
-        <ul>
-          <li>急性 <strong>10%</strong>、慢性 <strong>90%</strong></li>
-          <li><strong>50 歳以上で無症候性腱板損傷が増え始め、70 歳以上で半数</strong></li>
-          <li>高齢者ではエコー・MRI 所見だけでは陳旧性か急性か区別困難</li>
-        </ul>
-      </section>
-
-      <!-- §3 受傷機転 -->
-      <section class="section-page" id="s3" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>⚡ 受傷機転</h2>
-        <ul>
-          <li><strong>転倒で肩を直接打つ</strong>（直達）</li>
-          <li><strong>FOOSH</strong>（転倒で手をつく）</li>
-          <li><strong>重量物を持ち上げて急激な負荷</strong></li>
-        </ul>
-      </section>
-
-      <!-- §4 身体所見 -->
-      <section class="section-page" id="s4" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🩺 身体所見（4 つの負荷テスト）</h2>
-        <p>全部評価しても 1 分かからない。疑ったら必ず実施。</p>
-        <div class="table-wrap"><table><thead><tr><th>テスト</th><th>評価する筋</th><th>感度</th><th>特異度</th><th>陽性尤度比</th></tr></thead><tbody><tr><td>Painful arc test</td><td>棘上筋</td><td>71%</td><td>81%</td><td>3.7</td></tr><tr><td>Drop arm test</td><td>棘上筋</td><td>24%</td><td>93%</td><td>3.3</td></tr><tr><td>External rotation lag test</td><td>棘上筋＋棘下筋</td><td>47%</td><td>94%</td><td>7.2</td></tr><tr><td><strong>Internal rotation lag test</strong></td><td><strong>肩甲下筋</strong></td><td><strong>97%</strong></td><td><strong>83%</strong></td><td><strong>5.6</strong></td></tr></tbody></table></div>
-        <ul>
-          <li><strong>Painful arc</strong>：気をつけから頭上まで腕を上げる。90–120° で疼痛が出て、それ以上で軽快すれば陽性</li>
-          <li><strong>Drop arm</strong>：90° で腕を保持させる。痛くて保持できなければ陽性</li>
-          <li><strong>External rotation lag</strong>：小さく前へならえで掌を上。外側に手を動かして保持できなければ陽性</li>
-          <li><strong>Internal rotation lag</strong>：腰をトントンの姿勢で、手背を腰から離して保持できなければ陽性</li>
-        </ul>
-        <div class="callout callout-tip">
-          <div class="callout-title">感度が低くても特異度が高い</div>
-          <div class="callout-body"><p>1 つでも陽性なら腱板損傷を強く疑う。紹介状に所見名を記載して整形外科外来へ。</p></div>
+      <!-- コンサル文 -->
+      <details class="dx-box" id="consult">
+        <summary><span>コンサル文（カルテに貼る）</span></summary>
+        <div class="dx-box__body">
+          <p class="dx-template__hint">『他科コンサルト実践マニュアル』の院内紹介状フォーマットに準拠（【目的】【疾患】【既往歴】【内服薬】【ADL】【現病歴】）。腱板損傷は ER 緊急性低く、外来フォロー依頼が基本。</p>
+          <div class="dx-template">【目的】整形外科外来でのフォロー依頼（MRI / US 精査・治療方針相談）。
+【疾患】#1 右腱板損傷疑い（[加齢性変性断裂／急性外傷性／脱臼後遺残症状]）
+【既往歴】[特記事項なし／反復性脱臼歴／○○]
+【内服薬】[なし／NSAIDs／抗血小板薬 ○○]
+【ADL（受傷前）】[独歩／杖／介助歩行／車椅子]、[利き手／非利き手]、[職業：○○]
+【現病歴】[年齢]歳[男/女]性。[発症経緯：明確な外傷なく数日前から夜間痛／転倒で手をつく／肩関節脱臼整復後に挙上不能継続]で[来院経緯]で来院。
+ ・身体所見：painful arc [陽性／陰性]、drop arm test [陽性／陰性]、lift-off test [陽性／陰性]、ER lag sign [陽性／陰性]、empty can [陽性／陰性]
+ ・血管：橈骨動脈良好、神経学的異常なし
+ ・画像：肩 Xp 3 方向で脱臼・骨折除外、AHD [○○ mm／狭小化なし]、大結節 [cyst あり／なし]
+ ・ER 処置：三角巾固定、アセトアミノフェン処方
+ ・帰宅可と判断、整形外科外来での MRI / US 精査をご検討ください。
+よろしくお願いいたします。</div>
         </div>
-      </section>
+      </details>
 
-      <!-- §5 画像 -->
-      <section class="section-page" id="s5" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🖼️ 画像</h2>
-        <div class="table-wrap"><table><thead><tr><th>検査</th><th>感度（完全断裂）</th><th>感度（部分断裂）</th><th>特異度</th></tr></thead><tbody><tr><td>レントゲン</td><td>低</td><td>低</td><td>低</td></tr><tr><td><strong>エコー</strong></td><td><strong>91%</strong></td><td>68%</td><td>93%</td></tr><tr><td><strong>MRI</strong></td><td><strong>90%</strong></td><td>67%</td><td>93%</td></tr></tbody></table></div>
-        <ul>
-          <li>レントゲンで <strong>肩峰骨頭間距離 ≤ 6 mm</strong> なら腱板損傷を示唆（感度・特異度低い）</li>
-          <li>エコーは非整形外科医でも慣れれば有用、ER 外でも活用可能</li>
-          <li>ER では画像による確定診断は不要、臨床で疑い・紹介できれば十分</li>
-        </ul>
-      </section>
+      <!-- 関連ハブ -->
+      <details class="dx-box">
+        <summary><span>関連ハブ・隣接疾患</span></summary>
+        <div class="dx-box__body">
+          <ul>
+            <li>主訴入口：<a class="wiki-link" href="../肩の外傷・痛み.html">肩の外傷・痛み</a> ／ <a class="wiki-link" href="../転倒.html">転倒</a></li>
+            <li>隣接疾患：<a class="wiki-link" href="肩関節脱臼.html">肩関節脱臼</a> ／ <a class="wiki-link" href="肩鎖関節脱臼.html">肩鎖関節脱臼</a> ／ <a class="wiki-link" href="上腕骨近位端骨折.html">上腕骨近位端骨折</a> ／ <a class="wiki-link" href="鎖骨骨折.html">鎖骨骨折</a></li>
+            <li>鑑別：<a class="wiki-link" href="頸椎症.html">頸椎症</a>（放散痛）／ 五十肩・凍結肩</li>
+          </ul>
+        </div>
+      </details>
 
-      <!-- §6 マネジメント -->
-      <section class="section-page" id="s6" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🩹 マネジメント</h2>
-        <ul>
-          <li><strong>44–88% が保存加療</strong>（多くは手術にならない）</li>
-          <li><strong>三角巾固定 + 鎮痛薬内服</strong></li>
-          <li><strong>帰宅保存</strong> または <strong>帰宅手術</strong> として整形外科外来へ紹介</li>
-        </ul>
-
-        <h3>してはいけないこと</h3>
-        <ul>
-          <li><strong>肩関節内注射での鎮痛</strong> → 腱を余計に傷つけるリスク、ER では控える</li>
-          <li>無理なリハビリ指導 → 専門医に任せる</li>
-        </ul>
-      </section>
-
-      <!-- §7 紹介状のコツ -->
-      <section class="section-page" id="s7" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>📝 紹介状に書くべきこと</h2>
-        <ul>
-          <li>受傷機転（日時・どう受傷したか）</li>
-          <li><strong>陽性だった身体所見</strong>（例：internal rotation lag test 陽性）</li>
-          <li>仕事・趣味・ADL（手術適応判断に影響）</li>
-          <li>ほかの肩外傷が除外されていること</li>
-        </ul>
-      </section>
-
-      <!-- §8 出典 -->
-      <section class="section-page" id="s8" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>📖 出典</h2>
-        <ul>
-          <li><strong>増井伸高. 骨折ハンター. 中外医学社. 2019.</strong></li>
-          <li><strong>Hermans J ほか.</strong> Does this patient with shoulder pain have rotator cuff disease? <em>JAMA.</em> 2013;310(8):837-47.</li>
-          <li><strong>Park HB ほか.</strong> Diagnostic accuracy of clinical tests for the different degrees of subacromial impingement syndrome. <em>J Bone Joint Surg Am.</em> 2005;87(7):1446-55.</li>
-        </ul>
-
-        <h3>関連</h3>
-        <ul>
-          <li><a class="wiki-link" href="../転倒.html">転倒</a> / <a class="wiki-link" href="肩関節脱臼.html">肩関節脱臼</a> / <a class="wiki-link" href="上肢骨折の固定/上腕骨近位部骨折.html">上腕骨近位部骨折</a></li>
-        </ul>
-      </section>
+      <!-- 出典 -->
+      <details class="dx-box">
+        <summary><span>出典</span></summary>
+        <div class="dx-box__body">
+          <ul>
+            <li>「他科コンサルト実践マニュアル」（医書ジェイピー）整形外科の項.</li>
+            <li>日本整形外科学会・日本肩関節学会 監修「腱板損傷（断裂）診療ガイドライン」.</li>
+            <li>「骨折・脱臼 改訂4版」（富士川恭輔，鳥巣岳彦/編），南山堂，2018.</li>
+          </ul>
+        </div>
+      </details>
 
     </article>
   </main>
@@ -190,53 +414,21 @@
 
   <script>
   (function(){
-    const menu = document.getElementById('sectionMenu');
-    const pages = document.querySelectorAll('.section-page');
-    const titleH1 = document.querySelector('.page-title');
-    const relatedSymp = document.getElementById('related-symptoms');
-
-    function showSection(id) {
-      menu.hidden = true;
-      if (titleH1) titleH1.hidden = true;
-      if (relatedSymp) relatedSymp.hidden = true;
-      pages.forEach(p => p.hidden = (p.id !== id));
-      window.scrollTo(0, 0);
-    }
-    function showMenu(scrollTarget) {
-      menu.hidden = false;
-      if (titleH1) titleH1.hidden = false;
-      if (relatedSymp) relatedSymp.hidden = false;
-      pages.forEach(p => p.hidden = true);
-      if (scrollTarget) {
-        if (scrollTarget.tagName === 'DETAILS') scrollTarget.open = true;
-        scrollTarget.scrollIntoView({behavior: 'instant', block: 'start'});
-      } else {
-        window.scrollTo(0, 0);
-      }
-    }
-    function syncFromHash() {
-      const id = (location.hash || '').replace('#','');
-      const target = id ? document.getElementById(id) : null;
-      if (target && target.classList.contains('section-page')) {
-        showSection(id);
-      } else if (target) {
-        showMenu(target);
-      } else {
-        showMenu();
-      }
-    }
-
-    window.addEventListener('hashchange', syncFromHash);
-    document.querySelectorAll('.back-to-menu').forEach(b => {
-      b.addEventListener('click', () => { history.pushState(null,'',location.pathname); showMenu(); });
+    document.querySelectorAll('.dx-quick__btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.dataset.target;
+        const target = document.getElementById(id);
+        if (!target) return;
+        target.open = true;
+        target.scrollIntoView({behavior: 'smooth', block: 'start'});
+      });
     });
+
     const navBack = document.getElementById('navBack');
     if (navBack) navBack.addEventListener('click', () => {
       if (window.history.length > 1) history.back();
       else window.location.href = '../index.html';
     });
-
-    syncFromHash();
   })();
   </script>
 </body>

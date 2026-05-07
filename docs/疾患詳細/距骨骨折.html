@@ -6,6 +6,196 @@
   <meta name="color-scheme" content="light dark" />
   <title>距骨骨折 | ER ノート</title>
   <link rel="stylesheet" href="../er-note.css" />
+  <style>
+    /* ============ クイックタップ（3 つを開閉トリガー） ============ */
+    .dx-quick {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px;
+      margin: 10px 0 4px;
+    }
+    .dx-quick__btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      padding: 10px 6px;
+      border-radius: 10px;
+      background: color-mix(in srgb, var(--accent) 10%, var(--surface));
+      border: 1.5px solid var(--accent);
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 13px;
+      line-height: 1.2;
+      text-align: center;
+      cursor: pointer;
+      transition: background 120ms ease;
+    }
+    .dx-quick__btn:hover {
+      background: color-mix(in srgb, var(--accent) 18%, var(--surface));
+    }
+    .dx-quick__icon { font-size: 20px; }
+    .dx-quick__sub {
+      font-size: 10.5px;
+      font-weight: 500;
+      color: var(--muted);
+    }
+
+    /* ============ 同時評価 3 列（血管・神経・典型像） ============ */
+    .dx-tri {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+      margin: 6px 0 4px;
+      align-items: start;
+    }
+    .dx-tri__card {
+      background: var(--surface);
+      border-radius: 10px;
+      padding: 10px 12px;
+      border: 1.5px solid color-mix(in srgb, var(--text) 18%, transparent);
+    }
+    .dx-tri__card--vasc { border-color: #c0392b; background: color-mix(in srgb, #c0392b 6%, var(--surface)); }
+    .dx-tri__card--neuro { border-color: #b5651d; background: color-mix(in srgb, #b5651d 6%, var(--surface)); }
+    .dx-tri__card--typical { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 6%, var(--surface)); }
+    .dx-tri__title {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 800;
+      font-size: 13.5px;
+      margin-bottom: 4px;
+    }
+    .dx-tri__card--vasc .dx-tri__title { color: #c0392b; }
+    .dx-tri__card--neuro .dx-tri__title { color: #b5651d; }
+    .dx-tri__list {
+      margin: 0;
+      padding-left: 18px;
+      font-size: 12.5px;
+      line-height: 1.5;
+    }
+    .dx-tri__list li { margin: 2px 0; }
+
+    /* details 形式の血管/神経カード：summary にチェック印、開閉時の挙動 */
+    details.dx-tri__card { padding: 0; }
+    details.dx-tri__card > summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 10px 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 800;
+      font-size: 13.5px;
+    }
+    details.dx-tri__card > summary::-webkit-details-marker { display: none; }
+    details.dx-tri__card > summary::after {
+      content: "▸";
+      margin-left: auto;
+      font-size: 12px;
+      color: var(--muted);
+      transition: transform 120ms ease;
+    }
+    details.dx-tri__card[open] > summary::after { transform: rotate(90deg); }
+    details.dx-tri__card--vasc > summary { color: #c0392b; }
+    details.dx-tri__card--neuro > summary { color: #b5651d; }
+    details.dx-tri__card > .dx-tri__list { padding: 0 14px 12px 30px; }
+    details.dx-tri__card > .dx-tri__hint {
+      padding: 0 14px 6px 30px;
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    /* ============ 大きな details ボックス（画像/治療方針/コンサル文） ============ */
+    details.dx-box {
+      background: var(--surface);
+      border: 1.5px solid color-mix(in srgb, var(--text) 18%, transparent);
+      border-radius: 10px;
+      margin: 10px 0;
+      scroll-margin-top: 8px;
+    }
+    details.dx-box > summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 12px 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 800;
+      font-size: 14.5px;
+    }
+    details.dx-box > summary::-webkit-details-marker { display: none; }
+    details.dx-box > summary::after {
+      content: "▸";
+      margin-left: auto;
+      font-size: 13px;
+      color: var(--muted);
+      transition: transform 120ms ease;
+    }
+    details.dx-box[open] > summary::after { transform: rotate(90deg); }
+    details.dx-box[open] {
+      border-color: var(--accent);
+    }
+    details.dx-box > .dx-box__body {
+      padding: 0 14px 14px;
+    }
+
+    /* スマホで 1 列に */
+    @media (max-width: 640px) {
+      .dx-quick { gap: 6px; }
+      .dx-quick__btn { padding: 8px 4px; font-size: 11.5px; border-radius: 8px; }
+      .dx-quick__icon { font-size: 17px; }
+      .dx-quick__sub { font-size: 9.5px; }
+
+      .dx-tri { grid-template-columns: 1fr; gap: 8px; }
+      .dx-tri__card { padding: 8px 10px; }
+      details.dx-tri__card > summary { padding: 8px 10px; font-size: 12.5px; }
+      details.dx-tri__card > .dx-tri__list { padding: 0 12px 10px 26px; }
+      .dx-tri__title { font-size: 12.5px; }
+      .dx-tri__list { font-size: 12px; }
+
+      details.dx-box > summary { padding: 10px 12px; font-size: 13.5px; }
+      details.dx-box > .dx-box__body { padding: 0 12px 12px; }
+    }
+
+    /* ============ 区切り帯（最小限） ============ */
+    .dx-step {
+      margin: 18px 0 6px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 11.5px;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+    }
+    .dx-step::before, .dx-step::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: color-mix(in srgb, var(--text) 18%, transparent);
+    }
+
+    /* コピペ用テンプレ */
+    .dx-template {
+      background: color-mix(in srgb, var(--text) 4%, var(--surface));
+      border-left: 3px solid var(--accent);
+      border-radius: 6px;
+      padding: 10px 12px;
+      margin: 6px 0 0;
+      font-size: 13px;
+      line-height: 1.6;
+      white-space: pre-wrap;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+    .dx-template__hint {
+      font-size: 11px;
+      color: var(--muted);
+      margin: 0 0 4px;
+    }
+  </style>
 </head>
 <body>
   <header class="hokuto-top">
@@ -21,167 +211,205 @@
     <article class="note-shell">
       <h1 class="page-title">距骨骨折</h1>
 
-      <!-- 即時アクションヘッダー（常時 sticky） -->
-      <div class="action-header">
-        <div class="action-header__title">⚡ 即時アクション</div>
-        <ol class="action-header__list">
-          <li><strong>高エネルギー外傷</strong>（墜落・交通）で疑う</li>
-          <li>AP+lat+mortise+<strong>Canale view</strong>（距骨頸部）</li>
-          <li><strong>Hawkins 分類</strong>（Ⅰ-Ⅳ）で評価</li>
-          <li><strong>骨壊死リスク</strong>：Hawkins Ⅱ-Ⅳ で高い、<strong>Hawkins sign</strong>（半月状透亮像）で予後評価</li>
-        </ol>
-      </div>
-
-      <!-- メニュータイル -->
-      <nav class="section-tiles" id="sectionMenu">
-        <a class="section-tile" href="#s1"><span class="section-tile__no">🦴</span><span class="section-tile__name">解剖と血流</span></a>
-        <a class="section-tile" href="#s2"><span class="section-tile__no">💥</span><span class="section-tile__name">受傷機転</span></a>
-        <a class="section-tile" href="#s3"><span class="section-tile__no">🩺</span><span class="section-tile__name">身体所見</span></a>
-        <a class="section-tile" href="#s4"><span class="section-tile__no">📷</span><span class="section-tile__name">画像<br><small>Canale / CT</small></span></a>
-        <a class="section-tile" href="#s5"><span class="section-tile__no">📊</span><span class="section-tile__name">Hawkins<br><small>分類</small></span></a>
-        <a class="section-tile" href="#s6"><span class="section-tile__no">💉</span><span class="section-tile__name">マネジメント<br><small>即時整形</small></span></a>
-        <a class="section-tile" href="#s7"><span class="section-tile__no">⚠️</span><span class="section-tile__name">合併症</span></a>
-        <a class="section-tile" href="#s8"><span class="section-tile__no">🌓</span><span class="section-tile__name">Hawkins sign</span></a>
-        <a class="section-tile" href="#s9"><span class="section-tile__no">🏠</span><span class="section-tile__name">帰宅時の説明<br><small>＋出典</small></span></a>
+      <!-- スマホですぐ開きたい 3 つ -->
+      <nav class="dx-quick" aria-label="クイックタップ">
+        <button class="dx-quick__btn" type="button" data-target="img-read">
+          <span>画像の見方</span>
+          <span class="dx-quick__sub">Xp / Canale / CT</span>
+        </button>
+        <button class="dx-quick__btn" type="button" data-target="plan">
+          <span>治療方針</span>
+          <span class="dx-quick__sub">Hawkins 別マネジメント</span>
+        </button>
+        <button class="dx-quick__btn" type="button" data-target="consult">
+          <span>コンサル文</span>
+          <span class="dx-quick__sub">そのまま貼れる</span>
+        </button>
       </nav>
 
-      <!-- 関連主訴（双方向リンク） -->
-      <details class="sub-fold" id="related-symptoms">
-        <summary>📞 この疾患が該当する主訴</summary>
-        <div class="sub-fold__body">
+      <!-- 同時評価 3 列：典型像は常時、血管・神経は折りたたみ -->
+      <div class="dx-step"><span>同時並行で評価する 3 軸</span></div>
+      <div class="dx-tri">
+
+        <div class="dx-tri__card dx-tri__card--typical">
+          <div class="dx-tri__title">典型像</div>
+          <ul class="dx-tri__list">
+            <li><strong>major（縦断・頸部）40% / minor（剥離）60%</strong>：minor の方が多い</li>
+            <li><strong>major：頸部骨折</strong> → 高エネルギー（墜落・交通）／背屈強制</li>
+            <li><strong>minor 3 つ</strong>：外側突起（スノボ・墜落／ATFL 付近）／後突起（サッカー・空手／アキレス腱外側）／滑車（内反／圧痛なしでも荷重痛）</li>
+            <li>所見：足関節前方腫脹・変形、骨折線部位の圧痛、荷重不能</li>
+            <li>開放創・皮膚緊張（pressure necrosis 注意）</li>
+          </ul>
+        </div>
+
+        <details class="dx-tri__card dx-tri__card--vasc">
+          <summary>血管</summary>
+          <p class="dx-tri__hint"><strong>距骨体は血流が乏しい</strong>。頸部骨折で <strong>無腐性壊死（AVN）</strong>のリスク（Hawkins 分類で進行）。</p>
+          <ul class="dx-tri__list">
+            <li><strong>足背動脈・後脛骨動脈</strong>を必ず触知（左右比較）</li>
+            <li>転位・脱臼例は <strong>距骨頸部周囲血管</strong>（後脛骨動脈枝・足背動脈枝・足根洞動脈）が断裂</li>
+            <li>Hawkins sign（受傷 6-8 週で滑車下軟骨下透亮像）が出れば AVN 回避の示唆</li>
+            <li>触れない／弱い → CTA 検討、緊急整復で再灌流</li>
+          </ul>
+        </details>
+
+        <details class="dx-tri__card dx-tri__card--neuro">
+          <summary>神経</summary>
+          <p class="dx-tri__hint">距骨脱臼骨折では<strong>後脛骨神経</strong>・<strong>腓腹神経</strong>領域の感覚を確認。</p>
+          <ul class="dx-tri__list">
+            <li><strong>足底感覚</strong>（後脛骨神経）</li>
+            <li><strong>足背外側感覚</strong>（腓腹神経）</li>
+            <li>第一趾間背側（深腓骨神経）</li>
+            <li>整復前後で必ず再評価し記録</li>
+          </ul>
+        </details>
+      </div>
+
+      <!-- 画像の見方 -->
+      <details class="dx-box" id="img-read">
+        <summary><span>画像の見方</span></summary>
+        <div class="dx-box__body">
+          <p><strong>距骨 Xp の感度は 24〜33%</strong>と低い。骨折線イメージを持って読み、迷えば CT。</p>
           <ul>
-            <li><a class="wiki-link" href="../足関節・足部の外傷.html">足関節・足部の外傷</a> — 高エネルギー外傷での足部痛・腫脹・荷重不能</li>
-            <li><a class="wiki-link" href="../転倒.html">転倒</a> — 高所からの転落（垂直軸圧）が代表的機転</li>
+            <li><strong>足関節 AP・側面・mortise</strong>＋距骨頸部用の<strong>Canale view</strong>（足底屈・回内 15°、管球 75°）</li>
+            <li>major（頸部骨折）：<strong>側面像でわかりやすい</strong>。多くは転位強く手術へ。</li>
+            <li>minor 骨折はそれぞれ見える方向が違う（読影前にイメージを持つ）：
+              <ul>
+                <li><strong>外側突起骨折（snowboarder's fracture）</strong> → <strong>正面像</strong>。ATFL 損傷だと思ったらその下に骨折…が典型的見逃し。</li>
+                <li><strong>滑車骨折</strong> → <strong>正面像</strong>。内側の方が多い。</li>
+                <li><strong>後突起骨折</strong> → <strong>側面像</strong>でわずかに見えるのみ（os trigonum と鑑別）。</li>
+              </ul>
+            </li>
+            <li>major で必ず追うポイント：
+              <ul>
+                <li><strong>距骨頸部の縦走骨折線</strong>（Hawkins Ⅰ → Ⅱ → Ⅲ → Ⅳ）</li>
+                <li>距骨下関節・脛距関節の<strong>亜脱臼／脱臼</strong></li>
+                <li>距骨体の脱出（Hawkins Ⅲ-Ⅳ）— 皮膚壊死リスク</li>
+              </ul>
+            </li>
+            <li><strong>骨折線確認・転位評価には CT 必須</strong>（手術計画用、minor の確定診断にも有用）</li>
+            <li>急性期の MRI は基本不要、AVN 評価は受傷 3-6 か月後（Hawkins sign で示唆）</li>
+            <li>足部全体（踵骨・舟状骨・中足骨）を必ず追加で評価（合併骨折多い）</li>
           </ul>
         </div>
       </details>
 
-      <!-- §1 解剖と血流 -->
-      <section class="section-page" id="s1" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🦴 解剖と血流</h2>
-        <ul>
-          <li>距骨は足関節（上方）と距踵関節（下方）の間にあり、<strong>関節軟骨で 60% 以上被覆</strong></li>
-          <li><strong>表面の大部分が関節面 → 血管侵入部が少ない</strong></li>
-          <li><strong>血流は主に後方・外側から逆行性に入る</strong></li>
-          <li>骨折で血管が途絶 → <strong>無腐性壊死</strong>（AVN）</li>
-        </ul>
-      </section>
+      <!-- 治療方針 -->
+      <details class="dx-box" id="plan">
+        <summary><span>治療方針（Hawkins 分類 × マネジメント）</span></summary>
+        <div class="dx-box__body">
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>Hawkins 分類</th><th>所見</th><th>マネジメント</th><th>ER の動き</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Ⅰ：転位なし</td>
+                  <td>頸部骨折のみ、距骨下・脛距 normal</td>
+                  <td><strong>帰宅保存</strong>（AVN 0-13%）</td>
+                  <td>シーネ ＋ 翌日整形</td>
+                </tr>
+                <tr>
+                  <td>Ⅱ：距骨下亜脱臼</td>
+                  <td>距骨下関節脱臼を伴う</td>
+                  <td><strong>緊急整復＋手術</strong>（AVN 20-50%）</td>
+                  <td>整形即コール、シーネ</td>
+                </tr>
+                <tr>
+                  <td><strong>Ⅲ：脛距も脱臼</strong></td>
+                  <td>距骨体が後内方へ脱出</td>
+                  <td><strong>緊急整復＋観血的整復</strong>（AVN 80-100%）</td>
+                  <td>皮膚壊死回避で即整復</td>
+                </tr>
+                <tr>
+                  <td><strong>Ⅳ：距舟関節も脱臼</strong></td>
+                  <td>頭部も舟状骨から脱臼</td>
+                  <td><strong>緊急手術</strong>（AVN ほぼ必発）</td>
+                  <td>整形即コール、開放注意</td>
+                </tr>
+                <tr>
+                  <td><strong>外側突起（snowboarder）</strong></td>
+                  <td>正面像、ATFL 付近に骨折線</td>
+                  <td><strong>帰宅手術 or 帰宅保存</strong>（後方固定）</td>
+                  <td>シーネ非荷重 ＋ 翌日整形</td>
+                </tr>
+                <tr>
+                  <td><strong>後突起</strong></td>
+                  <td>側面像、os trigonum 鑑別</td>
+                  <td><strong>帰宅手術 or 帰宅保存</strong>（後方固定）</td>
+                  <td>シーネ非荷重 ＋ 翌日整形</td>
+                </tr>
+                <tr>
+                  <td><strong>滑車</strong></td>
+                  <td>正面像、内反受傷で外果圧痛なし</td>
+                  <td><strong>帰宅手術 or 帰宅保存</strong>（後方固定）</td>
+                  <td>シーネ非荷重 ＋ 翌日整形</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
 
-      <!-- §2 受傷機転 -->
-      <section class="section-page" id="s2" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>💥 受傷機転</h2>
-        <ul>
-          <li><strong>高所からの転落</strong>（垂直軸圧）</li>
-          <li><strong>交通事故</strong>（ダッシュボード損傷）</li>
-          <li><strong>足関節背屈強制</strong></li>
-        </ul>
-      </section>
+          <p>※ minor 骨折は剥離骨折でも距骨は阻血されやすく <strong>偽関節リスク</strong>があるため、必ず整形フォロー。CT が撮れない場合も occult fracture として後方固定で同様に対応。</p>
 
-      <!-- §3 身体所見 -->
-      <section class="section-page" id="s3" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🩺 身体所見</h2>
-        <ul>
-          <li>足関節の強い <strong>腫脹 + 変形</strong></li>
-          <li><strong>距骨頸部（前面中央）の圧痛</strong></li>
-          <li>荷重不能</li>
-          <li>皮膚損傷（開放骨折）、神経血管障害</li>
-        </ul>
-      </section>
+          <h3>ER で打つ手</h3>
+          <ul>
+            <li><strong>下腿シーネ（後方固定）</strong>（足関節中間位、足趾まで露出して循環確認）</li>
+            <li><strong>Hawkins Ⅲ・Ⅳは皮膚緊張による壊死リスクあり、即時整復</strong>を整形と</li>
+            <li>非荷重を厳守（疑い段階でも荷重させない）</li>
+            <li>絶飲食、ライン確保、抗凝固薬の有無を確認（major は手術前提）</li>
+            <li>開放創あれば洗浄＋第 1 世代セフェム＋破傷風</li>
+            <li>NSAIDs は短期、患肢挙上＋クーリング</li>
+          </ul>
+        </div>
+      </details>
 
-      <!-- §4 画像 -->
-      <section class="section-page" id="s4" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>📷 画像</h2>
+      <!-- コンサル文 -->
+      <details class="dx-box" id="consult">
+        <summary><span>コンサル文（カルテに貼る）</span></summary>
+        <div class="dx-box__body">
+          <p class="dx-template__hint">『他科コンサルト実践マニュアル』の院内紹介状フォーマットに準拠（【目的】【疾患】【既往歴】【内服薬】【ADL】【現病歴】）。空欄を埋めるだけで通る形式。</p>
+          <div class="dx-template">【目的】整復・観血的整復のご相談・ご加療依頼。
+【疾患】#1 [右/左]距骨骨折 Hawkins ○型（[頸部／体部／外側突起／後突起]、転位 [あり/なし]）
+【既往歴】[特記事項なし／○○]
+【内服薬】[なし／ワーファリン／DOAC ○○／抗血小板薬 ○○]
+【ADL（受傷前）】[独歩／杖／介助歩行／車椅子]
+【現病歴】[年齢]歳[男/女]性。[受傷機転：高所墜落／交通外傷／背屈強制]で受傷し、[来院経緯]で来院。
+ ・身体所見：足関節前方腫脹＋変形、距骨頸部圧痛、荷重不能
+ ・血管：足背動脈・後脛骨動脈 [良好／弱／触知不能]
+ ・神経：後脛骨神経・腓腹神経領域 [問題なし／麻痺]
+ ・皮膚：[緊張なし／緊張あり／開放創]
+ ・画像：Xp（AP・側面・mortise・Canale）で距骨[頸部／体部／突起]骨折、CT [施行済／未]
+ ・ER 処置：シーネ固定（中間位）、非荷重、[整復済／未]
+ ・術前検査：採血・心電図・胸部 X 線 [済／未]
+よろしくお願いいたします。</div>
+        </div>
+      </details>
 
-        <h3>レントゲン</h3>
-        <ul>
-          <li>足関節 3 方向 + 足部</li>
-          <li><strong>Canale view</strong>（前後像を 15° 回外）で距骨頸部を評価</li>
-        </ul>
+      <!-- 関連ハブ -->
+      <details class="dx-box">
+        <summary><span>関連ハブ・隣接疾患</span></summary>
+        <div class="dx-box__body">
+          <ul>
+            <li>主訴入口：<a class="wiki-link" href="../足関節の外傷・痛み.html">足関節の外傷・痛み</a> ／ <a class="wiki-link" href="../転倒.html">転倒</a></li>
+            <li>隣接疾患：<a class="wiki-link" href="踵骨骨折.html">踵骨骨折</a> ／ <a class="wiki-link" href="リスフラン関節脱臼骨折.html">リスフラン関節脱臼骨折</a> ／ <a class="wiki-link" href="足関節骨折.html">足関節骨折</a></li>
+            <li>処置：<a class="wiki-link" href="開放骨折.html">開放骨折</a> ／ <a class="wiki-link" href="コンパートメント症候群.html">コンパートメント症候群</a></li>
+            <li>合併症対応：AVN フォロー、距骨下関節症、後遺障害は長期</li>
+          </ul>
+        </div>
+      </details>
 
-        <h3>CT（全例推奨）</h3>
-        <ul>
-          <li>骨折線の詳細、転位・粉砕の評価</li>
-          <li>手術計画</li>
-        </ul>
-
-        <h3>MRI</h3>
-        <ul>
-          <li><strong>AVN の評価</strong>（受傷 3 ヶ月以降に実施）</li>
-        </ul>
-      </section>
-
-      <!-- §5 Hawkins 分類 -->
-      <section class="section-page" id="s5" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>📊 Hawkins 分類（距骨頸部骨折）</h2>
-        <div class="table-wrap"><table><thead><tr><th>Type</th><th>所見</th><th>AVN 率</th></tr></thead><tbody><tr><td>I</td><td>転位なし</td><td><strong>0–15%</strong></td></tr><tr><td>II</td><td>距踵関節脱臼</td><td><strong>20–50%</strong></td></tr><tr><td>III</td><td>距踵関節 + 足関節脱臼</td><td><strong>50–90%</strong></td></tr><tr><td>IV</td><td>距踵関節 + 足関節 + 距舟関節脱臼</td><td><strong>ほぼ 100%</strong></td></tr></tbody></table></div>
-      </section>
-
-      <!-- §6 マネジメント -->
-      <section class="section-page" id="s6" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>💉 マネジメント — 原則 <strong>即時整形</strong></h2>
-
-        <h3>ER での対応</h3>
-        <ol>
-          <li><strong>U-slab シーネ固定</strong></li>
-          <li><strong>挙上 + アイシング</strong></li>
-          <li><strong>CT + 整形外科コンサルト</strong></li>
-          <li><strong>転位骨折 → 緊急手術</strong>（血流再開のため早期整復が AVN 予防）</li>
-          <li>開放骨折なら洗浄・抗菌薬・破傷風</li>
-        </ol>
-
-        <h3>手術のタイミング</h3>
-        <ul>
-          <li><strong>Hawkins II 以上は緊急整復</strong>（6–8 時間以内が望ましいとされたが近年では軟部組織の状態優先）</li>
-          <li><strong>Hawkins III–IV</strong>：ただちに整復試行、整復できなければ観血的整復</li>
-        </ul>
-      </section>
-
-      <!-- §7 合併症 -->
-      <section class="section-page" id="s7" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>⚠️ 合併症</h2>
-        <div class="table-wrap"><table><thead><tr><th>合併症</th><th>頻度・背景</th></tr></thead><tbody><tr><td><strong>無腐性壊死（AVN）</strong></td><td>Hawkins 分類に比例</td></tr><tr><td><strong>外傷性関節症</strong></td><td>ほぼ必発</td></tr><tr><td><strong>皮膚壊死</strong></td><td>脱臼の放置</td></tr><tr><td><strong>感染</strong></td><td>開放骨折</td></tr></tbody></table></div>
-      </section>
-
-      <!-- §8 Hawkins sign -->
-      <section class="section-page" id="s8" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🌓 Hawkins sign</h2>
-        <ul>
-          <li><strong>受傷後 6–8 週</strong>のレントゲンで、距骨天井部の <strong>軟骨下骨透過性亢進</strong></li>
-          <li>陽性 = <strong>血流が保たれている</strong> → AVN リスク低い</li>
-          <li>陰性 = AVN のリスク</li>
-        </ul>
-      </section>
-
-      <!-- §9 帰宅時の説明 ＋ 出典 ＋ 関連 -->
-      <section class="section-page" id="s9" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🏠 帰宅時の説明（保存例）</h2>
-        <ul>
-          <li><strong>完全非荷重 2–3 ヶ月</strong></li>
-          <li>長期の follow（最低 2 年）で AVN 監視</li>
-          <li>腫脹・疼痛増強で再受診</li>
-        </ul>
-
-        <h3>出典</h3>
-        <ul>
-          <li><strong>増井伸高. 骨折ハンター. 中外医学社. 2019.</strong></li>
-          <li><strong>Hawkins LG.</strong> Fractures of the neck of the talus. <em>J Bone Joint Surg Am.</em> 1970.</li>
-          <li><strong>Vallier HA ほか.</strong> Talar neck fractures: results and outcomes. <em>J Bone Joint Surg Am.</em> 2004.</li>
-        </ul>
-
-        <h3>関連</h3>
-        <ul>
-          <li><a class="wiki-link" href="../転倒.html">転倒</a> / <a class="wiki-link" href="足関節痛.html">足関節痛</a> / <a class="wiki-link" href="踵骨骨折.html">踵骨骨折</a> / <a class="wiki-link" href="Pilon骨折.html">Pilon骨折</a></li>
-        </ul>
-      </section>
+      <!-- 出典 -->
+      <details class="dx-box">
+        <summary><span>出典</span></summary>
+        <div class="dx-box__body">
+          <ul>
+            <li>増井伸高. 骨折ハンター. 中外医学社. 2019.</li>
+            <li>Hawkins LG. Fractures of the neck of the talus. <em>J Bone Joint Surg Am.</em> 1970.</li>
+            <li>Canale ST, Kelly FB. Fractures of the neck of the talus. <em>J Bone Joint Surg Am.</em> 1978.</li>
+          </ul>
+        </div>
+      </details>
 
     </article>
   </main>
@@ -200,53 +428,22 @@
 
   <script>
   (function(){
-    const menu = document.getElementById('sectionMenu');
-    const pages = document.querySelectorAll('.section-page');
-    const titleH1 = document.querySelector('.page-title');
-    const relatedSymp = document.getElementById('related-symptoms');
-
-    function showSection(id) {
-      menu.hidden = true;
-      if (titleH1) titleH1.hidden = true;
-      if (relatedSymp) relatedSymp.hidden = true;
-      pages.forEach(p => p.hidden = (p.id !== id));
-      window.scrollTo(0, 0);
-    }
-    function showMenu(scrollTarget) {
-      menu.hidden = false;
-      if (titleH1) titleH1.hidden = false;
-      if (relatedSymp) relatedSymp.hidden = false;
-      pages.forEach(p => p.hidden = true);
-      if (scrollTarget) {
-        if (scrollTarget.tagName === 'DETAILS') scrollTarget.open = true;
-        scrollTarget.scrollIntoView({behavior: 'instant', block: 'start'});
-      } else {
-        window.scrollTo(0, 0);
-      }
-    }
-    function syncFromHash() {
-      const id = (location.hash || '').replace('#','');
-      const target = id ? document.getElementById(id) : null;
-      if (target && target.classList.contains('section-page')) {
-        showSection(id);
-      } else if (target) {
-        showMenu(target);
-      } else {
-        showMenu();
-      }
-    }
-
-    window.addEventListener('hashchange', syncFromHash);
-    document.querySelectorAll('.back-to-menu').forEach(b => {
-      b.addEventListener('click', () => { history.pushState(null,'',location.pathname); showMenu(); });
+    // クイックタップで対応 details を開いてスクロール
+    document.querySelectorAll('.dx-quick__btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.dataset.target;
+        const target = document.getElementById(id);
+        if (!target) return;
+        target.open = true;
+        target.scrollIntoView({behavior: 'smooth', block: 'start'});
+      });
     });
+
     const navBack = document.getElementById('navBack');
     if (navBack) navBack.addEventListener('click', () => {
       if (window.history.length > 1) history.back();
       else window.location.href = '../index.html';
     });
-
-    syncFromHash();
   })();
   </script>
 </body>

@@ -6,6 +6,196 @@
   <meta name="color-scheme" content="light dark" />
   <title>舟状骨骨折 | ER ノート</title>
   <link rel="stylesheet" href="../er-note.css" />
+  <style>
+    /* ============ クイックタップ（3 つを開閉トリガー） ============ */
+    .dx-quick {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px;
+      margin: 10px 0 4px;
+    }
+    .dx-quick__btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      padding: 10px 6px;
+      border-radius: 10px;
+      background: color-mix(in srgb, var(--accent) 10%, var(--surface));
+      border: 1.5px solid var(--accent);
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 13px;
+      line-height: 1.2;
+      text-align: center;
+      cursor: pointer;
+      transition: background 120ms ease;
+    }
+    .dx-quick__btn:hover {
+      background: color-mix(in srgb, var(--accent) 18%, var(--surface));
+    }
+    .dx-quick__icon { font-size: 20px; }
+    .dx-quick__sub {
+      font-size: 10.5px;
+      font-weight: 500;
+      color: var(--muted);
+    }
+
+    /* ============ 同時評価 3 列（血管・神経・典型像） ============ */
+    .dx-tri {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+      margin: 6px 0 4px;
+      align-items: start;
+    }
+    .dx-tri__card {
+      background: var(--surface);
+      border-radius: 10px;
+      padding: 10px 12px;
+      border: 1.5px solid color-mix(in srgb, var(--text) 18%, transparent);
+    }
+    .dx-tri__card--vasc { border-color: #c0392b; background: color-mix(in srgb, #c0392b 6%, var(--surface)); }
+    .dx-tri__card--neuro { border-color: #b5651d; background: color-mix(in srgb, #b5651d 6%, var(--surface)); }
+    .dx-tri__card--typical { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 6%, var(--surface)); }
+    .dx-tri__title {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 800;
+      font-size: 13.5px;
+      margin-bottom: 4px;
+    }
+    .dx-tri__card--vasc .dx-tri__title { color: #c0392b; }
+    .dx-tri__card--neuro .dx-tri__title { color: #b5651d; }
+    .dx-tri__list {
+      margin: 0;
+      padding-left: 18px;
+      font-size: 12.5px;
+      line-height: 1.5;
+    }
+    .dx-tri__list li { margin: 2px 0; }
+
+    /* details 形式の血管/神経カード：summary にチェック印、開閉時の挙動 */
+    details.dx-tri__card { padding: 0; }
+    details.dx-tri__card > summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 10px 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 800;
+      font-size: 13.5px;
+    }
+    details.dx-tri__card > summary::-webkit-details-marker { display: none; }
+    details.dx-tri__card > summary::after {
+      content: "▸";
+      margin-left: auto;
+      font-size: 12px;
+      color: var(--muted);
+      transition: transform 120ms ease;
+    }
+    details.dx-tri__card[open] > summary::after { transform: rotate(90deg); }
+    details.dx-tri__card--vasc > summary { color: #c0392b; }
+    details.dx-tri__card--neuro > summary { color: #b5651d; }
+    details.dx-tri__card > .dx-tri__list { padding: 0 14px 12px 30px; }
+    details.dx-tri__card > .dx-tri__hint {
+      padding: 0 14px 6px 30px;
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    /* ============ 大きな details ボックス（画像/治療方針/コンサル文） ============ */
+    details.dx-box {
+      background: var(--surface);
+      border: 1.5px solid color-mix(in srgb, var(--text) 18%, transparent);
+      border-radius: 10px;
+      margin: 10px 0;
+      scroll-margin-top: 8px;
+    }
+    details.dx-box > summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 12px 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 800;
+      font-size: 14.5px;
+    }
+    details.dx-box > summary::-webkit-details-marker { display: none; }
+    details.dx-box > summary::after {
+      content: "▸";
+      margin-left: auto;
+      font-size: 13px;
+      color: var(--muted);
+      transition: transform 120ms ease;
+    }
+    details.dx-box[open] > summary::after { transform: rotate(90deg); }
+    details.dx-box[open] {
+      border-color: var(--accent);
+    }
+    details.dx-box > .dx-box__body {
+      padding: 0 14px 14px;
+    }
+
+    /* スマホで 1 列に */
+    @media (max-width: 640px) {
+      .dx-quick { gap: 6px; }
+      .dx-quick__btn { padding: 8px 4px; font-size: 11.5px; border-radius: 8px; }
+      .dx-quick__icon { font-size: 17px; }
+      .dx-quick__sub { font-size: 9.5px; }
+
+      .dx-tri { grid-template-columns: 1fr; gap: 8px; }
+      .dx-tri__card { padding: 8px 10px; }
+      details.dx-tri__card > summary { padding: 8px 10px; font-size: 12.5px; }
+      details.dx-tri__card > .dx-tri__list { padding: 0 12px 10px 26px; }
+      .dx-tri__title { font-size: 12.5px; }
+      .dx-tri__list { font-size: 12px; }
+
+      details.dx-box > summary { padding: 10px 12px; font-size: 13.5px; }
+      details.dx-box > .dx-box__body { padding: 0 12px 12px; }
+    }
+
+    /* ============ 区切り帯（最小限） ============ */
+    .dx-step {
+      margin: 18px 0 6px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 11.5px;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+    }
+    .dx-step::before, .dx-step::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: color-mix(in srgb, var(--text) 18%, transparent);
+    }
+
+    /* コピペ用テンプレ */
+    .dx-template {
+      background: color-mix(in srgb, var(--text) 4%, var(--surface));
+      border-left: 3px solid var(--accent);
+      border-radius: 6px;
+      padding: 10px 12px;
+      margin: 6px 0 0;
+      font-size: 13px;
+      line-height: 1.6;
+      white-space: pre-wrap;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+    .dx-template__hint {
+      font-size: 11px;
+      color: var(--muted);
+      margin: 0 0 4px;
+    }
+  </style>
 </head>
 <body>
   <header class="hokuto-top">
@@ -21,183 +211,185 @@
     <article class="note-shell">
       <h1 class="page-title">舟状骨骨折</h1>
 
-      <!-- 即時アクションヘッダー（常時 sticky） -->
-      <div class="action-header">
-        <div class="action-header__title">⚡ 即時アクション</div>
-        <ol class="action-header__list">
-          <li><strong>snuffbox 圧痛 + 軸圧痛</strong>で疑う</li>
-          <li>AP + lat + <strong>scaphoid view</strong>、初回 X 線陰性でも疑い続けば<strong>ギプス + 2 週後再撮影 or MRI</strong></li>
-          <li>転位なしは保存、転位ありは手術</li>
-          <li><strong>偽関節リスク高</strong>、整形紹介を必ず</li>
-        </ol>
-      </div>
-
-      <!-- メニュータイル -->
-      <nav class="section-tiles" id="sectionMenu">
-        <a class="section-tile" href="#s1"><span class="section-tile__no">📊</span><span class="section-tile__name">疫学</span></a>
-        <a class="section-tile" href="#s2"><span class="section-tile__no">🦴</span><span class="section-tile__name">解剖と血流</span></a>
-        <a class="section-tile" href="#s3"><span class="section-tile__no">🩺</span><span class="section-tile__name">身体所見<br><small>3 圧痛テスト</small></span></a>
-        <a class="section-tile" href="#s4"><span class="section-tile__no">📷</span><span class="section-tile__name">画像</span></a>
-        <a class="section-tile" href="#s5"><span class="section-tile__no">💉</span><span class="section-tile__name">マネジメント<br><small>疑いは即固定</small></span></a>
-        <a class="section-tile" href="#s6"><span class="section-tile__no">👨‍⚕️</span><span class="section-tile__name">非整形外科医の役割</span></a>
-        <a class="section-tile" href="#s7"><span class="section-tile__no">⚠️</span><span class="section-tile__name">合併症</span></a>
-        <a class="section-tile" href="#s8"><span class="section-tile__no">🏠</span><span class="section-tile__name">帰宅時の説明</span></a>
-        <a class="section-tile" href="#s9"><span class="section-tile__no">📚</span><span class="section-tile__name">出典・関連</span></a>
+      <!-- スマホですぐ開きたい 3 つ -->
+      <nav class="dx-quick" aria-label="クイックタップ">
+        <button class="dx-quick__btn" type="button" data-target="img-read">
+          <span>画像の見方</span>
+          <span class="dx-quick__sub">初回陰性 → MRI / 再撮影</span>
+        </button>
+        <button class="dx-quick__btn" type="button" data-target="plan">
+          <span>治療方針</span>
+          <span class="dx-quick__sub">転位有無で分岐</span>
+        </button>
+        <button class="dx-quick__btn" type="button" data-target="consult">
+          <span>コンサル文</span>
+          <span class="dx-quick__sub">そのまま貼れる</span>
+        </button>
       </nav>
 
-      <!-- 関連主訴（双方向リンク） -->
-      <details class="sub-fold" id="related-symptoms">
-        <summary>📞 この疾患が該当する主訴</summary>
-        <div class="sub-fold__body">
+      <!-- 同時評価 3 列：典型像は常時、血管・神経は折りたたみ -->
+      <div class="dx-step"><span>同時並行で評価する 3 軸</span></div>
+      <div class="dx-tri">
+
+        <div class="dx-tri__card dx-tri__card--typical">
+          <div class="dx-tri__title">典型像</div>
+          <ul class="dx-tri__list">
+            <li>若年男性：<strong>FOOSH</strong>（手をついて転倒）</li>
+            <li>スポーツ・自転車・バイク事故</li>
+            <li><strong>嗅ぎたばこ窩（snuffbox）圧痛</strong></li>
+            <li>母指軸圧痛、舟状骨結節圧痛</li>
+            <li>「捻挫」と誤診されやすい</li>
+          </ul>
+        </div>
+
+        <details class="dx-tri__card dx-tri__card--vasc">
+          <summary>血管</summary>
+          <p class="dx-tri__hint">舟状骨は近位極で血流が逆行性。<strong>偽関節・無腐性壊死</strong>のリスクがある（急性虚血ではないため初療では基本問題なし）。</p>
+          <ul class="dx-tri__list">
+            <li><strong>橈骨動脈</strong>触知（手首掌側）</li>
+            <li>指動脈・固有指神経の触知/感覚は基本的に問題なし</li>
+            <li>近位 1/3 骨折は壊死リスク高 → 早期診断・固定が要</li>
+            <li>受傷から治療までの遅延が偽関節リスク</li>
+          </ul>
+        </details>
+
+        <details class="dx-tri__card dx-tri__card--neuro">
+          <summary>神経</summary>
+          <p class="dx-tri__hint">神経損傷は通常合併しない。<strong>正中神経（手根管）</strong>領域の症状は受傷後腫脹で生じうる。</p>
+          <ul class="dx-tri__list">
+            <li><strong>母指・示指・中指掌側の感覚</strong>（正中神経）</li>
+            <li>母指対立・外転（短母指外転筋）</li>
+            <li>指動脈・固有指神経の触知/感覚は左右比較で確認</li>
+            <li>麻痺所見は記録（後の責任分界点）</li>
+          </ul>
+        </details>
+      </div>
+
+      <!-- 画像の見方 -->
+      <details class="dx-box" id="img-read">
+        <summary><span>画像の見方</span></summary>
+        <div class="dx-box__body">
           <ul>
-            <li><a class="wiki-link" href="../手関節・手の外傷.html">手関節・手の外傷</a> — 上肢外傷の入口</li>
-            <li><a class="wiki-link" href="../転倒.html">転倒</a> — FOOSH 後の手関節橈側痛</li>
+            <li><strong>手関節 AP・lateral ＋ scaphoid view</strong>（4 方向：尺屈位 PA など）</li>
+            <li>Xp で必ず追うポイント：
+              <ul>
+                <li>舟状骨腰部の<strong>透亮線</strong>（骨折線）</li>
+                <li>近位極／腰部（waist）／遠位極の部位特定</li>
+                <li>転位・短縮・<strong>humpback 変形</strong>の有無</li>
+                <li>合併骨折（橈骨遠位端、月状骨周囲脱臼）</li>
+              </ul>
+            </li>
+            <li><strong>初回 Xp で骨折線指摘困難 10〜20%</strong>。臨床所見が陽性なら<strong>骨折ありとして扱う</strong></li>
+            <li>陰性例の対応：
+              <ul>
+                <li><strong>母指スパイカ／sugar tong シーネ固定 → 1〜2 週後再撮影</strong></li>
+                <li>または早期に <strong>MRI / CT</strong>（感度高い）</li>
+              </ul>
+            </li>
+            <li>転位 ≥ 1 mm／屈曲変形は手術適応の目安</li>
           </ul>
         </div>
       </details>
 
-      <!-- §1 疫学 -->
-      <section class="section-page" id="s1" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>📊 疫学</h2>
-        <ul>
-          <li><strong>舟状骨骨折は手根骨骨折の 60–70%</strong> を占める</li>
-          <li><strong>10–30 代男性</strong>、スポーツや転倒で FOOSH</li>
-          <li>高齢者では橈骨遠位端骨折が優位になる</li>
-        </ul>
-        <div class="callout callout-summary">
-          <div class="callout-title">舟状骨骨折 = 「レントゲン正常でも偽陰性を疑え」の代表格</div>
-          <div class="callout-body"><ul>
-            <li><strong>FOOSH</strong> 後の手関節橈側痛、<strong>若年男性に多い</strong></li>
-            <li>初回レントゲンの <strong>感度 70%</strong>（3 割は見逃される亡霊骨折）</li>
-            <li><strong>解剖学的嗅ぎタバコ入れ（snuff box）の圧痛</strong> で疑う</li>
-            <li>疑いがあれば画像陰性でも <strong>母指までスパイカ固定 + 整形外科紹介</strong></li>
-            <li>見逃しで偽関節・無腐性壊死 → <strong>訴訟にもなる骨折</strong></li>
-          </ul></div>
+      <!-- 治療方針 -->
+      <details class="dx-box" id="plan">
+        <summary><span>治療方針（部位 × 転位）</span></summary>
+        <div class="dx-box__body">
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>パターン</th><th>所見</th><th>方針</th><th>ER の動き</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>遠位極／腰部・転位なし</td>
+                  <td>圧痛＋ Xp 骨折線、転位なし</td>
+                  <td><strong>保存（母指スパイカギプス）</strong></td>
+                  <td>シーネ ＋ 翌日整形外来</td>
+                </tr>
+                <tr>
+                  <td>近位 1/3</td>
+                  <td>近位極の骨折線</td>
+                  <td><strong>手術考慮</strong>（壊死・偽関節リスク）</td>
+                  <td>シーネ ＋ 整形相談</td>
+                </tr>
+                <tr>
+                  <td><strong>転位 ≥ 1 mm／屈曲変形</strong></td>
+                  <td>段差・短縮・humpback</td>
+                  <td><strong>手術（ヘルベルトスクリュー等）</strong></td>
+                  <td>シーネ ＋ 整形相談</td>
+                </tr>
+                <tr>
+                  <td>初回 Xp 陰性・臨床陽性</td>
+                  <td>snuffbox 圧痛のみ</td>
+                  <td><strong>骨折として固定 → 再評価</strong></td>
+                  <td>母指スパイカシーネ ＋ 1〜2 週後外来</td>
+                </tr>
+                <tr>
+                  <td>合併損傷</td>
+                  <td>月状骨周囲脱臼／橈骨遠位端骨折合併</td>
+                  <td>整形コンサル</td>
+                  <td>同日コンサル</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3>ER で打つ手</h3>
+          <ul>
+            <li><strong>母指スパイカシーネ／sugar tong シーネ</strong>（母指 IP 関節以遠は露出、手指運動可）</li>
+            <li>三角巾装着、患肢挙上指導</li>
+            <li>鎮痛は NSAIDs／アセトアミノフェン</li>
+            <li>「初回 Xp 陰性でも骨折扱い」を本人と家族に明確に説明</li>
+            <li>翌日〜2 週後の整形外科外来受診を必ず指示</li>
+          </ul>
         </div>
-      </section>
+      </details>
 
-      <!-- §2 解剖と血流 -->
-      <section class="section-page" id="s2" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🦴 解剖と血流</h2>
-        <ul>
-          <li>舟状骨は <strong>遠位から近位に血流</strong> → <strong>近位 1/3 骨折は血流途絶のリスク</strong></li>
-          <li><strong>無腐性壊死・偽関節の好発部位</strong>（治療遅延で増加）</li>
-        </ul>
-      </section>
-
-      <!-- §3 身体所見 -->
-      <section class="section-page" id="s3" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🩺 身体所見（3 つの圧痛テスト）</h2>
-        <p>いずれも感度 90% 前後、<strong>1 つでも陽性なら舟状骨骨折を疑う</strong>。</p>
-        <div class="table-wrap"><table>
-          <thead><tr><th>テスト</th><th>感度</th><th>特異度</th></tr></thead>
-          <tbody>
-            <tr><td><strong>解剖学的嗅ぎタバコ入れ圧痛</strong></td><td>90%</td><td>40%</td></tr>
-            <tr><td><strong>舟状骨結節圧痛</strong>（掌側）</td><td>87%</td><td>57%</td></tr>
-            <tr><td><strong>母指軸圧痛</strong>（第 1 中手骨の軸を押し込む）</td><td>48–100%</td><td>48–98%</td></tr>
-          </tbody>
-        </table></div>
-        <div class="callout callout-warning">
-          <div class="callout-title">画像陰性 + 圧痛あり = 疑い陽性</div>
-          <div class="callout-body"><p>感度は高いが特異度が低い → <strong>一つでも陽性なら画像陰性でも舟状骨骨折として扱う</strong>。</p></div>
+      <!-- コンサル文 -->
+      <details class="dx-box" id="consult">
+        <summary><span>コンサル文（カルテに貼る）</span></summary>
+        <div class="dx-box__body">
+          <p class="dx-template__hint">『他科コンサルト実践マニュアル』の院内紹介状フォーマットに準拠（【目的】【疾患】【既往歴】【内服薬】【ADL】【現病歴】）。外来フォロー型。</p>
+          <div class="dx-template">【目的】整形外科外来でのご加療依頼。
+【疾患】#1 [右/左]舟状骨骨折（[遠位極／腰部／近位極]、転位 [なし／あり]）／※初回 Xp 陰性・臨床的疑いの場合：舟状骨骨折疑い
+【既往歴】[特記事項なし／○○]
+【内服薬】[なし／○○]
+【ADL（受傷前）】[自立／○○]
+【現病歴】[年齢]歳[男/女]性。[受傷機転：転倒で手をついた／スポーツ／バイク事故]で受傷し、[来院経緯]で来院。
+ ・身体所見：嗅ぎたばこ窩（snuffbox）圧痛 [+]、舟状骨結節圧痛 [+/−]、母指軸圧痛 [+/−]、腫脹 [+/−]
+ ・血管：橈骨動脈触知 [良好]、指動脈触知 [良好]、左右差なし
+ ・神経：正中・尺骨・橈骨神経領域 [問題なし]、固有指神経の感覚 [問題なし]
+ ・画像：手関節 Xp 4 方向（AP / lateral / scaphoid view）で[骨折線あり／明らかな骨折線なし]、転位 [なし／あり]
+ ・ER 処置：母指スパイカシーネ固定、三角巾装着、患肢挙上指導
+よろしくお願いいたします。</div>
         </div>
-      </section>
+      </details>
 
-      <!-- §4 画像 -->
-      <section class="section-page" id="s4" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>📷 画像</h2>
+      <!-- 関連ハブ -->
+      <details class="dx-box">
+        <summary><span>関連ハブ・隣接疾患</span></summary>
+        <div class="dx-box__body">
+          <ul>
+            <li>主訴入口：<a class="wiki-link" href="../手関節・手の外傷.html">手関節・手の外傷</a> ／ <a class="wiki-link" href="../転倒.html">転倒</a></li>
+            <li>隣接疾患：<a class="wiki-link" href="橈骨遠位端骨折.html">橈骨遠位端骨折</a> ／ <a class="wiki-link" href="月状骨周囲脱臼.html">月状骨周囲脱臼</a> ／ <a class="wiki-link" href="第1中手骨基部骨折.html">第1中手骨基部骨折</a></li>
+            <li>処置：シーネ固定 ／ 三角巾</li>
+            <li>合併症対応：偽関節・無腐性壊死は long-term の問題。早期固定とフォローが必須</li>
+          </ul>
+        </div>
+      </details>
 
-        <h3>レントゲン</h3>
-        <ul>
-          <li>手関節 3 方向 + <strong>舟状骨特殊撮影（ulnar deviation）</strong></li>
-          <li><strong>初回感度 70%</strong>、<strong>残り 30% は亡霊骨折</strong></li>
-          <li>2 週後に再撮影すると感度 92% に上昇（骨吸収で骨折線が見える）</li>
-        </ul>
-
-        <h3>MRI / CT</h3>
-        <ul>
-          <li>MRI は急性期でも感度 98% と高い</li>
-          <li>CT は骨皮質の連続性評価に有用</li>
-          <li>ER で撮れれば確定診断できるが、<strong>撮れなくても診断は付ける</strong></li>
-        </ul>
-      </section>
-
-      <!-- §5 マネジメント -->
-      <section class="section-page" id="s5" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>💉 マネジメント — 疑いは即固定</h2>
-
-        <h3>基本方針</h3>
-        <ol>
-          <li><strong>圧痛あり + 画像所見あり or なし</strong> → <strong>全例固定</strong></li>
-          <li><strong>母指まで含むスパイカ型シーネ</strong>（親指の付け根まで巻き込む）</li>
-          <li><strong>帰宅保存 or 帰宅手術</strong> として整形外科外来へ紹介</li>
-        </ol>
-
-        <h3>転位の評価</h3>
-        <ul>
-          <li><strong>転位なし（&lt; 1 mm）</strong> → 保存（ギプス 6–12 週）</li>
-          <li><strong>転位あり（≥ 1 mm）</strong> → 手術（スクリュー固定）</li>
-          <li>近位 1/3 骨折は血流リスクで手術傾向</li>
-        </ul>
-      </section>
-
-      <!-- §6 非整形外科医の役割 -->
-      <section class="section-page" id="s6" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>👨‍⚕️ 非整形外科医の役割</h2>
-        <ol>
-          <li><strong>圧痛チェック + レントゲン</strong>（陰性でも疑いは捨てない）</li>
-          <li><strong>母指まで含むスパイカ固定</strong></li>
-          <li><strong>整形外科紹介</strong>（1 週以内、遅くとも 2 週以内）</li>
-          <li><strong>紹介状に「舟状骨骨折疑い」と明記</strong>（責任所在を明確化）</li>
-        </ol>
-      </section>
-
-      <!-- §7 合併症 -->
-      <section class="section-page" id="s7" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>⚠️ 合併症</h2>
-        <div class="table-wrap"><table>
-          <thead><tr><th>合併症</th><th>頻度・背景</th></tr></thead>
-          <tbody>
-            <tr><td><strong>偽関節</strong></td><td>治療遅延・近位 1/3 骨折で高率</td></tr>
-            <tr><td><strong>無腐性壊死</strong></td><td>近位骨片の血流途絶</td></tr>
-            <tr><td>舟状月状骨離開</td><td>靱帯損傷合併</td></tr>
-          </tbody>
-        </table></div>
-      </section>
-
-      <!-- §8 帰宅時の説明 -->
-      <section class="section-page" id="s8" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🏠 帰宅時の説明</h2>
-        <ul>
-          <li>「レントゲンに映らない骨折が 3 割あります」「画像陰性でも固定と整形外科受診が必要」</li>
-          <li>2 週後に整形外科で再撮影予定</li>
-          <li>しびれ・蒼白・強い疼痛 → 即受診</li>
-        </ul>
-      </section>
-
-      <!-- §9 出典・関連 -->
-      <section class="section-page" id="s9" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>📚 出典 / 関連</h2>
-        <h3>出典</h3>
-        <ul>
-          <li><strong>増井伸高. 骨折ハンター. 中外医学社. 2019.</strong></li>
-          <li><strong>Carpenter CR ほか.</strong> Adult scaphoid fracture. <em>Acad Emerg Med.</em> 2014.</li>
-          <li><strong>Yin ZG ほか.</strong> Diagnosing suspected scaphoid fractures. <em>J Bone Joint Surg Am.</em> 2012.</li>
-        </ul>
-        <h3>関連</h3>
-        <ul>
-          <li><a class="wiki-link" href="../転倒.html">転倒</a> / <a class="wiki-link" href="上肢骨折の固定/橈骨遠位端骨折.html">橈骨遠位端骨折</a> / <a class="wiki-link" href="中手骨頸部骨折.html">中手骨頸部骨折</a></li>
-        </ul>
-      </section>
+      <!-- 出典 -->
+      <details class="dx-box">
+        <summary><span>出典</span></summary>
+        <div class="dx-box__body">
+          <ul>
+            <li>増井伸高. 骨折ハンター. 中外医学社. 2019.</li>
+            <li>津下健哉. 手の外科の実際 改訂第7版. 南江堂. 2011.</li>
+            <li>佐藤弘明 ほか. 他科コンサルト実践マニュアル. 羊土社.</li>
+          </ul>
+        </div>
+      </details>
 
     </article>
   </main>
@@ -216,53 +408,21 @@
 
   <script>
   (function(){
-    const menu = document.getElementById('sectionMenu');
-    const pages = document.querySelectorAll('.section-page');
-    const titleH1 = document.querySelector('.page-title');
-    const relatedSymp = document.getElementById('related-symptoms');
-
-    function showSection(id) {
-      menu.hidden = true;
-      if (titleH1) titleH1.hidden = true;
-      if (relatedSymp) relatedSymp.hidden = true;
-      pages.forEach(p => p.hidden = (p.id !== id));
-      window.scrollTo(0, 0);
-    }
-    function showMenu(scrollTarget) {
-      menu.hidden = false;
-      if (titleH1) titleH1.hidden = false;
-      if (relatedSymp) relatedSymp.hidden = false;
-      pages.forEach(p => p.hidden = true);
-      if (scrollTarget) {
-        if (scrollTarget.tagName === 'DETAILS') scrollTarget.open = true;
-        scrollTarget.scrollIntoView({behavior: 'instant', block: 'start'});
-      } else {
-        window.scrollTo(0, 0);
-      }
-    }
-    function syncFromHash() {
-      const id = (location.hash || '').replace('#','');
-      const target = id ? document.getElementById(id) : null;
-      if (target && target.classList.contains('section-page')) {
-        showSection(id);
-      } else if (target) {
-        showMenu(target);
-      } else {
-        showMenu();
-      }
-    }
-
-    window.addEventListener('hashchange', syncFromHash);
-    document.querySelectorAll('.back-to-menu').forEach(b => {
-      b.addEventListener('click', () => { history.pushState(null,'',location.pathname); showMenu(); });
+    document.querySelectorAll('.dx-quick__btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.dataset.target;
+        const target = document.getElementById(id);
+        if (!target) return;
+        target.open = true;
+        target.scrollIntoView({behavior: 'smooth', block: 'start'});
+      });
     });
+
     const navBack = document.getElementById('navBack');
     if (navBack) navBack.addEventListener('click', () => {
       if (window.history.length > 1) history.back();
       else window.location.href = '../index.html';
     });
-
-    syncFromHash();
   })();
   </script>
 </body>

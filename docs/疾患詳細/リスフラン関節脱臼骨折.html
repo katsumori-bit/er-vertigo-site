@@ -6,6 +6,196 @@
   <meta name="color-scheme" content="light dark" />
   <title>リスフラン関節脱臼骨折 | ER ノート</title>
   <link rel="stylesheet" href="../er-note.css" />
+  <style>
+    /* ============ クイックタップ（3 つを開閉トリガー） ============ */
+    .dx-quick {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px;
+      margin: 10px 0 4px;
+    }
+    .dx-quick__btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      padding: 10px 6px;
+      border-radius: 10px;
+      background: color-mix(in srgb, var(--accent) 10%, var(--surface));
+      border: 1.5px solid var(--accent);
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 13px;
+      line-height: 1.2;
+      text-align: center;
+      cursor: pointer;
+      transition: background 120ms ease;
+    }
+    .dx-quick__btn:hover {
+      background: color-mix(in srgb, var(--accent) 18%, var(--surface));
+    }
+    .dx-quick__icon { font-size: 20px; }
+    .dx-quick__sub {
+      font-size: 10.5px;
+      font-weight: 500;
+      color: var(--muted);
+    }
+
+    /* ============ 同時評価 3 列（血管・神経・典型像） ============ */
+    .dx-tri {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+      margin: 6px 0 4px;
+      align-items: start;
+    }
+    .dx-tri__card {
+      background: var(--surface);
+      border-radius: 10px;
+      padding: 10px 12px;
+      border: 1.5px solid color-mix(in srgb, var(--text) 18%, transparent);
+    }
+    .dx-tri__card--vasc { border-color: #c0392b; background: color-mix(in srgb, #c0392b 6%, var(--surface)); }
+    .dx-tri__card--neuro { border-color: #b5651d; background: color-mix(in srgb, #b5651d 6%, var(--surface)); }
+    .dx-tri__card--typical { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 6%, var(--surface)); }
+    .dx-tri__title {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 800;
+      font-size: 13.5px;
+      margin-bottom: 4px;
+    }
+    .dx-tri__card--vasc .dx-tri__title { color: #c0392b; }
+    .dx-tri__card--neuro .dx-tri__title { color: #b5651d; }
+    .dx-tri__list {
+      margin: 0;
+      padding-left: 18px;
+      font-size: 12.5px;
+      line-height: 1.5;
+    }
+    .dx-tri__list li { margin: 2px 0; }
+
+    /* details 形式の血管/神経カード：summary にチェック印、開閉時の挙動 */
+    details.dx-tri__card { padding: 0; }
+    details.dx-tri__card > summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 10px 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 800;
+      font-size: 13.5px;
+    }
+    details.dx-tri__card > summary::-webkit-details-marker { display: none; }
+    details.dx-tri__card > summary::after {
+      content: "▸";
+      margin-left: auto;
+      font-size: 12px;
+      color: var(--muted);
+      transition: transform 120ms ease;
+    }
+    details.dx-tri__card[open] > summary::after { transform: rotate(90deg); }
+    details.dx-tri__card--vasc > summary { color: #c0392b; }
+    details.dx-tri__card--neuro > summary { color: #b5651d; }
+    details.dx-tri__card > .dx-tri__list { padding: 0 14px 12px 30px; }
+    details.dx-tri__card > .dx-tri__hint {
+      padding: 0 14px 6px 30px;
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    /* ============ 大きな details ボックス（画像/治療方針/コンサル文） ============ */
+    details.dx-box {
+      background: var(--surface);
+      border: 1.5px solid color-mix(in srgb, var(--text) 18%, transparent);
+      border-radius: 10px;
+      margin: 10px 0;
+      scroll-margin-top: 8px;
+    }
+    details.dx-box > summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 12px 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 800;
+      font-size: 14.5px;
+    }
+    details.dx-box > summary::-webkit-details-marker { display: none; }
+    details.dx-box > summary::after {
+      content: "▸";
+      margin-left: auto;
+      font-size: 13px;
+      color: var(--muted);
+      transition: transform 120ms ease;
+    }
+    details.dx-box[open] > summary::after { transform: rotate(90deg); }
+    details.dx-box[open] {
+      border-color: var(--accent);
+    }
+    details.dx-box > .dx-box__body {
+      padding: 0 14px 14px;
+    }
+
+    /* スマホで 1 列に */
+    @media (max-width: 640px) {
+      .dx-quick { gap: 6px; }
+      .dx-quick__btn { padding: 8px 4px; font-size: 11.5px; border-radius: 8px; }
+      .dx-quick__icon { font-size: 17px; }
+      .dx-quick__sub { font-size: 9.5px; }
+
+      .dx-tri { grid-template-columns: 1fr; gap: 8px; }
+      .dx-tri__card { padding: 8px 10px; }
+      details.dx-tri__card > summary { padding: 8px 10px; font-size: 12.5px; }
+      details.dx-tri__card > .dx-tri__list { padding: 0 12px 10px 26px; }
+      .dx-tri__title { font-size: 12.5px; }
+      .dx-tri__list { font-size: 12px; }
+
+      details.dx-box > summary { padding: 10px 12px; font-size: 13.5px; }
+      details.dx-box > .dx-box__body { padding: 0 12px 12px; }
+    }
+
+    /* ============ 区切り帯（最小限） ============ */
+    .dx-step {
+      margin: 18px 0 6px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 11.5px;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+    }
+    .dx-step::before, .dx-step::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: color-mix(in srgb, var(--text) 18%, transparent);
+    }
+
+    /* コピペ用テンプレ */
+    .dx-template {
+      background: color-mix(in srgb, var(--text) 4%, var(--surface));
+      border-left: 3px solid var(--accent);
+      border-radius: 6px;
+      padding: 10px 12px;
+      margin: 6px 0 0;
+      font-size: 13px;
+      line-height: 1.6;
+      white-space: pre-wrap;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+    .dx-template__hint {
+      font-size: 11px;
+      color: var(--muted);
+      margin: 0 0 4px;
+    }
+  </style>
 </head>
 <body>
   <header class="hokuto-top">
@@ -21,176 +211,192 @@
     <article class="note-shell">
       <h1 class="page-title">リスフラン関節脱臼骨折</h1>
 
-      <!-- 即時アクションヘッダー（常時 sticky） -->
-      <div class="action-header">
-        <div class="action-header__title">⚡ 即時アクション</div>
-        <ol class="action-header__list">
-          <li><strong>見逃しやすい</strong>（中足部の腫脹・足底斑状出血で疑う）</li>
-          <li><strong>荷重 X 線</strong>、CT で確定</li>
-          <li><strong>fleck sign</strong>（第 2 中足骨基部の裂離骨片）</li>
-          <li><strong>外科手術が原則</strong>（ORIF）</li>
-        </ol>
-      </div>
-
-      <!-- メニュータイル -->
-      <nav class="section-tiles" id="sectionMenu">
-        <a class="section-tile" href="#s1"><span class="section-tile__no">🦴</span><span class="section-tile__name">解剖</span></a>
-        <a class="section-tile" href="#s2"><span class="section-tile__no">💥</span><span class="section-tile__name">受傷機転</span></a>
-        <a class="section-tile" href="#s3"><span class="section-tile__no">🩺</span><span class="section-tile__name">身体所見</span></a>
-        <a class="section-tile" href="#s4"><span class="section-tile__no">📷</span><span class="section-tile__name">画像<br><small>X 線 / CT</small></span></a>
-        <a class="section-tile" href="#s5"><span class="section-tile__no">📊</span><span class="section-tile__name">分類<br><small>Myerson</small></span></a>
-        <a class="section-tile" href="#s6"><span class="section-tile__no">💉</span><span class="section-tile__name">マネジメント<br><small>全例手術</small></span></a>
-        <a class="section-tile" href="#s7"><span class="section-tile__no">🕳️</span><span class="section-tile__name">落とし穴</span></a>
-        <a class="section-tile" href="#s8"><span class="section-tile__no">🔍</span><span class="section-tile__name">鑑別</span></a>
-        <a class="section-tile" href="#s9"><span class="section-tile__no">🏠</span><span class="section-tile__name">帰宅時の説明<br><small>＋出典</small></span></a>
+      <!-- スマホですぐ開きたい 3 つ -->
+      <nav class="dx-quick" aria-label="クイックタップ">
+        <button class="dx-quick__btn" type="button" data-target="img-read">
+          <span>画像の見方</span>
+          <span class="dx-quick__sub">荷重位 ／ fleck sign</span>
+        </button>
+        <button class="dx-quick__btn" type="button" data-target="plan">
+          <span>治療方針</span>
+          <span class="dx-quick__sub">転位の有無で全然違う</span>
+        </button>
+        <button class="dx-quick__btn" type="button" data-target="consult">
+          <span>コンサル文</span>
+          <span class="dx-quick__sub">そのまま貼れる</span>
+        </button>
       </nav>
 
-      <!-- 関連主訴（双方向リンク） -->
-      <details class="sub-fold" id="related-symptoms">
-        <summary>📞 この疾患が該当する主訴</summary>
-        <div class="sub-fold__body">
+      <!-- 同時評価 3 列：典型像は常時、血管・神経は折りたたみ -->
+      <div class="dx-step"><span>同時並行で評価する 3 軸</span></div>
+      <div class="dx-tri">
+
+        <div class="dx-tri__card dx-tri__card--typical">
+          <div class="dx-tri__title">典型像</div>
+          <ul class="dx-tri__list">
+            <li><strong>足部底屈位での軸圧</strong>（高所墜落・交通・スポーツ）。中足骨骨折と同じ受傷機転</li>
+            <li>所見：中足部腫脹＋皮下血腫、<strong>足底側皮下血斑（plantar ecchymosis sign）</strong></li>
+            <li><strong>中足部圧痛</strong>＋荷重不能・つま先立ち不能</li>
+            <li><strong>20% が見逃される</strong>（Xp 正常でも、歩行可能でも除外不可）</li>
+            <li>解剖学的に<strong>第 1・第 2 中足骨基部間に靱帯がなく、第 2 楔状骨が他より小さい</strong>ため、<strong>第 2 中足骨がもっとも脱臼しやすい</strong></li>
+            <li>足部の<strong>外転・回内ストレス痛</strong>あり</li>
+          </ul>
+        </div>
+
+        <details class="dx-tri__card dx-tri__card--vasc">
+          <summary>血管</summary>
+          <p class="dx-tri__hint"><strong>足背動脈損傷</strong>に注意（リスフラン関節を横切る）。<strong>足部コンパートメント症候群</strong>も。</p>
+          <ul class="dx-tri__list">
+            <li><strong>足背動脈・後脛骨動脈</strong>を必ず触知（左右比較）</li>
+            <li>第 1・第 2 中足骨間を走る<strong>足背動脈深枝</strong>が損傷可能</li>
+            <li>触れない／弱い → CTA、緊急整復</li>
+            <li>足部の<strong>緊満・他動的趾屈曲時痛</strong>→ コンパートメント疑い</li>
+            <li>整復後は循環再評価</li>
+          </ul>
+        </details>
+
+        <details class="dx-tri__card dx-tri__card--neuro">
+          <summary>神経</summary>
+          <p class="dx-tri__hint"><strong>深腓骨神経</strong>が第 1・2 中足骨間を走行 → 麻痺をチェック。</p>
+          <ul class="dx-tri__list">
+            <li><strong>第 1-2 趾間の背側感覚</strong>（深腓骨神経）</li>
+            <li>足部背側感覚（浅腓骨神経）、外側（腓腹神経）</li>
+            <li>足趾の伸展・屈曲</li>
+            <li>整復前後で必ず再評価し記録</li>
+          </ul>
+        </details>
+      </div>
+
+      <!-- 画像の見方 -->
+      <details class="dx-box" id="img-read">
+        <summary><span>画像の見方</span></summary>
+        <div class="dx-box__body">
           <ul>
-            <li><a class="wiki-link" href="../足関節・足部の外傷.html">足関節・足部の外傷</a> — 中足部痛・腫脹・荷重不能、見逃し率 20–30%</li>
-            <li><a class="wiki-link" href="../転倒.html">転倒</a> — 階段踏み外し・スポーツ・交通事故で発生</li>
+            <li><strong>足部 AP・側面・30° 斜位</strong>＋可能なら<strong>荷重位</strong>（ストレス撮影で潜在性損傷を顕在化）</li>
+            <li><strong>3 ライン読影</strong>（正面 1 本＋斜位 2 本、すべて一直線でなければ脱臼）：
+              <ul>
+                <li><strong>正面：第 1・第 2 楔状骨間関節面と第 1・第 2 中足骨間関節面が一直線</strong> → 第 2 中足骨の側方転位＝リスフラン関節脱臼</li>
+                <li><strong>斜位①：第 2・第 3 楔状骨間関節面と第 2・第 3 中足骨間関節面</strong>がそろうか</li>
+                <li><strong>斜位②：第 3 楔状骨・立方骨間関節面と第 3・第 4 中足骨間関節面</strong>がそろうか</li>
+              </ul>
+            </li>
+            <li>その他で必ず追うポイント：
+              <ul>
+                <li><strong>fleck sign</strong>：第 1・第 2 中足骨間の小骨片（リスフラン靱帯裂離） — 病的</li>
+                <li>関節間離開（diastasis）2 mm 以上</li>
+                <li>背側脱臼（側面）</li>
+              </ul>
+            </li>
+            <li><strong>Xp 正常でも疑えば CT</strong>（潜在性脱臼・微小骨折）</li>
+            <li><strong>純靱帯損傷の確定は MRI</strong>（リスフラン靱帯の高信号）</li>
+            <li>反対側との比較撮影が有効</li>
           </ul>
         </div>
       </details>
 
-      <!-- §1 解剖 -->
-      <section class="section-page" id="s1" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🦴 解剖</h2>
-        <ul>
-          <li>リスフラン関節 = <strong>足根中足関節</strong>（tarsometatarsal joint, TMT）</li>
-          <li>5 つの中足骨基部と遠位足根骨の関節</li>
-          <li><strong>リスフラン靱帯</strong>（第 2 中足骨基部 → 内側楔状骨）が最も重要</li>
-          <li>足のアーチの要</li>
-        </ul>
-      </section>
+      <!-- 治療方針 -->
+      <details class="dx-box" id="plan">
+        <summary><span>治療方針（転位 × マネジメント）</span></summary>
+        <div class="dx-box__body">
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>分類</th><th>所見</th><th>マネジメント</th><th>ER の動き</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>転位なし（safe stable）</strong></td>
+                  <td>荷重位 Xp で離開なし、靱帯部分損傷</td>
+                  <td><strong>ギプス・非荷重 6 週</strong></td>
+                  <td>シーネ ＋ 整形外来（早期）</td>
+                </tr>
+                <tr>
+                  <td><strong>不安定（diastasis ≥ 2 mm）</strong></td>
+                  <td>荷重位／ストレスで関節離開</td>
+                  <td><strong>観血的整復＋スクリュー固定 / 関節固定</strong></td>
+                  <td>シーネ ＋ 整形 cons.</td>
+                </tr>
+                <tr>
+                  <td><strong>明らかな脱臼骨折</strong></td>
+                  <td>第 2 中足骨基部骨折＋多方向脱臼</td>
+                  <td><strong>緊急整復＋手術</strong></td>
+                  <td>整形即コール、シーネ</td>
+                </tr>
+                <tr>
+                  <td><strong>コンパートメント／open</strong></td>
+                  <td>足部緊満／創／皮膚壊死リスク</td>
+                  <td><strong>緊急筋膜切開／緊急手術</strong></td>
+                  <td>整形即コール、内圧測定</td>
+                </tr>
+                <tr>
+                  <td>潜在性（Xp 正常・疑い症例）</td>
+                  <td>中足部痛＋荷重不能、fleck sign なし</td>
+                  <td><strong>シーネ非荷重→ 1-2 週で再評価</strong></td>
+                  <td>整形外来予約・MRI も検討</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
 
-      <!-- §2 受傷機転 -->
-      <section class="section-page" id="s2" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>💥 受傷機転</h2>
-        <ul>
-          <li><strong>高エネルギー</strong>：交通事故、高所転落</li>
-          <li><strong>低エネルギー</strong>：階段踏み外し、スポーツ（野球のスライディング、ダンサー）</li>
-          <li><strong>軸圧 + 回旋ストレス</strong></li>
-        </ul>
-      </section>
-
-      <!-- §3 身体所見 -->
-      <section class="section-page" id="s3" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🩺 身体所見</h2>
-        <ul>
-          <li><strong>中足部の腫脹 + 圧痛</strong>（足背）</li>
-          <li><strong>足底側の皮下血腫（plantar ecchymosis sign）</strong>：特異度高い</li>
-          <li><strong>荷重不能</strong></li>
-          <li>受動的に足趾を底背屈 → 中足部痛誘発</li>
-        </ul>
-      </section>
-
-      <!-- §4 画像 -->
-      <section class="section-page" id="s4" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>📷 画像</h2>
-
-        <h3>レントゲン（3 方向）</h3>
-        <ul>
-          <li><strong>正面像で第 1・2 中足骨基部間の開大</strong>（&gt; 2 mm）</li>
-          <li><strong>第 2 中足骨内側縁と中間楔状骨内側縁が一直線</strong>になっているか</li>
-          <li><strong>Fleck sign</strong>：第 1・2 中足骨間の小骨片 = リスフラン靱帯撕脱</li>
-        </ul>
-
-        <h3>CT（全例推奨）</h3>
-        <ul>
-          <li><strong>レントゲンの感度 50%</strong> 程度で、CT で確定</li>
-          <li>骨折・転位の詳細評価</li>
-        </ul>
-
-        <h3>荷重下 X-ray</h3>
-        <ul>
-          <li>疼痛許容下で荷重させると転位が顕在化</li>
-          <li>ER では困難、外来で評価することが多い</li>
-        </ul>
-      </section>
-
-      <!-- §5 分類 -->
-      <section class="section-page" id="s5" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>📊 分類（Quenu &amp; Kuss / Myerson）</h2>
-        <ul>
-          <li><strong>同側性脱臼</strong>（全中足骨が同方向）</li>
-          <li><strong>分散性脱臼</strong>（第 1 とその他が分離）</li>
-          <li><strong>部分的脱臼</strong>（1–2 本のみ）</li>
-        </ul>
-      </section>
-
-      <!-- §6 マネジメント -->
-      <section class="section-page" id="s6" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>💉 マネジメント — ほぼ <strong>全例手術</strong></h2>
-
-        <h3>ER での対応</h3>
-        <ol>
-          <li><strong>U-slab シーネ + 非荷重</strong></li>
-          <li>挙上 + アイシング</li>
-          <li><strong>CT + 整形外科コンサルト</strong></li>
-          <li><strong>開放・高度転位 → 即時整形</strong></li>
-          <li>低エネルギー・転位軽度 → <strong>帰宅手術</strong></li>
-        </ol>
-
-        <h3>手術</h3>
-        <ul>
-          <li>ORIF（スクリュー固定）が第一選択</li>
-          <li>最近は <strong>リスフラン靱帯温存</strong>で一次関節固定術も選択肢</li>
-        </ul>
-      </section>
-
-      <!-- §7 落とし穴 -->
-      <section class="section-page" id="s7" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🕳️ 落とし穴</h2>
-        <div class="callout callout-warning">
-        <div class="callout-title">「中足部の挫傷」と診断して帰宅はダメ</div>
-        <div class="callout-body"><ul>
-        <li>見逃し率 <strong>20–30%</strong></li>
-        <li>慢性期になると関節症・アーチ破綻で機能障害大</li>
-        <li>中足部の圧痛 + 荷重不能 + レントゲン正常 → <strong>CT 必須</strong></li>
-        </ul></div>
+          <h3>ER で打つ手</h3>
+          <ul>
+            <li><strong>見逃さないことが最重要</strong>（Xp 正常でも疑えば非荷重シーネ＋整形外来）</li>
+            <li><strong>足部シーネ固定</strong>（足関節中間位、足趾露出して循環確認）</li>
+            <li>非荷重を厳守、挙上・クーリング</li>
+            <li><strong>足部コンパートメント徴候を毎時観察</strong>（背側緊満・他動趾屈曲時痛）</li>
+            <li>明らかな脱臼は<strong>整復後シーネ</strong>（皮膚緊張で壊死回避）</li>
+            <li>open / 多発外傷は緊急整形コール</li>
+            <li>絶飲食、ライン確保、抗凝固薬の有無を確認</li>
+          </ul>
         </div>
-      </section>
+      </details>
 
-      <!-- §8 鑑別 -->
-      <section class="section-page" id="s8" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🔍 鑑別</h2>
-        <div class="table-wrap"><table><thead><tr><th>疾患</th><th>鑑別点</th></tr></thead><tbody><tr><td><strong>ATFL 損傷</strong></td><td>外果前下方の圧痛</td></tr><tr><td><strong>第 5 中足骨基部骨折</strong></td><td>第 5 中足骨基部の圧痛</td></tr><tr><td><strong>舟状骨骨折（足）</strong></td><td>舟状骨の圧痛</td></tr><tr><td><strong>中足骨骨幹部骨折</strong></td><td>中足骨中央の圧痛</td></tr></tbody></table></div>
-      </section>
+      <!-- コンサル文 -->
+      <details class="dx-box" id="consult">
+        <summary><span>コンサル文（カルテに貼る）</span></summary>
+        <div class="dx-box__body">
+          <p class="dx-template__hint">『他科コンサルト実践マニュアル』の院内紹介状フォーマットに準拠（【目的】【疾患】【既往歴】【内服薬】【ADL】【現病歴】）。空欄を埋めるだけで通る形式。</p>
+          <div class="dx-template">【目的】観血的整復のご相談・ご加療依頼。
+【疾患】#1 [右/左]リスフラン関節脱臼骨折（[安定型／不安定型／脱臼骨折]、第 2 中足骨基部骨折 [あり/なし]、fleck sign [あり/なし]）
+【既往歴】[特記事項なし／○○]
+【内服薬】[なし／ワーファリン／DOAC ○○／抗血小板薬 ○○]
+【ADL（受傷前）】[独歩／杖／介助歩行／車椅子]
+【現病歴】[年齢]歳[男/女]性。[受傷機転：高所墜落／交通／スポーツ／底屈位での軸圧]で受傷し、[来院経緯]で来院。
+ ・身体所見：中足部腫脹＋皮下血腫、足底側皮下血斑、中足部圧痛、荷重不能、つま先立ち不能
+ ・血管：足背動脈・後脛骨動脈 [良好／弱／触知不能]
+ ・神経：深腓骨神経領域（第 1-2 趾間）[問題なし／麻痺]
+ ・足部コンパートメント所見 [なし／あり]
+ ・画像：Xp（AP・側面・斜位）で[第 2 中足骨基部 fleck sign／離開○ mm／脱臼○方向]、CT [施行済／未]
+ ・ER 処置：シーネ固定（中間位）、非荷重、挙上・クーリング、[整復済／未]
+ ・術前検査：採血・心電図・胸部 X 線 [済／未]
+よろしくお願いいたします。</div>
+        </div>
+      </details>
 
-      <!-- §9 帰宅時の説明 ＋ 出典 ＋ 関連 -->
-      <section class="section-page" id="s9" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🏠 帰宅時の説明（手術待ちの保存例）</h2>
-        <ul>
-          <li><strong>絶対荷重禁止</strong></li>
-          <li>数日以内に整形外科で手術日決定</li>
-          <li>腫脹・疼痛・しびれ増強で再受診</li>
-        </ul>
+      <!-- 関連ハブ -->
+      <details class="dx-box">
+        <summary><span>関連ハブ・隣接疾患</span></summary>
+        <div class="dx-box__body">
+          <ul>
+            <li>主訴入口：<a class="wiki-link" href="../足関節の外傷・痛み.html">足関節の外傷・痛み</a> ／ <a class="wiki-link" href="../転倒.html">転倒</a></li>
+            <li>隣接疾患：<a class="wiki-link" href="第5中足骨近位端骨折.html">第5中足骨近位端骨折</a> ／ <a class="wiki-link" href="距骨骨折.html">距骨骨折</a> ／ <a class="wiki-link" href="踵骨骨折.html">踵骨骨折</a></li>
+            <li>処置：<a class="wiki-link" href="コンパートメント症候群.html">コンパートメント症候群</a> ／ <a class="wiki-link" href="開放骨折.html">開放骨折</a></li>
+            <li>合併症対応：<strong>見逃し率高い</strong>、変形性関節症進行、長期フォロー</li>
+          </ul>
+        </div>
+      </details>
 
-        <h3>出典</h3>
-        <ul>
-          <li><strong>増井伸高. 骨折ハンター. 中外医学社. 2019.</strong></li>
-          <li><strong>Myerson MS ほか.</strong> Fracture dislocations of the tarsometatarsal joints. <em>Foot Ankle.</em> 1986.</li>
-          <li><strong>Desmond EA, Chou LB.</strong> Current concepts review: Lisfranc injuries. <em>Foot Ankle Int.</em> 2006.</li>
-        </ul>
-
-        <h3>関連</h3>
-        <ul>
-          <li><a class="wiki-link" href="../転倒.html">転倒</a> / <a class="wiki-link" href="足関節痛.html">足関節痛</a> / <a class="wiki-link" href="第5中足骨近位端骨折.html">第5中足骨近位端骨折</a></li>
-        </ul>
-      </section>
+      <!-- 出典 -->
+      <details class="dx-box">
+        <summary><span>出典</span></summary>
+        <div class="dx-box__body">
+          <ul>
+            <li>増井伸高. 骨折ハンター. 中外医学社. 2019.</li>
+            <li>Myerson MS. The diagnosis and treatment of injury to the tarsometatarsal joint complex. <em>J Bone Joint Surg Br.</em> 1999.</li>
+            <li>Sherief TI, et al. Lisfranc injury: how frequently does it get missed? <em>Injury.</em> 2007.</li>
+          </ul>
+        </div>
+      </details>
 
     </article>
   </main>
@@ -209,53 +415,22 @@
 
   <script>
   (function(){
-    const menu = document.getElementById('sectionMenu');
-    const pages = document.querySelectorAll('.section-page');
-    const titleH1 = document.querySelector('.page-title');
-    const relatedSymp = document.getElementById('related-symptoms');
-
-    function showSection(id) {
-      menu.hidden = true;
-      if (titleH1) titleH1.hidden = true;
-      if (relatedSymp) relatedSymp.hidden = true;
-      pages.forEach(p => p.hidden = (p.id !== id));
-      window.scrollTo(0, 0);
-    }
-    function showMenu(scrollTarget) {
-      menu.hidden = false;
-      if (titleH1) titleH1.hidden = false;
-      if (relatedSymp) relatedSymp.hidden = false;
-      pages.forEach(p => p.hidden = true);
-      if (scrollTarget) {
-        if (scrollTarget.tagName === 'DETAILS') scrollTarget.open = true;
-        scrollTarget.scrollIntoView({behavior: 'instant', block: 'start'});
-      } else {
-        window.scrollTo(0, 0);
-      }
-    }
-    function syncFromHash() {
-      const id = (location.hash || '').replace('#','');
-      const target = id ? document.getElementById(id) : null;
-      if (target && target.classList.contains('section-page')) {
-        showSection(id);
-      } else if (target) {
-        showMenu(target);
-      } else {
-        showMenu();
-      }
-    }
-
-    window.addEventListener('hashchange', syncFromHash);
-    document.querySelectorAll('.back-to-menu').forEach(b => {
-      b.addEventListener('click', () => { history.pushState(null,'',location.pathname); showMenu(); });
+    // クイックタップで対応 details を開いてスクロール
+    document.querySelectorAll('.dx-quick__btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.dataset.target;
+        const target = document.getElementById(id);
+        if (!target) return;
+        target.open = true;
+        target.scrollIntoView({behavior: 'smooth', block: 'start'});
+      });
     });
+
     const navBack = document.getElementById('navBack');
     if (navBack) navBack.addEventListener('click', () => {
       if (window.history.length > 1) history.back();
       else window.location.href = '../index.html';
     });
-
-    syncFromHash();
   })();
   </script>
 </body>

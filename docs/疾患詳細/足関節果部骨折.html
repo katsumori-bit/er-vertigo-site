@@ -6,6 +6,196 @@
   <meta name="color-scheme" content="light dark" />
   <title>足関節果部骨折 | ER ノート</title>
   <link rel="stylesheet" href="../er-note.css" />
+  <style>
+    /* ============ クイックタップ（3 つを開閉トリガー） ============ */
+    .dx-quick {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px;
+      margin: 10px 0 4px;
+    }
+    .dx-quick__btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      padding: 10px 6px;
+      border-radius: 10px;
+      background: color-mix(in srgb, var(--accent) 10%, var(--surface));
+      border: 1.5px solid var(--accent);
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 13px;
+      line-height: 1.2;
+      text-align: center;
+      cursor: pointer;
+      transition: background 120ms ease;
+    }
+    .dx-quick__btn:hover {
+      background: color-mix(in srgb, var(--accent) 18%, var(--surface));
+    }
+    .dx-quick__icon { font-size: 20px; }
+    .dx-quick__sub {
+      font-size: 10.5px;
+      font-weight: 500;
+      color: var(--muted);
+    }
+
+    /* ============ 同時評価 3 列（血管・神経・典型像） ============ */
+    .dx-tri {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+      margin: 6px 0 4px;
+      align-items: start;
+    }
+    .dx-tri__card {
+      background: var(--surface);
+      border-radius: 10px;
+      padding: 10px 12px;
+      border: 1.5px solid color-mix(in srgb, var(--text) 18%, transparent);
+    }
+    .dx-tri__card--vasc { border-color: #c0392b; background: color-mix(in srgb, #c0392b 6%, var(--surface)); }
+    .dx-tri__card--neuro { border-color: #b5651d; background: color-mix(in srgb, #b5651d 6%, var(--surface)); }
+    .dx-tri__card--typical { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 6%, var(--surface)); }
+    .dx-tri__title {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 800;
+      font-size: 13.5px;
+      margin-bottom: 4px;
+    }
+    .dx-tri__card--vasc .dx-tri__title { color: #c0392b; }
+    .dx-tri__card--neuro .dx-tri__title { color: #b5651d; }
+    .dx-tri__list {
+      margin: 0;
+      padding-left: 18px;
+      font-size: 12.5px;
+      line-height: 1.5;
+    }
+    .dx-tri__list li { margin: 2px 0; }
+
+    /* details 形式の血管/神経カード：summary にチェック印、開閉時の挙動 */
+    details.dx-tri__card { padding: 0; }
+    details.dx-tri__card > summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 10px 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 800;
+      font-size: 13.5px;
+    }
+    details.dx-tri__card > summary::-webkit-details-marker { display: none; }
+    details.dx-tri__card > summary::after {
+      content: "▸";
+      margin-left: auto;
+      font-size: 12px;
+      color: var(--muted);
+      transition: transform 120ms ease;
+    }
+    details.dx-tri__card[open] > summary::after { transform: rotate(90deg); }
+    details.dx-tri__card--vasc > summary { color: #c0392b; }
+    details.dx-tri__card--neuro > summary { color: #b5651d; }
+    details.dx-tri__card > .dx-tri__list { padding: 0 14px 12px 30px; }
+    details.dx-tri__card > .dx-tri__hint {
+      padding: 0 14px 6px 30px;
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    /* ============ 大きな details ボックス（画像/治療方針/コンサル文） ============ */
+    details.dx-box {
+      background: var(--surface);
+      border: 1.5px solid color-mix(in srgb, var(--text) 18%, transparent);
+      border-radius: 10px;
+      margin: 10px 0;
+      scroll-margin-top: 8px;
+    }
+    details.dx-box > summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 12px 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 800;
+      font-size: 14.5px;
+    }
+    details.dx-box > summary::-webkit-details-marker { display: none; }
+    details.dx-box > summary::after {
+      content: "▸";
+      margin-left: auto;
+      font-size: 13px;
+      color: var(--muted);
+      transition: transform 120ms ease;
+    }
+    details.dx-box[open] > summary::after { transform: rotate(90deg); }
+    details.dx-box[open] {
+      border-color: var(--accent);
+    }
+    details.dx-box > .dx-box__body {
+      padding: 0 14px 14px;
+    }
+
+    /* スマホで 1 列に */
+    @media (max-width: 640px) {
+      .dx-quick { gap: 6px; }
+      .dx-quick__btn { padding: 8px 4px; font-size: 11.5px; border-radius: 8px; }
+      .dx-quick__icon { font-size: 17px; }
+      .dx-quick__sub { font-size: 9.5px; }
+
+      .dx-tri { grid-template-columns: 1fr; gap: 8px; }
+      .dx-tri__card { padding: 8px 10px; }
+      details.dx-tri__card > summary { padding: 8px 10px; font-size: 12.5px; }
+      details.dx-tri__card > .dx-tri__list { padding: 0 12px 10px 26px; }
+      .dx-tri__title { font-size: 12.5px; }
+      .dx-tri__list { font-size: 12px; }
+
+      details.dx-box > summary { padding: 10px 12px; font-size: 13.5px; }
+      details.dx-box > .dx-box__body { padding: 0 12px 12px; }
+    }
+
+    /* ============ 区切り帯（最小限） ============ */
+    .dx-step {
+      margin: 18px 0 6px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 11.5px;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+    }
+    .dx-step::before, .dx-step::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: color-mix(in srgb, var(--text) 18%, transparent);
+    }
+
+    /* コピペ用テンプレ */
+    .dx-template {
+      background: color-mix(in srgb, var(--text) 4%, var(--surface));
+      border-left: 3px solid var(--accent);
+      border-radius: 6px;
+      padding: 10px 12px;
+      margin: 6px 0 0;
+      font-size: 13px;
+      line-height: 1.6;
+      white-space: pre-wrap;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+    .dx-template__hint {
+      font-size: 11px;
+      color: var(--muted);
+      margin: 0 0 4px;
+    }
+  </style>
 </head>
 <body>
   <header class="hokuto-top">
@@ -21,167 +211,180 @@
     <article class="note-shell">
       <h1 class="page-title">足関節果部骨折</h1>
 
-      <!-- 即時アクションヘッダー（常時 sticky） -->
-      <div class="action-header">
-        <div class="action-header__title">⚡ 即時アクション</div>
-        <ol class="action-header__list">
-          <li><strong>Ottawa Ankle Rules</strong> で X 線適応を判断</li>
-          <li><strong>AP + lat + mortise</strong> 3 方向で撮影</li>
-          <li><strong>Lauge-Hansen / AO・Weber 分類</strong> で骨折型を評価</li>
-          <li><strong>転位なし or 安定型は保存</strong>、<strong>不安定型・転位ありは手術</strong></li>
-        </ol>
-      </div>
-
-      <!-- メニュータイル -->
-      <nav class="section-tiles" id="sectionMenu">
-        <a class="section-tile" href="#s1"><span class="section-tile__no">📝</span><span class="section-tile__name">受傷機転</span></a>
-        <a class="section-tile" href="#s2"><span class="section-tile__no">🩺</span><span class="section-tile__name">身体所見</span></a>
-        <a class="section-tile" href="#s3"><span class="section-tile__no">🧪</span><span class="section-tile__name">画像<br><small>X 線 / CT</small></span></a>
-        <a class="section-tile" href="#s4"><span class="section-tile__no">📊</span><span class="section-tile__name">Weber 分類</span></a>
-        <a class="section-tile" href="#s5"><span class="section-tile__no">🦴</span><span class="section-tile__name">骨折パターン<br><small>と治療</small></span></a>
-        <a class="section-tile" href="#s6"><span class="section-tile__no">💉</span><span class="section-tile__name">マネジメント</span></a>
-        <a class="section-tile" href="#s7"><span class="section-tile__no">🏠</span><span class="section-tile__name">帰宅時説明</span></a>
-        <a class="section-tile" href="#s8"><span class="section-tile__no">📚</span><span class="section-tile__name">出典</span></a>
+      <!-- スマホですぐ開きたい 3 つ -->
+      <nav class="dx-quick" aria-label="クイックタップ">
+        <button class="dx-quick__btn" type="button" data-target="img-read">
+          <span>画像の見方</span>
+          <span class="dx-quick__sub">Ottawa / 3 方向 / mortise</span>
+        </button>
+        <button class="dx-quick__btn" type="button" data-target="plan">
+          <span>治療方針</span>
+          <span class="dx-quick__sub">Weber × 単果 / 両果 / 三果</span>
+        </button>
+        <button class="dx-quick__btn" type="button" data-target="consult">
+          <span>コンサル文</span>
+          <span class="dx-quick__sub">そのまま貼れる</span>
+        </button>
       </nav>
 
-      <!-- 概要サマリ -->
-      <details class="sub-fold" id="overview">
-        <summary>概要：内反捻挫で外果、外反で内果、両方あれば不安定</summary>
-        <div class="sub-fold__body">
-          <div class="callout callout-summary">
-            <div class="callout-title">足関節果部骨折 = 内反捻挫で外果、外反で内果、両方あれば不安定</div>
-            <div class="callout-body"><ul>
-              <li><strong>内反捻挫</strong>が最多の受傷機転（足が内側に倒れる）</li>
-              <li><strong>外果骨折</strong>（Weber 分類 A/B/C）と <strong>内果骨折・後果骨折</strong></li>
-              <li>単果 → 保存多、<strong>両果・三果 → 手術（帰宅手術）</strong></li>
-              <li><strong>Maisonneuve 骨折</strong>（腓骨近位端）を必ず鑑別</li>
-            </ul></div>
-          </div>
-        </div>
-      </details>
+      <!-- 同時評価 3 列：典型像は常時、血管・神経は折りたたみ -->
+      <div class="dx-step"><span>同時並行で評価する 3 軸</span></div>
+      <div class="dx-tri">
 
-      <!-- 関連主訴（双方向リンク） -->
-      <details class="sub-fold" id="related-symptoms">
-        <summary>📞 この疾患が該当する主訴</summary>
-        <div class="sub-fold__body">
+        <div class="dx-tri__card dx-tri__card--typical">
+          <div class="dx-tri__title">典型像</div>
+          <ul class="dx-tri__list">
+            <li><strong>内反捻挫</strong>（最多） → 外果骨折</li>
+            <li><strong>外反 + 外旋</strong> → 内果骨折・三角靱帯損傷</li>
+            <li><strong>軸圧 + 回旋</strong> → 両果・三果骨折</li>
+            <li>所見：<strong>外果・内果の圧痛</strong>、足関節腫脹、荷重不能</li>
+            <li>腓骨遠位は皮下に直接触れる → 圧痛・叩打痛で骨折を疑える</li>
+            <li><strong>1 カ所見つけたら 2 つ目・3 つ目を必ず探す</strong>（外果→内果・後果、内果→腓骨近位）</li>
+            <li><strong>腓骨近位端の圧痛</strong>もルーチンでチェック（Maisonneuve 除外）</li>
+          </ul>
+        </div>
+
+        <details class="dx-tri__card dx-tri__card--vasc">
+          <summary>血管</summary>
+          <p class="dx-tri__hint">通常は問題ないが脱臼骨折・転位大では循環障害の可能性。確認の流儀。</p>
+          <ul class="dx-tri__list">
+            <li><strong>足背動脈・後脛骨動脈</strong>を必ず触知（左右比較）</li>
+            <li>触れない／弱い → 整復後に再評価、改善なければ CTA</li>
+            <li>皮膚緊張・蒼白・水疱 → 即時整復で皮膚救済</li>
+          </ul>
+        </details>
+
+        <details class="dx-tri__card dx-tri__card--neuro">
+          <summary>神経</summary>
+          <p class="dx-tri__hint">通常は問題なしだが念のため確認。腓骨神経・脛骨神経領域を 1 分で。</p>
+          <ul class="dx-tri__list">
+            <li><strong>足関節背屈・第一趾背屈</strong>（腓骨神経・L5）</li>
+            <li><strong>足底屈・足底感覚</strong>（脛骨神経）</li>
+            <li>足背外側の感覚（腓腹神経）</li>
+            <li>記録を残す（後の責任分界点）</li>
+          </ul>
+        </details>
+      </div>
+
+      <!-- 画像の見方 -->
+      <details class="dx-box" id="img-read">
+        <summary><span>画像の見方</span></summary>
+        <div class="dx-box__body">
+          <h3>Ottawa Ankle Rules（撮影適応判断）</h3>
           <ul>
-            <li><a class="wiki-link" href="../足関節・足部の外傷.html">足関節・足部の外傷</a> — 足関節捻挫・骨折の入口主訴</li>
-            <li><a class="wiki-link" href="../転倒.html">転倒</a> — 内反捻挫を伴う転倒で発症</li>
+            <li><strong>外果・内果の尖端および後縁 6 cm の圧痛</strong></li>
+            <li><strong>受傷直後 + ER で合計 4 歩歩けない</strong></li>
+            <li>感度 99%、特異度 40% 前後（陰性なら骨折ほぼ否定）</li>
+          </ul>
+          <h3>レントゲン 3 方向</h3>
+          <ul>
+            <li>正面・側面・<strong>mortise view</strong>（足関節を 15–20° 内旋）</li>
+            <li>関節適合性（mortise）の評価</li>
+            <li><strong>medial clear space 拡大</strong>・<strong>tibiofibular clear space 拡大</strong> → 脛腓靱帯結合損傷</li>
+            <li><strong>腓骨近位端まで含めて撮影</strong>（Maisonneuve 除外）</li>
+          </ul>
+          <h3>CT</h3>
+          <ul>
+            <li>関節内骨折の詳細・後果骨片サイズ評価</li>
+            <li>粉砕型や手術計画</li>
           </ul>
         </div>
       </details>
 
-      <!-- §1 受傷機転 -->
-      <section class="section-page" id="s1" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>📝 受傷機転</h2>
-        <ul>
-          <li><strong>内反捻挫</strong>（最多）：外果骨折</li>
-          <li><strong>外反ストレス</strong>：内果骨折 + 三角靱帯損傷</li>
-          <li><strong>軸圧 + 回旋</strong>：両果・三果骨折</li>
-        </ul>
-      </section>
+      <!-- 治療方針 -->
+      <details class="dx-box" id="plan">
+        <summary><span>治療方針（Weber 分類 × 骨折パターン）</span></summary>
+        <div class="dx-box__body">
+          <h3>Weber 分類（腓骨遠位端）</h3>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>Type</th><th>骨折位置</th><th>安定性</th><th>マネジメント</th></tr>
+              </thead>
+              <tbody>
+                <tr><td><strong>A</strong></td><td>脛腓靱帯結合下（足関節裂隙より下）</td><td>安定</td><td><strong>帰宅保存</strong></td></tr>
+                <tr><td><strong>B</strong></td><td>脛腓靱帯結合のレベル（らせん状骨折が多い）</td><td>中間</td><td>転位なし→保存／あり→手術</td></tr>
+                <tr><td><strong>C</strong></td><td>脛腓靱帯結合より上（Maisonneuve 含む）</td><td>不安定</td><td><strong>手術</strong></td></tr>
+              </tbody>
+            </table>
+          </div>
 
-      <!-- §2 身体所見 -->
-      <section class="section-page" id="s2" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🩺 身体所見</h2>
-        <ul>
-          <li><strong>外果・内果の圧痛</strong>（Ottawa の判断基準）</li>
-          <li>足関節周囲の腫脹</li>
-          <li><strong>腓骨近位端の圧痛チェック</strong>（Maisonneuve の除外）</li>
-          <li>荷重試験：受傷直後 + ER で 4 歩歩けるか</li>
-        </ul>
-      </section>
+          <h3>骨折パターンと 5 択マネジメント</h3>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>パターン</th><th>所見</th><th>5 択マネジメント</th><th>ER の動き</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>単果（外果 or 内果）転位なし</td><td>安定</td><td><strong>帰宅保存</strong></td><td>後方シーネ＋松葉杖、後日整形外来</td></tr>
+                <tr><td>単果（転位あり）</td><td>整復必要</td><td>日中 <strong>即時整形</strong> / 夜間 <strong>帰宅手術</strong></td><td>整復＋シーネ</td></tr>
+                <tr><td><strong>両果骨折</strong></td><td>不安定（多くは手術）</td><td>日中 <strong>即時整形</strong> / 夜間 <strong>入院整形 or 帰宅手術</strong></td><td>後方シーネ＋整形 cons.</td></tr>
+                <tr><td><strong>三果骨折</strong></td><td>関節不安定、後果大は手術必須</td><td>日中 <strong>即時整形</strong> / 夜間 <strong>入院整形 or 帰宅手術</strong></td><td>後方シーネ＋整形 cons.</td></tr>
+                <tr><td><strong>Maisonneuve 骨折</strong></td><td>腓骨近位端骨折＋syndesmosis 損傷</td><td>日中 <strong>即時整形</strong> / 夜間 <strong>帰宅手術</strong></td><td>腓骨近位端より中枢まで後方固定</td></tr>
+                <tr><td><strong>脱臼骨折・開放骨折</strong></td><td>皮膚緊張・蒼白・水疱・創</td><td><strong>即時整形</strong></td><td>整復・洗浄・抗菌薬・破傷風</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p style="font-size:12px; color:var(--muted); margin:6px 0 0;">脱臼骨折は整復すれば足関節骨折として扱える。整復に自信がなければ即時整形外科コンサルト。後果単独骨折はまれで、多くは他骨折に付随。</p>
 
-      <!-- §3 画像 -->
-      <section class="section-page" id="s3" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🧪 画像</h2>
+          <h3>ER で打つ手</h3>
+          <ul>
+            <li><strong>後方シーネ（U-slab）</strong>を 90° 中間位で固定（足関節〜足部外傷はほぼ全例で後方固定、例外はアキレス腱と足趾骨折）</li>
+            <li>松葉杖で <strong>非荷重</strong></li>
+            <li>Maisonneuve では <strong>腓骨近位端より中枢側まで</strong>シーネを伸ばす</li>
+            <li><strong>整復が必要な場合</strong>（脱臼骨折・皮膚緊張）：受傷直後なら鎮痛＋牽引整復を ER で試みる、整復後レントゲン</li>
+            <li>挙上＋アイシング、絶飲食（手術可能性あれば）</li>
+            <li>抗凝固薬の有無を確認</li>
+          </ul>
+        </div>
+      </details>
 
-        <h3>レントゲン 3 方向</h3>
-        <ul>
-          <li>正面・側面・<strong>mortise view</strong>（足関節を 15–20° 内旋）</li>
-          <li>関節適合性（mortise）の評価</li>
-          <li>関節裂隙の左右差：<strong>Talocrural angle</strong> と <strong>medial clear space</strong></li>
-        </ul>
+      <!-- コンサル文 -->
+      <details class="dx-box" id="consult">
+        <summary><span>コンサル文（カルテに貼る）</span></summary>
+        <div class="dx-box__body">
+          <p class="dx-template__hint">『他科コンサルト実践マニュアル』の院内紹介状フォーマットに準拠（【目的】【疾患】【既往歴】【内服薬】【ADL】【現病歴】）。空欄を埋めるだけで通る形式。</p>
+          <div class="dx-template">【目的】観血的整復のご相談・ご加療依頼／整形外科外来フォロー依頼。
+【疾患】#1 [右/左]足関節果部骨折（Weber [A/B/C]、[単果/両果/三果]、転位 [あり/なし]）
+【既往歴】[特記事項なし／○○]
+【内服薬】[なし／ワーファリン／DOAC ○○／抗血小板薬 ○○]
+【ADL（受傷前）】[独歩／杖／介助歩行／車椅子]
+【現病歴】[年齢]歳[男/女]性。[受傷機転：内反捻挫／外反捻挫／高所からの転落]で受傷し、[来院経緯]で来院。
+ ・身体所見：[外果／内果／両果]圧痛、足関節腫脹、荷重 [可／不能]、腓骨近位端圧痛 [なし／あり]
+ ・血管：足背動脈・後脛骨動脈 [良好／弱／触知不能]、皮膚緊張 [なし／あり]
+ ・神経：腓骨神経・脛骨神経領域 [問題なし／○○]
+ ・画像：Xp で [Weber A/B/C] の腓骨遠位端骨折、[内果骨折／後果骨折] 合併 [あり/なし]、CT [施行済／未]
+ ・ER 処置：U-slab 固定（90° 中間位）、整復 [済／未／不要]、松葉杖非荷重指示
+ ・術前検査：採血・心電図・胸部 X 線 [済／未]
+よろしくお願いいたします。</div>
+        </div>
+      </details>
 
-        <h3>CT</h3>
-        <ul>
-          <li>関節内骨折の詳細</li>
-          <li>粉砕型や手術計画</li>
-        </ul>
-      </section>
+      <!-- 関連ハブ -->
+      <details class="dx-box">
+        <summary><span>関連ハブ・隣接疾患</span></summary>
+        <div class="dx-box__body">
+          <ul>
+            <li>主訴入口：<a class="wiki-link" href="../足関節・足部の外傷.html">足関節・足部の外傷</a> ／ <a class="wiki-link" href="../転倒.html">転倒</a></li>
+            <li>詳細プロトコル：<a class="wiki-link" href="足関節痛.html">足関節痛</a></li>
+            <li>隣接疾患：<a class="wiki-link" href="Maisonneuve骨折.html">Maisonneuve骨折</a> ／ <a class="wiki-link" href="Pilon骨折.html">Pilon骨折</a> ／ <a class="wiki-link" href="ATFL損傷.html">ATFL損傷</a> ／ <a class="wiki-link" href="第5中足骨近位端骨折.html">第5中足骨近位端骨折</a> ／ <a class="wiki-link" href="距骨骨折.html">距骨骨折</a></li>
+            <li>処置：<a class="wiki-link" href="開放骨折.html">開放骨折</a> ／ <a class="wiki-link" href="コンパートメント症候群.html">コンパートメント症候群</a></li>
+          </ul>
+        </div>
+      </details>
 
-      <!-- §4 Weber 分類 -->
-      <section class="section-page" id="s4" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>📊 Weber 分類（腓骨遠位端）</h2>
-        <div class="table-wrap"><table><thead><tr><th>Type</th><th>骨折位置</th><th>安定性</th><th>治療</th></tr></thead><tbody><tr><td><strong>A</strong></td><td><strong>脛腓靱帯結合下</strong>（足関節裂隙より下）</td><td>安定</td><td>保存</td></tr><tr><td><strong>B</strong></td><td><strong>脛腓靱帯結合のレベル</strong>（らせん状骨折が多い）</td><td>中間</td><td>転位なければ保存、ありなら手術</td></tr><tr><td><strong>C</strong></td><td><strong>脛腓靱帯結合より上</strong>（Maisonneuve 含む）</td><td>不安定</td><td><strong>手術</strong></td></tr></tbody></table></div>
-      </section>
-
-      <!-- §5 骨折パターンと治療 -->
-      <section class="section-page" id="s5" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🦴 骨折パターンと治療</h2>
-        <div class="table-wrap"><table><thead><tr><th>パターン</th><th>安定性</th><th>治療</th></tr></thead><tbody><tr><td>単果（外果 or 内果）</td><td>多くは安定</td><td>保存 or 帰宅手術</td></tr><tr><td><strong>両果骨折</strong></td><td><strong>不安定</strong></td><td><strong>帰宅手術</strong>（ORIF）</td></tr><tr><td><strong>三果骨折</strong>（外果 + 内果 + 後果）</td><td>不安定</td><td><strong>帰宅手術</strong>、後果 &gt; 25% なら手術必須</td></tr><tr><td>Maisonneuve</td><td>不安定</td><td><strong>帰宅手術</strong></td></tr></tbody></table></div>
-      </section>
-
-      <!-- §6 マネジメント -->
-      <section class="section-page" id="s6" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>💉 マネジメント</h2>
-
-        <h3>非整形外科医の役割</h3>
-        <ol>
-          <li><strong>Ottawa Ankle Rules</strong> でレントゲン適応判断</li>
-          <li><strong>腓骨近位端圧痛チェック</strong>（Maisonneuve 除外）</li>
-          <li>転位なし・単果 → <strong>ギプスシーネ固定 + 非荷重</strong></li>
-          <li>転位あり・両果以上 → <strong>シーネ固定 + 整形外科紹介</strong>（帰宅手術）</li>
-          <li><strong>開放骨折・脱臼骨折</strong> → <strong>即時整形</strong></li>
-        </ol>
-
-        <h3>固定</h3>
-        <ul>
-          <li><strong>U-slab（後方シーネ + U 字シーネ）</strong></li>
-          <li>90° 中間位で固定</li>
-          <li>松葉杖で <strong>非荷重</strong></li>
-        </ul>
-
-        <h3>整復が必要な場合</h3>
-        <ul>
-          <li>骨折脱臼（転位大・皮膚緊張）</li>
-          <li>受傷直後なら <strong>鎮痛 + 牽引整復</strong>を ER で試みる</li>
-          <li>整復後レントゲンで位置確認</li>
-        </ul>
-      </section>
-
-      <!-- §7 帰宅時の説明 -->
-      <section class="section-page" id="s7" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🏠 帰宅時の説明</h2>
-        <ul>
-          <li>松葉杖で非荷重、荷重開始は整形外科医の判断</li>
-          <li>1 週以内に整形外科外来</li>
-          <li>腫脹・疼痛・しびれ増強で再受診</li>
-        </ul>
-      </section>
-
-      <!-- §8 出典 -->
-      <section class="section-page" id="s8" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>📚 出典・関連</h2>
-        <h3>出典</h3>
-        <ul>
-          <li><strong>増井伸高. 骨折ハンター. 中外医学社. 2019.</strong></li>
-          <li><strong>Weber BG.</strong> <em>Die Verletzungen des oberen Sprunggelenkes.</em> Huber. 1966.</li>
-          <li><strong>Michelson JD.</strong> Ankle fractures resulting from rotational injuries. <em>J Am Acad Orthop Surg.</em> 2003.</li>
-        </ul>
-        <h3>関連</h3>
-        <ul>
-          <li><a class="wiki-link" href="../転倒.html">転倒</a> / <a class="wiki-link" href="足関節痛.html">足関節痛</a> / <a class="wiki-link" href="Maisonneuve骨折.html">Maisonneuve骨折</a> / <a class="wiki-link" href="Pilon骨折.html">Pilon骨折</a> / <a class="wiki-link" href="ATFL損傷.html">ATFL損傷</a></li>
-        </ul>
-      </section>
+      <!-- 出典 -->
+      <details class="dx-box">
+        <summary><span>出典</span></summary>
+        <div class="dx-box__body">
+          <ul>
+            <li>増井伸高. 骨折ハンター. 中外医学社. 2019.</li>
+            <li>Weber BG. <em>Die Verletzungen des oberen Sprunggelenkes.</em> Huber. 1966.</li>
+            <li>Michelson JD. Ankle fractures resulting from rotational injuries. <em>J Am Acad Orthop Surg.</em> 2003.</li>
+            <li>Stiell IG ほか. Implementation of the Ottawa ankle rules. <em>JAMA.</em> 1994.</li>
+          </ul>
+        </div>
+      </details>
 
     </article>
   </main>
@@ -200,56 +403,22 @@
 
   <script>
   (function(){
-    const menu = document.getElementById('sectionMenu');
-    const pages = document.querySelectorAll('.section-page');
-    const titleH1 = document.querySelector('.page-title');
-    const overview = document.getElementById('overview');
-    const relatedSymp = document.getElementById('related-symptoms');
-
-    function showSection(id) {
-      menu.hidden = true;
-      if (titleH1) titleH1.hidden = true;
-      if (overview) overview.hidden = true;
-      if (relatedSymp) relatedSymp.hidden = true;
-      pages.forEach(p => p.hidden = (p.id !== id));
-      window.scrollTo(0, 0);
-    }
-    function showMenu(scrollTarget) {
-      menu.hidden = false;
-      if (titleH1) titleH1.hidden = false;
-      if (overview) overview.hidden = false;
-      if (relatedSymp) relatedSymp.hidden = false;
-      pages.forEach(p => p.hidden = true);
-      if (scrollTarget) {
-        if (scrollTarget.tagName === 'DETAILS') scrollTarget.open = true;
-        scrollTarget.scrollIntoView({behavior: 'instant', block: 'start'});
-      } else {
-        window.scrollTo(0, 0);
-      }
-    }
-    function syncFromHash() {
-      const id = (location.hash || '').replace('#','');
-      const target = id ? document.getElementById(id) : null;
-      if (target && target.classList.contains('section-page')) {
-        showSection(id);
-      } else if (target) {
-        showMenu(target);
-      } else {
-        showMenu();
-      }
-    }
-
-    window.addEventListener('hashchange', syncFromHash);
-    document.querySelectorAll('.back-to-menu').forEach(b => {
-      b.addEventListener('click', () => { history.pushState(null,'',location.pathname); showMenu(); });
+    // クイックタップで対応 details を開いてスクロール
+    document.querySelectorAll('.dx-quick__btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.dataset.target;
+        const target = document.getElementById(id);
+        if (!target) return;
+        target.open = true;
+        target.scrollIntoView({behavior: 'smooth', block: 'start'});
+      });
     });
+
     const navBack = document.getElementById('navBack');
     if (navBack) navBack.addEventListener('click', () => {
       if (window.history.length > 1) history.back();
       else window.location.href = '../index.html';
     });
-
-    syncFromHash();
   })();
   </script>
 </body>

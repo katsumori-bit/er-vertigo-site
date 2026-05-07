@@ -6,6 +6,382 @@
   <meta name="color-scheme" content="light dark" />
   <title>肩の外傷・痛み | ER ノート</title>
   <link rel="stylesheet" href="er-note.css" />
+  <style>
+    /* 単純化診療フロー（このページ専用） */
+    .flow-box { position: static; user-select: none; }
+    .flow-box__title {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 0.5rem; cursor: pointer; padding: 2px 0;
+    }
+    .flow-box__hint {
+      font-size: 0.72rem; font-weight: 600; color: var(--muted);
+      letter-spacing: 0.02em; padding: 2px 8px; border-radius: 999px;
+      border: 1px solid color-mix(in srgb, var(--text) 20%, transparent);
+    }
+
+    /* ===== 診療フロー本体 ===== */
+    .flow-canvas {
+      background: var(--surface); border-radius: 10px;
+      padding: 14px 10px 18px; margin-top: 0.55rem;
+      overflow-x: auto; overflow-y: hidden;
+      -webkit-overflow-scrolling: touch; touch-action: pan-x pan-y pinch-zoom;
+    }
+    .dx-flow {
+      min-width: 720px; margin: 0 auto; padding: 4px 6px 8px;
+      font-size: 14px; line-height: 1.45; color: var(--text); font-family: inherit;
+    }
+
+    /* ノード共通 */
+    .dx-node {
+      background: var(--surface);
+      border: 1.5px solid color-mix(in srgb, var(--text) 22%, transparent);
+      border-radius: 10px; padding: 8px 12px; text-align: center;
+      box-shadow: 0 1px 2px var(--shadow, rgba(0,0,0,0.06));
+      min-height: 38px;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 2px;
+    }
+    .dx-node__title { font-weight: 700; font-size: 13.5px; }
+    .dx-node__sub   { font-size: 11.5px; color: var(--muted); font-weight: 500; }
+
+    .dx-node--decision {
+      background: color-mix(in srgb, var(--accent) 12%, var(--surface));
+      border-color: var(--accent); border-radius: 14px;
+    }
+    .dx-node--judge {
+      background: var(--accent-weak, color-mix(in srgb, var(--accent) 14%, var(--surface)));
+      border: 1.5px dashed var(--accent); border-radius: 999px;
+      padding: 6px 14px; font-weight: 700; min-height: 32px;
+    }
+    .dx-node--danger {
+      background: color-mix(in srgb, #c0392b 14%, var(--surface));
+      border-color: #c0392b;
+    }
+    .dx-node--danger .dx-node__title { color: #c0392b; }
+    .dx-node--action {
+      background: color-mix(in srgb, var(--text) 5%, var(--surface));
+      border-style: dashed;
+    }
+    .dx-node--external {
+      text-decoration: none; color: var(--text); border-style: dashed;
+      position: relative;
+      background: color-mix(in srgb, var(--accent) 6%, var(--surface));
+      transition: background-color 120ms ease;
+    }
+    .dx-node--external::after {
+      content: "↗"; position: absolute; top: 4px; right: 8px;
+      font-size: 12px; color: var(--accent); opacity: 0.85;
+    }
+
+    /* レイヤー */
+    .dx-layer {
+      display: grid; gap: 14px; align-items: stretch; margin: 0;
+    }
+    .dx-layer--root   { grid-template-columns: 1fr; justify-items: center; }
+    .dx-layer--root > * { max-width: 360px; }
+    .dx-layer--branch { grid-template-columns: 1fr 1fr; }
+    .dx-layer--quad   { grid-template-columns: repeat(4, 1fr); }
+
+    /* 矢印 */
+    .dx-arrow {
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      position: relative; margin: 4px 0; min-height: 44px;
+      color: var(--muted); font-size: 11.5px; font-weight: 600;
+    }
+    .dx-arrow::before {
+      content: ""; width: 2px; height: 100%; min-height: 38px;
+      background: color-mix(in srgb, var(--text) 35%, transparent);
+    }
+    .dx-arrow::after {
+      content: ""; position: absolute; bottom: 0;
+      width: 0; height: 0;
+      border-left: 5px solid transparent; border-right: 5px solid transparent;
+      border-top: 7px solid color-mix(in srgb, var(--text) 35%, transparent);
+    }
+    .dx-arrow__label {
+      background: var(--surface); padding: 1px 8px; border-radius: 999px;
+      border: 1px solid color-mix(in srgb, var(--text) 18%, transparent);
+      position: absolute; left: 50%; top: 50%;
+      transform: translate(-50%, -50%); white-space: nowrap; z-index: 1;
+    }
+
+    /* 分岐 Y 字 */
+    .dx-fork {
+      display: grid; grid-template-columns: 1fr 1fr;
+      position: relative; min-height: 38px; margin: 2px 0 4px;
+    }
+    .dx-fork::before {
+      content: ""; position: absolute;
+      top: 0; left: 25%; right: 25%; height: 2px;
+      background: color-mix(in srgb, var(--text) 35%, transparent);
+    }
+    .dx-fork__leg {
+      position: relative; display: flex; flex-direction: column;
+      align-items: center; justify-content: flex-end;
+      padding-top: 4px; padding-bottom: 4px;
+      font-size: 11.5px; font-weight: 600; color: var(--muted); min-height: 36px;
+    }
+    .dx-fork__leg::before {
+      content: ""; width: 2px; flex: 1;
+      background: color-mix(in srgb, var(--text) 35%, transparent);
+    }
+    .dx-fork__leg::after {
+      content: ""; position: absolute; bottom: 0;
+      width: 0; height: 0;
+      border-left: 5px solid transparent; border-right: 5px solid transparent;
+      border-top: 7px solid color-mix(in srgb, var(--text) 35%, transparent);
+    }
+    .dx-fork__label {
+      background: var(--surface); padding: 1px 8px; border-radius: 999px;
+      border: 1px solid color-mix(in srgb, var(--text) 18%, transparent);
+      margin-bottom: 2px; z-index: 1;
+    }
+    .dx-fork--triple { grid-template-columns: repeat(3, 1fr); }
+    .dx-fork--triple::before { left: 16.6%; right: 16.6%; }
+    .dx-fork--quad { grid-template-columns: repeat(4, 1fr); }
+    .dx-fork--quad::before { left: 12.5%; right: 12.5%; }
+
+    /* 3列／4列の疾患ツリー */
+    .dx-trees {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 12px; align-items: start; margin-top: 4px;
+    }
+    .dx-tree { display: flex; flex-direction: column; gap: 6px; }
+    .dx-tree__group {
+      font-size: 11px; font-weight: 700; color: var(--muted);
+      text-align: center; padding: 6px 0 2px; margin-top: 4px;
+      border-bottom: 1px dashed color-mix(in srgb, var(--text) 22%, transparent);
+      letter-spacing: 0.02em;
+    }
+    .dx-tree__group:first-child { margin-top: 0; }
+
+    /* メモ */
+    .dx-note {
+      background: color-mix(in srgb, var(--text) 4%, var(--surface));
+      border-left: 3px solid color-mix(in srgb, var(--text) 25%, transparent);
+      border-radius: 6px; padding: 6px 10px;
+      font-size: 11.5px; color: var(--muted);
+      text-align: left; margin-top: 4px;
+    }
+
+    /* タップ可能ノード */
+    a.dx-node {
+      text-decoration: none; color: inherit; cursor: pointer;
+      transition: transform 80ms ease, box-shadow 120ms ease;
+      position: relative;
+    }
+    a.dx-node:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 3px 6px var(--shadow, rgba(0,0,0,0.12));
+    }
+    a.dx-node:active { transform: translateY(0); }
+    a.dx-node:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+    a.dx-node::after {
+      content: "›"; position: absolute; top: 3px; right: 6px;
+      font-size: 12px; color: color-mix(in srgb, var(--text) 40%, transparent);
+      font-weight: 700;
+    }
+    a.dx-node--danger::after { color: #c0392b; }
+    a.dx-node--decision::after { color: var(--accent); }
+
+    /* スマホ */
+    @media (max-width: 600px) {
+      .dx-flow { min-width: 0; font-size: 11px; padding: 2px 0 6px; }
+      .flow-canvas { overflow-x: hidden; padding: 8px 6px 12px; }
+
+      .dx-node { padding: 4px 5px; min-height: 28px; border-radius: 7px; gap: 1px;
+        box-shadow: 0 1px 1px var(--shadow, rgba(0,0,0,0.05)); }
+      .dx-node__title { font-size: 10.5px; line-height: 1.22; }
+      .dx-node__sub   { font-size: 9px;    line-height: 1.25; }
+      .dx-node--decision { border-radius: 8px; }
+      .dx-node--judge { padding: 3px 7px; min-height: 22px; font-size: 10px; }
+      .dx-node--external::after { top: 2px; right: 4px; font-size: 9px; }
+
+      .dx-layer { gap: 6px; }
+      .dx-layer--root > * { max-width: none; width: 100%; }
+
+      .dx-arrow { min-height: 24px; margin: 1px 0; }
+      .dx-arrow::before { min-height: 20px; width: 1.5px; }
+      .dx-arrow::after { border-left-width: 4px; border-right-width: 4px; border-top-width: 6px; }
+      .dx-arrow__label { font-size: 8.5px; padding: 0 4px; line-height: 1.4; }
+
+      .dx-fork { min-height: 22px; }
+      .dx-fork::before { height: 1.5px; }
+      .dx-fork__leg { min-height: 22px; padding-top: 2px; padding-bottom: 2px; font-size: 9px; }
+      .dx-fork__leg::before { width: 1.5px; }
+      .dx-fork__leg::after { border-left-width: 4px; border-right-width: 4px; border-top-width: 6px; }
+      .dx-fork__label { font-size: 8.5px; padding: 0 4px; margin-bottom: 0; }
+      .dx-fork--triple::before { left: 16.6%; right: 16.6%; }
+      .dx-fork--quad::before { left: 12.5%; right: 12.5%; }
+
+      .dx-trees { gap: 4px; }
+      .dx-tree { gap: 3px; }
+      .dx-tree__group { font-size: 8.5px; padding: 4px 0 1px; margin-top: 2px; }
+      .dx-note { padding: 4px 7px; font-size: 9.5px; }
+
+      a.dx-node::after { top: 1px; right: 3px; font-size: 9px; }
+    }
+
+    /* === 来院後チェック === */
+    .dx-arrival-divider {
+      margin: 18px 0 8px; display: flex; align-items: center; gap: 10px;
+      color: var(--muted); font-size: 11.5px; font-weight: 800; letter-spacing: 0.1em;
+    }
+    .dx-arrival-divider::before, .dx-arrival-divider::after {
+      content: ""; flex: 1; height: 1px;
+      background: color-mix(in srgb, var(--text) 18%, transparent);
+    }
+    .dx-checklist {
+      background: var(--surface); border-radius: 10px;
+      border: 1.5px solid color-mix(in srgb, var(--text) 14%, transparent);
+      padding: 10px 14px;
+      box-shadow: 0 1px 2px var(--shadow, rgba(0,0,0,0.04));
+      margin-bottom: 8px;
+    }
+    .dx-checklist > summary {
+      cursor: pointer; font-weight: 800; font-size: 13.5px;
+      list-style: none; user-select: none;
+      display: flex; align-items: center; gap: 6px; color: var(--text);
+    }
+    .dx-checklist > summary::-webkit-details-marker { display: none; }
+    .dx-checklist > summary::before {
+      content: "▶"; font-size: 10px; color: var(--muted);
+      transition: transform 150ms ease; flex-shrink: 0;
+    }
+    .dx-checklist[open] > summary::before { transform: rotate(90deg); }
+    .dx-checklist__head {
+      display: flex; align-items: center; justify-content: space-between; gap: 8px;
+    }
+    .dx-checklist__reset {
+      font-size: 10.5px; color: var(--muted);
+      background: transparent;
+      border: 1px solid color-mix(in srgb, var(--text) 18%, transparent);
+      border-radius: 999px; padding: 1px 8px; cursor: pointer; font-weight: 600;
+    }
+    .dx-checklist__reset:hover { background: color-mix(in srgb, var(--text) 5%, transparent); }
+    .dx-checklist__list { list-style: none; margin: 8px 0 2px; padding: 0; }
+    .dx-checklist__list li { margin: 0; font-size: 12.5px; line-height: 1.45; }
+    .dx-checklist__list label {
+      display: flex; align-items: flex-start; gap: 8px; cursor: pointer;
+      padding: 5px 6px; border-radius: 5px;
+      transition: background-color 100ms ease;
+    }
+    .dx-checklist__list label:hover { background: color-mix(in srgb, var(--text) 4%, transparent); }
+    .dx-checklist__list input[type="checkbox"] { margin-top: 3px; flex-shrink: 0; accent-color: var(--accent); }
+    .dx-checklist__list label:has(input:checked) { color: var(--muted); }
+    .dx-checklist__list label:has(input:checked) strong {
+      color: var(--muted); text-decoration: line-through;
+      text-decoration-color: color-mix(in srgb, var(--muted) 50%, transparent);
+    }
+    .dx-checklist__sub { color: var(--muted); font-size: 11px; font-weight: 500; }
+
+    @media (max-width: 600px) {
+      .dx-checklist { padding: 8px 10px; }
+      .dx-checklist > summary { font-size: 12px; }
+      .dx-checklist__list li { font-size: 11.5px; }
+      .dx-checklist__sub { font-size: 10px; }
+      .dx-checklist__reset { font-size: 9.5px; padding: 1px 6px; }
+      .dx-arrival-divider { font-size: 10px; margin: 14px 0 6px; }
+    }
+
+    /* === トリガー連動ルール === */
+    .dx-rules-l2 {
+      margin-top: 12px;
+      background: var(--surface); border-radius: 10px;
+      border: 1.5px solid color-mix(in srgb, #c0392b 35%, transparent);
+      padding: 10px 14px;
+    }
+    .dx-rules-l2 > summary {
+      cursor: pointer; font-weight: 800; font-size: 13.5px;
+      list-style: none; user-select: none;
+      display: flex; align-items: center; gap: 6px; color: #c0392b;
+    }
+    .dx-rules-l2 > summary::-webkit-details-marker { display: none; }
+    .dx-rules-l2 > summary::before {
+      content: "▶"; font-size: 10px; color: #c0392b;
+      transition: transform 150ms ease; flex-shrink: 0;
+    }
+    .dx-rules-l2[open] > summary::before { transform: rotate(90deg); }
+    .dx-rules-l2__intro { font-size: 11px; color: var(--muted); margin: 8px 0 4px; line-height: 1.5; }
+    .dx-rules-l2__group {
+      font-size: 11px; font-weight: 800; color: var(--muted);
+      margin: 12px 0 5px; padding: 0; letter-spacing: 0.06em;
+    }
+    .dx-rules-l2__list {
+      list-style: none; margin: 0 0 4px; padding: 0;
+      display: flex; flex-direction: column; gap: 5px;
+    }
+    .dx-rule {
+      background: color-mix(in srgb, var(--text) 4%, var(--surface));
+      border-left: 3px solid color-mix(in srgb, var(--text) 28%, transparent);
+      border-radius: 6px; padding: 7px 10px;
+      font-size: 12px; line-height: 1.45;
+    }
+    .dx-rule.is-critical {
+      background: color-mix(in srgb, #c0392b 6%, var(--surface));
+      border-left-color: #c0392b;
+    }
+    .dx-rule.is-pitfall {
+      background: color-mix(in srgb, #d68910 7%, var(--surface));
+      border-left-color: #d68910;
+    }
+    .dx-rule__if {
+      font-weight: 700; color: var(--text);
+      display: flex; align-items: baseline; gap: 6px; flex-wrap: wrap;
+    }
+    .dx-rule__tag {
+      display: inline-block; font-size: 9.5px; font-weight: 800;
+      padding: 1px 7px; border-radius: 999px;
+      background: color-mix(in srgb, var(--text) 12%, var(--surface));
+      color: var(--muted); letter-spacing: 0.08em; flex-shrink: 0;
+    }
+    .dx-rule.is-critical .dx-rule__tag {
+      background: color-mix(in srgb, #c0392b 18%, var(--surface)); color: #c0392b;
+    }
+    .dx-rule.is-pitfall .dx-rule__tag {
+      background: color-mix(in srgb, #d68910 20%, var(--surface)); color: #b87900;
+    }
+    .dx-rule__then { margin-top: 3px; color: var(--text); }
+    .dx-rule__then strong { color: var(--accent); }
+    .dx-rule.is-critical .dx-rule__then strong { color: #c0392b; }
+
+    @media (max-width: 600px) {
+      .dx-rules-l2 { padding: 8px 10px; }
+      .dx-rules-l2 > summary { font-size: 12px; }
+      .dx-rules-l2__intro { font-size: 10px; }
+      .dx-rules-l2__group { font-size: 10px; margin-top: 10px; }
+      .dx-rule { font-size: 11px; padding: 6px 8px; line-height: 1.4; }
+      .dx-rule__tag { font-size: 9px; padding: 0 5px; }
+    }
+
+    /* 撮影方向の備忘 */
+    .dx-imaging {
+      margin-top: 12px;
+      background: var(--surface); border-radius: 10px;
+      border: 1.5px solid color-mix(in srgb, var(--text) 14%, transparent);
+      padding: 10px 14px;
+    }
+    .dx-imaging > summary {
+      cursor: pointer; font-weight: 800; font-size: 13.5px;
+      list-style: none; user-select: none;
+      display: flex; align-items: center; gap: 6px; color: var(--text);
+    }
+    .dx-imaging > summary::-webkit-details-marker { display: none; }
+    .dx-imaging > summary::before {
+      content: "▶"; font-size: 10px; color: var(--muted);
+      transition: transform 150ms ease; flex-shrink: 0;
+    }
+    .dx-imaging[open] > summary::before { transform: rotate(90deg); }
+    .dx-imaging__list {
+      margin: 8px 0 0; padding-left: 1.2em; font-size: 12.5px; line-height: 1.55;
+    }
+    .dx-imaging__list li { margin: 2px 0; }
+    @media (max-width: 600px) {
+      .dx-imaging { padding: 8px 10px; }
+      .dx-imaging > summary { font-size: 12px; }
+      .dx-imaging__list { font-size: 11.5px; }
+    }
+  </style>
 </head>
 <body>
   <header class="hokuto-top">
@@ -21,334 +397,338 @@
     <article class="note-shell">
       <h1 class="page-title">肩の外傷・痛み</h1>
 
-      <!-- 即時アクションヘッダー（常時 sticky） -->
-      <div class="action-header">
-        <div class="action-header__title">⚡ 即時アクション</div>
-        <ol class="action-header__list">
-          <li><strong>血管神経評価</strong>（橈骨動脈・末梢冷感 / <strong>腋窩神経 = deltoid 外側知覚 + 三角筋収縮</strong> / 開放外傷）→ 異常あれば<strong>整形即コール</strong></li>
-          <li><strong>必須 X-line：肩 AP + Y view + 腋窩位</strong>（脱臼方向と関節適合の評価に必須）</li>
-          <li><strong>脱臼は早期整復</strong>：<strong>Stimson 法 / Spaso 法</strong>を第一選択、鎮痛・筋弛緩を準備</li>
-          <li><strong>初回脱臼</strong> vs <strong>反復性脱臼</strong>で固定期間と紹介を分ける、整復後は必ず<strong>X-line + 神経再評価</strong></li>
-        </ol>
+      <!-- 単純化診療フロー -->
+      <div class="action-header flow-box" id="flowBox">
+        <div class="action-header__title flow-box__title" id="flowBoxClose" role="button" tabindex="0" aria-label="診療フローを閉じる">
+          <span>🗺 単純化診療フロー</span>
+          <span class="flow-box__hint">タップで閉じる ✕</span>
+        </div>
+
+        <div class="flow-canvas">
+          <div class="dx-flow" role="group" aria-label="肩外傷・痛みの単純化診療フロー">
+
+            <!-- L0: Red flags -->
+            <div class="dx-layer dx-layer--root">
+              <a class="dx-node dx-node--decision dx-node--danger" href="#redflags">
+                <div class="dx-node__title">🚨 Red flags 確認</div>
+                <div class="dx-node__sub">血管／腋窩神経／開放／後方脱臼／脱臼骨折</div>
+              </a>
+            </div>
+
+            <div class="dx-fork">
+              <div class="dx-fork__leg"><span class="dx-fork__label">あり</span></div>
+              <div class="dx-fork__leg"><span class="dx-fork__label">なし</span></div>
+            </div>
+
+            <div class="dx-layer dx-layer--branch">
+              <a class="dx-node dx-node--danger" href="#redflags">
+                <div class="dx-node__title">緊急対応</div>
+                <div class="dx-node__sub">即整復／血管神経評価／整形即コール</div>
+              </a>
+              <div class="dx-arrow"><span class="dx-arrow__label">↓ 年齢で絞る</span></div>
+            </div>
+
+            <!-- L1: 年齢で振り分ける -->
+            <div class="dx-layer dx-layer--root">
+              <div class="dx-node dx-node--judge">年齢・受傷機転は？</div>
+            </div>
+
+            <div class="dx-fork dx-fork--triple">
+              <div class="dx-fork__leg"><span class="dx-fork__label">高齢者・低エネ転倒</span></div>
+              <div class="dx-fork__leg"><span class="dx-fork__label">成人・高エネ／スポーツ</span></div>
+              <div class="dx-fork__leg"><span class="dx-fork__label">画像正常・挙上不能</span></div>
+            </div>
+
+            <!-- L2: 3列の疾患ツリー -->
+            <div class="dx-trees">
+
+              <!-- 1) 高齢者 -->
+              <div class="dx-tree">
+                <div class="dx-tree__group">最多（9割以上）</div>
+                <a class="dx-node" href="疾患詳細/上肢骨折の固定/上腕骨近位部骨折.html">
+                  <div class="dx-node__title">上腕骨近位部骨折</div>
+                  <div class="dx-node__sub">明確骨折タイプ／三角巾固定</div>
+                </a>
+
+                <div class="dx-tree__group">脱臼+骨折</div>
+                <a class="dx-node dx-node--danger" href="疾患詳細/肩関節脱臼.html">
+                  <div class="dx-node__title">脱臼+大結節骨折</div>
+                  <div class="dx-node__sub">整復トライ／戻れば成人と同様</div>
+                </a>
+                <a class="dx-node dx-node--danger" href="疾患詳細/肩関節脱臼.html">
+                  <div class="dx-node__title">脱臼+外科頸骨折</div>
+                  <div class="dx-node__sub">整復不可／即時整形コール</div>
+                </a>
+
+                <div class="dx-tree__group">忘れがちだが多い</div>
+                <a class="dx-node" href="疾患詳細/上肢骨折の固定/鎖骨骨折.html">
+                  <div class="dx-node__title">鎖骨骨折</div>
+                  <div class="dx-node__sub">内側1/3 = 高齢の脆弱性</div>
+                </a>
+              </div>
+
+              <!-- 2) 成人 -->
+              <div class="dx-tree">
+                <div class="dx-tree__group">激痛・自動運動不可</div>
+                <a class="dx-node" href="疾患詳細/肩関節脱臼.html">
+                  <div class="dx-node__title">肩関節脱臼（前方）</div>
+                  <div class="dx-node__sub">90〜98%／squared off shoulder</div>
+                </a>
+                <a class="dx-node dx-node--danger" href="疾患詳細/肩関節脱臼.html">
+                  <div class="dx-node__title">肩関節脱臼（後方）</div>
+                  <div class="dx-node__sub">てんかん／電撃／内旋固定</div>
+                </a>
+
+                <div class="dx-tree__group">肩から落ちた（最多）</div>
+                <a class="dx-node" href="疾患詳細/上肢骨折の固定/鎖骨骨折.html">
+                  <div class="dx-node__title">鎖骨骨折</div>
+                  <div class="dx-node__sub">中央1/3 が大半／鎖骨2方向</div>
+                </a>
+                <a class="dx-node" href="疾患詳細/肩鎖関節脱臼.html">
+                  <div class="dx-node__title">肩鎖関節脱臼</div>
+                  <div class="dx-node__sub">ピアノキー／13mm 以上で III 以上</div>
+                </a>
+
+                <div class="dx-tree__group">FOOSH／高エネ</div>
+                <a class="dx-node" href="疾患詳細/上肢骨折の固定/上腕骨近位部骨折.html">
+                  <div class="dx-node__title">上腕骨近位部骨折</div>
+                  <div class="dx-node__sub">成人では稀だが除外</div>
+                </a>
+                <a class="dx-node" href="疾患詳細/上肢骨折の固定/上腕骨骨幹部骨折.html">
+                  <div class="dx-node__title">上腕骨骨幹部骨折</div>
+                  <div class="dx-node__sub">病的骨折・橈骨神経麻痺に注意</div>
+                </a>
+              </div>
+
+              <!-- 3) 画像正常・挙上不能 -->
+              <div class="dx-tree">
+                <div class="dx-tree__group">最後に疑う</div>
+                <a class="dx-node" href="疾患詳細/腱板損傷.html">
+                  <div class="dx-node__title">腱板損傷</div>
+                  <div class="dx-node__sub">4 つの身体所見で診断補助</div>
+                </a>
+                <div class="dx-note">急性 10%／慢性 90%。70 歳以上は<strong>無症候性腱板損傷</strong>が約半数で、画像所見だけでは急性かどうか判断不可</div>
+
+                <div class="dx-tree__group">他に見逃さない</div>
+                <a class="dx-node" href="疾患詳細/肩鎖関節脱臼.html">
+                  <div class="dx-node__title">転位なし肩鎖関節脱臼</div>
+                  <div class="dx-node__sub">Type I/II は X 線陰性、圧痛で疑い</div>
+                </a>
+              </div>
+
+            </div>
+
+          </div>
+
+          <!-- 来院後チェック -->
+          <div class="dx-arrival-divider"><span>来院後のチェック</span></div>
+
+          <details class="dx-checklist" id="historyPanel">
+            <summary>
+              <span class="dx-checklist__head" style="flex:1;">
+                <span>🗣 問診（来院後に実施）</span>
+                <button type="button" class="dx-checklist__reset" aria-label="問診チェックをすべて外す">リセット</button>
+              </span>
+            </summary>
+            <ul class="dx-checklist__list">
+              <li><label><input type="checkbox" data-key="h-mech"> <span><strong>受傷機転</strong> <span class="dx-checklist__sub">転倒／肩から落ちた／腕を引かれた／FOOSH／直達外力</span></span></label></li>
+              <li><label><input type="checkbox" data-key="h-energy"> <span><strong>エネルギー</strong> <span class="dx-checklist__sub">低エネ転倒（高齢者）か高エネ／スポーツか</span></span></label></li>
+              <li><label><input type="checkbox" data-key="h-age"> <span><strong>年齢</strong> <span class="dx-checklist__sub">高齢=上腕骨近位／成人=脱臼・鎖骨／小児=鎖骨</span></span></label></li>
+              <li><label><input type="checkbox" data-key="h-history"> <span><strong>脱臼歴・反復性か</strong> <span class="dx-checklist__sub">「前と同じで腕が外れた」=肩関節脱臼を強く疑う</span></span></label></li>
+              <li><label><input type="checkbox" data-key="h-seizure"> <span><strong>てんかん発作・電撃傷</strong> <span class="dx-checklist__sub">後方脱臼の典型シーン。見逃しに直結</span></span></label></li>
+              <li><label><input type="checkbox" data-key="h-adl"> <span><strong>もとの ADL・利き手・職業／趣味</strong> <span class="dx-checklist__sub">紹介状に必ず記載（手術 vs 保存の判断材料）</span></span></label></li>
+              <li><label><input type="checkbox" data-key="h-lift"> <span><strong>受傷後の挙上可否</strong> <span class="dx-checklist__sub">画像正常で挙上不能=腱板損傷を想起</span></span></label></li>
+              <li><label><input type="checkbox" data-key="h-pop"> <span><strong>ポップ音・突然の脱力</strong> <span class="dx-checklist__sub">急性腱板断裂（受傷直後の挙上不能）も示唆</span></span></label></li>
+            </ul>
+          </details>
+
+          <details class="dx-checklist" id="examPanel">
+            <summary>
+              <span class="dx-checklist__head" style="flex:1;">
+                <span>🔍 身体診察（来院後に実施）</span>
+                <button type="button" class="dx-checklist__reset" aria-label="身体診察チェックをすべて外す">リセット</button>
+              </span>
+            </summary>
+            <ul class="dx-checklist__list">
+              <li><label><input type="checkbox" data-key="e-vital"> <span><strong>バイタル</strong> <span class="dx-checklist__sub">高エネ外傷では多発外傷を意識</span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-inspect"> <span><strong>視診</strong> <span class="dx-checklist__sub">squared off shoulder／段差変形／腫脹／皮下出血／開放創</span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-clavicle"> <span><strong>鎖骨を内側から外側まで触診</strong> <span class="dx-checklist__sub">全年齢で必須。鎖骨骨折は肩外傷で最多</span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-ac"> <span><strong>肩鎖関節の圧痛・段差</strong> <span class="dx-checklist__sub">ピアノキー徴候も確認</span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-axillary"> <span><strong>腋窩神経</strong> <span class="dx-checklist__sub">deltoid 外側皮膚知覚 + 三角筋収縮（脱臼で最多障害）</span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-vessel"> <span><strong>橈骨動脈・末梢血流</strong> <span class="dx-checklist__sub">触知低下／左右差／毛細血管再充満／皮膚色温</span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-distal"> <span><strong>末梢神経（正中・橈・尺）</strong> <span class="dx-checklist__sub">手指の運動 + 知覚。橈骨神経麻痺は上腕骨骨幹部骨折で 12〜18%</span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-rom"> <span><strong>ROM（脱臼疑いでは無理に動かさない）</strong> <span class="dx-checklist__sub">外旋不能 = 後方脱臼を強く示唆</span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-cuff"> <span><strong>腱板の 4 つの身体所見</strong> <span class="dx-checklist__sub">painful arc／drop arm／external rotation lag／internal rotation lag</span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-recheck"> <span><strong>整復・固定後の再評価</strong> <span class="dx-checklist__sub">腋窩神経 + 末梢神経血管 + X 線</span></span></label></li>
+            </ul>
+          </details>
+
+          <!-- トリガー連動の注意 -->
+          <details class="dx-rules-l2" id="rulesL2Panel">
+            <summary>⚠️ トリガー連動の注意（条件で意識）</summary>
+            <p class="dx-rules-l2__intro">特定の状況に出会ったら必ず思い出すべき注意点。フローの判断と並行して意識する。</p>
+
+            <h4 class="dx-rules-l2__group">緊急・四肢温存トリガー</h4>
+            <ul class="dx-rules-l2__list">
+              <li class="dx-rule is-critical" id="redflags">
+                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>橈骨動脈触知低下／左右差／末梢冷感</span></div>
+                <div class="dx-rule__then"><strong>腋窩動脈損傷</strong>を疑い即時整形コンサルト。脱臼例では整復後も再評価</div>
+              </li>
+              <li class="dx-rule is-critical">
+                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>deltoid 外側知覚低下／三角筋収縮なし</span></div>
+                <div class="dx-rule__then"><strong>腋窩神経損傷</strong>。整復前後で必ず確認、所見あれば紹介状記載</div>
+              </li>
+              <li class="dx-rule is-critical">
+                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>整復不能／著明な変形／開放外傷</span></div>
+                <div class="dx-rule__then"><strong>即時整形コンサルト</strong>。観血的整復・洗浄・抗菌薬・破傷風</div>
+              </li>
+              <li class="dx-rule is-critical">
+                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>てんかん発作・電撃傷後の肩痛＋内旋固定</span></div>
+                <div class="dx-rule__then"><strong>後方脱臼</strong>を強く疑う。Y view／腋窩位を必ず追加</div>
+              </li>
+              <li class="dx-rule is-critical">
+                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>高齢者で脱臼+外科頸骨折</span></div>
+                <div class="dx-rule__then">牽引しても骨頭が戻らない。<strong>非整形科医での整復はトライしない</strong>、即整形コール</div>
+              </li>
+              <li class="dx-rule is-critical">
+                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>上腕骨骨幹部骨折＋下垂手（drop hand）</span></div>
+                <div class="dx-rule__then"><strong>橈骨神経麻痺</strong>を疑う（合併 12〜18%）。多くは保存で 3〜4 か月以内に回復</div>
+              </li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">見逃し回避トリガー</h4>
+            <ul class="dx-rules-l2__list">
+              <li class="dx-rule">
+                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>肩外傷の全例</span></div>
+                <div class="dx-rule__then"><strong>鎖骨を内側から外側まで触診</strong>。鎖骨骨折は肩外傷の 42% で最多</div>
+              </li>
+              <li class="dx-rule">
+                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>鎖骨に圧痛あり</span></div>
+                <div class="dx-rule__then"><strong>鎖骨2方向</strong>を追加オーダー。肩関節2方向では微妙骨折タイプになる</div>
+              </li>
+              <li class="dx-rule">
+                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>高齢者の転倒後肩痛</span></div>
+                <div class="dx-rule__then">9 割以上が<strong>上腕骨近位部骨折</strong>。診察より先に X 線でよい（明確骨折タイプ）</div>
+              </li>
+              <li class="dx-rule">
+                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>30 歳前後・既往あり「腕が外れた」</span></div>
+                <div class="dx-rule__then"><strong>肩関節脱臼（リピーター）</strong>。X 線で確認して整復</div>
+              </li>
+              <li class="dx-rule">
+                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>X 線陰性で挙上不能</span></div>
+                <div class="dx-rule__then"><strong>腱板損傷</strong>を疑い 4 つの身体所見を実施。1 つでも陽性なら紹介状に明記</div>
+              </li>
+              <li class="dx-rule">
+                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>鎖骨外側部に圧痛、転位なし X 線</span></div>
+                <div class="dx-rule__then"><strong>Type I/II 肩鎖関節脱臼</strong>を疑う（X 線特異度 90% / 感度 41%）</div>
+              </li>
+              <li class="dx-rule">
+                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>肩関節 AP のみで「異常なし」</span></div>
+                <div class="dx-rule__then"><strong>後方脱臼</strong>は AP では light bulb sign のみ。Y view + 腋窩位で確認</div>
+              </li>
+              <li class="dx-rule">
+                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>整復成功・痛み軽快</span></div>
+                <div class="dx-rule__then">必ず<strong>整復後 X 線 + 腋窩神経再評価</strong>。大結節骨折・Hill-Sachs・Bankart を確認</div>
+              </li>
+              <li class="dx-rule">
+                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>高齢者・脱臼+大結節骨折</span></div>
+                <div class="dx-rule__then">非整形科医も整復トライ。<strong>大結節は整復後にほぼ元位置へ戻る</strong>ため、戻れば成人脱臼と同じ管理</div>
+              </li>
+              <li class="dx-rule">
+                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>初回脱臼（特に若年）</span></div>
+                <div class="dx-rule__then">初回は<strong>2〜3 週固定 + 整形紹介</strong>。Bankart 修復術の早期検討も</div>
+              </li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">ピットフォール</h4>
+            <ul class="dx-rules-l2__list">
+              <li class="dx-rule is-pitfall">
+                <div class="dx-rule__if"><span class="dx-rule__tag">⚠</span><span>後方脱臼を AP のみで判定</span></div>
+                <div class="dx-rule__then">日本では稀だが、てんかん／電撃で出会う。<strong>Y view + 腋窩位</strong>必須</div>
+              </li>
+              <li class="dx-rule is-pitfall">
+                <div class="dx-rule__if"><span class="dx-rule__tag">⚠</span><span>整復前後で腋窩神経を診ない</span></div>
+                <div class="dx-rule__then">整復による神経障害を見逃す。<strong>整復前 + 整復後で記録</strong>するクセを</div>
+              </li>
+              <li class="dx-rule is-pitfall">
+                <div class="dx-rule__if"><span class="dx-rule__tag">⚠</span><span>整復後 X 線を撮らない</span></div>
+                <div class="dx-rule__then">大結節骨折・再脱臼・骨頭の位置確認漏れ。<strong>AP + Y</strong> を必ず再撮影</div>
+              </li>
+              <li class="dx-rule is-pitfall">
+                <div class="dx-rule__if"><span class="dx-rule__tag">⚠</span><span>高齢者の挙上困難=「腱板」と即断</span></div>
+                <div class="dx-rule__then"><strong>上腕骨近位部骨折</strong>を先に X 線で除外。70 歳以上は無症候性腱板も多く判定困難</div>
+              </li>
+              <li class="dx-rule is-pitfall">
+                <div class="dx-rule__if"><span class="dx-rule__tag">⚠</span><span>肩関節 2 方向だけで終了</span></div>
+                <div class="dx-rule__then">鎖骨骨折・肩鎖関節脱臼が<strong>微妙骨折タイプ</strong>で写る。鎖骨に痛みあれば鎖骨2方向</div>
+              </li>
+              <li class="dx-rule is-pitfall">
+                <div class="dx-rule__if"><span class="dx-rule__tag">⚠</span><span>初回脱臼と反復性脱臼を同じ管理</span></div>
+                <div class="dx-rule__then">初回は<strong>2〜3 週固定 + 整形紹介</strong>、反復は短期固定。固定期間と紹介プロトコルが違う</div>
+              </li>
+              <li class="dx-rule is-pitfall">
+                <div class="dx-rule__if"><span class="dx-rule__tag">⚠</span><span>外傷後の挙上困難を「単なる肩こり」で帰宅</span></div>
+                <div class="dx-rule__then">慢性肩こりと誤認。<strong>4 つの身体所見</strong>で腱板損傷を最後に疑う</div>
+              </li>
+              <li class="dx-rule is-pitfall">
+                <div class="dx-rule__if"><span class="dx-rule__tag">⚠</span><span>鎖骨骨折で 8 字包帯にこだわる</span></div>
+                <div class="dx-rule__then">成人は<strong>三角巾±バストバンド or クラビクルバンド</strong>でアウトカム同等</div>
+              </li>
+              <li class="dx-rule is-pitfall">
+                <div class="dx-rule__if"><span class="dx-rule__tag">⚠</span><span>AC 関節脱臼にクラビクルバンド</span></div>
+                <div class="dx-rule__then"><strong>三角巾 ± バストバンド</strong>が正解。クラビクルバンドは使わない</div>
+              </li>
+              <li class="dx-rule is-pitfall">
+                <div class="dx-rule__if"><span class="dx-rule__tag">⚠</span><span>ER で腱板に関節内ステロイド注射</span></div>
+                <div class="dx-rule__then">腱を傷つけるリスク。ER は身体所見で疑うところまで、注射は整形外来で</div>
+              </li>
+              <li class="dx-rule is-pitfall">
+                <div class="dx-rule__if"><span class="dx-rule__tag">⚠</span><span>軽微外力での上腕骨骨幹部骨折</span></div>
+                <div class="dx-rule__then"><strong>病的骨折</strong>を疑う（転移性骨腫瘍・多発性骨髄腫など）。胸部画像と全身評価</div>
+              </li>
+            </ul>
+          </details>
+
+          <!-- 撮影方向の備忘 -->
+          <details class="dx-imaging" id="imagingPanel">
+            <summary>📷 撮影方向の備忘</summary>
+            <ul class="dx-imaging__list">
+              <li><strong>肩関節</strong>：true AP + <strong>Y view（scapular Y）</strong> + <strong>腋窩位</strong>（後方脱臼の確定に最有用、疼痛で困難なら Velpeau 代用）</li>
+              <li><strong>鎖骨に圧痛</strong>：<strong>鎖骨2方向</strong>を追加（肩関節2方向では微妙骨折タイプ）</li>
+              <li><strong>肩鎖関節</strong>：肩関節 AP で十分（必要に応じて Zanca view）。肩峰下端〜鎖骨下端の距離 13 mm 以上で Type III 以上</li>
+              <li><strong>CT 追加</strong>：上腕骨近位部骨折の Neer 分類（2-part 以上、整形紹介前準備）／脱臼骨折／骨頭陥没疑い</li>
+              <li><strong>MRI／エコー</strong>：腱板損傷（完全断裂は感度・特異度 90% 前後、部分断裂は感度低下）。ER で必須ではなく整形外来で</li>
+              <li><strong>整復後</strong>：必ず <strong>AP + Y</strong> を再撮影し、骨頭位置・大結節骨折・Hill-Sachs／Bankart を確認</li>
+            </ul>
+          </details>
+
+        </div>
       </div>
 
-      <!-- メニュータイル -->
-      <nav class="section-tiles" id="sectionMenu">
-        <a class="section-tile" href="#s1"><span class="section-tile__no">🚨</span><span class="section-tile__name">Red flags<br><small>血管・神経・開放</small></span></a>
-        <a class="section-tile" href="#s2"><span class="section-tile__no">🩺</span><span class="section-tile__name">最小診察<br><small>腋窩神経が最重要</small></span></a>
-        <a class="section-tile" href="#s3"><span class="section-tile__no">📷</span><span class="section-tile__name">X-line の置き方<br><small>AP / Y / 腋窩</small></span></a>
-        <a class="section-tile" href="#s4"><span class="section-tile__no">🦴</span><span class="section-tile__name">主要鑑別<br><small>脱臼・骨折・腱板</small></span></a>
-        <a class="section-tile" href="#s5"><span class="section-tile__no">🔄</span><span class="section-tile__name">脱臼の整復法<br><small>Stimson / Spaso</small></span></a>
-        <a class="section-tile" href="#s6"><span class="section-tile__no">🩹</span><span class="section-tile__name">初期固定・鎮痛</span></a>
-        <a class="section-tile" href="#s7"><span class="section-tile__no">📤</span><span class="section-tile__name">disposition<br><small>初回 vs 反復</small></span></a>
-        <a class="section-tile" href="#s8"><span class="section-tile__no">⚠️</span><span class="section-tile__name">ピットフォール</span></a>
-        <a class="section-tile" href="#s9"><span class="section-tile__no">📚</span><span class="section-tile__name">関連リンク</span></a>
-      </nav>
+      <!-- 出典・関連リンク -->
+      <h3>関連ページ</h3>
+      <ul>
+        <li><a class="wiki-link" href="疾患詳細/肩関節脱臼.html">肩関節脱臼</a></li>
+        <li><a class="wiki-link" href="疾患詳細/肩鎖関節脱臼.html">肩鎖関節脱臼</a></li>
+        <li><a class="wiki-link" href="疾患詳細/上肢骨折の固定/上腕骨近位部骨折.html">上腕骨近位部骨折</a></li>
+        <li><a class="wiki-link" href="疾患詳細/上肢骨折の固定/鎖骨骨折.html">鎖骨骨折</a></li>
+        <li><a class="wiki-link" href="疾患詳細/腱板損傷.html">腱板損傷</a></li>
+        <li><a class="wiki-link" href="疾患詳細/上肢骨折の固定/上腕骨骨幹部骨折.html">上腕骨骨幹部骨折</a></li>
+        <li><a class="wiki-link" href="疾患詳細/開放骨折.html">開放骨折</a></li>
+        <li><a class="wiki-link" href="転倒.html">転倒</a></li>
+      </ul>
 
-      <!-- §1 Red flags -->
-      <section class="section-page" id="s1" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🚨 Red flags（血管・神経・開放）</h2>
+      <h3>主な根拠</h3>
+      <ul>
+        <li>上腕骨近位部骨折は脆弱性骨折として 4 番目に多く、80% が安定型で保存加療。転位例でも RCT で手術 vs 保存に機能予後差なしの報告</li>
+        <li>肩関節脱臼は全脱臼の 50%、前方が 90〜98%。Bankart 87% / Hill-Sachs 54〜76% を合併</li>
+        <li>鎖骨骨折は肩外傷の 42% を占める。中央1/3 が 69〜80%、87% が間接外力（肩から落ちる）</li>
+        <li>肩鎖関節脱臼の X 線：特異度 90% / 感度 41%。Type I/II は X 線陰性が普通で身体所見で診断</li>
+        <li>腱板損傷：エコー・MRI の完全断裂感度・特異度は 90% 前後だが、部分断裂で感度低下。70 歳以上は無症候性が約半数</li>
+        <li>腱板の身体所見：painful arc（71/81%）／drop arm（24/93%）／external rotation lag（47/94%）／internal rotation lag（97/83%）</li>
+      </ul>
 
-        <h3>血管</h3>
-        <ul>
-          <li>上肢の冷感・蒼白・橈骨動脈触知低下 / 左右差</li>
-          <li>毛細血管再充満時間延長、末梢 SpO2 低下</li>
-          <li>高エネルギー外傷後の脱臼・骨折で<strong>腋窩動脈損傷</strong>を疑う</li>
-        </ul>
-
-        <h3>神経</h3>
-        <ul>
-          <li><strong>腋窩神経</strong>：deltoid 外側皮膚の知覚 + 三角筋収縮（最重要・脱臼で最多障害）</li>
-          <li><strong>筋皮神経</strong>：前腕外側知覚、肘屈曲</li>
-          <li><strong>正中・橈骨・尺骨</strong>：手指の運動 + 知覚</li>
-          <li>高齢・高エネルギー外傷では<strong>腕神経叢損傷</strong>も</li>
-        </ul>
-
-        <h3>その他</h3>
-        <ul>
-          <li>開放外傷（皮膚損傷 + 骨折・脱臼）</li>
-          <li>整復不能な脱臼、著明な変形</li>
-        </ul>
-
-        <div class="callout callout-danger">
-          <div class="callout-title">1 つでもあれば即整形コンサルト</div>
-          <div class="callout-body">
-            <p>主な緊急鑑別：</p>
-            <ul>
-              <li><span class="wiki-missing">腋窩動脈損傷</span> / <span class="wiki-missing">腋窩神経損傷</span> / <span class="wiki-missing">腕神経叢損傷</span></li>
-              <li><a class="wiki-link" href="疾患詳細/肩関節脱臼.html">肩関節脱臼</a>（整復不能・後方脱臼）</li>
-              <li><span class="wiki-missing">開放骨折</span> / <a class="wiki-link" href="疾患詳細/上肢骨折の固定/上腕骨近位部骨折.html">上腕骨近位部骨折</a>（4-part / 脱臼骨折）</li>
-            </ul>
-          </div>
-        </div>
-      </section>
-
-      <!-- §2 最小診察 -->
-      <section class="section-page" id="s2" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🩺 最小診察（腋窩神経が最重要）</h2>
-
-        <h3>その場で行う最小セット</h3>
-        <ul>
-          <li><strong>視診</strong>：肩の輪郭（squared off shoulder = 前方脱臼の典型）、変形、皮下出血、開放創</li>
-          <li><strong>触診</strong>：鎖骨、肩鎖関節、肩峰、上腕骨大結節、骨頭の位置</li>
-          <li><strong>可動域</strong>：自動・他動の挙上 / 外旋 / 内旋（脱臼疑いでは無理に動かさない）</li>
-          <li><strong>腋窩神経</strong>：<strong>整復前後で必ず deltoid 外側皮膚の知覚 + 三角筋収縮を確認</strong></li>
-          <li><strong>橈骨・尺骨・正中神経</strong>：手指の運動 + 知覚</li>
-          <li><strong>血管</strong>：橈骨動脈触知、毛細血管再充満、末梢 SpO2、皮膚色温</li>
-        </ul>
-
-        <h3>腱板の機能評価（脱臼除外後）</h3>
-        <ul>
-          <li><strong>棘上筋</strong>：empty can test、外転筋力</li>
-          <li><strong>棘下筋・小円筋</strong>：external rotation lag sign</li>
-          <li><strong>肩甲下筋</strong>：lift-off / belly press test</li>
-        </ul>
-
-        <div class="callout callout-warning">
-          <div class="callout-title">後方脱臼を見逃さない</div>
-          <div class="callout-body"><p>てんかん発作 / 電撃傷 / 高エネルギー外傷後の<strong>内旋固定 + 外旋不能</strong>は<strong>後方脱臼</strong>を疑う。AP 単独では light bulb sign のみで見落とされる → <strong>腋窩位 or Y view 必須</strong>。</p></div>
-        </div>
-      </section>
-
-      <!-- §3 X-line の置き方 -->
-      <section class="section-page" id="s3" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>📷 X-line の置き方（AP / Y / 腋窩）</h2>
-
-        <div class="table-wrap">
-          <table>
-            <thead><tr><th>撮影方向</th><th>分かること</th><th>注意</th></tr></thead>
-            <tbody>
-              <tr>
-                <td><strong>肩 AP（true AP）</strong></td>
-                <td>骨頭の位置、骨折線、関節裂隙</td>
-                <td>後方脱臼は light bulb sign のみで分かりにくい</td>
-              </tr>
-              <tr>
-                <td><strong>Y view（scapular Y）</strong></td>
-                <td>骨頭の前後位置（前方 vs 後方脱臼の判定）</td>
-                <td>Y の交点に骨頭がない = 脱臼</td>
-              </tr>
-              <tr>
-                <td><strong>腋窩位</strong></td>
-                <td>関節適合、Hill-Sachs / Bankart 病変</td>
-                <td><strong>後方脱臼の確定に最有用</strong>。疼痛で困難なら Velpeau view 代用</td>
-              </tr>
-              <tr>
-                <td>追加</td>
-                <td>鎖骨 AP / Zanca view（肩鎖関節）</td>
-                <td>肩鎖関節脱臼の grade 判定に有用</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        <div class="callout callout-warning">
-          <div class="callout-title">1 方向のみで判断しない</div>
-          <div class="callout-body">
-            <ul>
-              <li><strong>AP のみで「整復済み」と判断しない</strong> → Y view / 腋窩位で確認</li>
-              <li>整復後も<strong>必ず X-line で位置と Hill-Sachs / Bankart / 大結節骨折を再評価</strong></li>
-              <li>4-part 骨折・骨折脱臼は CT 追加</li>
-            </ul>
-          </div>
-        </div>
-      </section>
-
-      <!-- §4 主要鑑別 -->
-      <section class="section-page" id="s4" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🦴 主要鑑別（脱臼・骨折・腱板）</h2>
-
-        <div class="table-wrap">
-          <table>
-            <thead><tr><th>病態</th><th>手がかり</th><th>進む先</th></tr></thead>
-            <tbody>
-              <tr>
-                <td><strong>肩関節脱臼</strong>（前方）</td>
-                <td>外傷後に自動運動不可、squared off shoulder、外転外旋位で固定</td>
-                <td><a class="wiki-link" href="疾患詳細/肩関節脱臼.html">肩関節脱臼</a></td>
-              </tr>
-              <tr>
-                <td><strong>肩関節脱臼</strong>（後方）</td>
-                <td>てんかん・電撃傷後、内旋位固定、外旋不能</td>
-                <td><a class="wiki-link" href="疾患詳細/肩関節脱臼.html">肩関節脱臼</a></td>
-              </tr>
-              <tr>
-                <td><strong>上腕骨近位部骨折</strong></td>
-                <td>高齢者転倒、肩周囲の腫脹と圧痛、皮下出血</td>
-                <td><a class="wiki-link" href="疾患詳細/上肢骨折の固定/上腕骨近位部骨折.html">上腕骨近位部骨折</a></td>
-              </tr>
-              <tr>
-                <td><strong>鎖骨骨折</strong></td>
-                <td>肩峰近傍の圧痛、皮下出血、肩を抱える肢位</td>
-                <td><a class="wiki-link" href="疾患詳細/上肢骨折の固定/鎖骨骨折.html">鎖骨骨折</a></td>
-              </tr>
-              <tr>
-                <td><strong>肩鎖関節脱臼</strong></td>
-                <td>肩峰部の限局痛、段差変形、ピアノキー徴候</td>
-                <td><a class="wiki-link" href="疾患詳細/肩鎖関節脱臼.html">肩鎖関節脱臼</a></td>
-              </tr>
-              <tr>
-                <td><strong>腱板損傷</strong></td>
-                <td>外傷後の挙上困難、X 線で骨折なし、外転筋力低下</td>
-                <td><a class="wiki-link" href="疾患詳細/腱板損傷.html">腱板損傷</a></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </section>
-
-      <!-- §5 脱臼の整復法 -->
-      <section class="section-page" id="s5" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🔄 脱臼の整復法</h2>
-
-        <details class="sub-fold">
-          <summary>1. Stimson 法（うつ伏せ重錘牽引）</summary>
-          <div class="sub-fold__body">
-            <ul>
-              <li>うつ伏せ、患肢をベッド端から下垂、5〜10 kg を 15〜30 分間重錘牽引</li>
-              <li>鎮痛・筋弛緩を併用、術者の負担少なく成功率高い</li>
-              <li>第一選択になりやすい</li>
-            </ul>
-          </div>
-        </details>
-
-        <details class="sub-fold">
-          <summary>2. Spaso 法</summary>
-          <div class="sub-fold__body">
-            <ul>
-              <li>仰臥位で患肢を 90° 前方挙上 + 軽度外旋しながら牽引</li>
-              <li>1 人で行え、鎮痛があれば成功率高い</li>
-            </ul>
-          </div>
-        </details>
-
-        <details class="sub-fold">
-          <summary>3. Kocher 法 / 外旋法</summary>
-          <div class="sub-fold__body">
-            <ul>
-              <li>外旋法：肘 90° 屈曲位でゆっくり外旋、自然に整復</li>
-              <li>Kocher 法は古典的だが上腕骨骨折のリスクがあり推奨度低下</li>
-            </ul>
-          </div>
-        </details>
-
-        <details class="sub-fold">
-          <summary>4. 整復前後のチェック</summary>
-          <div class="sub-fold__body">
-            <ul>
-              <li><strong>整復前</strong>：腋窩神経・末梢神経 + 血管、X-line（脱臼方向 + 大結節骨折の有無）</li>
-              <li><strong>整復後</strong>：腋窩神経・末梢神経 + 血管 を再評価、<strong>X-line で整復確認</strong>（AP + Y）</li>
-              <li>大結節骨折を伴う場合や高齢者は<strong>整形コンサルト</strong></li>
-            </ul>
-          </div>
-        </details>
-
-        <div class="callout callout-tip">
-          <div class="callout-title">鎮痛・筋弛緩の選択肢</div>
-          <div class="callout-body">
-            <ul>
-              <li>静注鎮痛（フェンタニル / モルヒネ）+ ベンゾジアゼピン少量</li>
-              <li>関節内リドカイン注入（IAL block）：呼吸抑制が少なく外来でも安全</li>
-              <li>処置鎮静（procedural sedation）：モニター下で実施</li>
-            </ul>
-          </div>
-        </div>
-      </section>
-
-      <!-- §6 初期固定・鎮痛 -->
-      <section class="section-page" id="s6" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🩹 初期固定・鎮痛</h2>
-
-        <h3>固定の選び方</h3>
-        <ul>
-          <li><strong>肩関節脱臼整復後</strong>：sling（三角巾）+ swathe</li>
-          <li><strong>上腕骨近位部骨折</strong>：sling + swathe、転位大なら U 字副木</li>
-          <li><strong>鎖骨骨折</strong>：8 字包帯 / sling（成人は sling 単独で十分との報告）</li>
-          <li><strong>肩鎖関節脱臼</strong>：sling、grade III 以上は整形相談</li>
-        </ul>
-
-        <h3>鎮痛</h3>
-        <ul>
-          <li>第一選択：<strong>アセトアミノフェン</strong>、必要時 NSAIDs</li>
-          <li>整復前：オピオイド静注 ± ベンゾジアゼピン or IAL block</li>
-          <li>冷却を併用</li>
-        </ul>
-
-        <div class="callout callout-tip">
-          <div class="callout-title">固定後は必ず再評価</div>
-          <div class="callout-body"><p>固定後に<strong>神経血管所見を再確認</strong>。指先の色温・知覚・運動を本人にも教え、悪化時受診を説明する。</p></div>
-        </div>
-      </section>
-
-      <!-- §7 disposition -->
-      <section class="section-page" id="s7" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>📤 disposition（初回 vs 反復で違う）</h2>
-
-        <h3>初回脱臼</h3>
-        <ul>
-          <li>整復後 sling 固定 <strong>2〜3 週間</strong>（年齢・骨片で調整）</li>
-          <li><strong>整形外科外来へ紹介</strong>（Bankart / Hill-Sachs 評価、若年者は手術検討）</li>
-          <li>20 歳代の若年者は再脱臼率が高く、早期手術の選択肢を説明</li>
-        </ul>
-
-        <h3>反復性脱臼</h3>
-        <ul>
-          <li>整復後 sling は<strong>短期間</strong>（数日〜1 週間）</li>
-          <li>外来で手術適応を相談（鏡視下 Bankart 修復など）</li>
-          <li>受診歴がある整形主治医がいれば優先連携</li>
-        </ul>
-
-        <h3>入院 / 整形コンサルト</h3>
-        <ul>
-          <li>整復不能な脱臼、後方脱臼、骨折脱臼</li>
-          <li>血管神経損傷、開放骨折</li>
-          <li>4-part 上腕骨近位部骨折、転位大の鎖骨骨折</li>
-          <li>高齢者で疼痛コントロール困難・独居で安全性低い</li>
-          <li>夜間で整形対応不能 + 再評価必要例</li>
-        </ul>
-      </section>
-
-      <!-- §8 ピットフォール -->
-      <section class="section-page" id="s8" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>⚠️ ピットフォール</h2>
-
-        <ul>
-          <li><strong>後方脱臼を AP のみで見落とす</strong> — Y view / 腋窩位を必ず追加</li>
-          <li><strong>整復前後で腋窩神経をチェックしない</strong> — 整復による神経障害の見落とし</li>
-          <li><strong>整復後 X-line を撮らない</strong> — 大結節骨折・再脱臼の確認漏れ</li>
-          <li><strong>高齢者の挙上困難を「腱板」と決めつける</strong> — 上腕骨近位部骨折を rule out</li>
-          <li><strong>初回と反復性で同じ管理</strong> — 固定期間と紹介プロトコルが違う</li>
-          <li><strong>鎖骨骨折で 8 字包帯にこだわる</strong> — 成人は sling 単独でアウトカム同等</li>
-          <li><strong>てんかん発作後の肩痛を軽視</strong> — 後方脱臼の典型シーン</li>
-        </ul>
-      </section>
-
-      <!-- §9 関連リンク -->
-      <section class="section-page" id="s9" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>📚 関連リンク</h2>
-
-        <h3>関連ページ</h3>
-        <ul>
-          <li><a class="wiki-link" href="疾患詳細/肩関節脱臼.html">肩関節脱臼</a></li>
-          <li><a class="wiki-link" href="疾患詳細/肩鎖関節脱臼.html">肩鎖関節脱臼</a></li>
-          <li><a class="wiki-link" href="疾患詳細/上肢骨折の固定/上腕骨近位部骨折.html">上腕骨近位部骨折</a></li>
-          <li><a class="wiki-link" href="疾患詳細/上肢骨折の固定/鎖骨骨折.html">鎖骨骨折</a></li>
-          <li><a class="wiki-link" href="疾患詳細/腱板損傷.html">腱板損傷</a></li>
-          <li><a class="wiki-link" href="転倒.html">転倒</a></li>
-          <li><span class="wiki-missing">腋窩神経損傷</span> / <span class="wiki-missing">腋窩動脈損傷</span> / <span class="wiki-missing">腕神経叢損傷</span></li>
-        </ul>
-
-        <p>#ER #救急 #肩 #肩関節脱臼 #上腕骨近位部骨折 #鎖骨骨折 #肩鎖関節脱臼 #腱板損傷 #整形外科</p>
-      </section>
+      <p>#ER #救急 #肩 #肩関節脱臼 #上腕骨近位部骨折 #鎖骨骨折 #肩鎖関節脱臼 #腱板損傷 #整形外科</p>
 
     </article>
   </main>
@@ -367,50 +747,61 @@
 
   <script>
   (function(){
-    const menu = document.getElementById('sectionMenu');
-    const pages = document.querySelectorAll('.section-page');
-    const titleH1 = document.querySelector('.page-title');
+    const flowBox = document.getElementById('flowBox');
+    const flowBoxClose = document.getElementById('flowBoxClose');
 
-    function showSection(id) {
-      menu.hidden = true;
-      if (titleH1) titleH1.hidden = true;
-      pages.forEach(p => p.hidden = (p.id !== id));
-      window.scrollTo(0, 0);
-    }
-    function showMenu(scrollTarget) {
-      menu.hidden = false;
-      if (titleH1) titleH1.hidden = false;
-      pages.forEach(p => p.hidden = true);
-      if (scrollTarget) {
-        if (scrollTarget.tagName === 'DETAILS') scrollTarget.open = true;
-        scrollTarget.scrollIntoView({behavior: 'instant', block: 'start'});
-      } else {
-        window.scrollTo(0, 0);
-      }
-    }
-    function syncFromHash() {
-      const id = (location.hash || '').replace('#','');
-      const target = id ? document.getElementById(id) : null;
-      if (target && target.classList.contains('section-page')) {
-        showSection(id);
-      } else if (target) {
-        showMenu(target);
-      } else {
-        showMenu();
-      }
+    if (flowBox && flowBoxClose) {
+      const dismiss = () => { flowBox.hidden = true; };
+      flowBoxClose.addEventListener('click', dismiss);
+      flowBoxClose.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); dismiss(); }
+      });
     }
 
-    window.addEventListener('hashchange', syncFromHash);
-    document.querySelectorAll('.back-to-menu').forEach(b => {
-      b.addEventListener('click', () => { history.pushState(null,'',location.pathname); showMenu(); });
+    // 来院後チェックリスト：localStorage 永続化 + per-panel リセット
+    const STORAGE_KEY = 'shoulder-dx-checklist-v1';
+    let stored = {};
+    try { stored = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); } catch (_) {}
+    const allBoxes = document.querySelectorAll('.dx-checklist__list input[type="checkbox"]');
+    allBoxes.forEach(cb => {
+      const key = cb.dataset.key;
+      if (stored[key]) cb.checked = true;
+      cb.addEventListener('change', () => {
+        if (cb.checked) stored[key] = true; else delete stored[key];
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(stored));
+      });
     });
+    document.querySelectorAll('.dx-checklist__reset').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const details = btn.closest('details');
+        if (!details) return;
+        details.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+          cb.checked = false;
+          delete stored[cb.dataset.key];
+        });
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(stored));
+      });
+    });
+
+    // パネル開閉状態を localStorage で復元
+    ['historyPanel', 'examPanel', 'rulesL2Panel', 'imagingPanel'].forEach(id => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      const key = `shoulder-${id}-open-v1`;
+      const saved = localStorage.getItem(key);
+      if (saved !== null) el.open = saved === '1';
+      el.addEventListener('toggle', () => {
+        localStorage.setItem(key, el.open ? '1' : '0');
+      });
+    });
+
     const navBack = document.getElementById('navBack');
     if (navBack) navBack.addEventListener('click', () => {
       if (window.history.length > 1) history.back();
       else window.location.href = 'index.html';
     });
-
-    syncFromHash();
   })();
   </script>
 </body>

@@ -6,6 +6,189 @@
   <meta name="color-scheme" content="light dark" />
   <title>肘内障 | ER ノート</title>
   <link rel="stylesheet" href="../er-note.css" />
+  <style>
+    .dx-quick {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px;
+      margin: 10px 0 4px;
+    }
+    .dx-quick__btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      padding: 10px 6px;
+      border-radius: 10px;
+      background: color-mix(in srgb, var(--accent) 10%, var(--surface));
+      border: 1.5px solid var(--accent);
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 13px;
+      line-height: 1.2;
+      text-align: center;
+      cursor: pointer;
+      transition: background 120ms ease;
+    }
+    .dx-quick__btn:hover {
+      background: color-mix(in srgb, var(--accent) 18%, var(--surface));
+    }
+    .dx-quick__icon { font-size: 20px; }
+    .dx-quick__sub {
+      font-size: 10.5px;
+      font-weight: 500;
+      color: var(--muted);
+    }
+
+    .dx-tri {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+      margin: 6px 0 4px;
+      align-items: start;
+    }
+    .dx-tri__card {
+      background: var(--surface);
+      border-radius: 10px;
+      padding: 10px 12px;
+      border: 1.5px solid color-mix(in srgb, var(--text) 18%, transparent);
+    }
+    .dx-tri__card--vasc { border-color: #c0392b; background: color-mix(in srgb, #c0392b 6%, var(--surface)); }
+    .dx-tri__card--neuro { border-color: #b5651d; background: color-mix(in srgb, #b5651d 6%, var(--surface)); }
+    .dx-tri__card--typical { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 6%, var(--surface)); }
+    .dx-tri__title {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 800;
+      font-size: 13.5px;
+      margin-bottom: 4px;
+    }
+    .dx-tri__card--vasc .dx-tri__title { color: #c0392b; }
+    .dx-tri__card--neuro .dx-tri__title { color: #b5651d; }
+    .dx-tri__list {
+      margin: 0;
+      padding-left: 18px;
+      font-size: 12.5px;
+      line-height: 1.5;
+    }
+    .dx-tri__list li { margin: 2px 0; }
+
+    details.dx-tri__card { padding: 0; }
+    details.dx-tri__card > summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 10px 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 800;
+      font-size: 13.5px;
+    }
+    details.dx-tri__card > summary::-webkit-details-marker { display: none; }
+    details.dx-tri__card > summary::after {
+      content: "▸";
+      margin-left: auto;
+      font-size: 12px;
+      color: var(--muted);
+      transition: transform 120ms ease;
+    }
+    details.dx-tri__card[open] > summary::after { transform: rotate(90deg); }
+    details.dx-tri__card--vasc > summary { color: #c0392b; }
+    details.dx-tri__card--neuro > summary { color: #b5651d; }
+    details.dx-tri__card > .dx-tri__list { padding: 0 14px 12px 30px; }
+    details.dx-tri__card > .dx-tri__hint {
+      padding: 0 14px 6px 30px;
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    details.dx-box {
+      background: var(--surface);
+      border: 1.5px solid color-mix(in srgb, var(--text) 18%, transparent);
+      border-radius: 10px;
+      margin: 10px 0;
+      scroll-margin-top: 8px;
+    }
+    details.dx-box > summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 12px 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 800;
+      font-size: 14.5px;
+    }
+    details.dx-box > summary::-webkit-details-marker { display: none; }
+    details.dx-box > summary::after {
+      content: "▸";
+      margin-left: auto;
+      font-size: 13px;
+      color: var(--muted);
+      transition: transform 120ms ease;
+    }
+    details.dx-box[open] > summary::after { transform: rotate(90deg); }
+    details.dx-box[open] {
+      border-color: var(--accent);
+    }
+    details.dx-box > .dx-box__body {
+      padding: 0 14px 14px;
+    }
+
+    @media (max-width: 640px) {
+      .dx-quick { gap: 6px; }
+      .dx-quick__btn { padding: 8px 4px; font-size: 11.5px; border-radius: 8px; }
+      .dx-quick__icon { font-size: 17px; }
+      .dx-quick__sub { font-size: 9.5px; }
+
+      .dx-tri { grid-template-columns: 1fr; gap: 8px; }
+      .dx-tri__card { padding: 8px 10px; }
+      details.dx-tri__card > summary { padding: 8px 10px; font-size: 12.5px; }
+      details.dx-tri__card > .dx-tri__list { padding: 0 12px 10px 26px; }
+      .dx-tri__title { font-size: 12.5px; }
+      .dx-tri__list { font-size: 12px; }
+
+      details.dx-box > summary { padding: 10px 12px; font-size: 13.5px; }
+      details.dx-box > .dx-box__body { padding: 0 12px 12px; }
+    }
+
+    .dx-step {
+      margin: 18px 0 6px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 11.5px;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+    }
+    .dx-step::before, .dx-step::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: color-mix(in srgb, var(--text) 18%, transparent);
+    }
+
+    .dx-template {
+      background: color-mix(in srgb, var(--text) 4%, var(--surface));
+      border-left: 3px solid var(--accent);
+      border-radius: 6px;
+      padding: 10px 12px;
+      margin: 6px 0 0;
+      font-size: 13px;
+      line-height: 1.6;
+      white-space: pre-wrap;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+    .dx-template__hint {
+      font-size: 11px;
+      color: var(--muted);
+      margin: 0 0 4px;
+    }
+  </style>
 </head>
 <body>
   <header class="hokuto-top">
@@ -21,179 +204,192 @@
     <article class="note-shell">
       <h1 class="page-title">肘内障</h1>
 
-      <!-- 即時アクションヘッダー（常時 sticky） -->
-      <div class="action-header">
-        <div class="action-header__title">⚡ 即時アクション</div>
-        <ol class="action-header__list">
-          <li><strong>小児 1-4 歳、引っ張った後</strong>の典型病歴を確認</li>
-          <li><strong>X 線不要</strong>、整復で確定診断</li>
-          <li><strong>回外・屈曲法 / 過回内法</strong>で整復（数秒で完了）</li>
-          <li>反復しやすい（家族指導：手を引っ張らない）</li>
-        </ol>
-      </div>
-
-      <!-- メニュータイル -->
-      <nav class="section-tiles" id="sectionMenu">
-        <a class="section-tile" href="#s1"><span class="section-tile__no">📊</span><span class="section-tile__name">疫学・受傷機転</span></a>
-        <a class="section-tile" href="#s2"><span class="section-tile__no">📝</span><span class="section-tile__name">特徴的病歴</span></a>
-        <a class="section-tile" href="#s3"><span class="section-tile__no">🩺</span><span class="section-tile__name">身体所見</span></a>
-        <a class="section-tile" href="#s4"><span class="section-tile__no">✅</span><span class="section-tile__name">診断</span></a>
-        <a class="section-tile" href="#s5"><span class="section-tile__no">🔧</span><span class="section-tile__name">整復手技</span></a>
-        <a class="section-tile" href="#s6"><span class="section-tile__no">🔍</span><span class="section-tile__name">整復後の確認</span></a>
-        <a class="section-tile" href="#s7"><span class="section-tile__no">⚠️</span><span class="section-tile__name">整復できない場合</span></a>
-        <a class="section-tile" href="#s8"><span class="section-tile__no">🏠</span><span class="section-tile__name">帰宅・してはいけないこと</span></a>
-        <a class="section-tile" href="#s9"><span class="section-tile__no">📚</span><span class="section-tile__name">出典・関連</span></a>
+      <nav class="dx-quick" aria-label="クイックタップ">
+        <button class="dx-quick__btn" type="button" data-target="img-read">
+          <span>画像の見方</span>
+          <span class="dx-quick__sub">基本不要だが…</span>
+        </button>
+        <button class="dx-quick__btn" type="button" data-target="plan">
+          <span>整復方法</span>
+          <span class="dx-quick__sub">回内法 → 回外屈曲法</span>
+        </button>
+        <button class="dx-quick__btn" type="button" data-target="consult">
+          <span>整復後説明</span>
+          <span class="dx-quick__sub">家族へ・整形フォロー</span>
+        </button>
       </nav>
 
-      <!-- 関連主訴（双方向リンク） -->
-      <details class="sub-fold" id="related-symptoms">
-        <summary>📞 この疾患が該当する主訴</summary>
-        <div class="sub-fold__body">
+      <div class="dx-step"><span>同時並行で評価する 3 軸</span></div>
+      <div class="dx-tri">
+
+        <div class="dx-tri__card dx-tri__card--typical">
+          <div class="dx-tri__title">典型像</div>
+          <ul class="dx-tri__list">
+            <li><strong>1–4 歳の幼児</strong>（5 歳以上はまれ）</li>
+            <li>機転：<strong>手を引っ張られた</strong>後に泣き出した</li>
+            <li>所見：患肢を <strong>軽度屈曲・回内位</strong>で動かさない（pseudoparalysis）</li>
+            <li>腫脹・変形なし、皮下出血なし</li>
+            <li>整復一発で<strong>すぐに泣き止んで使い始める</strong></li>
+          </ul>
+        </div>
+
+        <details class="dx-tri__card dx-tri__card--vasc">
+          <summary>血管</summary>
+          <p class="dx-tri__hint">血管障害は通常なし。腫脹・色調変化があれば<strong>骨折を疑う</strong>。</p>
+          <ul class="dx-tri__list">
+            <li>橈骨動脈触知 OK が基本</li>
+            <li>腫脹・冷感・変色 → 骨折／脱臼を再考</li>
+            <li>左右差なし、CRT 正常</li>
+          </ul>
+        </details>
+
+        <details class="dx-tri__card dx-tri__card--neuro">
+          <summary>神経</summary>
+          <p class="dx-tri__hint">神経障害は通常なし。麻痺所見があれば<strong>骨折・脱臼を再考</strong>。</p>
+          <ul class="dx-tri__list">
+            <li>整復後は患肢を自発的に使い始める</li>
+            <li>感覚・運動の評価は幼児ゆえ困難 → 観察で判断</li>
+            <li>整復後も使わない → Xp 再撮影、整形相談</li>
+          </ul>
+        </details>
+      </div>
+
+      <details class="dx-box" id="img-read">
+        <summary><span>画像の見方</span></summary>
+        <div class="dx-box__body">
           <ul>
-            <li><a class="wiki-link" href="../手関節・手の外傷.html">手関節・手の外傷</a> — 上肢外傷の入口</li>
+            <li><strong>典型例では Xp 不要</strong>（病歴・所見＋整復成功で診断）</li>
+            <li>Xp を撮る適応：
+              <ul>
+                <li>受傷機転が不明 or 引っ張られていない</li>
+                <li>腫脹・皮下出血・変形あり</li>
+                <li>整復後も患肢を使わない</li>
+                <li>5 歳以上、または再発を繰り返す</li>
+              </ul>
+            </li>
+            <li>Xp を撮る場合：<strong>肘 2 方向＋健側比較</strong>（骨端線評価）</li>
+            <li>鑑別：<a class="wiki-link" href="上腕骨顆上骨折.html">上腕骨顆上骨折</a> ／ 上腕骨外顆骨折 ／ <a class="wiki-link" href="鎖骨骨折.html">鎖骨骨折</a></li>
           </ul>
         </div>
       </details>
 
-      <!-- §1 疫学・受傷機転 -->
-      <section class="section-page" id="s1" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>📊 疫学・受傷機転</h2>
-        <ul>
-          <li><strong>2–5 歳</strong>（6 歳以降は橈骨頭が発達し起こりにくい）</li>
-          <li><strong>腕を急に引っ張られる</strong>（親が手を引いた、遊具での回転）</li>
-          <li>子供は「肘が痛い」とは言えず <strong>腕をだらりと下げて動かさない</strong></li>
-        </ul>
-        <div class="callout callout-summary">
-          <div class="callout-title">肘内障 = 2–5 歳の肘痛、レントゲン撮影の前に整復を試せる</div>
-          <div class="callout-body"><ul>
-            <li><strong>2–5 歳</strong>、腕を引っ張られて発症（親の手を引く瞬間など）</li>
-            <li><strong>橈骨輪状靱帯が橈骨頭から外れる亜脱臼</strong></li>
-            <li>レントゲン不要、<strong>臨床診断 + 整復で完結</strong></li>
-            <li>整復成功 → <strong>数分で腕を動かし始める</strong> → 帰宅</li>
-          </ul></div>
+      <details class="dx-box" id="plan">
+        <summary><span>整復方法・治療方針</span></summary>
+        <div class="dx-box__body">
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>場面</th><th>所見</th><th>マネジメント</th><th>ER の動き</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>典型的肘内障</td>
+                  <td>引っ張り＋pseudoparalysis、腫脹なし</td>
+                  <td><strong>徒手整復</strong>（ER で完結）</td>
+                  <td>整復→使い始め確認→帰宅</td>
+                </tr>
+                <tr>
+                  <td>整復成功</td>
+                  <td>整復音 ＋ すぐに使い始める</td>
+                  <td>固定不要、帰宅</td>
+                  <td>家族へ再発予防説明</td>
+                </tr>
+                <tr>
+                  <td><strong>整復不能 / 使用しない</strong></td>
+                  <td>整復試行で改善せず</td>
+                  <td>Xp 撮影＋整形コンサルト</td>
+                  <td>三角巾固定、整形外来へ</td>
+                </tr>
+                <tr>
+                  <td><strong>非典型例</strong></td>
+                  <td>腫脹／変形／皮下出血</td>
+                  <td><strong>骨折・脱臼を疑う</strong></td>
+                  <td>Xp 必須、整形コンサル</td>
+                </tr>
+                <tr>
+                  <td>反復例</td>
+                  <td>過去に複数回</td>
+                  <td>家族指導＋整形外来</td>
+                  <td>整復後に経過観察</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3>整復手技</h3>
+          <ul>
+            <li><strong>第一選択：回内法（整復率 80–95%）</strong>。橈骨頭を母指でホールド、肘を 90° 屈曲、前腕を愛護的に回内（患児の掌が術者へ向く方向）。クリック感を確認</li>
+            <li><strong>第二選択：回外屈曲法（整復率 69–77%）</strong>。回内法でクリック音がない時に追加</li>
+            <li>整復成功 → 数分以内に泣き止んで <strong>自発的に使い始める</strong></li>
+            <li>使い始めなければ 5–10 分後に再試行 or 反対手技</li>
+            <li>2–3 回試行しても改善なし → <strong>Xp ＋ 整形コンサル</strong>に切替</li>
+            <li>再発率は約 20%。年齢不相応・受傷機転不明の場合は虐待も鑑別</li>
+          </ul>
+
+          <h3>ER で打つ手</h3>
+          <ul>
+            <li>典型例は<strong>整形コンサル不要</strong>で完結する</li>
+            <li>整復後は<strong>固定不要</strong>、帰宅可</li>
+            <li>家族説明：再発予防（手を引っ張らない、抱き上げ方の指導）、5 歳頃には自然軽快</li>
+            <li>使用しない／非典型例 → <strong>Xp ＋ 整形相談</strong></li>
+          </ul>
         </div>
-      </section>
+      </details>
 
-      <!-- §2 特徴的病歴 -->
-      <section class="section-page" id="s2" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>📝 特徴的病歴</h2>
-        <ul>
-          <li>親の訴え：「急に腕を引っ張ったら、動かさなくなった」</li>
-          <li>打撲歴・転倒歴は <strong>なし</strong></li>
-          <li>肘の腫脹も <strong>なし</strong></li>
-        </ul>
-      </section>
+      <details class="dx-box" id="consult">
+        <summary><span>整復後の説明・整形フォロー文（必要時）</span></summary>
+        <div class="dx-box__body">
+          <p class="dx-template__hint">典型例は整形コンサル不要。<strong>整復後の家族説明</strong>と、<strong>整復不能・非典型時の整形フォロー文</strong>の 2 種を用意。後者は『他科コンサルト実践マニュアル』のフォーマットに準拠。</p>
 
-      <!-- §3 身体所見 -->
-      <section class="section-page" id="s3" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🩺 身体所見</h2>
-        <ul>
-          <li><strong>患肢は前腕回内位で下垂</strong></li>
-          <li>肘関節の軽度屈曲位で保持</li>
-          <li>肩・手関節は動かせる（肘だけ動かさない）</li>
-          <li>腫脹・変形・皮膚所見 <strong>なし</strong></li>
-        </ul>
-      </section>
+          <h3>家族への説明（カルテ・帰宅指示書用）</h3>
+          <div class="dx-template">【病名】肘内障（橈骨頭亜脱臼）
+【整復】[回内法／回外屈曲法]で整復、整復音 [あり／なし]
+【整復後経過】[○分後に自発的に使い始め／泣き止んで普段通り]
+【家族説明】
+・幼児に多い肘の亜脱臼で、骨折ではありません。
+・手を引っ張ったり、急に持ち上げたりすると再発します。
+・5 歳前後には自然に起きにくくなります。
+・整復後は固定不要、入浴・食事・遊びは普通通りで構いません。
+・万が一、再び腕を使わない・腫れてきた場合は再受診してください。</div>
 
-      <!-- §4 診断 -->
-      <section class="section-page" id="s4" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>✅ 診断</h2>
-        <ul>
-          <li><strong>臨床診断で十分</strong>、レントゲン不要</li>
-          <li>骨折・肘関節脱臼との区別：腫脹・変形の有無、打撲歴の有無</li>
-          <li>迷う場合のみレントゲン（骨折・脱臼の除外目的）</li>
-        </ul>
-      </section>
-
-      <!-- §5 整復手技 -->
-      <section class="section-page" id="s5" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🔧 整復手技</h2>
-
-        <h3>手技（2 種類、どちらも有効）</h3>
-        <ol>
-          <li><strong>回外屈曲法（supination-flexion）</strong>
-            <ul>
-              <li>術者：肘を 90° 屈曲、橈骨頭に母指を置く</li>
-              <li>前腕を <strong>完全に回外</strong> → そのまま <strong>完全屈曲</strong></li>
-              <li>整復時に「コリッ」という感触</li>
-            </ul>
-          </li>
-          <li><strong>過回内法（hyperpronation）</strong>
-            <ul>
-              <li>肘 90° 屈曲</li>
-              <li>前腕を <strong>強く回内</strong></li>
-              <li>子供の疼痛が少ないと報告あり</li>
-            </ul>
-          </li>
-        </ol>
-
-        <div class="callout callout-tip">
-          <div class="callout-title">どちらの手技も数秒で完結</div>
-          <div class="callout-body"><p>軽くコリッと音がすれば成功。失敗してもすぐもう一方を試してよい。</p></div>
+          <h3>整形外来フォロー文（整復不能・反復例・非典型例）</h3>
+          <div class="dx-template">【目的】肘内障 [整復不能／反復例／非典型例]の精査・ご加療依頼。
+【疾患】#1 [右/左]肘内障（[整復不能／○回目の反復／腫脹あり]）
+【既往歴】[特記事項なし／○○]
+【内服薬】[なし／○○]
+【ADL（受傷前）】[年齢相当]
+【現病歴】[年齢]歳[男/女]児。[受傷機転：手を引っ張られた／不明]で発症し、[来院経緯]で来院。
+ ・身体所見：患肢を軽度屈曲・回内位で使用せず（pseudoparalysis）、腫脹・変形 [なし／あり]
+ ・血管：橈骨動脈触知 [良好]、CRT [正常]
+ ・神経：麻痺 [なし／○○]
+ ・画像：Xp [未／施行（骨折・脱臼なし／○○）]
+ ・ER 処置：[回内法／回外屈曲法]で整復試行 [○回]、[整復後使用開始／使用しない]
+よろしくお願いいたします。</div>
         </div>
-      </section>
+      </details>
 
-      <!-- §6 整復後の確認 -->
-      <section class="section-page" id="s6" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🔍 整復後の確認</h2>
-        <ul>
-          <li><strong>5–10 分観察</strong></li>
-          <li>自然に腕を動かし、手で物を取ったら成功</li>
-          <li>おもちゃやシールを使って動かすか確認</li>
-        </ul>
-      </section>
+      <details class="dx-box">
+        <summary><span>関連ハブ・隣接疾患</span></summary>
+        <div class="dx-box__body">
+          <ul>
+            <li>主訴入口：<a class="wiki-link" href="../肘の外傷・痛み.html">肘の外傷・痛み</a> ／ <a class="wiki-link" href="../小児外傷.html">小児外傷</a></li>
+            <li>隣接疾患：<a class="wiki-link" href="上腕骨顆上骨折.html">上腕骨顆上骨折</a> ／ <a class="wiki-link" href="肘関節脱臼.html">肘関節脱臼</a> ／ <a class="wiki-link" href="鎖骨骨折.html">鎖骨骨折</a></li>
+            <li>関連処置：徒手整復（鎮痛・鎮静不要が原則）</li>
+            <li>家族指導：手を引っ張らない、抱き上げ方の工夫</li>
+          </ul>
+        </div>
+      </details>
 
-      <!-- §7 整復できない場合 -->
-      <section class="section-page" id="s7" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>⚠️ 整復できない場合</h2>
-        <ul>
-          <li>繰り返し試して失敗 → <strong>レントゲン撮影</strong>（骨折・脱臼の除外）</li>
-          <li>時間が経って肘周囲の炎症で整復困難になっている可能性</li>
-          <li>整形外科コンサルト</li>
-        </ul>
-      </section>
-
-      <!-- §8 帰宅・してはいけないこと -->
-      <section class="section-page" id="s8" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🏠 帰宅時の説明 / してはいけないこと</h2>
-
-        <h3>帰宅時の説明</h3>
-        <ul>
-          <li>再発リスクあり（5–30%）、<strong>手を引っ張らない</strong>よう指導</li>
-          <li>数日以内に動かさなくなったら受診</li>
-          <li>再発を繰り返すなら整形外科外来</li>
-        </ul>
-
-        <h3>してはいけないこと</h3>
-        <ul>
-          <li><strong>レントゲンで異常なし → 湿布で様子観察</strong> は不適切</li>
-          <li>整復すれば数分で症状消失するので、<strong>ER で必ず試す</strong></li>
-        </ul>
-      </section>
-
-      <!-- §9 出典・関連 -->
-      <section class="section-page" id="s9" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>📚 出典 / 関連</h2>
-        <h3>出典</h3>
-        <ul>
-          <li><strong>増井伸高. 骨折ハンター. 中外医学社. 2019.</strong></li>
-          <li><strong>Krul M ほか.</strong> Manipulative interventions for reducing pulled elbow in young children. <em>Cochrane Database Syst Rev.</em> 2017.</li>
-          <li><strong>UpToDate</strong> &quot;Radial head subluxation (nursemaid&#x27;s elbow)&quot;.</li>
-        </ul>
-        <h3>関連</h3>
-        <ul>
-          <li><a class="wiki-link" href="../転倒.html">転倒</a> / <a class="wiki-link" href="上腕骨顆上骨折.html">上腕骨顆上骨折</a></li>
-        </ul>
-      </section>
+      <details class="dx-box">
+        <summary><span>出典</span></summary>
+        <div class="dx-box__body">
+          <ul>
+            <li>増井伸高. 骨折ハンター. 中外医学社. 2019.</li>
+            <li>Krul M, et al. Manipulative interventions for reducing pulled elbow in young children. <em>Cochrane Database Syst Rev.</em> 2017.</li>
+            <li>「他科コンサルト実践マニュアル」整形外科の章（小児四肢外傷）.</li>
+          </ul>
+        </div>
+      </details>
 
     </article>
   </main>
@@ -212,53 +408,21 @@
 
   <script>
   (function(){
-    const menu = document.getElementById('sectionMenu');
-    const pages = document.querySelectorAll('.section-page');
-    const titleH1 = document.querySelector('.page-title');
-    const relatedSymp = document.getElementById('related-symptoms');
-
-    function showSection(id) {
-      menu.hidden = true;
-      if (titleH1) titleH1.hidden = true;
-      if (relatedSymp) relatedSymp.hidden = true;
-      pages.forEach(p => p.hidden = (p.id !== id));
-      window.scrollTo(0, 0);
-    }
-    function showMenu(scrollTarget) {
-      menu.hidden = false;
-      if (titleH1) titleH1.hidden = false;
-      if (relatedSymp) relatedSymp.hidden = false;
-      pages.forEach(p => p.hidden = true);
-      if (scrollTarget) {
-        if (scrollTarget.tagName === 'DETAILS') scrollTarget.open = true;
-        scrollTarget.scrollIntoView({behavior: 'instant', block: 'start'});
-      } else {
-        window.scrollTo(0, 0);
-      }
-    }
-    function syncFromHash() {
-      const id = (location.hash || '').replace('#','');
-      const target = id ? document.getElementById(id) : null;
-      if (target && target.classList.contains('section-page')) {
-        showSection(id);
-      } else if (target) {
-        showMenu(target);
-      } else {
-        showMenu();
-      }
-    }
-
-    window.addEventListener('hashchange', syncFromHash);
-    document.querySelectorAll('.back-to-menu').forEach(b => {
-      b.addEventListener('click', () => { history.pushState(null,'',location.pathname); showMenu(); });
+    document.querySelectorAll('.dx-quick__btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.dataset.target;
+        const target = document.getElementById(id);
+        if (!target) return;
+        target.open = true;
+        target.scrollIntoView({behavior: 'smooth', block: 'start'});
+      });
     });
+
     const navBack = document.getElementById('navBack');
     if (navBack) navBack.addEventListener('click', () => {
       if (window.history.length > 1) history.back();
       else window.location.href = '../index.html';
     });
-
-    syncFromHash();
   })();
   </script>
 </body>

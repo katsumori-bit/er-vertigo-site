@@ -6,6 +6,196 @@
   <meta name="color-scheme" content="light dark" />
   <title>ATFL損傷 | ER ノート</title>
   <link rel="stylesheet" href="../er-note.css" />
+  <style>
+    /* ============ クイックタップ（3 つを開閉トリガー） ============ */
+    .dx-quick {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px;
+      margin: 10px 0 4px;
+    }
+    .dx-quick__btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      padding: 10px 6px;
+      border-radius: 10px;
+      background: color-mix(in srgb, var(--accent) 10%, var(--surface));
+      border: 1.5px solid var(--accent);
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 13px;
+      line-height: 1.2;
+      text-align: center;
+      cursor: pointer;
+      transition: background 120ms ease;
+    }
+    .dx-quick__btn:hover {
+      background: color-mix(in srgb, var(--accent) 18%, var(--surface));
+    }
+    .dx-quick__icon { font-size: 20px; }
+    .dx-quick__sub {
+      font-size: 10.5px;
+      font-weight: 500;
+      color: var(--muted);
+    }
+
+    /* ============ 同時評価 3 列（血管・神経・典型像） ============ */
+    .dx-tri {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+      margin: 6px 0 4px;
+      align-items: start;
+    }
+    .dx-tri__card {
+      background: var(--surface);
+      border-radius: 10px;
+      padding: 10px 12px;
+      border: 1.5px solid color-mix(in srgb, var(--text) 18%, transparent);
+    }
+    .dx-tri__card--vasc { border-color: #c0392b; background: color-mix(in srgb, #c0392b 6%, var(--surface)); }
+    .dx-tri__card--neuro { border-color: #b5651d; background: color-mix(in srgb, #b5651d 6%, var(--surface)); }
+    .dx-tri__card--typical { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 6%, var(--surface)); }
+    .dx-tri__title {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 800;
+      font-size: 13.5px;
+      margin-bottom: 4px;
+    }
+    .dx-tri__card--vasc .dx-tri__title { color: #c0392b; }
+    .dx-tri__card--neuro .dx-tri__title { color: #b5651d; }
+    .dx-tri__list {
+      margin: 0;
+      padding-left: 18px;
+      font-size: 12.5px;
+      line-height: 1.5;
+    }
+    .dx-tri__list li { margin: 2px 0; }
+
+    /* details 形式の血管/神経カード：summary にチェック印、開閉時の挙動 */
+    details.dx-tri__card { padding: 0; }
+    details.dx-tri__card > summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 10px 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 800;
+      font-size: 13.5px;
+    }
+    details.dx-tri__card > summary::-webkit-details-marker { display: none; }
+    details.dx-tri__card > summary::after {
+      content: "▸";
+      margin-left: auto;
+      font-size: 12px;
+      color: var(--muted);
+      transition: transform 120ms ease;
+    }
+    details.dx-tri__card[open] > summary::after { transform: rotate(90deg); }
+    details.dx-tri__card--vasc > summary { color: #c0392b; }
+    details.dx-tri__card--neuro > summary { color: #b5651d; }
+    details.dx-tri__card > .dx-tri__list { padding: 0 14px 12px 30px; }
+    details.dx-tri__card > .dx-tri__hint {
+      padding: 0 14px 6px 30px;
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    /* ============ 大きな details ボックス（画像/治療方針/コンサル文） ============ */
+    details.dx-box {
+      background: var(--surface);
+      border: 1.5px solid color-mix(in srgb, var(--text) 18%, transparent);
+      border-radius: 10px;
+      margin: 10px 0;
+      scroll-margin-top: 8px;
+    }
+    details.dx-box > summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 12px 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 800;
+      font-size: 14.5px;
+    }
+    details.dx-box > summary::-webkit-details-marker { display: none; }
+    details.dx-box > summary::after {
+      content: "▸";
+      margin-left: auto;
+      font-size: 13px;
+      color: var(--muted);
+      transition: transform 120ms ease;
+    }
+    details.dx-box[open] > summary::after { transform: rotate(90deg); }
+    details.dx-box[open] {
+      border-color: var(--accent);
+    }
+    details.dx-box > .dx-box__body {
+      padding: 0 14px 14px;
+    }
+
+    /* スマホで 1 列に */
+    @media (max-width: 640px) {
+      .dx-quick { gap: 6px; }
+      .dx-quick__btn { padding: 8px 4px; font-size: 11.5px; border-radius: 8px; }
+      .dx-quick__icon { font-size: 17px; }
+      .dx-quick__sub { font-size: 9.5px; }
+
+      .dx-tri { grid-template-columns: 1fr; gap: 8px; }
+      .dx-tri__card { padding: 8px 10px; }
+      details.dx-tri__card > summary { padding: 8px 10px; font-size: 12.5px; }
+      details.dx-tri__card > .dx-tri__list { padding: 0 12px 10px 26px; }
+      .dx-tri__title { font-size: 12.5px; }
+      .dx-tri__list { font-size: 12px; }
+
+      details.dx-box > summary { padding: 10px 12px; font-size: 13.5px; }
+      details.dx-box > .dx-box__body { padding: 0 12px 12px; }
+    }
+
+    /* ============ 区切り帯（最小限） ============ */
+    .dx-step {
+      margin: 18px 0 6px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 11.5px;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+    }
+    .dx-step::before, .dx-step::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: color-mix(in srgb, var(--text) 18%, transparent);
+    }
+
+    /* コピペ用テンプレ */
+    .dx-template {
+      background: color-mix(in srgb, var(--text) 4%, var(--surface));
+      border-left: 3px solid var(--accent);
+      border-radius: 6px;
+      padding: 10px 12px;
+      margin: 6px 0 0;
+      font-size: 13px;
+      line-height: 1.6;
+      white-space: pre-wrap;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+    .dx-template__hint {
+      font-size: 11px;
+      color: var(--muted);
+      margin: 0 0 4px;
+    }
+  </style>
 </head>
 <body>
   <header class="hokuto-top">
@@ -21,169 +211,190 @@
     <article class="note-shell">
       <h1 class="page-title">ATFL損傷</h1>
 
-      <!-- 即時アクションヘッダー（常時 sticky） -->
-      <div class="action-header">
-        <div class="action-header__title">⚡ 即時アクション</div>
-        <ol class="action-header__list">
-          <li><strong>Ottawa Ankle Rules</strong>（骨折除外）</li>
-          <li><strong>前方引き出しテスト + 内反ストレステスト</strong></li>
-          <li><strong>MRI</strong>（grade 3 / 重症例）</li>
-          <li><strong>RICE → 早期可動・荷重</strong>（<strong>長期固定は推奨されない</strong>）</li>
-        </ol>
-      </div>
-
-      <!-- メニュータイル -->
-      <nav class="section-tiles" id="sectionMenu">
-        <a class="section-tile" href="#s1"><span class="section-tile__no">🦴</span><span class="section-tile__name">解剖</span></a>
-        <a class="section-tile" href="#s2"><span class="section-tile__no">⚡</span><span class="section-tile__name">受傷機転</span></a>
-        <a class="section-tile" href="#s3"><span class="section-tile__no">🩺</span><span class="section-tile__name">身体所見</span></a>
-        <a class="section-tile" href="#s4"><span class="section-tile__no">🖼️</span><span class="section-tile__name">画像<br><small>Ottawa</small></span></a>
-        <a class="section-tile" href="#s5"><span class="section-tile__no">📊</span><span class="section-tile__name">重症度分類</span></a>
-        <a class="section-tile" href="#s6"><span class="section-tile__no">💉</span><span class="section-tile__name">マネジメント<br><small>RICE</small></span></a>
-        <a class="section-tile" href="#s7"><span class="section-tile__no">🔁</span><span class="section-tile__name">慢性不安定症<br><small>予防</small></span></a>
-        <a class="section-tile" href="#s8"><span class="section-tile__no">⚠️</span><span class="section-tile__name">鑑別<br><small>見落とし</small></span></a>
-        <a class="section-tile" href="#s9"><span class="section-tile__no">🏠</span><span class="section-tile__name">帰宅時の説明</span></a>
+      <!-- スマホですぐ開きたい 3 つ -->
+      <nav class="dx-quick" aria-label="クイックタップ">
+        <button class="dx-quick__btn" type="button" data-target="img-read">
+          <span>画像の見方</span>
+          <span class="dx-quick__sub">Ottawa / 撮影適応</span>
+        </button>
+        <button class="dx-quick__btn" type="button" data-target="plan">
+          <span>治療方針</span>
+          <span class="dx-quick__sub">grade × POLICE / 装具</span>
+        </button>
+        <button class="dx-quick__btn" type="button" data-target="consult">
+          <span>コンサル文</span>
+          <span class="dx-quick__sub">外来フォロー依頼型</span>
+        </button>
       </nav>
 
-      <!-- 関連主訴（双方向リンク） -->
-      <details class="sub-fold" id="related-symptoms">
-        <summary>📞 この疾患が該当する主訴</summary>
-        <div class="sub-fold__body">
+      <!-- 同時評価 3 列：典型像は常時、血管・神経は折りたたみ -->
+      <div class="dx-step"><span>同時並行で評価する 3 軸</span></div>
+      <div class="dx-tri">
+
+        <div class="dx-tri__card dx-tri__card--typical">
+          <div class="dx-tri__title">典型像</div>
+          <ul class="dx-tri__list">
+            <li><strong>内反捻挫</strong>（外果が内果より長いため内反しやすい）</li>
+            <li>足関節靱帯損傷の <strong>85%</strong>、ATFL は外側靱帯損傷の <strong>60–70%</strong>（最多）</li>
+            <li>外側靱帯：ATFL（前距腓・最弱・最多）／ CFL（踵腓） ／ PTFL（後距腓・最強）</li>
+            <li>所見：<strong>外果前下方（ATFL 走行部）の圧痛</strong>、腫脹</li>
+            <li><strong>腓骨遠位（皮下に直接触れる）に圧痛・叩打痛なし</strong>が骨折否定の鍵</li>
+            <li>前方引き出しテスト・内反ストレステストで不安定性評価</li>
+            <li>合併：CFL 損傷（ATFL に付随）、20–25% に <strong>遠位脛腓靱帯（syndesmosis）損傷</strong></li>
+          </ul>
+        </div>
+
+        <details class="dx-tri__card dx-tri__card--vasc">
+          <summary>血管</summary>
+          <p class="dx-tri__hint">捻挫では通常問題なし。確認の流儀として一度だけ触る。</p>
+          <ul class="dx-tri__list">
+            <li><strong>足背動脈・後脛骨動脈</strong>を触知（左右比較）</li>
+            <li>強い腫脹で循環評価困難なら整復・冷却で再評価</li>
+            <li>急速腫脹＋強い疼痛 → コンパートメント症候群を除外</li>
+          </ul>
+        </details>
+
+        <details class="dx-tri__card dx-tri__card--neuro">
+          <summary>神経</summary>
+          <p class="dx-tri__hint">通常は問題なし。腓骨神経・腓腹神経領域を 1 分で確認。</p>
+          <ul class="dx-tri__list">
+            <li><strong>足関節背屈・第一趾背屈</strong>（腓骨神経）</li>
+            <li>足背外側の感覚（腓腹神経）</li>
+            <li>足底感覚（脛骨神経）</li>
+            <li>記録を残す</li>
+          </ul>
+        </details>
+      </div>
+
+      <!-- 画像の見方 -->
+      <details class="dx-box" id="img-read">
+        <summary><span>画像の見方</span></summary>
+        <div class="dx-box__body">
+          <h3>Ottawa Ankle Rules</h3>
           <ul>
-            <li><a class="wiki-link" href="../足関節・足部の外傷.html">足関節・足部の外傷</a> — 内反捻挫の最多原因</li>
-            <li><a class="wiki-link" href="../転倒.html">転倒</a> — 階段踏み外し・歩行中の段差</li>
+            <li><strong>外果・内果の尖端および後縁 6 cm の圧痛</strong></li>
+            <li><strong>受傷直後 + ER で合計 4 歩歩けない</strong></li>
+            <li>該当なし → レントゲン不要、捻挫として治療</li>
+            <li>感度 99%、特異度 40%</li>
+          </ul>
+          <h3>レントゲン（Ottawa 陽性時）</h3>
+          <ul>
+            <li>足関節 3 方向（正面・側面・mortise）</li>
+            <li>腓骨近位端まで含めて撮影（Maisonneuve 除外）</li>
+          </ul>
+          <h3>MRI（Grade III／重症例）</h3>
+          <ul>
+            <li>靱帯断裂の確定診断</li>
+            <li>骨軟骨損傷（OCD）の評価</li>
+            <li>腱断裂・腓骨筋腱脱臼の鑑別</li>
+          </ul>
+          <h3>1 週以上持続する疼痛</h3>
+          <ul>
+            <li>occult fracture（距骨・第 5 中足骨基部）の除外</li>
+            <li>レントゲン再撮影 ± MRI / CT</li>
           </ul>
         </div>
       </details>
 
-      <!-- §1 解剖 -->
-      <section class="section-page" id="s1" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🦴 解剖</h2>
-        <ul>
-          <li>足関節外側靱帯は <strong>3 本</strong>
-            <ul>
-              <li><strong>前距腓靱帯（ATFL）</strong>：最弱、最も損傷多い</li>
-              <li>踵腓靱帯（CFL）：次に多い</li>
-              <li>後距腓靱帯（PTFL）：最強、稀にしか損傷しない</li>
-            </ul>
-          </li>
-        </ul>
-      </section>
+      <!-- 治療方針 -->
+      <details class="dx-box" id="plan">
+        <summary><span>治療方針（grade × POLICE）</span></summary>
+        <div class="dx-box__body">
+          <h3>重症度分類</h3>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Grade</th><th>靱帯</th><th>所見</th><th>マネジメント</th></tr></thead>
+              <tbody>
+                <tr><td>I</td><td>伸展／微細断裂</td><td>軽度圧痛、不安定なし、荷重可</td><td>装具＋早期可動</td></tr>
+                <tr><td>II</td><td>部分断裂</td><td>中等度圧痛・腫脹、軽度不安定、荷重困難</td><td>装具＋部分荷重</td></tr>
+                <tr><td>III</td><td>完全断裂</td><td>強い圧痛・腫脹、明らかな不安定、荷重不能</td><td>U-slab → 装具、整形外科紹介</td></tr>
+              </tbody>
+            </table>
+          </div>
 
-      <!-- §2 受傷機転 -->
-      <section class="section-page" id="s2" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>⚡ 受傷機転</h2>
-        <ul>
-          <li><strong>内反捻挫</strong>（足を内側にひねる）</li>
-          <li>スポーツ・階段での踏み外し・歩行中の段差</li>
-        </ul>
-      </section>
+          <h3>急性期：POLICE（PRICE の進化形）</h3>
+          <ul>
+            <li><strong>P</strong>rotection：装具・テーピング</li>
+            <li><strong>O</strong>ptimal <strong>L</strong>oading：早期に部分荷重・可動域訓練（完全固定は予後悪化）</li>
+            <li><strong>I</strong>ce：20 分 × 数回／日</li>
+            <li><strong>C</strong>ompression：弾性包帯</li>
+            <li><strong>E</strong>levation：挙上</li>
+          </ul>
 
-      <!-- §3 身体所見 -->
-      <section class="section-page" id="s3" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🩺 身体所見</h2>
-        <ul>
-          <li><strong>外果前下方の圧痛</strong>（ATFL の走行部）</li>
-          <li>腫脹（受傷後数時間で増大）</li>
-          <li><strong>前方引き出しテスト</strong>：距骨を前方に引く、健側と比較して開大</li>
-          <li><strong>内反ストレステスト</strong>：不安定性</li>
-        </ul>
-      </section>
+          <h3>固定</h3>
+          <ul>
+            <li>Grade I–II：<strong>ankle brace（装具）</strong>、3–5 日後から可動域訓練</li>
+            <li>Grade III：<strong>U-slab シーネ</strong> 1–2 週 → その後装具</li>
+            <li><strong>長期完全固定は推奨されない</strong>（早期可動域訓練の方が予後良好）</li>
+          </ul>
 
-      <!-- §4 画像 -->
-      <section class="section-page" id="s4" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🖼️ 画像</h2>
-        <ul>
-          <li><strong>Ottawa Ankle Rules</strong>で撮影適応判断</li>
-          <li>陰性なら骨折の可能性極低 → レントゲン不要</li>
-          <li>持続疼痛が 1 週以上続けば再評価（occult fracture の除外）</li>
-        </ul>
-      </section>
+          <h3>薬物</h3>
+          <ul>
+            <li><strong>アセトアミノフェン</strong> 第一選択</li>
+            <li>NSAIDs は短期間なら可（長期は骨・靱帯治癒を遅らせる可能性）</li>
+          </ul>
 
-      <!-- §5 重症度分類 -->
-      <section class="section-page" id="s5" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>📊 重症度分類</h2>
-        <div class="table-wrap"><table><thead><tr><th>Grade</th><th>靱帯の状態</th><th>所見</th></tr></thead><tbody><tr><td>I</td><td>伸展 / 微細断裂</td><td>軽度圧痛、不安定性なし、荷重可</td></tr><tr><td>II</td><td>部分断裂</td><td>中等度圧痛・腫脹、軽度不安定、荷重困難</td></tr><tr><td>III</td><td>完全断裂</td><td>強い圧痛・腫脹、明らかな不安定、荷重不能</td></tr></tbody></table></div>
-      </section>
+          <h3>再発予防（重要）</h3>
+          <ul>
+            <li>初回捻挫後の <strong>再発率 30%</strong>、慢性足関節不安定症へ</li>
+            <li><strong>バランストレーニング・腓骨筋強化</strong>で再発予防</li>
+            <li>反復捻挫 → 整形外科で靱帯再建術を検討</li>
+          </ul>
 
-      <!-- §6 マネジメント -->
-      <section class="section-page" id="s6" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>💉 マネジメント</h2>
+          <h3>再受診基準（帰宅指示）</h3>
+          <ul>
+            <li>1 週後も疼痛・腫脹・歩行困難が持続</li>
+            <li>しびれ・蒼白・強い疼痛増強（即受診）</li>
+            <li>Grade II–III は 2–6 週で完治、装具継続</li>
+          </ul>
+        </div>
+      </details>
 
-        <h3>急性期（RICE）</h3>
-        <ul>
-          <li><strong>Rest</strong>：活動制限、必要なら松葉杖</li>
-          <li><strong>Ice</strong>：20 分 x 数回/日</li>
-          <li><strong>Compression</strong>：弾性包帯</li>
-          <li><strong>Elevation</strong>：挙上</li>
-        </ul>
+      <!-- コンサル文 -->
+      <details class="dx-box" id="consult">
+        <summary><span>コンサル文（カルテに貼る）— 外来フォロー依頼型</span></summary>
+        <div class="dx-box__body">
+          <p class="dx-template__hint">『他科コンサルト実践マニュアル』の院内紹介状フォーマットに準拠（【目的】【疾患】【既往歴】【内服薬】【ADL】【現病歴】）。保存療法中心のため整形外科外来フォロー依頼型。</p>
+          <div class="dx-template">【目的】保存加療継続のフォロー依頼。
+【疾患】#1 [右/左]足関節外側靱帯損傷（ATFL 損傷、Grade [I/II/III]）
+【既往歴】[特記事項なし／反復性捻挫／○○]
+【内服薬】[なし／○○]
+【ADL（受傷前）】[独歩／杖／介助歩行]
+【現病歴】[年齢]歳[男/女]性。[受傷機転：内反捻挫／スポーツ中／階段踏み外し]で受傷し、[来院経緯]で来院。
+ ・身体所見：外果前下方圧痛、腫脹 [軽度／中等度／高度]、前方引き出しテスト [陰性／陽性]、内反ストレス [陰性／陽性]
+ ・血管：足背動脈・後脛骨動脈良好
+ ・神経：腓骨神経・腓腹神経領域問題なし
+ ・画像：Ottawa Ankle Rules [陰性につき撮影せず／陽性で撮影、骨折なし]、Maisonneuve 除外済
+ ・ER 処置：[ankle brace／U-slab] 装着、POLICE 指導、松葉杖 [部分荷重／非荷重]、アセトアミノフェン処方
+よろしくお願いいたします。</div>
+        </div>
+      </details>
 
-        <h3>固定</h3>
-        <ul>
-          <li>Grade I–II → <strong>装具（ankle brace）</strong>、3–5 日後から可動域訓練</li>
-          <li>Grade III → <strong>U-slab シーネ</strong> 1–2 週 → その後装具へ</li>
-        </ul>
+      <!-- 関連ハブ -->
+      <details class="dx-box">
+        <summary><span>関連ハブ・隣接疾患</span></summary>
+        <div class="dx-box__body">
+          <ul>
+            <li>主訴入口：<a class="wiki-link" href="../足関節・足部の外傷.html">足関節・足部の外傷</a> ／ <a class="wiki-link" href="../転倒.html">転倒</a></li>
+            <li>詳細プロトコル：<a class="wiki-link" href="足関節痛.html">足関節痛</a></li>
+            <li>見落とし注意：<a class="wiki-link" href="足関節果部骨折.html">足関節果部骨折</a> ／ <a class="wiki-link" href="Maisonneuve骨折.html">Maisonneuve骨折</a> ／ <a class="wiki-link" href="第5中足骨近位端骨折.html">第5中足骨近位端骨折</a> ／ <a class="wiki-link" href="距骨骨折.html">距骨骨折</a></li>
+            <li>鑑別：腓骨筋腱脱臼（外果後方のポキっとした感覚、歩行時の引っかかり）</li>
+          </ul>
+        </div>
+      </details>
 
-        <h3>早期可動域訓練</h3>
-        <ul>
-          <li><strong>完全固定よりも早期可動域訓練の方が予後良好</strong>（Grade I–II）</li>
-          <li>疼痛許容範囲で底背屈・円運動</li>
-        </ul>
-
-        <h3>薬物</h3>
-        <ul>
-          <li><strong>アセトアミノフェン</strong> 第一選択</li>
-          <li>NSAIDs は短期間なら可（長期は骨・靱帯治癒を遅らせる可能性）</li>
-        </ul>
-      </section>
-
-      <!-- §7 慢性足関節不安定症の予防 -->
-      <section class="section-page" id="s7" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🔁 慢性足関節不安定症の予防</h2>
-        <ul>
-          <li>初回捻挫後に <strong>再発 30%</strong></li>
-          <li><strong>バランストレーニング・腓骨筋強化</strong> が再発予防に有効</li>
-          <li>反復する捻挫 → 整形外科で靱帯再建術を検討</li>
-        </ul>
-      </section>
-
-      <!-- §8 鑑別・見落とし要注意 -->
-      <section class="section-page" id="s8" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>⚠️ 鑑別・見落とし要注意</h2>
-        <div class="table-wrap"><table><thead><tr><th>疾患</th><th>鑑別点</th></tr></thead><tbody><tr><td><a class="wiki-link" href="足関節果部骨折.html">足関節果部骨折</a></td><td>外果の圧痛、Ottawa 陽性</td></tr><tr><td><a class="wiki-link" href="Maisonneuve骨折.html">Maisonneuve骨折</a></td><td>腓骨近位端の圧痛</td></tr><tr><td><a class="wiki-link" href="第5中足骨近位端骨折.html">第5中足骨近位端骨折</a></td><td>第 5 中足骨基部圧痛</td></tr><tr><td><a class="wiki-link" href="距骨骨折.html">距骨骨折</a></td><td>距骨頸部の圧痛、持続痛</td></tr><tr><td>腓骨筋腱脱臼</td><td>外果後方のポキっとした感覚、歩行時の引っかかり</td></tr></tbody></table></div>
-      </section>
-
-      <!-- §9 帰宅時の説明 -->
-      <section class="section-page" id="s9" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🏠 帰宅時の説明</h2>
-        <ul>
-          <li>最初の 48 時間は RICE 徹底</li>
-          <li>3–5 日で疼痛軽減 → 装具装着で日常生活</li>
-          <li>1 週後も疼痛・腫脹・歩行困難が続く → 整形外科再評価</li>
-          <li>Grade II–III は 2–6 週での完治、再発予防のバランス運動を推奨</li>
-        </ul>
-
-        <h3>出典</h3>
-        <ul>
-          <li><strong>増井伸高. 骨折ハンター. 中外医学社. 2019.</strong></li>
-          <li><strong>Kerkhoffs GM ほか.</strong> Different functional treatment strategies for acute lateral ankle ligament injuries in adults. <em>Cochrane Database Syst Rev.</em> 2002.</li>
-          <li><strong>van den Bekerom MPJ ほか.</strong> Management of acute lateral ankle ligament injury. <em>Sports Med.</em> 2013.</li>
-        </ul>
-
-        <h3>関連</h3>
-        <ul>
-          <li><a class="wiki-link" href="../転倒.html">転倒</a> / <a class="wiki-link" href="足関節痛.html">足関節痛</a> / <a class="wiki-link" href="足関節果部骨折.html">足関節果部骨折</a> / <a class="wiki-link" href="Maisonneuve骨折.html">Maisonneuve骨折</a> / <a class="wiki-link" href="第5中足骨近位端骨折.html">第5中足骨近位端骨折</a></li>
-        </ul>
-      </section>
+      <!-- 出典 -->
+      <details class="dx-box">
+        <summary><span>出典</span></summary>
+        <div class="dx-box__body">
+          <ul>
+            <li>増井伸高. 骨折ハンター. 中外医学社. 2019.</li>
+            <li>Kerkhoffs GM ほか. Different functional treatment strategies for acute lateral ankle ligament injuries in adults. <em>Cochrane Database Syst Rev.</em> 2002.</li>
+            <li>van den Bekerom MPJ ほか. Management of acute lateral ankle ligament injury. <em>Sports Med.</em> 2013.</li>
+            <li>Stiell IG ほか. Implementation of the Ottawa ankle rules. <em>JAMA.</em> 1994.</li>
+          </ul>
+        </div>
+      </details>
 
     </article>
   </main>
@@ -202,53 +413,21 @@
 
   <script>
   (function(){
-    const menu = document.getElementById('sectionMenu');
-    const pages = document.querySelectorAll('.section-page');
-    const titleH1 = document.querySelector('.page-title');
-    const relatedSymp = document.getElementById('related-symptoms');
-
-    function showSection(id) {
-      menu.hidden = true;
-      if (titleH1) titleH1.hidden = true;
-      if (relatedSymp) relatedSymp.hidden = true;
-      pages.forEach(p => p.hidden = (p.id !== id));
-      window.scrollTo(0, 0);
-    }
-    function showMenu(scrollTarget) {
-      menu.hidden = false;
-      if (titleH1) titleH1.hidden = false;
-      if (relatedSymp) relatedSymp.hidden = false;
-      pages.forEach(p => p.hidden = true);
-      if (scrollTarget) {
-        if (scrollTarget.tagName === 'DETAILS') scrollTarget.open = true;
-        scrollTarget.scrollIntoView({behavior: 'instant', block: 'start'});
-      } else {
-        window.scrollTo(0, 0);
-      }
-    }
-    function syncFromHash() {
-      const id = (location.hash || '').replace('#','');
-      const target = id ? document.getElementById(id) : null;
-      if (target && target.classList.contains('section-page')) {
-        showSection(id);
-      } else if (target) {
-        showMenu(target);
-      } else {
-        showMenu();
-      }
-    }
-
-    window.addEventListener('hashchange', syncFromHash);
-    document.querySelectorAll('.back-to-menu').forEach(b => {
-      b.addEventListener('click', () => { history.pushState(null,'',location.pathname); showMenu(); });
+    document.querySelectorAll('.dx-quick__btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.dataset.target;
+        const target = document.getElementById(id);
+        if (!target) return;
+        target.open = true;
+        target.scrollIntoView({behavior: 'smooth', block: 'start'});
+      });
     });
+
     const navBack = document.getElementById('navBack');
     if (navBack) navBack.addEventListener('click', () => {
       if (window.history.length > 1) history.back();
       else window.location.href = '../index.html';
     });
-
-    syncFromHash();
   })();
   </script>
 </body>

@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="color-scheme" content="light dark" />
+  <title>足趾骨骨折 | ER ノート</title>
+  <link rel="stylesheet" href="../er-note.css" />
+</head>
+<body>
+  <header class="hokuto-top">
+    <a class="hokuto-top__btn" href="../薬剤情報.html">
+      <span class="hokuto-top__icon">℞</span><span>薬剤情報</span>
+    </a>
+    <a class="hokuto-top__btn" href="../表計算.html">
+      <span class="hokuto-top__icon">⊞</span><span>表計算</span>
+    </a>
+  </header>
+
+  <main class="hokuto-main">
+    <article class="note-shell">
+      <h1 class="page-title">足趾骨骨折</h1>
+
+      <!-- 即時アクションヘッダー（常時 sticky） -->
+      <div class="action-header">
+        <div class="action-header__title">⚡ 即時アクション</div>
+        <ol class="action-header__list">
+          <li><strong>靴下を脱がせて開放骨折チェック</strong></li>
+          <li><strong>AP + 斜位</strong>で撮影、第1趾は脱臼確認</li>
+          <li><strong>爪下血腫 50% 以上はドレナージ</strong></li>
+          <li><strong>バディテープ固定</strong>で帰宅、後日整形外来</li>
+        </ol>
+      </div>
+
+      <!-- メニュータイル -->
+      <nav class="section-tiles" id="sectionMenu">
+        <a class="section-tile" href="#s1"><span class="section-tile__no">📝</span><span class="section-tile__name">受傷機転<br><small>+ 開放骨折</small></span></a>
+        <a class="section-tile" href="#s2"><span class="section-tile__no">🩺</span><span class="section-tile__name">身体所見<br><small>爪・脱臼</small></span></a>
+        <a class="section-tile" href="#s3"><span class="section-tile__no">🧪</span><span class="section-tile__name">画像</span></a>
+        <a class="section-tile" href="#s4"><span class="section-tile__no">💉</span><span class="section-tile__name">マネジメント</span></a>
+        <a class="section-tile" href="#s5"><span class="section-tile__no">🏠</span><span class="section-tile__name">帰宅時説明</span></a>
+        <a class="section-tile" href="#s6"><span class="section-tile__no">📚</span><span class="section-tile__name">出典・関連</span></a>
+      </nav>
+
+      <!-- 概要サマリ -->
+      <details class="sub-fold" id="overview">
+        <summary>概要：開放骨折を見逃さない、固定はバディテープ</summary>
+        <div class="sub-fold__body">
+          <div class="callout callout-summary">
+            <div class="callout-title">足趾骨骨折 = 開放チェック + バディテープで保存</div>
+            <div class="callout-body"><ul>
+              <li><strong>サンダル等で物にぶつけた・重い物の落下</strong>が典型機転</li>
+              <li><strong>必ず靴下を脱がせて開放骨折を確認</strong>（あれば即時整形）</li>
+              <li><strong>爪下血腫 50% 以上</strong>はドレナージ、爪床裂創は後日整形に処置依頼可</li>
+              <li><strong>第1趾の脱臼</strong>が多い → web block で長軸牽引整復</li>
+              <li>固定は <strong>位置にかかわらずバディテープ</strong></li>
+              <li>伸筋腱損傷の評価は初診で困難 → 後日整形に委ねる</li>
+            </ul></div>
+          </div>
+        </div>
+      </details>
+
+      <!-- 関連主訴（双方向リンク） -->
+      <details class="sub-fold" id="related-symptoms">
+        <summary>📞 この疾患が該当する主訴</summary>
+        <div class="sub-fold__body">
+          <ul>
+            <li><a class="wiki-link" href="../足関節・足部の外傷.html">足関節・足部の外傷</a> — 足部外傷の入口主訴</li>
+          </ul>
+        </div>
+      </details>
+
+      <!-- §1 受傷機転 + 開放骨折チェック -->
+      <section class="section-page" id="s1" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>📝 受傷機転 + 開放骨折チェック</h2>
+
+        <h3>受傷機転</h3>
+        <ul>
+          <li><strong>サンダル等で家具・段差に強くぶつけた</strong></li>
+          <li><strong>作業中に重い物が足趾に落下</strong></li>
+          <li>足を踏まれた・転倒で趾を捻った</li>
+        </ul>
+
+        <h3>開放骨折チェック（必須）</h3>
+        <ul>
+          <li><strong>靴下を必ず脱がせる</strong>（履いたままだと見逃す）</li>
+          <li>皮膚裂創・爪床裂創を確認</li>
+          <li><strong>開放骨折なら即時整形コンサル</strong>（洗浄・抗菌薬）</li>
+        </ul>
+      </section>
+
+      <!-- §2 身体所見 -->
+      <section class="section-page" id="s2" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🩺 身体所見</h2>
+        <ul>
+          <li>腫脹・皮下出血・変形・回旋転位</li>
+          <li><strong>爪下血腫</strong>の範囲を評価（50% 以上はドレナージ適応）</li>
+          <li><strong>爪床裂創</strong>の有無</li>
+          <li><strong>第1趾 MTP / IP 関節の脱臼</strong>を確認（最多）</li>
+          <li>知覚・末梢循環チェック</li>
+          <li><strong>伸筋腱損傷の評価は初診では困難</strong> → 後日整形に委ねる</li>
+        </ul>
+      </section>
+
+      <!-- §3 画像 -->
+      <section class="section-page" id="s3" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🧪 画像</h2>
+        <ul>
+          <li><strong>AP + 斜位</strong>を撮影（lateral は他趾と重なる）</li>
+          <li>骨折線・転位・脱臼の確認</li>
+          <li>第1趾は <strong>MTP・IP 関節の脱臼</strong>を必ず評価</li>
+        </ul>
+      </section>
+
+      <!-- §4 マネジメント -->
+      <section class="section-page" id="s4" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>💉 マネジメント</h2>
+
+        <h3>固定：バディテープ</h3>
+        <ul>
+          <li><strong>位置にかかわらずバディテープ</strong>（隣接趾と一緒に巻く）</li>
+          <li>ガーゼを間に挟んで皮膚浸軟予防</li>
+          <li>硬めの底の靴 or 松葉杖で歩行</li>
+        </ul>
+
+        <h3>爪下血腫</h3>
+        <ul>
+          <li><strong>爪面の 50% 以上</strong>に及ぶ血腫 → <strong>ドレナージ</strong>（電気焼灼・18G 針穿孔）</li>
+          <li>50% 未満 or 無痛なら経過観察</li>
+        </ul>
+
+        <h3>爪床裂創</h3>
+        <ul>
+          <li>時間に余裕があれば縫合・爪床整復</li>
+          <li><strong>時間がなければ後日整形に処置依頼可</strong></li>
+        </ul>
+
+        <h3>第1趾の脱臼整復</h3>
+        <ul>
+          <li><strong>web block で麻酔</strong>後、<strong>長軸牽引整復</strong></li>
+          <li>整復後にレントゲンで位置確認</li>
+          <li>整復不能 → 整形コンサル</li>
+        </ul>
+
+        <h3>整形へ即コンサル</h3>
+        <ul>
+          <li><strong>開放骨折</strong></li>
+          <li>整復不能な脱臼</li>
+          <li>関節内骨折で大きな転位</li>
+          <li>多発・粉砕型</li>
+        </ul>
+      </section>
+
+      <!-- §5 帰宅時の説明 -->
+      <section class="section-page" id="s5" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🏠 帰宅時の説明</h2>
+        <ul>
+          <li>バディテープは <strong>2〜3 週間</strong>継続、汗・浸軟で適宜巻き直す</li>
+          <li>挙上・冷却で腫脹軽減</li>
+          <li>1〜2 週で整形外科外来を受診</li>
+          <li>爪が抜ける可能性あり（自然脱落で経過観察可）</li>
+          <li>疼痛増強・発赤・排膿で再受診</li>
+        </ul>
+      </section>
+
+      <!-- §6 出典・関連 -->
+      <section class="section-page" id="s6" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>📚 出典・関連</h2>
+        <h3>出典</h3>
+        <ul>
+          <li><strong>増井伸高. 骨折ハンター. 中外医学社. 2019.</strong></li>
+        </ul>
+        <h3>関連</h3>
+        <ul>
+          <li><a class="wiki-link" href="../足関節・足部の外傷.html">足関節・足部の外傷</a>（主訴入口）</li>
+          <li><a class="wiki-link" href="中足骨骨折.html">中足骨骨折</a></li>
+        </ul>
+      </section>
+
+    </article>
+  </main>
+
+  <nav class="hokuto-bottom">
+    <button class="hokuto-bottom__btn" type="button" id="navBack">
+      <span class="hokuto-bottom__icon">←</span><span>戻る</span>
+    </button>
+    <a class="hokuto-bottom__btn" href="../ツール.html">
+      <span class="hokuto-bottom__icon">⚙</span><span>ツール</span>
+    </a>
+    <a class="hokuto-bottom__btn" href="../index.html">
+      <span class="hokuto-bottom__icon">⌂</span><span>ホーム</span>
+    </a>
+  </nav>
+
+  <script>
+  (function(){
+    const menu = document.getElementById('sectionMenu');
+    const pages = document.querySelectorAll('.section-page');
+    const titleH1 = document.querySelector('.page-title');
+    const overview = document.getElementById('overview');
+    const relatedSymp = document.getElementById('related-symptoms');
+
+    function showSection(id) {
+      menu.hidden = true;
+      if (titleH1) titleH1.hidden = true;
+      if (overview) overview.hidden = true;
+      if (relatedSymp) relatedSymp.hidden = true;
+      pages.forEach(p => p.hidden = (p.id !== id));
+      window.scrollTo(0, 0);
+    }
+    function showMenu(scrollTarget) {
+      menu.hidden = false;
+      if (titleH1) titleH1.hidden = false;
+      if (overview) overview.hidden = false;
+      if (relatedSymp) relatedSymp.hidden = false;
+      pages.forEach(p => p.hidden = true);
+      if (scrollTarget) {
+        if (scrollTarget.tagName === 'DETAILS') scrollTarget.open = true;
+        scrollTarget.scrollIntoView({behavior: 'instant', block: 'start'});
+      } else {
+        window.scrollTo(0, 0);
+      }
+    }
+    function syncFromHash() {
+      const id = (location.hash || '').replace('#','');
+      const target = id ? document.getElementById(id) : null;
+      if (target && target.classList.contains('section-page')) {
+        showSection(id);
+      } else if (target) {
+        showMenu(target);
+      } else {
+        showMenu();
+      }
+    }
+
+    window.addEventListener('hashchange', syncFromHash);
+    document.querySelectorAll('.back-to-menu').forEach(b => {
+      b.addEventListener('click', () => { history.pushState(null,'',location.pathname); showMenu(); });
+    });
+    const navBack = document.getElementById('navBack');
+    if (navBack) navBack.addEventListener('click', () => {
+      if (window.history.length > 1) history.back();
+      else window.location.href = '../index.html';
+    });
+
+    syncFromHash();
+  })();
+  </script>
+</body>
+</html>

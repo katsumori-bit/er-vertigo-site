@@ -4,8 +4,65 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="color-scheme" content="light dark" />
-  <title>第1中手骨基部骨折 | ER ノート</title>
+  <title>第1中手骨基部骨折（Bennett / Rolando） | ER ノート</title>
   <link rel="stylesheet" href="../er-note.css" />
+  <style>
+    .dx-quick { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin: 10px 0 4px; }
+    .dx-quick__btn { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; padding: 10px 6px; border-radius: 10px; background: color-mix(in srgb, var(--accent) 10%, var(--surface)); border: 1.5px solid var(--accent); color: var(--text); text-decoration: none; font-weight: 700; font-size: 13px; line-height: 1.2; text-align: center; cursor: pointer; transition: background 120ms ease; }
+    .dx-quick__btn:hover { background: color-mix(in srgb, var(--accent) 18%, var(--surface)); }
+    .dx-quick__icon { font-size: 20px; }
+    .dx-quick__sub { font-size: 10.5px; font-weight: 500; color: var(--muted); }
+
+    .dx-tri { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin: 6px 0 4px; align-items: start; }
+    .dx-tri__card { background: var(--surface); border-radius: 10px; padding: 10px 12px; border: 1.5px solid color-mix(in srgb, var(--text) 18%, transparent); }
+    .dx-tri__card--vasc { border-color: #c0392b; background: color-mix(in srgb, #c0392b 6%, var(--surface)); }
+    .dx-tri__card--neuro { border-color: #b5651d; background: color-mix(in srgb, #b5651d 6%, var(--surface)); }
+    .dx-tri__card--typical { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 6%, var(--surface)); }
+    .dx-tri__title { display: flex; align-items: center; gap: 6px; font-weight: 800; font-size: 13.5px; margin-bottom: 4px; }
+    .dx-tri__card--vasc .dx-tri__title { color: #c0392b; }
+    .dx-tri__card--neuro .dx-tri__title { color: #b5651d; }
+    .dx-tri__list { margin: 0; padding-left: 18px; font-size: 12.5px; line-height: 1.5; }
+    .dx-tri__list li { margin: 2px 0; }
+
+    details.dx-tri__card { padding: 0; }
+    details.dx-tri__card > summary { list-style: none; cursor: pointer; padding: 10px 12px; display: flex; align-items: center; gap: 6px; font-weight: 800; font-size: 13.5px; }
+    details.dx-tri__card > summary::-webkit-details-marker { display: none; }
+    details.dx-tri__card > summary::after { content: "▸"; margin-left: auto; font-size: 12px; color: var(--muted); transition: transform 120ms ease; }
+    details.dx-tri__card[open] > summary::after { transform: rotate(90deg); }
+    details.dx-tri__card--vasc > summary { color: #c0392b; }
+    details.dx-tri__card--neuro > summary { color: #b5651d; }
+    details.dx-tri__card > .dx-tri__list { padding: 0 14px 12px 30px; }
+    details.dx-tri__card > .dx-tri__hint { padding: 0 14px 6px 30px; font-size: 11px; color: var(--muted); }
+
+    details.dx-box { background: var(--surface); border: 1.5px solid color-mix(in srgb, var(--text) 18%, transparent); border-radius: 10px; margin: 10px 0; scroll-margin-top: 8px; }
+    details.dx-box > summary { list-style: none; cursor: pointer; padding: 12px 14px; display: flex; align-items: center; gap: 8px; font-weight: 800; font-size: 14.5px; }
+    details.dx-box > summary::-webkit-details-marker { display: none; }
+    details.dx-box > summary::after { content: "▸"; margin-left: auto; font-size: 13px; color: var(--muted); transition: transform 120ms ease; }
+    details.dx-box[open] > summary::after { transform: rotate(90deg); }
+    details.dx-box[open] { border-color: var(--accent); }
+    details.dx-box > .dx-box__body { padding: 0 14px 14px; }
+
+    @media (max-width: 640px) {
+      .dx-quick { gap: 6px; }
+      .dx-quick__btn { padding: 8px 4px; font-size: 11.5px; border-radius: 8px; }
+      .dx-quick__icon { font-size: 17px; }
+      .dx-quick__sub { font-size: 9.5px; }
+      .dx-tri { grid-template-columns: 1fr; gap: 8px; }
+      .dx-tri__card { padding: 8px 10px; }
+      details.dx-tri__card > summary { padding: 8px 10px; font-size: 12.5px; }
+      details.dx-tri__card > .dx-tri__list { padding: 0 12px 10px 26px; }
+      .dx-tri__title { font-size: 12.5px; }
+      .dx-tri__list { font-size: 12px; }
+      details.dx-box > summary { padding: 10px 12px; font-size: 13.5px; }
+      details.dx-box > .dx-box__body { padding: 0 12px 12px; }
+    }
+
+    .dx-step { margin: 18px 0 6px; display: flex; align-items: center; gap: 10px; color: var(--muted); font-size: 11.5px; font-weight: 800; letter-spacing: 0.1em; }
+    .dx-step::before, .dx-step::after { content: ""; flex: 1; height: 1px; background: color-mix(in srgb, var(--text) 18%, transparent); }
+
+    .dx-template { background: color-mix(in srgb, var(--text) 4%, var(--surface)); border-left: 3px solid var(--accent); border-radius: 6px; padding: 10px 12px; margin: 6px 0 0; font-size: 13px; line-height: 1.6; white-space: pre-wrap; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+    .dx-template__hint { font-size: 11px; color: var(--muted); margin: 0 0 4px; }
+  </style>
 </head>
 <body>
   <header class="hokuto-top">
@@ -19,136 +76,174 @@
 
   <main class="hokuto-main">
     <article class="note-shell">
-      <h1 class="page-title">第1中手骨基部骨折</h1>
+      <h1 class="page-title">第1中手骨基部骨折（Bennett / Rolando）</h1>
 
-      <!-- 即時アクションヘッダー（常時 sticky） -->
-      <div class="action-header">
-        <div class="action-header__title">⚡ 即時アクション</div>
-        <ol class="action-header__list">
-          <li><strong>Bennett vs Rolando vs 関節外</strong>を区別 — 母指 CMC 関節周囲圧痛・短縮・回内変形</li>
-          <li><strong>AP + lat + oblique X 線</strong>で関節内骨折線を確認、必要なら CT</li>
-          <li><strong>Bennett・Rolando は手術</strong>（関節内骨折、ORIF または pinning）</li>
-          <li>関節外骨折は<strong>保存（thumb spica）</strong>、転位 30° 以内なら保存可</li>
-        </ol>
-      </div>
-
-      <!-- メニュータイル -->
-      <nav class="section-tiles" id="sectionMenu">
-        <a class="section-tile" href="#s1"><span class="section-tile__no">📝</span><span class="section-tile__name">受傷機転</span></a>
-        <a class="section-tile" href="#s2"><span class="section-tile__no">📊</span><span class="section-tile__name">分類<br><small>Bennett / Rolando</small></span></a>
-        <a class="section-tile" href="#s3"><span class="section-tile__no">🩺</span><span class="section-tile__name">身体所見</span></a>
-        <a class="section-tile" href="#s4"><span class="section-tile__no">🧪</span><span class="section-tile__name">画像</span></a>
-        <a class="section-tile" href="#s5"><span class="section-tile__no">💉</span><span class="section-tile__name">マネジメント</span></a>
-        <a class="section-tile" href="#s6"><span class="section-tile__no">👨‍⚕️</span><span class="section-tile__name">非整形外科医の役割</span></a>
-        <a class="section-tile" href="#s7"><span class="section-tile__no">🏠</span><span class="section-tile__name">帰宅時の説明</span></a>
-        <a class="section-tile" href="#s8"><span class="section-tile__no">📚</span><span class="section-tile__name">出典</span></a>
+      <nav class="dx-quick" aria-label="クイックタップ">
+        <button class="dx-quick__btn" type="button" data-target="img-read">
+          <span>画像の見方</span>
+          <span class="dx-quick__sub">関節内 / 粉砕で分類</span>
+        </button>
+        <button class="dx-quick__btn" type="button" data-target="plan">
+          <span>治療方針</span>
+          <span class="dx-quick__sub">転位ありは整復・手術</span>
+        </button>
+        <button class="dx-quick__btn" type="button" data-target="consult">
+          <span>コンサル文</span>
+          <span class="dx-quick__sub">そのまま貼れる</span>
+        </button>
       </nav>
 
-      <!-- 関連主訴（双方向リンク） -->
-      <details class="sub-fold" id="related-symptoms">
-        <summary>📞 この疾患が該当する主訴</summary>
-        <div class="sub-fold__body">
+      <div class="dx-step"><span>同時並行で評価する 3 軸</span></div>
+      <div class="dx-tri">
+
+        <div class="dx-tri__card dx-tri__card--typical">
+          <div class="dx-tri__title">典型像</div>
+          <ul class="dx-tri__list">
+            <li>母指軸圧で受傷（殴打・転倒・スポーツ）</li>
+            <li>母指 CMC 関節基部の腫脹・圧痛</li>
+            <li>母指基部の屈曲・対立で疼痛増悪</li>
+            <li>第1中手骨が橈背側に転位（APL 牽引）</li>
+            <li><strong>Bennett</strong>＝関節内 2 part、<strong>Rolando</strong>＝関節内粉砕</li>
+          </ul>
+        </div>
+
+        <details class="dx-tri__card dx-tri__card--vasc">
+          <summary>血管</summary>
+          <p class="dx-tri__hint">血管損傷は通常合併しない。固有指動脈の触知/拍動感を左右で比較。</p>
+          <ul class="dx-tri__list">
+            <li><strong>橈骨動脈</strong>触知（手関節掌側）</li>
+            <li><strong>母指固有指動脈</strong>の拍動・色調・CRT</li>
+            <li>シーネ後も末梢循環を再確認</li>
+            <li>強い腫脹は挙上・冷却</li>
+          </ul>
+        </details>
+
+        <details class="dx-tri__card dx-tri__card--neuro">
+          <summary>神経</summary>
+          <p class="dx-tri__hint">正中・尺骨神経は通常 OK。<strong>母指固有指神経</strong>の感覚を独立して確認。</p>
+          <ul class="dx-tri__list">
+            <li>母指掌側の感覚（正中神経・固有指神経）</li>
+            <li>母指対立・外転（短母指外転筋・正中神経）</li>
+            <li>第1背側骨間筋筋力（尺骨神経）</li>
+            <li>麻痺所見は記録</li>
+          </ul>
+        </details>
+      </div>
+
+      <details class="dx-box" id="img-read">
+        <summary><span>画像の見方</span></summary>
+        <div class="dx-box__body">
           <ul>
-            <li><a class="wiki-link" href="../手関節・手の外傷.html">手関節・手の外傷</a> — 母指軸圧外傷後の CMC 関節圧痛</li>
-            <li><a class="wiki-link" href="../転倒.html">転倒</a> — 転倒で母指を突いて受傷</li>
+            <li><strong>母指 AP・lateral・oblique（3 方向）</strong></li>
+            <li>Xp で必ず追うポイント：
+              <ul>
+                <li>関節面に骨折線が及ぶか（関節内＝Bennett / Rolando）</li>
+                <li><strong>掌尺側骨片（hook）</strong>が関節面に残る（Bennett）</li>
+                <li>第1中手骨の<strong>橈背側転位</strong>（APL 牽引による）</li>
+                <li>粉砕の有無（Rolando：T / Y 字、複数骨片）</li>
+                <li>関節外基部骨折は別扱い（Winterstein）</li>
+              </ul>
+            </li>
+            <li>転位・関節内段差 ≥ 1〜2 mm は手術適応の目安</li>
+            <li>Rolando・関節外でも粉砕・大転位は CT 追加検討</li>
           </ul>
         </div>
       </details>
 
-      <!-- §1 受傷機転 -->
-      <section class="section-page" id="s1" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>📝 受傷機転</h2>
-        <ul>
-          <li><strong>母指に軸圧</strong>（殴打・転倒で母指を突く）</li>
-          <li><strong>若年男性に多い</strong></li>
-          <li>スポーツ外傷（スキー・ボクシング）</li>
-        </ul>
-      </section>
+      <details class="dx-box" id="plan">
+        <summary><span>治療方針（タイプ × 転位）</span></summary>
+        <div class="dx-box__body">
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>タイプ</th><th>所見</th><th>方針</th><th>ER の動き</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>関節外基部骨折・転位なし</td>
+                  <td>関節面整、転位 &lt; 30°</td>
+                  <td><strong>保存（母指スパイカ）</strong></td>
+                  <td>シーネ ＋ 翌日整形</td>
+                </tr>
+                <tr>
+                  <td><strong>Bennett 骨折</strong></td>
+                  <td>関節内 2 part、CMC 亜脱臼</td>
+                  <td><strong>徒手整復 → 手術（経皮ピンニング等）</strong></td>
+                  <td>整形相談（同日〜翌日）</td>
+                </tr>
+                <tr>
+                  <td><strong>Rolando 骨折</strong></td>
+                  <td>関節内粉砕（T / Y 字）</td>
+                  <td><strong>手術（プレート／創外固定）</strong></td>
+                  <td>整形相談</td>
+                </tr>
+                <tr>
+                  <td>転位大の関節外</td>
+                  <td>30°以上の屈曲変形・短縮</td>
+                  <td><strong>徒手整復 → 保存 or 手術</strong></td>
+                  <td>整形相談</td>
+                </tr>
+                <tr>
+                  <td>開放創／血管・神経障害</td>
+                  <td>創あり／拍動・感覚低下</td>
+                  <td><strong>緊急手術</strong></td>
+                  <td>洗浄・破傷風・抗菌薬・即コンサル</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
 
-      <!-- §2 分類 -->
-      <section class="section-page" id="s2" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>📊 分類</h2>
-        <div class="table-wrap"><table><thead><tr><th>分類</th><th>所見</th><th>治療</th></tr></thead><tbody><tr><td><strong>Bennett 骨折</strong></td><td>関節内、<strong>2 骨片</strong>（内側小骨片が靱帯で残る + 中手骨本体が外側へ転位）</td><td><strong>帰宅手術</strong>（ORIF または pinning）</td></tr><tr><td><strong>Rolando 骨折</strong></td><td>関節内、<strong>粉砕</strong>（Y/T 字型）</td><td><strong>帰宅手術</strong>（整復困難例は人工関節）</td></tr><tr><td><strong>関節外骨折</strong></td><td>基部〜骨幹部の関節外</td><td>保存（許容度大）</td></tr></tbody></table></div>
-      </section>
+          <h3>ER で打つ手</h3>
+          <ul>
+            <li><strong>母指スパイカシーネ固定</strong>（母指外転位、IP 関節は露出）</li>
+            <li>三角巾装着、患肢挙上指導</li>
+            <li>転位大の関節外骨折は ER で<strong>徒手整復のご相談</strong>を整形に</li>
+            <li>鎮痛は NSAIDs／アセトアミノフェン</li>
+            <li>翌日 or 同日整形外科外来を指示</li>
+          </ul>
+        </div>
+      </details>
 
-      <!-- §3 身体所見 -->
-      <section class="section-page" id="s3" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🩺 身体所見</h2>
-        <ul>
-          <li><strong>母指 CMC 関節周囲の腫脹・圧痛</strong></li>
-          <li><strong>母指の外転・把握痛</strong></li>
-          <li>変形：母指が回内位・短縮</li>
-        </ul>
-      </section>
+      <details class="dx-box" id="consult">
+        <summary><span>コンサル文（カルテに貼る）</span></summary>
+        <div class="dx-box__body">
+          <p class="dx-template__hint">『他科コンサルト実践マニュアル』フォーマット。Bennett / Rolando は徒手整復のご相談、関節外無転位は外来フォロー。</p>
+          <div class="dx-template">【目的】[徒手整復のご相談・ご加療依頼／整形外科外来でのご加療依頼]。
+【疾患】#1 [右/左]第1中手骨基部骨折（[Bennett 骨折／Rolando 骨折／関節外基部骨折]、転位 [なし／あり]）
+【既往歴】[特記事項なし／○○]
+【内服薬】[なし／○○]
+【ADL（受傷前）】[自立／○○]
+【現病歴】[年齢]歳[男/女]性。[受傷機転：母指軸圧／殴打／転倒／スポーツ]で受傷し、[来院経緯]で来院。
+ ・身体所見：母指 CMC 関節部の腫脹・圧痛 [+]、母指基部運動制限 [+/−]、皮膚損傷 [なし／あり]
+ ・血管：橈骨動脈触知 [良好]、母指固有指動脈の拍動／CRT [良好]
+ ・神経：正中・尺骨神経領域 [問題なし]、母指固有指神経の感覚 [問題なし]
+ ・画像：母指 Xp 3 方向（AP / lateral / oblique）で[Bennett／Rolando／関節外基部]骨折、第1中手骨の橈背側転位 [なし／あり]
+ ・ER 処置：母指スパイカシーネ固定、三角巾、患肢挙上指導
+よろしくお願いいたします。</div>
+        </div>
+      </details>
 
-      <!-- §4 画像 -->
-      <section class="section-page" id="s4" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🧪 画像</h2>
-        <ul>
-          <li>手 3 方向 + <strong>母指特殊撮影</strong></li>
-          <li><strong>正面像で関節内骨折線を確認</strong></li>
-          <li>CT で骨折線の詳細を評価（手術計画）</li>
-        </ul>
-      </section>
+      <details class="dx-box">
+        <summary><span>関連ハブ・隣接疾患</span></summary>
+        <div class="dx-box__body">
+          <ul>
+            <li>主訴入口：<a class="wiki-link" href="../手関節・手の外傷.html">手関節・手の外傷</a></li>
+            <li>隣接疾患：<a class="wiki-link" href="舟状骨骨折.html">舟状骨骨折</a> ／ <a class="wiki-link" href="ゲームキーパー母指.html">ゲームキーパー母指</a> ／ <a class="wiki-link" href="中手骨頸部骨折.html">中手骨頸部骨折</a></li>
+            <li>処置：母指スパイカシーネ ／ 三角巾</li>
+          </ul>
+        </div>
+      </details>
 
-      <!-- §5 マネジメント -->
-      <section class="section-page" id="s5" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>💉 マネジメント</h2>
-        <h3>Bennett / Rolando 骨折（関節内）</h3>
-        <ul>
-          <li><strong>帰宅手術</strong>または<strong>即時整形</strong></li>
-          <li><strong>母指スパイカシーネ</strong>で固定して紹介</li>
-        </ul>
-        <h3>関節外骨折</h3>
-        <ul>
-          <li>転位角度 <strong>30° 以内</strong>なら保存可</li>
-          <li>母指スパイカシーネ固定</li>
-          <li>3–4 週でリハビリ開始</li>
-        </ul>
-      </section>
-
-      <!-- §6 非整形外科医の役割 -->
-      <section class="section-page" id="s6" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>👨‍⚕️ 非整形外科医の役割</h2>
-        <ol>
-          <li><strong>母指 CMC 関節の圧痛</strong>を評価</li>
-          <li><strong>画像で関節内進展</strong>を確認</li>
-          <li>関節内骨折は<strong>母指スパイカ固定 + 帰宅手術</strong></li>
-          <li>関節外でも転位が大きければ整形外科紹介</li>
-        </ol>
-      </section>
-
-      <!-- §7 帰宅時の説明 -->
-      <section class="section-page" id="s7" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🏠 帰宅時の説明</h2>
-        <ul>
-          <li>母指は親指の機能要 → 早期診断・治療が機能予後に直結</li>
-          <li>「母指を使う仕事・趣味」を紹介状に記載</li>
-          <li>1 週以内に整形外科外来</li>
-        </ul>
-      </section>
-
-      <!-- §8 出典 -->
-      <section class="section-page" id="s8" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>📚 出典</h2>
-        <ul>
-          <li><strong>増井伸高. 骨折ハンター. 中外医学社. 2019.</strong></li>
-          <li><strong>Bennett EH.</strong> On fracture of the metacarpal bone of the thumb. <em>Br Med J.</em> 1886.</li>
-          <li><strong>Carlsen BT, Moran SL.</strong> Thumb trauma: Bennett fractures, Rolando fractures, and ulnar collateral ligament injuries. <em>J Hand Surg Am.</em> 2009.</li>
-        </ul>
-        <h3>関連</h3>
-        <ul>
-          <li><a class="wiki-link" href="../転倒.html">転倒</a> / <a class="wiki-link" href="中手骨頸部骨折.html">中手骨頸部骨折</a> / <a class="wiki-link" href="ゲームキーパー母指.html">ゲームキーパー母指</a></li>
-        </ul>
-      </section>
+      <details class="dx-box">
+        <summary><span>出典</span></summary>
+        <div class="dx-box__body">
+          <ul>
+            <li>増井伸高. 骨折ハンター. 中外医学社. 2019.</li>
+            <li>津下健哉. 手の外科の実際 改訂第7版. 南江堂. 2011.</li>
+            <li>佐藤弘明 ほか. 他科コンサルト実践マニュアル. 羊土社.</li>
+          </ul>
+        </div>
+      </details>
 
     </article>
   </main>
@@ -167,53 +262,20 @@
 
   <script>
   (function(){
-    const menu = document.getElementById('sectionMenu');
-    const pages = document.querySelectorAll('.section-page');
-    const titleH1 = document.querySelector('.page-title');
-    const relatedSymp = document.getElementById('related-symptoms');
-
-    function showSection(id) {
-      menu.hidden = true;
-      if (titleH1) titleH1.hidden = true;
-      if (relatedSymp) relatedSymp.hidden = true;
-      pages.forEach(p => p.hidden = (p.id !== id));
-      window.scrollTo(0, 0);
-    }
-    function showMenu(scrollTarget) {
-      menu.hidden = false;
-      if (titleH1) titleH1.hidden = false;
-      if (relatedSymp) relatedSymp.hidden = false;
-      pages.forEach(p => p.hidden = true);
-      if (scrollTarget) {
-        if (scrollTarget.tagName === 'DETAILS') scrollTarget.open = true;
-        scrollTarget.scrollIntoView({behavior: 'instant', block: 'start'});
-      } else {
-        window.scrollTo(0, 0);
-      }
-    }
-    function syncFromHash() {
-      const id = (location.hash || '').replace('#','');
-      const target = id ? document.getElementById(id) : null;
-      if (target && target.classList.contains('section-page')) {
-        showSection(id);
-      } else if (target) {
-        showMenu(target);
-      } else {
-        showMenu();
-      }
-    }
-
-    window.addEventListener('hashchange', syncFromHash);
-    document.querySelectorAll('.back-to-menu').forEach(b => {
-      b.addEventListener('click', () => { history.pushState(null,'',location.pathname); showMenu(); });
+    document.querySelectorAll('.dx-quick__btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.dataset.target;
+        const target = document.getElementById(id);
+        if (!target) return;
+        target.open = true;
+        target.scrollIntoView({behavior: 'smooth', block: 'start'});
+      });
     });
     const navBack = document.getElementById('navBack');
     if (navBack) navBack.addEventListener('click', () => {
       if (window.history.length > 1) history.back();
       else window.location.href = '../index.html';
     });
-
-    syncFromHash();
   })();
   </script>
 </body>

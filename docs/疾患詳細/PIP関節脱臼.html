@@ -4,8 +4,65 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="color-scheme" content="light dark" />
-  <title>PIP関節脱臼 | ER ノート</title>
+  <title>PIP 関節脱臼 | ER ノート</title>
   <link rel="stylesheet" href="../er-note.css" />
+  <style>
+    .dx-quick { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin: 10px 0 4px; }
+    .dx-quick__btn { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; padding: 10px 6px; border-radius: 10px; background: color-mix(in srgb, var(--accent) 10%, var(--surface)); border: 1.5px solid var(--accent); color: var(--text); text-decoration: none; font-weight: 700; font-size: 13px; line-height: 1.2; text-align: center; cursor: pointer; transition: background 120ms ease; }
+    .dx-quick__btn:hover { background: color-mix(in srgb, var(--accent) 18%, var(--surface)); }
+    .dx-quick__icon { font-size: 20px; }
+    .dx-quick__sub { font-size: 10.5px; font-weight: 500; color: var(--muted); }
+
+    .dx-tri { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin: 6px 0 4px; align-items: start; }
+    .dx-tri__card { background: var(--surface); border-radius: 10px; padding: 10px 12px; border: 1.5px solid color-mix(in srgb, var(--text) 18%, transparent); }
+    .dx-tri__card--vasc { border-color: #c0392b; background: color-mix(in srgb, #c0392b 6%, var(--surface)); }
+    .dx-tri__card--neuro { border-color: #b5651d; background: color-mix(in srgb, #b5651d 6%, var(--surface)); }
+    .dx-tri__card--typical { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 6%, var(--surface)); }
+    .dx-tri__title { display: flex; align-items: center; gap: 6px; font-weight: 800; font-size: 13.5px; margin-bottom: 4px; }
+    .dx-tri__card--vasc .dx-tri__title { color: #c0392b; }
+    .dx-tri__card--neuro .dx-tri__title { color: #b5651d; }
+    .dx-tri__list { margin: 0; padding-left: 18px; font-size: 12.5px; line-height: 1.5; }
+    .dx-tri__list li { margin: 2px 0; }
+
+    details.dx-tri__card { padding: 0; }
+    details.dx-tri__card > summary { list-style: none; cursor: pointer; padding: 10px 12px; display: flex; align-items: center; gap: 6px; font-weight: 800; font-size: 13.5px; }
+    details.dx-tri__card > summary::-webkit-details-marker { display: none; }
+    details.dx-tri__card > summary::after { content: "▸"; margin-left: auto; font-size: 12px; color: var(--muted); transition: transform 120ms ease; }
+    details.dx-tri__card[open] > summary::after { transform: rotate(90deg); }
+    details.dx-tri__card--vasc > summary { color: #c0392b; }
+    details.dx-tri__card--neuro > summary { color: #b5651d; }
+    details.dx-tri__card > .dx-tri__list { padding: 0 14px 12px 30px; }
+    details.dx-tri__card > .dx-tri__hint { padding: 0 14px 6px 30px; font-size: 11px; color: var(--muted); }
+
+    details.dx-box { background: var(--surface); border: 1.5px solid color-mix(in srgb, var(--text) 18%, transparent); border-radius: 10px; margin: 10px 0; scroll-margin-top: 8px; }
+    details.dx-box > summary { list-style: none; cursor: pointer; padding: 12px 14px; display: flex; align-items: center; gap: 8px; font-weight: 800; font-size: 14.5px; }
+    details.dx-box > summary::-webkit-details-marker { display: none; }
+    details.dx-box > summary::after { content: "▸"; margin-left: auto; font-size: 13px; color: var(--muted); transition: transform 120ms ease; }
+    details.dx-box[open] > summary::after { transform: rotate(90deg); }
+    details.dx-box[open] { border-color: var(--accent); }
+    details.dx-box > .dx-box__body { padding: 0 14px 14px; }
+
+    @media (max-width: 640px) {
+      .dx-quick { gap: 6px; }
+      .dx-quick__btn { padding: 8px 4px; font-size: 11.5px; border-radius: 8px; }
+      .dx-quick__icon { font-size: 17px; }
+      .dx-quick__sub { font-size: 9.5px; }
+      .dx-tri { grid-template-columns: 1fr; gap: 8px; }
+      .dx-tri__card { padding: 8px 10px; }
+      details.dx-tri__card > summary { padding: 8px 10px; font-size: 12.5px; }
+      details.dx-tri__card > .dx-tri__list { padding: 0 12px 10px 26px; }
+      .dx-tri__title { font-size: 12.5px; }
+      .dx-tri__list { font-size: 12px; }
+      details.dx-box > summary { padding: 10px 12px; font-size: 13.5px; }
+      details.dx-box > .dx-box__body { padding: 0 12px 12px; }
+    }
+
+    .dx-step { margin: 18px 0 6px; display: flex; align-items: center; gap: 10px; color: var(--muted); font-size: 11.5px; font-weight: 800; letter-spacing: 0.1em; }
+    .dx-step::before, .dx-step::after { content: ""; flex: 1; height: 1px; background: color-mix(in srgb, var(--text) 18%, transparent); }
+
+    .dx-template { background: color-mix(in srgb, var(--text) 4%, var(--surface)); border-left: 3px solid var(--accent); border-radius: 6px; padding: 10px 12px; margin: 6px 0 0; font-size: 13px; line-height: 1.6; white-space: pre-wrap; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+    .dx-template__hint { font-size: 11px; color: var(--muted); margin: 0 0 4px; }
+  </style>
 </head>
 <body>
   <header class="hokuto-top">
@@ -19,160 +76,182 @@
 
   <main class="hokuto-main">
     <article class="note-shell">
-      <h1 class="page-title">PIP関節脱臼</h1>
+      <h1 class="page-title">PIP 関節脱臼</h1>
 
-      <!-- 即時アクションヘッダー（常時 sticky） -->
-      <div class="action-header">
-        <div class="action-header__title">⚡ 即時アクション</div>
-        <ol class="action-header__list">
-          <li><strong>背側 / 掌側 / 側方</strong>を区別、<strong>背側が最多</strong>（過伸展ストレス、突き指）</li>
-          <li>整復後 X 線で<strong>関節適合性</strong>確認（指根部ブロック → 牽引 → 屈曲）</li>
-          <li><strong>volar plate 損傷</strong>の評価 — 基節骨掌側基部の撕脱骨片が 1/3 以上なら手術</li>
-          <li><strong>屈曲拘縮</strong>の後遺症リスク、<strong>buddy taping + 早期 ROM</strong>で対策</li>
-        </ol>
-      </div>
-
-      <!-- メニュータイル -->
-      <nav class="section-tiles" id="sectionMenu">
-        <a class="section-tile" href="#s1"><span class="section-tile__no">📝</span><span class="section-tile__name">受傷機転</span></a>
-        <a class="section-tile" href="#s2"><span class="section-tile__no">↔️</span><span class="section-tile__name">脱臼の方向</span></a>
-        <a class="section-tile" href="#s3"><span class="section-tile__no">🩺</span><span class="section-tile__name">身体所見</span></a>
-        <a class="section-tile" href="#s4"><span class="section-tile__no">🧪</span><span class="section-tile__name">画像<br><small>整復前後</small></span></a>
-        <a class="section-tile" href="#s5"><span class="section-tile__no">🛠️</span><span class="section-tile__name">整復手技<br><small>背側脱臼</small></span></a>
-        <a class="section-tile" href="#s6"><span class="section-tile__no">✅</span><span class="section-tile__name">整復後の評価</span></a>
-        <a class="section-tile" href="#s7"><span class="section-tile__no">💉</span><span class="section-tile__name">マネジメント</span></a>
-        <a class="section-tile" href="#s8"><span class="section-tile__no">🔬</span><span class="section-tile__name">Volar plate 損傷</span></a>
-        <a class="section-tile" href="#s9"><span class="section-tile__no">🏠</span><span class="section-tile__name">帰宅・出典</span></a>
+      <nav class="dx-quick" aria-label="クイックタップ">
+        <button class="dx-quick__btn" type="button" data-target="img-read">
+          <span>画像の見方</span>
+          <span class="dx-quick__sub">整復前後で 2 回撮影</span>
+        </button>
+        <button class="dx-quick__btn" type="button" data-target="plan">
+          <span>治療方針</span>
+          <span class="dx-quick__sub">脱臼方向で分岐</span>
+        </button>
+        <button class="dx-quick__btn" type="button" data-target="consult">
+          <span>コンサル文</span>
+          <span class="dx-quick__sub">そのまま貼れる</span>
+        </button>
       </nav>
 
-      <!-- 関連主訴（双方向リンク） -->
-      <details class="sub-fold" id="related-symptoms">
-        <summary>📞 この疾患が該当する主訴</summary>
-        <div class="sub-fold__body">
+      <div class="dx-step"><span>同時並行で評価する 3 軸</span></div>
+      <div class="dx-tri">
+
+        <div class="dx-tri__card dx-tri__card--typical">
+          <div class="dx-tri__title">典型像</div>
+          <ul class="dx-tri__list">
+            <li>球技・転倒で「突き指」 → PIP 関節背側に変形</li>
+            <li>多くは <strong>背側脱臼</strong>（中節骨が背側）</li>
+            <li>掌側脱臼は稀（中央索損傷で boutonnière）</li>
+            <li>腫脹・変形・自動運動不能</li>
+            <li><strong>volar plate</strong> 損傷（裂離骨片）が高頻度</li>
+          </ul>
+        </div>
+
+        <details class="dx-tri__card dx-tri__card--vasc">
+          <summary>血管</summary>
+          <p class="dx-tri__hint">血管損傷は通常合併しない。<strong>整復前後で固有指動脈・CRT を再評価</strong>。</p>
+          <ul class="dx-tri__list">
+            <li><strong>固有指動脈</strong>の拍動・色調・CRT（&lt; 2 秒）</li>
+            <li>整復前と<strong>整復後</strong>で必ず再評価</li>
+            <li>左右指比較で問題なし</li>
+            <li>強い腫脹は挙上・冷却</li>
+          </ul>
+        </details>
+
+        <details class="dx-tri__card dx-tri__card--neuro">
+          <summary>神経</summary>
+          <p class="dx-tri__hint">神経損傷は通常 OK。<strong>固有指神経</strong>の感覚を整復前後で確認。</p>
+          <ul class="dx-tri__list">
+            <li>各指の固有指神経の感覚（橈尺両側）</li>
+            <li>整復前・整復後で記録</li>
+            <li>正中・尺骨・橈骨神経領域 [問題なし]</li>
+            <li>麻痺所見は記録</li>
+          </ul>
+        </details>
+      </div>
+
+      <details class="dx-box" id="img-read">
+        <summary><span>画像の見方</span></summary>
+        <div class="dx-box__body">
           <ul>
-            <li><a class="wiki-link" href="../手関節・手の外傷.html">手関節・手の外傷</a> — 突き指後の PIP 変形・腫脹</li>
+            <li><strong>整復前 Xp（AP / lateral / oblique）→ 整復 → 整復後 Xp</strong>（必ず 2 セット）</li>
+            <li>整復前 Xp で確認：
+              <ul>
+                <li>脱臼方向（背側 / 掌側 / 側方）</li>
+                <li><strong>volar plate 裂離骨片</strong>（中節骨基部掌側）</li>
+                <li>関節内骨折（中節骨基部の段差）</li>
+                <li>関節面の<strong>1/3 を超える骨片</strong> → 不安定脱臼骨折</li>
+              </ul>
+            </li>
+            <li>整復後 Xp で確認：
+              <ul>
+                <li>関節整合性（concentric reduction）</li>
+                <li>軽度屈曲位での再脱臼傾向（V sign）</li>
+                <li>骨片の関節内嵌頓</li>
+              </ul>
+            </li>
+            <li>整復不能・関節嵌頓は<strong>画像撮影前にコンサル</strong>でも可</li>
           </ul>
         </div>
       </details>
 
-      <!-- §1 受傷機転 -->
-      <section class="section-page" id="s1" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>📝 受傷機転</h2>
-        <ul>
-          <li><strong>突き指による過伸展ストレス</strong>（バスケ・バレー）</li>
-          <li>PIP 関節が<strong>背側に脱臼</strong>（中手指節側が掌側に転位）</li>
-        </ul>
-      </section>
+      <details class="dx-box" id="plan">
+        <summary><span>治療方針（脱臼方向 × 安定性）</span></summary>
+        <div class="dx-box__body">
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>パターン</th><th>所見</th><th>方針</th><th>ER の動き</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>背側脱臼・単純</td>
+                  <td>整復可、整復後安定</td>
+                  <td><strong>整復 → PIP 20〜30°屈曲位 buddy taping、固定 3〜6 週（スポーツ継続例は 6〜8 週）</strong></td>
+                  <td>ER 整復 → 翌日整形外来</td>
+                </tr>
+                <tr>
+                  <td>背側脱臼 ＋ 大骨片</td>
+                  <td>関節面 ≥ 1/3、整復後不安定</td>
+                  <td><strong>手術（経皮ピンニング／extension block）</strong></td>
+                  <td>整形相談</td>
+                </tr>
+                <tr>
+                  <td><strong>整復不能</strong></td>
+                  <td>volar plate 嵌頓・骨片嵌頓</td>
+                  <td><strong>観血的整復</strong></td>
+                  <td><strong>徒手整復のご相談 → 観血的整復</strong></td>
+                </tr>
+                <tr>
+                  <td>掌側脱臼</td>
+                  <td>中央索損傷、boutonnière 変形</td>
+                  <td><strong>手術 or PIP 伸展位固定 6 週</strong></td>
+                  <td>整形相談</td>
+                </tr>
+                <tr>
+                  <td>開放創／血管・神経障害</td>
+                  <td>創あり／拍動・感覚低下</td>
+                  <td><strong>緊急対応</strong></td>
+                  <td>洗浄・破傷風・抗菌薬・即コンサル</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
 
-      <!-- §2 脱臼の方向 -->
-      <section class="section-page" id="s2" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>↔️ 脱臼の方向</h2>
-        <div class="table-wrap"><table><thead><tr><th>方向</th><th>頻度</th><th>病態</th></tr></thead><tbody><tr><td><strong>背側脱臼</strong></td><td>最多</td><td>掌側板損傷、過伸展で発生</td></tr><tr><td>側方脱臼</td><td>次いで多い</td><td>側副靱帯断裂</td></tr><tr><td><strong>掌側脱臼</strong></td><td>稀</td><td>中央索断裂 → <strong>ボタン穴変形</strong></td></tr></tbody></table></div>
-      </section>
+          <h3>ER で打つ手（背側脱臼の整復）</h3>
+          <ul>
+            <li><strong>指神経ブロック（web block）</strong>（リドカイン）で除痛</li>
+            <li>軽度過伸展しつつ縦軸牽引、中節骨基部を遠位掌側へ押し戻す</li>
+            <li>整復後：自動・他動可動と関節安定性を確認</li>
+            <li><strong>整復後 Xp で concentric reduction を確認</strong></li>
+            <li>buddy taping または PIP 軽度屈曲位副子（伸展位は中央索断裂時のみ）</li>
+            <li>2〜3 回試みて整復不能なら<strong>観血的整復</strong>を整形に相談</li>
+            <li>整復前後で固有指神経・指動脈を必ず再評価</li>
+          </ul>
+        </div>
+      </details>
 
-      <!-- §3 身体所見 -->
-      <section class="section-page" id="s3" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🩺 身体所見</h2>
-        <ul>
-          <li>PIP 関節の<strong>変形 + 腫脹</strong></li>
-          <li>動かない / 激痛</li>
-          <li>神経血管所見：指先の感覚・循環</li>
-        </ul>
-      </section>
+      <details class="dx-box" id="consult">
+        <summary><span>コンサル文（カルテに貼る）</span></summary>
+        <div class="dx-box__body">
+          <p class="dx-template__hint">『他科コンサルト実践マニュアル』フォーマット。整復後安定は外来フォロー、整復不能・大骨片・掌側脱臼は同日コンサル。</p>
+          <div class="dx-template">【目的】[徒手整復のご相談・ご加療依頼／整形外科外来でのご加療依頼]。
+【疾患】#1 [右/左][第○指]PIP 関節[背側／掌側／側方]脱臼（volar plate 裂離骨片 [なし／あり]、関節内骨片 [なし／あり]、整復 [済／不能]）
+【既往歴】[特記事項なし／○○]
+【内服薬】[なし／○○]
+【ADL（受傷前）】[自立／○○]
+【現病歴】[年齢]歳[男/女]性。[受傷機転：球技で突き指／転倒／スポーツ]で受傷し、[来院経緯]で来院。
+ ・身体所見：PIP 関節の変形・腫脹、自動運動 [可／不能]、整復後の関節安定性 [良好／不安定]、皮膚損傷 [なし／あり]
+ ・血管：固有指動脈の拍動／CRT [整復前後とも良好]、左右指比較で問題なし
+ ・神経：固有指神経の感覚 [整復前後とも問題なし]、正中・尺骨・橈骨神経領域 [問題なし]
+ ・画像：患指 Xp 整復前 → 整復後で[concentric reduction 良好／関節嵌頓・整復不能]、volar plate 骨片 [なし／あり、大きさ ○○]
+ ・ER 処置：指神経ブロック → 徒手整復、buddy taping または[PIP 軽度屈曲位副子／伸展位副子]、患肢挙上指導
+よろしくお願いいたします。</div>
+        </div>
+      </details>
 
-      <!-- §4 画像 -->
-      <section class="section-page" id="s4" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🧪 画像（整復前後で必須）</h2>
-        <ul>
-          <li>指 3 方向</li>
-          <li><strong>掌側板撕脱骨片</strong>（基節骨掌側基部）を確認</li>
-          <li>骨片が関節面の <strong>1/3 以上</strong>なら手術適応</li>
-        </ul>
-      </section>
+      <details class="dx-box">
+        <summary><span>関連ハブ・隣接疾患</span></summary>
+        <div class="dx-box__body">
+          <ul>
+            <li>主訴入口：<a class="wiki-link" href="../手関節・手の外傷.html">手関節・手の外傷</a></li>
+            <li>隣接疾患：<a class="wiki-link" href="Mallet finger・Jersey finger.html">Mallet / Jersey finger</a> ／ <a class="wiki-link" href="中手骨頸部骨折.html">中手骨頸部骨折</a> ／ <a class="wiki-link" href="ゲームキーパー母指.html">ゲームキーパー母指</a></li>
+            <li>処置：指神経ブロック ／ buddy taping ／ アルミ副子</li>
+            <li>合併症対応：boutonnière 変形は中央索断裂、伸展位 6 週固定</li>
+          </ul>
+        </div>
+      </details>
 
-      <!-- §5 整復手技 -->
-      <section class="section-page" id="s5" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🛠️ 整復手技（背側脱臼）</h2>
-        <ol>
-          <li><strong>指根部ブロック</strong>（リドカインで指の根元から麻酔）</li>
-          <li>基節骨と中節骨を同じ軸上に並べる</li>
-          <li>中節骨を<strong>わずかに背屈 + 掌側へ牽引 → 屈曲</strong></li>
-          <li><strong>コリッ</strong>と整復される</li>
-        </ol>
-      </section>
-
-      <!-- §6 整復後の評価 -->
-      <section class="section-page" id="s6" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>✅ 整復後の評価</h2>
-        <ol>
-          <li><strong>神経血管所見</strong></li>
-          <li><strong>整復後レントゲン</strong></li>
-          <li><strong>関節の安定性</strong>：軽く屈伸して不安定性がないか</li>
-          <li><strong>PIP 関節の側方不安定性</strong>（側副靱帯損傷）</li>
-        </ol>
-      </section>
-
-      <!-- §7 マネジメント -->
-      <section class="section-page" id="s7" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>💉 マネジメント</h2>
-        <h3>背側脱臼（多い）</h3>
-        <ul>
-          <li>整復後<strong>アルミシーネで 10–30° 屈曲位固定</strong> 1 週間</li>
-          <li>その後 <strong>buddy taping</strong>（隣指とテーピング）で可動域訓練</li>
-          <li>帰宅保存、1 週以内に整形外科外来</li>
-        </ul>
-        <h3>掌側脱臼（稀・要注意）</h3>
-        <ul>
-          <li>中央索断裂 → 放置で<strong>ボタン穴変形（boutonniere deformity）</strong></li>
-          <li><strong>PIP 関節伸展位で 6 週固定</strong></li>
-          <li>整形外科（手外科）紹介</li>
-        </ul>
-        <h3>骨折脱臼（掌側板撕脱 1/3 以上）</h3>
-        <ul>
-          <li><strong>帰宅手術</strong>として手外科紹介</li>
-          <li>関節面の不整合 → PIP 関節の慢性不安定</li>
-        </ul>
-      </section>
-
-      <!-- §8 Volar plate -->
-      <section class="section-page" id="s8" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🔬 掌側板損傷（Volar plate injury）</h2>
-        <ul>
-          <li>背側脱臼で必発</li>
-          <li>基節骨掌側基部の撕脱骨片</li>
-          <li>骨片小 → 保存、骨片大 → 手術</li>
-        </ul>
-      </section>
-
-      <!-- §9 帰宅・出典 -->
-      <section class="section-page" id="s9" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🏠 帰宅時の説明・出典</h2>
-        <h3>帰宅時の説明</h3>
-        <ul>
-          <li><strong>1 週以内に整形外科受診</strong>（手外科が望ましい）</li>
-          <li>数週間の可動域制限が残る</li>
-          <li>PIP 関節は拘縮しやすいので<strong>早期可動域訓練</strong>が重要</li>
-        </ul>
-        <h3>出典</h3>
-        <ul>
-          <li><strong>増井伸高. 骨折ハンター. 中外医学社. 2019.</strong></li>
-          <li><strong>Freiberg A.</strong> Management of proximal interphalangeal joint injuries. <em>J Trauma.</em> 1999.</li>
-          <li><strong>Kiefhaber TR, Stern PJ.</strong> Fracture-dislocations of the proximal interphalangeal joint. <em>J Hand Surg Am.</em> 1998.</li>
-        </ul>
-        <h3>関連</h3>
-        <ul>
-          <li><a class="wiki-link" href="../転倒.html">転倒</a> / <a class="wiki-link" href="Mallet finger・Jersey finger.html">Mallet finger・Jersey finger</a> / <a class="wiki-link" href="ゲームキーパー母指.html">ゲームキーパー母指</a></li>
-        </ul>
-      </section>
+      <details class="dx-box">
+        <summary><span>出典</span></summary>
+        <div class="dx-box__body">
+          <ul>
+            <li>増井伸高. 骨折ハンター. 中外医学社. 2019.</li>
+            <li>津下健哉. 手の外科の実際 改訂第7版. 南江堂. 2011.</li>
+            <li>佐藤弘明 ほか. 他科コンサルト実践マニュアル. 羊土社.</li>
+          </ul>
+        </div>
+      </details>
 
     </article>
   </main>
@@ -191,53 +270,20 @@
 
   <script>
   (function(){
-    const menu = document.getElementById('sectionMenu');
-    const pages = document.querySelectorAll('.section-page');
-    const titleH1 = document.querySelector('.page-title');
-    const relatedSymp = document.getElementById('related-symptoms');
-
-    function showSection(id) {
-      menu.hidden = true;
-      if (titleH1) titleH1.hidden = true;
-      if (relatedSymp) relatedSymp.hidden = true;
-      pages.forEach(p => p.hidden = (p.id !== id));
-      window.scrollTo(0, 0);
-    }
-    function showMenu(scrollTarget) {
-      menu.hidden = false;
-      if (titleH1) titleH1.hidden = false;
-      if (relatedSymp) relatedSymp.hidden = false;
-      pages.forEach(p => p.hidden = true);
-      if (scrollTarget) {
-        if (scrollTarget.tagName === 'DETAILS') scrollTarget.open = true;
-        scrollTarget.scrollIntoView({behavior: 'instant', block: 'start'});
-      } else {
-        window.scrollTo(0, 0);
-      }
-    }
-    function syncFromHash() {
-      const id = (location.hash || '').replace('#','');
-      const target = id ? document.getElementById(id) : null;
-      if (target && target.classList.contains('section-page')) {
-        showSection(id);
-      } else if (target) {
-        showMenu(target);
-      } else {
-        showMenu();
-      }
-    }
-
-    window.addEventListener('hashchange', syncFromHash);
-    document.querySelectorAll('.back-to-menu').forEach(b => {
-      b.addEventListener('click', () => { history.pushState(null,'',location.pathname); showMenu(); });
+    document.querySelectorAll('.dx-quick__btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.dataset.target;
+        const target = document.getElementById(id);
+        if (!target) return;
+        target.open = true;
+        target.scrollIntoView({behavior: 'smooth', block: 'start'});
+      });
     });
     const navBack = document.getElementById('navBack');
     if (navBack) navBack.addEventListener('click', () => {
       if (window.history.length > 1) history.back();
       else window.location.href = '../index.html';
     });
-
-    syncFromHash();
   })();
   </script>
 </body>

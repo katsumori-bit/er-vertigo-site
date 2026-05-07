@@ -6,6 +6,189 @@
   <meta name="color-scheme" content="light dark" />
   <title>橈骨頭骨折 | ER ノート</title>
   <link rel="stylesheet" href="../er-note.css" />
+  <style>
+    .dx-quick {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px;
+      margin: 10px 0 4px;
+    }
+    .dx-quick__btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      padding: 10px 6px;
+      border-radius: 10px;
+      background: color-mix(in srgb, var(--accent) 10%, var(--surface));
+      border: 1.5px solid var(--accent);
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 13px;
+      line-height: 1.2;
+      text-align: center;
+      cursor: pointer;
+      transition: background 120ms ease;
+    }
+    .dx-quick__btn:hover {
+      background: color-mix(in srgb, var(--accent) 18%, var(--surface));
+    }
+    .dx-quick__icon { font-size: 20px; }
+    .dx-quick__sub {
+      font-size: 10.5px;
+      font-weight: 500;
+      color: var(--muted);
+    }
+
+    .dx-tri {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+      margin: 6px 0 4px;
+      align-items: start;
+    }
+    .dx-tri__card {
+      background: var(--surface);
+      border-radius: 10px;
+      padding: 10px 12px;
+      border: 1.5px solid color-mix(in srgb, var(--text) 18%, transparent);
+    }
+    .dx-tri__card--vasc { border-color: #c0392b; background: color-mix(in srgb, #c0392b 6%, var(--surface)); }
+    .dx-tri__card--neuro { border-color: #b5651d; background: color-mix(in srgb, #b5651d 6%, var(--surface)); }
+    .dx-tri__card--typical { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 6%, var(--surface)); }
+    .dx-tri__title {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 800;
+      font-size: 13.5px;
+      margin-bottom: 4px;
+    }
+    .dx-tri__card--vasc .dx-tri__title { color: #c0392b; }
+    .dx-tri__card--neuro .dx-tri__title { color: #b5651d; }
+    .dx-tri__list {
+      margin: 0;
+      padding-left: 18px;
+      font-size: 12.5px;
+      line-height: 1.5;
+    }
+    .dx-tri__list li { margin: 2px 0; }
+
+    details.dx-tri__card { padding: 0; }
+    details.dx-tri__card > summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 10px 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 800;
+      font-size: 13.5px;
+    }
+    details.dx-tri__card > summary::-webkit-details-marker { display: none; }
+    details.dx-tri__card > summary::after {
+      content: "▸";
+      margin-left: auto;
+      font-size: 12px;
+      color: var(--muted);
+      transition: transform 120ms ease;
+    }
+    details.dx-tri__card[open] > summary::after { transform: rotate(90deg); }
+    details.dx-tri__card--vasc > summary { color: #c0392b; }
+    details.dx-tri__card--neuro > summary { color: #b5651d; }
+    details.dx-tri__card > .dx-tri__list { padding: 0 14px 12px 30px; }
+    details.dx-tri__card > .dx-tri__hint {
+      padding: 0 14px 6px 30px;
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    details.dx-box {
+      background: var(--surface);
+      border: 1.5px solid color-mix(in srgb, var(--text) 18%, transparent);
+      border-radius: 10px;
+      margin: 10px 0;
+      scroll-margin-top: 8px;
+    }
+    details.dx-box > summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 12px 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 800;
+      font-size: 14.5px;
+    }
+    details.dx-box > summary::-webkit-details-marker { display: none; }
+    details.dx-box > summary::after {
+      content: "▸";
+      margin-left: auto;
+      font-size: 13px;
+      color: var(--muted);
+      transition: transform 120ms ease;
+    }
+    details.dx-box[open] > summary::after { transform: rotate(90deg); }
+    details.dx-box[open] {
+      border-color: var(--accent);
+    }
+    details.dx-box > .dx-box__body {
+      padding: 0 14px 14px;
+    }
+
+    @media (max-width: 640px) {
+      .dx-quick { gap: 6px; }
+      .dx-quick__btn { padding: 8px 4px; font-size: 11.5px; border-radius: 8px; }
+      .dx-quick__icon { font-size: 17px; }
+      .dx-quick__sub { font-size: 9.5px; }
+
+      .dx-tri { grid-template-columns: 1fr; gap: 8px; }
+      .dx-tri__card { padding: 8px 10px; }
+      details.dx-tri__card > summary { padding: 8px 10px; font-size: 12.5px; }
+      details.dx-tri__card > .dx-tri__list { padding: 0 12px 10px 26px; }
+      .dx-tri__title { font-size: 12.5px; }
+      .dx-tri__list { font-size: 12px; }
+
+      details.dx-box > summary { padding: 10px 12px; font-size: 13.5px; }
+      details.dx-box > .dx-box__body { padding: 0 12px 12px; }
+    }
+
+    .dx-step {
+      margin: 18px 0 6px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 11.5px;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+    }
+    .dx-step::before, .dx-step::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: color-mix(in srgb, var(--text) 18%, transparent);
+    }
+
+    .dx-template {
+      background: color-mix(in srgb, var(--text) 4%, var(--surface));
+      border-left: 3px solid var(--accent);
+      border-radius: 6px;
+      padding: 10px 12px;
+      margin: 6px 0 0;
+      font-size: 13px;
+      line-height: 1.6;
+      white-space: pre-wrap;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+    .dx-template__hint {
+      font-size: 11px;
+      color: var(--muted);
+      margin: 0 0 4px;
+    }
+  </style>
 </head>
 <body>
   <header class="hokuto-top">
@@ -21,162 +204,174 @@
     <article class="note-shell">
       <h1 class="page-title">橈骨頭骨折</h1>
 
-      <!-- 即時アクションヘッダー（常時 sticky） -->
-      <div class="action-header">
-        <div class="action-header__title">⚡ 即時アクション</div>
-        <ol class="action-header__list">
-          <li><strong>Mason 分類（Ⅰ-Ⅳ）</strong>で病期評価</li>
-          <li>AP + lat（<strong>fat pad sign / sail sign</strong> で見落とし回避）</li>
-          <li>Ⅰ 保存、Ⅱ-Ⅲ 議論、Ⅳ 手術</li>
-          <li><strong>Essex-Lopresti 損傷</strong>（前腕骨間膜+橈骨頭+遠位橈尺関節）を念頭</li>
-        </ol>
-      </div>
-
-      <!-- メニュータイル -->
-      <nav class="section-tiles" id="sectionMenu">
-        <a class="section-tile" href="#s1"><span class="section-tile__no">💥</span><span class="section-tile__name">受傷機転</span></a>
-        <a class="section-tile" href="#s2"><span class="section-tile__no">🩺</span><span class="section-tile__name">身体所見</span></a>
-        <a class="section-tile" href="#s3"><span class="section-tile__no">📷</span><span class="section-tile__name">画像<br><small>fat pad sign</small></span></a>
-        <a class="section-tile" href="#s4"><span class="section-tile__no">📊</span><span class="section-tile__name">Mason 分類</span></a>
-        <a class="section-tile" href="#s5"><span class="section-tile__no">💉</span><span class="section-tile__name">マネジメント</span></a>
-        <a class="section-tile" href="#s6"><span class="section-tile__no">⚠️</span><span class="section-tile__name">合併症</span></a>
-        <a class="section-tile" href="#s7"><span class="section-tile__no">📚</span><span class="section-tile__name">出典・関連</span></a>
+      <nav class="dx-quick" aria-label="クイックタップ">
+        <button class="dx-quick__btn" type="button" data-target="img-read">
+          <span>画像の見方</span>
+          <span class="dx-quick__sub">fat pad sign が鍵</span>
+        </button>
+        <button class="dx-quick__btn" type="button" data-target="plan">
+          <span>治療方針</span>
+          <span class="dx-quick__sub">Mason 分類 × 5 択</span>
+        </button>
+        <button class="dx-quick__btn" type="button" data-target="consult">
+          <span>コンサル文</span>
+          <span class="dx-quick__sub">そのまま貼れる</span>
+        </button>
       </nav>
 
-      <!-- 関連主訴（双方向リンク） -->
-      <details class="sub-fold" id="related-symptoms">
-        <summary>📞 この疾患が該当する主訴</summary>
-        <div class="sub-fold__body">
+      <div class="dx-step"><span>同時並行で評価する 3 軸</span></div>
+      <div class="dx-tri">
+
+        <div class="dx-tri__card dx-tri__card--typical">
+          <div class="dx-tri__title">典型像</div>
+          <ul class="dx-tri__list">
+            <li><strong>成人の肘外傷で最多</strong>（半数以上）、FOOSH が典型</li>
+            <li>独歩 walk in、画像所見が微妙な微妙骨折タイプが多い</li>
+            <li>所見：肘外側の圧痛＋腫脹、肘の <strong>回内外で激痛</strong></li>
+            <li>画像で迷ったら橈骨頭を触れ、回内外で疼痛があれば骨折として扱う</li>
+            <li>合併：肘関節脱臼／鉤状突起骨折＝<strong>terrible triad</strong></li>
+            <li>遠位橈尺関節（DRUJ）痛 ＝ <strong>Essex-Lopresti 損傷</strong>を疑う</li>
+          </ul>
+        </div>
+
+        <details class="dx-tri__card dx-tri__card--vasc">
+          <summary>血管</summary>
+          <p class="dx-tri__hint">血管障害は通常まれだが、念のため触知記録を。</p>
+          <ul class="dx-tri__list">
+            <li>橈骨動脈・尺骨動脈触知（左右比較）</li>
+            <li>CRT・色調・温度を確認</li>
+            <li>腫脹強い・転位大 → コンパートメント 6P チェック</li>
+          </ul>
+        </details>
+
+        <details class="dx-tri__card dx-tri__card--neuro">
+          <summary>神経</summary>
+          <p class="dx-tri__hint">神経障害は通常まれ。<strong>後骨間神経（PIN）麻痺</strong>に注意。</p>
+          <ul class="dx-tri__list">
+            <li><strong>PIN（後骨間神経）</strong>：手指の MP 伸展（drop finger）</li>
+            <li>正中神経・尺骨神経：通常問題なし、念のため確認</li>
+            <li>所見記録（責任分界）</li>
+          </ul>
+        </details>
+      </div>
+
+      <details class="dx-box" id="img-read">
+        <summary><span>画像の見方</span></summary>
+        <div class="dx-box__body">
           <ul>
-            <li><a class="wiki-link" href="../手関節・手の外傷.html">手関節・手の外傷</a> — 上肢外傷の入口</li>
-            <li><a class="wiki-link" href="../転倒.html">転倒</a> — FOOSH による軸圧で発生</li>
+            <li><strong>肘 2 方向（正面・側面）</strong>＋ 必要に応じて橈骨頭斜位</li>
+            <li>側面像で必ず確認：
+              <ul>
+                <li><strong>fat pad sign</strong>（前方は sail sign、後方は陽性で関節内出血を示唆）→ 不顕性骨折を疑う</li>
+                <li><strong>橈骨頭の段差</strong>（2 mm 以上の関節面段差は要手術）</li>
+                <li>骨片数、転位の方向</li>
+              </ul>
+            </li>
+            <li>正面像：橈骨頭の輪郭、合併骨折（鉤状突起・肘頭）</li>
+            <li><strong>転位／粉砕／terrible triad 疑い → CT</strong>（手術計画用）</li>
+            <li>手関節痛があれば <strong>手関節 Xp</strong>（Essex-Lopresti を見落とさない）</li>
+            <li>fat pad sign のみ陽性で骨折線不明 → 不顕性橈骨頭骨折として保存治療＋再診</li>
           </ul>
         </div>
       </details>
 
-      <!-- §1 受傷機転 -->
-      <section class="section-page" id="s1" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>💥 受傷機転</h2>
-        <ul>
-          <li><strong>FOOSH</strong>（転倒で手をつく）</li>
-          <li>橈骨長軸方向への軸圧</li>
-          <li>若年〜中年に多い</li>
-        </ul>
-        <div class="callout callout-summary">
-          <div class="callout-title">橈骨頭骨折 = 肘外傷で「骨折なし」でも疑う occult fracture</div>
-          <div class="callout-body"><ul>
-            <li><strong>FOOSH</strong> による肘への軸圧で発生</li>
-            <li><strong>レントゲンで見逃しやすい亡霊骨折</strong></li>
-            <li><strong>Fat pad sign</strong>（posterior fat pad / sail sign）で疑う</li>
-            <li>転位なし → 帰宅保存、転位あり → 帰宅手術</li>
-          </ul></div>
+      <details class="dx-box" id="plan">
+        <summary><span>治療方針（Mason 分類 × 5 択）</span></summary>
+        <div class="dx-box__body">
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>分類（Mason）</th><th>所見</th><th>マネジメント</th><th>ER の動き</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Type I：転位なし</td>
+                  <td>転位 &lt; 2 mm、関節可動 OK</td>
+                  <td><strong>保存（早期可動）</strong></td>
+                  <td>三角巾＋早期 ROM、整形外来</td>
+                </tr>
+                <tr>
+                  <td>Type II：転位＋部分</td>
+                  <td>転位 ≥ 2 mm、骨片あり</td>
+                  <td><strong>整形コンサル（手術検討）</strong></td>
+                  <td>シーネ＋整形相談、CT</td>
+                </tr>
+                <tr>
+                  <td><strong>Type III：粉砕</strong></td>
+                  <td>橈骨頭の粉砕骨折</td>
+                  <td><strong>手術（ORIF / 人工頭）</strong></td>
+                  <td>CT、絶飲食、整形コンサル</td>
+                </tr>
+                <tr>
+                  <td><strong>Type IV：脱臼合併</strong></td>
+                  <td>肘脱臼＋橈骨頭骨折</td>
+                  <td><strong>緊急整復＋手術</strong></td>
+                  <td>整復、CT、即コンサル</td>
+                </tr>
+                <tr>
+                  <td><strong>Essex-Lopresti</strong></td>
+                  <td>橈骨頭骨折＋DRUJ 損傷</td>
+                  <td><strong>手術＋骨間膜評価</strong></td>
+                  <td>手関節 Xp、整形コンサル</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3>ER で打つ手</h3>
+          <ul>
+            <li>Type I：<strong>三角巾固定</strong>のみで早期可動域訓練が原則（拘縮予防）</li>
+            <li>Type II 以上：<strong>後方シーネ（肘 90° 屈曲・前腕中間位）</strong>＋ 三角巾</li>
+            <li>関節血腫の穿刺＋局所麻酔は疼痛軽減に有効（整形外科判断）</li>
+            <li>転位大・粉砕・脱臼合併は CT、絶飲食、ライン確保</li>
+            <li>鎮痛はアセトアミノフェン中心。<strong>神経ブロックは整形医到着前は避ける</strong></li>
+          </ul>
         </div>
-      </section>
+      </details>
 
-      <!-- §2 身体所見 -->
-      <section class="section-page" id="s2" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🩺 身体所見</h2>
-        <ul>
-          <li><strong>肘外側の圧痛</strong>（橈骨頭直上）</li>
-          <li><strong>前腕回内・回外制限</strong>（橈骨頭の回旋障害）</li>
-          <li>肘関節屈伸は比較的保たれることも</li>
-        </ul>
-      </section>
-
-      <!-- §3 画像 - Fat pad sign -->
-      <section class="section-page" id="s3" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>📷 画像 — Fat pad sign を見落とすな</h2>
-        <ul>
-          <li><strong>肘側面像が最も重要</strong></li>
-          <li>橈骨頭の骨折線は微妙で見逃しやすい（<strong>微妙骨折〜亡霊骨折</strong>）</li>
-        </ul>
-
-        <h3>見るポイント</h3>
-        <div class="table-wrap"><table>
-          <thead><tr><th>所見</th><th>意義</th></tr></thead>
-          <tbody>
-            <tr><td><strong>Posterior fat pad sign</strong></td><td><strong>関節内血腫の間接所見</strong> → 骨折ありとして扱う</td></tr>
-            <tr><td>Sail sign（anterior fat pad 拡大）</td><td>同上（健常でも見えるが拡大は異常）</td></tr>
-            <tr><td>橈骨頭の皮質の不連続性</td><td>直接所見</td></tr>
-          </tbody>
-        </table></div>
-
-        <div class="callout callout-warning">
-          <div class="callout-title">Posterior fat pad sign 陽性は「骨折あり」として扱う</div>
-          <div class="callout-body"><p>レントゲンで骨折線が見えなくても、<strong>関節内血腫 = 関節内骨折</strong>と判断。CT または 2 週後再検で確認。</p></div>
+      <details class="dx-box" id="consult">
+        <summary><span>コンサル文（カルテに貼る）</span></summary>
+        <div class="dx-box__body">
+          <p class="dx-template__hint">『他科コンサルト実践マニュアル』の院内紹介状フォーマットに準拠（【目的】【疾患】【既往歴】【内服薬】【ADL】【現病歴】）。Type I 単独は翌日整形外来でも可、Type II 以上・脱臼合併は<strong>すみやかにコンサルト</strong>。</p>
+          <div class="dx-template">【目的】橈骨頭骨折の[ご加療方針／観血的整復]のご相談。
+【疾患】#1 [右/左]橈骨頭骨折 Mason 分類 [Ⅰ/Ⅱ/Ⅲ/Ⅳ]型（転位 [○ mm]、粉砕 [あり／なし]、脱臼合併 [あり／なし]）
+【既往歴】[特記事項なし／○○]
+【内服薬】[なし／ワーファリン／DOAC ○○／抗血小板薬 ○○]
+【ADL（受傷前）】[独歩／杖／介助歩行／車椅子]
+【現病歴】[年齢]歳[男/女]性。[受傷機転：転倒で手をついた／高エネ外傷]で受傷し、[来院経緯]で来院。
+ ・身体所見：肘外側の圧痛＋腫脹、肘の回内外で激痛、能動的可動制限
+ ・血管：橈骨動脈・尺骨動脈 [良好]、CRT [○○秒]
+ ・神経：PIN（後骨間神経・MP 伸展）[問題なし／麻痺]、正中神経・尺骨神経 [問題なし]
+ ・画像：Xp で橈骨頭骨折（転位 [○ mm]）、fat pad sign [陽性／陰性]、CT [施行済／未]
+ ・遠位橈尺関節：手関節痛 [なし／あり]（Essex-Lopresti 否定 [済／未]）
+ ・ER 処置：[三角巾／後方シーネ（肘 90° 屈曲）]、患肢挙上
+ ・術前検査：採血・心電図・胸部 X 線 [済／未]
+よろしくお願いいたします。</div>
         </div>
-      </section>
+      </details>
 
-      <!-- §4 Mason 分類 -->
-      <section class="section-page" id="s4" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>📊 Mason 分類（非整形外科医用の簡略版）</h2>
-        <div class="table-wrap"><table>
-          <thead><tr><th>Type</th><th>所見</th><th>治療</th></tr></thead>
-          <tbody>
-            <tr><td>I</td><td>転位なし / 2 mm 未満</td><td>保存（三角巾・数日〜1 週）</td></tr>
-            <tr><td><strong>II</strong></td><td>転位 ≥ 2 mm</td><td><strong>帰宅手術</strong>（ORIF）</td></tr>
-            <tr><td>III</td><td>粉砕</td><td>人工橈骨頭</td></tr>
-            <tr><td>IV</td><td>脱臼合併</td><td>即時整形</td></tr>
-          </tbody>
-        </table></div>
-      </section>
+      <details class="dx-box">
+        <summary><span>関連ハブ・隣接疾患</span></summary>
+        <div class="dx-box__body">
+          <ul>
+            <li>主訴入口：<a class="wiki-link" href="../肘の外傷・痛み.html">肘の外傷・痛み</a> ／ <a class="wiki-link" href="../転倒.html">転倒</a></li>
+            <li>隣接疾患：<a class="wiki-link" href="肘関節脱臼.html">肘関節脱臼</a> ／ <a class="wiki-link" href="肘頭骨折.html">肘頭骨折</a> ／ <a class="wiki-link" href="上腕骨顆上骨折.html">上腕骨顆上骨折</a></li>
+            <li>合併損傷：terrible triad、Essex-Lopresti、<a class="wiki-link" href="開放骨折.html">開放骨折</a></li>
+            <li>保存例：早期可動が原則（拘縮予防）、翌日〜数日で整形外来</li>
+          </ul>
+        </div>
+      </details>
 
-      <!-- §5 マネジメント -->
-      <section class="section-page" id="s5" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>💉 マネジメント</h2>
-
-        <h3>転位なし（Type I）</h3>
-        <ul>
-          <li><strong>三角巾 + シーネ固定</strong></li>
-          <li><strong>帰宅保存</strong>、1 週以内に整形外科外来</li>
-          <li>疼痛軽減次第、<strong>早期可動域訓練</strong>（肘拘縮予防）</li>
-        </ul>
-
-        <h3>転位あり（Type II 以上）</h3>
-        <ul>
-          <li><strong>帰宅手術</strong> or 入院整形</li>
-          <li>脱臼合併なら <strong>即時整形</strong></li>
-        </ul>
-
-        <h3>Fat pad sign のみ（画像上骨折線なし）</h3>
-        <ul>
-          <li><strong>橈骨頭骨折の亡霊骨折</strong>として扱う</li>
-          <li>Type I と同じく保存治療</li>
-          <li>疼痛・腫脹が長引けば 2 週後レントゲン再検か MRI</li>
-        </ul>
-      </section>
-
-      <!-- §6 合併症 -->
-      <section class="section-page" id="s6" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>⚠️ 合併症</h2>
-        <ul>
-          <li><strong>肘関節拘縮</strong>（長期固定で増悪）→ 早期可動域訓練が重要</li>
-          <li><strong>Monteggia 骨折</strong> の合併（橈骨頭脱臼 + 尺骨骨折）→ 見落とし注意</li>
-          <li><strong>前腕回旋制限</strong>（橈骨頭の段差による機械的ブロック）</li>
-        </ul>
-      </section>
-
-      <!-- §7 出典・関連 -->
-      <section class="section-page" id="s7" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>📚 出典 / 関連</h2>
-        <h3>出典</h3>
-        <ul>
-          <li><strong>増井伸高. 骨折ハンター. 中外医学社. 2019.</strong></li>
-          <li><strong>Mason ML.</strong> Some observations on fractures of the head of the radius with a review of one hundred cases. <em>Br J Surg.</em> 1954.</li>
-          <li><strong>Hotchkiss RN.</strong> Displaced fractures of the radial head: internal fixation or excision? <em>J Am Acad Orthop Surg.</em> 1997.</li>
-        </ul>
-        <h3>関連</h3>
-        <ul>
-          <li><a class="wiki-link" href="../転倒.html">転倒</a> / <a class="wiki-link" href="肘関節脱臼.html">肘関節脱臼</a> / <a class="wiki-link" href="肘頭骨折.html">肘頭骨折</a></li>
-        </ul>
-      </section>
+      <details class="dx-box">
+        <summary><span>出典</span></summary>
+        <div class="dx-box__body">
+          <ul>
+            <li>増井伸高. 骨折ハンター. 中外医学社. 2019.</li>
+            <li>Mason ML. Some observations on fractures of the head of the radius. <em>Br J Surg.</em> 1954.</li>
+            <li>「他科コンサルト実践マニュアル」整形外科の章（脱臼骨折・転位骨折）.</li>
+          </ul>
+        </div>
+      </details>
 
     </article>
   </main>
@@ -195,53 +390,21 @@
 
   <script>
   (function(){
-    const menu = document.getElementById('sectionMenu');
-    const pages = document.querySelectorAll('.section-page');
-    const titleH1 = document.querySelector('.page-title');
-    const relatedSymp = document.getElementById('related-symptoms');
-
-    function showSection(id) {
-      menu.hidden = true;
-      if (titleH1) titleH1.hidden = true;
-      if (relatedSymp) relatedSymp.hidden = true;
-      pages.forEach(p => p.hidden = (p.id !== id));
-      window.scrollTo(0, 0);
-    }
-    function showMenu(scrollTarget) {
-      menu.hidden = false;
-      if (titleH1) titleH1.hidden = false;
-      if (relatedSymp) relatedSymp.hidden = false;
-      pages.forEach(p => p.hidden = true);
-      if (scrollTarget) {
-        if (scrollTarget.tagName === 'DETAILS') scrollTarget.open = true;
-        scrollTarget.scrollIntoView({behavior: 'instant', block: 'start'});
-      } else {
-        window.scrollTo(0, 0);
-      }
-    }
-    function syncFromHash() {
-      const id = (location.hash || '').replace('#','');
-      const target = id ? document.getElementById(id) : null;
-      if (target && target.classList.contains('section-page')) {
-        showSection(id);
-      } else if (target) {
-        showMenu(target);
-      } else {
-        showMenu();
-      }
-    }
-
-    window.addEventListener('hashchange', syncFromHash);
-    document.querySelectorAll('.back-to-menu').forEach(b => {
-      b.addEventListener('click', () => { history.pushState(null,'',location.pathname); showMenu(); });
+    document.querySelectorAll('.dx-quick__btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.dataset.target;
+        const target = document.getElementById(id);
+        if (!target) return;
+        target.open = true;
+        target.scrollIntoView({behavior: 'smooth', block: 'start'});
+      });
     });
+
     const navBack = document.getElementById('navBack');
     if (navBack) navBack.addEventListener('click', () => {
       if (window.history.length > 1) history.back();
       else window.location.href = '../index.html';
     });
-
-    syncFromHash();
   })();
   </script>
 </body>

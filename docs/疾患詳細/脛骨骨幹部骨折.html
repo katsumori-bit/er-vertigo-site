@@ -6,6 +6,196 @@
   <meta name="color-scheme" content="light dark" />
   <title>脛骨骨幹部骨折 | ER ノート</title>
   <link rel="stylesheet" href="../er-note.css" />
+  <style>
+    /* ============ クイックタップ（3 つを開閉トリガー） ============ */
+    .dx-quick {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px;
+      margin: 10px 0 4px;
+    }
+    .dx-quick__btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      padding: 10px 6px;
+      border-radius: 10px;
+      background: color-mix(in srgb, var(--accent) 10%, var(--surface));
+      border: 1.5px solid var(--accent);
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 13px;
+      line-height: 1.2;
+      text-align: center;
+      cursor: pointer;
+      transition: background 120ms ease;
+    }
+    .dx-quick__btn:hover {
+      background: color-mix(in srgb, var(--accent) 18%, var(--surface));
+    }
+    .dx-quick__icon { font-size: 20px; }
+    .dx-quick__sub {
+      font-size: 10.5px;
+      font-weight: 500;
+      color: var(--muted);
+    }
+
+    /* ============ 同時評価 3 列（血管・神経・典型像） ============ */
+    .dx-tri {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+      margin: 6px 0 4px;
+      align-items: start;
+    }
+    .dx-tri__card {
+      background: var(--surface);
+      border-radius: 10px;
+      padding: 10px 12px;
+      border: 1.5px solid color-mix(in srgb, var(--text) 18%, transparent);
+    }
+    .dx-tri__card--vasc { border-color: #c0392b; background: color-mix(in srgb, #c0392b 6%, var(--surface)); }
+    .dx-tri__card--neuro { border-color: #b5651d; background: color-mix(in srgb, #b5651d 6%, var(--surface)); }
+    .dx-tri__card--typical { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 6%, var(--surface)); }
+    .dx-tri__title {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 800;
+      font-size: 13.5px;
+      margin-bottom: 4px;
+    }
+    .dx-tri__card--vasc .dx-tri__title { color: #c0392b; }
+    .dx-tri__card--neuro .dx-tri__title { color: #b5651d; }
+    .dx-tri__list {
+      margin: 0;
+      padding-left: 18px;
+      font-size: 12.5px;
+      line-height: 1.5;
+    }
+    .dx-tri__list li { margin: 2px 0; }
+
+    /* details 形式の血管/神経カード：summary にチェック印、開閉時の挙動 */
+    details.dx-tri__card { padding: 0; }
+    details.dx-tri__card > summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 10px 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 800;
+      font-size: 13.5px;
+    }
+    details.dx-tri__card > summary::-webkit-details-marker { display: none; }
+    details.dx-tri__card > summary::after {
+      content: "▸";
+      margin-left: auto;
+      font-size: 12px;
+      color: var(--muted);
+      transition: transform 120ms ease;
+    }
+    details.dx-tri__card[open] > summary::after { transform: rotate(90deg); }
+    details.dx-tri__card--vasc > summary { color: #c0392b; }
+    details.dx-tri__card--neuro > summary { color: #b5651d; }
+    details.dx-tri__card > .dx-tri__list { padding: 0 14px 12px 30px; }
+    details.dx-tri__card > .dx-tri__hint {
+      padding: 0 14px 6px 30px;
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    /* ============ 大きな details ボックス（画像/治療方針/コンサル文） ============ */
+    details.dx-box {
+      background: var(--surface);
+      border: 1.5px solid color-mix(in srgb, var(--text) 18%, transparent);
+      border-radius: 10px;
+      margin: 10px 0;
+      scroll-margin-top: 8px;
+    }
+    details.dx-box > summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 12px 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 800;
+      font-size: 14.5px;
+    }
+    details.dx-box > summary::-webkit-details-marker { display: none; }
+    details.dx-box > summary::after {
+      content: "▸";
+      margin-left: auto;
+      font-size: 13px;
+      color: var(--muted);
+      transition: transform 120ms ease;
+    }
+    details.dx-box[open] > summary::after { transform: rotate(90deg); }
+    details.dx-box[open] {
+      border-color: var(--accent);
+    }
+    details.dx-box > .dx-box__body {
+      padding: 0 14px 14px;
+    }
+
+    /* スマホで 1 列に */
+    @media (max-width: 640px) {
+      .dx-quick { gap: 6px; }
+      .dx-quick__btn { padding: 8px 4px; font-size: 11.5px; border-radius: 8px; }
+      .dx-quick__icon { font-size: 17px; }
+      .dx-quick__sub { font-size: 9.5px; }
+
+      .dx-tri { grid-template-columns: 1fr; gap: 8px; }
+      .dx-tri__card { padding: 8px 10px; }
+      details.dx-tri__card > summary { padding: 8px 10px; font-size: 12.5px; }
+      details.dx-tri__card > .dx-tri__list { padding: 0 12px 10px 26px; }
+      .dx-tri__title { font-size: 12.5px; }
+      .dx-tri__list { font-size: 12px; }
+
+      details.dx-box > summary { padding: 10px 12px; font-size: 13.5px; }
+      details.dx-box > .dx-box__body { padding: 0 12px 12px; }
+    }
+
+    /* ============ 区切り帯（最小限） ============ */
+    .dx-step {
+      margin: 18px 0 6px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 11.5px;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+    }
+    .dx-step::before, .dx-step::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: color-mix(in srgb, var(--text) 18%, transparent);
+    }
+
+    /* コピペ用テンプレ */
+    .dx-template {
+      background: color-mix(in srgb, var(--text) 4%, var(--surface));
+      border-left: 3px solid var(--accent);
+      border-radius: 6px;
+      padding: 10px 12px;
+      margin: 6px 0 0;
+      font-size: 13px;
+      line-height: 1.6;
+      white-space: pre-wrap;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+    .dx-template__hint {
+      font-size: 11px;
+      color: var(--muted);
+      margin: 0 0 4px;
+    }
+  </style>
 </head>
 <body>
   <header class="hokuto-top">
@@ -21,175 +211,188 @@
     <article class="note-shell">
       <h1 class="page-title">脛骨骨幹部骨折</h1>
 
-      <!-- 即時アクションヘッダー（常時 sticky） -->
-      <div class="action-header">
-        <div class="action-header__title">⚡ 即時アクション</div>
-        <ol class="action-header__list">
-          <li><strong>血管神経評価 + コンパートメント</strong>（5P / 受動背屈で過度な疼痛 = 最早期所見、緊満感、5–10% に合併）</li>
-          <li>下腿 <strong>AP + lat</strong>（膝 + 足関節含む）。腓骨評価・関節内進展（高原・果部）の有無</li>
-          <li><strong>髄内釘（IM nail）</strong>が標準術式。下腿全体をシーネ固定 + 挙上・アイシング</li>
-          <li><strong>開放骨折</strong>なら <strong>洗浄 + ABx（セファゾリン±AG）+ 破傷風 + 早期手術</strong>（6–8 時間以内）</li>
-        </ol>
-      </div>
-
-      <!-- §1〜§8 メニュータイル -->
-      <nav class="section-tiles" id="sectionMenu">
-        <a class="section-tile" href="#s1"><span class="section-tile__no">🚗</span><span class="section-tile__name">受傷機転</span></a>
-        <a class="section-tile" href="#s2"><span class="section-tile__no">🩺</span><span class="section-tile__name">身体所見<br><small>+ コンパ</small></span></a>
-        <a class="section-tile" href="#s3"><span class="section-tile__no">📷</span><span class="section-tile__name">画像</span></a>
-        <a class="section-tile" href="#s4"><span class="section-tile__no">📊</span><span class="section-tile__name">分類</span></a>
-        <a class="section-tile" href="#s5"><span class="section-tile__no">💉</span><span class="section-tile__name">マネジメント</span></a>
-        <a class="section-tile" href="#s6"><span class="section-tile__no">🩹</span><span class="section-tile__name">Gustilo<br><small>分類</small></span></a>
-        <a class="section-tile" href="#s7"><span class="section-tile__no">⚠️</span><span class="section-tile__name">コンパ<br><small>+ 合併症</small></span></a>
-        <a class="section-tile" href="#s8"><span class="section-tile__no">📚</span><span class="section-tile__name">出典<br><small>+ 関連</small></span></a>
+      <!-- スマホですぐ開きたい 3 つ -->
+      <nav class="dx-quick" aria-label="クイックタップ">
+        <button class="dx-quick__btn" type="button" data-target="img-read">
+          <span>画像の見方</span>
+          <span class="dx-quick__sub">Xp / Gustilo 分類</span>
+        </button>
+        <button class="dx-quick__btn" type="button" data-target="plan">
+          <span>治療方針</span>
+          <span class="dx-quick__sub">抗菌薬・コンパ・固定</span>
+        </button>
+        <button class="dx-quick__btn" type="button" data-target="consult">
+          <span>コンサル文</span>
+          <span class="dx-quick__sub">そのまま貼れる</span>
+        </button>
       </nav>
 
-      <!-- 関連主訴（双方向リンク） -->
-      <details class="sub-fold" id="related-symptoms">
-        <summary>📞 この疾患が該当する主訴</summary>
-        <div class="sub-fold__body">
+      <!-- 同時評価 3 列：典型像は常時、血管・神経は折りたたみ -->
+      <div class="dx-step"><span>同時並行で評価する 3 軸</span></div>
+      <div class="dx-tri">
+
+        <div class="dx-tri__card dx-tri__card--typical">
+          <div class="dx-tri__title">典型像</div>
+          <ul class="dx-tri__list">
+            <li>高エネルギー外傷（交通・スキー・転落）の若年男性</li>
+            <li>ねじれ外力（スキー転倒）／直達外力（バンパー）</li>
+            <li>下腿の<strong>変形・短縮・腫脹</strong>＋荷重不能</li>
+            <li><strong>脛骨前面は皮下組織が薄く開放骨折最好発</strong></li>
+            <li>75–85% で腓骨骨折を合併</li>
+          </ul>
+        </div>
+
+        <details class="dx-tri__card dx-tri__card--vasc">
+          <summary>血管・コンパ</summary>
+          <p class="dx-tri__hint"><strong>コンパートメント症候群は脛骨骨幹部骨折の 8%</strong>に合併。入院初日の一般病棟で発症する。</p>
+          <ul class="dx-tri__list">
+            <li><strong>足趾他動屈伸での疼痛誘発</strong>＝早期所見</li>
+            <li>不可逆性変化は<strong>虚血 4 時間で開始、8 時間で完成</strong></li>
+            <li>区画圧 ≥ 30 mmHg で筋膜切開</li>
+            <li>足背・後脛骨動脈の触知（左右比較）</li>
+            <li>頻回診察を入院オーダーに明記</li>
+          </ul>
+        </details>
+
+        <details class="dx-tri__card dx-tri__card--neuro">
+          <summary>神経</summary>
+          <p class="dx-tri__hint">腓骨神経麻痺（腓骨骨折合併時）に注意。</p>
+          <ul class="dx-tri__list">
+            <li>足関節背屈・第一趾背屈（L5）</li>
+            <li>足背・第 1–2 指間の感覚</li>
+            <li>固定肢位を見直す</li>
+            <li>記録を残す（責任分界点）</li>
+          </ul>
+        </details>
+      </div>
+
+      <!-- 画像の見方 -->
+      <details class="dx-box" id="img-read">
+        <summary><span>画像の見方</span></summary>
+        <div class="dx-box__body">
           <ul>
-            <li><span class="wiki-missing">足関節・足部の外傷</span> — 下腿変形・腫脹・荷重不能</li>
-            <li><a class="wiki-link" href="../転倒.html">転倒</a> — ねじれ外力（スキー転倒）・直達外力（バンパー）</li>
+            <li>下腿 <strong>AP + 側面</strong>（膝関節と足関節を必ず含める）</li>
+            <li>明確骨折タイプ — レントゲンで骨折線は明白、<strong>CT は基本不要</strong></li>
+            <li>腓骨骨折の有無を同時評価（治療方針は変わらないが記載）</li>
+            <li>関節内進展（脛骨高原・足関節果部）疑いのみ CT 追加</li>
+          </ul>
+
+          <h3>脱衣の極意 — 開放骨折を見逃さない</h3>
+          <ul>
+            <li><strong>必ず両側のズボン・スカートを完全に脱がせて</strong>骨折部直下の裂創を確認。激痛で困難なら衣服を切る</li>
+            <li><strong>1 cm 未満のピンホール状でも骨折部直下なら開放骨折</strong></li>
+            <li>創が見えにくい時は生食で軽く流す</li>
+            <li>飛び出た骨・筋肉は<strong>絶対に押し戻さない</strong>（細菌を送り込む）</li>
+          </ul>
+
+          <h3>Gustilo 分類（ER で使う）</h3>
+          <p>非整形外科医も使う理由：① 整形医に重症度が伝わる、② <strong>初回抗菌薬の選択が変わる</strong>。</p>
+          <div class="table-wrap"><table>
+            <thead><tr><th>Grade</th><th>裂創</th><th>備考</th><th>抗菌薬</th></tr></thead>
+            <tbody>
+              <tr><td>I</td><td>1 cm 未満</td><td>軽度汚染</td><td>セファゾリン 2 g</td></tr>
+              <tr><td>II</td><td>1–10 cm</td><td>中等度軟部組織損傷</td><td>セファゾリン 2 g</td></tr>
+              <tr><td><strong>IIIA</strong></td><td>10 cm 以上</td><td>閉創ができそう</td><td><strong>セファゾリン 2 g + ゲンタマイシン 2 mg/kg</strong></td></tr>
+              <tr><td><strong>IIIB</strong></td><td>10 cm 以上</td><td>閉創困難・骨露出</td><td>同上</td></tr>
+              <tr><td><strong>IIIC</strong></td><td>10 cm 以上</td><td>動脈損傷あり</td><td>同上</td></tr>
+            </tbody>
+          </table></div>
+        </div>
+      </details>
+
+      <!-- 治療方針 -->
+      <details class="dx-box" id="plan">
+        <summary><span>治療方針（抗菌薬・コンパ・固定）</span></summary>
+        <div class="dx-box__body">
+          <h3>開放骨折なら受傷 3 時間以内に抗菌薬</h3>
+          <p>非整形外科医が開放骨折と診断した直後に投与開始。<strong>初回投与量は腎機能にかかわらず top dose</strong>。研修医でも自己判断で前倒し開始してよい。</p>
+          <ul>
+            <li><strong>2 種類の抗菌薬</strong>：セファゾリン <strong>2 g</strong>、ゲンタマイシン <strong>2 mg/kg</strong>（Gustilo III で追加）</li>
+            <li><strong>2 種類の破傷風予防</strong>：テタガム<sup>®</sup> P 250 単位 筋注 ＋ 沈降破傷風トキソイド「生研」 0.5 mL 筋注</li>
+            <li>創洗浄は受傷 6 時間以内（低圧の生食で十分、本格洗浄は手術室）</li>
+            <li>確認後は<strong>生食ガーゼで被覆＋アルミフェンスシーネで副子固定</strong></li>
+          </ul>
+
+          <h3>コンパートメント症候群（脛骨骨幹部骨折の 8%）</h3>
+          <p>骨折由来コンパの<strong>ほとんどが脛骨骨幹部骨折</strong>。前方／後方深部コンパは容積が小さく、骨折出血で容易に内圧が上がる。閉鎖骨折でも<strong>入院後の経過観察が要</strong>。</p>
+          <ul>
+            <li><strong>足趾他動屈伸での疼痛</strong>＝早期所見、即座に内圧測定／整形コンサルト</li>
+            <li>初期は疼痛増悪・感覚障害、循環は一見保たれる</li>
+            <li>動脈触知不能・末梢チアノーゼは<strong>高度進行状態</strong>。その前に介入する</li>
+            <li>不可逆性変化は<strong>虚血 4 時間で開始、8 時間で完成</strong></li>
+            <li>区画圧 <strong>≥ 30 mmHg</strong> で筋膜切開</li>
+          </ul>
+
+          <h3>ER の動き（5 択マネジメント）</h3>
+          <div class="table-wrap"><table>
+            <thead><tr><th>状況</th><th>対応</th></tr></thead>
+            <tbody>
+              <tr><td><strong>開放骨折</strong>（全 Gustilo）</td><td>抗菌薬＋破傷風 2 剤を即開始 → <strong>即時整形</strong>（創外固定で一時安定化）</td></tr>
+              <tr><td>閉鎖・転位強</td><td>下肢シーネ＋牽引 → <strong>即時整形</strong></td></tr>
+              <tr><td>閉鎖・転位軽度</td><td>下肢シーネ → <strong>入院整形</strong>（コンパ管理依頼）</td></tr>
+              <tr><td>多発外傷</td><td>来院直後から整形併診、Damage Control Orthopedics</td></tr>
+              <tr><td>IIIC 動脈出血</td><td>ガーゼで圧迫し続ける（弱まる／止血する場合あり）</td></tr>
+            </tbody>
+          </table></div>
+
+          <h3>固定・鎮痛</h3>
+          <ul>
+            <li>下腿全体をシーネ固定（膝・足関節を含める）＋挙上＋アイシング</li>
+            <li>髄内釘（IM nail）固定が手術の第一選択</li>
+            <li>鎮痛は <a class="wiki-link" href="大腿神経ブロック.html">大腿神経ブロック</a> ＋アセトアミノフェン</li>
+            <li>絶飲食、ライン確保、抗凝固薬の有無を確認</li>
           </ul>
         </div>
       </details>
 
-      <!-- §1 受傷機転 -->
-      <section class="section-page" id="s1" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🚗 受傷機転</h2>
-        <p>#骨折 #脛骨 #骨幹部 #コンパートメント #ER</p>
-
-        <div class="callout callout-summary">
-          <div class="callout-title">脛骨骨幹部骨折 = 下腿の最多骨折、コンパートメント症候群が最大リスク</div>
-          <div class="callout-body"><ul>
-            <li>下腿長管骨骨折で最多、<strong>若年男性</strong></li>
-            <li><strong>開放骨折</strong>になりやすい（皮下組織が薄い）</li>
-            <li><strong>コンパートメント症候群</strong> 5–10%（若年男性・高エネルギーで多い）</li>
-            <li><strong>腓骨骨折 + 脛骨骨幹部骨折</strong> のパターンが多い</li>
-            <li>原則 <strong>帰宅手術 or 入院整形</strong>、開放骨折なら <strong>即時整形</strong></li>
-          </ul></div>
+      <!-- コンサル文 -->
+      <details class="dx-box" id="consult">
+        <summary><span>コンサル文（カルテに貼る）</span></summary>
+        <div class="dx-box__body">
+          <p class="dx-template__hint">『他科コンサルト実践マニュアル』の院内紹介状フォーマットに準拠（【目的】【疾患】【既往歴】【内服薬】【ADL】【現病歴】）。空欄を埋めるだけで通る形式。</p>
+          <div class="dx-template">【目的】観血的整復・コンパ管理目的のご加療依頼。
+【疾患】#1 [右/左]脛骨骨幹部骨折（[開放/閉鎖]、[Gustilo I/II/IIIA/IIIB/IIIC]、腓骨骨折合併 [あり/なし]）
+【既往歴】[特記事項なし／○○]
+【内服薬】[なし／ワーファリン／DOAC ○○／抗血小板薬 ○○]
+【ADL（受傷前）】[独歩／杖／介助歩行／車椅子]
+【現病歴】[年齢]歳[男/女]性。[受傷機転：交通外傷／スキー転倒／バンパー直撃／高所転落]で受傷し、[来院経緯]で来院。
+ ・身体所見：下腿の変形・短縮・腫脹、前脛骨部圧痛、裂創 [あり○cm／なし]
+ ・血管：足背動脈・後脛骨動脈 [良好／弱／触知不能]、足趾他動屈伸での疼痛 [なし／あり]
+ ・神経：腓骨神経領域（足背屈・足背感覚） [問題なし／麻痺]
+ ・画像：下腿 AP + 側面で脛骨骨幹部骨折、腓骨骨折 [あり／なし]、CT [未／施行済]
+ ・ER 処置：[アルミフェンス／下肢]シーネ固定、生食ガーゼ被覆 [済／未]
+ ・抗菌薬：セファゾリン 2 g [済／未] ＋ ゲンタマイシン 2 mg/kg [必要時／不要]
+ ・破傷風予防：テタガム<sup>®</sup> P 250 単位＋沈降破傷風トキソイド 0.5 mL [済／未]
+ ・術前検査：採血・心電図・胸部 X 線 [済／未]
+よろしくお願いいたします。</div>
         </div>
+      </details>
 
-        <ul>
-          <li><strong>高エネルギー外傷</strong>（交通事故・転落・スポーツ）</li>
-          <li><strong>ねじれ外力</strong>（スキー転倒）</li>
-          <li><strong>直達外力</strong>（バンパー損傷）</li>
-        </ul>
-      </section>
+      <!-- 関連ハブ -->
+      <details class="dx-box">
+        <summary><span>関連ハブ・隣接疾患</span></summary>
+        <div class="dx-box__body">
+          <ul>
+            <li>主訴入口：<a class="wiki-link" href="../転倒.html">転倒</a></li>
+            <li>隣接疾患：<a class="wiki-link" href="脛骨高原骨折.html">脛骨高原骨折</a> ／ <a class="wiki-link" href="足関節果部骨折.html">足関節果部骨折</a> ／ <a class="wiki-link" href="大腿骨骨幹部骨折.html">大腿骨骨幹部骨折</a></li>
+            <li>合併症：<a class="wiki-link" href="コンパートメント症候群.html">コンパートメント症候群</a> ／ <a class="wiki-link" href="開放骨折.html">開放骨折</a></li>
+            <li>処置：<a class="wiki-link" href="大腿神経ブロック.html">大腿神経ブロック</a></li>
+          </ul>
+        </div>
+      </details>
 
-      <!-- §2 身体所見 + コンパ -->
-      <section class="section-page" id="s2" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🩺 身体所見</h2>
-        <ul>
-          <li>下腿の <strong>変形・腫脹</strong></li>
-          <li><strong>前脛骨部の圧痛</strong>（骨折部位）</li>
-          <li><strong>開放創</strong>の有無（皮膚が薄く突出しやすい）</li>
-          <li><strong>末梢循環</strong>（足背・後脛骨動脈）、<strong>感覚・運動</strong></li>
-        </ul>
-
-        <h3>コンパートメント症候群のチェック</h3>
-        <ul>
-          <li><strong>5P</strong>（pain, pallor, pulselessness, paresthesia, paralysis）</li>
-          <li><strong>受動背屈で過度な疼痛</strong> = 最も鋭敏な早期所見</li>
-          <li><strong>緊満感</strong>（触診で石のよう）</li>
-          <li>疑えば <strong>コンパートメント内圧測定</strong></li>
-        </ul>
-      </section>
-
-      <!-- §3 画像 -->
-      <section class="section-page" id="s3" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>📷 画像</h2>
-        <ul>
-          <li>下腿 2 方向（膝 + 足関節含む）</li>
-          <li><strong>関節内進展の有無</strong>（高原・果部）</li>
-          <li><strong>腓骨の評価</strong>（合併多い）</li>
-        </ul>
-      </section>
-
-      <!-- §4 分類 -->
-      <section class="section-page" id="s4" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>📊 分類（非整形外科医用の簡略版）</h2>
-        <div class="table-wrap"><table><thead><tr><th>タイプ</th><th>所見</th><th>治療</th></tr></thead><tbody><tr><td>閉鎖性・転位なし</td><td>単純骨折</td><td><strong>入院 or 帰宅手術</strong>（長脚シーネ）</td></tr><tr><td>閉鎖性・転位あり</td><td>高エネルギー</td><td><strong>入院整形</strong>、観血的整復</td></tr><tr><td><strong>開放骨折</strong></td><td>皮膚創あり</td><td><strong>即時整形</strong>（6–8 時間以内の洗浄・固定）</td></tr></tbody></table></div>
-      </section>
-
-      <!-- §5 マネジメント -->
-      <section class="section-page" id="s5" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>💉 マネジメント</h2>
-
-        <h3>ER での対応</h3>
-        <ol>
-          <li><strong>下腿全体をシーネ固定</strong>（膝 + 足関節）</li>
-          <li><strong>挙上 + アイシング</strong></li>
-          <li><strong>コンパートメント症候群の評価</strong>（5P、受動背屈）</li>
-          <li>開放骨折なら：
-            <ul>
-              <li><strong>生理食塩水で洗浄</strong></li>
-              <li><strong>セファゾリン + アミノグリコシド</strong>（重度開放）</li>
-              <li><strong>破傷風トキソイド</strong></li>
-              <li><strong>即時整形</strong></li>
-            </ul>
-          </li>
-          <li><strong>下肢神経ブロック</strong>（坐骨神経 + 大腿神経ブロック）で鎮痛</li>
-        </ol>
-
-        <h3>手術</h3>
-        <ul>
-          <li><strong>髄内釘固定</strong>（IM nail）が第一選択</li>
-          <li>開放骨折は <strong>外固定</strong>で一時的に安定化 → 後日内固定（DCO）</li>
-        </ul>
-      </section>
-
-      <!-- §6 Gustilo 分類 -->
-      <section class="section-page" id="s6" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🩹 開放骨折の Gustilo 分類</h2>
-        <div class="table-wrap"><table><thead><tr><th>Grade</th><th>所見</th><th>抗菌薬</th></tr></thead><tbody><tr><td>I</td><td>創 1 cm 未満、汚染軽度</td><td>セファゾリン</td></tr><tr><td>II</td><td>創 1–10 cm、軟部組織損傷中等度</td><td>セファゾリン</td></tr><tr><td><strong>III</strong></td><td>創 10 cm 超 or 高度軟部組織損傷</td><td><strong>セファゾリン + アミノグリコシド</strong>、IIIB/C はさらに ペニシリン</td></tr></tbody></table></div>
-      </section>
-
-      <!-- §7 コンパートメント + 合併症 -->
-      <section class="section-page" id="s7" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>⚠️ コンパートメント症候群 / 合併症</h2>
-
-        <h3>コンパートメント症候群</h3>
-        <ul>
-          <li>脛骨骨幹部骨折の <strong>5–10%</strong> に合併</li>
-          <li><strong>発症後 6 時間以内の筋膜切開</strong>が筋肉生存の鍵</li>
-          <li>詳細は <a class="wiki-link" href="コンパートメント症候群.html">コンパートメント症候群</a> を参照</li>
-        </ul>
-
-        <h3>合併症</h3>
-        <ul>
-          <li><strong>コンパートメント症候群</strong>（最重要）</li>
-          <li><strong>感染</strong>（開放骨折）</li>
-          <li><strong>不完全治癒・偽関節</strong>（特に骨幹部中下 1/3）</li>
-          <li><strong>腓骨神経麻痺</strong>（合併腓骨骨折時）</li>
-        </ul>
-      </section>
-
-      <!-- §8 出典 + 関連 -->
-      <section class="section-page" id="s8" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>📚 出典 + 関連</h2>
-
-        <h3>出典</h3>
-        <ul>
-          <li><strong>増井伸高. 骨折ハンター. 中外医学社. 2019.</strong></li>
-          <li><strong>Gustilo RB, Anderson JT.</strong> Prevention of infection in the treatment of one thousand and twenty-five open fractures of long bones. <em>J Bone Joint Surg Am.</em> 1976.</li>
-          <li><strong>Court-Brown CM ほか.</strong> The epidemiology of tibial fractures. <em>J Bone Joint Surg Br.</em> 1995.</li>
-        </ul>
-
-        <h3>関連</h3>
-        <ul>
-          <li><a class="wiki-link" href="../転倒.html">転倒</a> / <a class="wiki-link" href="コンパートメント症候群.html">コンパートメント症候群</a> / <a class="wiki-link" href="開放骨折.html">開放骨折</a> / <a class="wiki-link" href="脛骨高原骨折.html">脛骨高原骨折</a> / <a class="wiki-link" href="足関節果部骨折.html">足関節果部骨折</a></li>
-        </ul>
-      </section>
+      <!-- 出典 -->
+      <details class="dx-box">
+        <summary><span>出典</span></summary>
+        <div class="dx-box__body">
+          <ul>
+            <li>増井伸高. 骨折ハンター. 中外医学社. 2019（第 17 章：下腿痛ハンター）</li>
+            <li>Gustilo RB, Anderson JT. Prevention of infection in the treatment of one thousand and twenty-five open fractures of long bones. <em>J Bone Joint Surg Am.</em> 1976.</li>
+            <li>Court-Brown CM ほか. The epidemiology of tibial fractures. <em>J Bone Joint Surg Br.</em> 1995.</li>
+            <li>FLOW Investigators. A trial of wound irrigation in the initial management of open fracture wounds. <em>N Engl J Med.</em> 2015.</li>
+          </ul>
+        </div>
+      </details>
 
     </article>
   </main>
@@ -208,53 +411,22 @@
 
   <script>
   (function(){
-    const menu = document.getElementById('sectionMenu');
-    const pages = document.querySelectorAll('.section-page');
-    const titleH1 = document.querySelector('.page-title');
-    const relatedSymp = document.getElementById('related-symptoms');
-
-    function showSection(id) {
-      menu.hidden = true;
-      if (titleH1) titleH1.hidden = true;
-      if (relatedSymp) relatedSymp.hidden = true;
-      pages.forEach(p => p.hidden = (p.id !== id));
-      window.scrollTo(0, 0);
-    }
-    function showMenu(scrollTarget) {
-      menu.hidden = false;
-      if (titleH1) titleH1.hidden = false;
-      if (relatedSymp) relatedSymp.hidden = false;
-      pages.forEach(p => p.hidden = true);
-      if (scrollTarget) {
-        if (scrollTarget.tagName === 'DETAILS') scrollTarget.open = true;
-        scrollTarget.scrollIntoView({behavior: 'instant', block: 'start'});
-      } else {
-        window.scrollTo(0, 0);
-      }
-    }
-    function syncFromHash() {
-      const id = (location.hash || '').replace('#','');
-      const target = id ? document.getElementById(id) : null;
-      if (target && target.classList.contains('section-page')) {
-        showSection(id);
-      } else if (target) {
-        showMenu(target);
-      } else {
-        showMenu();
-      }
-    }
-
-    window.addEventListener('hashchange', syncFromHash);
-    document.querySelectorAll('.back-to-menu').forEach(b => {
-      b.addEventListener('click', () => { history.pushState(null,'',location.pathname); showMenu(); });
+    // クイックタップで対応 details を開いてスクロール
+    document.querySelectorAll('.dx-quick__btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.dataset.target;
+        const target = document.getElementById(id);
+        if (!target) return;
+        target.open = true;
+        target.scrollIntoView({behavior: 'smooth', block: 'start'});
+      });
     });
+
     const navBack = document.getElementById('navBack');
     if (navBack) navBack.addEventListener('click', () => {
       if (window.history.length > 1) history.back();
       else window.location.href = '../index.html';
     });
-
-    syncFromHash();
   })();
   </script>
 </body>

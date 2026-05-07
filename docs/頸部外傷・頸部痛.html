@@ -6,6 +6,382 @@
   <meta name="color-scheme" content="light dark" />
   <title>頸部外傷・頸部痛 | ER ノート</title>
   <link rel="stylesheet" href="er-note.css" />
+  <style>
+    /* 単純化診療フロー（このページ専用） */
+    .flow-box { position: static; user-select: none; }
+    .flow-box__title {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 0.5rem; cursor: pointer; padding: 2px 0;
+    }
+    .flow-box__hint {
+      font-size: 0.72rem; font-weight: 600; color: var(--muted);
+      letter-spacing: 0.02em; padding: 2px 8px; border-radius: 999px;
+      border: 1px solid color-mix(in srgb, var(--text) 20%, transparent);
+    }
+
+    /* ===== 診療フロー本体 ===== */
+    .flow-canvas {
+      background: var(--surface); border-radius: 10px;
+      padding: 14px 10px 18px; margin-top: 0.55rem;
+      overflow-x: auto; overflow-y: hidden;
+      -webkit-overflow-scrolling: touch; touch-action: pan-x pan-y pinch-zoom;
+    }
+    .dx-flow {
+      min-width: 720px; margin: 0 auto; padding: 4px 6px 8px;
+      font-size: 14px; line-height: 1.45; color: var(--text); font-family: inherit;
+    }
+
+    /* ノード共通 */
+    .dx-node {
+      background: var(--surface);
+      border: 1.5px solid color-mix(in srgb, var(--text) 22%, transparent);
+      border-radius: 10px; padding: 8px 12px; text-align: center;
+      box-shadow: 0 1px 2px var(--shadow, rgba(0,0,0,0.06));
+      min-height: 38px;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 2px;
+    }
+    .dx-node__title { font-weight: 700; font-size: 13.5px; }
+    .dx-node__sub   { font-size: 11.5px; color: var(--muted); font-weight: 500; }
+
+    .dx-node--decision {
+      background: color-mix(in srgb, var(--accent) 12%, var(--surface));
+      border-color: var(--accent); border-radius: 14px;
+    }
+    .dx-node--judge {
+      background: var(--accent-weak, color-mix(in srgb, var(--accent) 14%, var(--surface)));
+      border: 1.5px dashed var(--accent); border-radius: 999px;
+      padding: 6px 14px; font-weight: 700; min-height: 32px;
+    }
+    .dx-node--danger {
+      background: color-mix(in srgb, #c0392b 14%, var(--surface));
+      border-color: #c0392b;
+    }
+    .dx-node--danger .dx-node__title { color: #c0392b; }
+    .dx-node--action {
+      background: color-mix(in srgb, var(--text) 5%, var(--surface));
+      border-style: dashed;
+    }
+    .dx-node--external {
+      text-decoration: none; color: var(--text); border-style: dashed;
+      position: relative;
+      background: color-mix(in srgb, var(--accent) 6%, var(--surface));
+      transition: background-color 120ms ease;
+    }
+    .dx-node--external::after {
+      content: "↗"; position: absolute; top: 4px; right: 8px;
+      font-size: 12px; color: var(--accent); opacity: 0.85;
+    }
+
+    /* レイヤー */
+    .dx-layer {
+      display: grid; gap: 14px; align-items: stretch; margin: 0;
+    }
+    .dx-layer--root   { grid-template-columns: 1fr; justify-items: center; }
+    .dx-layer--root > * { max-width: 360px; }
+    .dx-layer--branch { grid-template-columns: 1fr 1fr; }
+    .dx-layer--quad   { grid-template-columns: repeat(4, 1fr); }
+
+    /* 矢印 */
+    .dx-arrow {
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      position: relative; margin: 4px 0; min-height: 44px;
+      color: var(--muted); font-size: 11.5px; font-weight: 600;
+    }
+    .dx-arrow::before {
+      content: ""; width: 2px; height: 100%; min-height: 38px;
+      background: color-mix(in srgb, var(--text) 35%, transparent);
+    }
+    .dx-arrow::after {
+      content: ""; position: absolute; bottom: 0;
+      width: 0; height: 0;
+      border-left: 5px solid transparent; border-right: 5px solid transparent;
+      border-top: 7px solid color-mix(in srgb, var(--text) 35%, transparent);
+    }
+    .dx-arrow__label {
+      background: var(--surface); padding: 1px 8px; border-radius: 999px;
+      border: 1px solid color-mix(in srgb, var(--text) 18%, transparent);
+      position: absolute; left: 50%; top: 50%;
+      transform: translate(-50%, -50%); white-space: nowrap; z-index: 1;
+    }
+
+    /* 分岐 Y 字 */
+    .dx-fork {
+      display: grid; grid-template-columns: 1fr 1fr;
+      position: relative; min-height: 38px; margin: 2px 0 4px;
+    }
+    .dx-fork::before {
+      content: ""; position: absolute;
+      top: 0; left: 25%; right: 25%; height: 2px;
+      background: color-mix(in srgb, var(--text) 35%, transparent);
+    }
+    .dx-fork__leg {
+      position: relative; display: flex; flex-direction: column;
+      align-items: center; justify-content: flex-end;
+      padding-top: 4px; padding-bottom: 4px;
+      font-size: 11.5px; font-weight: 600; color: var(--muted); min-height: 36px;
+    }
+    .dx-fork__leg::before {
+      content: ""; width: 2px; flex: 1;
+      background: color-mix(in srgb, var(--text) 35%, transparent);
+    }
+    .dx-fork__leg::after {
+      content: ""; position: absolute; bottom: 0;
+      width: 0; height: 0;
+      border-left: 5px solid transparent; border-right: 5px solid transparent;
+      border-top: 7px solid color-mix(in srgb, var(--text) 35%, transparent);
+    }
+    .dx-fork__label {
+      background: var(--surface); padding: 1px 8px; border-radius: 999px;
+      border: 1px solid color-mix(in srgb, var(--text) 18%, transparent);
+      margin-bottom: 2px; z-index: 1;
+    }
+    .dx-fork--quad { grid-template-columns: repeat(4, 1fr); }
+    .dx-fork--quad::before { left: 12.5%; right: 12.5%; }
+
+    /* 4列の疾患ツリー */
+    .dx-trees {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 12px; align-items: start; margin-top: 4px;
+    }
+    .dx-tree { display: flex; flex-direction: column; gap: 6px; }
+    .dx-tree__group {
+      font-size: 11px; font-weight: 700; color: var(--muted);
+      text-align: center; padding: 6px 0 2px; margin-top: 4px;
+      border-bottom: 1px dashed color-mix(in srgb, var(--text) 22%, transparent);
+      letter-spacing: 0.02em;
+    }
+    .dx-tree__group:first-child { margin-top: 0; }
+
+    /* メモ */
+    .dx-note {
+      background: color-mix(in srgb, var(--text) 4%, var(--surface));
+      border-left: 3px solid color-mix(in srgb, var(--text) 25%, transparent);
+      border-radius: 6px; padding: 6px 10px;
+      font-size: 11.5px; color: var(--muted);
+      text-align: left; margin-top: 4px;
+    }
+
+    /* タップ可能ノード */
+    a.dx-node {
+      text-decoration: none; color: inherit; cursor: pointer;
+      transition: transform 80ms ease, box-shadow 120ms ease;
+      position: relative;
+    }
+    a.dx-node:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 3px 6px var(--shadow, rgba(0,0,0,0.12));
+    }
+    a.dx-node:active { transform: translateY(0); }
+    a.dx-node:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+    a.dx-node::after {
+      content: "›"; position: absolute; top: 3px; right: 6px;
+      font-size: 12px; color: color-mix(in srgb, var(--text) 40%, transparent);
+      font-weight: 700;
+    }
+    a.dx-node--danger::after { color: #c0392b; }
+    a.dx-node--decision::after { color: var(--accent); }
+
+    /* スマホ */
+    @media (max-width: 600px) {
+      .dx-flow { min-width: 0; font-size: 11px; padding: 2px 0 6px; }
+      .flow-canvas { overflow-x: hidden; padding: 8px 6px 12px; }
+
+      .dx-node { padding: 4px 5px; min-height: 28px; border-radius: 7px; gap: 1px;
+        box-shadow: 0 1px 1px var(--shadow, rgba(0,0,0,0.05)); }
+      .dx-node__title { font-size: 10.5px; line-height: 1.22; }
+      .dx-node__sub   { font-size: 9px;    line-height: 1.25; }
+      .dx-node--decision { border-radius: 8px; }
+      .dx-node--judge { padding: 3px 7px; min-height: 22px; font-size: 10px; }
+      .dx-node--external::after { top: 2px; right: 4px; font-size: 9px; }
+
+      .dx-layer { gap: 6px; }
+      .dx-layer--root > * { max-width: none; width: 100%; }
+
+      .dx-arrow { min-height: 24px; margin: 1px 0; }
+      .dx-arrow::before { min-height: 20px; width: 1.5px; }
+      .dx-arrow::after { border-left-width: 4px; border-right-width: 4px; border-top-width: 6px; }
+      .dx-arrow__label { font-size: 8.5px; padding: 0 4px; line-height: 1.4; }
+
+      .dx-fork { min-height: 22px; }
+      .dx-fork::before { height: 1.5px; }
+      .dx-fork__leg { min-height: 22px; padding-top: 2px; padding-bottom: 2px; font-size: 9px; }
+      .dx-fork__leg::before { width: 1.5px; }
+      .dx-fork__leg::after { border-left-width: 4px; border-right-width: 4px; border-top-width: 6px; }
+      .dx-fork__label { font-size: 8.5px; padding: 0 4px; margin-bottom: 0; }
+      .dx-fork--quad::before { left: 12.5%; right: 12.5%; }
+
+      .dx-trees { gap: 4px; }
+      .dx-tree { gap: 3px; }
+      .dx-tree__group { font-size: 8.5px; padding: 4px 0 1px; margin-top: 2px; }
+      .dx-note { padding: 4px 7px; font-size: 9.5px; }
+
+      a.dx-node::after { top: 1px; right: 3px; font-size: 9px; }
+    }
+
+    /* === 来院後チェック === */
+    .dx-arrival-divider {
+      margin: 18px 0 8px; display: flex; align-items: center; gap: 10px;
+      color: var(--muted); font-size: 11.5px; font-weight: 800; letter-spacing: 0.1em;
+    }
+    .dx-arrival-divider::before, .dx-arrival-divider::after {
+      content: ""; flex: 1; height: 1px;
+      background: color-mix(in srgb, var(--text) 18%, transparent);
+    }
+    .dx-checklist {
+      background: var(--surface); border-radius: 10px;
+      border: 1.5px solid color-mix(in srgb, var(--text) 14%, transparent);
+      padding: 10px 14px;
+      box-shadow: 0 1px 2px var(--shadow, rgba(0,0,0,0.04));
+      margin-bottom: 8px;
+    }
+    .dx-checklist > summary {
+      cursor: pointer; font-weight: 800; font-size: 13.5px;
+      list-style: none; user-select: none;
+      display: flex; align-items: center; gap: 6px; color: var(--text);
+    }
+    .dx-checklist > summary::-webkit-details-marker { display: none; }
+    .dx-checklist > summary::before {
+      content: "▶"; font-size: 10px; color: var(--muted);
+      transition: transform 150ms ease; flex-shrink: 0;
+    }
+    .dx-checklist[open] > summary::before { transform: rotate(90deg); }
+    .dx-checklist__head {
+      display: flex; align-items: center; justify-content: space-between; gap: 8px;
+    }
+    .dx-checklist__reset {
+      font-size: 10.5px; color: var(--muted);
+      background: transparent;
+      border: 1px solid color-mix(in srgb, var(--text) 18%, transparent);
+      border-radius: 999px; padding: 1px 8px; cursor: pointer; font-weight: 600;
+    }
+    .dx-checklist__reset:hover { background: color-mix(in srgb, var(--text) 5%, transparent); }
+    .dx-checklist__list { list-style: none; margin: 8px 0 2px; padding: 0; }
+    .dx-checklist__list li { margin: 0; font-size: 12.5px; line-height: 1.45; }
+    .dx-checklist__list label {
+      display: flex; align-items: flex-start; gap: 8px; cursor: pointer;
+      padding: 5px 6px; border-radius: 5px;
+      transition: background-color 100ms ease;
+    }
+    .dx-checklist__list label:hover { background: color-mix(in srgb, var(--text) 4%, transparent); }
+    .dx-checklist__list input[type="checkbox"] { margin-top: 3px; flex-shrink: 0; accent-color: var(--accent); }
+    .dx-checklist__list label:has(input:checked) { color: var(--muted); }
+    .dx-checklist__list label:has(input:checked) strong {
+      color: var(--muted); text-decoration: line-through;
+      text-decoration-color: color-mix(in srgb, var(--muted) 50%, transparent);
+    }
+    .dx-checklist__sub { color: var(--muted); font-size: 11px; font-weight: 500; }
+
+    @media (max-width: 600px) {
+      .dx-checklist { padding: 8px 10px; }
+      .dx-checklist > summary { font-size: 12px; }
+      .dx-checklist__list li { font-size: 11.5px; }
+      .dx-checklist__sub { font-size: 10px; }
+      .dx-checklist__reset { font-size: 9.5px; padding: 1px 6px; }
+      .dx-arrival-divider { font-size: 10px; margin: 14px 0 6px; }
+    }
+
+    /* === トリガー連動ルール === */
+    .dx-rules-l2 {
+      margin-top: 12px;
+      background: var(--surface); border-radius: 10px;
+      border: 1.5px solid color-mix(in srgb, #c0392b 35%, transparent);
+      padding: 10px 14px;
+    }
+    .dx-rules-l2 > summary {
+      cursor: pointer; font-weight: 800; font-size: 13.5px;
+      list-style: none; user-select: none;
+      display: flex; align-items: center; gap: 6px; color: #c0392b;
+    }
+    .dx-rules-l2 > summary::-webkit-details-marker { display: none; }
+    .dx-rules-l2 > summary::before {
+      content: "▶"; font-size: 10px; color: #c0392b;
+      transition: transform 150ms ease; flex-shrink: 0;
+    }
+    .dx-rules-l2[open] > summary::before { transform: rotate(90deg); }
+    .dx-rules-l2__intro { font-size: 11px; color: var(--muted); margin: 8px 0 4px; line-height: 1.5; }
+    .dx-rules-l2__group {
+      font-size: 11px; font-weight: 800; color: var(--muted);
+      margin: 12px 0 5px; padding: 0; letter-spacing: 0.06em;
+    }
+    .dx-rules-l2__list {
+      list-style: none; margin: 0 0 4px; padding: 0;
+      display: flex; flex-direction: column; gap: 5px;
+    }
+    .dx-rule {
+      background: color-mix(in srgb, var(--text) 4%, var(--surface));
+      border-left: 3px solid color-mix(in srgb, var(--text) 28%, transparent);
+      border-radius: 6px; padding: 7px 10px;
+      font-size: 12px; line-height: 1.45;
+    }
+    .dx-rule.is-critical {
+      background: color-mix(in srgb, #c0392b 6%, var(--surface));
+      border-left-color: #c0392b;
+    }
+    .dx-rule.is-pitfall {
+      background: color-mix(in srgb, #d68910 7%, var(--surface));
+      border-left-color: #d68910;
+    }
+    .dx-rule__if {
+      font-weight: 700; color: var(--text);
+      display: flex; align-items: baseline; gap: 6px; flex-wrap: wrap;
+    }
+    .dx-rule__tag {
+      display: inline-block; font-size: 9.5px; font-weight: 800;
+      padding: 1px 7px; border-radius: 999px;
+      background: color-mix(in srgb, var(--text) 12%, var(--surface));
+      color: var(--muted); letter-spacing: 0.08em; flex-shrink: 0;
+    }
+    .dx-rule.is-critical .dx-rule__tag {
+      background: color-mix(in srgb, #c0392b 18%, var(--surface)); color: #c0392b;
+    }
+    .dx-rule.is-pitfall .dx-rule__tag {
+      background: color-mix(in srgb, #d68910 20%, var(--surface)); color: #b87900;
+    }
+    .dx-rule__then { margin-top: 3px; color: var(--text); }
+    .dx-rule__then strong { color: var(--accent); }
+    .dx-rule.is-critical .dx-rule__then strong { color: #c0392b; }
+
+    @media (max-width: 600px) {
+      .dx-rules-l2 { padding: 8px 10px; }
+      .dx-rules-l2 > summary { font-size: 12px; }
+      .dx-rules-l2__intro { font-size: 10px; }
+      .dx-rules-l2__group { font-size: 10px; margin-top: 10px; }
+      .dx-rule { font-size: 11px; padding: 6px 8px; line-height: 1.4; }
+      .dx-rule__tag { font-size: 9px; padding: 0 5px; }
+    }
+
+    /* 撮影方向の備忘 */
+    .dx-imaging {
+      margin-top: 12px;
+      background: var(--surface); border-radius: 10px;
+      border: 1.5px solid color-mix(in srgb, var(--text) 14%, transparent);
+      padding: 10px 14px;
+    }
+    .dx-imaging > summary {
+      cursor: pointer; font-weight: 800; font-size: 13.5px;
+      list-style: none; user-select: none;
+      display: flex; align-items: center; gap: 6px; color: var(--text);
+    }
+    .dx-imaging > summary::-webkit-details-marker { display: none; }
+    .dx-imaging > summary::before {
+      content: "▶"; font-size: 10px; color: var(--muted);
+      transition: transform 150ms ease; flex-shrink: 0;
+    }
+    .dx-imaging[open] > summary::before { transform: rotate(90deg); }
+    .dx-imaging__list {
+      margin: 8px 0 0; padding-left: 1.2em; font-size: 12.5px; line-height: 1.55;
+    }
+    .dx-imaging__list li { margin: 2px 0; }
+    @media (max-width: 600px) {
+      .dx-imaging { padding: 8px 10px; }
+      .dx-imaging > summary { font-size: 12px; }
+      .dx-imaging__list { font-size: 11.5px; }
+    }
+
+    /* §メニュータイル非表示 */
+    .section-tiles { display: none !important; }
+  </style>
 </head>
 <body>
   <header class="hokuto-top">
@@ -21,233 +397,364 @@
     <article class="note-shell">
       <h1 class="page-title">頸部外傷・頸部痛</h1>
 
-      <!-- 即時アクションヘッダー（常時 sticky） -->
-      <div class="action-header">
-        <div class="action-header__title">⚡ 即時アクション</div>
-        <ol class="action-header__list">
-          <li><strong>頸椎固定を継続</strong>（カラー / 用手 inline 固定）— <strong>NEXUS / Canadian C-spine</strong> で除外可なら解除</li>
-          <li><strong>気道・呼吸</strong>を最優先 — <strong>C5 以上で麻痺リスク</strong>、横隔膜麻痺＝呼吸停止を念頭</li>
-          <li><strong>CT 適応</strong>：Canadian C-spine（高リスク要素 / 危険な受傷機転）+ 高エネルギー外傷で閾値を下げる</li>
-          <li><strong>椎骨動脈損傷</strong>を念頭 — 神経所見・大血管損傷リスク・回旋外傷で <strong>CTA</strong> を検討</li>
-        </ol>
+      <!-- 単純化診療フロー -->
+      <div class="action-header flow-box" id="flowBox">
+        <div class="action-header__title flow-box__title" id="flowBoxClose" role="button" tabindex="0" aria-label="診療フローを閉じる">
+          <span>🗺 単純化診療フロー</span>
+          <span class="flow-box__hint">タップで閉じる ✕</span>
+        </div>
+
+        <div class="flow-canvas">
+          <div class="dx-flow" role="group" aria-label="頸部外傷・頸部痛の単純化診療フロー">
+
+            <!-- L0: Red flags -->
+            <div class="dx-layer dx-layer--root">
+              <a class="dx-node dx-node--decision dx-node--danger" href="#redflags">
+                <div class="dx-node__title">🚨 Red flags 確認</div>
+                <div class="dx-node__sub">呼吸不全／四肢麻痺／神経原性ショック／皮下気腫</div>
+              </a>
+            </div>
+
+            <div class="dx-fork">
+              <div class="dx-fork__leg"><span class="dx-fork__label">あり</span></div>
+              <div class="dx-fork__leg"><span class="dx-fork__label">なし</span></div>
+            </div>
+
+            <div class="dx-layer dx-layer--branch">
+              <a class="dx-node dx-node--danger" href="#redflags">
+                <div class="dx-node__title">緊急対応</div>
+                <div class="dx-node__sub">気道確保／in-line 固定／脊椎外科</div>
+              </a>
+              <div class="dx-arrow"><span class="dx-arrow__label">↓ 機転で絞る</span></div>
+            </div>
+
+            <!-- L1: 外傷の有無 -->
+            <div class="dx-layer dx-layer--root">
+              <div class="dx-node dx-node--judge">外傷の有無は？</div>
+            </div>
+
+            <div class="dx-fork dx-fork--quad">
+              <div class="dx-fork__leg"><span class="dx-fork__label">高エネ外傷</span></div>
+              <div class="dx-fork__leg"><span class="dx-fork__label">低エネ／高齢者</span></div>
+              <div class="dx-fork__leg"><span class="dx-fork__label">非外傷・致死的</span></div>
+              <div class="dx-fork__leg"><span class="dx-fork__label">非外傷・慢性</span></div>
+            </div>
+
+            <!-- L2/L3: 4列の疾患ツリー -->
+            <div class="dx-trees">
+
+              <!-- 1) 高エネ外傷 -->
+              <div class="dx-tree">
+                <div class="dx-tree__group">上位頸椎（C1–2）</div>
+                <a class="dx-node dx-node--danger" href="疾患詳細/頸椎損傷.html">
+                  <div class="dx-node__title">Jefferson 骨折</div>
+                  <div class="dx-node__sub">C1 破裂・軸圧。横靱帯断裂で不安定</div>
+                </a>
+                <a class="dx-node dx-node--danger" href="疾患詳細/頸椎損傷.html">
+                  <div class="dx-node__title">Hangman 骨折</div>
+                  <div class="dx-node__sub">C2 椎弓根。過伸展＋軸圧</div>
+                </a>
+
+                <div class="dx-tree__group">下位頸椎（C3–7）</div>
+                <a class="dx-node dx-node--danger" href="疾患詳細/頸椎損傷.html">
+                  <div class="dx-node__title">屈曲涙滴骨折</div>
+                  <div class="dx-node__sub">脊髄損傷の合併が多い</div>
+                </a>
+                <a class="dx-node dx-node--danger" href="疾患詳細/頸椎損傷.html">
+                  <div class="dx-node__title">両側 facet 脱臼</div>
+                  <div class="dx-node__sub">50%以上前方転位・脊髄損傷高率</div>
+                </a>
+
+                <div class="dx-tree__group">血管・軟部</div>
+                <a class="dx-node dx-node--danger" href="#redflags">
+                  <div class="dx-node__title">椎骨動脈損傷（BCVI）</div>
+                  <div class="dx-node__sub">横突孔骨折／回旋外傷／後頭部痛</div>
+                </a>
+                <a class="dx-node dx-node--danger" href="#redflags">
+                  <div class="dx-node__title">喉頭・気管・食道損傷</div>
+                  <div class="dx-node__sub">皮下気腫・嗄声・嚥下時痛</div>
+                </a>
+              </div>
+
+              <!-- 2) 低エネ・高齢者 -->
+              <div class="dx-tree">
+                <div class="dx-tree__group">高齢者の軽微外傷</div>
+                <a class="dx-node dx-node--danger" href="疾患詳細/頸椎損傷.html">
+                  <div class="dx-node__title">中心性頸髄損傷</div>
+                  <div class="dx-node__sub">過伸展。上肢＞下肢の麻痺</div>
+                </a>
+                <a class="dx-node" href="疾患詳細/頸椎損傷.html">
+                  <div class="dx-node__title">歯突起骨折（Type II）</div>
+                  <div class="dx-node__sub">高齢者で見落としやすい</div>
+                </a>
+
+                <div class="dx-tree__group">むち打ち</div>
+                <a class="dx-node" href="#redflags">
+                  <div class="dx-node__title">外傷性頸部症候群</div>
+                  <div class="dx-node__sub">Quebec Grade I–IV</div>
+                </a>
+
+                <div class="dx-tree__group">小児</div>
+                <a class="dx-node dx-node--danger" href="#redflags">
+                  <div class="dx-node__title">SCIWORA</div>
+                  <div class="dx-node__sub">画像陰性で脊髄症状。MRI へ</div>
+                </a>
+              </div>
+
+              <!-- 3) 非外傷・致死的 -->
+              <div class="dx-tree">
+                <div class="dx-tree__group">中枢性</div>
+                <a class="dx-node dx-node--danger" href="#redflags">
+                  <div class="dx-node__title">髄膜炎</div>
+                  <div class="dx-node__sub">発熱＋項部硬直＋意識変容</div>
+                </a>
+                <a class="dx-node dx-node--danger" href="#redflags">
+                  <div class="dx-node__title">くも膜下出血</div>
+                  <div class="dx-node__sub">突発の頭頸部痛</div>
+                </a>
+
+                <div class="dx-tree__group">血管</div>
+                <a class="dx-node dx-node--danger" href="#redflags">
+                  <div class="dx-node__title">椎骨動脈解離</div>
+                  <div class="dx-node__sub">後頭部〜後頸部痛・回旋誘発</div>
+                </a>
+                <a class="dx-node dx-node--danger" href="#redflags">
+                  <div class="dx-node__title">頸動脈解離</div>
+                  <div class="dx-node__sub">一側性頸部痛・Horner・片麻痺</div>
+                </a>
+
+                <div class="dx-tree__group">感染</div>
+                <a class="dx-node dx-node--danger" href="#redflags">
+                  <div class="dx-node__title">咽後膿瘍</div>
+                  <div class="dx-node__sub">嚥下時痛・開口障害・発熱</div>
+                </a>
+                <a class="dx-node dx-node--danger" href="#redflags">
+                  <div class="dx-node__title">頸髄硬膜外膿瘍</div>
+                  <div class="dx-node__sub">発熱＋進行性四肢麻痺</div>
+                </a>
+              </div>
+
+              <!-- 4) 非外傷・慢性 -->
+              <div class="dx-tree">
+                <div class="dx-tree__group">変性疾患</div>
+                <a class="dx-node" href="#redflags">
+                  <div class="dx-node__title">頸椎症性脊髄症（CSM）</div>
+                  <div class="dx-node__sub">巧緻運動障害・Hoffmann 陽性</div>
+                </a>
+                <a class="dx-node" href="#redflags">
+                  <div class="dx-node__title">頸椎症性神経根症</div>
+                  <div class="dx-node__sub">Spurling テスト・上肢痛</div>
+                </a>
+
+                <div class="dx-tree__group">関連痛・機能性</div>
+                <a class="dx-node" href="#redflags">
+                  <div class="dx-node__title">急性冠症候群（顎・頸部放散）</div>
+                  <div class="dx-node__sub">非外傷で見落とすと致命的</div>
+                </a>
+                <a class="dx-node" href="#redflags">
+                  <div class="dx-node__title">寝違え・筋筋膜性</div>
+                  <div class="dx-node__sub">他疾患を除外したあと</div>
+                </a>
+                <div class="dx-note">「外傷なし＝凝り」と決めつけない。発熱・突発・神経所見・嚥下時痛は致死的鑑別へ</div>
+              </div>
+
+            </div>
+
+          </div>
+
+          <!-- 来院後チェック -->
+          <div class="dx-arrival-divider"><span>来院後のチェック</span></div>
+
+          <details class="dx-checklist" id="historyPanel">
+            <summary>
+              <span class="dx-checklist__head" style="flex:1;">
+                <span>🗣 問診（来院後に実施）</span>
+                <button type="button" class="dx-checklist__reset" aria-label="問診チェックをすべて外す">リセット</button>
+              </span>
+            </summary>
+            <ul class="dx-checklist__list">
+              <li><label><input type="checkbox" data-key="h-trauma"> <span><strong>外傷の有無</strong> <span class="dx-checklist__sub">あり / なし / 機転不明（高齢者・酩酊・認知症）</span></span></label></li>
+              <li><label><input type="checkbox" data-key="h-mech"> <span><strong>受傷機転</strong> <span class="dx-checklist__sub">追突／転倒／ダイブ／絞扼／刺創／過屈曲・過伸展・軸圧・回旋</span></span></label></li>
+              <li><label><input type="checkbox" data-key="h-energy"> <span><strong>エネルギー</strong> <span class="dx-checklist__sub">高所転落 ≥1 m/5段、車外放出、転覆、自転車・自動車衝突、歩行者と車</span></span></label></li>
+              <li><label><input type="checkbox" data-key="h-age"> <span><strong>年齢</strong> <span class="dx-checklist__sub">65 歳以上は CCSR 高リスク。小児は SCIWORA</span></span></label></li>
+              <li><label><input type="checkbox" data-key="h-syncope"> <span><strong>失神先行か</strong> <span class="dx-checklist__sub">失神 → 転倒 → 頸部外傷の連鎖</span></span></label></li>
+              <li><label><input type="checkbox" data-key="h-anticoag"> <span><strong>抗凝固薬</strong> <span class="dx-checklist__sub">DOAC／ワルファリン／抗血小板。微小外傷でも血腫リスク</span></span></label></li>
+              <li><label><input type="checkbox" data-key="h-neuro"> <span><strong>神経症状</strong> <span class="dx-checklist__sub">四肢のしびれ・脱力・刺すような痛み・巧緻運動障害・排尿障害</span></span></label></li>
+              <li><label><input type="checkbox" data-key="h-swallow"> <span><strong>嚥下時痛・嗄声</strong> <span class="dx-checklist__sub">喉頭・気管・食道損傷／咽後膿瘍</span></span></label></li>
+              <li><label><input type="checkbox" data-key="h-fever"> <span><strong>発熱・頭痛持続</strong> <span class="dx-checklist__sub">髄膜炎／硬膜外膿瘍／突発時 SAH</span></span></label></li>
+              <li><label><input type="checkbox" data-key="h-vertigo"> <span><strong>めまい・後方循環症状</strong> <span class="dx-checklist__sub">椎骨動脈解離／BCVI</span></span></label></li>
+            </ul>
+          </details>
+
+          <details class="dx-checklist" id="examPanel">
+            <summary>
+              <span class="dx-checklist__head" style="flex:1;">
+                <span>🔍 身体診察（来院後に実施）</span>
+                <button type="button" class="dx-checklist__reset" aria-label="身体診察チェックをすべて外す">リセット</button>
+              </span>
+            </summary>
+            <ul class="dx-checklist__list">
+              <li><label><input type="checkbox" data-key="e-vital"> <span><strong>バイタル・呼吸パターン</strong> <span class="dx-checklist__sub">徐脈＋低血圧＋末梢温暖＝神経原性ショック。腹式呼吸消失＝高位頸髄</span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-nexus-1"> <span><strong>NEXUS①：後頸部正中圧痛</strong> <span class="dx-checklist__sub">一指で棘突起触知。限局圧痛は骨傷示唆</span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-nexus-2"> <span><strong>NEXUS②：意識清明・中毒なし</strong> <span class="dx-checklist__sub">GCS 15、見当識保持、酩酊・薬物なし</span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-nexus-3"> <span><strong>NEXUS③：局所神経所見なし</strong> <span class="dx-checklist__sub">MMT・感覚・反射・Babinski</span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-nexus-4"> <span><strong>NEXUS④：気が逸れる損傷なし</strong> <span class="dx-checklist__sub">長管骨骨折・腹部痛など distracting injury</span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-ccsr"> <span><strong>CCSR Step 1–3</strong> <span class="dx-checklist__sub">高リスク（65↑/危険機転/しびれ）→ 低リスク → 能動 45° 回旋</span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-asia"> <span><strong>ASIA：四肢 MMT・感覚・S4–5</strong> <span class="dx-checklist__sub">完全 vs 不完全。肛門周囲感覚と肛門括約筋緊張</span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-bulbo"> <span><strong>球海綿体反射</strong> <span class="dx-checklist__sub">脊髄ショック判定（24–48 h で回復）</span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-hoffmann"> <span><strong>Hoffmann 反射・Babinski</strong> <span class="dx-checklist__sub">CSM スクリーニング</span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-meningeal"> <span><strong>項部硬直・Kernig</strong> <span class="dx-checklist__sub">非外傷の致死的鑑別</span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-front"> <span><strong>頸部前面・側面の視診触診</strong> <span class="dx-checklist__sub">皮下気腫／甲状軟骨／血腫／絞扼痕／ハンドルマーク</span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-rom"> <span><strong>能動回旋（45° 左右）</strong> <span class="dx-checklist__sub">CCSR Step 3。固定継続のまま</span></span></label></li>
+            </ul>
+          </details>
+
+          <!-- トリガー連動の注意 -->
+          <details class="dx-rules-l2" id="rulesL2Panel">
+            <summary>⚠️ トリガー連動の注意（条件で意識）</summary>
+            <p class="dx-rules-l2__intro">特定の状況に出会ったら必ず思い出すべき注意点。フローの判断と並行して意識する。</p>
+
+            <h4 class="dx-rules-l2__group">緊急トリガー（命・後遺症を外す）</h4>
+            <ul class="dx-rules-l2__list">
+              <li class="dx-rule is-critical" id="redflags">
+                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>呼吸不全・腹式呼吸消失・SpO2 低下</span></div>
+                <div class="dx-rule__then"><strong>高位頸髄損傷（C3–5 横隔神経）</strong>。in-line で気道確保・ビデオ喉頭鏡</div>
+              </li>
+              <li class="dx-rule is-critical">
+                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>四肢麻痺・対麻痺・感覚レベル</span></div>
+                <div class="dx-rule__then"><strong>固定継続</strong>＋ASIA 評価＋脊椎外科即コンサルト・MRI</div>
+              </li>
+              <li class="dx-rule is-critical">
+                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>徐脈＋低血圧＋末梢温暖</span></div>
+                <div class="dx-rule__then"><strong>神経原性ショック</strong>。輸液・ノルアド／フェニレフリン、MAP 85–90 mmHg。出血性ショックも並行除外</div>
+              </li>
+              <li class="dx-rule is-critical">
+                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>後頭部・後頸部打撲＋めまい・後方循環症状</span></div>
+                <div class="dx-rule__then"><strong>椎骨動脈損傷</strong>を疑い<strong>頸部 CTA</strong>。Modified Denver / Memphis 基準</div>
+              </li>
+              <li class="dx-rule is-critical">
+                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>皮下気腫・嗄声・嚥下時痛・吐血</span></div>
+                <div class="dx-rule__then"><strong>喉頭・気管・食道損傷</strong>。軟部 CT＋耳鼻科／消化器外科。輪状軟骨圧迫は避ける</div>
+              </li>
+              <li class="dx-rule is-critical">
+                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>発熱＋項部硬直／突発の頭頸部痛／進行性四肢麻痺</span></div>
+                <div class="dx-rule__then"><strong>髄膜炎／SAH／硬膜外膿瘍</strong>を疑う。非外傷の致死的鑑別</div>
+              </li>
+              <li class="dx-rule is-critical">
+                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>絞扼・縊頸・頸部血腫の進行</span></div>
+                <div class="dx-rule__then"><strong>気道閉塞リスク</strong>。早期気道確保・ICU 管理</div>
+              </li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">見逃し回避トリガー</h4>
+            <ul class="dx-rules-l2__list">
+              <li class="dx-rule">
+                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>高齢者の軽微な顔面打撲・転倒</span></div>
+                <div class="dx-rule__then">過伸展機転で<strong>中心性頸髄損傷</strong>。CT 骨傷なくても上肢優位の脱力で MRI</div>
+              </li>
+              <li class="dx-rule">
+                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>小児・若年で外傷後に脊髄症状あり</span></div>
+                <div class="dx-rule__then"><strong>SCIWORA</strong>を疑う。CT 陰性でも MRI で脊髄信号変化</div>
+              </li>
+              <li class="dx-rule">
+                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>酩酊・意識障害下で NEXUS / CCSR 適用</span></div>
+                <div class="dx-rule__then"><strong>適用外</strong>。固定継続のうえ画像で評価する</div>
+              </li>
+              <li class="dx-rule">
+                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>頸椎横突孔骨折／C1–3 損傷／facet 脱臼</span></div>
+                <div class="dx-rule__then"><strong>BCVI スクリーニング陽性</strong>。頸部 CTA。遅発性脳梗塞を防ぐため抗血栓を相談</div>
+              </li>
+              <li class="dx-rule">
+                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>頭部 CT を撮る場面</span></div>
+                <div class="dx-rule__then"><strong>頸椎下端（C7–T1）まで含める</strong>。頸椎下端のフィルムアウトは頻発</div>
+              </li>
+              <li class="dx-rule">
+                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>外果骨折に相当する「外傷性頸部症候群」</span></div>
+                <div class="dx-rule__then">Quebec Grade を分けて評価。<strong>Grade III 以上は神経所見</strong>あり、再受診基準を必ず説明</div>
+              </li>
+              <li class="dx-rule">
+                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>抗凝固薬例の軽微頸部外傷</span></div>
+                <div class="dx-rule__then">受診時 OK でも<strong>遅発性硬膜外血腫</strong>に注意。観察または翌日 follow-up</div>
+              </li>
+              <li class="dx-rule">
+                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>非外傷の頸部痛で「凝り・寝違え」と判断しそうなとき</span></div>
+                <div class="dx-rule__then">発熱・突発・神経所見・嚥下時痛・後方循環症状があれば<strong>致死的鑑別</strong>へ戻す</div>
+              </li>
+              <li class="dx-rule">
+                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>歯突起骨折を Open mouth 像のみで除外</span></div>
+                <div class="dx-rule__then">高齢者で読影困難。<strong>CT を低い閾値で</strong>追加する</div>
+              </li>
+              <li class="dx-rule">
+                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>外果（外果＝外果骨折）と読み替え：外果骨折を見つけたら他果も探すように、頸椎で 1 椎骨折を見つけたら他椎・椎骨動脈も探す</span></div>
+                <div class="dx-rule__then">単発骨折で安心しない。<strong>連続性損傷</strong>を再評価</div>
+              </li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">ピットフォール</h4>
+            <ul class="dx-rules-l2__list">
+              <li class="dx-rule is-pitfall">
+                <div class="dx-rule__if"><span class="dx-rule__tag">⚠</span><span>むち打ちを「ただの頸部痛」と軽視</span></div>
+                <div class="dx-rule__then">Quebec Grade III は神経所見あり。<strong>再受診基準</strong>を口頭・書面で説明</div>
+              </li>
+              <li class="dx-rule is-pitfall">
+                <div class="dx-rule__if"><span class="dx-rule__tag">⚠</span><span>長期の硬性カラー固定</span></div>
+                <div class="dx-rule__then">むち打ち Grade I–II は<strong>早期可動・通常活動再開</strong>が予後良好。長期固定はかえって遷延</div>
+              </li>
+              <li class="dx-rule is-pitfall">
+                <div class="dx-rule__if"><span class="dx-rule__tag">⚠</span><span>急性頸髄損傷にステロイドをルーチン投与</span></div>
+                <div class="dx-rule__then">NASCIS II/III 以降<strong>ルーチン非推奨</strong>。感染・消化管出血・血糖上昇のリスク。脊椎外科と個別相談</div>
+              </li>
+              <li class="dx-rule is-pitfall">
+                <div class="dx-rule__if"><span class="dx-rule__tag">⚠</span><span>気道介入で頸部を動かす</span></div>
+                <div class="dx-rule__then"><strong>用手 in-line stabilization</strong> が原則。事前計画を立てる。ビデオ喉頭鏡を選ぶ</div>
+              </li>
+              <li class="dx-rule is-pitfall">
+                <div class="dx-rule__if"><span class="dx-rule__tag">⚠</span><span>CT 正常 ＝ 頸髄損傷除外</span></div>
+                <div class="dx-rule__then">SCIWORA・中心性頸髄損傷・靱帯損傷・硬膜外血腫は CT で拾えない。神経所見あれば<strong>MRI</strong></div>
+              </li>
+              <li class="dx-rule is-pitfall">
+                <div class="dx-rule__if"><span class="dx-rule__tag">⚠</span><span>NEXUS 全陰性で安心</span></div>
+                <div class="dx-rule__then">感度高・特異度低。陰性なら画像省略可だが<strong>適用外条件</strong>を必ず確認</div>
+              </li>
+              <li class="dx-rule is-pitfall">
+                <div class="dx-rule__if"><span class="dx-rule__tag">⚠</span><span>初期 ASIA A の完全麻痺</span></div>
+                <div class="dx-rule__then"><strong>脊髄ショック</strong>でフラットに見える可能性。球海綿体反射・経時的再評価</div>
+              </li>
+            </ul>
+          </details>
+
+          <!-- 撮影方向の備忘 -->
+          <details class="dx-imaging" id="imagingPanel">
+            <summary>📷 画像の置き方・撮影方向</summary>
+            <ul class="dx-imaging__list">
+              <li><strong>頸椎 Xp</strong>（AP / lateral / open mouth）：感度低く除外には弱い。<strong>日常的には推奨されない</strong>。CT が使えない環境の暫定</li>
+              <li><strong>頸椎 CT</strong>（C0–T1）：<strong>第一選択</strong>。NEXUS / CCSR 陽性、高エネ、意識障害例。<strong>頭部 CT 撮るときは頸椎下端まで含める</strong></li>
+              <li><strong>頸椎 MRI</strong>：神経所見あり、CT 陰性で症状未説明、<strong>中心性頸髄損傷</strong>疑い、<strong>SCIWORA</strong>疑い、CSM 評価、硬膜外血腫・膿瘍</li>
+              <li><strong>頸部 CTA</strong>：<strong>BCVI スクリーニング陽性</strong>（Modified Denver / Memphis）、頸椎横突孔骨折、後頭部痛＋神経所見、Le Fort II/III、頭蓋底骨折、頸部血管雑音・Horner</li>
+              <li><strong>頸部 CT 軟部</strong>：皮下気腫、嗄声、嚥下時痛、絞扼、咽後膿瘍疑い</li>
+              <li><strong>歯突起骨折疑い</strong>：高齢者は Open mouth 像のみで除外せず<strong>CT を低い閾値で</strong></li>
+            </ul>
+          </details>
+
+          <!-- 出典・関連リンク -->
+          <details class="dx-imaging" id="referencePanel">
+            <summary>📚 出典・関連リンク</summary>
+            <ul class="dx-imaging__list">
+              <li><strong>NEXUS Low-Risk Criteria</strong>：Hoffman JR ほか. <em>N Engl J Med.</em> 2000;343:94–9.</li>
+              <li><strong>Canadian C-Spine Rule</strong>：Stiell IG ほか. <em>JAMA.</em> 2001;286:1841–8.</li>
+              <li><strong>NEXUS vs CCSR 直接比較</strong>：Stiell IG ほか. <em>N Engl J Med.</em> 2003;349:2510–8.</li>
+              <li><strong>Quebec Task Force on Whiplash</strong>：Spitzer WO ほか. <em>Spine.</em> 1995;20(8 Suppl):1S–73S.</li>
+              <li><strong>Modified Denver criteria（BCVI）</strong>：Biffl WL ほか／Memphis criteria. EAST / WTA ガイドライン</li>
+              <li><strong>急性頸髄損傷ステロイド</strong>：NASCIS II/III の限界、AOSpine / AANS：ルーチン非推奨</li>
+              <li><strong>SCIWORA</strong>：Pang D ほか. 小児脊髄損傷で X 線・CT 陰性</li>
+              <li><strong>ASIA Impairment Scale</strong>：International Standards for Neurological Classification of Spinal Cord Injury（ASIA / ISCoS）</li>
+              <li>関連ページ：<a class="wiki-link" href="頭部外傷評価.html">頭部外傷評価</a> ／ <a class="wiki-link" href="転倒.html">転倒</a> ／ <a class="wiki-link" href="意識消失.html">意識消失</a> ／ <a class="wiki-link" href="意識障害.html">意識障害</a> ／ <a class="wiki-link" href="疾患詳細/頸椎損傷.html">頸椎損傷（疾患詳細）</a></li>
+              <li>#ER #救急 #頸部外傷 #頸部痛 #頸椎損傷 #頸髄損傷 #中心性頸髄損傷 #NEXUS #CCSR #椎骨動脈損傷 #BCVI #SCIWORA #むち打ち #Quebec #髄膜炎 #SAH</li>
+            </ul>
+          </details>
+
+        </div>
       </div>
-
-      <!-- §タイル -->
-      <nav class="section-tiles" id="sectionMenu">
-        <a class="section-tile" href="#s1"><span class="section-tile__no">🚨</span><span class="section-tile__name">Red flags<br><small>致死・後遺症</small></span></a>
-        <a class="section-tile" href="#s2"><span class="section-tile__no">🛡</span><span class="section-tile__name">頸椎固定<br><small>NEXUS / Canadian</small></span></a>
-        <a class="section-tile" href="#s3"><span class="section-tile__no">🩺</span><span class="section-tile__name">診察と評価</span></a>
-        <a class="section-tile" href="#s4"><span class="section-tile__no">🔬</span><span class="section-tile__name">画像の置き方<br><small>Xp / CT / MRI / CTA</small></span></a>
-        <a class="section-tile" href="#s5"><span class="section-tile__no">🧠</span><span class="section-tile__name">主要鑑別</span></a>
-        <a class="section-tile" href="#s6"><span class="section-tile__no">📤</span><span class="section-tile__name">disposition</span></a>
-        <a class="section-tile" href="#s7"><span class="section-tile__no">⚠️</span><span class="section-tile__name">ピットフォール</span></a>
-        <a class="section-tile" href="#s8"><span class="section-tile__no">📚</span><span class="section-tile__name">出典・リンク</span></a>
-      </nav>
-
-      <!-- §1 Red flags -->
-      <section class="section-page" id="s1" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🚨 Red flags（致死・後遺症を外す）</h2>
-
-        <h3>これがあれば頸椎固定を緩めない</h3>
-        <ul>
-          <li><strong>四肢麻痺・感覚低下</strong>（不全麻痺含む）</li>
-          <li><strong>頸部正中圧痛</strong></li>
-          <li><strong>意識障害を伴う外傷</strong>（評価困難 → 固定継続）</li>
-          <li><strong>高エネルギー外傷</strong>（高所転落・歩行者と車・車外放出）</li>
-          <li><strong>高齢者の軽微外傷</strong>でも中心性頸髄損傷を起こしうる</li>
-          <li><strong>抗凝固薬</strong>内服</li>
-          <li>頸部・後頭部痛 + 神経所見 → <strong>椎骨動脈損傷</strong>を疑う</li>
-        </ul>
-
-        <div class="callout callout-danger">
-          <div class="callout-title">危険所見あり</div>
-          <div class="callout-body">
-            <p>頸椎保護を継続し、<strong>整形外科 / 脊椎外科</strong>へ早期コンサルト。気道管理は in-line stabilization で。</p>
-            <ul>
-              <li><span class="wiki-missing">頸髄損傷</span>（中心性頸髄損傷を含む）</li>
-              <li><a class="wiki-link" href="疾患詳細/頸椎損傷.html">頸椎損傷</a>（骨傷）</li>
-              <li><span class="wiki-missing">椎骨動脈損傷</span>（外傷性解離）</li>
-            </ul>
-          </div>
-        </div>
-      </section>
-
-      <!-- §2 頸椎固定 -->
-      <section class="section-page" id="s2" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🛡 頸椎固定の判断（NEXUS / Canadian C-spine）</h2>
-
-        <p>「外して良いか」を意識的に判断する。固定は<strong>除外できれば解除</strong>。漫然と続けない。</p>
-
-        <details class="sub-fold">
-          <summary>NEXUS 基準（5 つすべて陰性で固定解除可）</summary>
-          <div class="sub-fold__body">
-            <ul>
-              <li><strong>後頸部正中圧痛なし</strong></li>
-              <li><strong>中毒なし</strong>（アルコール・薬物）</li>
-              <li><strong>意識清明</strong>（GCS 15、見当識保持）</li>
-              <li><strong>局所神経所見なし</strong></li>
-              <li><strong>気が逸れる損傷なし</strong>（distracting injury）</li>
-            </ul>
-            <p>すべて陰性なら<strong>画像不要</strong>として固定解除を検討。</p>
-          </div>
-        </details>
-
-        <details class="sub-fold">
-          <summary>Canadian C-spine Rule</summary>
-          <div class="sub-fold__body">
-            <p>意識清明で安定した外傷成人に適用。</p>
-            <ul>
-              <li><strong>高リスク要素</strong>（1 つでもあれば画像）：65 歳以上、危険な受傷機転（高所転落・車外放出・高速衝突）、四肢のしびれ</li>
-              <li><strong>低リスク要素</strong>（1 つもなければ可動域評価へ）：単純追突、座位で評価可、歩行可、遅発性発症、正中圧痛なし</li>
-              <li><strong>能動的に左右 45° 回旋可</strong> → 画像不要で固定解除可</li>
-            </ul>
-          </div>
-        </details>
-
-        <div class="callout callout-warning">
-          <div class="callout-title">適用が外れる場面に注意</div>
-          <div class="callout-body">
-            <p>意識障害・中毒・高エネルギー外傷・神経所見ありのときは <strong>NEXUS / Canadian の適用外</strong>。固定継続のうえ画像で評価する。</p>
-          </div>
-        </div>
-      </section>
-
-      <!-- §3 診察と評価 -->
-      <section class="section-page" id="s3" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🩺 診察と評価</h2>
-
-        <h3>その場で行う最小セット</h3>
-        <ul>
-          <li><strong>受傷機転の確認</strong>（高エネルギー / 軽微 / 失神先行）</li>
-          <li><strong>頸椎固定継続のまま</strong>視診・触診（後頸部正中圧痛、変形、皮下気腫）</li>
-          <li><strong>神経学的評価</strong>：四肢の運動・感覚・腱反射、肛門括約筋反射、Babinski</li>
-          <li><strong>気道・呼吸</strong>：呼吸パターン、横隔膜運動、SpO2</li>
-          <li><strong>四肢の左右差</strong>（中心性頸髄損傷では<strong>上肢 &gt; 下肢</strong>の不全麻痺）</li>
-          <li><strong>頸部前面・側面・後頭部の損傷</strong>（喉頭・気管・大血管・甲状腺）</li>
-        </ul>
-
-        <div class="callout callout-tip">
-          <div class="callout-title">中心性頸髄損傷の早期サイン</div>
-          <div class="callout-body">
-            <p>高齢者の軽微外傷（特に過伸展）で、<strong>上肢優位の不全麻痺・手指の巧緻運動低下・尿閉</strong>を見たら疑う。CT では骨傷なく見える → MRI へ。</p>
-          </div>
-        </div>
-
-        <div class="callout callout-warning">
-          <div class="callout-title">気道管理時の注意</div>
-          <div class="callout-body">
-            <p>頸椎損傷疑いでの挿管は <strong>用手 in-line stabilization</strong> で行う。輪状軟骨圧迫・過度の頸部進展は避ける。ビデオ喉頭鏡が有用。</p>
-          </div>
-        </div>
-      </section>
-
-      <!-- §4 画像の置き方 -->
-      <section class="section-page" id="s4" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🔬 画像の置き方</h2>
-
-        <div class="table-wrap">
-          <table>
-            <thead><tr><th>モダリティ</th><th>得意</th><th>選ぶとき</th></tr></thead>
-            <tbody>
-              <tr><td><strong>頸椎 Xp</strong>（3 方向）</td><td>明確な脱臼・骨折</td><td>軽微外傷で CT 不要なとき。<strong>感度低い</strong>ので除外には弱い</td></tr>
-              <tr><td><strong>頸椎 CT</strong></td><td>骨傷・脱臼・椎間板損傷の間接所見</td><td>第一選択。NEXUS / Canadian で陽性、高エネルギー外傷、意識障害例</td></tr>
-              <tr><td><strong>頸椎 MRI</strong></td><td>脊髄・椎間板・靱帯・硬膜外血腫</td><td>神経所見あり、CT 陰性でも症状が説明できないとき、<strong>中心性頸髄損傷</strong>疑い</td></tr>
-              <tr><td><strong>頸部 CTA</strong></td><td>椎骨動脈・頸動脈損傷</td><td>神経所見 + 大血管損傷リスク（高エネルギー、回旋外傷、頸椎横突孔骨折、Le Fort II/III、Horner 症候群）</td></tr>
-            </tbody>
-          </table>
-        </div>
-
-        <div class="callout callout-warning">
-          <div class="callout-title">CT 正常 = 頸髄損傷除外ではない</div>
-          <div class="callout-body">
-            <p>SCIWORA / 中心性頸髄損傷・靱帯損傷・硬膜外血腫は CT では拾えない。<strong>神経所見があれば MRI</strong>。</p>
-          </div>
-        </div>
-      </section>
-
-      <!-- §5 主要鑑別 -->
-      <section class="section-page" id="s5" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🧠 主要鑑別</h2>
-
-        <div class="table-wrap">
-          <table>
-            <thead><tr><th>病態</th><th>手がかり</th><th>進む先</th></tr></thead>
-            <tbody>
-              <tr><td><strong>頸椎損傷（骨傷）</strong></td><td>正中圧痛、神経症状、高エネルギー</td><td><a class="wiki-link" href="疾患詳細/頸椎損傷.html">頸椎損傷</a></td></tr>
-              <tr><td><strong>中心性頸髄損傷</strong></td><td>高齢・過伸展、上肢優位の不全麻痺、CT 骨傷なし</td><td><span class="wiki-missing">頸髄損傷</span></td></tr>
-              <tr><td><strong>椎骨動脈損傷</strong></td><td>後頭部痛、めまい、構音障害、視野欠損、高エネルギー / 回旋外傷</td><td><span class="wiki-missing">椎骨動脈損傷</span></td></tr>
-              <tr><td><strong>外傷性頸部症候群</strong>（むち打ち様）</td><td>頸部痛中心、神経症状乏しい、遅発症状あり</td><td><a class="wiki-link" href="転倒.html">転倒</a> で再診基準を確認</td></tr>
-              <tr><td><strong>喉頭・気管損傷</strong></td><td>発声異常、皮下気腫、嗄声、呼吸困難</td><td>耳鼻科 / 外科</td></tr>
-              <tr><td><strong>頸部血腫・大血管損傷</strong></td><td>進行性腫脹、ショック、雑音</td><td>血管外科 / 救命</td></tr>
-            </tbody>
-          </table>
-        </div>
-      </section>
-
-      <!-- §6 disposition -->
-      <section class="section-page" id="s6" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>📤 disposition</h2>
-
-        <h3>帰宅を考えやすい</h3>
-        <ul>
-          <li>NEXUS / Canadian で固定解除可、神経所見なし、画像陰性</li>
-          <li>外傷性頸部症候群で機能保たれる</li>
-          <li>独居でなく、フォロー可能</li>
-        </ul>
-
-        <h3>入院 / コンサルト</h3>
-        <ul>
-          <li><strong>頸椎骨折・脱臼</strong> → 整形 / 脊椎外科に即コンサルト</li>
-          <li><strong>頸髄損傷の疑い</strong>（神経所見あり）→ 入院、MRI 評価、脊椎外科</li>
-          <li><strong>椎骨動脈損傷の疑い</strong> → CTA、脳外 / 血管外科コンサルト、抗血栓療法を相談</li>
-          <li><strong>気道閉塞リスク</strong>（喉頭損傷、頸部腫脹進行）→ ICU、早期気道確保</li>
-          <li><strong>意識障害があり頸椎評価困難</strong> → 固定継続のうえ入院</li>
-        </ul>
-      </section>
-
-      <!-- §7 ピットフォール -->
-      <section class="section-page" id="s7" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>⚠️ ピットフォール</h2>
-
-        <ul>
-          <li><strong>NEXUS / Canadian の適用外で当てはめる</strong>（意識障害・中毒・高エネルギー）</li>
-          <li><strong>CT 正常で安心する</strong> — 中心性頸髄損傷・靱帯損傷・SCIWORA は写らない</li>
-          <li><strong>高齢者の軽微外傷を軽視</strong> — 過伸展で中心性頸髄損傷が起こる</li>
-          <li><strong>椎骨動脈損傷を考えない</strong> — 後頭部痛・めまい + 高エネルギーで CTA を</li>
-          <li><strong>外傷性頸部症候群で帰すときに遅発症状の説明をしない</strong></li>
-          <li><strong>気道管理で頸部を動かす</strong> — in-line stabilization が原則</li>
-          <li><strong>抗凝固薬例の頸部血腫</strong>を見逃す（進行性腫脹に注意）</li>
-        </ul>
-      </section>
-
-      <!-- §8 出典・リンク -->
-      <section class="section-page" id="s8" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>📚 出典・リンク</h2>
-
-        <h3>主要文献</h3>
-        <ul>
-          <li><strong>NEXUS</strong>：Hoffman JR ほか. <em>N Engl J Med.</em> 2000.</li>
-          <li><strong>Canadian C-spine Rule</strong>：Stiell IG ほか. <em>JAMA.</em> 2001.</li>
-          <li><strong>椎骨動脈損傷スクリーニング</strong>：Modified Denver / Memphis criteria.</li>
-        </ul>
-
-        <h3>関連ページ</h3>
-        <ul>
-          <li><a class="wiki-link" href="転倒.html">転倒</a> / <a class="wiki-link" href="頭部外傷評価.html">頭部外傷評価</a></li>
-          <li><a class="wiki-link" href="疾患詳細/頸椎損傷.html">頸椎損傷</a> / <span class="wiki-missing">頸髄損傷</span> / <span class="wiki-missing">椎骨動脈損傷</span></li>
-          <li><a class="wiki-link" href="意識障害.html">意識障害</a> / <a class="wiki-link" href="意識消失.html">意識消失</a></li>
-        </ul>
-
-        <p>#ER #救急 #頸部外傷 #頸椎損傷 #頸髄損傷 #NEXUS #Canadian #椎骨動脈損傷 #中心性頸髄損傷</p>
-      </section>
 
     </article>
   </main>
@@ -266,50 +773,61 @@
 
   <script>
   (function(){
-    const menu = document.getElementById('sectionMenu');
-    const pages = document.querySelectorAll('.section-page');
-    const titleH1 = document.querySelector('.page-title');
+    const flowBox = document.getElementById('flowBox');
+    const flowBoxClose = document.getElementById('flowBoxClose');
 
-    function showSection(id) {
-      menu.hidden = true;
-      if (titleH1) titleH1.hidden = true;
-      pages.forEach(p => p.hidden = (p.id !== id));
-      window.scrollTo(0, 0);
-    }
-    function showMenu(scrollTarget) {
-      menu.hidden = false;
-      if (titleH1) titleH1.hidden = false;
-      pages.forEach(p => p.hidden = true);
-      if (scrollTarget) {
-        if (scrollTarget.tagName === 'DETAILS') scrollTarget.open = true;
-        scrollTarget.scrollIntoView({behavior: 'instant', block: 'start'});
-      } else {
-        window.scrollTo(0, 0);
-      }
-    }
-    function syncFromHash() {
-      const id = (location.hash || '').replace('#','');
-      const target = id ? document.getElementById(id) : null;
-      if (target && target.classList.contains('section-page')) {
-        showSection(id);
-      } else if (target) {
-        showMenu(target);
-      } else {
-        showMenu();
-      }
+    if (flowBox && flowBoxClose) {
+      const dismiss = () => { flowBox.hidden = true; };
+      flowBoxClose.addEventListener('click', dismiss);
+      flowBoxClose.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); dismiss(); }
+      });
     }
 
-    window.addEventListener('hashchange', syncFromHash);
-    document.querySelectorAll('.back-to-menu').forEach(b => {
-      b.addEventListener('click', () => { history.pushState(null,'',location.pathname); showMenu(); });
+    // 来院後チェックリスト：localStorage 永続化 + per-panel リセット
+    const STORAGE_KEY = 'neck-trauma-dx-checklist-v1';
+    let stored = {};
+    try { stored = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); } catch (_) {}
+    const allBoxes = document.querySelectorAll('.dx-checklist__list input[type="checkbox"]');
+    allBoxes.forEach(cb => {
+      const key = cb.dataset.key;
+      if (stored[key]) cb.checked = true;
+      cb.addEventListener('change', () => {
+        if (cb.checked) stored[key] = true; else delete stored[key];
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(stored));
+      });
     });
+    document.querySelectorAll('.dx-checklist__reset').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const details = btn.closest('details');
+        if (!details) return;
+        details.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+          cb.checked = false;
+          delete stored[cb.dataset.key];
+        });
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(stored));
+      });
+    });
+
+    // パネル開閉状態を localStorage で復元
+    ['historyPanel', 'examPanel', 'rulesL2Panel', 'imagingPanel', 'referencePanel'].forEach(id => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      const key = `neck-trauma-${id}-open-v1`;
+      const saved = localStorage.getItem(key);
+      if (saved !== null) el.open = saved === '1';
+      el.addEventListener('toggle', () => {
+        localStorage.setItem(key, el.open ? '1' : '0');
+      });
+    });
+
     const navBack = document.getElementById('navBack');
     if (navBack) navBack.addEventListener('click', () => {
       if (window.history.length > 1) history.back();
       else window.location.href = 'index.html';
     });
-
-    syncFromHash();
   })();
   </script>
 </body>

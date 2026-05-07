@@ -6,6 +6,189 @@
   <meta name="color-scheme" content="light dark" />
   <title>アキレス腱損傷 | ER ノート</title>
   <link rel="stylesheet" href="../er-note.css" />
+  <style>
+    .dx-quick {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px;
+      margin: 10px 0 4px;
+    }
+    .dx-quick__btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      padding: 10px 6px;
+      border-radius: 10px;
+      background: color-mix(in srgb, var(--accent) 10%, var(--surface));
+      border: 1.5px solid var(--accent);
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 13px;
+      line-height: 1.2;
+      text-align: center;
+      cursor: pointer;
+      transition: background 120ms ease;
+    }
+    .dx-quick__btn:hover {
+      background: color-mix(in srgb, var(--accent) 18%, var(--surface));
+    }
+    .dx-quick__icon { font-size: 20px; }
+    .dx-quick__sub {
+      font-size: 10.5px;
+      font-weight: 500;
+      color: var(--muted);
+    }
+
+    .dx-tri {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+      margin: 6px 0 4px;
+      align-items: start;
+    }
+    .dx-tri__card {
+      background: var(--surface);
+      border-radius: 10px;
+      padding: 10px 12px;
+      border: 1.5px solid color-mix(in srgb, var(--text) 18%, transparent);
+    }
+    .dx-tri__card--vasc { border-color: #c0392b; background: color-mix(in srgb, #c0392b 6%, var(--surface)); }
+    .dx-tri__card--neuro { border-color: #b5651d; background: color-mix(in srgb, #b5651d 6%, var(--surface)); }
+    .dx-tri__card--typical { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 6%, var(--surface)); }
+    .dx-tri__title {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 800;
+      font-size: 13.5px;
+      margin-bottom: 4px;
+    }
+    .dx-tri__card--vasc .dx-tri__title { color: #c0392b; }
+    .dx-tri__card--neuro .dx-tri__title { color: #b5651d; }
+    .dx-tri__list {
+      margin: 0;
+      padding-left: 18px;
+      font-size: 12.5px;
+      line-height: 1.5;
+    }
+    .dx-tri__list li { margin: 2px 0; }
+
+    details.dx-tri__card { padding: 0; }
+    details.dx-tri__card > summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 10px 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 800;
+      font-size: 13.5px;
+    }
+    details.dx-tri__card > summary::-webkit-details-marker { display: none; }
+    details.dx-tri__card > summary::after {
+      content: "▸";
+      margin-left: auto;
+      font-size: 12px;
+      color: var(--muted);
+      transition: transform 120ms ease;
+    }
+    details.dx-tri__card[open] > summary::after { transform: rotate(90deg); }
+    details.dx-tri__card--vasc > summary { color: #c0392b; }
+    details.dx-tri__card--neuro > summary { color: #b5651d; }
+    details.dx-tri__card > .dx-tri__list { padding: 0 14px 12px 30px; }
+    details.dx-tri__card > .dx-tri__hint {
+      padding: 0 14px 6px 30px;
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    details.dx-box {
+      background: var(--surface);
+      border: 1.5px solid color-mix(in srgb, var(--text) 18%, transparent);
+      border-radius: 10px;
+      margin: 10px 0;
+      scroll-margin-top: 8px;
+    }
+    details.dx-box > summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 12px 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 800;
+      font-size: 14.5px;
+    }
+    details.dx-box > summary::-webkit-details-marker { display: none; }
+    details.dx-box > summary::after {
+      content: "▸";
+      margin-left: auto;
+      font-size: 13px;
+      color: var(--muted);
+      transition: transform 120ms ease;
+    }
+    details.dx-box[open] > summary::after { transform: rotate(90deg); }
+    details.dx-box[open] {
+      border-color: var(--accent);
+    }
+    details.dx-box > .dx-box__body {
+      padding: 0 14px 14px;
+    }
+
+    @media (max-width: 640px) {
+      .dx-quick { gap: 6px; }
+      .dx-quick__btn { padding: 8px 4px; font-size: 11.5px; border-radius: 8px; }
+      .dx-quick__icon { font-size: 17px; }
+      .dx-quick__sub { font-size: 9.5px; }
+
+      .dx-tri { grid-template-columns: 1fr; gap: 8px; }
+      .dx-tri__card { padding: 8px 10px; }
+      details.dx-tri__card > summary { padding: 8px 10px; font-size: 12.5px; }
+      details.dx-tri__card > .dx-tri__list { padding: 0 12px 10px 26px; }
+      .dx-tri__title { font-size: 12.5px; }
+      .dx-tri__list { font-size: 12px; }
+
+      details.dx-box > summary { padding: 10px 12px; font-size: 13.5px; }
+      details.dx-box > .dx-box__body { padding: 0 12px 12px; }
+    }
+
+    .dx-step {
+      margin: 18px 0 6px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 11.5px;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+    }
+    .dx-step::before, .dx-step::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: color-mix(in srgb, var(--text) 18%, transparent);
+    }
+
+    .dx-template {
+      background: color-mix(in srgb, var(--text) 4%, var(--surface));
+      border-left: 3px solid var(--accent);
+      border-radius: 6px;
+      padding: 10px 12px;
+      margin: 6px 0 0;
+      font-size: 13px;
+      line-height: 1.6;
+      white-space: pre-wrap;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+    .dx-template__hint {
+      font-size: 11px;
+      color: var(--muted);
+      margin: 0 0 4px;
+    }
+  </style>
 </head>
 <body>
   <header class="hokuto-top">
@@ -21,160 +204,196 @@
     <article class="note-shell">
       <h1 class="page-title">アキレス腱損傷</h1>
 
-      <!-- 即時アクションヘッダー（常時 sticky） -->
-      <div class="action-header">
-        <div class="action-header__title">⚡ 即時アクション</div>
-        <ol class="action-header__list">
-          <li><strong>Thompson テスト</strong>：腓腹筋を握って足底屈なし → 完全断裂疑い</li>
-          <li><strong>触診で gap</strong>（踵骨上 3–5 cm の陥凹）。痛みなし可</li>
-          <li><strong>US / MRI</strong> で確定（レントゲン・CT では分からない）</li>
-          <li><strong>装具 vs 手術</strong>（活動性で選択、保存療法でも再断裂率高い）</li>
-        </ol>
-      </div>
-
-      <!-- メニュータイル -->
-      <nav class="section-tiles" id="sectionMenu">
-        <a class="section-tile" href="#s1"><span class="section-tile__no">📊</span><span class="section-tile__name">疫学</span></a>
-        <a class="section-tile" href="#s2"><span class="section-tile__no">⚡</span><span class="section-tile__name">受傷機転</span></a>
-        <a class="section-tile" href="#s3"><span class="section-tile__no">🩺</span><span class="section-tile__name">身体所見<br><small>Thompson</small></span></a>
-        <a class="section-tile" href="#s4"><span class="section-tile__no">🖼️</span><span class="section-tile__name">画像<br><small>US / MRI</small></span></a>
-        <a class="section-tile" href="#s5"><span class="section-tile__no">💉</span><span class="section-tile__name">マネジメント<br><small>保存 vs 手術</small></span></a>
-        <a class="section-tile" href="#s6"><span class="section-tile__no">⚠️</span><span class="section-tile__name">注意点</span></a>
-        <a class="section-tile" href="#s7"><span class="section-tile__no">🏠</span><span class="section-tile__name">帰宅時の説明</span></a>
-        <a class="section-tile" href="#s8"><span class="section-tile__no">📚</span><span class="section-tile__name">出典</span></a>
+      <nav class="dx-quick" aria-label="クイックタップ">
+        <button class="dx-quick__btn" type="button" data-target="img-read">
+          <span>画像の見方</span>
+          <span class="dx-quick__sub">US / MRI 中心</span>
+        </button>
+        <button class="dx-quick__btn" type="button" data-target="plan">
+          <span>治療方針</span>
+          <span class="dx-quick__sub">保存 vs 手術</span>
+        </button>
+        <button class="dx-quick__btn" type="button" data-target="consult">
+          <span>コンサル文</span>
+          <span class="dx-quick__sub">外来フォロー型</span>
+        </button>
       </nav>
 
-      <!-- 関連主訴（双方向リンク） -->
-      <details class="sub-fold" id="related-symptoms">
-        <summary>📞 この疾患が該当する主訴</summary>
-        <div class="sub-fold__body">
+      <div class="dx-step"><span>同時並行で評価する 3 軸</span></div>
+      <div class="dx-tri">
+
+        <div class="dx-tri__card dx-tri__card--typical">
+          <div class="dx-tri__title">典型像</div>
+          <ul class="dx-tri__list">
+            <li><strong>30–50 代男性</strong>、スポーツ復帰時（テニス・バドミントン・バスケ）</li>
+            <li>ダッシュ・ジャンプ・着地で「<strong>後ろから蹴られた</strong>」感覚、バチッという音</li>
+            <li><strong>初期診療で 25% が見逃し</strong>。<strong>スポーツ以外の非典型例（脱力のみ）が 19–40%</strong> → 受傷機転がはっきりしなくても疑う</li>
+            <li><strong>踵骨上 2–6 cm の凹み</strong>（アキレス腱の陥凹）、圧痛</li>
+            <li><strong>Thompson test 陽性</strong>：腓腹筋を握って足底屈なし（感度 96%、特異度 93%） — <strong>非典型例にもルーチン実施</strong></li>
+            <li><strong>足関節底屈は弱いながら可能</strong>（他の屈筋が代償） → 「動くから大丈夫」と判断しない</li>
+            <li>鑑別：<strong>腓腹筋挫傷（肉離れ）</strong> — 同じ受傷機転で“筋”に起きるか“腱”に起きるかの違い、両方併発もあり</li>
+            <li><strong>フルオロキノロン・ステロイド使用歴</strong>はリスク</li>
+          </ul>
+        </div>
+
+        <details class="dx-tri__card dx-tri__card--vasc">
+          <summary>血管</summary>
+          <p class="dx-tri__hint">アキレス腱損傷は <strong>神経血管とは通常関係薄い</strong>。確認の流儀として一度だけ。</p>
+          <ul class="dx-tri__list">
+            <li>足背動脈・後脛骨動脈を触知（左右比較）</li>
+            <li>陳旧例で皮下血腫が大きければ局所循環評価</li>
+            <li>循環障害を起こす機転ではないので、所見があれば別疾患を疑う</li>
+          </ul>
+        </details>
+
+        <details class="dx-tri__card dx-tri__card--neuro">
+          <summary>神経</summary>
+          <p class="dx-tri__hint">アキレス腱損傷は <strong>神経損傷を伴わない</strong>。確認の流儀として 1 分だけ。</p>
+          <ul class="dx-tri__list">
+            <li>腓腹神経（外側踵部の感覚）— 手術アプローチ時に注意される</li>
+            <li>脛骨神経（足底感覚・足趾屈曲）</li>
+            <li>麻痺所見があれば別の重大疾患を疑う</li>
+          </ul>
+        </details>
+      </div>
+
+      <!-- 画像の見方 -->
+      <details class="dx-box" id="img-read">
+        <summary><span>画像の見方（US / MRI が主役）</span></summary>
+        <div class="dx-box__body">
+          <h3>診察での確定（画像より先に）</h3>
           <ul>
-            <li><a class="wiki-link" href="../足関節・足部の外傷.html">足関節・足部の外傷</a> — 足関節後方の外傷として鑑別</li>
-            <li><a class="wiki-link" href="../転倒.html">転倒</a> — 中高年男性のスポーツ復帰時に多い</li>
+            <li><strong>Thompson test</strong>：腹臥位で下腿ふくらはぎを握って圧迫 → 足底屈すれば腱断裂なし、しなければ断裂
+              <ul>
+                <li>感度 96%、特異度 93%</li>
+              </ul>
+            </li>
+            <li><strong>触診で gap</strong>（踵骨上 3–5 cm の陥凹）。痛みなし可</li>
+            <li><strong>「底屈できる」で断裂否定は危険</strong>：他の底屈筋（長母指屈筋・後脛骨筋など）が代償するため、底屈力は残る</li>
+          </ul>
+          <h3>レントゲン</h3>
+          <ul>
+            <li><strong>骨性の撕脱骨折がないか確認</strong>（稀）</li>
+            <li>腱断裂自体はレントゲン・CT では分からない</li>
+          </ul>
+          <h3>エコー（ER でできる）</h3>
+          <ul>
+            <li>感度 80–90%</li>
+            <li>連続性の途絶・血腫を確認</li>
+          </ul>
+          <h3>MRI</h3>
+          <ul>
+            <li>診断精度最高、手術計画に有用</li>
+            <li>Grade III／部分断裂の鑑別</li>
+          </ul>
+          <p style="font-size:12px; color:var(--muted); margin:6px 0 0;">Thompson test 陽性なら ER では <strong>臨床診断のみ・画像検査なし</strong>でも OK（確定診断は外来でエコー／MRI）。</p>
+        </div>
+      </details>
+
+      <!-- 治療方針 -->
+      <details class="dx-box" id="plan">
+        <summary><span>治療方針（保存 vs 手術）</span></summary>
+        <div class="dx-box__body">
+          <h3>マネジメント 5 択</h3>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>状況</th><th>5 択マネジメント</th><th>ER の動き</th></tr></thead>
+              <tbody>
+                <tr><td>低活動・高齢者</td><td><strong>帰宅保存</strong></td><td>尖足位ギプス・松葉杖</td></tr>
+                <tr><td>若年・スポーツ復帰希望</td><td><strong>帰宅手術</strong></td><td>尖足位シーネ・整形 cons.</td></tr>
+                <tr><td>陳旧性（2 週以上）</td><td><strong>帰宅手術</strong>（要件付き）</td><td>整形外科に早期紹介</td></tr>
+                <tr><td>骨性撕脱（踵骨）合併</td><td><strong>帰宅手術</strong></td><td>シーネ・整形 cons.</td></tr>
+                <tr><td>開放創を伴う断裂</td><td><strong>即時整形</strong></td><td>洗浄・抗菌薬・破傷風</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3>保存 vs 手術</h3>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>項目</th><th>保存</th><th>手術</th></tr></thead>
+              <tbody>
+                <tr><td>再断裂率</td><td>10–15%</td><td>2–5%</td></tr>
+                <tr><td>合併症</td><td>なし</td><td>創感染・神経（腓腹神経）損傷</td></tr>
+                <tr><td>機能回復</td><td>やや劣る</td><td>良好</td></tr>
+                <tr><td>適応</td><td>高齢者・低活動</td><td>若年・スポーツ</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <ul>
+            <li><strong>近年は早期可動域訓練を併用すれば保存と手術の再断裂率差が縮まる</strong></li>
+            <li>アスリートは手術、そうでなければ保存も選択肢</li>
+          </ul>
+
+          <h3>ER で打つ手</h3>
+          <ol>
+            <li><strong>Thompson test ＋ エコー</strong>で診断</li>
+            <li><strong>足関節底屈位（尖足位、equinus position）ギプス／シーネ</strong></li>
+            <li>松葉杖で <strong>非荷重</strong></li>
+            <li>整形外科紹介（帰宅手術 or 帰宅保存）</li>
+            <li>鎮痛はアセトアミノフェン中心、後脛骨神経ブロックも選択肢</li>
+          </ol>
+
+          <h3>注意点</h3>
+          <ul>
+            <li><strong>陳旧性断裂</strong>（2 週以上経過）は腱退縮で手術困難になる → 早期診断必須</li>
+            <li>Haglund 変形などの踵部痛と鑑別</li>
+            <li>フルオロキノロン・ステロイド服用中 → 主治医と相談し中止</li>
+          </ul>
+
+          <h3>帰宅指示</h3>
+          <ul>
+            <li><strong>歩行禁止、松葉杖使用</strong></li>
+            <li><strong>尖足位を保ち、背屈しない</strong>（ギプス内で背屈動作しない）</li>
+            <li>1 週以内に整形外科外来</li>
           </ul>
         </div>
       </details>
 
-      <!-- §1 疫学 -->
-      <section class="section-page" id="s1" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>📊 疫学</h2>
-        <ul>
-          <li><strong>30–50 代男性</strong>に多い</li>
-          <li>スポーツ復帰時（テニス・バドミントン・バスケ・久しぶりの運動）</li>
-          <li><strong>フルオロキノロン・ステロイド使用歴</strong>はリスク</li>
-          <li>踏み込み動作で踵骨上 <strong>3–5 cm</strong> で断裂</li>
-        </ul>
-      </section>
-
-      <!-- §2 受傷機転 -->
-      <section class="section-page" id="s2" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>⚡ 受傷機転</h2>
-        <ul>
-          <li>ダッシュ・ジャンプ・着地</li>
-          <li>「後ろから蹴られた」「石を投げつけられた」感覚</li>
-          <li><strong>バチッという音</strong>を自覚する人も</li>
-        </ul>
-      </section>
-
-      <!-- §3 身体所見 -->
-      <section class="section-page" id="s3" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🩺 身体所見</h2>
-        <ul>
-          <li><strong>踵骨上 3–5 cm の凹み</strong>（アキレス腱の陥凹）</li>
-          <li><strong>圧痛</strong>（腱断裂部）</li>
-          <li><strong>Thompson test</strong>：腹臥位で下腿ふくらはぎを握って圧迫 → 足底屈すれば腱断裂なし、しなければ断裂
-            <ul>
-              <li><strong>感度 96%、特異度 93%</strong></li>
-            </ul>
-          </li>
-          <li><strong>足関節底屈は弱いながら可能</strong>（他の屈筋が代償） → 「動くから大丈夫」と判断しない</li>
-        </ul>
-        <div class="callout callout-tip">
-          <div class="callout-title">「底屈できる」で断裂否定は危険</div>
-          <div class="callout-body"><ul>
-            <li>他の底屈筋（長母指屈筋・後脛骨筋など）が代償するため、<strong>底屈力は残る</strong></li>
-            <li>必ず <strong>Thompson test</strong> を実施</li>
-          </ul></div>
+      <!-- コンサル文 -->
+      <details class="dx-box" id="consult">
+        <summary><span>コンサル文（カルテに貼る）— 外来フォロー依頼型</span></summary>
+        <div class="dx-box__body">
+          <p class="dx-template__hint">『他科コンサルト実践マニュアル』の院内紹介状フォーマットに準拠（【目的】【疾患】【既往歴】【内服薬】【ADL】【現病歴】）。保存・手術いずれも整形外科外来フォローが基本のため。</p>
+          <div class="dx-template">【目的】[保存加療継続のフォロー依頼／観血的縫合術のご相談・ご加療依頼]。
+【疾患】#1 [右/左] アキレス腱断裂（[完全／部分]）
+【既往歴】[特記事項なし／○○]
+【内服薬】[なし／フルオロキノロン／ステロイド／○○]
+【ADL（受傷前）】[独歩／スポーツ活動あり：○○／杖]
+【現病歴】[年齢]歳[男/女]性。[受傷機転：ダッシュ／ジャンプ／着地時に「後ろから蹴られた」感覚＋音]で受傷し、[来院経緯]で来院。
+ ・身体所見：踵骨上 3–5 cm の陥凹あり、圧痛、Thompson test 陽性、足関節底屈は弱いながら可
+ ・血管：足背動脈・後脛骨動脈良好
+ ・神経：腓腹神経・脛骨神経領域問題なし
+ ・画像：レントゲンで骨性撕脱 [なし／あり]、エコーで腱の連続性途絶 [あり／なし]、MRI [施行済／未]
+ ・ER 処置：足関節尖足位 [ギプス／シーネ] 装着、松葉杖非荷重、アセトアミノフェン処方
+ ・備考：フルオロキノロン・ステロイドは [服用なし／○○ 内服中（主治医と中止相談予定）]
+よろしくお願いいたします。</div>
         </div>
-      </section>
+      </details>
 
-      <!-- §4 画像 -->
-      <section class="section-page" id="s4" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🖼️ 画像</h2>
-        <ul>
-          <li><strong>レントゲン</strong>：骨性の撕脱骨折がないか確認（稀）</li>
-          <li><strong>エコー</strong>：ER でできる、<strong>感度 80–90%</strong></li>
-          <li><strong>MRI</strong>：診断精度最高、手術計画に有用</li>
-        </ul>
-      </section>
+      <!-- 関連ハブ -->
+      <details class="dx-box">
+        <summary><span>関連ハブ・隣接疾患</span></summary>
+        <div class="dx-box__body">
+          <ul>
+            <li>主訴入口：<a class="wiki-link" href="../足関節・足部の外傷.html">足関節・足部の外傷</a> ／ <a class="wiki-link" href="../転倒.html">転倒</a></li>
+            <li>詳細プロトコル：<a class="wiki-link" href="足関節痛.html">足関節痛</a></li>
+            <li>鑑別：Haglund 変形（踵部痛）、足底筋膜炎、腓腹筋肉離れ</li>
+          </ul>
+        </div>
+      </details>
 
-      <!-- §5 マネジメント -->
-      <section class="section-page" id="s5" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>💉 マネジメント</h2>
-
-        <h3>ER での対応</h3>
-        <ol>
-          <li><strong>Thompson test + エコー</strong>で診断</li>
-          <li><strong>足関節底屈位ギプス or シーネ</strong>（尖足位）</li>
-          <li><strong>帰宅手術 or 帰宅保存</strong> として整形外科紹介</li>
-        </ol>
-
-        <h3>固定</h3>
-        <ul>
-          <li><strong>ギプスシーネで尖足位（equinus position）</strong>に固定</li>
-          <li>松葉杖で非荷重</li>
-        </ul>
-
-        <h3>保存 vs 手術</h3>
-        <div class="table-wrap"><table><thead><tr><th>保存</th><th>手術</th></tr></thead><tbody><tr><td><strong>再断裂率 10–15%</strong></td><td><strong>再断裂率 2–5%</strong></td></tr><tr><td>手術合併症なし</td><td>創感染・神経損傷</td></tr><tr><td>機能回復やや劣る</td><td>機能回復良好</td></tr><tr><td>高齢者・低活動向き</td><td>若年・スポーツ向き</td></tr></tbody></table></div>
-        <ul>
-          <li><strong>近年は早期可動域訓練を併用すれば保存と手術の再断裂率差が縮まる</strong></li>
-          <li><strong>アスリートは手術</strong>、そうでなければ保存も選択肢</li>
-        </ul>
-      </section>
-
-      <!-- §6 注意点 -->
-      <section class="section-page" id="s6" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>⚠️ 注意点</h2>
-        <ul>
-          <li><strong>陳旧性断裂</strong>（2 週以上経過）は腱退縮で手術困難になる → 早期診断必須</li>
-          <li><strong>Haglund 変形</strong>などの踵部痛と鑑別</li>
-          <li><strong>後脛骨神経ブロック</strong>で鎮痛可能</li>
-        </ul>
-      </section>
-
-      <!-- §7 帰宅時の説明 -->
-      <section class="section-page" id="s7" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🏠 帰宅時の説明</h2>
-        <ul>
-          <li><strong>歩行禁止、松葉杖使用</strong></li>
-          <li><strong>尖足位を保ち、背屈しない</strong>（ギプス内で背屈動作しない）</li>
-          <li>1 週以内に整形外科外来</li>
-          <li>フルオロキノロン・ステロイド服用中 → 主治医と相談し中止</li>
-        </ul>
-      </section>
-
-      <!-- §8 出典 -->
-      <section class="section-page" id="s8" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>📚 出典</h2>
-        <ul>
-          <li><strong>増井伸高. 骨折ハンター. 中外医学社. 2019.</strong></li>
-          <li><strong>Thompson TC, Doherty JH.</strong> Spontaneous rupture of tendon of Achilles. <em>J Trauma.</em> 1962.</li>
-          <li><strong>Maffulli N ほか.</strong> Acute rupture of the Achilles tendon. <em>Am Fam Physician.</em> 2004.</li>
-        </ul>
-        <h3>関連</h3>
-        <ul>
-          <li><a class="wiki-link" href="../転倒.html">転倒</a> / <a class="wiki-link" href="足関節痛.html">足関節痛</a></li>
-        </ul>
-      </section>
+      <!-- 出典 -->
+      <details class="dx-box">
+        <summary><span>出典</span></summary>
+        <div class="dx-box__body">
+          <ul>
+            <li>増井伸高. 骨折ハンター. 中外医学社. 2019.</li>
+            <li>Thompson TC, Doherty JH. Spontaneous rupture of tendon of Achilles. <em>J Trauma.</em> 1962.</li>
+            <li>Maffulli N ほか. Acute rupture of the Achilles tendon. <em>Am Fam Physician.</em> 2004.</li>
+          </ul>
+        </div>
+      </details>
 
     </article>
   </main>
@@ -193,53 +412,21 @@
 
   <script>
   (function(){
-    const menu = document.getElementById('sectionMenu');
-    const pages = document.querySelectorAll('.section-page');
-    const titleH1 = document.querySelector('.page-title');
-    const relatedSymp = document.getElementById('related-symptoms');
-
-    function showSection(id) {
-      menu.hidden = true;
-      if (titleH1) titleH1.hidden = true;
-      if (relatedSymp) relatedSymp.hidden = true;
-      pages.forEach(p => p.hidden = (p.id !== id));
-      window.scrollTo(0, 0);
-    }
-    function showMenu(scrollTarget) {
-      menu.hidden = false;
-      if (titleH1) titleH1.hidden = false;
-      if (relatedSymp) relatedSymp.hidden = false;
-      pages.forEach(p => p.hidden = true);
-      if (scrollTarget) {
-        if (scrollTarget.tagName === 'DETAILS') scrollTarget.open = true;
-        scrollTarget.scrollIntoView({behavior: 'instant', block: 'start'});
-      } else {
-        window.scrollTo(0, 0);
-      }
-    }
-    function syncFromHash() {
-      const id = (location.hash || '').replace('#','');
-      const target = id ? document.getElementById(id) : null;
-      if (target && target.classList.contains('section-page')) {
-        showSection(id);
-      } else if (target) {
-        showMenu(target);
-      } else {
-        showMenu();
-      }
-    }
-
-    window.addEventListener('hashchange', syncFromHash);
-    document.querySelectorAll('.back-to-menu').forEach(b => {
-      b.addEventListener('click', () => { history.pushState(null,'',location.pathname); showMenu(); });
+    document.querySelectorAll('.dx-quick__btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.dataset.target;
+        const target = document.getElementById(id);
+        if (!target) return;
+        target.open = true;
+        target.scrollIntoView({behavior: 'smooth', block: 'start'});
+      });
     });
+
     const navBack = document.getElementById('navBack');
     if (navBack) navBack.addEventListener('click', () => {
       if (window.history.length > 1) history.back();
       else window.location.href = '../index.html';
     });
-
-    syncFromHash();
   })();
   </script>
 </body>

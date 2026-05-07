@@ -6,6 +6,196 @@
   <meta name="color-scheme" content="light dark" />
   <title>肩関節脱臼 | ER ノート</title>
   <link rel="stylesheet" href="../er-note.css" />
+  <style>
+    /* ============ クイックタップ（3 つを開閉トリガー） ============ */
+    .dx-quick {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px;
+      margin: 10px 0 4px;
+    }
+    .dx-quick__btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      padding: 10px 6px;
+      border-radius: 10px;
+      background: color-mix(in srgb, var(--accent) 10%, var(--surface));
+      border: 1.5px solid var(--accent);
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 13px;
+      line-height: 1.2;
+      text-align: center;
+      cursor: pointer;
+      transition: background 120ms ease;
+    }
+    .dx-quick__btn:hover {
+      background: color-mix(in srgb, var(--accent) 18%, var(--surface));
+    }
+    .dx-quick__icon { font-size: 20px; }
+    .dx-quick__sub {
+      font-size: 10.5px;
+      font-weight: 500;
+      color: var(--muted);
+    }
+
+    /* ============ 同時評価 3 列（血管・神経・典型像） ============ */
+    .dx-tri {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+      margin: 6px 0 4px;
+      align-items: start;
+    }
+    .dx-tri__card {
+      background: var(--surface);
+      border-radius: 10px;
+      padding: 10px 12px;
+      border: 1.5px solid color-mix(in srgb, var(--text) 18%, transparent);
+    }
+    .dx-tri__card--vasc { border-color: #c0392b; background: color-mix(in srgb, #c0392b 6%, var(--surface)); }
+    .dx-tri__card--neuro { border-color: #b5651d; background: color-mix(in srgb, #b5651d 6%, var(--surface)); }
+    .dx-tri__card--typical { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 6%, var(--surface)); }
+    .dx-tri__title {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 800;
+      font-size: 13.5px;
+      margin-bottom: 4px;
+    }
+    .dx-tri__card--vasc .dx-tri__title { color: #c0392b; }
+    .dx-tri__card--neuro .dx-tri__title { color: #b5651d; }
+    .dx-tri__list {
+      margin: 0;
+      padding-left: 18px;
+      font-size: 12.5px;
+      line-height: 1.5;
+    }
+    .dx-tri__list li { margin: 2px 0; }
+
+    /* details 形式の血管/神経カード：summary にチェック印、開閉時の挙動 */
+    details.dx-tri__card { padding: 0; }
+    details.dx-tri__card > summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 10px 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 800;
+      font-size: 13.5px;
+    }
+    details.dx-tri__card > summary::-webkit-details-marker { display: none; }
+    details.dx-tri__card > summary::after {
+      content: "▸";
+      margin-left: auto;
+      font-size: 12px;
+      color: var(--muted);
+      transition: transform 120ms ease;
+    }
+    details.dx-tri__card[open] > summary::after { transform: rotate(90deg); }
+    details.dx-tri__card--vasc > summary { color: #c0392b; }
+    details.dx-tri__card--neuro > summary { color: #b5651d; }
+    details.dx-tri__card > .dx-tri__list { padding: 0 14px 12px 30px; }
+    details.dx-tri__card > .dx-tri__hint {
+      padding: 0 14px 6px 30px;
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    /* ============ 大きな details ボックス（画像/治療方針/コンサル文） ============ */
+    details.dx-box {
+      background: var(--surface);
+      border: 1.5px solid color-mix(in srgb, var(--text) 18%, transparent);
+      border-radius: 10px;
+      margin: 10px 0;
+      scroll-margin-top: 8px;
+    }
+    details.dx-box > summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 12px 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 800;
+      font-size: 14.5px;
+    }
+    details.dx-box > summary::-webkit-details-marker { display: none; }
+    details.dx-box > summary::after {
+      content: "▸";
+      margin-left: auto;
+      font-size: 13px;
+      color: var(--muted);
+      transition: transform 120ms ease;
+    }
+    details.dx-box[open] > summary::after { transform: rotate(90deg); }
+    details.dx-box[open] {
+      border-color: var(--accent);
+    }
+    details.dx-box > .dx-box__body {
+      padding: 0 14px 14px;
+    }
+
+    /* スマホで 1 列に */
+    @media (max-width: 640px) {
+      .dx-quick { gap: 6px; }
+      .dx-quick__btn { padding: 8px 4px; font-size: 11.5px; border-radius: 8px; }
+      .dx-quick__icon { font-size: 17px; }
+      .dx-quick__sub { font-size: 9.5px; }
+
+      .dx-tri { grid-template-columns: 1fr; gap: 8px; }
+      .dx-tri__card { padding: 8px 10px; }
+      details.dx-tri__card > summary { padding: 8px 10px; font-size: 12.5px; }
+      details.dx-tri__card > .dx-tri__list { padding: 0 12px 10px 26px; }
+      .dx-tri__title { font-size: 12.5px; }
+      .dx-tri__list { font-size: 12px; }
+
+      details.dx-box > summary { padding: 10px 12px; font-size: 13.5px; }
+      details.dx-box > .dx-box__body { padding: 0 12px 12px; }
+    }
+
+    /* ============ 区切り帯（最小限） ============ */
+    .dx-step {
+      margin: 18px 0 6px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 11.5px;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+    }
+    .dx-step::before, .dx-step::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: color-mix(in srgb, var(--text) 18%, transparent);
+    }
+
+    /* コピペ用テンプレ */
+    .dx-template {
+      background: color-mix(in srgb, var(--text) 4%, var(--surface));
+      border-left: 3px solid var(--accent);
+      border-radius: 6px;
+      padding: 10px 12px;
+      margin: 6px 0 0;
+      font-size: 13px;
+      line-height: 1.6;
+      white-space: pre-wrap;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+    .dx-template__hint {
+      font-size: 11px;
+      color: var(--muted);
+      margin: 0 0 4px;
+    }
+  </style>
 </head>
 <body>
   <header class="hokuto-top">
@@ -21,189 +211,248 @@
     <article class="note-shell">
       <h1 class="page-title">肩関節脱臼</h1>
 
-      <!-- 即時アクションヘッダー（常時 sticky） -->
-      <div class="action-header">
-        <div class="action-header__title">⚡ 即時アクション</div>
-        <ol class="action-header__list">
-          <li><strong>血管神経評価</strong>：<strong>腋窩神経</strong>（三角筋部の触覚）と<strong>橈骨動脈触知</strong>を整復前後で必ず確認</li>
-          <li><strong>X 線で確定</strong>：肩 <strong>AP + Y view + 腋窩位</strong> 3 方向（脱臼骨折・後方脱臼を見逃さない）</li>
-          <li><strong>整復</strong>：肩関節内注射（1% リドカイン 10–20 mL）→ <strong>Stimson / Spaso / Cunningham</strong> など筋弛緩を生かす方法を選択</li>
-          <li><strong>初回 vs 反復で対応分け</strong>：初回は固定 3 週間 + 整形紹介必須、反復例は固定短め（1–2 週）でも整形フォロー継続</li>
-        </ol>
-      </div>
-
-      <!-- メニュータイル -->
-      <nav class="section-tiles" id="sectionMenu">
-        <a class="section-tile" href="#s1"><span class="section-tile__no">📚</span><span class="section-tile__name">疫学・受傷機転</span></a>
-        <a class="section-tile" href="#s2"><span class="section-tile__no">🩺</span><span class="section-tile__name">診断<br><small>視診・X 線</small></span></a>
-        <a class="section-tile" href="#s3"><span class="section-tile__no">💉</span><span class="section-tile__name">整復手技<br><small>3 ステップ</small></span></a>
-        <a class="section-tile" href="#s4"><span class="section-tile__no">✅</span><span class="section-tile__name">整復後の評価</span></a>
-        <a class="section-tile" href="#s5"><span class="section-tile__no">🩹</span><span class="section-tile__name">固定と<br>disposition</span></a>
-        <a class="section-tile" href="#s6"><span class="section-tile__no">📞</span><span class="section-tile__name">コンサルト基準</span></a>
-        <a class="section-tile" href="#s7"><span class="section-tile__no">🏠</span><span class="section-tile__name">帰宅時の説明</span></a>
-        <a class="section-tile" href="#s8"><span class="section-tile__no">📖</span><span class="section-tile__name">出典</span></a>
+      <!-- スマホですぐ開きたい 3 つ -->
+      <nav class="dx-quick" aria-label="クイックタップ">
+        <button class="dx-quick__btn" type="button" data-target="img-read">
+          <span>画像の見方</span>
+          <span class="dx-quick__sub">Xp 3 方向のポイント</span>
+        </button>
+        <button class="dx-quick__btn" type="button" data-target="plan">
+          <span>治療方針</span>
+          <span class="dx-quick__sub">整復法・5 択</span>
+        </button>
+        <button class="dx-quick__btn" type="button" data-target="consult">
+          <span>コンサル文</span>
+          <span class="dx-quick__sub">そのまま貼れる</span>
+        </button>
       </nav>
 
-      <!-- 関連主訴（双方向リンク） -->
-      <details class="sub-fold" id="related-symptoms">
-        <summary>📞 この疾患が該当する主訴</summary>
-        <div class="sub-fold__body">
+      <!-- 同時評価 3 列：典型像は常時、血管・神経は折りたたみ -->
+      <div class="dx-step"><span>同時並行で評価する 3 軸</span></div>
+      <div class="dx-tri">
+
+        <div class="dx-tri__card dx-tri__card--typical">
+          <div class="dx-tri__title">典型像</div>
+          <ul class="dx-tri__list">
+            <li>成人の肩激痛 → <strong>大本命は前方脱臼</strong>（全脱臼の 50%、肩関節脱臼の 90–98%）</li>
+            <li>受傷機転：直接肩をぶつける／腕を引っ張られる／外転外旋強制</li>
+            <li>30 歳未満は<strong>リピーター多い</strong>（「前と同じで腕が外れた」病歴は強く疑う）</li>
+            <li>高齢者：転倒で受傷、<strong>大結節骨折合併</strong>が多い</li>
+            <li>所見：肩の<strong>squared off</strong>変形、骨頭が前下方に触知</li>
+            <li><strong>外転・外旋の弾力性固定</strong>、自動運動不能</li>
+            <li>後方脱臼：てんかん発作・電撃症後に注意（日本では非常に稀／見逃し多い）</li>
+          </ul>
+        </div>
+
+        <details class="dx-tri__card dx-tri__card--vasc">
+          <summary>血管</summary>
+          <p class="dx-tri__hint"><strong>腋窩動脈損傷</strong>は高齢者・反復脱臼で稀ながら起こる。整復前後で必ず比較。</p>
+          <ul class="dx-tri__list">
+            <li><strong>橈骨動脈</strong>を左右で触知比較</li>
+            <li>前胸部・腋窩の血腫・拍動性腫瘤</li>
+            <li>触れない／弱い → CTA 検討（高齢・骨折合併で閾値低く）</li>
+            <li>整復前後で必ず再評価し<strong>記録に残す</strong></li>
+          </ul>
+        </details>
+
+        <details class="dx-tri__card dx-tri__card--neuro">
+          <summary>神経</summary>
+          <p class="dx-tri__hint"><strong>腋窩神経麻痺</strong>が最多。上腕神経叢全体の損傷も念頭に。</p>
+          <ul class="dx-tri__list">
+            <li><strong>外側上腕の感覚</strong>（regimental badge area）</li>
+            <li><strong>三角筋の収縮</strong>（等尺で押し当てて確認）</li>
+            <li>筋皮神経（上腕二頭筋）、正中・尺・橈骨も簡便にチェック</li>
+            <li>麻痺は整復後に改善することが多い（経過観察）</li>
+            <li>整復前後で必ず比較し記録（責任分界点）</li>
+          </ul>
+        </details>
+      </div>
+
+      <!-- 画像の見方 -->
+      <details class="dx-box" id="img-read">
+        <summary><span>画像の見方</span></summary>
+        <div class="dx-box__body">
           <ul>
-            <li><a class="wiki-link" href="../肩の外傷・痛み.html">肩の外傷・痛み</a> — 全脱臼の 50% を占める最多疾患、square shoulder で疑う</li>
-            <li><a class="wiki-link" href="../転倒.html">転倒</a> — FOOSH や肩への直接打撲で受傷</li>
+            <li><strong>肩 3 方向：true AP ＋ scapular Y view ＋ axillary（腋窩位）</strong>
+              <ul>
+                <li><strong>true AP</strong>：骨頭の前下方転位を確認（前方脱臼の大多数）</li>
+                <li><strong>scapular Y view</strong>：肩甲骨を「Y」として見たときに骨頭が中央にあれば整復位、前下＝前方／後＝後方</li>
+                <li><strong>axillary view</strong>：後方脱臼の見逃し防止に最重要（1 方向だと見逃す）</li>
+                <li>腋窩位が痛くて撮れなければ Velpeau 法（前後屈位）を代用</li>
+              </ul>
+            </li>
+            <li>必ず追うポイント：
+              <ul>
+                <li><strong>骨頭の位置</strong>（前下方＝前方脱臼が大多数）</li>
+                <li>後方脱臼の <strong>light bulb sign</strong>（骨頭が内旋して電球状に見える）</li>
+                <li><strong>大結節骨折合併</strong>（高齢者で多い：整復後にほとんど元に戻る → 整復トライ可）</li>
+                <li><strong>外科頸骨折合併</strong>（少数：牽引しても骨頭は戻らない → <strong>即時整形コンサルト</strong>）</li>
+                <li><strong>Hill-Sachs 変形</strong>（骨頭後外側の陥凹、発生率 54–76%）</li>
+                <li><strong>Bankart 骨折</strong>（関節窩前下縁の骨折、発生率 87%）</li>
+                <li>関節窩の glenoid rim 骨折</li>
+              </ul>
+            </li>
+            <li>整復前後の画像を必ず撮影し、紹介状に添付（次回整形外来で確認）</li>
+            <li>Bankart / Hill-Sachs は <strong>occult fracture</strong> となり MRI でないと診断できないこともある（緊急性低、後日整形で評価）</li>
+            <li>整復後の <strong>CT</strong>：骨性 Bankart や glenoid 骨折が疑われたとき</li>
+            <li>後日 <strong>MRI</strong>：軟部 Bankart・腱板損傷評価（外来で）</li>
           </ul>
         </div>
       </details>
 
-      <!-- §1 疫学・受傷機転 -->
-      <section class="section-page" id="s1" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>📚 疫学・受傷機転</h2>
+      <!-- 治療方針 -->
+      <details class="dx-box" id="plan">
+        <summary><span>治療方針（整復法 × 5 択）</span></summary>
+        <div class="dx-box__body">
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>分類</th><th>所見</th><th>5 択マネジメント</th><th>ER の動き</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>前方脱臼（単純）</td>
+                  <td>成人、骨折なし</td>
+                  <td><strong>ER 整復＋帰宅保存</strong></td>
+                  <td>関節内注射→整復→三角巾±バストバンド、後日整形外来</td>
+                </tr>
+                <tr>
+                  <td>脱臼骨折（<strong>大結節骨折</strong>）</td>
+                  <td>高齢者で多い、整復後ほとんど元に戻る</td>
+                  <td><strong>ER 整復＋帰宅保存／手術</strong></td>
+                  <td>非整形外科医で整復トライ可、整復後画像を紹介状添付</td>
+                </tr>
+                <tr>
+                  <td>脱臼骨折（<strong>外科頸骨折</strong>）</td>
+                  <td>少数派、牽引しても骨頭が戻らない</td>
+                  <td><strong>即時整形コンサルト</strong>（観血的整復）</td>
+                  <td>自己整復しない、コンサルトと同時に手術準備</td>
+                </tr>
+                <tr>
+                  <td><strong>骨性 Bankart / glenoid 骨折</strong></td>
+                  <td>関節窩前下縁の骨片大</td>
+                  <td><strong>帰宅手術 or 入院整形</strong></td>
+                  <td>整復→CT→整形 cons.</td>
+                </tr>
+                <tr>
+                  <td><strong>後方脱臼</strong></td>
+                  <td>てんかん・電撃症後、日本では非常に稀／見逃し多い</td>
+                  <td><strong>整形 cons.</strong>（整復難）</td>
+                  <td>整形医到着まで安静、自己整復しない</td>
+                </tr>
+                <tr>
+                  <td><strong>血管・神経損傷／開放</strong></td>
+                  <td>橈骨動脈触知不能／腋窩麻痺以外の高度麻痺／創</td>
+                  <td><strong>即時整形＋血管</strong></td>
+                  <td>CTA・破傷風・抗菌薬</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
 
-        <div class="callout callout-summary">
-          <div class="callout-title">肩関節脱臼 = 全脱臼の 50% を占めるナンバーワン</div>
-          <div class="callout-body"><ul>
-            <li>肩関節脱臼の <strong>90–98% は前方脱臼</strong>（日本では後方脱臼は稀）</li>
-            <li>30 歳未満でリピーターが多い</li>
-            <li><strong>非整形外科医も 1 人で整復できるようになるべき</strong></li>
-            <li><strong>整復前後のレントゲン</strong>を必ず紹介状に添付</li>
-          </ul></div>
+          <h3>ER で打つ手（整復の 3 段階：骨折ハンター方式）</h3>
+          <ol>
+            <li><strong>肩関節内注射</strong>（全例で実施）：
+              <ul>
+                <li>1% リドカイン 10–20 mL を関節腔に注入</li>
+                <li>完全除痛にはならないが手技簡単・合併症少なく安全</li>
+                <li>静脈鎮静より低リスク</li>
+              </ul>
+            </li>
+            <li><strong>段階的に整復法を選ぶ</strong>（できる範囲から）：
+              <ul>
+                <li><strong>① 外旋＋Milch 法</strong>（術者 1 名・関節注射のみ・仰臥位）<br>1 人で可能。まずこれをトライ</li>
+                <li><strong>② 肩甲骨回旋＋Stimson 法</strong>（術者 2 名・関節注射のみ・腹臥位）<br>ナース介助で腹臥位、5 kg 程度を 10–20 分懸垂</li>
+                <li><strong>③ 反対牽引法</strong>（術者 2 名・関節注射＋静脈麻酔・仰臥位）<br>透視下、点滴確保のうえ放射線部に連絡</li>
+                <li>Hippocratic 法は新たな骨折リスクで避ける傾向</li>
+              </ul>
+            </li>
+            <li><strong>整復前後で必ず再評価</strong>：
+              <ul>
+                <li>橈骨動脈触知（左右差）／腋窩神経領域の感覚・三角筋筋力</li>
+                <li>所見はすべてカルテに記録（責任分界点）</li>
+              </ul>
+            </li>
+          </ol>
+
+          <h3>整復後の処置</h3>
+          <ul>
+            <li><strong>三角巾 ± バストバンド</strong>で内転内旋位固定（約 3 週）</li>
+            <li>整復前後の Xp を撮影 → <strong>両方紹介状に添付</strong>（次回整形外来で確認）</li>
+            <li>後日整形外科外来へ（翌日または週明け、Bankart/Hill-Sachs/大結節骨折評価）</li>
+            <li>患者説明：「これだけ大きな関節が外れた時には、レントゲンに映らない骨折があるかもしれない。緊急性は低いが、後日必ず整形外科で評価してもらう」</li>
+            <li>反復脱臼で軽症なら自己整復後の確認のみのこともある</li>
+          </ul>
+
+          <h3>整形コンサルトのタイミング</h3>
+          <ul>
+            <li><strong>整復前（即時）</strong>：外科頸骨折合併、後方脱臼、血管神経障害、開放、整復困難</li>
+            <li><strong>整復後（後日外来）</strong>：Bankart・Hill-Sachs・大結節骨折評価、若年初回脱臼（手術適応の検討）</li>
+          </ul>
         </div>
+      </details>
 
-        <ul>
-          <li>全脱臼の <strong>50%</strong> を占める最多の脱臼</li>
-          <li><strong>前方脱臼 90–98%</strong>（本書では肩関節脱臼 ≒ 前方脱臼）</li>
-          <li>直接肩をぶつける／腕を引っ張られる／FOOSH</li>
-          <li>30 歳未満のリピーター：「前と同じで外れた」 → 本疾患をほぼ確定的に疑う</li>
-        </ul>
-      </section>
+      <!-- コンサル文 -->
+      <details class="dx-box" id="consult">
+        <summary><span>コンサル文（カルテに貼る）</span></summary>
+        <div class="dx-box__body">
+          <p class="dx-template__hint">『他科コンサルト実践マニュアル』の院内紹介状フォーマットに準拠（【目的】【疾患】【既往歴】【内服薬】【ADL】【現病歴】）。脱臼骨折の項目では「整復操作は整形外科医でなければ難しい」「神経ブロックは整形医到着前は避ける」とされる。</p>
 
-      <!-- §2 診断 -->
-      <section class="section-page" id="s2" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🩺 診断</h2>
-        <ul>
-          <li>視診で肩の <strong>square shoulder</strong>（肩峰の突出）、患肢は内旋位で保持</li>
-          <li>救急医の臨床診断の的中率 <strong>98–100%</strong>（受傷機転と視診で判断可能）</li>
-          <li>日本では診断確定のためレントゲン（肩 2 方向）を推奨</li>
-        </ul>
+          <p class="dx-template__hint" style="margin-top:10px;"><strong>パターン A：整復後（Bankart/Hill-Sachs 評価依頼）</strong></p>
+          <div class="dx-template">【目的】整復後のフォロー・Bankart / Hill-Sachs 評価のご相談。
+【疾患】#1 右肩関節前方脱臼（[初回／反復]、[骨折合併なし／大結節骨折／骨性 Bankart]）
+【既往歴】[特記事項なし／反復性脱臼／○○]
+【内服薬】[なし／ワーファリン／DOAC ○○／抗血小板薬 ○○]
+【ADL（受傷前）】[独歩／杖／介助歩行／車椅子]、[利き手／非利き手]
+【現病歴】[年齢]歳[男/女]性。[受傷機転：転倒で外転外旋強制／コンタクトスポーツ／てんかん発作後]で受傷し、[来院経緯]で来院。
+ ・身体所見：肩 squared off 変形、外転外旋の弾力性固定
+ ・血管：橈骨動脈 [良好／弱／触知不能]（整復前後とも）
+ ・神経：腋窩神経領域 [問題なし／外側上腕感覚低下／三角筋脱力]、その他末梢神経 [問題なし／○○]
+ ・画像：Xp 3 方向で前方脱臼、整復後 Xp で[整復確認／○○骨折判明]
+ ・ER 処置：肩関節内注射（1% リドカイン ○ mL）→ [外旋＋Milch 法／肩甲骨回旋＋Stimson 法／反対牽引法（透視下）] で整復
+ ・整復後：三角巾＋バストバンド固定、神経血管所見不変
+よろしくお願いいたします。</div>
 
-        <h3>高齢者では脱臼骨折を疑う</h3>
-        <ul>
-          <li>上腕骨 <strong>大結節骨折</strong> を伴うことが多い（整復後は元の位置に戻る → 非整形外科医で整復トライ）</li>
-          <li><strong>外科頸骨折</strong>を伴う場合：整復で牽引しても骨頭が戻らない → <strong>即時整形</strong></li>
-          <li>対応を変えるため、脱臼骨折のパターンはレントゲンで区別する</li>
-        </ul>
-      </section>
-
-      <!-- §3 整復手技 -->
-      <section class="section-page" id="s3" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>💉 整復手技（3 ステップ）</h2>
-        <p>整復前に <strong>肩関節内注射</strong>（1% リドカイン 10–20 mL を肩峰下に）で麻酔。全例で実施可、手技は簡単で合併症なし。</p>
-
-        <h3>Step 1 : 外旋 + Milch 法（仰臥位、術者 1 名）</h3>
-        <ul>
-          <li>仰臥位、関節注射のみで可</li>
-          <li>患肢を愛護的に <strong>外旋</strong> → 整復できないときは肩関節を <strong>外転 + 挙上</strong> して Milch 法</li>
-          <li>まず試すべき方法</li>
-        </ul>
-
-        <h3>Step 2 : 肩甲骨回旋 + Stimson 法（腹臥位、術者 2 名）</h3>
-        <ul>
-          <li>腹臥位にし、患肢から 5 kg 程度の <strong>重りを吊るす</strong>（Stimson）</li>
-          <li>同時にナースが <strong>肩甲骨下端を内側へ押し、上端を外側へ回旋</strong></li>
-          <li>Step 1 で整復しない場合に</li>
-        </ul>
-
-        <h3>Step 3 : 反対牽引法（透視下、経静脈麻酔）</h3>
-        <ul>
-          <li>点滴確保 + 経静脈麻酔（ketofol など）</li>
-          <li>透視下で、術者が前腕を牽引、助手が腋窩にシーツを通してカウンタートラクション</li>
-          <li>前 2 つで整復しない場合に放射線部に連絡して実施</li>
-        </ul>
-
-        <div class="callout callout-tip">
-          <div class="callout-title">整復のコツ</div>
-          <div class="callout-body"><ul>
-            <li><strong>鎮痛を十分に</strong>：力技は禁物</li>
-            <li>筋弛緩が整復の鍵。Step 1 → 2 → 3 で段階的に麻酔量を上げる</li>
-            <li>整復後は明らかな「ガコッ」という感触と、疼痛の急速な軽減で確認</li>
-          </ul></div>
+          <p class="dx-template__hint" style="margin-top:14px;"><strong>パターン B：整復前（整復のご相談）</strong></p>
+          <div class="dx-template">【目的】整復のご相談・ご加療依頼。
+【疾患】#1 右肩関節[前方／後方]脱臼（[骨折合併：あり：○○骨折／なし]）
+【既往歴】[特記事項なし／反復性脱臼／てんかん／○○]
+【内服薬】[なし／ワーファリン／DOAC ○○／抗血小板薬 ○○]
+【ADL（受傷前）】[独歩／杖／介助歩行／車椅子]、[利き手／非利き手]
+【現病歴】[年齢]歳[男/女]性。[受傷機転：てんかん発作後／高エネ外傷／反復脱臼でも整復困難]で受傷し、[来院経緯]で来院。
+ ・身体所見：肩関節変形、自動運動不能
+ ・血管：橈骨動脈 [良好／弱／触知不能]
+ ・神経：腋窩神経領域 [問題なし／麻痺]、その他末梢神経 [問題なし／○○]
+ ・画像：Xp 3 方向で[後方脱臼／脱臼骨折で整復困難と判断]
+ ・ER 処置：三角巾固定で安静保持、神経ブロックは未施行
+よろしくお願いいたします。</div>
         </div>
-      </section>
+      </details>
 
-      <!-- §4 整復後の評価 -->
-      <section class="section-page" id="s4" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>✅ 整復後の評価</h2>
+      <!-- 関連ハブ -->
+      <details class="dx-box">
+        <summary><span>関連ハブ・隣接疾患</span></summary>
+        <div class="dx-box__body">
+          <ul>
+            <li>主訴入口：<a class="wiki-link" href="../肩の外傷・痛み.html">肩の外傷・痛み</a> ／ <a class="wiki-link" href="../転倒.html">転倒</a></li>
+            <li>隣接疾患：<a class="wiki-link" href="肩鎖関節脱臼.html">肩鎖関節脱臼</a> ／ <a class="wiki-link" href="腱板損傷.html">腱板損傷</a> ／ <a class="wiki-link" href="鎖骨骨折.html">鎖骨骨折</a> ／ <a class="wiki-link" href="上腕骨近位端骨折.html">上腕骨近位端骨折</a></li>
+            <li>処置：<a class="wiki-link" href="肩関節内注射.html">肩関節内注射</a> ／ <a class="wiki-link" href="鎮静.html">鎮静</a></li>
+            <li>合併：腋窩神経麻痺は数週で自然回復多、Bankart 病変は反復脱臼の主因 → 若年初回は手術適応評価をフォローへ</li>
+          </ul>
+        </div>
+      </details>
 
-        <h3>必ず確認</h3>
-        <ol>
-          <li><strong>神経所見</strong>：腋窩神経（三角筋付着部の感覚）、正中・尺骨・橈骨神経</li>
-          <li><strong>血流</strong>：橈骨動脈触知、末梢循環</li>
-          <li><strong>整復確認レントゲン</strong>（2 方向）</li>
-          <li><strong>合併骨折の有無</strong>：Hill-Sachs lesion（上腕骨頭の陥没、54–76%）、Bankart lesion（関節窩縁の骨折、87%）</li>
-        </ol>
-
-        <h3>整復後の合併症（occult fracture）</h3>
-        <ul>
-          <li>Bankart / Hill-Sachs lesion は <strong>occult fracture</strong> のことが多く、MRI でないと診断できない</li>
-          <li>緊急性は低い → 帰宅時に「レントゲンに映らない骨折がある可能性があります。必ず後日整形外科で評価を」と説明</li>
-        </ul>
-      </section>
-
-      <!-- §5 固定と disposition -->
-      <section class="section-page" id="s5" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🩹 固定と disposition</h2>
-        <ul>
-          <li><strong>三角巾 ± バストバンド</strong>固定</li>
-          <li>帰宅保存／帰宅手術（合併症評価のため次回整形外科受診は必須）</li>
-          <li>整復前後のレントゲン + 紹介状を渡す</li>
-        </ul>
-      </section>
-
-      <!-- §6 コンサルト -->
-      <section class="section-page" id="s6" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>📞 コンサルトが必要な場合</h2>
-        <ul>
-          <li><strong>整復できない</strong> → 整形外科医の手技依頼</li>
-          <li><strong>脱臼骨折で外科頸骨折</strong> → 観血的整復 → <strong>即時整形</strong></li>
-          <li><strong>神経・血管障害が整復後も持続</strong></li>
-          <li><strong>腋窩動脈損傷</strong>（脈拍触知不可、拡大する腫脹）→ 緊急血管評価</li>
-        </ul>
-      </section>
-
-      <!-- §7 帰宅時の説明 -->
-      <section class="section-page" id="s7" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🏠 帰宅時の説明</h2>
-        <ul>
-          <li>3 週間の固定が目安（年齢で調整：若年は長めに）</li>
-          <li><strong>再脱臼リスク</strong> は若年ほど高い（20 代で 50% 以上）</li>
-          <li>数日〜1 週間後に整形外科外来で合併症（Bankart、腱板、腋窩神経）を再評価</li>
-          <li>しびれ・蒼白・腕が動かない等の症状があれば即受診</li>
-        </ul>
-      </section>
-
-      <!-- §8 出典 -->
-      <section class="section-page" id="s8" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>📖 出典</h2>
-        <ul>
-          <li><strong>増井伸高. 骨折ハンター. 中外医学社. 2019.</strong></li>
-          <li><strong>Riebel GD, McCabe JB.</strong> Anterior shoulder dislocation: a review of reduction techniques. <em>Am J Emerg Med.</em> 1991.</li>
-          <li><strong>Alkaduhimi H ほか.</strong> A systematic comparison of the closed shoulder reduction techniques. <em>Arch Orthop Trauma Surg.</em> 2017.</li>
-          <li><strong>UpToDate</strong> "Shoulder dislocation and reduction".</li>
-        </ul>
-
-        <h3>関連</h3>
-        <ul>
-          <li><a class="wiki-link" href="../転倒.html">転倒</a> / <a class="wiki-link" href="上肢骨折の固定/上腕骨近位部骨折.html">上腕骨近位部骨折</a> / <a class="wiki-link" href="腱板損傷.html">腱板損傷</a></li>
-        </ul>
-      </section>
+      <!-- 出典 -->
+      <details class="dx-box">
+        <summary><span>出典</span></summary>
+        <div class="dx-box__body">
+          <ul>
+            <li>増井伸高. 骨折ハンター. 中外医学社. 2019.</li>
+            <li>「他科コンサルト実践マニュアル」（医書ジェイピー）整形外科 脱臼骨折の項.</li>
+            <li>「骨折・脱臼 改訂4版」（富士川恭輔，鳥巣岳彦/編），南山堂，2018.</li>
+          </ul>
+        </div>
+      </details>
 
     </article>
   </main>
@@ -222,53 +471,21 @@
 
   <script>
   (function(){
-    const menu = document.getElementById('sectionMenu');
-    const pages = document.querySelectorAll('.section-page');
-    const titleH1 = document.querySelector('.page-title');
-    const relatedSymp = document.getElementById('related-symptoms');
-
-    function showSection(id) {
-      menu.hidden = true;
-      if (titleH1) titleH1.hidden = true;
-      if (relatedSymp) relatedSymp.hidden = true;
-      pages.forEach(p => p.hidden = (p.id !== id));
-      window.scrollTo(0, 0);
-    }
-    function showMenu(scrollTarget) {
-      menu.hidden = false;
-      if (titleH1) titleH1.hidden = false;
-      if (relatedSymp) relatedSymp.hidden = false;
-      pages.forEach(p => p.hidden = true);
-      if (scrollTarget) {
-        if (scrollTarget.tagName === 'DETAILS') scrollTarget.open = true;
-        scrollTarget.scrollIntoView({behavior: 'instant', block: 'start'});
-      } else {
-        window.scrollTo(0, 0);
-      }
-    }
-    function syncFromHash() {
-      const id = (location.hash || '').replace('#','');
-      const target = id ? document.getElementById(id) : null;
-      if (target && target.classList.contains('section-page')) {
-        showSection(id);
-      } else if (target) {
-        showMenu(target);
-      } else {
-        showMenu();
-      }
-    }
-
-    window.addEventListener('hashchange', syncFromHash);
-    document.querySelectorAll('.back-to-menu').forEach(b => {
-      b.addEventListener('click', () => { history.pushState(null,'',location.pathname); showMenu(); });
+    document.querySelectorAll('.dx-quick__btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.dataset.target;
+        const target = document.getElementById(id);
+        if (!target) return;
+        target.open = true;
+        target.scrollIntoView({behavior: 'smooth', block: 'start'});
+      });
     });
+
     const navBack = document.getElementById('navBack');
     if (navBack) navBack.addEventListener('click', () => {
       if (window.history.length > 1) history.back();
       else window.location.href = '../index.html';
     });
-
-    syncFromHash();
   })();
   </script>
 </body>

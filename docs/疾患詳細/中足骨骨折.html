@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="color-scheme" content="light dark" />
+  <title>中足骨骨折 | ER ノート</title>
+  <link rel="stylesheet" href="../er-note.css" />
+</head>
+<body>
+  <header class="hokuto-top">
+    <a class="hokuto-top__btn" href="../薬剤情報.html">
+      <span class="hokuto-top__icon">℞</span><span>薬剤情報</span>
+    </a>
+    <a class="hokuto-top__btn" href="../表計算.html">
+      <span class="hokuto-top__icon">⊞</span><span>表計算</span>
+    </a>
+  </header>
+
+  <main class="hokuto-main">
+    <article class="note-shell">
+      <h1 class="page-title">中足骨骨折</h1>
+
+      <!-- 即時アクションヘッダー（常時 sticky） -->
+      <div class="action-header">
+        <div class="action-header__title">⚡ 即時アクション</div>
+        <ol class="action-header__list">
+          <li><strong>裸足で両側視診</strong>（腫脹・変形・皮膚緊張）</li>
+          <li><strong>AP + lateral + 斜位</strong> 3 方向で撮影</li>
+          <li><strong>リスフラン関節脱臼骨折</strong>を必ず鑑別（第2中足骨基部の側方転位）</li>
+          <li><strong>後方シーネ + 免荷（松葉杖）</strong>で帰宅、後日整形外来</li>
+        </ol>
+      </div>
+
+      <!-- メニュータイル -->
+      <nav class="section-tiles" id="sectionMenu">
+        <a class="section-tile" href="#s1"><span class="section-tile__no">📝</span><span class="section-tile__name">受傷機転</span></a>
+        <a class="section-tile" href="#s2"><span class="section-tile__no">🩺</span><span class="section-tile__name">身体所見</span></a>
+        <a class="section-tile" href="#s3"><span class="section-tile__no">🧪</span><span class="section-tile__name">画像<br><small>AP+lat+斜位</small></span></a>
+        <a class="section-tile" href="#s4"><span class="section-tile__no">🦴</span><span class="section-tile__name">部位と頻度</span></a>
+        <a class="section-tile" href="#s5"><span class="section-tile__no">💉</span><span class="section-tile__name">マネジメント</span></a>
+        <a class="section-tile" href="#s6"><span class="section-tile__no">🏠</span><span class="section-tile__name">帰宅時説明</span></a>
+        <a class="section-tile" href="#s7"><span class="section-tile__no">📚</span><span class="section-tile__name">出典・関連</span></a>
+      </nav>
+
+      <!-- 概要サマリ -->
+      <details class="sub-fold" id="overview">
+        <summary>概要：第2〜4 中足骨は保存型、第5近位端と Lisfranc は分けて考える</summary>
+        <div class="sub-fold__body">
+          <div class="callout callout-summary">
+            <div class="callout-title">中足骨骨折 = 第2〜4 を中心に保存対応、隣接本も探す</div>
+            <div class="callout-body"><ul>
+              <li><strong>つま先で強く着地・直達外力・足背打撲</strong>が典型機転</li>
+              <li><strong>多発骨折が多い</strong>：1 本見つけたら隣も必ず確認（外果と同様）</li>
+              <li><strong>頸部・基部</strong>に多く、骨幹部は少ない</li>
+              <li>転位なし単独 → <strong>後方シーネ + 免荷</strong>で帰宅、後日整形</li>
+              <li>第2基部の側方転位 → <a class="wiki-link" href="リスフラン関節脱臼骨折.html">リスフラン関節脱臼骨折</a>へ</li>
+              <li>第5近位端は別疾患 → <a class="wiki-link" href="第5中足骨近位端骨折.html">第5中足骨近位端骨折</a></li>
+            </ul></div>
+          </div>
+        </div>
+      </details>
+
+      <!-- 関連主訴（双方向リンク） -->
+      <details class="sub-fold" id="related-symptoms">
+        <summary>📞 この疾患が該当する主訴</summary>
+        <div class="sub-fold__body">
+          <ul>
+            <li><a class="wiki-link" href="../足関節・足部の外傷.html">足関節・足部の外傷</a> — 足部外傷の入口主訴</li>
+          </ul>
+        </div>
+      </details>
+
+      <!-- §1 受傷機転 -->
+      <section class="section-page" id="s1" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>📝 受傷機転</h2>
+        <ul>
+          <li><strong>つま先で強く着地</strong>（ジャンプ着地・段差踏み外し）</li>
+          <li><strong>重い物の直達外力</strong>（足背に物が落下）</li>
+          <li><strong>高エネ外傷で足背を打撲</strong>（交通外傷など）</li>
+          <li>足部の捻りで骨幹部らせん骨折となることもある</li>
+        </ul>
+      </section>
+
+      <!-- §2 身体所見 -->
+      <section class="section-page" id="s2" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🩺 身体所見</h2>
+        <ul>
+          <li><strong>裸足で両側視診</strong>（腫脹・皮下出血・変形）</li>
+          <li>各中足骨を <strong>頭部から基部まで圧痛走査</strong></li>
+          <li>軸圧痛（指先を長軸方向に押す）</li>
+          <li><strong>第2中足骨基部の圧痛</strong>はリスフラン関節脱臼骨折を疑う</li>
+          <li>足背の皮膚緊張・コンパートメント徴候の有無</li>
+          <li>足背動脈・後脛骨動脈・知覚チェック</li>
+        </ul>
+      </section>
+
+      <!-- §3 画像 -->
+      <section class="section-page" id="s3" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🧪 画像</h2>
+
+        <h3>レントゲン 3 方向</h3>
+        <ul>
+          <li><strong>AP + lateral + 斜位</strong>を必ず撮る</li>
+          <li><strong>lateral では中足骨同士が重なって読みづらい</strong> → 斜位が必須</li>
+          <li>1 本見つけたら <strong>隣接中足骨も詳細に確認</strong>（多発が多い）</li>
+          <li>第2中足骨基部と内側楔状骨の位置関係（リスフラン評価）</li>
+        </ul>
+
+        <h3>CT</h3>
+        <ul>
+          <li>リスフラン関節脱臼骨折が疑われる場合</li>
+          <li>関節内骨折・粉砕型・手術計画</li>
+        </ul>
+      </section>
+
+      <!-- §4 部位と頻度 -->
+      <section class="section-page" id="s4" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🦴 部位と頻度</h2>
+        <div class="table-wrap"><table><thead><tr><th>部位</th><th>頻度</th><th>典型例</th></tr></thead><tbody><tr><td><strong>頸部</strong>（neck）</td><td>多い</td><td>つま先着地、直達外力</td></tr><tr><td><strong>基部</strong>（base）</td><td>多い</td><td>足部捻り、直達外力</td></tr><tr><td>骨幹部（shaft）</td><td>少ない</td><td>強い直達外力・らせん骨折</td></tr></tbody></table></div>
+        <ul>
+          <li>第2〜4 中足骨は <strong>保存対応の典型骨折</strong></li>
+          <li><strong>第5中足骨近位端骨折・Jones 骨折</strong>は別ページで管理 → <a class="wiki-link" href="第5中足骨近位端骨折.html">第5中足骨近位端骨折</a></li>
+          <li><strong>第2中足骨基部の側方転位</strong>はリスフラン損傷を疑う → <a class="wiki-link" href="リスフラン関節脱臼骨折.html">リスフラン関節脱臼骨折</a></li>
+        </ul>
+      </section>
+
+      <!-- §5 マネジメント -->
+      <section class="section-page" id="s5" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>💉 マネジメント</h2>
+
+        <h3>保存（多くの症例）</h3>
+        <ul>
+          <li><strong>転位なし or 軽度</strong>の単独骨折</li>
+          <li><strong>後方シーネ固定</strong>（足関節 90° 中間位）</li>
+          <li><strong>松葉杖で免荷</strong></li>
+          <li>1 週以内に整形外科外来</li>
+        </ul>
+
+        <h3>整形へ即コンサル</h3>
+        <ul>
+          <li><strong>開放骨折</strong></li>
+          <li><strong>著明な転位・短縮・回旋</strong></li>
+          <li><strong>複数本の骨幹部骨折</strong>（足部アライメント崩壊）</li>
+          <li><strong>リスフラン関節脱臼骨折の合併</strong></li>
+          <li>コンパートメント症候群を疑う所見</li>
+        </ul>
+      </section>
+
+      <!-- §6 帰宅時の説明 -->
+      <section class="section-page" id="s6" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🏠 帰宅時の説明</h2>
+        <ul>
+          <li>松葉杖で <strong>免荷</strong>、荷重開始は整形外科医の指示</li>
+          <li>1 週以内に整形外科外来を受診</li>
+          <li>挙上・冷却で腫脹軽減</li>
+          <li>腫脹・疼痛・しびれ増強・指先の色不良で再受診</li>
+        </ul>
+      </section>
+
+      <!-- §7 出典・関連 -->
+      <section class="section-page" id="s7" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>📚 出典・関連</h2>
+        <h3>出典</h3>
+        <ul>
+          <li><strong>増井伸高. 骨折ハンター. 中外医学社. 2019.</strong></li>
+        </ul>
+        <h3>関連</h3>
+        <ul>
+          <li><a class="wiki-link" href="../足関節・足部の外傷.html">足関節・足部の外傷</a>（主訴入口）</li>
+          <li><a class="wiki-link" href="リスフラン関節脱臼骨折.html">リスフラン関節脱臼骨折</a></li>
+          <li><a class="wiki-link" href="第5中足骨近位端骨折.html">第5中足骨近位端骨折</a></li>
+          <li><a class="wiki-link" href="足趾骨骨折.html">足趾骨骨折</a></li>
+        </ul>
+      </section>
+
+    </article>
+  </main>
+
+  <nav class="hokuto-bottom">
+    <button class="hokuto-bottom__btn" type="button" id="navBack">
+      <span class="hokuto-bottom__icon">←</span><span>戻る</span>
+    </button>
+    <a class="hokuto-bottom__btn" href="../ツール.html">
+      <span class="hokuto-bottom__icon">⚙</span><span>ツール</span>
+    </a>
+    <a class="hokuto-bottom__btn" href="../index.html">
+      <span class="hokuto-bottom__icon">⌂</span><span>ホーム</span>
+    </a>
+  </nav>
+
+  <script>
+  (function(){
+    const menu = document.getElementById('sectionMenu');
+    const pages = document.querySelectorAll('.section-page');
+    const titleH1 = document.querySelector('.page-title');
+    const overview = document.getElementById('overview');
+    const relatedSymp = document.getElementById('related-symptoms');
+
+    function showSection(id) {
+      menu.hidden = true;
+      if (titleH1) titleH1.hidden = true;
+      if (overview) overview.hidden = true;
+      if (relatedSymp) relatedSymp.hidden = true;
+      pages.forEach(p => p.hidden = (p.id !== id));
+      window.scrollTo(0, 0);
+    }
+    function showMenu(scrollTarget) {
+      menu.hidden = false;
+      if (titleH1) titleH1.hidden = false;
+      if (overview) overview.hidden = false;
+      if (relatedSymp) relatedSymp.hidden = false;
+      pages.forEach(p => p.hidden = true);
+      if (scrollTarget) {
+        if (scrollTarget.tagName === 'DETAILS') scrollTarget.open = true;
+        scrollTarget.scrollIntoView({behavior: 'instant', block: 'start'});
+      } else {
+        window.scrollTo(0, 0);
+      }
+    }
+    function syncFromHash() {
+      const id = (location.hash || '').replace('#','');
+      const target = id ? document.getElementById(id) : null;
+      if (target && target.classList.contains('section-page')) {
+        showSection(id);
+      } else if (target) {
+        showMenu(target);
+      } else {
+        showMenu();
+      }
+    }
+
+    window.addEventListener('hashchange', syncFromHash);
+    document.querySelectorAll('.back-to-menu').forEach(b => {
+      b.addEventListener('click', () => { history.pushState(null,'',location.pathname); showMenu(); });
+    });
+    const navBack = document.getElementById('navBack');
+    if (navBack) navBack.addEventListener('click', () => {
+      if (window.history.length > 1) history.back();
+      else window.location.href = '../index.html';
+    });
+
+    syncFromHash();
+  })();
+  </script>
+</body>
+</html>
