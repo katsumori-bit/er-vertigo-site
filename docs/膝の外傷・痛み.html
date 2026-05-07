@@ -21,192 +21,664 @@
     <article class="note-shell">
       <h1 class="page-title">膝の外傷・痛み</h1>
 
-      <!-- 即時アクションヘッダー（常時 sticky） -->
+      <!-- 即時アクションヘッダー -->
       <div class="action-header">
         <div class="action-header__title">⚡ 即時アクション</div>
         <ol class="action-header__list">
-          <li><strong>血流・神経・コンパートメント</strong>を最初に確認（足背動脈、下腿感覚運動、腫脹・緊満）</li>
-          <li><strong>Ottawa Knee Rules</strong>：55歳以上 / 腓骨頭圧痛 / 膝蓋骨単独圧痛 / 90度屈曲不能 / 受傷直後と ER で 4 歩歩行不能 → X 線</li>
-          <li><strong>X 線は AP + lateral</strong>、脱臼疑いなら <strong>sunrise（skyline）</strong>追加</li>
-          <li><strong>膝蓋骨脱臼は速やかに整復</strong>、後外側 corner 損傷や膝関節脱臼は<strong>必ず MRI / 血管評価</strong></li>
+          <li><strong>赤旗を外す</strong>：膝関節脱臼（自然整復含む）/ 膝窩動脈損傷 / 開放骨折 / 下腿コンパートメント症候群 / 伸展不能</li>
+          <li><strong>脱衣して両膝を視診</strong>：打撲痕・変形・開放創・大量関節血症の有無を確認（衣類で骨折線・裂創を見逃さない）</li>
+          <li><strong>X 線は AP + 側面</strong>。膝蓋骨を疑えば <strong>skyline（軸位）</strong>、脛骨高原を疑えば <strong>oblique + CT</strong> の閾値を下げる</li>
+          <li><strong>3 つの骨を順に評価</strong>：① 膝蓋骨（骨折・脱臼） → ② 大腿骨遠位端 → ③ 脛骨高原 → ④ 軟部組織（ACL/MCL/半月板）</li>
+          <li><strong>5 択分類で行先を決める</strong>：即時整形 / 入院整形 / 帰宅手術 / 帰宅保存 / 経過観察（多くはニーブレース＋松葉杖で帰宅可）</li>
         </ol>
       </div>
 
-      <!-- §1〜§7 メニュータイル -->
+      <!-- §1〜§9 メニュータイル -->
       <nav class="section-tiles" id="sectionMenu">
-        <a class="section-tile" href="#s1"><span class="section-tile__no">🚨</span><span class="section-tile__name">Red flags<br><small>血管・神経・脱臼</small></span></a>
-        <a class="section-tile" href="#s2"><span class="section-tile__no">🩺</span><span class="section-tile__name">最小診察<br><small>+ Ottawa Knee Rules</small></span></a>
-        <a class="section-tile" href="#s3"><span class="section-tile__no">📷</span><span class="section-tile__name">画像検査<br><small>X 線 / CT / MRI</small></span></a>
-        <a class="section-tile" href="#s4"><span class="section-tile__no">🦴</span><span class="section-tile__name">主要鑑別<br><small>骨折・脱臼・靱帯</small></span></a>
-        <a class="section-tile" href="#s5"><span class="section-tile__no">📤</span><span class="section-tile__name">disposition</span></a>
-        <a class="section-tile" href="#s6"><span class="section-tile__no">⚠️</span><span class="section-tile__name">ピットフォール</span></a>
-        <a class="section-tile" href="#s7"><span class="section-tile__no">📚</span><span class="section-tile__name">出典・リンク</span></a>
+        <a class="section-tile" href="#s1"><span class="section-tile__no">🚨</span><span class="section-tile__name">Red flags<br><small>命・四肢温存</small></span></a>
+        <a class="section-tile" href="#s2"><span class="section-tile__no">🔀</span><span class="section-tile__name">鑑別の枠組み<br><small>3 骨 + 軟部組織</small></span></a>
+        <a class="section-tile" href="#s3"><span class="section-tile__no">🦴</span><span class="section-tile__name">主要疾患詳細<br><small>骨性外傷 + 軟部組織</small></span></a>
+        <a class="section-tile" href="#s4"><span class="section-tile__no">🩺</span><span class="section-tile__name">身体所見・画像<br><small>+ Ottawa Knee Rule</small></span></a>
+        <a class="section-tile" href="#s5"><span class="section-tile__no">📊</span><span class="section-tile__name">マネジメント<br><small>5 択分類</small></span></a>
+        <a class="section-tile" href="#s6"><span class="section-tile__no">📤</span><span class="section-tile__name">disposition<br><small>帰宅説明・フォロー</small></span></a>
+        <a class="section-tile" href="#s7"><span class="section-tile__no">📝</span><span class="section-tile__name">カルテテンプレ</span></a>
+        <a class="section-tile" href="#s8"><span class="section-tile__no">⚠️</span><span class="section-tile__name">見落とし・ミス</span></a>
+        <a class="section-tile" href="#s9"><span class="section-tile__no">📚</span><span class="section-tile__name">出典・リンク</span></a>
       </nav>
 
       <!-- §1 Red flags -->
       <section class="section-page" id="s1" hidden>
         <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🚨 Red flags（致死・四肢温存に直結）</h2>
-
-        <h3>1 つでもあれば緊急対応</h3>
-        <ul>
-          <li><strong>足背動脈触知不良 / 足色蒼白・冷感</strong> → 膝関節脱臼や膝窩動脈損傷を疑う</li>
-          <li><strong>下腿コンパートメント緊満・激痛・受動伸展痛</strong> → コンパートメント症候群</li>
-          <li><strong>下腿の感覚脱失・足趾運動障害</strong> → 腓骨神経損傷など</li>
-          <li><strong>明らかな関節変形・大量関節血症</strong> → 脱臼・骨折を強く疑う</li>
-          <li><strong>開放創・大量出血</strong></li>
-          <li><strong>受傷後の高エネルギー外傷</strong>（交通外傷、転落）</li>
-        </ul>
+        <h2>🚨 Red flags（命・四肢温存に直結）</h2>
 
         <div class="callout callout-danger">
-          <div class="callout-title">膝関節脱臼は血管評価必須</div>
+          <div class="callout-title">1 つでもあれば緊急対応</div>
+          <div class="callout-body"><ul>
+            <li><strong>足背・後脛骨動脈触知不良 / 足色蒼白・冷感</strong> → 膝関節脱臼・膝窩動脈損傷</li>
+            <li><strong>明らかな膝の変形・大量関節血症 + 高エネルギー外傷</strong> → 膝関節脱臼（自然整復していることがある）</li>
+            <li><strong>下腿の緊満・受動伸展痛・激痛</strong> → <a class="wiki-link" href="疾患詳細/コンパートメント症候群.html">コンパートメント症候群</a>（脛骨骨幹部・高原骨折に合併）</li>
+            <li><strong>下腿の感覚脱失・足趾運動障害</strong> → 腓骨神経損傷（脛骨高原・腓骨頭近傍骨折）</li>
+            <li><strong>開放創・骨突出・大量出血</strong> → <a class="wiki-link" href="疾患詳細/開放骨折.html">開放骨折</a>（大腿骨遠位端骨折の 10% は開放）</li>
+            <li><strong>伸展不能</strong>（active SLR ができない） → 伸筋装置断裂（膝蓋腱・大腿四頭筋腱）または膝蓋骨横骨折</li>
+          </ul></div>
+        </div>
+
+        <h3>① 膝関節脱臼 — 自然整復していても血管評価</h3>
+        <div class="callout callout-danger">
+          <div class="callout-title">膝窩動脈損傷を見逃さない</div>
           <div class="callout-body">
-            <p><strong>膝関節脱臼は自然整復していることがある</strong>。明らかな不安定性・大量関節血症を伴う高エネルギー外傷では、整復後でも<strong>膝窩動脈損傷</strong>を念頭に ABI 測定 / CT angio / 血管外科コンサルトを検討。</p>
+            <p>膝関節脱臼は <strong>受診時には自然整復している</strong> ことが少なくない。「明らかな脱臼」を待たない。<strong>高エネルギー外傷 + 大量関節血症 + 強い不安定性</strong>を見たら脱臼として扱う。</p>
+            <ul>
+              <li>足背・後脛骨動脈の左右差、CRT、皮膚色・温度を必ず確認</li>
+              <li><strong>ABI &lt; 0.9 / 左右差あり</strong> → CT angiography / 血管外科</li>
+              <li>脈拍触知良好でも遅発性内膜損傷があり得る → 24 時間の血管経過観察を計画</li>
+              <li>整復後も上記評価を必ず再確認、整形 + 必要に応じ血管外科コンサルト</li>
+            </ul>
           </div>
         </div>
+
+        <h3>② コンパートメント症候群 — 脛骨骨幹部・高原骨折で必ず想起</h3>
+        <p><a class="wiki-link" href="疾患詳細/脛骨骨幹部骨折.html">脛骨骨幹部骨折</a> や <a class="wiki-link" href="疾患詳細/脛骨高原骨折.html">脛骨高原骨折</a> は下腿コンパートメント症候群の代表的トリガー。「6P」（Pain out of proportion、Paresthesia、Pallor、Paralysis、Pulselessness、Poikilothermia）の <strong>Pain と受動伸展痛</strong>がもっとも早く現れる。</p>
+        <ul>
+          <li>受傷直後だけでなく <strong>数時間後の遅発性増悪</strong>に注意 → 入院後も再評価必須</li>
+          <li>ギプス・シーネ後の急激な疼痛増悪は「外して再評価」が原則</li>
+          <li>診断は臨床所見が第一。コンパートメント内圧測定は補助</li>
+          <li>疑った時点で <strong>緊急筋膜切開</strong>を整形と相談</li>
+        </ul>
+
+        <h3>③ 開放骨折</h3>
+        <ul>
+          <li>裂創 + 骨折を「単なる擦過傷」で済ませない（衣類で隠れていることが多い）</li>
+          <li><strong>受傷後 1 時間以内の抗菌薬投与</strong>が予後を改善：第一世代セフェム ± アミノグリコシド／重度汚染ならペニシリン追加</li>
+          <li>破傷風トキソイド ± 免疫グロブリンの適応確認</li>
+          <li>洗浄・被覆して即時整形コンサルト → 詳細は <a class="wiki-link" href="疾患詳細/開放骨折.html">開放骨折</a></li>
+        </ul>
+
+        <h3>④ 伸展不能</h3>
+        <p>仰臥位で踵を浮かせる active straight leg raise（active SLR）ができない場合、伸筋装置の連続性が破綻している。</p>
+        <ul>
+          <li><strong>膝蓋骨高位</strong> → 膝蓋腱断裂</li>
+          <li><strong>膝蓋骨低位</strong> → 大腿四頭筋腱断裂</li>
+          <li><strong>膝蓋骨水平骨折で離開大</strong> → 横骨折（手術適応）</li>
+          <li>いずれも整形コンサルト、ニーブレース伸展位固定で帰宅 or 入院</li>
+        </ul>
       </section>
 
-      <!-- §2 最小診察 + Ottawa Knee Rules -->
+      <!-- §2 鑑別の枠組み -->
       <section class="section-page" id="s2" hidden>
         <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🩺 最小診察 + Ottawa Knee Rules</h2>
+        <h2>🔀 鑑別の枠組み（3 骨 + 軟部組織）</h2>
 
-        <h3>その場で行う最小セット</h3>
-        <ul>
-          <li><strong>視診</strong>：腫脹、変形、皮膚色、開放創</li>
-          <li><strong>触診</strong>：膝蓋骨、腓骨頭、関節裂隙、大腿骨遠位、脛骨近位</li>
-          <li><strong>関節血症の有無</strong>（Ballottement）</li>
-          <li><strong>可動域</strong>：屈曲 / 伸展、伸展不能（伸筋装置損傷）</li>
-          <li><strong>不安定性テスト</strong>：Lachman / 前後引き出し / 内外反 / McMurray（必要に応じて疼痛緩和後）</li>
-          <li><strong>血流・神経</strong>：足背動脈、後脛骨動脈、下腿感覚運動</li>
-        </ul>
+        <h3>外傷性膝痛は「3 骨」で考える</h3>
+        <p>膝の骨性外傷は <strong>① 膝蓋骨 ② 大腿骨遠位端 ③ 脛骨高原（＋ 脛骨骨幹部）</strong> の 3 骨を毎回点検する。X 線撮影前に骨折線のイメージを持っておくと検出率が上がる。</p>
 
         <div class="callout callout-tip">
-          <div class="callout-title">Ottawa Knee Rules（外傷時の X 線適応）</div>
+          <div class="callout-title">エネルギーで絞る</div>
           <div class="callout-body">
             <ul>
-              <li><strong>55 歳以上</strong></li>
-              <li><strong>腓骨頭の圧痛</strong></li>
-              <li><strong>膝蓋骨単独の圧痛</strong>（他に骨圧痛なし）</li>
-              <li><strong>膝の 90 度屈曲不能</strong></li>
-              <li><strong>受傷直後と ER で 4 歩歩行不能</strong>（跛行可でもよい）</li>
+              <li><strong>高エネルギー外傷（交通外傷・転落・スポーツ激突）</strong>：大腿骨遠位端、脛骨高原、脛骨骨幹部、膝関節脱臼、開放骨折、コンパートメント</li>
+              <li><strong>低エネルギー外傷（高齢者の転倒・躓き）</strong>：大腿骨遠位端骨折・脛骨高原骨折の occult fracture も起こり得る（高齢者の膝痛では受傷機転にかかわらず鑑別に挙げる）</li>
+              <li><strong>膝前面の直接打撲</strong>：膝蓋骨骨折</li>
+              <li><strong>膝の捻り・ピボット</strong>：膝蓋骨脱臼、ACL 損傷、半月板損傷</li>
+              <li><strong>膝外側からの直接外力（タックル）</strong>：MCL 損傷</li>
             </ul>
-            <p>1 つでも該当 → X 線。すべて陰性なら骨折の可能性は極めて低い（感度ほぼ 100%）。</p>
           </div>
         </div>
-      </section>
 
-      <!-- §3 画像検査 -->
-      <section class="section-page" id="s3" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>📷 画像検査</h2>
-
-        <h3>第一選択</h3>
-        <ul>
-          <li><strong>膝関節 AP + lateral</strong></li>
-          <li><strong>膝蓋骨脱臼疑い / 膝蓋骨骨折疑い</strong> → <strong>sunrise（skyline / merchant）</strong>追加</li>
-          <li><strong>脛骨高原骨折疑い</strong> → <strong>oblique view</strong>追加 / 評価不十分なら CT</li>
-        </ul>
-
-        <h3>追加画像</h3>
-        <ul>
-          <li><strong>CT</strong>：脛骨高原骨折の関節面評価、複雑骨折、術前計画</li>
-          <li><strong>MRI</strong>：靱帯・半月板・後外側 corner 損傷、骨挫傷、occult fracture、膝関節脱臼後の評価</li>
-          <li><strong>CT angio / ABI</strong>：膝関節脱臼で血管損傷を疑うとき</li>
-        </ul>
-
-        <div class="callout callout-warning">
-          <div class="callout-title">X 線陰性でも骨折はある</div>
-          <div class="callout-body">
-            <p>高齢者の脛骨高原骨折、膝蓋骨水平骨折、occult fracture は単純 X 線で見逃しやすい。<strong>荷重不能や強い関節血症が続く</strong>なら CT / MRI を追加。</p>
-          </div>
-        </div>
-      </section>
-
-      <!-- §4 主要鑑別 -->
-      <section class="section-page" id="s4" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🦴 主要鑑別</h2>
-
+        <h3>骨性 vs 軟部組織の振り分け</h3>
         <div class="table-wrap"><table>
-          <thead><tr><th>病態</th><th>手がかり</th><th>進む先</th></tr></thead>
+          <thead><tr><th>所見</th><th>骨性外傷を示唆</th><th>軟部組織損傷を示唆</th></tr></thead>
           <tbody>
-            <tr><td><strong>脛骨高原骨折</strong></td><td>転倒・側方衝撃後の荷重困難、関節血症、内外反不安定性</td><td><a class="wiki-link" href="疾患詳細/脛骨高原骨折.html">脛骨高原骨折</a></td></tr>
-            <tr><td><strong>膝蓋骨骨折・脱臼</strong></td><td>膝前面打撲、伸展障害、膝蓋骨高位 / 触知異常</td><td><a class="wiki-link" href="疾患詳細/膝蓋骨骨折・脱臼.html">膝蓋骨骨折・脱臼</a></td></tr>
-            <tr><td><strong>靱帯・半月板損傷</strong></td><td>X線で骨折なし、不安定性、ロッキング</td><td><a class="wiki-link" href="疾患詳細/膝靱帯・半月板損傷.html">膝靱帯・半月板損傷</a></td></tr>
-            <tr><td><strong>膝関節脱臼</strong></td><td>高エネルギー、明らかな変形 / 不安定性、血管損傷リスク</td><td>整形緊急 + 血管評価</td></tr>
-            <tr><td><strong>伸筋装置断裂</strong>（膝蓋腱・大腿四頭筋腱）</td><td>伸展不能、膝蓋骨上方 / 下方転位</td><td>整形コンサルト</td></tr>
+            <tr><td>受傷後の歩行</td><td>受傷直後から不能</td><td>直後は歩けるが翌日悪化することも</td></tr>
+            <tr><td>関節血症</td><td>脂肪滴 + → 関節内骨折</td><td>脂肪滴 −、出血 ≧ 10cc → ACL 示唆、出血 &lt; 10cc → MCL/半月板</td></tr>
+            <tr><td>圧痛部位</td><td>骨突出部（腓骨頭、膝蓋骨、関節裂隙骨）</td><td>関節裂隙、靱帯走行に沿う</td></tr>
+            <tr><td>不安定性</td><td>骨折部の異常可動性</td><td>Lachman / 外反 / McMurray など</td></tr>
+            <tr><td>受動運動</td><td>多くは制限・激痛</td><td>ロッキングは半月板示唆</td></tr>
           </tbody>
         </table></div>
 
-        <h3>関節血症の意味</h3>
+        <h3>主要鑑別の早見表</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>病態</th><th>典型エピソード</th><th>キー所見</th><th>進む先</th></tr></thead>
+          <tbody>
+            <tr><td><strong>大腿骨遠位端骨折</strong></td><td>高エネ（バイク・ダッシュボード） / 高齢者転倒（80% は高齢者）</td><td>転位強ければ自明、occult fracture も多い → CT 閾値を下げる</td><td><a class="wiki-link" href="疾患詳細/大腿骨遠位端骨折.html">大腿骨遠位端骨折</a></td></tr>
+            <tr><td><strong>脛骨高原骨折</strong></td><td>歩行者の bumper injury / 高所転落 / 高齢者転倒</td><td>外側の陥没・縦割れ。荷重不能 + 大量関節血症</td><td><a class="wiki-link" href="疾患詳細/脛骨高原骨折.html">脛骨高原骨折</a></td></tr>
+            <tr><td><strong>脛骨骨幹部骨折</strong></td><td>スキー・スポーツ・交通外傷</td><td>下腿緊満 → コンパートメント、開放骨折多い</td><td><a class="wiki-link" href="疾患詳細/脛骨骨幹部骨折.html">脛骨骨幹部骨折</a></td></tr>
+            <tr><td><strong>膝蓋骨骨折</strong></td><td>転倒で膝前面強打</td><td>膝蓋骨圧痛、伸展不能（横骨折）</td><td><a class="wiki-link" href="疾患詳細/膝蓋骨骨折・脱臼.html">膝蓋骨骨折・脱臼</a></td></tr>
+            <tr><td><strong>膝蓋骨脱臼</strong></td><td>膝伸展位での強い外反 / スポーツ・若年女性</td><td>膝蓋骨が外側に転位、軽度屈曲位で固定</td><td><a class="wiki-link" href="疾患詳細/膝蓋骨骨折・脱臼.html">膝蓋骨骨折・脱臼</a></td></tr>
+            <tr><td><strong>ACL 損傷</strong></td><td>非接触のジャンプ着地・切り返し</td><td>ポップ音、急性関節血症、Lachman / lever 陽性</td><td><a class="wiki-link" href="疾患詳細/膝靱帯・半月板損傷.html">膝靱帯・半月板損傷</a></td></tr>
+            <tr><td><strong>MCL 損傷</strong></td><td>横からのタックル（外反強制）</td><td>内側圧痛、外反ストレス陽性</td><td><a class="wiki-link" href="疾患詳細/膝靱帯・半月板損傷.html">膝靱帯・半月板損傷</a></td></tr>
+            <tr><td><strong>半月板損傷</strong></td><td>膝の捻り。「違和感」「キャッチング」「ロッキング」</td><td>関節裂隙圧痛、McMurray（精度は低め）</td><td><a class="wiki-link" href="疾患詳細/膝靱帯・半月板損傷.html">膝靱帯・半月板損傷</a></td></tr>
+            <tr><td><strong>膝関節脱臼</strong></td><td>高エネ。自然整復していることあり</td><td>大量関節血症 + 多方向不安定性 + 血管所見</td><td>整形 + 血管評価（ABI / CTA）</td></tr>
+            <tr><td><strong>伸筋装置断裂</strong></td><td>段差・着地で衝撃。伸展不能</td><td>膝蓋骨高位 / 低位、断裂部の陥凹</td><td>整形コンサルト</td></tr>
+          </tbody>
+        </table></div>
+
+        <div class="callout callout-tip">
+          <div class="callout-title">関節血症の質で軟部組織を絞る</div>
+          <div class="callout-body">
+            <ul>
+              <li><strong>脂肪滴 +（lipohemarthrosis）</strong> → 関節内骨折を強く示唆（occult fracture を含む）</li>
+              <li><strong>脂肪滴 −、出血 ≧ 10cc</strong> → ACL 損傷を疑う（外傷性関節血症の半数前後）</li>
+              <li><strong>脂肪滴 −、出血 &lt; 10cc</strong> → MCL / 半月板損傷の可能性が高い</li>
+              <li>関節穿刺は「画像で行先が決まらない時の最後のひと手間」</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- §3 主要疾患詳細 -->
+      <section class="section-page" id="s3" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🦴 主要疾患詳細</h2>
+
+        <h3>① 大腿骨遠位端骨折</h3>
+        <details class="sub-fold" open>
+          <summary>診断と骨折線イメージ</summary>
+          <div class="sub-fold__body">
+            <ul>
+              <li>受傷機転は <strong>2 峰性</strong>：若年高エネ（バイク・ダッシュボード）と高齢者の低エネ転倒。<strong>80% は高齢者</strong></li>
+              <li>関節外骨折は転位が強く読影しやすいが、<strong>関節内骨折は微細で見逃しやすい</strong></li>
+              <li>骨折線イメージ：<strong>正面像で Y 字（または T 字）、側面像では後方</strong>に骨折線が入る</li>
+              <li>関節内骨折は <strong>CT がほぼ必須</strong>。読影に迷ったら躊躇せず CT</li>
+              <li>occult fracture は CT でも読み取れず、MRI で初めて診断されることもある（T1 で低信号、脂肪抑制 T2 で高信号）</li>
+            </ul>
+          </div>
+        </details>
+        <details class="sub-fold">
+          <summary>マネジメント</summary>
+          <div class="sub-fold__body">
+            <ul>
+              <li><strong>原則手術</strong>。閉鎖骨折でも準緊急手術が多い</li>
+              <li>診断後は <strong>即時整形</strong> でコンサルト。受傷直後から手術プラン検討を希望されることが多い</li>
+              <li>転位強ければ直達牽引で待機 → これも即時整形</li>
+              <li><strong>10% は開放骨折</strong>。脱衣して創を必ず確認。CT で骨折周囲の air は開放骨折所見</li>
+              <li>大腿骨遠位インプラント周囲骨折は他院術後なら転院前提でマネジメント</li>
+              <li>詳細：<a class="wiki-link" href="疾患詳細/大腿骨遠位端骨折.html">大腿骨遠位端骨折</a></li>
+            </ul>
+          </div>
+        </details>
+
+        <h3>② 脛骨高原骨折</h3>
+        <details class="sub-fold">
+          <summary>Schatzker 分類と骨折線イメージ</summary>
+          <div class="sub-fold__body">
+            <ul>
+              <li>脛骨関節面（高原）の骨折。ほぼ全例 <strong>外側（± 内側）</strong>。外側の骨折線を徹底的に探す</li>
+              <li>形状は <strong>陥没</strong>（正面像で関節面の沈み込み） or <strong>縦割れ</strong>（正面 + 側面で骨折線）</li>
+              <li>受傷機転 3 パターン：① 歩行者の bumper injury、② 高所転落の軸圧、③ 高齢者の単純転倒（低エネでも起こる）</li>
+              <li>Schatzker IV〜VI は高エネ（全体の約 40%）、II/III は高齢者の微細陥没</li>
+              <li><strong>レントゲンで迷ったら CT 必須</strong>。手術プランニングにも CT は不可欠</li>
+              <li>occult fracture は CT 陰性 + MRI 陽性で診断されることもある</li>
+              <li><strong>合併損傷が高率</strong>：手術例の半月板損傷 91% / 靱帯損傷 77%、保存例でも半月板 80% / 靱帯 40%</li>
+            </ul>
+          </div>
+        </details>
+        <details class="sub-fold">
+          <summary>マネジメント</summary>
+          <div class="sub-fold__body">
+            <ul>
+              <li>関節面陥没 5 mm 以上は手術。保存でも荷重厳禁 → <strong>原則入院加療</strong></li>
+              <li>転位強い・日中受診なら <strong>即時整形</strong>、夜間休日で転位少なければ <strong>入院整形</strong></li>
+              <li><a class="wiki-link" href="疾患詳細/コンパートメント症候群.html">コンパートメント症候群</a> を 24 時間モニター</li>
+              <li>合併損傷の MRI 評価は整形外科に任せる</li>
+              <li>詳細：<a class="wiki-link" href="疾患詳細/脛骨高原骨折.html">脛骨高原骨折</a></li>
+            </ul>
+          </div>
+        </details>
+
+        <h3>③ 脛骨骨幹部骨折</h3>
         <ul>
-          <li><strong>急性大量関節血症（受傷後数時間以内）</strong>：ACL 断裂・脛骨高原骨折・膝蓋骨脱臼が多い</li>
-          <li><strong>脂肪滴を伴う関節血症</strong>：関節内骨折を強く示唆</li>
+          <li>スキー・交通外傷など高エネが多い。<strong>開放骨折頻度が高い</strong>（脛骨は皮下に近い）</li>
+          <li>診断後は <strong>即時整形</strong>。閉鎖でも髄内釘の準緊急手術が多い</li>
+          <li><strong>コンパートメント症候群</strong>のもっとも代表的なトリガー。受傷後 24〜48 時間は緊満・受動伸展痛・感覚異常を頻回チェック</li>
+          <li>衣類で裂創が隠れる。<strong>必ず脱衣</strong>して全周性に観察</li>
+          <li>詳細：<a class="wiki-link" href="疾患詳細/脛骨骨幹部骨折.html">脛骨骨幹部骨折</a></li>
+        </ul>
+
+        <h3>④ 膝蓋骨骨折</h3>
+        <details class="sub-fold">
+          <summary>診断のコツ</summary>
+          <div class="sub-fold__body">
+            <ul>
+              <li>受傷機転はほぼ全例 <strong>膝前面の直接打撲</strong>。「転倒して膝の正面をついた」が典型</li>
+              <li>膝蓋骨は皮下に触れる → <strong>圧痛の有無で予測可能</strong>。必ず脱衣して打撲痕を確認</li>
+              <li><strong>膝前面強打 or 膝蓋骨圧痛があれば skyline view（軸位像）を追加</strong></li>
+              <li>骨折タイプ：横骨折 50〜80%、縦骨折 12〜17%、残りが粉砕</li>
+              <li>横骨折は <strong>側面像</strong>、縦骨折は <strong>skyline view</strong> でこそ拾える</li>
+              <li>3 方向で診断つかなければ CT / MRI も可（実際にはレントゲンで決まる）</li>
+            </ul>
+          </div>
+        </details>
+        <details class="sub-fold">
+          <summary>マネジメント</summary>
+          <div class="sub-fold__body">
+            <ul>
+              <li>膝伸展位では膝蓋骨に荷重がかからない（自分で膝を伸ばし膝蓋骨を左右に動かしてみる） → <strong>転位 &lt; 3 mm なら伸展位固定で 4〜6 週、保存可能</strong></li>
+              <li>転位 ≧ 3 mm（横骨折に多い） → 手術（テンションバンド）。ただし待機手術が多い</li>
+              <li>初診時は転位の有無にかかわらず <strong>ニーブレース伸展位固定 + 松葉杖</strong>で <strong>帰宅保存 or 帰宅手術</strong></li>
+              <li>伸展不能（active SLR 不能）は離開強い横骨折・伸筋装置断裂を疑い整形コンサルト</li>
+              <li>二分膝蓋骨との鑑別：圧痛なし・仮骨あり・40〜45% 両側性 → 反対側膝も比較</li>
+              <li>詳細：<a class="wiki-link" href="疾患詳細/膝蓋骨骨折・脱臼.html">膝蓋骨骨折・脱臼</a></li>
+            </ul>
+          </div>
+        </details>
+
+        <h3>⑤ 膝蓋骨脱臼</h3>
+        <ul>
+          <li>10 万人あたり 20 人。<strong>若いスポーツマンと中年〜壮年女性</strong>に多い</li>
+          <li>受傷機転：<strong>膝伸展位での強い外反</strong>。患者は機転を表現しにくく、疼痛で病歴も曖昧になりがち</li>
+          <li><strong>80% 以上が外側脱臼</strong>（大腿四頭筋が膝蓋骨を外側上方に引く）</li>
+          <li>レントゲンで「膝蓋骨の位置が変」と気づければ診断できる。骨折線がないのに激痛なら膝蓋骨の側方シフトを冷静に確認</li>
+          <li><strong>整復は容易</strong>：軽度屈曲位を少しずつ伸展しながら、外側にある膝蓋骨を内側へ押し戻す。麻酔・鎮静は通常不要</li>
+          <li>合併損傷：膝蓋骨骨折・骨軟骨骨折 5%、半月板・靱帯損傷 12% → 整復後に再評価 + sunrise / MRI 検討</li>
+          <li>整復後はニーブレース伸展位固定 + 松葉杖で <strong>帰宅保存 or 帰宅手術</strong>、翌日整形外来で再評価</li>
+          <li>15% で再発。スポーツ選手は早期手術志向もあるが治療方針は整形に委ねる</li>
+        </ul>
+
+        <h3>⑥ ACL 損傷</h3>
+        <details class="sub-fold">
+          <summary>診断</summary>
+          <div class="sub-fold__body">
+            <ul>
+              <li>受傷機転：<strong>非接触型が 2/3</strong>。ジャンプ着地・切り返しで膝が中に入って外反強制</li>
+              <li><strong>ポップ音は 90% で聴取</strong>。病歴の有力な手がかり</li>
+              <li>急性大量関節血症の代表。<strong>非骨折性関節血腫の 72% は ACL 損傷</strong></li>
+              <li>身体所見：</li>
+            </ul>
+            <div class="table-wrap"><table>
+              <thead><tr><th>テスト</th><th>感度</th><th>特異度</th></tr></thead>
+              <tbody>
+                <tr><td>前方引き出し試験</td><td>62%</td><td>67%</td></tr>
+                <tr><td><strong>Lachman テスト</strong></td><td>84%</td><td>100%</td></tr>
+                <tr><td><strong>lever テスト</strong></td><td>98%</td><td>100%</td></tr>
+                <tr><td>包括的診察</td><td>82%</td><td>94%</td></tr>
+              </tbody>
+            </table></div>
+            <ul>
+              <li>Lachman は膝 20° 屈曲、片手で大腿、もう片手で下腿を引く。エンドポイント不明瞭なら陽性。患者の大腿下に自分の膝を入れると力のない術者でもとれる</li>
+              <li>lever テスト：拳をふくらはぎ下に入れ大腿を押す。踵が上がらなければ ACL 損傷を疑う</li>
+              <li><strong>必ず健側と比較</strong></li>
+              <li>エコーで関節内血腫の確認は感度 88% / 特異度 98% と MRI に近い</li>
+            </ul>
+          </div>
+        </details>
+        <details class="sub-fold">
+          <summary>マネジメント</summary>
+          <div class="sub-fold__body">
+            <ul>
+              <li>MRI 読影は非整形外科医には荷が重い（部分断裂・偽陽性あり）。<strong>暫定診断 + 整形コンサルトまで</strong>が ER の役割</li>
+              <li>ニーブレース固定 + 松葉杖で <strong>帰宅保存 or 帰宅手術</strong>。院内整形なら MRI 予約してあげると親切</li>
+              <li>「最終的に手術となることが多い」旨を説明</li>
+              <li>詳細：<a class="wiki-link" href="疾患詳細/膝靱帯・半月板損傷.html">膝靱帯・半月板損傷</a></li>
+            </ul>
+          </div>
+        </details>
+
+        <h3>⑦ MCL 損傷</h3>
+        <ul>
+          <li>ACL 損傷と並んで <strong>膝の最多軟部損傷</strong>。受傷機転は接触型（横からのタックルなど外反強制）</li>
+          <li>身体所見：<strong>内側圧痛 + 外反ストレステスト</strong>。左右差・動揺性で評価</li>
+          <li>重症度：Ⅰ度（不全断裂・安定）/ Ⅱ度（不全断裂・不安定）/ Ⅲ度（完全断裂）</li>
+          <li>合併 ACL 損傷の頻度：Ⅰ度 20% / Ⅱ度 52% / Ⅲ度 78% → ACL も必ず評価</li>
+          <li>関節外靱帯のためエコーで評価可能（健側と比較し、膨化・低エコー・線維 line 不明瞭）</li>
+          <li>修復能力高く保存治療が多い → <strong>帰宅保存（時に帰宅手術）</strong>、ニーブレース + 松葉杖</li>
+          <li>詳細：<a class="wiki-link" href="疾患詳細/膝靱帯・半月板損傷.html">膝靱帯・半月板損傷</a></li>
+        </ul>
+
+        <h3>⑧ 半月板損傷</h3>
+        <ul>
+          <li>プライマリケアから整形紹介の <strong>膝疾患の 25%</strong></li>
+          <li>内側半月板損傷が外側の <strong>5 倍</strong>（MCL・関節包への付着で可動性が低い）</li>
+          <li>2 峰性：若年スポーツの捻り、高齢者の変性 + 低エネ外傷</li>
+          <li>キーワード：<strong>「違和感」「キャッチング」「ロッキング」</strong></li>
+          <li>身体所見だけでは確定困難（McMurray 感度 53%）。総合評価が必要</li>
+          <li>MRI は感度・特異度高いが、無痛性半月板損傷の偽陽性に注意（70 歳以上 56%、変形性膝関節症 68〜90% で）</li>
+          <li>非整形外科医は <strong>暫定診断 + ニーブレース + 松葉杖で帰宅</strong>、整形外来で総合評価。緊急手術はない</li>
+          <li>詳細：<a class="wiki-link" href="疾患詳細/膝靱帯・半月板損傷.html">膝靱帯・半月板損傷</a></li>
+        </ul>
+
+        <h3>⑨ 膝関節脱臼</h3>
+        <ul>
+          <li>高エネ外傷。受診時は <strong>自然整復</strong> していることが多い</li>
+          <li>大量関節血症 + 多方向の不安定性 + 高エネ機転 = 脱臼として扱う</li>
+          <li><strong>膝窩動脈損傷の合併</strong>：脈触知良好でも内膜損傷で遅発性閉塞があり得る</li>
+          <li>整形緊急 + 血管評価（足背・後脛骨動脈触診、ABI、必要に応じて CTA）</li>
+          <li>整復後も 24 時間血管モニタリング</li>
         </ul>
       </section>
 
-      <!-- §5 disposition -->
+      <!-- §4 身体所見・画像 -->
+      <section class="section-page" id="s4" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🩺 身体所見・画像</h2>
+
+        <h3>その場で行う最小診察</h3>
+        <ul>
+          <li><strong>視診（脱衣して両膝を裸足で）</strong>：打撲痕、変形、皮膚色、開放創、膝蓋骨の位置（外側シフトに注意）</li>
+          <li><strong>触診</strong>：膝蓋骨、腓骨頭、関節裂隙（内側・外側）、大腿骨遠位、脛骨近位、ハムストリング・腓腹筋付着部</li>
+          <li><strong>関節血症の有無</strong>（patellar tap / ballottement）。可能なら穿刺で脂肪滴 + 出血量を評価</li>
+          <li><strong>可動域</strong>：屈曲 / 伸展。<strong>active straight leg raise</strong> で伸筋装置の連続性を必ず確認</li>
+          <li><strong>不安定性テスト</strong>：Lachman、前方引き出し、内外反ストレス、McMurray</li>
+          <li><strong>血流・神経</strong>：足背・後脛骨動脈、CRT、下腿感覚、足趾運動（腓骨神経 = 背屈、脛骨神経 = 底屈）</li>
+        </ul>
+
+        <h3>主要な徒手検査</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>テスト</th><th>方法</th><th>陽性の意味</th></tr></thead>
+          <tbody>
+            <tr><td>Lachman</td><td>膝 20° 屈曲、大腿固定 + 下腿前方引き出し</td><td>エンドポイント不明 / 前方シフト → ACL 損傷</td></tr>
+            <tr><td>lever</td><td>拳をふくらはぎ下に入れ大腿を押す</td><td>踵が浮かない → ACL 損傷</td></tr>
+            <tr><td>前方引き出し</td><td>膝 90° 屈曲で下腿を引く</td><td>感度低い。Lachman を優先</td></tr>
+            <tr><td>外反ストレス</td><td>膝 30° 屈曲で外反</td><td>内側痛・動揺性 → MCL 損傷</td></tr>
+            <tr><td>内反ストレス</td><td>膝 30° 屈曲で内反</td><td>外側痛・動揺性 → LCL（稀）</td></tr>
+            <tr><td>McMurray</td><td>膝 90° 屈曲で内 / 外旋しながら伸展</td><td>クリック・疼痛 → 半月板損傷（感度 53%）</td></tr>
+            <tr><td>active SLR</td><td>仰臥位で踵を浮かせる</td><td>不能 → 伸筋装置断裂・膝蓋骨横骨折離開</td></tr>
+            <tr><td>patellar apprehension</td><td>膝伸展で膝蓋骨を外側に押す</td><td>不安・抵抗 → 膝蓋骨脱臼 / 不安定症</td></tr>
+          </tbody>
+        </table></div>
+
+        <h3>Ottawa Knee Rule</h3>
+        <div class="callout callout-tip">
+          <div class="callout-title">5 項目のいずれかで X 線適応</div>
+          <div class="callout-body">
+            <ul>
+              <li>① <strong>55 歳以上</strong></li>
+              <li>② <strong>腓骨頭の圧痛</strong></li>
+              <li>③ <strong>膝蓋骨単独の圧痛</strong>（他に骨圧痛なし）</li>
+              <li>④ <strong>膝の 90° 屈曲不能</strong></li>
+              <li>⑤ <strong>受傷直後と ER で 4 歩歩行不能</strong>（跛行可でもよい）</li>
+            </ul>
+            <p>感度 平均 98.5%。すべて陰性なら骨折はかなり少ない。ただし日本では撮らないという運用は一般的でなく、<strong>「帰宅前に骨折の可能性を下げる」補助</strong>として用いる。<strong>occult fracture や 55 歳以上には適用外</strong>であることに注意。</p>
+            <p>ピッツバーグ膝ルール：① 50 歳以上 / 12 歳未満、② 4 歩歩行不能。項目少なく感度は 86〜100% でやや劣る。</p>
+          </div>
+        </div>
+
+        <h3>X 線：撮影方向</h3>
+        <ul>
+          <li><strong>第一選択は AP + 側面</strong></li>
+          <li><strong>膝前面強打 or 膝蓋骨圧痛</strong> → <strong>skyline view（軸位像）</strong>追加。縦骨折・骨軟骨骨折・膝蓋骨脱臼整復後の評価に必須</li>
+          <li><strong>脛骨高原を疑う</strong> → oblique view 追加 / 評価不十分なら CT へ</li>
+          <li><strong>大腿骨遠位端骨折を疑うが大腿骨やや長め</strong> → 大腿骨側を含める</li>
+          <li><strong>注意</strong>：転位の強い大腿骨・脛骨骨折で skyline は無理に撮らない（疼痛・転位悪化のリスク）</li>
+        </ul>
+
+        <h3>CT / MRI / 関節穿刺の使い分け</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>検査</th><th>適応</th><th>狙い</th></tr></thead>
+          <tbody>
+            <tr><td>CT</td><td>X 線で読影に迷う / 関節面の評価 / 高エネ / 大腿骨遠位端・脛骨高原・複雑骨折</td><td>骨折線の確認、術前計画、occult fracture の一部</td></tr>
+            <tr><td>MRI</td><td>CT 陰性で荷重不能 / 関節血症遷延 / 軟部組織の暫定診断</td><td>occult fracture（T1 低、脂肪抑制 T2 高）、靱帯・半月板</td></tr>
+            <tr><td>CT angio / ABI</td><td>膝関節脱臼 / 自然整復後 / 脈の左右差</td><td>膝窩動脈損傷</td></tr>
+            <tr><td>エコー</td><td>関節血腫の有無、MCL・膝蓋腱・大腿四頭筋腱</td><td>ベッドサイド評価。ACL は見えない</td></tr>
+            <tr><td>関節穿刺</td><td>CT 陰性・MRI 不可で行先を決めたい時</td><td>脂肪滴 → 骨折、出血量で ACL vs MCL/半月板</td></tr>
+          </tbody>
+        </table></div>
+
+        <div class="callout callout-warning">
+          <div class="callout-title">CT の閾値を下げる</div>
+          <div class="callout-body">
+            <p>大腿骨遠位端骨折と脛骨高原骨折は、<strong>レントゲンで迷ったら CT</strong>。診断確定だけでなく、整形外科の手術プランニングにも有用。「レントゲン + CT がそろったコンサルト」は喜ばれる。</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- §5 マネジメント（5 択分類） -->
       <section class="section-page" id="s5" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>📊 マネジメント（5 択分類）</h2>
+
+        <h3>診断 → 行先 5 択</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>行先</th><th>典型疾患</th><th>処置</th></tr></thead>
+          <tbody>
+            <tr><td><strong>即時整形</strong></td><td>大腿骨遠位端骨折、転位強い脛骨高原骨折、脛骨骨幹部骨折、開放骨折、膝関節脱臼、伸筋装置断裂、コンパートメント疑い</td><td>整形コール、シーネ / ニーブレース、点滴・絶飲食、必要に応じ抗菌薬・破傷風・鎮痛</td></tr>
+            <tr><td><strong>入院整形</strong></td><td>転位少ない脛骨高原骨折（夜間休日）、大腿骨インプラント周囲骨折、occult fracture（CT 陽性 or MRI 陽性）</td><td>荷重制限・固定、入院後に整形精査・手術検討</td></tr>
+            <tr><td><strong>帰宅手術</strong></td><td>膝蓋骨横骨折で離開ある例（待機）、ACL 断裂、大きな半月板損傷</td><td>ニーブレース伸展位 + 松葉杖、整形外来で MRI / 手術日程</td></tr>
+            <tr><td><strong>帰宅保存</strong></td><td>転位なし膝蓋骨骨折、膝蓋骨脱臼整復後、MCL 単独 ± ACL、暫定半月板損傷、捻挫</td><td>ニーブレース or サポーター + 松葉杖、再診指示</td></tr>
+            <tr><td><strong>経過観察</strong></td><td>骨折線なし、徒手検査陰性、Ottawa Knee Rule 全陰性、4 歩歩行可</td><td>セルフケア指導（RICE）、悪化時に再診</td></tr>
+          </tbody>
+        </table></div>
+
+        <h3>骨性外傷の対応マトリクス（要点）</h3>
+        <ul>
+          <li><strong>膝前面強打 or 膝蓋骨圧痛</strong> → skyline 追加 → 膝蓋骨骨折なら <strong>帰宅保存 or 帰宅手術</strong></li>
+          <li><strong>膝蓋骨に所見なし + 高エネ or 高齢者転倒</strong> → 大腿骨遠位端 + 脛骨高原を骨折線イメージで読影 → 迷えば CT → 陽性なら <strong>即時整形</strong></li>
+          <li><strong>CT 陰性で荷重不能・関節血症 +</strong> → MRI で occult fracture を除外（不可なら関節穿刺の脂肪滴で代用）</li>
+          <li><strong>関節血症の脂肪滴 +</strong> → occult fracture として固定 + 整形コンサルト</li>
+        </ul>
+
+        <h3>軟部組織損傷の対応マトリクス（要点）</h3>
+        <ul>
+          <li><strong>非接触ジャンプ + ポップ音 + 急性関節血症</strong> → ACL 損傷暫定 → Lachman / lever → ニーブレース + 松葉杖、<strong>帰宅手術 or 帰宅保存</strong></li>
+          <li><strong>膝外側からの外反強制 + 内側圧痛</strong> → MCL 損傷暫定 → 外反ストレステスト → 多くは <strong>帰宅保存</strong></li>
+          <li><strong>捻り + 「違和感・引っかかり・ロッキング」</strong> → 半月板損傷暫定 → <strong>帰宅手術 or 帰宅保存</strong>、整形で総合評価</li>
+          <li><strong>ロッキングで膝が動かない</strong> → 整形にすぐ相談（緊急手術ではないが観察短期化）</li>
+        </ul>
+
+        <h3>固定 + 装具 + 鎮痛</h3>
+        <ul>
+          <li><strong>ニーブレース伸展位固定</strong>が膝外傷の基本（膝蓋骨骨折・脱臼、ACL/MCL/半月板の暫定診断、occult fracture 疑い）</li>
+          <li>松葉杖は <strong>非荷重〜部分荷重</strong>で処方。歩き方の練習を ER で行う</li>
+          <li>RICE：Rest、Ice、Compression、Elevation</li>
+          <li>鎮痛：<strong>アセトアミノフェン</strong>を基本、必要に応じ短期 NSAIDs（腎機能・高齢で慎重）、強い疼痛にはオピオイド短期</li>
+          <li>大腿骨遠位端骨折の高エネ・高齢で重度疼痛 → <a class="wiki-link" href="疾患詳細/大腿神経ブロック.html">大腿神経ブロック</a> も検討</li>
+        </ul>
+      </section>
+
+      <!-- §6 disposition -->
+      <section class="section-page" id="s6" hidden>
         <button class="back-to-menu" type="button">← メニューへ</button>
         <h2>📤 disposition</h2>
 
-        <h3>帰宅を考えやすい</h3>
+        <h3>帰宅させてよい条件</h3>
         <ul>
-          <li>X 線 / Ottawa Knee Rules で骨折なし、神経血管異常なし、荷重可能</li>
-          <li>シーネ / 装具固定、松葉杖、安静・冷却・挙上指示</li>
-          <li>整形外来 1〜2 週で再診</li>
+          <li>レントゲン / Ottawa Knee Rule で骨折除外できる、または転位なし膝蓋骨骨折・整復後膝蓋骨脱臼・MCL 単独・暫定半月板損傷</li>
+          <li>神経血管異常なし、コンパートメント所見なし</li>
+          <li>松葉杖で部分荷重歩行可（ニーブレース固定下で）</li>
+          <li>家族・本人が帰宅後の悪化サインを理解し、再診できる体制がある</li>
         </ul>
 
         <h3>整形コンサルト / 入院</h3>
         <ul>
-          <li>骨折あり（脛骨高原・膝蓋骨など）</li>
-          <li>膝関節脱臼 / 整復後 / 血管損傷疑い</li>
+          <li>骨折あり（大腿骨遠位端、脛骨高原、脛骨骨幹部、転位ある膝蓋骨骨折、occult fracture 含む）</li>
+          <li>膝関節脱臼 / 自然整復後 / 血管損傷疑い</li>
           <li>伸筋装置断裂、開放創</li>
-          <li>大量関節血症 + 強い不安定性、荷重不能</li>
+          <li>大量関節血症 + 多方向不安定性、荷重不能、ロッキング</li>
+          <li>コンパートメント症候群を疑った時点で即時整形</li>
         </ul>
 
-        <h3>疼痛管理</h3>
+        <h3>帰宅説明（説明文ひな型）</h3>
+        <div class="callout callout-example">
+          <div class="callout-title">家族・本人へ</div>
+          <div class="callout-body">
+            <ul>
+              <li>ニーブレースは <strong>原則 24 時間装着</strong>、入浴時のみ外す（医師指示に従う）</li>
+              <li>松葉杖で <strong>非荷重 or 患側に体重をかけない</strong>歩行（医師指示）</li>
+              <li><strong>RICE</strong>：安静・冷却（1 回 15〜20 分、初日は数時間ごと）・圧迫・挙上（心臓より高く）</li>
+              <li>痛み止めはアセトアミノフェンが基本。NSAIDs は腎機能・胃腸症状・既往と相談</li>
+              <li><strong>整形外来は数日以内</strong>に必ず受診</li>
+              <li>以下があればすぐ救急再診：</li>
+              <ul>
+                <li>下腿が硬く張ってきて、安静にしても痛みが増す</li>
+                <li>足趾の感覚が鈍る、動かしにくい</li>
+                <li>足色が蒼白・紫色になる、冷たい</li>
+                <li>固定が外れた / 患部の変形が変わった</li>
+                <li>発熱・創部からの膿（開放創がある場合）</li>
+              </ul>
+            </ul>
+          </div>
+        </div>
+
+        <h3>フォロー</h3>
         <ul>
-          <li><strong>アセトアミノフェン</strong>を基本に、必要に応じてオピオイド短期使用</li>
-          <li>NSAIDs は腎機能 / 高齢で慎重</li>
-          <li>シーネ固定 + 冷却 + 挙上で疼痛が軽減することが多い</li>
+          <li>非整形外科医の役割は「<strong>骨折の有無 ± 軟部組織暫定診断 + 固定 + 整形につなぐ</strong>」まで。MRI 読影は整形に任せる</li>
+          <li>院内整形なら MRI を予約、院外なら紹介状にエピソード・身体所見・画像所見・暫定診断・固定方法・処方を書く</li>
+          <li>整形外来に行くまでに痛みが急増した、歩行が悪化した場合は再診</li>
         </ul>
       </section>
 
-      <!-- §6 ピットフォール -->
-      <section class="section-page" id="s6" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>⚠️ ピットフォール</h2>
-        <ul>
-          <li><strong>「自然整復した膝関節脱臼」を見逃す</strong> — 大量関節血症 + 不安定性 + 高エネルギーは血管評価</li>
-          <li><strong>X 線陰性で安心する</strong> — 脛骨高原 occult fracture や後外側 corner 損傷</li>
-          <li><strong>膝蓋骨脱臼の整復後に骨軟骨骨折を見逃す</strong> — 整復後も sunrise / MRI</li>
-          <li><strong>下腿コンパートメントを忘れる</strong> — 脛骨高原骨折・骨幹部骨折は要注意</li>
-          <li><strong>Ottawa Knee Rules を骨折以外に適用する</strong> — 急性外傷が前提、慢性痛には使わない</li>
-        </ul>
-      </section>
-
-      <!-- §7 出典・リンク -->
+      <!-- §7 カルテテンプレ -->
       <section class="section-page" id="s7" hidden>
         <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>📚 出典・リンク</h2>
+        <h2>📝 カルテテンプレ</h2>
+
+        <h3>初診カルテ（テンプレ）</h3>
+        <pre style="white-space:pre-wrap; background:var(--surface); border:1px solid color-mix(in srgb, var(--text) 14%, transparent); border-radius:8px; padding:10px 12px; font-size:12.5px; line-height:1.55;">
+【受傷機転】
+  発生時刻：　　　　／場所：　　　　／エネルギー：高 ／ 低
+  機序：直接打撲（膝前面）／ 捻り ／ 着地 ／ 外反タックル ／ 軸圧 ／ 高所転落 ／ 交通外傷
+  ポップ音：あり ／ なし　　受傷直後の歩行：可 ／ 不可　　ロッキング：あり ／ なし
+
+【既往・服薬】
+  整形手術歴（人工関節など）：あり（部位：　　　） ／ なし
+  抗凝固薬：あり ／ なし　　骨粗鬆症 ／ ステロイド ／ 担癌：
+
+【バイタル】　血圧／脈／SpO2／体温
+【全身】高エネは多発外傷を意識。腰椎・対側下肢も評価
+
+【視診（両側脱衣・裸足）】
+  打撲痕：　　　　／変形：　　　　／開放創：あり（部位：　　／サイズ：　　cm） ／ なし
+  膝蓋骨位置（外側シフト）：あり ／ なし
+
+【触診】
+  膝蓋骨圧痛：　　／関節裂隙圧痛（内側／外側）：
+  腓骨頭圧痛：　　／大腿骨遠位圧痛：　　／脛骨近位圧痛：
+  下腿緊満：あり ／ なし　　受動伸展痛：あり ／ なし
+
+【関節血症】　なし ／ あり（量：少 ／ 中 ／ 大、脂肪滴：+ / − / 未評価）
+
+【可動域】　屈曲　度　　伸展　度　　active SLR：可 ／ 不可
+
+【徒手検査】
+  Lachman：陰／陽　　lever：陰／陽　　前方引き出し：陰／陽
+  外反ストレス：陰／陽　　内反ストレス：陰／陽
+  McMurray：陰／陽　　patellar apprehension：陰／陽
+
+【神経・血管】
+  足背動脈：触知 ／ 不良　　後脛骨動脈：触知 ／ 不良　　CRT：　秒
+  下腿感覚（腓骨／脛骨領域）：正常 ／ 異常
+  足趾運動（背屈／底屈）：正常 ／ 異常
+
+【Ottawa Knee Rule】
+  ① 55 歳以上：　／② 腓骨頭圧痛：　／③ 膝蓋骨単独圧痛：　／④ 90° 屈曲不能：　／⑤ 4 歩歩行不能：
+  → 1 つでも陽性 → X 線
+
+【画像】
+  X 線：AP ／ 側面 ／ skyline（追加理由：膝前面強打／膝蓋骨圧痛）／ oblique
+  CT：あり ／ なし（理由：レントゲン読影困難 ／ 関節面評価 ／ 高エネ）
+  MRI：あり ／ なし（理由：CT 陰性・荷重不能 ／ 軟部組織暫定）
+  ABI / CTA：膝関節脱臼疑いで実施 ／ 非実施
+
+【関節穿刺】
+  実施 ／ 非実施　　量：　　cc　　脂肪滴：+ / −
+
+【暫定診断】
+
+【プラン（5 択）】
+  即時整形 ／ 入院整形 ／ 帰宅手術 ／ 帰宅保存 ／ 経過観察
+  固定：ニーブレース伸展位 ／ シーネ ／ サポーター
+  歩行：松葉杖（非荷重 ／ 部分荷重）
+  鎮痛：
+  抗菌薬・破傷風（開放骨折）：
+  再診：　　日後 整形外来予約
+
+【家族説明】（コンパートメント・血流障害の悪化サインを記載）
+        </pre>
+
+        <h3>整形コンサルト用サマリー</h3>
+        <pre style="white-space:pre-wrap; background:var(--surface); border:1px solid color-mix(in srgb, var(--text) 14%, transparent); border-radius:8px; padding:10px 12px; font-size:12.5px; line-height:1.55;">
+○歳 男／女、（高 ／ 低）エネ膝外傷。
+受傷機転：　　　　／受傷から　　時間
+身体所見：　　　　／伸展不能：　／不安定性：
+画像：
+診断：　　　　／開放：あり／なし／脂肪滴：+/−
+固定 ○○、松葉杖、鎮痛 ○○ 投与済。
+ご相談：手術適応 ／ 入院 ／ MRI 予約 ／ 外来フォロー
+        </pre>
+      </section>
+
+      <!-- §8 見落とし・ミス -->
+      <section class="section-page" id="s8" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>⚠️ 見落とし・ミス</h2>
+
+        <div class="callout callout-warning">
+          <div class="callout-title">膝外傷で頻出するピットフォール</div>
+          <div class="callout-body">
+            <ul>
+              <li><strong>「自然整復した膝関節脱臼」を見逃す</strong> — 「明らかな脱臼」は ER に来ない。高エネ + 大量関節血症 + 多方向不安定性は脱臼として血管評価</li>
+              <li><strong>足背動脈触れるから安心</strong> — 内膜損傷では遅発性閉塞があり、整復後も 24 時間モニター</li>
+              <li><strong>脛骨高原骨折の関節面陥没を Xp 単独で見逃す</strong> — 高齢者の単純転倒でも起こる。荷重不能 + 関節血症が続けば CT</li>
+              <li><strong>大腿骨遠位端骨折の occult fracture</strong> — Y 字（正面）と後方（側面）の骨折線イメージを持って読影。CT 閾値を下げる。CT 陰性でも MRI で出ることがある</li>
+              <li><strong>膝前面強打の患者で skyline view を撮らない</strong> — 縦骨折は正面・側面で見えない。<strong>必ず脱衣して打撲痕・圧痛を確認</strong></li>
+              <li><strong>膝蓋骨脱臼の整復後に骨軟骨骨折を見逃す</strong> — 整復後の sunrise / 必要なら MRI を追加</li>
+              <li><strong>下腿コンパートメント症候群の進行を見逃す</strong> — 受傷直後正常でも 24〜48 時間後に増悪。固定後の急増痛は「外して再評価」</li>
+              <li><strong>開放骨折を裂創扱いで見逃す</strong> — 衣類・血液で隠れる。脱衣して全周性に視診。CT で骨折周囲 air は開放</li>
+              <li><strong>active SLR を確認しない</strong> — 伸筋装置断裂・膝蓋骨横骨折離開を見逃す</li>
+              <li><strong>Ottawa Knee Rule を慢性痛・55 歳以上に適用</strong> — 急性外傷・55 歳未満で「骨折を下げる」補助。occult fracture も拾えない</li>
+              <li><strong>MCL 単独で安心して ACL を診ない</strong> — 重症度が上がるほど ACL 合併率は急増（Ⅲ度で 78%）</li>
+              <li><strong>MRI 所見だけで ACL / 半月板を確定診断</strong> — 部分断裂・偽陽性多い。整形外科の総合判断が必要</li>
+              <li><strong>二分膝蓋骨を骨折と誤診</strong> — 圧痛なし・仮骨あり・両側性 40〜45%。反対側膝の比較で鑑別</li>
+              <li><strong>大腿骨インプラント周囲骨折を「骨折」とだけ書いて終わる</strong> — 「インプラント入れた病院で治療する」が業界ルール、転院前提でマネジメント</li>
+              <li><strong>関節穿刺をためらう</strong> — 画像で行先が決まらない時、脂肪滴 + 出血量で 3 群に分けられる便利な手技</li>
+            </ul>
+          </div>
+        </div>
+
+        <h3>X 線の読影チェックリスト</h3>
+        <div class="callout callout-check">
+          <div class="callout-title">骨折線イメージで毎回確認</div>
+          <div class="callout-body">
+            <ul>
+              <li>① <strong>膝蓋骨</strong>：横骨折（側面）・縦骨折（skyline）・位置（外側シフト＝脱臼）</li>
+              <li>② <strong>大腿骨遠位端</strong>：<strong>正面で Y 字、側面で後方</strong>に骨折線</li>
+              <li>③ <strong>脛骨高原</strong>：<strong>外側の陥没（正面）・縦割れ（正面 + 側面）</strong>。関節面の段差</li>
+              <li>④ <strong>関節血症 / 脂肪滴</strong>：lateral で suprapatellar pouch を確認</li>
+              <li>⑤ <strong>軟部組織</strong>：気腫（開放骨折）・腫脹</li>
+              <li>⑥ <strong>腓骨頭</strong>：高エネで剥離骨折 → 後外側 corner / LCL を疑う</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- §9 出典・関連リンク -->
+      <section class="section-page" id="s9" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>📚 出典・関連リンク</h2>
 
         <h3>主要文献</h3>
         <ul>
-          <li><strong>Ottawa Knee Rules</strong>：Stiell IG et al. <em>JAMA</em>. 1996.</li>
-          <li>関節血症 / 膝靱帯損傷の評価：教科書・各疾患ページ参照</li>
+          <li><strong>Ottawa Knee Rule</strong>：Stiell IG, et al. <em>JAMA</em>. 1996;275:611-5. / 系統的レビューで平均感度 98.5%</li>
+          <li><strong>Pittsburgh Knee Rule</strong>：Bauer SJ, et al. <em>Acad Emerg Med</em>. 1995. 感度 86〜100%</li>
+          <li><strong>Schatzker 分類</strong>（脛骨高原骨折）</li>
+          <li><strong>AO 分類</strong>（大腿骨遠位端骨折）</li>
+          <li><strong>骨折ハンター</strong>（仲田和正 監修）— 第15章 膝関節痛ハンター①、第16章 膝関節痛ハンター②</li>
+          <li>その他 ACL/MCL/半月板の身体所見の感度・特異度は『骨折ハンター』所載のメタ解析を参照</li>
         </ul>
 
-        <h3>関連ページ</h3>
+        <h3>関連ページ（疾患詳細）</h3>
         <ul>
-          <li><a class="wiki-link" href="転倒.html">転倒</a></li>
+          <li><a class="wiki-link" href="疾患詳細/大腿骨遠位端骨折.html">大腿骨遠位端骨折</a></li>
           <li><a class="wiki-link" href="疾患詳細/脛骨高原骨折.html">脛骨高原骨折</a></li>
+          <li><a class="wiki-link" href="疾患詳細/脛骨骨幹部骨折.html">脛骨骨幹部骨折</a></li>
           <li><a class="wiki-link" href="疾患詳細/膝蓋骨骨折・脱臼.html">膝蓋骨骨折・脱臼</a></li>
           <li><a class="wiki-link" href="疾患詳細/膝靱帯・半月板損傷.html">膝靱帯・半月板損傷</a></li>
+          <li><a class="wiki-link" href="疾患詳細/Pilon骨折.html">Pilon 骨折</a>（軸圧外傷の合併鑑別）</li>
+          <li><a class="wiki-link" href="疾患詳細/コンパートメント症候群.html">コンパートメント症候群</a></li>
+          <li><a class="wiki-link" href="疾患詳細/開放骨折.html">開放骨折</a></li>
+          <li><a class="wiki-link" href="疾患詳細/大腿神経ブロック.html">大腿神経ブロック</a></li>
+          <li><a class="wiki-link" href="疾患詳細/大腿骨近位部骨折.html">大腿骨近位部骨折</a>（高齢者鑑別）</li>
+          <li><a class="wiki-link" href="疾患詳細/大腿骨骨幹部骨折.html">大腿骨骨幹部骨折</a></li>
         </ul>
 
-        <p>#ER #救急 #膝の外傷 #膝痛 #OttawaKneeRules #脛骨高原骨折 #膝蓋骨脱臼 #靱帯損傷</p>
+        <h3>関連トピック</h3>
+        <ul>
+          <li><a class="wiki-link" href="転倒.html">転倒</a></li>
+          <li><a class="wiki-link" href="足関節・足部の外傷.html">足関節・足部の外傷</a></li>
+        </ul>
+
+        <p>#ER #救急 #膝の外傷 #膝痛 #OttawaKneeRule #大腿骨遠位端骨折 #脛骨高原骨折 #膝蓋骨骨折 #膝蓋骨脱臼 #ACL #MCL #半月板損傷 #コンパートメント症候群 #膝関節脱臼</p>
       </section>
 
     </article>

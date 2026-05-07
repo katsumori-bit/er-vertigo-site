@@ -6,6 +6,254 @@
   <meta name="color-scheme" content="light dark" />
   <title>転倒 | ER ノート</title>
   <link rel="stylesheet" href="er-note.css" />
+  <style>
+    /* === 診療フロー（このページ専用、めまい.html から移植） === */
+    .flow-box { position: static; user-select: none; }
+    .flow-box__title {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 0.5rem; cursor: default; padding: 2px 0;
+    }
+
+    .flow-canvas {
+      background: var(--surface);
+      border-radius: 10px;
+      padding: 14px 10px 18px;
+      margin-top: 0.55rem;
+      overflow-x: auto;
+      overflow-y: hidden;
+      -webkit-overflow-scrolling: touch;
+      touch-action: pan-x pan-y pinch-zoom;
+    }
+    .flow-canvas__hint {
+      font-size: 0.72rem;
+      color: var(--muted);
+      text-align: center;
+      margin: 0 0 0.6rem 0;
+    }
+
+    .dx-flow {
+      min-width: 720px;
+      margin: 0 auto;
+      padding: 4px 6px 8px;
+      font-size: 14px;
+      line-height: 1.45;
+      color: var(--text);
+      font-family: inherit;
+    }
+
+    /* ノード共通 */
+    .dx-node {
+      background: var(--surface);
+      border: 1.5px solid color-mix(in srgb, var(--text) 22%, transparent);
+      border-radius: 10px;
+      padding: 8px 12px;
+      text-align: center;
+      box-shadow: 0 1px 2px var(--shadow, rgba(0,0,0,0.06));
+      min-height: 38px;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 2px;
+      text-decoration: none;
+      color: var(--text);
+    }
+    .dx-node__title { font-weight: 700; font-size: 13.5px; }
+    .dx-node__sub   { font-size: 11.5px; color: var(--muted); font-weight: 500; }
+
+    .dx-node--decision {
+      background: color-mix(in srgb, var(--accent) 12%, var(--surface));
+      border-color: var(--accent);
+      border-radius: 14px;
+    }
+    .dx-node--danger {
+      background: color-mix(in srgb, #c0392b 14%, var(--surface));
+      border-color: #c0392b;
+      color: var(--text);
+    }
+    .dx-node--danger .dx-node__title { color: #c0392b; }
+    .dx-node--action {
+      background: color-mix(in srgb, var(--text) 5%, var(--surface));
+      border-style: dashed;
+    }
+    .dx-node--external {
+      border-style: dashed;
+      position: relative;
+      background: color-mix(in srgb, var(--accent) 6%, var(--surface));
+      transition: background-color 120ms ease;
+    }
+    .dx-node--external::after {
+      content: "↗";
+      position: absolute;
+      top: 4px; right: 8px;
+      font-size: 12px;
+      color: var(--accent);
+      opacity: 0.85;
+    }
+    .dx-node--external:hover {
+      background: color-mix(in srgb, var(--accent) 14%, var(--surface));
+    }
+    /* 飲酒分岐ノード */
+    .dx-node--alcohol {
+      background: color-mix(in srgb, #d4a017 14%, var(--surface));
+      border-color: #d4a017;
+      border-radius: 14px;
+    }
+    .dx-node--alcohol .dx-node__title { color: #9b7508; }
+
+    /* レイヤー */
+    .dx-layer {
+      display: grid;
+      gap: 14px;
+      align-items: stretch;
+      margin: 0;
+    }
+    .dx-layer--root   { grid-template-columns: 1fr; justify-items: center; }
+    .dx-layer--root > * { max-width: 360px; }
+    .dx-layer--branch { grid-template-columns: 1fr 1fr; }
+
+    /* 矢印 */
+    .dx-arrow {
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      position: relative;
+      margin: 4px 0;
+      min-height: 44px;
+      color: var(--muted);
+      font-size: 11.5px;
+      font-weight: 600;
+    }
+    .dx-arrow::before {
+      content: "";
+      width: 2px;
+      height: 100%;
+      min-height: 38px;
+      background: color-mix(in srgb, var(--text) 35%, transparent);
+    }
+    .dx-arrow::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      width: 0; height: 0;
+      border-left: 5px solid transparent;
+      border-right: 5px solid transparent;
+      border-top: 7px solid color-mix(in srgb, var(--text) 35%, transparent);
+    }
+    .dx-arrow__label {
+      background: var(--surface);
+      padding: 1px 8px;
+      border-radius: 999px;
+      border: 1px solid color-mix(in srgb, var(--text) 18%, transparent);
+      position: absolute;
+      left: 50%; top: 50%;
+      transform: translate(-50%, -50%);
+      white-space: nowrap;
+      z-index: 1;
+    }
+
+    /* Y 字フォーク */
+    .dx-fork {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      position: relative;
+      min-height: 38px;
+      margin: 2px 0 4px;
+    }
+    .dx-fork::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 25%; right: 25%;
+      height: 2px;
+      background: color-mix(in srgb, var(--text) 35%, transparent);
+    }
+    .dx-fork__leg {
+      position: relative;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: flex-end;
+      padding-top: 4px; padding-bottom: 4px;
+      font-size: 11.5px;
+      font-weight: 600;
+      color: var(--muted);
+      min-height: 36px;
+    }
+    .dx-fork__leg::before {
+      content: "";
+      width: 2px; flex: 1;
+      background: color-mix(in srgb, var(--text) 35%, transparent);
+    }
+    .dx-fork__leg::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      width: 0; height: 0;
+      border-left: 5px solid transparent;
+      border-right: 5px solid transparent;
+      border-top: 7px solid color-mix(in srgb, var(--text) 35%, transparent);
+    }
+    .dx-fork__label {
+      background: var(--surface);
+      padding: 1px 8px;
+      border-radius: 999px;
+      border: 1px solid color-mix(in srgb, var(--text) 18%, transparent);
+      margin-bottom: 2px;
+      z-index: 1;
+    }
+
+    /* 2軸ヘッダーラベル（転倒固有） */
+    .dx-axis-header {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin: 8px 0 4px;
+    }
+    .dx-axis-header__cell {
+      text-align: center;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--muted);
+      padding: 4px 8px;
+      border-bottom: 2px solid color-mix(in srgb, var(--text) 25%, transparent);
+    }
+    .dx-axis-header__cell small { font-weight: 500; opacity: 0.85; }
+
+    /* §タイル非表示（フロー直リンクで代替） */
+    .section-tiles { display: none; }
+
+    /* スマホ向け縮小（フロー全体を一望できるよう） */
+    @media (max-width: 600px) {
+      .dx-flow { min-width: 0; font-size: 11px; padding: 2px 0 6px; }
+      .flow-canvas { overflow-x: hidden; padding: 8px 6px 12px; }
+      .flow-canvas__hint { font-size: 0.62rem; margin-bottom: 0.35rem; }
+
+      .dx-node {
+        padding: 4px 5px;
+        min-height: 28px;
+        border-radius: 7px;
+        gap: 1px;
+        box-shadow: 0 1px 1px var(--shadow, rgba(0,0,0,0.05));
+      }
+      .dx-node__title { font-size: 10.5px; line-height: 1.22; }
+      .dx-node__sub   { font-size: 9px;    line-height: 1.25; }
+      .dx-node--decision, .dx-node--alcohol { border-radius: 8px; }
+      .dx-node--external::after { top: 2px; right: 4px; font-size: 9px; }
+
+      .dx-layer { gap: 6px; }
+      .dx-layer--root > * { max-width: none; width: 100%; }
+
+      .dx-arrow { min-height: 24px; margin: 1px 0; }
+      .dx-arrow::before { min-height: 20px; width: 1.5px; }
+      .dx-arrow::after { border-left-width: 4px; border-right-width: 4px; border-top-width: 6px; }
+      .dx-arrow__label { font-size: 8.5px; padding: 0 4px; line-height: 1.4; }
+
+      .dx-fork { min-height: 22px; }
+      .dx-fork::before { height: 1.5px; }
+      .dx-fork__leg { min-height: 22px; padding-top: 2px; padding-bottom: 2px; font-size: 9px; }
+      .dx-fork__leg::before { width: 1.5px; }
+      .dx-fork__leg::after { border-left-width: 4px; border-right-width: 4px; border-top-width: 6px; }
+      .dx-fork__label { font-size: 8.5px; padding: 0 4px; margin-bottom: 0; }
+
+      .dx-axis-header { gap: 6px; margin: 4px 0 2px; }
+      .dx-axis-header__cell { font-size: 9.5px; padding: 2px 4px; }
+    }
+  </style>
 </head>
 <body>
   <header class="hokuto-top">
@@ -21,15 +269,97 @@
     <article class="note-shell">
       <h1 class="page-title">転倒</h1>
 
-      <!-- 即時アクションヘッダー（常時 sticky） -->
-      <div class="action-header">
-        <div class="action-header__title">⚡ 即時アクション</div>
-        <ol class="action-header__list">
-          <li><strong>頭部外傷・頸椎評価を必ず</strong> — GCS / 瞳孔 / 片麻痺、頸椎固定の判断</li>
-          <li><strong>原因鑑別</strong>：失神 vs ふらつき vs 機械的（つまずき）— 「転んだ」のか「倒れた」のか</li>
-          <li><strong>高齢者は薬剤・脱水・感染・心血管</strong>を評価（ECG・採血・起立試験）</li>
-          <li><strong>独居・反復転倒・新規 ADL 低下</strong>は介入要 — 環境調整・骨粗鬆症治療・服薬整理</li>
-        </ol>
+      <!-- 診療フロー（常時最上段、めまい方式） -->
+      <div class="action-header flow-box" id="flowBox">
+        <div class="action-header__title flow-box__title">
+          <span>🗺 転倒の診療フロー（2軸で進める）</span>
+        </div>
+        <div class="flow-canvas">
+          <p class="flow-canvas__hint">命の評価 → 原因精査と外傷評価を並走 → disposition</p>
+          <div class="dx-flow" role="group" aria-label="転倒の診療フロー">
+
+            <!-- L0: 命の評価 -->
+            <div class="dx-layer dx-layer--root">
+              <a class="dx-node dx-node--danger" href="#s1">
+                <div class="dx-node__title">🚨 命に関わるか？</div>
+                <div class="dx-node__sub">ABCD / 赤旗 / 失神先行</div>
+              </a>
+            </div>
+            <div class="dx-arrow"><span class="dx-arrow__label">否定 → 2軸並走</span></div>
+
+            <!-- 軸ヘッダー -->
+            <div class="dx-axis-header">
+              <div class="dx-axis-header__cell">軸① 原因精査<br><small>なぜ倒れたか</small></div>
+              <div class="dx-axis-header__cell">軸② 外傷評価<br><small>どこを損傷したか</small></div>
+            </div>
+
+            <!-- L1: 2軸入口 -->
+            <div class="dx-layer dx-layer--branch">
+              <a class="dx-node dx-node--decision" href="#s3">
+                <div class="dx-node__title">転んだ or 倒れた？</div>
+                <div class="dx-node__sub">失神否定 → 原因分類</div>
+              </a>
+              <a class="dx-node dx-node--decision" href="#s2">
+                <div class="dx-node__title">後遺症を残すか？</div>
+                <div class="dx-node__sub">神経・機能・社会</div>
+              </a>
+            </div>
+
+            <!-- L1.5: 原因軸の左側分岐ラベル -->
+            <div class="dx-layer dx-layer--branch" style="margin-top:6px;">
+              <div class="dx-fork">
+                <div class="dx-fork__leg"><span class="dx-fork__label">機械的</span></div>
+                <div class="dx-fork__leg"><span class="dx-fork__label">失神/前失神</span></div>
+              </div>
+              <div class="dx-arrow"><span class="dx-arrow__label">↓</span></div>
+            </div>
+
+            <!-- L2: 各軸の詳細 -->
+            <div class="dx-layer dx-layer--branch">
+              <a class="dx-node dx-node--action" href="#s3">
+                <div class="dx-node__title">原因の精査</div>
+                <div class="dx-node__sub">ECG / エコー / 起立 / 採血 / 薬剤</div>
+              </a>
+              <a class="dx-node dx-node--action" href="#s4">
+                <div class="dx-node__title">部位別診察</div>
+                <div class="dx-node__sub">頭・頸・体幹・骨盤・四肢</div>
+              </a>
+            </div>
+
+            <!-- L2.5: 飲酒分岐 / 外傷軸は5択へ -->
+            <div class="dx-layer dx-layer--branch" style="margin-top:6px;">
+              <div class="dx-arrow"><span class="dx-arrow__label">疑い時</span></div>
+              <div class="dx-arrow"><span class="dx-arrow__label">↓</span></div>
+            </div>
+            <div class="dx-layer dx-layer--branch">
+              <a class="dx-node dx-node--alcohol" href="#s3-alcohol">
+                <div class="dx-node__title">🍶 飲酒後転倒？</div>
+                <div class="dx-node__sub">神経診察難 / 意識障害並走 / 離脱リスク</div>
+              </a>
+              <a class="dx-node dx-node--decision" href="#s5">
+                <div class="dx-node__title">5択マネジメント</div>
+                <div class="dx-node__sub">即時/入院/帰宅手術/帰宅保存/再診不要</div>
+              </a>
+            </div>
+
+            <!-- 飲酒ノード補助：意識障害.html への外部リンク -->
+            <div class="dx-layer dx-layer--branch" style="margin-top:6px;">
+              <a class="dx-node dx-node--external" href="意識障害.html">
+                <div class="dx-node__sub">意識障害が並走するとき</div>
+              </a>
+              <div></div>
+            </div>
+
+            <!-- 合流 -->
+            <div class="dx-arrow"><span class="dx-arrow__label">合流</span></div>
+            <div class="dx-layer dx-layer--root">
+              <a class="dx-node dx-node--decision" href="#s6">
+                <div class="dx-node__title">📤 disposition</div>
+                <div class="dx-node__sub">帰宅 / 入院 / コンサルト</div>
+              </a>
+            </div>
+          </div>
+        </div>
       </div>
 
       <!-- §タイル -->
@@ -58,9 +388,9 @@
               <li><strong>ショック、止まらない出血</strong></li>
               <li><strong>大腿骨骨幹部の変形</strong>（出血 1–1.5 L、直達牽引が必要）</li>
               <li><strong>頸部痛</strong> → 頸髄損傷の可能性、頸椎保護を継続</li>
-              <li><strong>失神が先行している転倒</strong> → 致死性不整脈・PE・出血・SAH・解離</li>
               <li><strong>抗凝固薬・抗血小板薬内服中の頭部打撲</strong> → 軽症でも頭蓋内出血を疑う</li>
             </ul>
+            <p>※「失神が先行している転倒」は致死性不整脈・PE・出血・SAH・解離の入口 → <a class="wiki-link" href="#s3">§3 原因</a>（失神コールアウト）で扱う。</p>
           </div>
         </div>
 
@@ -101,22 +431,13 @@
           </div>
         </div>
 
-        <p>見逃すと上記に直結する病態と入口：</p>
-        <div class="table-wrap">
-          <table>
-            <thead><tr><th>見逃したくない病態</th><th>入口</th></tr></thead>
-            <tbody>
-              <tr><td>頸髄損傷（高齢者の軽微外傷でも中心性頸髄損傷が起こる）</td><td><a class="wiki-link" href="頸部外傷・頸部痛.html">頸部外傷・頸部痛</a></td></tr>
-              <tr><td>慢性硬膜下血腫（受傷数週後の性格変化・歩行障害）</td><td><a class="wiki-link" href="頭部外傷評価.html">頭部外傷評価</a></td></tr>
-              <tr><td>大腿骨近位部骨折（歩行できても否定できない occult あり）</td><td><a class="wiki-link" href="股関節痛.html">股関節痛</a> / <a class="wiki-link" href="疾患詳細/大腿骨近位部骨折.html">大腿骨近位部骨折</a></td></tr>
-              <tr><td>脆弱性骨盤骨折・脊椎圧迫骨折（ADL 喪失の主因）</td><td><a class="wiki-link" href="疾患詳細/脆弱性骨盤骨折.html">脆弱性骨盤骨折</a> / <a class="wiki-link" href="疾患詳細/脊椎圧迫骨折.html">脊椎圧迫骨折</a></td></tr>
-              <tr><td>上肢骨折（橈骨遠位端・上腕骨近位部・鎖骨）</td><td><a class="wiki-link" href="手関節・手の外傷.html">手関節・手の外傷</a> / <a class="wiki-link" href="肩の外傷・痛み.html">肩の外傷・痛み</a></td></tr>
-              <tr><td>下肢骨折（膝・足関節）</td><td><a class="wiki-link" href="膝の外傷・痛み.html">膝の外傷・痛み</a> / <a class="wiki-link" href="足関節・足部の外傷.html">足関節・足部の外傷</a></td></tr>
-              <tr><td>インプラント周囲骨折（術側患肢痛）</td><td><a class="wiki-link" href="股関節痛.html">股関節痛</a></td></tr>
-            </tbody>
-          </table>
-        </div>
-        <p>高齢者転倒の<strong>再発予防</strong>まで含めて考える場合は <a class="wiki-link" href="疾患詳細/骨粗鬆症治療.html">骨粗鬆症治療</a> を参照。ビスホスホネート未処方はここで介入する機会。</p>
+        <p>具体的な occult / 見逃しやすい病態の網羅は <a class="wiki-link" href="#s8">§8 見落とし・ミス</a> に集約。ここでは「どの層に効く介入か」だけ押さえる。</p>
+        <ul>
+          <li><strong>神経軸の入口</strong> → <a class="wiki-link" href="頭部外傷評価.html">頭部外傷評価</a> / <a class="wiki-link" href="頸部外傷・頸部痛.html">頸部外傷・頸部痛</a></li>
+          <li><strong>機能軸の入口</strong> → <a class="wiki-link" href="#s4">§4 部位別ショートカット</a>（部位別の occult は §8 へ）</li>
+          <li><strong>社会軸の入口</strong> → <a class="wiki-link" href="#s6">§6 disposition</a> の再転倒予防（環境調整・服薬整理・<a class="wiki-link" href="疾患詳細/骨粗鬆症治療.html">骨粗鬆症治療</a>）</li>
+        </ul>
+        <p>高齢者転倒は <strong>BP（ビスホスホネート）未処方ならここで介入</strong>。退院処方に乗せる機会。</p>
 
         <details class="sub-fold">
           <summary>高齢者の 4 大脆弱性骨折（参考：頻度）</summary>
@@ -177,6 +498,56 @@
           <div class="callout-title">失神が先行している転倒</div>
           <div class="callout-body">
             <p>「転んだ」のではなく「倒れた」可能性がある。<strong>目撃者なし + 受傷機転が不明確 + 外傷のわりに防御反応がない</strong>なら失神を疑う。<strong>ECG は必ず取る</strong>。心疾患の既往があれば循環器へ相談も検討（ESC 2018 失神ガイドライン）。</p>
+            <p>詳細鑑別 → <a class="wiki-link" href="意識消失.html">意識消失</a>（失神 / けいれん / 意識障害の振り分け）</p>
+          </div>
+        </div>
+
+        <!-- §3 内 サブ：飲酒後転倒の特殊対応 -->
+        <div class="callout callout-warning" id="s3-alcohol">
+          <div class="callout-title">🍶 飲酒後転倒の特殊対応</div>
+          <div class="callout-body">
+            <p>頻度が高い。<strong>「酔っているだけ」で帰してはいけない</strong>。神経診察が当てにならず、意識障害が並走することも多い。判断保留を恐れない。</p>
+
+            <h4>① 神経診察が信頼できない</h4>
+            <ul>
+              <li>GCS・四肢麻痺・小脳所見・構音障害が <strong>酩酊で説明できてしまう</strong>。アルコールに覆い隠される頭蓋内出血・頸髄損傷・低血糖を念頭に</li>
+              <li><strong>頭部 CT の閾値を下げる</strong>（抗凝固薬 / 高齢 / 受傷機転不明・目撃者なしならほぼ撮る）</li>
+              <li>初回診察で <strong>所見が取れなかった</strong>ことを記録 → アルコール代謝後（数時間後）の <strong>再評価</strong>を必ず計画</li>
+            </ul>
+
+            <h4>② 意識障害の並走を見逃さない</h4>
+            <ul>
+              <li>軽度の意識障害でも <strong>低血糖・低 Na・肝性脳症・Wernicke 脳症・薬物併用・CO・敗血症</strong>を鑑別</li>
+              <li><strong>血糖・血ガス（乳酸・電解質・アンモニア）</strong>は飲酒後転倒で必ず</li>
+              <li>詳細鑑別は <a class="wiki-link" href="意識障害.html">意識障害</a>（AIUEOTIPS / ABCDEs）へ</li>
+              <li>外傷後で意識消失 / 健忘がはっきりあるなら <a class="wiki-link" href="意識消失.html">意識消失</a> も並行確認</li>
+            </ul>
+
+            <h4>③ 入院時はアルコール離脱症候群リスクを必ず評価</h4>
+            <p>飲酒後転倒で <strong>入院</strong>させる場合（骨折・経過観察・意識障害精査）、入院当日中に離脱リスク評価＋予防的対応を指示しないと、入院 6〜24 時間で離脱が出始める。</p>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>時期</th><th>症状</th><th>対応</th></tr></thead>
+                <tbody>
+                  <tr><td><strong>6–12 時間</strong></td><td>振戦・不眠・発汗・頻脈・血圧上昇・不安</td><td>CIWA-Ar 評価開始、ベンゾジアゼピン頓用</td></tr>
+                  <tr><td><strong>12–48 時間</strong></td><td>アルコール離脱けいれん（全般性）、幻視・幻聴</td><td>ジアゼパム or ロラゼパム静注、酸素・モニタ</td></tr>
+                  <tr><td><strong>48–96 時間</strong></td><td>振戦せん妄（DT）：見当識障害・自律神経亢進・致死率 5%</td><td>ICU 管理レベル、ベンゾ持続、輸液、ハロペリドール慎重</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <ul>
+              <li><strong>予防</strong>：日常飲酒量・最終飲酒時刻を聴取。中等量以上＋既往ありなら入院当日からベンゾ予防投与を検討</li>
+              <li><strong>Wernicke 予防のチアミン 100–500 mg</strong> を <strong>ブドウ糖投与前</strong>に。低血糖補正でブドウ糖を先に入れない</li>
+              <li>低 Mg / 低 K / 低 P を補正、輸液は維持で十分</li>
+              <li>けいれん既往・DT 既往・直近の大量飲酒・他剤併用（ベンゾ常用・睡眠薬）は高リスク</li>
+            </ul>
+
+            <h4>④ disposition 判断のコツ</h4>
+            <ul>
+              <li><strong>素面に戻るまで観察</strong>を原則（夜間来院なら朝までベッド確保）。素面後の再診察で異常なければ帰宅を再評価</li>
+              <li>「帰宅 → 朝再診」は本人遵守が読めない。<strong>独居・連絡先不明・反復飲酒来院</strong>は入院寄りに</li>
+              <li>抗凝固薬内服 + 頭部打撲 + 飲酒は CT 正常でも経過観察入院を強く検討</li>
+            </ul>
           </div>
         </div>
       </section>
@@ -185,8 +556,6 @@
       <section class="section-page" id="s4" hidden>
         <button class="back-to-menu" type="button">← メニューへ</button>
         <h2>🧭 部位別ショートカット</h2>
-
-        <p>転倒患者で <strong>命・後遺症・原因</strong> を外さないことに絞るページ。部位別の診察・鑑別・occult の考え方は各ハブへ。</p>
 
         <section class="quick-nav">
           <div class="quick-grid">
@@ -197,20 +566,9 @@
             <a class="quick-link" href="股関節痛.html">股関節</a>
             <a class="quick-link" href="膝の外傷・痛み.html">膝</a>
             <a class="quick-link" href="足関節・足部の外傷.html">足関節</a>
-            <a class="quick-link" href="意識消失.html">失神疑い</a>
           </div>
         </section>
 
-        <div class="callout callout-tip">
-          <div class="callout-title">2 軸 × 3 つの問い</div>
-          <div class="callout-body">
-            <p><code>#高齢者の転倒 s/o ●●による△△</code>（●● = 原因／△△ = 外傷）の形で立てる。</p>
-            <ul>
-              <li><strong>軸 1：なぜ転んだか</strong>（原因検索）— §3</li>
-              <li><strong>軸 2：どこを何で損傷したか</strong>（外傷評価 → マネジメント）— §1 / §2 / §5</li>
-            </ul>
-          </div>
-        </div>
       </section>
 
       <!-- §5 外傷マネジメント -->
@@ -298,38 +656,46 @@
         <ul>
           <li><strong>頭蓋内出血</strong> → 脳神経外科</li>
           <li><strong>頸椎・頸髄損傷の疑い</strong> → 整形外科 / 脊椎外科</li>
-          <li><strong>大腿骨近位部骨折</strong> → 整形外科（48 時間以内、可能なら 24 時間以内の手術が目標）</li>
-          <li><strong>大腿骨骨幹部骨折・脊椎破裂骨折</strong> → 即時整形（直達牽引）</li>
-          <li><strong>開放骨折 / 整復不能な脱臼 / 血管・神経損傷</strong> → 即時整形</li>
-          <li><strong>脊椎圧迫骨折 / 脆弱性骨盤骨折で生活困難</strong> → 入院整形</li>
+          <li><strong>整形外科の即時 / 入院マネジメント</strong>（大腿骨近位部・大腿骨骨幹部・脊椎破裂・脆弱性骨盤・脊椎圧迫・開放骨折・整復不能脱臼・血管神経損傷など）→ 分類と典型例は <a class="wiki-link" href="#s5">§5 5択マネジメント</a> へ集約</li>
           <li><strong>失神の精査が必要</strong> → 入院 or 循環器</li>
           <li><strong>歩行不能 / ADL が維持できない</strong> → 入院</li>
           <li><strong>抗凝固薬内服中 + 頭部打撲</strong> → 経過観察入院を検討</li>
+          <li><strong>飲酒後転倒で素面に戻っていない / 神経診察不能</strong> → 観察入院（離脱対応は <a class="wiki-link" href="#s3-alcohol">§3 飲酒後転倒</a>）</li>
           <li><strong>独居高齢者で見守り困難</strong> → 環境調整が済むまで入院</li>
         </ul>
 
-        <h3>帰宅時の説明</h3>
-        <ul>
-          <li>頭部打撲時 → <a class="wiki-link" href="頭部外傷評価.html">頭部外傷評価</a> の再受診基準を必ず伝える（嘔吐・意識変容・強い頭痛・数日後の性格変化や歩行障害）</li>
-          <li>骨折なしでも痛みが続く場合 → <strong>再受診して再評価</strong>（occult / 不全骨折の可能性）</li>
-          <li>上肢外傷で固定した場合 → 指の屈伸を積極的に、挙上、しびれ・蒼白・強痛で即受診</li>
-          <li>肩関節脱臼整復後 → Bankart / Hill-Sachs 損傷の可能性を説明して整形フォロー</li>
-        </ul>
+        <details class="sub-fold">
+          <summary>帰宅時の説明（退院時に必ず伝える）</summary>
+          <div class="sub-fold__body">
+            <ul>
+              <li>頭部打撲時 → <a class="wiki-link" href="頭部外傷評価.html">頭部外傷評価</a> の再受診基準を必ず伝える（嘔吐・意識変容・強い頭痛・数日後の性格変化や歩行障害）</li>
+              <li>骨折なしでも痛みが続く場合 → <strong>再受診して再評価</strong>（occult / 不全骨折の可能性）</li>
+              <li>上肢外傷で固定した場合 → 指の屈伸を積極的に、挙上、しびれ・蒼白・強痛で即受診</li>
+              <li>肩関節脱臼整復後 → Bankart / Hill-Sachs 損傷の可能性を説明して整形フォロー</li>
+            </ul>
+          </div>
+        </details>
 
-        <h3>再転倒予防の視点（退院・帰宅時）</h3>
-        <ul>
-          <li>起立性低血圧の誘発薬（α 遮断薬・ニトロ・利尿薬）を減量</li>
-          <li>ベンゾジアゼピン・睡眠薬の整理</li>
-          <li>白内障・視力・聴力の確認</li>
-          <li>住環境（段差・照明・浴室手すり）の見直し</li>
-          <li><a class="wiki-link" href="疾患詳細/骨粗鬆症治療.html">骨粗鬆症治療</a>（BP 未処方ならビスホスホネート導入の提案）</li>
-        </ul>
+        <details class="sub-fold">
+          <summary>再転倒予防の視点（退院・帰宅時）</summary>
+          <div class="sub-fold__body">
+            <ul>
+              <li>起立性低血圧の誘発薬（α 遮断薬・ニトロ・利尿薬）を減量</li>
+              <li>ベンゾジアゼピン・睡眠薬の整理</li>
+              <li>白内障・視力・聴力の確認</li>
+              <li>住環境（段差・照明・浴室手すり）の見直し</li>
+              <li><a class="wiki-link" href="疾患詳細/骨粗鬆症治療.html">骨粗鬆症治療</a>（BP 未処方ならビスホスホネート導入の提案）</li>
+            </ul>
+          </div>
+        </details>
       </section>
 
       <!-- §7 カルテテンプレ -->
       <section class="section-page" id="s7" hidden>
         <button class="back-to-menu" type="button">← メニューへ</button>
         <h2>📝 カルテテンプレ（2 軸で書く）</h2>
+
+        <p>※ 2軸構造の全体像はページ最上段の <a class="wiki-link" href="#">フロー</a> 参照。</p>
 
         <div class="callout callout-example">
           <div class="callout-title">#高齢者の転倒 s/o ●●による△△</div>
@@ -370,22 +736,54 @@
         <button class="back-to-menu" type="button">← メニューへ</button>
         <h2>⚠️ 見落としやすいもの・やりがちなミス</h2>
 
-        <h3>見落としやすいもの</h3>
-        <ul>
-          <li><strong>後頭部の打撲・裂創</strong>（仰臥位のまま確認していない）</li>
-          <li><strong>大腿骨近位部の occult 骨折</strong>（初回 X 線で見えない → 痛みが続けば CT / MRI）</li>
-          <li><strong>脆弱性骨盤骨折の仙骨部</strong>（Xp 感度 7–44%、恥坐骨が折れていれば仙骨も疑う）</li>
-          <li><strong>中心性頸髄損傷</strong>（高齢者の軽微外傷でも起こる）</li>
-          <li><strong>脊椎圧迫骨折</strong>（背部痛として訴える、初回 Xp で責任椎体を決めない）</li>
-          <li><strong>失神が原因の転倒</strong>（「つまずいた」で片付けている）</li>
-          <li><strong>抗凝固薬の確認漏れ</strong></li>
-          <li><strong>慢性硬膜下血腫</strong>（数週後の認知低下・歩行障害で気づく）</li>
-          <li><strong>インプラント周囲骨折</strong>（術後患肢の転倒疼痛で必ず鑑別に）</li>
-          <li><strong>舟状骨骨折</strong>（嗅ぎたばこ窩圧痛、初回 Xp 陰性率が高い）</li>
-          <li><strong>Maisonneuve 骨折</strong>（足関節捻挫と思ったら膝下まで触る）</li>
-          <li><strong>鎖骨骨折</strong>（肩 2 方向だけだと写らない、鎖骨 2 方向を追加）</li>
-          <li><strong>大腿骨骨幹部骨折</strong>（出血 1–1.5 L、大腿神経ブロック + 直達牽引）</li>
-        </ul>
+        <p>occult / 見逃しやすい病態を <strong>部位別</strong>に集約。フローの「部位別診察」「後遺症」ノードから飛んできた時にここで該当部位を開く。</p>
+
+        <details class="sub-fold" open>
+          <summary>① 頭部・頸部</summary>
+          <div class="sub-fold__body">
+            <ul>
+              <li><strong>後頭部の打撲・裂創</strong>（仰臥位のまま確認していない）</li>
+              <li><strong>慢性硬膜下血腫</strong>（数週後の認知低下・歩行障害で気づく、抗凝固薬内服者で 24–72 時間後も含め注意）— 入口：<a class="wiki-link" href="頭部外傷評価.html">頭部外傷評価</a></li>
+              <li><strong>中心性頸髄損傷</strong>（高齢者の軽微外傷でも起こる）— 入口：<a class="wiki-link" href="頸部外傷・頸部痛.html">頸部外傷・頸部痛</a></li>
+            </ul>
+          </div>
+        </details>
+
+        <details class="sub-fold">
+          <summary>② 体幹・骨盤</summary>
+          <div class="sub-fold__body">
+            <ul>
+              <li><strong>脊椎圧迫骨折</strong>（背部痛として訴える、初回 Xp で責任椎体を決めない、ADL 喪失の主因）— 入口：<a class="wiki-link" href="疾患詳細/脊椎圧迫骨折.html">脊椎圧迫骨折</a></li>
+              <li><strong>脆弱性骨盤骨折の仙骨部</strong>（Xp 感度 7–44%、恥坐骨が折れていれば仙骨も疑う）— 入口：<a class="wiki-link" href="疾患詳細/脆弱性骨盤骨折.html">脆弱性骨盤骨折</a></li>
+            </ul>
+          </div>
+        </details>
+
+        <details class="sub-fold">
+          <summary>③ 四肢（上肢・下肢）</summary>
+          <div class="sub-fold__body">
+            <ul>
+              <li><strong>大腿骨近位部の occult 骨折</strong>（初回 X 線で見えない → 痛みが続けば CT / MRI、歩行できても否定できない）— 入口：<a class="wiki-link" href="股関節痛.html">股関節痛</a> / <a class="wiki-link" href="疾患詳細/大腿骨近位部骨折.html">大腿骨近位部骨折</a></li>
+              <li><strong>大腿骨骨幹部骨折</strong>（出血 1–1.5 L、大腿神経ブロック + 直達牽引）</li>
+              <li><strong>インプラント周囲骨折</strong>（術後患肢の転倒疼痛で必ず鑑別に）— 入口：<a class="wiki-link" href="股関節痛.html">股関節痛</a></li>
+              <li><strong>舟状骨骨折</strong>（嗅ぎたばこ窩圧痛、初回 Xp 陰性率が高い）— 入口：<a class="wiki-link" href="手関節・手の外傷.html">手関節・手の外傷</a></li>
+              <li><strong>鎖骨骨折</strong>（肩 2 方向だけだと写らない、鎖骨 2 方向を追加）— 入口：<a class="wiki-link" href="肩の外傷・痛み.html">肩の外傷・痛み</a></li>
+              <li><strong>Maisonneuve 骨折</strong>（足関節捻挫と思ったら膝下まで触る）— 入口：<a class="wiki-link" href="足関節・足部の外傷.html">足関節・足部の外傷</a></li>
+            </ul>
+          </div>
+        </details>
+
+        <details class="sub-fold">
+          <summary>④ 原因系（失神・薬剤・飲酒）</summary>
+          <div class="sub-fold__body">
+            <ul>
+              <li><strong>失神が原因の転倒</strong>（「つまずいた」で片付けている）— 入口：<a class="wiki-link" href="意識消失.html">意識消失</a> / <a class="wiki-link" href="#s3">§3 原因</a></li>
+              <li><strong>飲酒で覆い隠された頭蓋内出血・低血糖・意識障害</strong> — 入口：<a class="wiki-link" href="#s3-alcohol">§3 飲酒後転倒</a> / <a class="wiki-link" href="意識障害.html">意識障害</a></li>
+              <li><strong>抗凝固薬の確認漏れ</strong>（軽症頭部打撲でも CT 閾値を下げる）</li>
+              <li><strong>NSAIDs を高齢者に出してしまう</strong>（腎障害・消化管出血）</li>
+            </ul>
+          </div>
+        </details>
 
         <h3>やりがちなミス</h3>
         <ul>
@@ -475,7 +873,14 @@
       if (target && target.classList.contains('section-page')) {
         showSection(id);
       } else if (target) {
-        showMenu(target);
+        // section-page 内の子要素にハッシュが当たった場合：親 section を表示してからスクロール
+        const parentSection = target.closest('.section-page');
+        if (parentSection) {
+          showSection(parentSection.id);
+          target.scrollIntoView({behavior: 'instant', block: 'start'});
+        } else {
+          showMenu(target);
+        }
       } else {
         showMenu();
       }
