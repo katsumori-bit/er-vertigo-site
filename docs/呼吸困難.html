@@ -6,6 +6,157 @@
   <meta name="color-scheme" content="light dark" />
   <title>呼吸困難 | ER ノート</title>
   <link rel="stylesheet" href="er-note.css" />
+  <style>
+    /* === 診療フロー（このページ専用、めまい/転倒方式） === */
+    .flow-box { position: static; user-select: none; }
+    .flow-box__title {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 0.5rem; cursor: default; padding: 2px 0;
+    }
+    .flow-canvas {
+      background: var(--surface);
+      border-radius: 10px;
+      padding: 14px 10px 18px;
+      margin-top: 0.55rem;
+      overflow-x: auto; overflow-y: hidden;
+      -webkit-overflow-scrolling: touch;
+      touch-action: pan-x pan-y pinch-zoom;
+    }
+    .flow-canvas__hint {
+      font-size: 0.72rem; color: var(--muted);
+      text-align: center; margin: 0 0 0.6rem 0;
+    }
+    .dx-flow {
+      min-width: 720px; margin: 0 auto; padding: 4px 6px 8px;
+      font-size: 14px; line-height: 1.45; color: var(--text); font-family: inherit;
+    }
+    .dx-node {
+      background: var(--surface);
+      border: 1.5px solid color-mix(in srgb, var(--text) 22%, transparent);
+      border-radius: 10px; padding: 8px 12px; text-align: center;
+      box-shadow: 0 1px 2px var(--shadow, rgba(0,0,0,0.06));
+      min-height: 38px;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 2px; text-decoration: none; color: var(--text);
+    }
+    .dx-node__title { font-weight: 700; font-size: 13.5px; }
+    .dx-node__sub   { font-size: 11.5px; color: var(--muted); font-weight: 500; }
+    .dx-node--decision {
+      background: color-mix(in srgb, var(--accent) 12%, var(--surface));
+      border-color: var(--accent); border-radius: 14px;
+    }
+    .dx-node--danger {
+      background: color-mix(in srgb, #c0392b 14%, var(--surface));
+      border-color: #c0392b;
+    }
+    .dx-node--danger .dx-node__title { color: #c0392b; }
+    .dx-node--action {
+      background: color-mix(in srgb, var(--text) 5%, var(--surface));
+      border-style: dashed;
+    }
+    .dx-node--external {
+      border-style: dashed; position: relative;
+      background: color-mix(in srgb, var(--accent) 6%, var(--surface));
+    }
+    .dx-node--external::after {
+      content: "↗"; position: absolute; top: 4px; right: 8px;
+      font-size: 12px; color: var(--accent); opacity: 0.85;
+    }
+    .dx-node--warn {
+      background: color-mix(in srgb, #d4a017 14%, var(--surface));
+      border-color: #d4a017;
+    }
+    .dx-node--warn .dx-node__title { color: #9b7508; }
+
+    .dx-layer { display: grid; gap: 14px; align-items: stretch; margin: 0; }
+    .dx-layer--root   { grid-template-columns: 1fr; justify-items: center; }
+    .dx-layer--root > * { max-width: 360px; }
+    .dx-layer--branch { grid-template-columns: 1fr 1fr; }
+    .dx-layer--quad   { grid-template-columns: repeat(4, 1fr); }
+    .dx-layer--quint  { grid-template-columns: repeat(5, 1fr); }
+
+    .dx-arrow {
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      position: relative; margin: 4px 0; min-height: 44px;
+      color: var(--muted); font-size: 11.5px; font-weight: 600;
+    }
+    .dx-arrow::before {
+      content: ""; width: 2px; height: 100%; min-height: 38px;
+      background: color-mix(in srgb, var(--text) 35%, transparent);
+    }
+    .dx-arrow::after {
+      content: ""; position: absolute; bottom: 0;
+      width: 0; height: 0;
+      border-left: 5px solid transparent; border-right: 5px solid transparent;
+      border-top: 7px solid color-mix(in srgb, var(--text) 35%, transparent);
+    }
+    .dx-arrow__label {
+      background: var(--surface); padding: 1px 8px; border-radius: 999px;
+      border: 1px solid color-mix(in srgb, var(--text) 18%, transparent);
+      position: absolute; left: 50%; top: 50%;
+      transform: translate(-50%, -50%); white-space: nowrap; z-index: 1;
+    }
+
+    .dx-fork {
+      display: grid; grid-template-columns: 1fr 1fr;
+      position: relative; min-height: 38px; margin: 2px 0 4px;
+    }
+    .dx-fork::before {
+      content: ""; position: absolute;
+      top: 0; left: 25%; right: 25%; height: 2px;
+      background: color-mix(in srgb, var(--text) 35%, transparent);
+    }
+    .dx-fork__leg {
+      position: relative; display: flex; flex-direction: column;
+      align-items: center; justify-content: flex-end;
+      padding-top: 4px; padding-bottom: 4px;
+      font-size: 11.5px; font-weight: 600; color: var(--muted);
+      min-height: 36px;
+    }
+    .dx-fork__leg::before {
+      content: ""; width: 2px; flex: 1;
+      background: color-mix(in srgb, var(--text) 35%, transparent);
+    }
+    .dx-fork__leg::after {
+      content: ""; position: absolute; bottom: 0;
+      width: 0; height: 0;
+      border-left: 5px solid transparent; border-right: 5px solid transparent;
+      border-top: 7px solid color-mix(in srgb, var(--text) 35%, transparent);
+    }
+    .dx-fork__label {
+      background: var(--surface); padding: 1px 8px; border-radius: 999px;
+      border: 1px solid color-mix(in srgb, var(--text) 18%, transparent);
+      margin-bottom: 2px; z-index: 1;
+    }
+
+    .section-tiles { display: none !important; }
+
+    @media (max-width: 600px) {
+      .dx-flow { min-width: 0; font-size: 11px; padding: 2px 0 6px; }
+      .flow-canvas { overflow-x: hidden; padding: 8px 6px 12px; }
+      .flow-canvas__hint { font-size: 0.62rem; margin-bottom: 0.35rem; }
+      .dx-node { padding: 4px 5px; min-height: 28px; border-radius: 7px; gap: 1px; }
+      .dx-node__title { font-size: 10px; line-height: 1.22; }
+      .dx-node__sub   { font-size: 8.5px; line-height: 1.25; }
+      .dx-node--decision { border-radius: 8px; }
+      .dx-node--external::after { top: 2px; right: 4px; font-size: 9px; }
+      .dx-layer { gap: 5px; }
+      .dx-layer--root > * { max-width: none; width: 100%; }
+      .dx-layer--quad { grid-template-columns: 1fr 1fr; }
+      .dx-layer--quint { grid-template-columns: repeat(3, 1fr); }
+      .dx-arrow { min-height: 22px; margin: 1px 0; }
+      .dx-arrow::before { min-height: 18px; width: 1.5px; }
+      .dx-arrow::after { border-left-width: 4px; border-right-width: 4px; border-top-width: 6px; }
+      .dx-arrow__label { font-size: 8.5px; padding: 0 4px; line-height: 1.4; }
+      .dx-fork { min-height: 22px; }
+      .dx-fork::before { height: 1.5px; }
+      .dx-fork__leg { min-height: 22px; padding-top: 2px; padding-bottom: 2px; font-size: 9px; }
+      .dx-fork__leg::before { width: 1.5px; }
+      .dx-fork__leg::after { border-left-width: 4px; border-right-width: 4px; border-top-width: 6px; }
+      .dx-fork__label { font-size: 8.5px; padding: 0 4px; margin-bottom: 0; }
+    }
+  </style>
 </head>
 <body>
   <header class="hokuto-top">
@@ -21,18 +172,131 @@
     <article class="note-shell">
       <h1 class="page-title">呼吸困難</h1>
 
-      <!-- 即時アクションヘッダー（常時 sticky） -->
-      <div class="action-header">
-        <div class="action-header__title">⚡ 即時アクション</div>
-        <ol class="action-header__list">
-          <li><strong>緊張性気胸 / アナフィラキシー / 急性肺水腫 / PE / CO2 ナルコーシス</strong>を最初に外す</li>
-          <li><strong>SpO2 + 呼吸仕事量</strong>を見て酸素開始（COPD 疑い <strong>88–92%</strong>、それ以外 <strong>94–98%</strong>）</li>
-          <li>方向決定の<strong>4 軸：心不全 / COPD / 喘息 / 誤嚥性肺炎</strong>（決めつけず BNP + トロポニン併走）</li>
-          <li>全例で <strong>血ガス + BNP + トロポニン + ECG + 胸部 X 線</strong>をまとめて出す</li>
-        </ol>
+      <!-- 診療フロー -->
+      <div class="action-header flow-box" id="flowBox">
+        <div class="action-header__title flow-box__title">
+          <span>🗺 呼吸困難の診療フロー</span>
+        </div>
+        <div class="flow-canvas">
+          <p class="flow-canvas__hint">即動く致死疾患を外す → 全例セット → 4 軸 first → 当てはまらなければ PE/気胸/その他</p>
+          <div class="dx-flow" role="group" aria-label="呼吸困難の診療フロー">
+
+            <!-- L0: 即動く -->
+            <div class="dx-layer dx-layer--root">
+              <a class="dx-node dx-node--danger" href="#s1">
+                <div class="dx-node__title">🚨 鑑別の前に治療を先行</div>
+                <div class="dx-node__sub">緊張性気胸 / アナフィラキシー / 急性肺水腫 / 呼吸疲弊・CO2 ナルコーシス</div>
+              </a>
+            </div>
+
+            <div class="dx-arrow"><span class="dx-arrow__label">否定 → 全例セット</span></div>
+
+            <!-- L1: いつでもやること -->
+            <div class="dx-layer dx-layer--root">
+              <a class="dx-node dx-node--action" href="#s2">
+                <div class="dx-node__title">全例セット</div>
+                <div class="dx-node__sub">SpO2＋呼吸仕事量／酸素（COPD 88–92%、他 94–98%）</div>
+              </a>
+            </div>
+
+            <div class="dx-arrow"><span class="dx-arrow__label">↓ 同時並行</span></div>
+
+            <!-- L2: 検査セット -->
+            <div class="dx-layer dx-layer--branch">
+              <a class="dx-node dx-node--action" href="#s5">
+                <div class="dx-node__title">血液検査</div>
+                <div class="dx-node__sub">血ガス / BNP / トロポニン / D-dimer</div>
+              </a>
+              <a class="dx-node dx-node--action" href="#s6">
+                <div class="dx-node__title">ECG ＋ 胸部 X 線</div>
+                <div class="dx-node__sub">心不全/PE/気胸/肺炎所見</div>
+              </a>
+            </div>
+
+            <div class="dx-arrow"><span class="dx-arrow__label">↓ 問診＋聴診で 4 軸絞り</span></div>
+
+            <!-- L2.5: 問診と聴診の補助 -->
+            <div class="dx-layer dx-layer--branch">
+              <a class="dx-node dx-node--action" href="#s3">
+                <div class="dx-node__title">問診で方向決定</div>
+                <div class="dx-node__sub">突然/数日/既往/喫煙/感染</div>
+              </a>
+              <a class="dx-node dx-node--action" href="#s4">
+                <div class="dx-node__title">聴診</div>
+                <div class="dx-node__sub">湿性ラ音 / 喘鳴 / 片側消失 / 連続性</div>
+              </a>
+            </div>
+
+            <div class="dx-arrow"><span class="dx-arrow__label">4 軸 first</span></div>
+
+            <!-- L3: 4 軸 quad -->
+            <div class="dx-layer dx-layer--quad">
+              <a class="dx-node dx-node--external" href="疾患詳細/急性心不全.html">
+                <div class="dx-node__title">心不全</div>
+                <div class="dx-node__sub">起坐・湿性<br>BNP↑ / 心拡大</div>
+              </a>
+              <a class="dx-node dx-node--external" href="疾患詳細/COPD増悪.html">
+                <div class="dx-node__title">COPD 増悪</div>
+                <div class="dx-node__sub">呼気延長・連続性<br>樽状胸郭・喫煙歴</div>
+              </a>
+              <a class="dx-node dx-node--external" href="疾患詳細/喘息増悪.html">
+                <div class="dx-node__title">喘息発作</div>
+                <div class="dx-node__sub">夜間・若年<br>喘鳴・既往</div>
+              </a>
+              <a class="dx-node dx-node--external" href="疾患詳細/誤嚥性肺炎.html">
+                <div class="dx-node__title">誤嚥性肺炎</div>
+                <div class="dx-node__sub">高齢・嚥下機能↓<br>発熱・浸潤影</div>
+              </a>
+            </div>
+
+            <div class="dx-arrow"><span class="dx-arrow__label">合わない or 辻褄不一致 → 必ず疑う</span></div>
+
+            <!-- L4: 4 軸に当てはまらないとき -->
+            <div class="dx-layer dx-layer--quint">
+              <a class="dx-node dx-node--danger" href="#s7">
+                <div class="dx-node__title">PE</div>
+                <div class="dx-node__sub">突然・頻脈<br>D-dimer / 術後</div>
+              </a>
+              <a class="dx-node dx-node--danger" href="#s7">
+                <div class="dx-node__title">気胸</div>
+                <div class="dx-node__sub">片側消失<br>突然発症</div>
+              </a>
+              <a class="dx-node dx-node--danger" href="#s7">
+                <div class="dx-node__title">アナフィラキシー</div>
+                <div class="dx-node__sub">皮膚・喉頭<br>アドレナリン IM</div>
+              </a>
+              <a class="dx-node dx-node--warn" href="#s7">
+                <div class="dx-node__title">ACS</div>
+                <div class="dx-node__sub">胸痛主体<br>ECG 変化</div>
+              </a>
+              <a class="dx-node dx-node--warn" href="#s7">
+                <div class="dx-node__title">代謝性アシドーシス</div>
+                <div class="dx-node__sub">DKA / 腎不全 / 中毒</div>
+              </a>
+            </div>
+
+            <!-- L4.5: ILD -->
+            <div class="dx-arrow"><span class="dx-arrow__label">ILD 既往＋両側浸潤</span></div>
+            <div class="dx-layer dx-layer--root">
+              <a class="dx-node dx-node--external" href="疾患詳細/間質性肺炎急性増悪.html">
+                <div class="dx-node__title">間質性肺炎急性増悪</div>
+                <div class="dx-node__sub">ILD 既往 + 急性両側浸潤</div>
+              </a>
+            </div>
+
+            <!-- 合流：disposition -->
+            <div class="dx-arrow"><span class="dx-arrow__label">合流</span></div>
+            <div class="dx-layer dx-layer--root">
+              <a class="dx-node dx-node--decision" href="#s7">
+                <div class="dx-node__title">📤 disposition</div>
+                <div class="dx-node__sub">分岐先疾患ページへ</div>
+              </a>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <!-- §1〜§9 メニュータイル -->
+      <!-- §タイル（フロー直リンクで代替、CSS で非表示） -->
       <nav class="section-tiles" id="sectionMenu">
         <a class="section-tile" href="#s1"><span class="section-tile__no">🚨</span><span class="section-tile__name">即動く<br><small>致死疾患・先行治療</small></span></a>
         <a class="section-tile" href="#s2"><span class="section-tile__no">🩺</span><span class="section-tile__name">いつでもやること<br><small>バイタル・呼吸仕事量・酸素</small></span></a>
