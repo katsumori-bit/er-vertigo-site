@@ -6,6 +6,63 @@
   <meta name="color-scheme" content="light dark" />
   <title>大腿骨骨幹部骨折 | ER ノート</title>
   <link rel="stylesheet" href="../er-note.css" />
+  <style>
+    .dx-quick { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin: 10px 0 4px; }
+    .dx-quick__btn { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; padding: 10px 6px; border-radius: 10px; background: color-mix(in srgb, var(--accent) 10%, var(--surface)); border: 1.5px solid var(--accent); color: var(--text); text-decoration: none; font-weight: 700; font-size: 13px; line-height: 1.2; text-align: center; cursor: pointer; transition: background 120ms ease; }
+    .dx-quick__btn:hover { background: color-mix(in srgb, var(--accent) 18%, var(--surface)); }
+    .dx-quick__icon { font-size: 20px; }
+    .dx-quick__sub { font-size: 10.5px; font-weight: 500; color: var(--muted); }
+
+    .dx-tri { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin: 6px 0 4px; align-items: start; }
+    .dx-tri__card { background: var(--surface); border-radius: 10px; padding: 10px 12px; border: 1.5px solid color-mix(in srgb, var(--text) 18%, transparent); }
+    .dx-tri__card--vasc { border-color: #c0392b; background: color-mix(in srgb, #c0392b 6%, var(--surface)); }
+    .dx-tri__card--neuro { border-color: #b5651d; background: color-mix(in srgb, #b5651d 6%, var(--surface)); }
+    .dx-tri__card--typical { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 6%, var(--surface)); }
+    .dx-tri__title { display: flex; align-items: center; gap: 6px; font-weight: 800; font-size: 13.5px; margin-bottom: 4px; }
+    .dx-tri__card--vasc .dx-tri__title { color: #c0392b; }
+    .dx-tri__card--neuro .dx-tri__title { color: #b5651d; }
+    .dx-tri__list { margin: 0; padding-left: 18px; font-size: 12.5px; line-height: 1.5; }
+    .dx-tri__list li { margin: 2px 0; }
+
+    details.dx-tri__card { padding: 0; }
+    details.dx-tri__card > summary { list-style: none; cursor: pointer; padding: 10px 12px; display: flex; align-items: center; gap: 6px; font-weight: 800; font-size: 13.5px; }
+    details.dx-tri__card > summary::-webkit-details-marker { display: none; }
+    details.dx-tri__card > summary::after { content: "▸"; margin-left: auto; font-size: 12px; color: var(--muted); transition: transform 120ms ease; }
+    details.dx-tri__card[open] > summary::after { transform: rotate(90deg); }
+    details.dx-tri__card--vasc > summary { color: #c0392b; }
+    details.dx-tri__card--neuro > summary { color: #b5651d; }
+    details.dx-tri__card > .dx-tri__list { padding: 0 14px 12px 30px; }
+    details.dx-tri__card > .dx-tri__hint { padding: 0 14px 6px 30px; font-size: 11px; color: var(--muted); }
+
+    details.dx-box { background: var(--surface); border: 1.5px solid color-mix(in srgb, var(--text) 18%, transparent); border-radius: 10px; margin: 10px 0; scroll-margin-top: 8px; }
+    details.dx-box > summary { list-style: none; cursor: pointer; padding: 12px 14px; display: flex; align-items: center; gap: 8px; font-weight: 800; font-size: 14.5px; }
+    details.dx-box > summary::-webkit-details-marker { display: none; }
+    details.dx-box > summary::after { content: "▸"; margin-left: auto; font-size: 13px; color: var(--muted); transition: transform 120ms ease; }
+    details.dx-box[open] > summary::after { transform: rotate(90deg); }
+    details.dx-box[open] { border-color: var(--accent); }
+    details.dx-box > .dx-box__body { padding: 0 14px 14px; }
+
+    @media (max-width: 640px) {
+      .dx-quick { gap: 6px; }
+      .dx-quick__btn { padding: 8px 4px; font-size: 11.5px; border-radius: 8px; }
+      .dx-quick__icon { font-size: 17px; }
+      .dx-quick__sub { font-size: 9.5px; }
+      .dx-tri { grid-template-columns: 1fr; gap: 8px; }
+      .dx-tri__card { padding: 8px 10px; }
+      details.dx-tri__card > summary { padding: 8px 10px; font-size: 12.5px; }
+      details.dx-tri__card > .dx-tri__list { padding: 0 12px 10px 26px; }
+      .dx-tri__title { font-size: 12.5px; }
+      .dx-tri__list { font-size: 12px; }
+      details.dx-box > summary { padding: 10px 12px; font-size: 13.5px; }
+      details.dx-box > .dx-box__body { padding: 0 12px 12px; }
+    }
+
+    .dx-step { margin: 18px 0 6px; display: flex; align-items: center; gap: 10px; color: var(--muted); font-size: 11.5px; font-weight: 800; letter-spacing: 0.1em; }
+    .dx-step::before, .dx-step::after { content: ""; flex: 1; height: 1px; background: color-mix(in srgb, var(--text) 18%, transparent); }
+
+    .dx-template { background: color-mix(in srgb, var(--text) 4%, var(--surface)); border-left: 3px solid var(--accent); border-radius: 6px; padding: 10px 12px; margin: 6px 0 0; font-size: 13px; line-height: 1.6; white-space: pre-wrap; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+    .dx-template__hint { font-size: 11px; color: var(--muted); margin: 0 0 4px; }
+  </style>
 </head>
 <body>
   <header class="hokuto-top">
@@ -21,130 +78,156 @@
     <article class="note-shell">
       <h1 class="page-title">大腿骨骨幹部骨折</h1>
 
-      <!-- 即時アクションヘッダー -->
-      <div class="action-header">
-        <div class="action-header__title">⚡ 即時アクション</div>
-        <ol class="action-header__list">
-          <li><strong>血管神経評価 + 出血性ショック</strong>に注意（片側 1.5 L 出血あり得る）</li>
-          <li><strong>AP + lat X 線</strong>、両側 X 線も検討（多発外傷で全身 CT）</li>
-          <li><strong>髄内釘</strong>が標準（プレートは小児）</li>
-          <li><strong>脂肪塞栓症候群</strong>を念頭（24-48 h、呼吸困難・点状出血・意識障害）</li>
-        </ol>
-      </div>
-
-      <!-- メニュータイル -->
-      <nav class="section-tiles" id="sectionMenu">
-        <a class="section-tile" href="#s1"><span class="section-tile__no">📊</span><span class="section-tile__name">疫学・<br><small>受傷機転</small></span></a>
-        <a class="section-tile" href="#s2"><span class="section-tile__no">🩺</span><span class="section-tile__name">診断</span></a>
-        <a class="section-tile" href="#s3"><span class="section-tile__no">⚠️</span><span class="section-tile__name">併発リスク</span></a>
-        <a class="section-tile" href="#s4"><span class="section-tile__no">🚑</span><span class="section-tile__name">ER での対応</span></a>
-        <a class="section-tile" href="#s5"><span class="section-tile__no">💉</span><span class="section-tile__name">大腿神経<br><small>ブロック</small></span></a>
-        <a class="section-tile" href="#s6"><span class="section-tile__no">🦴</span><span class="section-tile__name">病的骨折<br><small>の疑い</small></span></a>
-        <a class="section-tile" href="#s7"><span class="section-tile__no">🏥</span><span class="section-tile__name">マネジメント<br><small>原則</small></span></a>
+      <nav class="dx-quick" aria-label="クイックタップ">
+        <button class="dx-quick__btn" type="button" data-target="img-read">
+          <span>画像の見方</span>
+          <span class="dx-quick__sub">Xp / 全身 CT</span>
+        </button>
+        <button class="dx-quick__btn" type="button" data-target="plan">
+          <span>治療方針</span>
+          <span class="dx-quick__sub">髄内釘・DCO</span>
+        </button>
+        <button class="dx-quick__btn" type="button" data-target="consult">
+          <span>コンサル文</span>
+          <span class="dx-quick__sub">そのまま貼れる</span>
+        </button>
       </nav>
 
-      <!-- 関連主訴（双方向リンク） -->
-      <details class="sub-fold" id="related-symptoms">
-        <summary>📞 この疾患が該当する主訴</summary>
-        <div class="sub-fold__body">
+      <div class="dx-step"><span>同時並行で評価する 3 軸</span></div>
+      <div class="dx-tri">
+
+        <div class="dx-tri__card dx-tri__card--typical">
+          <div class="dx-tri__title">典型像</div>
+          <ul class="dx-tri__list">
+            <li>若年男性、交通事故（バイク）・高所転落</li>
+            <li>明らかな<strong>変形 + 短縮 + 疼痛</strong></li>
+            <li>多発外傷の一部であることが多い</li>
+            <li>軽微外力なら<strong>病的骨折</strong>（転移性骨腫瘍）を疑う</li>
+            <li>受傷後 24–72h は<strong>脂肪塞栓症候群</strong>に注意</li>
+          </ul>
+        </div>
+
+        <details class="dx-tri__card dx-tri__card--vasc">
+          <summary>血管</summary>
+          <p class="dx-tri__hint"><strong>出血性ショックが最大リスク</strong>。片側 1000–1500 mL、両側で 3 L 出血しうる。</p>
+          <ul class="dx-tri__list">
+            <li>血圧・脈・乳酸を継時、ABC 優先</li>
+            <li>両側骨幹部骨折は<strong>大量輸血準備</strong></li>
+            <li>大腿動静脈の損傷を念頭（特に貫通・粉砕）</li>
+            <li>足背・後脛骨動脈を必ず触知（左右比較）、ABI 低下なら CTA</li>
+          </ul>
+        </details>
+
+        <details class="dx-tri__card dx-tri__card--neuro">
+          <summary>神経</summary>
+          <p class="dx-tri__hint"><strong>坐骨神経</strong>（後方走行）の損傷を念頭。下腿のコンパートメント症候群も大腿で起こりうる。</p>
+          <ul class="dx-tri__list">
+            <li>足趾運動・足背の感覚（坐骨神経領域）</li>
+            <li>下腿の緊満・受動背屈痛 → コンパートメント疑い</li>
+            <li>麻痺所見は固定肢位を見直す根拠</li>
+            <li>記録を残す（後の責任分界点）</li>
+          </ul>
+        </details>
+      </div>
+
+      <!-- 画像の見方 -->
+      <details class="dx-box" id="img-read">
+        <summary><span>画像の見方</span></summary>
+        <div class="dx-box__body">
           <ul>
-            <li><a class="wiki-link" href="../転倒.html">転倒</a> — 高エネルギー転倒・転落の典型疾患</li>
+            <li><strong>大腿 AP + lat</strong>（膝・股関節含む）— 隣接関節の合併骨折を見落とさない</li>
+            <li>多発外傷なら<strong>FAST + 全身 CT</strong>を優先</li>
+            <li>両側を疑う場合は両側 Xp</li>
+            <li><strong>軽微外力 → 病的骨折</strong>の鑑別：既往癌歴、皮質欠損、骨融解像 → 骨シンチ・全身 CT で原発巣検索</li>
+            <li>ステム周囲は<strong>インプラント末端</strong>の透亮像に注目（旧画像と比較）</li>
           </ul>
         </div>
       </details>
 
-      <!-- §1 疫学・受傷機転 -->
-      <section class="section-page" id="s1" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>📊 疫学・受傷機転</h2>
-        <ul>
-          <li><strong>若年男性</strong>、交通事故（バイク事故）、高所転落</li>
-          <li>高齢者では低エネルギーでも発生（骨粗鬆症・骨折歴の影響）</li>
-          <li><strong>病的骨折</strong>（転移性骨腫瘍）の鑑別を常に考える</li>
-        </ul>
-      </section>
+      <!-- 治療方針 -->
+      <details class="dx-box" id="plan">
+        <summary><span>治療方針（受傷状況 × 5 択）</span></summary>
+        <div class="dx-box__body">
+          <div class="table-wrap"><table>
+            <thead><tr><th>状況</th><th>所見</th><th>5 択マネジメント</th><th>ER の動き</th></tr></thead>
+            <tbody>
+              <tr><td>単独・閉鎖性</td><td>バイタル安定</td><td><strong>入院整形</strong>（24h 以内手術）</td><td>シーネ + Thomas splint 牽引</td></tr>
+              <tr><td><strong>多発外傷・不安定</strong></td><td>ショック・他臓器損傷</td><td><strong>即時整形</strong>（DCO：外固定→内固定）</td><td>輸血準備、FAST + 全身 CT</td></tr>
+              <tr><td>開放骨折</td><td>皮膚創あり</td><td><strong>即時整形</strong>（6–8h 以内洗浄）</td><td>洗浄 + ABx + 破傷風</td></tr>
+              <tr><td>病的骨折疑い</td><td>軽微外力 + 癌歴 / 骨融解</td><td><strong>入院整形 / 内科</strong></td><td>原発巣検索（骨シンチ・CT）</td></tr>
+              <tr><td><strong>血管・神経合併</strong></td><td>足背触知不能 / 麻痺</td><td><strong>即時整形 + 血管</strong></td><td>CTA、緊急手術</td></tr>
+            </tbody>
+          </table></div>
 
-      <!-- §2 診断 -->
-      <section class="section-page" id="s2" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🩺 診断</h2>
-        <ul>
-          <li>明らかな <strong>変形 + 短縮 + 疼痛</strong></li>
-          <li>レントゲン or 全身 CT で確定</li>
-          <li>多発外傷なら <strong>FAST + 全身 CT</strong></li>
-        </ul>
-      </section>
+          <h3>ER で打つ手</h3>
+          <ol>
+            <li><strong>ABC 優先</strong>、ショックなら輸液・輸血（クロスマッチ）</li>
+            <li><strong>FAST + 全身 CT</strong> で他外傷検索</li>
+            <li><strong>Thomas splint / 牽引固定</strong>で疼痛・出血軽減</li>
+            <li><strong>大腿神経ブロック</strong>でオピオイド依存を減らす（エコーガイド下、鼠径靱帯直下、大腿動脈外側、20 mL）→ <a class="wiki-link" href="大腿神経ブロック.html">大腿神経ブロック</a></li>
+            <li><strong>髄内釘（IM nail）</strong>固定が標準術式（プレートは小児）</li>
+            <li>多発外傷・全身不安定なら <strong>Damage Control Orthopedics</strong>（外固定で一時安定化 → 全身回復後に内固定）</li>
+            <li>24h 以内手術が脂肪塞栓リスク軽減</li>
+          </ol>
 
-      <!-- §3 併発リスク -->
-      <section class="section-page" id="s3" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>⚠️ 併発リスク</h2>
-        <div class="table-wrap"><table><thead><tr><th>合併症</th><th>頻度・機序</th></tr></thead><tbody><tr><td><strong>出血性ショック</strong></td><td>骨折部からの出血 1000–1500 mL/側、両側なら 3 L</td></tr><tr><td><strong>脂肪塞栓症候群</strong></td><td>12–72 時間後に頻呼吸・低酸素・意識障害</td></tr><tr><td><strong>ARDS</strong></td><td>多発外傷・脂肪塞栓に続発</td></tr><tr><td>神経血管損傷</td><td>大腿動静脈・坐骨神経</td></tr><tr><td>コンパートメント症候群</td><td>下腿と比して稀だが大腿でも起こる</td></tr></tbody></table></div>
-        <div class="callout callout-danger">
-          <div class="callout-title">出血性ショック + 脂肪塞栓</div>
-          <div class="callout-body"><ul>
-            <li>両側大腿骨幹部骨折 = 大量輸血準備</li>
-            <li>受傷後 24–72 時間の低酸素・意識障害は <strong>脂肪塞栓症候群</strong>を疑え</li>
-          </ul></div>
+          <h3>合併症（必ず先回り）</h3>
+          <div class="table-wrap"><table>
+            <thead><tr><th>合併症</th><th>頻度・機序</th></tr></thead>
+            <tbody>
+              <tr><td><strong>出血性ショック</strong></td><td>骨折部出血 1000–1500 mL/側、両側で 3 L</td></tr>
+              <tr><td><strong>脂肪塞栓症候群</strong></td><td>12–72h 後の頻呼吸・低酸素・意識障害・点状出血</td></tr>
+              <tr><td>ARDS</td><td>多発外傷・脂肪塞栓に続発</td></tr>
+              <tr><td>神経血管損傷</td><td>大腿動静脈・坐骨神経</td></tr>
+              <tr><td>コンパートメント症候群</td><td>下腿より稀だが大腿でも発生</td></tr>
+            </tbody>
+          </table></div>
         </div>
-      </section>
+      </details>
 
-      <!-- §4 ER での対応 -->
-      <section class="section-page" id="s4" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🚑 ER での対応</h2>
-        <ol>
-          <li><strong>ABC 優先</strong>、ショックなら輸液・輸血</li>
-          <li><strong>FAST + 全身 CT</strong> で他外傷検索</li>
-          <li><strong>Thomas splint / 牽引固定</strong>で疼痛・出血軽減</li>
-          <li><strong>大腿神経ブロック</strong>でオピオイドに依存しない鎮痛</li>
-          <li><strong>即時整形 → 髄内釘固定</strong>（24 時間以内が予後良好）</li>
-        </ol>
-      </section>
+      <!-- コンサル文 -->
+      <details class="dx-box" id="consult">
+        <summary><span>コンサル文（カルテに貼る）</span></summary>
+        <div class="dx-box__body">
+          <p class="dx-template__hint">『他科コンサルト実践マニュアル』の院内紹介状フォーマット準拠（【目的】【疾患】【既往歴】【内服薬】【ADL】【現病歴】）。</p>
+          <div class="dx-template">【目的】観血的整復・髄内釘固定のご相談・ご加療依頼。
+【疾患】#1 [右/左] 大腿骨骨幹部骨折（[閉鎖性／開放性 Gustilo ○型]、[単独／多発外傷の一部]、[病的骨折疑い：あり/なし]）
+【既往歴】[特記事項なし／○○／癌既往：○○]
+【内服薬】[なし／ワーファリン／DOAC ○○／抗血小板薬 ○○]
+【ADL（受傷前）】[独歩／杖／介助歩行／車椅子]
+【現病歴】[年齢]歳[男/女]性。[受傷機転：交通事故／高所転落／軽微外力]で受傷し、[来院経緯]で来院。
+ ・身体所見：大腿の変形・短縮・腫脹、開放創 [あり/なし]
+ ・血管：足背・後脛骨動脈 [良好／弱／触知不能]、ショック徴候 [あり/なし]
+ ・神経：坐骨神経領域 [問題なし／麻痺]、下腿コンパートメント [問題なし／緊満]
+ ・画像：Xp で大腿骨骨幹部骨折、[全身 CT 施行済／FAST 陰性]、[病的骨折精査：骨シンチ ○]
+ ・ER 処置：Thomas splint 牽引 + シーネ固定、大腿神経ブロック [済／未]、[輸液 / 輸血 ○ U]
+ ・術前検査：採血・心電図・胸部 X 線・クロスマッチ [済／未]
+よろしくお願いいたします。</div>
+        </div>
+      </details>
 
-      <!-- §5 大腿神経ブロックの意義 -->
-      <section class="section-page" id="s5" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>💉 大腿神経ブロックの意義</h2>
-        <ul>
-          <li>高齢・多発外傷で <strong>オピオイド依存を減らせる</strong></li>
-          <li><strong>エコーガイド下 + 20 mL 程度の局麻薬</strong>（1% リドカイン or 0.25% ブピバカイン）</li>
-          <li>鼠径靱帯直下で、大腿動脈の外側に穿刺</li>
-          <li>詳細は <a class="wiki-link" href="大腿神経ブロック.html">大腿神経ブロック</a> を参照</li>
-        </ul>
-      </section>
+      <!-- 関連ハブ -->
+      <details class="dx-box">
+        <summary><span>関連ハブ・隣接疾患</span></summary>
+        <div class="dx-box__body">
+          <ul>
+            <li>主訴入口：<a class="wiki-link" href="../転倒.html">転倒</a></li>
+            <li>隣接疾患：<a class="wiki-link" href="大腿骨近位部骨折.html">大腿骨近位部骨折</a> ／ <a class="wiki-link" href="大腿骨遠位端骨折.html">大腿骨遠位端骨折</a> ／ <a class="wiki-link" href="脛骨骨幹部骨折.html">脛骨骨幹部骨折</a></li>
+            <li>処置：<a class="wiki-link" href="大腿神経ブロック.html">大腿神経ブロック</a> ／ <a class="wiki-link" href="開放骨折.html">開放骨折</a> ／ <a class="wiki-link" href="コンパートメント症候群.html">コンパートメント症候群</a></li>
+          </ul>
+        </div>
+      </details>
 
-      <!-- §6 病的骨折の疑い -->
-      <section class="section-page" id="s6" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🦴 病的骨折の疑い</h2>
-        <ul>
-          <li>軽微な外力で大腿骨骨幹部骨折 → <strong>転移性骨腫瘍</strong>を疑う</li>
-          <li>既往歴（癌）・原発巣検索</li>
-          <li>骨シンチ・全身 CT</li>
-        </ul>
-      </section>
-
-      <!-- §7 マネジメント原則 -->
-      <section class="section-page" id="s7" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🏥 マネジメント原則</h2>
-        <ul>
-          <li><strong>髄内釘固定</strong>（IM nail）が第一選択</li>
-          <li>多発外傷・不安定な場合は <strong>Damage Control Orthopedics</strong>（外固定 → 全身安定後に内固定）</li>
-          <li>手術は 24 時間以内が推奨（脂肪塞栓リスク軽減）</li>
-        </ul>
-        <h3>出典</h3>
-        <ul>
-          <li><strong>増井伸高. 骨折ハンター. 中外医学社. 2019.</strong></li>
-          <li><strong>Bone LB ほか.</strong> Early versus delayed stabilization of femoral fractures. <em>J Bone Joint Surg Am.</em> 1989.</li>
-          <li><strong>ATLS 10th edition.</strong> American College of Surgeons.</li>
-        </ul>
-        <h3>関連</h3>
-        <ul>
-          <li><a class="wiki-link" href="../転倒.html">転倒</a> / <a class="wiki-link" href="大腿神経ブロック.html">大腿神経ブロック</a> / <a class="wiki-link" href="大腿骨近位部骨折.html">大腿骨近位部骨折</a> / <a class="wiki-link" href="大腿骨遠位端骨折.html">大腿骨遠位端骨折</a></li>
-        </ul>
-      </section>
+      <!-- 出典 -->
+      <details class="dx-box">
+        <summary><span>出典</span></summary>
+        <div class="dx-box__body">
+          <ul>
+            <li>増井伸高. 骨折ハンター. 中外医学社. 2019.</li>
+            <li>Bone LB ほか. Early versus delayed stabilization of femoral fractures. <em>J Bone Joint Surg Am.</em> 1989.</li>
+            <li>ATLS 10th edition. American College of Surgeons.</li>
+          </ul>
+        </div>
+      </details>
 
     </article>
   </main>
@@ -163,53 +246,20 @@
 
   <script>
   (function(){
-    const menu = document.getElementById('sectionMenu');
-    const pages = document.querySelectorAll('.section-page');
-    const titleH1 = document.querySelector('.page-title');
-    const relatedSymp = document.getElementById('related-symptoms');
-
-    function showSection(id) {
-      menu.hidden = true;
-      if (titleH1) titleH1.hidden = true;
-      if (relatedSymp) relatedSymp.hidden = true;
-      pages.forEach(p => p.hidden = (p.id !== id));
-      window.scrollTo(0, 0);
-    }
-    function showMenu(scrollTarget) {
-      menu.hidden = false;
-      if (titleH1) titleH1.hidden = false;
-      if (relatedSymp) relatedSymp.hidden = false;
-      pages.forEach(p => p.hidden = true);
-      if (scrollTarget) {
-        if (scrollTarget.tagName === 'DETAILS') scrollTarget.open = true;
-        scrollTarget.scrollIntoView({behavior: 'instant', block: 'start'});
-      } else {
-        window.scrollTo(0, 0);
-      }
-    }
-    function syncFromHash() {
-      const id = (location.hash || '').replace('#','');
-      const target = id ? document.getElementById(id) : null;
-      if (target && target.classList.contains('section-page')) {
-        showSection(id);
-      } else if (target) {
-        showMenu(target);
-      } else {
-        showMenu();
-      }
-    }
-
-    window.addEventListener('hashchange', syncFromHash);
-    document.querySelectorAll('.back-to-menu').forEach(b => {
-      b.addEventListener('click', () => { history.pushState(null,'',location.pathname); showMenu(); });
+    document.querySelectorAll('.dx-quick__btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.dataset.target;
+        const target = document.getElementById(id);
+        if (!target) return;
+        target.open = true;
+        target.scrollIntoView({behavior: 'smooth', block: 'start'});
+      });
     });
     const navBack = document.getElementById('navBack');
     if (navBack) navBack.addEventListener('click', () => {
       if (window.history.length > 1) history.back();
       else window.location.href = '../index.html';
     });
-
-    syncFromHash();
   })();
   </script>
 </body>

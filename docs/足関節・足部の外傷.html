@@ -6,6 +6,382 @@
   <meta name="color-scheme" content="light dark" />
   <title>足関節・足部の外傷 | ER ノート</title>
   <link rel="stylesheet" href="er-note.css" />
+  <style>
+    /* 単純化診療フロー（このページ専用） */
+    .flow-box { position: static; user-select: none; }
+    .flow-box__title {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 0.5rem; cursor: pointer; padding: 2px 0;
+    }
+    .flow-box__hint {
+      font-size: 0.72rem; font-weight: 600; color: var(--muted);
+      letter-spacing: 0.02em; padding: 2px 8px; border-radius: 999px;
+      border: 1px solid color-mix(in srgb, var(--text) 20%, transparent);
+    }
+
+    /* ===== 診療フロー本体 ===== */
+    .flow-canvas {
+      background: var(--surface); border-radius: 10px;
+      padding: 14px 10px 18px; margin-top: 0.55rem;
+      overflow-x: auto; overflow-y: hidden;
+      -webkit-overflow-scrolling: touch; touch-action: pan-x pan-y pinch-zoom;
+    }
+    .dx-flow {
+      min-width: 720px; margin: 0 auto; padding: 4px 6px 8px;
+      font-size: 14px; line-height: 1.45; color: var(--text); font-family: inherit;
+    }
+
+    /* ノード共通 */
+    .dx-node {
+      background: var(--surface);
+      border: 1.5px solid color-mix(in srgb, var(--text) 22%, transparent);
+      border-radius: 10px; padding: 8px 12px; text-align: center;
+      box-shadow: 0 1px 2px var(--shadow, rgba(0,0,0,0.06));
+      min-height: 38px;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 2px;
+    }
+    .dx-node__title { font-weight: 700; font-size: 13.5px; }
+    .dx-node__sub   { font-size: 11.5px; color: var(--muted); font-weight: 500; }
+
+    .dx-node--decision {
+      background: color-mix(in srgb, var(--accent) 12%, var(--surface));
+      border-color: var(--accent); border-radius: 14px;
+    }
+    .dx-node--judge {
+      background: var(--accent-weak, color-mix(in srgb, var(--accent) 14%, var(--surface)));
+      border: 1.5px dashed var(--accent); border-radius: 999px;
+      padding: 6px 14px; font-weight: 700; min-height: 32px;
+    }
+    .dx-node--danger {
+      background: color-mix(in srgb, #c0392b 14%, var(--surface));
+      border-color: #c0392b;
+    }
+    .dx-node--danger .dx-node__title { color: #c0392b; }
+    .dx-node--action {
+      background: color-mix(in srgb, var(--text) 5%, var(--surface));
+      border-style: dashed;
+    }
+    .dx-node--external {
+      text-decoration: none; color: var(--text); border-style: dashed;
+      position: relative;
+      background: color-mix(in srgb, var(--accent) 6%, var(--surface));
+      transition: background-color 120ms ease;
+    }
+    .dx-node--external::after {
+      content: "↗"; position: absolute; top: 4px; right: 8px;
+      font-size: 12px; color: var(--accent); opacity: 0.85;
+    }
+
+    /* レイヤー */
+    .dx-layer {
+      display: grid; gap: 14px; align-items: stretch; margin: 0;
+    }
+    .dx-layer--root   { grid-template-columns: 1fr; justify-items: center; }
+    .dx-layer--root > * { max-width: 360px; }
+    .dx-layer--branch { grid-template-columns: 1fr 1fr; }
+    .dx-layer--quad   { grid-template-columns: repeat(4, 1fr); }
+
+    /* 矢印 */
+    .dx-arrow {
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      position: relative; margin: 4px 0; min-height: 44px;
+      color: var(--muted); font-size: 11.5px; font-weight: 600;
+    }
+    .dx-arrow::before {
+      content: ""; width: 2px; height: 100%; min-height: 38px;
+      background: color-mix(in srgb, var(--text) 35%, transparent);
+    }
+    .dx-arrow::after {
+      content: ""; position: absolute; bottom: 0;
+      width: 0; height: 0;
+      border-left: 5px solid transparent; border-right: 5px solid transparent;
+      border-top: 7px solid color-mix(in srgb, var(--text) 35%, transparent);
+    }
+    .dx-arrow__label {
+      background: var(--surface); padding: 1px 8px; border-radius: 999px;
+      border: 1px solid color-mix(in srgb, var(--text) 18%, transparent);
+      position: absolute; left: 50%; top: 50%;
+      transform: translate(-50%, -50%); white-space: nowrap; z-index: 1;
+    }
+
+    /* 分岐 Y 字 */
+    .dx-fork {
+      display: grid; grid-template-columns: 1fr 1fr;
+      position: relative; min-height: 38px; margin: 2px 0 4px;
+    }
+    .dx-fork::before {
+      content: ""; position: absolute;
+      top: 0; left: 25%; right: 25%; height: 2px;
+      background: color-mix(in srgb, var(--text) 35%, transparent);
+    }
+    .dx-fork__leg {
+      position: relative; display: flex; flex-direction: column;
+      align-items: center; justify-content: flex-end;
+      padding-top: 4px; padding-bottom: 4px;
+      font-size: 11.5px; font-weight: 600; color: var(--muted); min-height: 36px;
+    }
+    .dx-fork__leg::before {
+      content: ""; width: 2px; flex: 1;
+      background: color-mix(in srgb, var(--text) 35%, transparent);
+    }
+    .dx-fork__leg::after {
+      content: ""; position: absolute; bottom: 0;
+      width: 0; height: 0;
+      border-left: 5px solid transparent; border-right: 5px solid transparent;
+      border-top: 7px solid color-mix(in srgb, var(--text) 35%, transparent);
+    }
+    .dx-fork__label {
+      background: var(--surface); padding: 1px 8px; border-radius: 999px;
+      border: 1px solid color-mix(in srgb, var(--text) 18%, transparent);
+      margin-bottom: 2px; z-index: 1;
+    }
+    .dx-fork--quad { grid-template-columns: repeat(4, 1fr); }
+    .dx-fork--quad::before { left: 12.5%; right: 12.5%; }
+
+    /* 4列の疾患ツリー */
+    .dx-trees {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 12px; align-items: start; margin-top: 4px;
+    }
+    .dx-tree { display: flex; flex-direction: column; gap: 6px; }
+    .dx-tree__group {
+      font-size: 11px; font-weight: 700; color: var(--muted);
+      text-align: center; padding: 6px 0 2px; margin-top: 4px;
+      border-bottom: 1px dashed color-mix(in srgb, var(--text) 22%, transparent);
+      letter-spacing: 0.02em;
+    }
+    .dx-tree__group:first-child { margin-top: 0; }
+
+    /* メモ */
+    .dx-note {
+      background: color-mix(in srgb, var(--text) 4%, var(--surface));
+      border-left: 3px solid color-mix(in srgb, var(--text) 25%, transparent);
+      border-radius: 6px; padding: 6px 10px;
+      font-size: 11.5px; color: var(--muted);
+      text-align: left; margin-top: 4px;
+    }
+
+    /* タップ可能ノード */
+    a.dx-node {
+      text-decoration: none; color: inherit; cursor: pointer;
+      transition: transform 80ms ease, box-shadow 120ms ease;
+      position: relative;
+    }
+    a.dx-node:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 3px 6px var(--shadow, rgba(0,0,0,0.12));
+    }
+    a.dx-node:active { transform: translateY(0); }
+    a.dx-node:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+    a.dx-node::after {
+      content: "›"; position: absolute; top: 3px; right: 6px;
+      font-size: 12px; color: color-mix(in srgb, var(--text) 40%, transparent);
+      font-weight: 700;
+    }
+    a.dx-node--danger::after { color: #c0392b; }
+    a.dx-node--decision::after { color: var(--accent); }
+
+    /* スマホ */
+    @media (max-width: 600px) {
+      .dx-flow { min-width: 0; font-size: 11px; padding: 2px 0 6px; }
+      .flow-canvas { overflow-x: hidden; padding: 8px 6px 12px; }
+
+      .dx-node { padding: 4px 5px; min-height: 28px; border-radius: 7px; gap: 1px;
+        box-shadow: 0 1px 1px var(--shadow, rgba(0,0,0,0.05)); }
+      .dx-node__title { font-size: 10.5px; line-height: 1.22; }
+      .dx-node__sub   { font-size: 9px;    line-height: 1.25; }
+      .dx-node--decision { border-radius: 8px; }
+      .dx-node--judge { padding: 3px 7px; min-height: 22px; font-size: 10px; }
+      .dx-node--external::after { top: 2px; right: 4px; font-size: 9px; }
+
+      .dx-layer { gap: 6px; }
+      .dx-layer--root > * { max-width: none; width: 100%; }
+
+      .dx-arrow { min-height: 24px; margin: 1px 0; }
+      .dx-arrow::before { min-height: 20px; width: 1.5px; }
+      .dx-arrow::after { border-left-width: 4px; border-right-width: 4px; border-top-width: 6px; }
+      .dx-arrow__label { font-size: 8.5px; padding: 0 4px; line-height: 1.4; }
+
+      .dx-fork { min-height: 22px; }
+      .dx-fork::before { height: 1.5px; }
+      .dx-fork__leg { min-height: 22px; padding-top: 2px; padding-bottom: 2px; font-size: 9px; }
+      .dx-fork__leg::before { width: 1.5px; }
+      .dx-fork__leg::after { border-left-width: 4px; border-right-width: 4px; border-top-width: 6px; }
+      .dx-fork__label { font-size: 8.5px; padding: 0 4px; margin-bottom: 0; }
+      .dx-fork--quad::before { left: 12.5%; right: 12.5%; }
+
+      .dx-trees { gap: 4px; }
+      .dx-tree { gap: 3px; }
+      .dx-tree__group { font-size: 8.5px; padding: 4px 0 1px; margin-top: 2px; }
+      .dx-note { padding: 4px 7px; font-size: 9.5px; }
+
+      a.dx-node::after { top: 1px; right: 3px; font-size: 9px; }
+    }
+
+    /* === 来院後チェック === */
+    .dx-arrival-divider {
+      margin: 18px 0 8px; display: flex; align-items: center; gap: 10px;
+      color: var(--muted); font-size: 11.5px; font-weight: 800; letter-spacing: 0.1em;
+    }
+    .dx-arrival-divider::before, .dx-arrival-divider::after {
+      content: ""; flex: 1; height: 1px;
+      background: color-mix(in srgb, var(--text) 18%, transparent);
+    }
+    .dx-checklist {
+      background: var(--surface); border-radius: 10px;
+      border: 1.5px solid color-mix(in srgb, var(--text) 14%, transparent);
+      padding: 10px 14px;
+      box-shadow: 0 1px 2px var(--shadow, rgba(0,0,0,0.04));
+      margin-bottom: 8px;
+    }
+    .dx-checklist > summary {
+      cursor: pointer; font-weight: 800; font-size: 13.5px;
+      list-style: none; user-select: none;
+      display: flex; align-items: center; gap: 6px; color: var(--text);
+    }
+    .dx-checklist > summary::-webkit-details-marker { display: none; }
+    .dx-checklist > summary::before {
+      content: "▶"; font-size: 10px; color: var(--muted);
+      transition: transform 150ms ease; flex-shrink: 0;
+    }
+    .dx-checklist[open] > summary::before { transform: rotate(90deg); }
+    .dx-checklist__head {
+      display: flex; align-items: center; justify-content: space-between; gap: 8px;
+    }
+    .dx-checklist__reset {
+      font-size: 10.5px; color: var(--muted);
+      background: transparent;
+      border: 1px solid color-mix(in srgb, var(--text) 18%, transparent);
+      border-radius: 999px; padding: 1px 8px; cursor: pointer; font-weight: 600;
+    }
+    .dx-checklist__reset:hover { background: color-mix(in srgb, var(--text) 5%, transparent); }
+    .dx-checklist__list { list-style: none; margin: 8px 0 2px; padding: 0; }
+    .dx-checklist__list li { margin: 0; font-size: 12.5px; line-height: 1.45; }
+    .dx-checklist__list label {
+      display: flex; align-items: flex-start; gap: 8px; cursor: pointer;
+      padding: 5px 6px; border-radius: 5px;
+      transition: background-color 100ms ease;
+    }
+    .dx-checklist__list label:hover { background: color-mix(in srgb, var(--text) 4%, transparent); }
+    .dx-checklist__list input[type="checkbox"] { margin-top: 3px; flex-shrink: 0; accent-color: var(--accent); }
+    .dx-checklist__list label:has(input:checked) { color: var(--muted); }
+    .dx-checklist__list label:has(input:checked) strong {
+      color: var(--muted); text-decoration: line-through;
+      text-decoration-color: color-mix(in srgb, var(--muted) 50%, transparent);
+    }
+    .dx-checklist__sub { color: var(--muted); font-size: 11px; font-weight: 500; }
+
+    @media (max-width: 600px) {
+      .dx-checklist { padding: 8px 10px; }
+      .dx-checklist > summary { font-size: 12px; }
+      .dx-checklist__list li { font-size: 11.5px; }
+      .dx-checklist__sub { font-size: 10px; }
+      .dx-checklist__reset { font-size: 9.5px; padding: 1px 6px; }
+      .dx-arrival-divider { font-size: 10px; margin: 14px 0 6px; }
+    }
+
+    /* === トリガー連動ルール === */
+    .dx-rules-l2 {
+      margin-top: 12px;
+      background: var(--surface); border-radius: 10px;
+      border: 1.5px solid color-mix(in srgb, #c0392b 35%, transparent);
+      padding: 10px 14px;
+    }
+    .dx-rules-l2 > summary {
+      cursor: pointer; font-weight: 800; font-size: 13.5px;
+      list-style: none; user-select: none;
+      display: flex; align-items: center; gap: 6px; color: #c0392b;
+    }
+    .dx-rules-l2 > summary::-webkit-details-marker { display: none; }
+    .dx-rules-l2 > summary::before {
+      content: "▶"; font-size: 10px; color: #c0392b;
+      transition: transform 150ms ease; flex-shrink: 0;
+    }
+    .dx-rules-l2[open] > summary::before { transform: rotate(90deg); }
+    .dx-rules-l2__intro { font-size: 11px; color: var(--muted); margin: 8px 0 4px; line-height: 1.5; }
+    .dx-rules-l2__group {
+      font-size: 11px; font-weight: 800; color: var(--muted);
+      margin: 12px 0 5px; padding: 0; letter-spacing: 0.06em;
+    }
+    .dx-rules-l2__list {
+      list-style: none; margin: 0 0 4px; padding: 0;
+      display: flex; flex-direction: column; gap: 5px;
+    }
+    .dx-rule {
+      background: color-mix(in srgb, var(--text) 4%, var(--surface));
+      border-left: 3px solid color-mix(in srgb, var(--text) 28%, transparent);
+      border-radius: 6px; padding: 7px 10px;
+      font-size: 12px; line-height: 1.45;
+    }
+    .dx-rule.is-critical {
+      background: color-mix(in srgb, #c0392b 6%, var(--surface));
+      border-left-color: #c0392b;
+    }
+    .dx-rule.is-pitfall {
+      background: color-mix(in srgb, #d68910 7%, var(--surface));
+      border-left-color: #d68910;
+    }
+    .dx-rule__if {
+      font-weight: 700; color: var(--text);
+      display: flex; align-items: baseline; gap: 6px; flex-wrap: wrap;
+    }
+    .dx-rule__tag {
+      display: inline-block; font-size: 9.5px; font-weight: 800;
+      padding: 1px 7px; border-radius: 999px;
+      background: color-mix(in srgb, var(--text) 12%, var(--surface));
+      color: var(--muted); letter-spacing: 0.08em; flex-shrink: 0;
+    }
+    .dx-rule.is-critical .dx-rule__tag {
+      background: color-mix(in srgb, #c0392b 18%, var(--surface)); color: #c0392b;
+    }
+    .dx-rule.is-pitfall .dx-rule__tag {
+      background: color-mix(in srgb, #d68910 20%, var(--surface)); color: #b87900;
+    }
+    .dx-rule__then { margin-top: 3px; color: var(--text); }
+    .dx-rule__then strong { color: var(--accent); }
+    .dx-rule.is-critical .dx-rule__then strong { color: #c0392b; }
+
+    @media (max-width: 600px) {
+      .dx-rules-l2 { padding: 8px 10px; }
+      .dx-rules-l2 > summary { font-size: 12px; }
+      .dx-rules-l2__intro { font-size: 10px; }
+      .dx-rules-l2__group { font-size: 10px; margin-top: 10px; }
+      .dx-rule { font-size: 11px; padding: 6px 8px; line-height: 1.4; }
+      .dx-rule__tag { font-size: 9px; padding: 0 5px; }
+    }
+
+    /* 撮影方向の備忘 */
+    .dx-imaging {
+      margin-top: 12px;
+      background: var(--surface); border-radius: 10px;
+      border: 1.5px solid color-mix(in srgb, var(--text) 14%, transparent);
+      padding: 10px 14px;
+    }
+    .dx-imaging > summary {
+      cursor: pointer; font-weight: 800; font-size: 13.5px;
+      list-style: none; user-select: none;
+      display: flex; align-items: center; gap: 6px; color: var(--text);
+    }
+    .dx-imaging > summary::-webkit-details-marker { display: none; }
+    .dx-imaging > summary::before {
+      content: "▶"; font-size: 10px; color: var(--muted);
+      transition: transform 150ms ease; flex-shrink: 0;
+    }
+    .dx-imaging[open] > summary::before { transform: rotate(90deg); }
+    .dx-imaging__list {
+      margin: 8px 0 0; padding-left: 1.2em; font-size: 12.5px; line-height: 1.55;
+    }
+    .dx-imaging__list li { margin: 2px 0; }
+    @media (max-width: 600px) {
+      .dx-imaging { padding: 8px 10px; }
+      .dx-imaging > summary { font-size: 12px; }
+      .dx-imaging__list { font-size: 11.5px; }
+    }
+
+    /* §メニュータイル非表示 */
+    .section-tiles { display: none !important; }
+  </style>
 </head>
 <body>
   <header class="hokuto-top">
@@ -21,194 +397,296 @@
     <article class="note-shell">
       <h1 class="page-title">足関節・足部の外傷</h1>
 
-      <!-- 即時アクションヘッダー（常時 sticky） -->
-      <div class="action-header">
-        <div class="action-header__title">⚡ 即時アクション</div>
-        <ol class="action-header__list">
-          <li><strong>Ottawa Ankle / Foot Rules</strong> で X 線適応を判定（外果・内果後縁、舟状骨、第 5 中足骨基部、4 歩歩行不能）</li>
-          <li><strong>X 線は AP + lateral + mortise</strong>（足部疑いなら足部 3 方向）</li>
-          <li><strong>Maisonneuve は腓骨近位を必ず触る</strong>、Pilon 骨折は <strong>CT</strong> で関節面評価</li>
-          <li><strong>Lisfranc 損傷は見逃しやすい</strong> → 中足部圧痛・腫脹あれば<strong>荷重 X 線</strong>を検討</li>
-        </ol>
+      <!-- 単純化診療フロー -->
+      <div class="action-header flow-box" id="flowBox">
+        <div class="action-header__title flow-box__title" id="flowBoxClose" role="button" tabindex="0" aria-label="診療フローを閉じる">
+          <span>🗺 単純化診療フロー</span>
+          <span class="flow-box__hint">タップで閉じる ✕</span>
+        </div>
+
+        <div class="flow-canvas">
+          <div class="dx-flow" role="group" aria-label="足関節・足部外傷の単純化診療フロー">
+
+            <!-- L0: Red flags -->
+            <div class="dx-layer dx-layer--root">
+              <a class="dx-node dx-node--decision dx-node--danger" href="#redflags">
+                <div class="dx-node__title">🚨 Red flags 確認</div>
+                <div class="dx-node__sub">脱臼骨折／血流障害／開放創／コンパートメント</div>
+              </a>
+            </div>
+
+            <div class="dx-fork">
+              <div class="dx-fork__leg"><span class="dx-fork__label">あり</span></div>
+              <div class="dx-fork__leg"><span class="dx-fork__label">なし</span></div>
+            </div>
+
+            <div class="dx-layer dx-layer--branch">
+              <a class="dx-node dx-node--danger" href="#redflags">
+                <div class="dx-node__title">緊急対応</div>
+                <div class="dx-node__sub">即整復／即時整形／血管評価</div>
+              </a>
+              <div class="dx-arrow"><span class="dx-arrow__label">↓ 部位で絞る</span></div>
+            </div>
+
+            <!-- L1: 痛みの主座 -->
+            <div class="dx-layer dx-layer--root">
+              <div class="dx-node dx-node--judge">痛みの主座は？</div>
+            </div>
+
+            <div class="dx-fork dx-fork--quad">
+              <div class="dx-fork__leg"><span class="dx-fork__label">足首・くるぶし</span></div>
+              <div class="dx-fork__leg"><span class="dx-fork__label">足の甲〜中足部</span></div>
+              <div class="dx-fork__leg"><span class="dx-fork__label">踵</span></div>
+              <div class="dx-fork__leg"><span class="dx-fork__label">アキレス腱</span></div>
+            </div>
+
+            <!-- L2/L3: 4列の疾患ツリー -->
+            <div class="dx-trees">
+
+              <!-- 1) 足首・くるぶし -->
+              <div class="dx-tree">
+                <div class="dx-tree__group">内反捻挫</div>
+                <a class="dx-node" href="疾患詳細/ATFL損傷.html">
+                  <div class="dx-node__title">ATFL損傷</div>
+                  <div class="dx-node__sub">最多。圧痛が ATFL のみ</div>
+                </a>
+                <a class="dx-node" href="疾患詳細/足関節果部骨折.html">
+                  <div class="dx-node__title">外果骨折</div>
+                  <div class="dx-node__sub">腓骨に直接圧痛・叩打痛</div>
+                </a>
+                <a class="dx-node" href="疾患詳細/距骨骨折.html">
+                  <div class="dx-node__title">距骨骨折（外側突起 ほか）</div>
+                  <div class="dx-node__sub">スノーボード型 / 荷重で痛い</div>
+                </a>
+
+                <div class="dx-tree__group">外反・回旋</div>
+                <a class="dx-node" href="疾患詳細/足関節果部骨折.html">
+                  <div class="dx-node__title">内果・二果・三果骨折</div>
+                  <div class="dx-node__sub">外果見つけたら他果も探す</div>
+                </a>
+                <a class="dx-node dx-node--danger" href="疾患詳細/Maisonneuve骨折.html">
+                  <div class="dx-node__title">Maisonneuve骨折</div>
+                  <div class="dx-node__sub">内果＋腓骨近位を必ず触診</div>
+                </a>
+
+                <div class="dx-tree__group">高エネ・軸圧</div>
+                <a class="dx-node dx-node--danger" href="疾患詳細/Pilon骨折.html">
+                  <div class="dx-node__title">Pilon骨折</div>
+                  <div class="dx-node__sub">脛骨天蓋・関節内骨折</div>
+                </a>
+                <a class="dx-node dx-node--danger" href="疾患詳細/距骨骨折.html">
+                  <div class="dx-node__title">距骨頸部骨折</div>
+                  <div class="dx-node__sub">準緊急手術。即時整形</div>
+                </a>
+
+                <div class="dx-tree__group">小児（10〜14歳）</div>
+                <a class="dx-node" href="疾患詳細/Tillaux骨折.html">
+                  <div class="dx-node__title">Tillaux／triplane骨折</div>
+                  <div class="dx-node__sub">骨端線骨折・関節内</div>
+                </a>
+
+                <div class="dx-tree__group">捻挫＋疼痛遷延</div>
+                <a class="dx-node" href="疾患詳細/遠位脛腓靱帯損傷.html">
+                  <div class="dx-node__title">遠位脛腓靱帯損傷</div>
+                  <div class="dx-node__sub">スクイージングテスト</div>
+                </a>
+              </div>
+
+              <!-- 2) 足の甲〜中足部 -->
+              <div class="dx-tree">
+                <div class="dx-tree__group">直達外力・つま先着地</div>
+                <a class="dx-node" href="疾患詳細/中足骨骨折.html">
+                  <div class="dx-node__title">中足骨骨折</div>
+                  <div class="dx-node__sub">第2〜4。多くは保存</div>
+                </a>
+                <a class="dx-node dx-node--danger" href="疾患詳細/リスフラン関節脱臼骨折.html">
+                  <div class="dx-node__title">リスフラン関節脱臼骨折</div>
+                  <div class="dx-node__sub">第2中足骨側方転位を確認</div>
+                </a>
+
+                <div class="dx-tree__group">内反 + 第5中足骨基部</div>
+                <a class="dx-node" href="疾患詳細/第5中足骨近位端骨折.html">
+                  <div class="dx-node__title">第5中足骨近位端骨折</div>
+                  <div class="dx-node__sub">裸足視診で気づく</div>
+                </a>
+
+                <div class="dx-tree__group">足趾</div>
+                <a class="dx-node" href="疾患詳細/足趾骨骨折.html">
+                  <div class="dx-node__title">足趾骨骨折</div>
+                  <div class="dx-node__sub">爪外傷・開放骨折に注意</div>
+                </a>
+              </div>
+
+              <!-- 3) 踵 -->
+              <div class="dx-tree">
+                <div class="dx-tree__group">転落・軸圧</div>
+                <a class="dx-node dx-node--danger" href="疾患詳細/踵骨骨折.html">
+                  <div class="dx-node__title">踵骨骨折</div>
+                  <div class="dx-node__sub">Böhler角 &lt; 20°</div>
+                </a>
+                <div class="dx-note">高所転落では<strong>反対側踵骨</strong>と<strong>腰椎</strong>を必ず評価（両側10%／脊椎合併10%）</div>
+              </div>
+
+              <!-- 4) アキレス腱 -->
+              <div class="dx-tree">
+                <div class="dx-tree__group">底屈力低下／ポップ音</div>
+                <a class="dx-node" href="疾患詳細/アキレス腱損傷.html">
+                  <div class="dx-node__title">アキレス腱損傷</div>
+                  <div class="dx-node__sub">Thompson テスト陽性</div>
+                </a>
+                <div class="dx-note">非典型例（ポップ音なし・脱力のみ）が25%。腓腹筋挫傷も同ページに併記</div>
+              </div>
+
+            </div>
+
+          </div>
+
+          <!-- 来院後チェック -->
+          <div class="dx-arrival-divider"><span>来院後のチェック</span></div>
+
+          <details class="dx-checklist" id="historyPanel">
+            <summary>
+              <span class="dx-checklist__head" style="flex:1;">
+                <span>🗣 問診（来院後に実施）</span>
+                <button type="button" class="dx-checklist__reset" aria-label="問診チェックをすべて外す">リセット</button>
+              </span>
+            </summary>
+            <ul class="dx-checklist__list">
+              <li><label><input type="checkbox" data-key="h-mech"> <span><strong>受傷機転</strong> <span class="dx-checklist__sub">捻った／踏んだ／ぶつけた／落ちた／伸ばした</span></span></label></li>
+              <li><label><input type="checkbox" data-key="h-direction"> <span><strong>力の方向</strong> <span class="dx-checklist__sub">内反 / 外反 / 軸圧 / 直達外力</span></span></label></li>
+              <li><label><input type="checkbox" data-key="h-pop"> <span><strong>ポップ音・突然の脱力</strong> <span class="dx-checklist__sub">アキレス腱断裂を強く示唆</span></span></label></li>
+              <li><label><input type="checkbox" data-key="h-fall"> <span><strong>高所転落の高さ</strong> <span class="dx-checklist__sub">踵骨骨折→脊椎・反対側踵骨を連動評価</span></span></label></li>
+              <li><label><input type="checkbox" data-key="h-sport"> <span><strong>スポーツ種目</strong> <span class="dx-checklist__sub">ボード=外側突起、サッカー/空手=後方突起</span></span></label></li>
+              <li><label><input type="checkbox" data-key="h-age"> <span><strong>年齢・成長期か</strong> <span class="dx-checklist__sub">小学校高学年〜中学生は骨端線骨折を想起</span></span></label></li>
+              <li><label><input type="checkbox" data-key="h-walk"> <span><strong>受傷直後の歩行可否</strong> <span class="dx-checklist__sub">4歩歩行可/不可（Ottawa の補助）</span></span></label></li>
+            </ul>
+          </details>
+
+          <details class="dx-checklist" id="examPanel">
+            <summary>
+              <span class="dx-checklist__head" style="flex:1;">
+                <span>🔍 身体診察（来院後に実施）</span>
+                <button type="button" class="dx-checklist__reset" aria-label="身体診察チェックをすべて外す">リセット</button>
+              </span>
+            </summary>
+            <ul class="dx-checklist__list">
+              <li><label><input type="checkbox" data-key="e-vital"> <span><strong>バイタル</strong> <span class="dx-checklist__sub">高エネ外傷では多発外傷を意識</span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-bare"> <span><strong>両側裸足にして視診</strong> <span class="dx-checklist__sub">第5中足骨腫脹／Mondor sign／開放創／爪外傷</span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-tender"> <span><strong>圧痛マッピング</strong> <span class="dx-checklist__sub">外果＋後縁6cm／内果／舟状骨／第5中足骨基部／中足部／踵／アキレス腱</span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-prox-fib"> <span><strong>腓骨近位の圧痛</strong> <span class="dx-checklist__sub">Maisonneuve 除外。所見あれば下腿全長 X 線</span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-contra-heel"> <span><strong>反対側踵骨の圧痛</strong> <span class="dx-checklist__sub">両側骨折 10%</span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-spine"> <span><strong>腰部圧痛</strong> <span class="dx-checklist__sub">踵骨骨折→脊椎合併 10%</span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-thompson"> <span><strong>Thompson テスト</strong> <span class="dx-checklist__sub">非典型アキレス腱損傷の見逃し防止</span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-squeeze"> <span><strong>スクイージングテスト</strong> <span class="dx-checklist__sub">遠位脛腓靱帯損傷の示唆</span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-load"> <span><strong>荷重試験（4歩歩行）</strong> <span class="dx-checklist__sub">不能なら見逃し再点検</span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-pulse"> <span><strong>血流・神経</strong> <span class="dx-checklist__sub">足背・後脛骨動脈、足趾感覚運動</span></span></label></li>
+            </ul>
+          </details>
+
+          <!-- トリガー連動の注意 -->
+          <details class="dx-rules-l2" id="rulesL2Panel">
+            <summary>⚠️ トリガー連動の注意（条件で意識）</summary>
+            <p class="dx-rules-l2__intro">特定の状況に出会ったら必ず思い出すべき注意点。フローの判断と並行して意識する。</p>
+
+            <h4 class="dx-rules-l2__group">緊急・四肢温存トリガー</h4>
+            <ul class="dx-rules-l2__list">
+              <li class="dx-rule is-critical" id="redflags">
+                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>脱臼骨折・皮膚緊張・血流障害</span></div>
+                <div class="dx-rule__then"><strong>X 線確認前でも整復</strong>を検討。整形と相談</div>
+              </li>
+              <li class="dx-rule is-critical">
+                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>開放創</span></div>
+                <div class="dx-rule__then"><strong>即時整形コンサルト</strong>。創部洗浄・抗菌薬・破傷風</div>
+              </li>
+              <li class="dx-rule is-critical">
+                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>高エネ + 下腿緊満・受動伸展痛</span></div>
+                <div class="dx-rule__then"><strong>コンパートメント症候群</strong>を疑う。緊急減張</div>
+              </li>
+              <li class="dx-rule is-critical">
+                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>高所転落</span></div>
+                <div class="dx-rule__then"><strong>両側踵骨 + 腰椎</strong>を必ず評価。脊椎骨折 10% 合併</div>
+              </li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">見逃し回避トリガー</h4>
+            <ul class="dx-rules-l2__list">
+              <li class="dx-rule">
+                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>内反捻挫 + 内果のみ痛い</span></div>
+                <div class="dx-rule__then"><strong>腓骨近位を触診</strong>。Maisonneuve 骨折を除外（足関節 X 線では写らない）</div>
+              </li>
+              <li class="dx-rule">
+                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>中足骨骨折を見つけた</span></div>
+                <div class="dx-rule__then"><strong>斜位像でリスフラン関節</strong>の側方転位を確認（見逃し 20%）</div>
+              </li>
+              <li class="dx-rule">
+                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>内反捻挫の全例</span></div>
+                <div class="dx-rule__then"><strong>第5中足骨基部の圧痛</strong>を裸足視診とセットで全例確認</div>
+              </li>
+              <li class="dx-rule">
+                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>外果骨折を見つけた</span></div>
+                <div class="dx-rule__then"><strong>内果・後果の圧痛</strong>を再評価（二果・三果に格上げで方針変更）</div>
+              </li>
+              <li class="dx-rule">
+                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>足を捻って外果痛</span></div>
+                <div class="dx-rule__then">ATFL損傷 vs 腓骨遠位端骨折は<strong>圧痛部位</strong>で鑑別（腓骨直接 = 骨折寄り）</div>
+              </li>
+              <li class="dx-rule">
+                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>小学校高学年〜中学生の足関節外傷</span></div>
+                <div class="dx-rule__then">靱帯損傷より<strong>骨端線骨折</strong>を先に疑う（Tillaux／triplane）</div>
+              </li>
+              <li class="dx-rule">
+                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>突然のポップ音／底屈力低下</span></div>
+                <div class="dx-rule__then"><strong>Thompson テスト</strong>を必ず実施（非典型例 25% 見逃し）</div>
+              </li>
+              <li class="dx-rule">
+                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>距骨 minor 骨折を疑う（外側突起／滑車／後方突起）</span></div>
+                <div class="dx-rule__then">レントゲン感度 24〜33%。<strong>CT を追加</strong>して評価</div>
+              </li>
+              <li class="dx-rule">
+                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>捻挫だが疼痛・機能障害が遷延</span></div>
+                <div class="dx-rule__then"><strong>遠位脛腓靱帯損傷</strong>を疑う。スクイージングテスト・mortise の medial clear space</div>
+              </li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">ピットフォール</h4>
+            <ul class="dx-rules-l2__list">
+              <li class="dx-rule is-pitfall">
+                <div class="dx-rule__if"><span class="dx-rule__tag">⚠</span><span>Ottawa Ankle Rule で撮影省略</span></div>
+                <div class="dx-rule__then">日本では<strong>除外補助</strong>として使う。歩行可否で安心せず、所見があれば撮る</div>
+              </li>
+              <li class="dx-rule is-pitfall">
+                <div class="dx-rule__if"><span class="dx-rule__tag">⚠</span><span>足関節 X 線で「異常なし」</span></div>
+                <div class="dx-rule__then">Maisonneuve は腓骨近位が<strong>フィルムアウト</strong>。下腿全長を追加</div>
+              </li>
+              <li class="dx-rule is-pitfall">
+                <div class="dx-rule__if"><span class="dx-rule__tag">⚠</span><span>第5中足骨近位端の骨折線</span></div>
+                <div class="dx-rule__then">楔状骨関節面と<strong>連続して見えやすい</strong>。骨折線イメージを持って読影</div>
+              </li>
+              <li class="dx-rule is-pitfall">
+                <div class="dx-rule__if"><span class="dx-rule__tag">⚠</span><span>微妙骨折タイプの踵骨骨折</span></div>
+                <div class="dx-rule__then"><strong>Böhler 角 &lt; 20°</strong> で示唆。軸位像も必ず読む</div>
+              </li>
+              <li class="dx-rule is-pitfall">
+                <div class="dx-rule__if"><span class="dx-rule__tag">⚠</span><span>「単独 ATFL 損傷」と診断確定</span></div>
+                <div class="dx-rule__then">遠位脛腓靱帯損傷の併発が多い。スクイージング陽性なら同時想起</div>
+              </li>
+            </ul>
+          </details>
+
+          <!-- 撮影方向の備忘 -->
+          <details class="dx-imaging" id="imagingPanel">
+            <summary>📷 撮影方向の備忘</summary>
+            <ul class="dx-imaging__list">
+              <li><strong>足関節</strong>：AP + lateral + <strong>mortise</strong>（内旋15〜20°）</li>
+              <li><strong>足部</strong>：AP + lateral + <strong>斜位</strong>（中足骨・リスフラン評価）</li>
+              <li><strong>踵骨</strong>：側面 + <strong>軸位</strong>（Böhler 角測定）</li>
+              <li><strong>Maisonneuve 疑い</strong>：<strong>下腿全長</strong>を追加</li>
+              <li><strong>CT 追加</strong>：Pilon／距骨 minor 骨折／踵骨／リスフラン関節脱臼骨折</li>
+            </ul>
+          </details>
+
+        </div>
       </div>
-
-      <!-- §1〜§7 メニュータイル -->
-      <nav class="section-tiles" id="sectionMenu">
-        <a class="section-tile" href="#s1"><span class="section-tile__no">🚨</span><span class="section-tile__name">Red flags<br><small>血管・神経・開放</small></span></a>
-        <a class="section-tile" href="#s2"><span class="section-tile__no">🩺</span><span class="section-tile__name">最小診察<br><small>+ Ottawa Ankle/Foot</small></span></a>
-        <a class="section-tile" href="#s3"><span class="section-tile__no">📷</span><span class="section-tile__name">画像検査<br><small>X 線 / CT</small></span></a>
-        <a class="section-tile" href="#s4"><span class="section-tile__no">🦴</span><span class="section-tile__name">主要鑑別</span></a>
-        <a class="section-tile" href="#s5"><span class="section-tile__no">📤</span><span class="section-tile__name">disposition</span></a>
-        <a class="section-tile" href="#s6"><span class="section-tile__no">⚠️</span><span class="section-tile__name">ピットフォール</span></a>
-        <a class="section-tile" href="#s7"><span class="section-tile__no">📚</span><span class="section-tile__name">出典・リンク</span></a>
-      </nav>
-
-      <!-- §1 Red flags -->
-      <section class="section-page" id="s1" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🚨 Red flags</h2>
-        <ul>
-          <li><strong>足背動脈・後脛骨動脈触知不良 / 足部の冷感・蒼白</strong> → 血管損傷</li>
-          <li><strong>足趾の感覚脱失・運動障害</strong></li>
-          <li><strong>明らかな変形・脱臼</strong>（足関節脱臼骨折・距骨脱臼など）</li>
-          <li><strong>開放創</strong></li>
-          <li><strong>下腿コンパートメント緊満</strong>（高エネルギー外傷後）</li>
-        </ul>
-
-        <div class="callout callout-danger">
-          <div class="callout-title">脱臼骨折は速やかな整復</div>
-          <div class="callout-body">
-            <p>足関節脱臼骨折は皮膚緊満・血流障害をきたしやすい。整復は X 線確認前でも適応となることがある。整形外科と相談。</p>
-          </div>
-        </div>
-      </section>
-
-      <!-- §2 最小診察 + Ottawa Ankle/Foot Rules -->
-      <section class="section-page" id="s2" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🩺 最小診察 + Ottawa Ankle / Foot Rules</h2>
-
-        <h3>その場で行う最小セット</h3>
-        <ul>
-          <li><strong>視診</strong>：腫脹、変形、皮膚色、開放創</li>
-          <li><strong>触診</strong>：外果・内果（特に<strong>後縁 6 cm</strong>）、舟状骨、第 5 中足骨基部、Achilles、<strong>腓骨近位</strong>（Maisonneuve）</li>
-          <li><strong>荷重可否</strong>（受傷直後と ER で 4 歩歩行可？）</li>
-          <li><strong>血流・神経</strong>：足背動脈、後脛骨動脈、足趾感覚運動</li>
-          <li><strong>Achilles 腱損傷</strong>：Thompson テスト</li>
-        </ul>
-
-        <div class="callout callout-tip">
-          <div class="callout-title">Ottawa Ankle Rules（足関節）</div>
-          <div class="callout-body">
-            <p>以下のいずれかで足関節 X 線を撮る：</p>
-            <ul>
-              <li><strong>外果先端 / 後縁 6 cm の圧痛</strong></li>
-              <li><strong>内果先端 / 後縁 6 cm の圧痛</strong></li>
-              <li><strong>受傷直後と ER で 4 歩歩行不能</strong></li>
-            </ul>
-          </div>
-        </div>
-
-        <div class="callout callout-tip">
-          <div class="callout-title">Ottawa Foot Rules（足部）</div>
-          <div class="callout-body">
-            <p>以下のいずれかで足部 X 線を撮る：</p>
-            <ul>
-              <li><strong>第 5 中足骨基部の圧痛</strong></li>
-              <li><strong>舟状骨の圧痛</strong></li>
-              <li><strong>受傷直後と ER で 4 歩歩行不能</strong></li>
-            </ul>
-            <p>すべて陰性なら骨折の可能性は極めて低い（感度 ほぼ 100%）。</p>
-          </div>
-        </div>
-      </section>
-
-      <!-- §3 画像検査 -->
-      <section class="section-page" id="s3" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>📷 画像検査</h2>
-
-        <h3>第一選択</h3>
-        <ul>
-          <li><strong>足関節 AP + lateral + mortise</strong>（mortise view は内果・外果・天蓋の関係評価に必須）</li>
-          <li><strong>足部</strong>：AP + lateral + oblique</li>
-          <li><strong>Maisonneuve 疑い</strong> → <strong>下腿全長 / 腓骨近位</strong>を含めて撮影</li>
-        </ul>
-
-        <h3>追加画像</h3>
-        <ul>
-          <li><strong>CT</strong>：Pilon 骨折 / 距骨骨折 / 踵骨骨折 / Lisfranc 損傷の関節面評価</li>
-          <li><strong>荷重 X 線</strong>：Lisfranc 損傷疑いで明らかな転位がない症例</li>
-          <li><strong>MRI</strong>：靱帯損傷の精査、occult fracture、骨挫傷</li>
-        </ul>
-
-        <div class="callout callout-warning">
-          <div class="callout-title">Maisonneuve を見逃さない</div>
-          <div class="callout-body">
-            <p>足関節痛 / 内果遠位の圧痛だけでも、<strong>腓骨近位の骨折</strong>（Maisonneuve）を伴う回外外旋型損傷がある。<strong>必ず腓骨近位を触診</strong>し、所見があれば下腿全長 X 線。</p>
-          </div>
-        </div>
-      </section>
-
-      <!-- §4 主要鑑別 -->
-      <section class="section-page" id="s4" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🦴 主要鑑別</h2>
-
-        <div class="table-wrap"><table>
-          <thead><tr><th>病態</th><th>手がかり</th><th>進む先</th></tr></thead>
-          <tbody>
-            <tr><td><strong>足関節果部骨折</strong></td><td>外果 / 内果圧痛、腫脹、荷重不能</td><td><a class="wiki-link" href="疾患詳細/足関節果部骨折.html">足関節果部骨折</a></td></tr>
-            <tr><td><strong>Maisonneuve 骨折</strong></td><td>足関節痛 + 腓骨近位圧痛、内側裂隙開大</td><td><a class="wiki-link" href="疾患詳細/Maisonneuve骨折.html">Maisonneuve骨折</a></td></tr>
-            <tr><td><strong>ATFL 損傷</strong>（捻挫）</td><td>前外側の圧痛優位、骨圧痛軽い、Ottawa 陰性</td><td><a class="wiki-link" href="疾患詳細/ATFL損傷.html">ATFL損傷</a></td></tr>
-            <tr><td><strong>第 5 中足骨近位端骨折</strong></td><td>外側足部の限局痛、内反外傷後</td><td><a class="wiki-link" href="疾患詳細/第5中足骨近位端骨折.html">第5中足骨近位端骨折</a></td></tr>
-            <tr><td><strong>Pilon 骨折</strong></td><td>高エネルギー、軸圧、関節面破壊 → CT 必須</td><td>整形コンサルト</td></tr>
-            <tr><td><strong>Lisfranc 損傷</strong></td><td>中足部圧痛 / 腫脹 / 足底斑状出血、転位は荷重で顕在化</td><td>整形コンサルト + 荷重 X 線 / CT</td></tr>
-            <tr><td><strong>距骨・踵骨骨折</strong></td><td>軸圧外傷（転落）、腫脹著明、CT で評価</td><td>整形コンサルト</td></tr>
-            <tr><td><strong>Achilles 腱断裂</strong></td><td>底屈力低下、Thompson 陽性、踵上方の陥凹</td><td>整形コンサルト</td></tr>
-          </tbody>
-        </table></div>
-      </section>
-
-      <!-- §5 disposition -->
-      <section class="section-page" id="s5" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>📤 disposition</h2>
-
-        <h3>帰宅を考えやすい</h3>
-        <ul>
-          <li>Ottawa 陰性 / X 線で骨折なし、神経血管異常なし</li>
-          <li>シーネ or 装具固定、松葉杖、RICE 指示</li>
-          <li>整形外来 1〜2 週で再診（症状持続なら追加画像）</li>
-        </ul>
-
-        <h3>整形コンサルト / 入院</h3>
-        <ul>
-          <li>転位のある果部骨折、Pilon、距骨・踵骨骨折</li>
-          <li>Maisonneuve、Lisfranc 損傷</li>
-          <li>脱臼骨折、開放創、血管・神経損傷</li>
-          <li>明らかな足関節不安定性</li>
-          <li>Achilles 腱断裂</li>
-        </ul>
-      </section>
-
-      <!-- §6 ピットフォール -->
-      <section class="section-page" id="s6" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>⚠️ ピットフォール</h2>
-        <ul>
-          <li><strong>足関節だけ撮って Maisonneuve を見逃す</strong> — 必ず腓骨近位を触る</li>
-          <li><strong>Lisfranc を「捻挫」で帰す</strong> — 中足部圧痛 + 足底斑状出血は要 荷重 X 線 / CT</li>
-          <li><strong>Pilon を単純 X 線だけで評価する</strong> — 関節面評価には CT 必須</li>
-          <li><strong>Achilles 断裂を見落とす</strong> — Thompson テストを忘れない</li>
-          <li><strong>第 5 中足骨「Jones 骨折」と「裂離骨折」を区別しない</strong> — 治療方針が異なる</li>
-          <li><strong>Ottawa Rules を高エネルギー外傷で過信する</strong> — 軸圧外傷では distal の所見がなくても踵骨・距骨骨折あり</li>
-        </ul>
-      </section>
-
-      <!-- §7 出典・リンク -->
-      <section class="section-page" id="s7" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>📚 出典・リンク</h2>
-
-        <h3>主要文献</h3>
-        <ul>
-          <li><strong>Ottawa Ankle / Foot Rules</strong>：Stiell IG et al. <em>JAMA</em>. 1994.</li>
-          <li>各疾患の評価・治療は疾患ページに記載</li>
-        </ul>
-
-        <h3>関連ページ</h3>
-        <ul>
-          <li><a class="wiki-link" href="転倒.html">転倒</a></li>
-          <li><a class="wiki-link" href="疾患詳細/足関節痛.html">足関節痛</a></li>
-          <li><a class="wiki-link" href="疾患詳細/足関節果部骨折.html">足関節果部骨折</a></li>
-          <li><a class="wiki-link" href="疾患詳細/Maisonneuve骨折.html">Maisonneuve骨折</a></li>
-          <li><a class="wiki-link" href="疾患詳細/ATFL損傷.html">ATFL損傷</a></li>
-          <li><a class="wiki-link" href="疾患詳細/第5中足骨近位端骨折.html">第5中足骨近位端骨折</a></li>
-        </ul>
-
-        <p>#ER #救急 #足関節 #足部 #外傷 #OttawaAnkleRules #Maisonneuve #Lisfranc</p>
-      </section>
 
     </article>
   </main>
@@ -227,50 +705,61 @@
 
   <script>
   (function(){
-    const menu = document.getElementById('sectionMenu');
-    const pages = document.querySelectorAll('.section-page');
-    const titleH1 = document.querySelector('.page-title');
+    const flowBox = document.getElementById('flowBox');
+    const flowBoxClose = document.getElementById('flowBoxClose');
 
-    function showSection(id) {
-      menu.hidden = true;
-      if (titleH1) titleH1.hidden = true;
-      pages.forEach(p => p.hidden = (p.id !== id));
-      window.scrollTo(0, 0);
-    }
-    function showMenu(scrollTarget) {
-      menu.hidden = false;
-      if (titleH1) titleH1.hidden = false;
-      pages.forEach(p => p.hidden = true);
-      if (scrollTarget) {
-        if (scrollTarget.tagName === 'DETAILS') scrollTarget.open = true;
-        scrollTarget.scrollIntoView({behavior: 'instant', block: 'start'});
-      } else {
-        window.scrollTo(0, 0);
-      }
-    }
-    function syncFromHash() {
-      const id = (location.hash || '').replace('#','');
-      const target = id ? document.getElementById(id) : null;
-      if (target && target.classList.contains('section-page')) {
-        showSection(id);
-      } else if (target) {
-        showMenu(target);
-      } else {
-        showMenu();
-      }
+    if (flowBox && flowBoxClose) {
+      const dismiss = () => { flowBox.hidden = true; };
+      flowBoxClose.addEventListener('click', dismiss);
+      flowBoxClose.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); dismiss(); }
+      });
     }
 
-    window.addEventListener('hashchange', syncFromHash);
-    document.querySelectorAll('.back-to-menu').forEach(b => {
-      b.addEventListener('click', () => { history.pushState(null,'',location.pathname); showMenu(); });
+    // 来院後チェックリスト：localStorage 永続化 + per-panel リセット
+    const STORAGE_KEY = 'ankle-foot-dx-checklist-v1';
+    let stored = {};
+    try { stored = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); } catch (_) {}
+    const allBoxes = document.querySelectorAll('.dx-checklist__list input[type="checkbox"]');
+    allBoxes.forEach(cb => {
+      const key = cb.dataset.key;
+      if (stored[key]) cb.checked = true;
+      cb.addEventListener('change', () => {
+        if (cb.checked) stored[key] = true; else delete stored[key];
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(stored));
+      });
     });
+    document.querySelectorAll('.dx-checklist__reset').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const details = btn.closest('details');
+        if (!details) return;
+        details.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+          cb.checked = false;
+          delete stored[cb.dataset.key];
+        });
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(stored));
+      });
+    });
+
+    // パネル開閉状態を localStorage で復元
+    ['historyPanel', 'examPanel', 'rulesL2Panel', 'imagingPanel'].forEach(id => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      const key = `ankle-foot-${id}-open-v1`;
+      const saved = localStorage.getItem(key);
+      if (saved !== null) el.open = saved === '1';
+      el.addEventListener('toggle', () => {
+        localStorage.setItem(key, el.open ? '1' : '0');
+      });
+    });
+
     const navBack = document.getElementById('navBack');
     if (navBack) navBack.addEventListener('click', () => {
       if (window.history.length > 1) history.back();
       else window.location.href = 'index.html';
     });
-
-    syncFromHash();
   })();
   </script>
 </body>

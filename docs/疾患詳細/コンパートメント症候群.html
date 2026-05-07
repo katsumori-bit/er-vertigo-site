@@ -6,6 +6,196 @@
   <meta name="color-scheme" content="light dark" />
   <title>コンパートメント症候群 | ER ノート</title>
   <link rel="stylesheet" href="../er-note.css" />
+  <style>
+    /* ============ クイックタップ（3 つを開閉トリガー） ============ */
+    .dx-quick {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px;
+      margin: 10px 0 4px;
+    }
+    .dx-quick__btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      padding: 10px 6px;
+      border-radius: 10px;
+      background: color-mix(in srgb, var(--accent) 10%, var(--surface));
+      border: 1.5px solid var(--accent);
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 13px;
+      line-height: 1.2;
+      text-align: center;
+      cursor: pointer;
+      transition: background 120ms ease;
+    }
+    .dx-quick__btn:hover {
+      background: color-mix(in srgb, var(--accent) 18%, var(--surface));
+    }
+    .dx-quick__icon { font-size: 20px; }
+    .dx-quick__sub {
+      font-size: 10.5px;
+      font-weight: 500;
+      color: var(--muted);
+    }
+
+    /* ============ 同時評価 3 列（血管・神経・典型像） ============ */
+    .dx-tri {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+      margin: 6px 0 4px;
+      align-items: start;
+    }
+    .dx-tri__card {
+      background: var(--surface);
+      border-radius: 10px;
+      padding: 10px 12px;
+      border: 1.5px solid color-mix(in srgb, var(--text) 18%, transparent);
+    }
+    .dx-tri__card--vasc { border-color: #c0392b; background: color-mix(in srgb, #c0392b 6%, var(--surface)); }
+    .dx-tri__card--neuro { border-color: #b5651d; background: color-mix(in srgb, #b5651d 6%, var(--surface)); }
+    .dx-tri__card--typical { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 6%, var(--surface)); }
+    .dx-tri__title {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 800;
+      font-size: 13.5px;
+      margin-bottom: 4px;
+    }
+    .dx-tri__card--vasc .dx-tri__title { color: #c0392b; }
+    .dx-tri__card--neuro .dx-tri__title { color: #b5651d; }
+    .dx-tri__list {
+      margin: 0;
+      padding-left: 18px;
+      font-size: 12.5px;
+      line-height: 1.5;
+    }
+    .dx-tri__list li { margin: 2px 0; }
+
+    /* details 形式の血管/神経カード：summary にチェック印、開閉時の挙動 */
+    details.dx-tri__card { padding: 0; }
+    details.dx-tri__card > summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 10px 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 800;
+      font-size: 13.5px;
+    }
+    details.dx-tri__card > summary::-webkit-details-marker { display: none; }
+    details.dx-tri__card > summary::after {
+      content: "▸";
+      margin-left: auto;
+      font-size: 12px;
+      color: var(--muted);
+      transition: transform 120ms ease;
+    }
+    details.dx-tri__card[open] > summary::after { transform: rotate(90deg); }
+    details.dx-tri__card--vasc > summary { color: #c0392b; }
+    details.dx-tri__card--neuro > summary { color: #b5651d; }
+    details.dx-tri__card > .dx-tri__list { padding: 0 14px 12px 30px; }
+    details.dx-tri__card > .dx-tri__hint {
+      padding: 0 14px 6px 30px;
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    /* ============ 大きな details ボックス（画像/治療方針/コンサル文） ============ */
+    details.dx-box {
+      background: var(--surface);
+      border: 1.5px solid color-mix(in srgb, var(--text) 18%, transparent);
+      border-radius: 10px;
+      margin: 10px 0;
+      scroll-margin-top: 8px;
+    }
+    details.dx-box > summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 12px 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 800;
+      font-size: 14.5px;
+    }
+    details.dx-box > summary::-webkit-details-marker { display: none; }
+    details.dx-box > summary::after {
+      content: "▸";
+      margin-left: auto;
+      font-size: 13px;
+      color: var(--muted);
+      transition: transform 120ms ease;
+    }
+    details.dx-box[open] > summary::after { transform: rotate(90deg); }
+    details.dx-box[open] {
+      border-color: var(--accent);
+    }
+    details.dx-box > .dx-box__body {
+      padding: 0 14px 14px;
+    }
+
+    /* スマホで 1 列に */
+    @media (max-width: 640px) {
+      .dx-quick { gap: 6px; }
+      .dx-quick__btn { padding: 8px 4px; font-size: 11.5px; border-radius: 8px; }
+      .dx-quick__icon { font-size: 17px; }
+      .dx-quick__sub { font-size: 9.5px; }
+
+      .dx-tri { grid-template-columns: 1fr; gap: 8px; }
+      .dx-tri__card { padding: 8px 10px; }
+      details.dx-tri__card > summary { padding: 8px 10px; font-size: 12.5px; }
+      details.dx-tri__card > .dx-tri__list { padding: 0 12px 10px 26px; }
+      .dx-tri__title { font-size: 12.5px; }
+      .dx-tri__list { font-size: 12px; }
+
+      details.dx-box > summary { padding: 10px 12px; font-size: 13.5px; }
+      details.dx-box > .dx-box__body { padding: 0 12px 12px; }
+    }
+
+    /* ============ 区切り帯（最小限） ============ */
+    .dx-step {
+      margin: 18px 0 6px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 11.5px;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+    }
+    .dx-step::before, .dx-step::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: color-mix(in srgb, var(--text) 18%, transparent);
+    }
+
+    /* コピペ用テンプレ */
+    .dx-template {
+      background: color-mix(in srgb, var(--text) 4%, var(--surface));
+      border-left: 3px solid var(--accent);
+      border-radius: 6px;
+      padding: 10px 12px;
+      margin: 6px 0 0;
+      font-size: 13px;
+      line-height: 1.6;
+      white-space: pre-wrap;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+    .dx-template__hint {
+      font-size: 11px;
+      color: var(--muted);
+      margin: 0 0 4px;
+    }
+  </style>
 </head>
 <body>
   <header class="hokuto-top">
@@ -21,175 +211,197 @@
     <article class="note-shell">
       <h1 class="page-title">コンパートメント症候群</h1>
 
-      <!-- 即時アクションヘッダー（常時 sticky） -->
-      <div class="action-header">
-        <div class="action-header__title">⚡ 即時アクション</div>
-        <ol class="action-header__list">
-          <li><strong>5P</strong>（Pain out of proportion / Paresthesia / Pallor / Pulseless / Paralysis）─ <strong>疼痛が最初</strong>、麻痺・脈消失は晩期</li>
-          <li><strong>コンパートメント圧測定</strong>（Stryker）─ <strong>ΔP &lt; 30 mmHg で診断</strong>（ΔP = 拡張期血圧 − コンパートメント圧）</li>
-          <li><strong>緊急筋膜切開（fasciotomy）</strong> ─ 6 h 以内が筋肉生存目安、8 h 超で不可逆</li>
-          <li><strong>脛骨骨幹部・前腕</strong>で多い、<strong>長時間圧迫・再灌流障害</strong>でも起こる</li>
-        </ol>
-      </div>
-
-      <!-- §1〜§9 メニュータイル -->
-      <nav class="section-tiles" id="sectionMenu">
-        <a class="section-tile" href="#s1"><span class="section-tile__no">📖</span><span class="section-tile__name">定義・病態</span></a>
-        <a class="section-tile" href="#s2"><span class="section-tile__no">🦴</span><span class="section-tile__name">好発部位</span></a>
-        <a class="section-tile" href="#s3"><span class="section-tile__no">⚙️</span><span class="section-tile__name">原因</span></a>
-        <a class="section-tile" href="#s4"><span class="section-tile__no">🩺</span><span class="section-tile__name">臨床所見<br><small>5P・早期</small></span></a>
-        <a class="section-tile" href="#s5"><span class="section-tile__no">📊</span><span class="section-tile__name">診断<br><small>ΔP &lt; 30</small></span></a>
-        <a class="section-tile" href="#s6"><span class="section-tile__no">🔪</span><span class="section-tile__name">マネジメント<br><small>筋膜切開</small></span></a>
-        <a class="section-tile" href="#s7"><span class="section-tile__no">🔍</span><span class="section-tile__name">鑑別</span></a>
-        <a class="section-tile" href="#s8"><span class="section-tile__no">⚠️</span><span class="section-tile__name">合併症</span></a>
-        <a class="section-tile" href="#s9"><span class="section-tile__no">👁️</span><span class="section-tile__name">予防・<br><small>早期発見</small></span></a>
+      <!-- スマホですぐ開きたい 3 つ -->
+      <nav class="dx-quick" aria-label="クイックタップ">
+        <button class="dx-quick__btn" type="button" data-target="img-read">
+          <span>画像の見方</span>
+          <span class="dx-quick__sub">早期 vs 5P</span>
+        </button>
+        <button class="dx-quick__btn" type="button" data-target="plan">
+          <span>治療方針</span>
+          <span class="dx-quick__sub">ΔP / 4 区画切開</span>
+        </button>
+        <button class="dx-quick__btn" type="button" data-target="consult">
+          <span>コンサル文</span>
+          <span class="dx-quick__sub">そのまま貼れる</span>
+        </button>
       </nav>
 
-      <!-- 関連主訴（双方向リンク） -->
-      <details class="sub-fold" id="related-symptoms">
-        <summary>📞 この疾患が該当する主訴</summary>
-        <div class="sub-fold__body">
+      <!-- 同時評価 3 列：典型像は常時、血管・神経は折りたたみ -->
+      <div class="dx-step"><span>同時並行で評価する 3 軸</span></div>
+      <div class="dx-tri">
+
+        <div class="dx-tri__card dx-tri__card--typical">
+          <div class="dx-tri__title">典型像</div>
+          <ul class="dx-tri__list">
+            <li>骨折由来の最頻部位は<strong>脛骨骨幹部骨折（合併率 約 8%）</strong></li>
+            <li>下腿に <strong>4 区画</strong>（前方・外側・後方浅・後方深）</li>
+            <li><strong>足趾の他動屈曲伸展で疼痛惹起 ＋ 緊満感</strong>＝最早期</li>
+            <li>循環は<strong>一見保たれている</strong>段階で疑う</li>
+            <li>発症は ER でなく<strong>入院初日の一般病棟</strong>が多い</li>
+          </ul>
+        </div>
+
+        <details class="dx-tri__card dx-tri__card--vasc">
+          <summary>血管</summary>
+          <p class="dx-tri__hint">脈拍があってもコンパートメント症候群は否定できない。動脈触知不能・末梢チアノーゼは末期所見。</p>
+          <ul class="dx-tri__list">
+            <li>晩期 5P：<strong>Pain / Pallor / Paresthesia / Paralysis / Pulselessness</strong></li>
+            <li>これらが揃うのを待つと<strong>手遅れ</strong></li>
+            <li>満員電車の例え：定員以上の乗客が乗り込んだ車両の状態</li>
+            <li>区画圧 > 30 mmHg または <strong>ΔP < 30 mmHg</strong>（ΔP = 拡張期血圧 − 区画圧）</li>
+          </ul>
+        </details>
+
+        <details class="dx-tri__card dx-tri__card--neuro">
+          <summary>神経</summary>
+          <p class="dx-tri__hint"><strong>受動伸展痛 ＋ 緊満感</strong>で疑った時点で評価・介入を開始する。</p>
+          <ul class="dx-tri__list">
+            <li>下腿前方区画：<strong>深腓骨神経</strong>（第 1・2 趾間の感覚低下）</li>
+            <li>進行する疼痛・感覚障害（<strong>鎮痛薬で取れない持続痛</strong>）</li>
+            <li>意識障害・鎮静患者は訴えがないので積極的に疑う（圧測定）</li>
+            <li>記録を残す（後の責任分界点）</li>
+          </ul>
+        </details>
+      </div>
+
+      <!-- 画像の見方 -->
+      <details class="dx-box" id="img-read">
+        <summary><span>画像の見方・所見の取り方</span></summary>
+        <div class="dx-box__body">
+          <h3>定義・病態（満員電車の例え）</h3>
           <ul>
-            <li><span class="wiki-missing">手関節・手の外傷</span> — 前腕（Volkmann 拘縮）、中手骨骨折で発症</li>
-            <li><span class="wiki-missing">膝の外傷・痛み</span> — 大腿骨骨幹部骨折・脛骨近位部で発症</li>
-            <li><span class="wiki-missing">足関節・足部の外傷</span> — 下腿（最多・脛骨骨幹部骨折）、踵骨骨折で発症</li>
+            <li>筋膜で仕切られた閉鎖区画内に出血・浮腫が貯留 → <strong>区画内圧上昇</strong> → 微小循環障害 → 筋・神経の虚血壊死</li>
+            <li>コンパートメントを<strong>電車の車両</strong>、内包される筋肉・血管・神経を<strong>座席の乗客</strong>に例えると、骨折で大量の血液が流れ込む状態は<strong>朝の通勤電車に定員以上の乗客が乗り込んでくる</strong>のに似る</li>
+            <li><strong>筋膜切開（fasciotomy）はドアを開け放ち乗客を降ろす対症療法</strong></li>
+          </ul>
+
+          <h3>好発部位（脛骨骨幹部が圧倒的）</h3>
+          <div class="table-wrap"><table>
+            <thead><tr><th>部位</th><th>頻度・原因</th></tr></thead>
+            <tbody>
+              <tr><td><strong>下腿（前方・後方深部）</strong></td><td><strong>最多</strong>。<strong>脛骨骨幹部骨折の約 8%</strong>に合併。隣接 2 区画は容積が小さく、出血で容易に内圧負荷</td></tr>
+              <tr><td>前腕</td><td>小児上腕骨顆上骨折（Volkmann 拘縮）、橈骨遠位端骨折のきついギプス</td></tr>
+              <tr><td>大腿</td><td>大腿骨骨幹部骨折</td></tr>
+              <tr><td>足</td><td>踵骨骨折、Lisfranc 損傷</td></tr>
+              <tr><td>手</td><td>挫滅外傷、中手骨骨折</td></tr>
+            </tbody>
+          </table></div>
+
+          <h3>早期所見（これで疑う）</h3>
+          <ul>
+            <li><strong>足趾の他動屈曲伸展で疼痛惹起</strong>（passive stretch pain）＝<strong>最も鋭敏</strong></li>
+            <li><strong>緊満感</strong>（石のように固い、区画の腫脹）</li>
+            <li>進行する疼痛・感覚障害（鎮痛薬で取れない持続痛）</li>
+            <li><strong>循環は一見保たれている</strong>段階で疑う</li>
+          </ul>
+
+          <h3>晩期所見（5P）— 待つと手遅れ</h3>
+          <ul>
+            <li><strong>Pain</strong>（激痛）／<strong>Pallor</strong>（蒼白）／<strong>Paresthesia</strong>（しびれ）／<strong>Paralysis</strong>（麻痺）／<strong>Pulselessness</strong>（脈拍消失）</li>
+            <li>動脈触知不能・末梢チアノーゼは<strong>高度進行状態</strong>。これらが揃う前に介入する</li>
+          </ul>
+
+          <h3>診断（圧測定）</h3>
+          <ul>
+            <li><strong>Stryker 圧センサー</strong>で直接内圧測定 > 30 mmHg</li>
+            <li><strong>ΔP < 30 mmHg</strong>（ΔP = 拡張期血圧 − 区画圧）</li>
+            <li>意識障害・鎮静中の患者では圧測定が特に重要</li>
           </ul>
         </div>
       </details>
 
-      <!-- §1 定義・病態 -->
-      <section class="section-page" id="s1" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>📖 定義・病態</h2>
-        <ul>
-          <li>閉鎖した筋膜区画（コンパートメント）内の圧が上昇</li>
-          <li><strong>30 mmHg 以上 or 拡張期血圧との差（ΔP）&lt; 30 mmHg</strong></li>
-          <li>微小循環障害 → 筋肉・神経の虚血 → 壊死</li>
-        </ul>
-      </section>
+      <!-- 治療方針 -->
+      <details class="dx-box" id="plan">
+        <summary><span>治療方針（時間軸 ＋ 4 区画切開）</span></summary>
+        <div class="dx-box__body">
+          <h3>時間との勝負</h3>
+          <ul>
+            <li><strong>虚血 4 時間で筋・神経の不可逆変化が始まり、8 時間で完成</strong></li>
+            <li>発症前は<strong>頻回診察</strong>、発症後は時間との勝負</li>
+            <li>発症場所は ER ではなく<strong>入院初日の一般病棟</strong>。守備範囲外なら<strong>即時整形コンサルトで入院依頼</strong></li>
+          </ul>
 
-      <!-- §2 好発部位 -->
-      <section class="section-page" id="s2" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🦴 好発部位</h2>
-        <div class="table-wrap"><table><thead><tr><th>部位</th><th>頻度・原因</th></tr></thead><tbody><tr><td><strong>下腿（前脛骨コンパートメント）</strong></td><td><strong>最多</strong>、脛骨骨幹部骨折</td></tr><tr><td>前腕</td><td>上腕骨顆上骨折（Volkmann 拘縮）</td></tr><tr><td>大腿</td><td>大腿骨骨幹部骨折</td></tr><tr><td>足</td><td>踵骨骨折、Lisfranc 損傷</td></tr><tr><td>手</td><td>挫滅外傷、中手骨骨折</td></tr></tbody></table></div>
-      </section>
+          <h3>ER / 病棟での対応</h3>
+          <ol>
+            <li><strong>ギプス・シーネの除去</strong>（きつければ半円にカット）</li>
+            <li><strong>患肢は心臓と同じ高さに保つ</strong>（挙上すると灌流圧が下がる）</li>
+            <li>酸素投与・鎮痛</li>
+            <li>整形外科に<strong>即時コンサルト</strong>（筋膜切開の準備）</li>
+            <li>区画圧測定（30 mmHg 以上 or <strong>ΔP < 30 mmHg</strong>なら fasciotomy）</li>
+          </ol>
 
-      <!-- §3 原因 -->
-      <section class="section-page" id="s3" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>⚙️ 原因</h2>
-        <ul>
-          <li><strong>骨折</strong>（特に脛骨骨幹部、小児の上腕骨顆上）</li>
-          <li><strong>挫滅外傷</strong></li>
-          <li><strong>長時間の圧迫</strong>（薬物過量による意識消失・寝たきり）</li>
-          <li><strong>血管損傷</strong>（再還流障害）</li>
-          <li><strong>重度熱傷・感電</strong></li>
-          <li><strong>きついギプス・包帯</strong></li>
-        </ul>
-      </section>
+          <h3>筋膜切開（Fasciotomy）</h3>
+          <ul>
+            <li>満員電車のドアを開けて乗客を降ろすのと同じ「除圧の対症療法」</li>
+            <li>下腿は <strong>4 区画すべて</strong>を開放（前方・外側・後方浅・後方深）</li>
+            <li>創は<strong>開放のまま管理</strong>し、後日 2 次閉鎖</li>
+          </ul>
 
-      <!-- §4 臨床所見 -->
-      <section class="section-page" id="s4" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🩺 臨床所見 — 早期所見を見逃すな</h2>
-        <h3>早期所見（これで診断を疑う）</h3>
-        <ul>
-          <li><strong>受動伸展での過度な疼痛</strong>（passive stretch pain）= <strong>最も鋭敏</strong></li>
-          <li><strong>緊満感</strong>（石のように固い）</li>
-          <li><strong>鎮痛薬に反応しない持続痛</strong></li>
-        </ul>
-        <h3>晩期所見（5P、これを待つと手遅れ）</h3>
-        <ul>
-          <li><strong>Pain</strong>（激痛）</li>
-          <li><strong>Pallor</strong>（蒼白）</li>
-          <li><strong>Paresthesia</strong>（しびれ）</li>
-          <li><strong>Paralysis</strong>（麻痺）</li>
-          <li><strong>Pulselessness</strong>（脈拍消失）</li>
-        </ul>
-        <div class="callout callout-danger">
-          <div class="callout-title">脈拍があってもコンパートメント症候群は否定できない</div>
-          <div class="callout-body"><ul>
-            <li>脈拍消失は末期所見、多くの症例で脈拍は触れる</li>
-            <li><strong>受動伸展痛 + 緊満感</strong>で疑ったら即対応</li>
-          </ul></div>
+          <h3>非整形外科医がやるべきこと（予防 ＋ 早期発見）</h3>
+          <ul>
+            <li>非整形外科医が初診で<strong>ギプスを使うと圧迫が強すぎる</strong>。橈骨遠位端骨折などには<strong>sugar tong splint</strong>を使用する</li>
+            <li>脛骨骨幹部骨折は閉鎖骨折でも<strong>入院後 24–48 時間頻回診察</strong></li>
+            <li>多部位外傷で頭蓋内・体幹出血に脛骨骨幹部骨折が付随する場合も<strong>来院直後から整形外科に併診依頼</strong></li>
+            <li>意識障害患者（鎮静・麻酔・薬物過量）は訴えがないので積極的に疑う</li>
+            <li>踵骨骨折で帰宅保存の場合、<strong>腫脹増悪・疼痛増悪時は再診</strong>を必ず指示</li>
+          </ul>
+
+          <h3>合併症</h3>
+          <ul>
+            <li>筋壊死 → 永久機能障害／<strong>Volkmann 拘縮</strong>（前腕）</li>
+            <li>腎不全（myoglobinuria → クラッシュ症候群）</li>
+            <li>感染（筋膜切開後）</li>
+          </ul>
         </div>
-      </section>
+      </details>
 
-      <!-- §5 診断 -->
-      <section class="section-page" id="s5" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>📊 診断</h2>
-        <h3>臨床所見 + コンパートメント内圧測定</h3>
-        <ul>
-          <li><strong>Stryker 圧センサー</strong>（救急カートに常備すべき）</li>
-          <li>直接内圧測定 &gt; 30 mmHg</li>
-          <li><strong>ΔP &lt; 30 mmHg</strong>（ΔP = 拡張期血圧 − コンパートメント圧）</li>
-          <li>意識障害・鎮静中の患者では圧測定が特に重要</li>
-        </ul>
-      </section>
+      <!-- コンサル文 -->
+      <details class="dx-box" id="consult">
+        <summary><span>コンサル文（カルテに貼る）</span></summary>
+        <div class="dx-box__body">
+          <p class="dx-template__hint">『他科コンサルト実践マニュアル』の院内紹介状フォーマットに準拠（【目的】【疾患】【既往歴】【内服薬】【ADL】【現病歴】）。発症前なら「予防的入院依頼」、発症後なら「緊急筋膜切開依頼」として書き分ける。</p>
+          <div class="dx-template">【目的】[コンパートメント症候群を疑い、緊急筋膜切開のご相談／脛骨骨幹部骨折に伴うコンパートメント症候群リスク管理目的に入院ご依頼]。
+【疾患】#1 [部位]コンパートメント症候群 [疑い／確定] #2 [原疾患：脛骨骨幹部骨折 ほか]
+【既往歴】[特記事項なし／○○]
+【内服薬】[なし／ワーファリン／DOAC ○○／抗血小板薬 ○○]
+【ADL（受傷前）】[独歩／杖／介助歩行／車椅子]
+【現病歴】[年齢]歳[男/女]性。[受傷機転]で受傷し、[来院経緯]で来院。
+ ・身体所見：[部位]の<strong>緊満感あり</strong>、足趾他動屈曲伸展で<strong>強い疼痛</strong>誘発、鎮痛薬で取れない持続痛
+ ・血管：足背・後脛骨動脈 [良好／弱／触知不能]（一見保たれている段階）
+ ・神経：[深腓骨神経領域：第 1・2 趾間 ほか] [問題なし／感覚低下／麻痺]
+ ・区画圧測定：[未測定／○ mmHg、ΔP = ○ mmHg]
+ ・画像：Xp で [部位]骨折
+ ・ER 処置：ギプス／シーネを[除去／半円カット]、患肢は心臓と同じ高さに保持、酸素・鎮痛
+ ・経過：受傷から ○ 時間経過、虚血 4 時間で不可逆変化開始のため<strong>緊急対応希望</strong>
+よろしくお願いいたします。</div>
+        </div>
+      </details>
 
-      <!-- §6 マネジメント -->
-      <section class="section-page" id="s6" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🔪 マネジメント — 即時整形 + 筋膜切開</h2>
-        <h3>ER での対応</h3>
-        <ol>
-          <li><strong>ギプス・シーネの除去</strong>（きつければ半円にカット）</li>
-          <li><strong>患肢を心臓と同じ高さに保つ</strong>（挙上すると灌流圧が下がる）</li>
-          <li><strong>酸素投与</strong>、<strong>鎮痛</strong></li>
-          <li><strong>整形外科に即時コンサルト</strong>（筋膜切開の準備）</li>
-          <li><strong>圧測定</strong></li>
-        </ol>
-        <h3>筋膜切開（Fasciotomy）</h3>
-        <ul>
-          <li><strong>6 時間以内</strong>が筋肉生存の目安</li>
-          <li>8 時間を超えると不可逆壊死</li>
-          <li>下腿は <strong>4 コンパートメントすべて</strong>開放（前方・外側・後浅・後深）</li>
-          <li>筋膜切開後は <strong>創は開放のまま</strong>、後日 2 次閉鎖</li>
-        </ul>
-      </section>
+      <!-- 関連ハブ -->
+      <details class="dx-box">
+        <summary><span>関連ハブ・隣接疾患</span></summary>
+        <div class="dx-box__body">
+          <ul>
+            <li>主訴入口：<a class="wiki-link" href="../転倒.html">転倒</a></li>
+            <li>原疾患：<a class="wiki-link" href="脛骨骨幹部骨折.html">脛骨骨幹部骨折</a> ／ <a class="wiki-link" href="上腕骨顆上骨折.html">上腕骨顆上骨折</a> ／ <a class="wiki-link" href="開放骨折.html">開放骨折</a></li>
+            <li>合併症経路：Volkmann 拘縮（前腕）／クラッシュ症候群（myoglobinuria → 腎不全）</li>
+            <li>退院時説明：踵骨骨折などで帰宅保存の場合は、腫脹増悪・疼痛増悪時の再診を必ず指示</li>
+          </ul>
+        </div>
+      </details>
 
-      <!-- §7 鑑別 -->
-      <section class="section-page" id="s7" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🔍 鑑別</h2>
-        <div class="table-wrap"><table><thead><tr><th>疾患</th><th>鑑別点</th></tr></thead><tbody><tr><td>血管損傷</td><td>脈拍消失、Doppler / CTA</td></tr><tr><td>DVT</td><td>D-dimer、エコー</td></tr><tr><td>単純な打撲痛</td><td>受動伸展痛なし、緊満感なし</td></tr></tbody></table></div>
-      </section>
-
-      <!-- §8 合併症 -->
-      <section class="section-page" id="s8" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>⚠️ 合併症</h2>
-        <ul>
-          <li><strong>筋壊死 → 永久機能障害</strong></li>
-          <li><strong>Volkmann 拘縮</strong>（前腕）</li>
-          <li><strong>腎不全</strong>（myoglobinuria → クラッシュ症候群）</li>
-          <li><strong>感染</strong>（筋膜切開後）</li>
-        </ul>
-      </section>
-
-      <!-- §9 予防・早期発見 -->
-      <section class="section-page" id="s9" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>👁️ 予防・早期発見のポイント</h2>
-        <ul>
-          <li><strong>脛骨骨幹部骨折</strong> を見たら 24–48 時間の観察期間中に必ず何度も評価</li>
-          <li><strong>意識障害患者</strong>（鎮静・麻酔・薬物過量）は訴えがないので積極的に疑う</li>
-          <li><strong>小児の上腕骨顆上骨折</strong> は Volkmann 拘縮のリスクが高い</li>
-          <li><strong>きついギプス・包帯</strong>は絶対に作らない</li>
-        </ul>
-        <h3>関連</h3>
-        <ul>
-          <li><a class="wiki-link" href="../転倒.html">転倒</a> / <a class="wiki-link" href="脛骨骨幹部骨折.html">脛骨骨幹部骨折</a> / <a class="wiki-link" href="上腕骨顆上骨折.html">上腕骨顆上骨折</a> / <a class="wiki-link" href="開放骨折.html">開放骨折</a></li>
-        </ul>
-        <h3>出典</h3>
-        <ul>
-          <li><strong>増井伸高. 骨折ハンター. 中外医学社. 2019.</strong></li>
-          <li><strong>McQueen MM, Court-Brown CM.</strong> Compartment monitoring in tibial fractures. <em>J Bone Joint Surg Br.</em> 1996.</li>
-          <li><strong>von Keudell AG ほか.</strong> Diagnosis and treatment of acute extremity compartment syndrome. <em>Lancet.</em> 2015.</li>
-        </ul>
-      </section>
+      <!-- 出典 -->
+      <details class="dx-box">
+        <summary><span>出典</span></summary>
+        <div class="dx-box__body">
+          <ul>
+            <li>増井伸高. 骨折ハンター. 中外医学社. 2019（第 17 章：下腿痛ハンター — コンパートメント症候群、合併率 8%）</li>
+            <li>McQueen MM, Court-Brown CM. Compartment monitoring in tibial fractures. <em>J Bone Joint Surg Br.</em> 1996.</li>
+            <li>von Keudell AG ほか. Diagnosis and treatment of acute extremity compartment syndrome. <em>Lancet.</em> 2015;386(10000):1299–310.</li>
+          </ul>
+        </div>
+      </details>
 
     </article>
   </main>
@@ -208,53 +420,22 @@
 
   <script>
   (function(){
-    const menu = document.getElementById('sectionMenu');
-    const pages = document.querySelectorAll('.section-page');
-    const titleH1 = document.querySelector('.page-title');
-    const relatedSymp = document.getElementById('related-symptoms');
-
-    function showSection(id) {
-      menu.hidden = true;
-      if (titleH1) titleH1.hidden = true;
-      if (relatedSymp) relatedSymp.hidden = true;
-      pages.forEach(p => p.hidden = (p.id !== id));
-      window.scrollTo(0, 0);
-    }
-    function showMenu(scrollTarget) {
-      menu.hidden = false;
-      if (titleH1) titleH1.hidden = false;
-      if (relatedSymp) relatedSymp.hidden = false;
-      pages.forEach(p => p.hidden = true);
-      if (scrollTarget) {
-        if (scrollTarget.tagName === 'DETAILS') scrollTarget.open = true;
-        scrollTarget.scrollIntoView({behavior: 'instant', block: 'start'});
-      } else {
-        window.scrollTo(0, 0);
-      }
-    }
-    function syncFromHash() {
-      const id = (location.hash || '').replace('#','');
-      const target = id ? document.getElementById(id) : null;
-      if (target && target.classList.contains('section-page')) {
-        showSection(id);
-      } else if (target) {
-        showMenu(target);
-      } else {
-        showMenu();
-      }
-    }
-
-    window.addEventListener('hashchange', syncFromHash);
-    document.querySelectorAll('.back-to-menu').forEach(b => {
-      b.addEventListener('click', () => { history.pushState(null,'',location.pathname); showMenu(); });
+    // クイックタップで対応 details を開いてスクロール
+    document.querySelectorAll('.dx-quick__btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.dataset.target;
+        const target = document.getElementById(id);
+        if (!target) return;
+        target.open = true;
+        target.scrollIntoView({behavior: 'smooth', block: 'start'});
+      });
     });
+
     const navBack = document.getElementById('navBack');
     if (navBack) navBack.addEventListener('click', () => {
       if (window.history.length > 1) history.back();
       else window.location.href = '../index.html';
     });
-
-    syncFromHash();
   })();
   </script>
 </body>

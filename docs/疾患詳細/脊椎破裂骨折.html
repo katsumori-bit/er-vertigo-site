@@ -6,6 +6,189 @@
   <meta name="color-scheme" content="light dark" />
   <title>脊椎破裂骨折 | ER ノート</title>
   <link rel="stylesheet" href="../er-note.css" />
+  <style>
+    .dx-quick {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px;
+      margin: 10px 0 4px;
+    }
+    .dx-quick__btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      padding: 10px 6px;
+      border-radius: 10px;
+      background: color-mix(in srgb, var(--accent) 10%, var(--surface));
+      border: 1.5px solid var(--accent);
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 13px;
+      line-height: 1.2;
+      text-align: center;
+      cursor: pointer;
+      transition: background 120ms ease;
+    }
+    .dx-quick__btn:hover {
+      background: color-mix(in srgb, var(--accent) 18%, var(--surface));
+    }
+    .dx-quick__icon { font-size: 20px; }
+    .dx-quick__sub {
+      font-size: 10.5px;
+      font-weight: 500;
+      color: var(--muted);
+    }
+
+    .dx-tri {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+      margin: 6px 0 4px;
+      align-items: start;
+    }
+    .dx-tri__card {
+      background: var(--surface);
+      border-radius: 10px;
+      padding: 10px 12px;
+      border: 1.5px solid color-mix(in srgb, var(--text) 18%, transparent);
+    }
+    .dx-tri__card--vasc { border-color: #c0392b; background: color-mix(in srgb, #c0392b 6%, var(--surface)); }
+    .dx-tri__card--neuro { border-color: #b5651d; background: color-mix(in srgb, #b5651d 6%, var(--surface)); }
+    .dx-tri__card--typical { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 6%, var(--surface)); }
+    .dx-tri__title {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 800;
+      font-size: 13.5px;
+      margin-bottom: 4px;
+    }
+    .dx-tri__card--vasc .dx-tri__title { color: #c0392b; }
+    .dx-tri__card--neuro .dx-tri__title { color: #b5651d; }
+    .dx-tri__list {
+      margin: 0;
+      padding-left: 18px;
+      font-size: 12.5px;
+      line-height: 1.5;
+    }
+    .dx-tri__list li { margin: 2px 0; }
+
+    details.dx-tri__card { padding: 0; }
+    details.dx-tri__card > summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 10px 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 800;
+      font-size: 13.5px;
+    }
+    details.dx-tri__card > summary::-webkit-details-marker { display: none; }
+    details.dx-tri__card > summary::after {
+      content: "▸";
+      margin-left: auto;
+      font-size: 12px;
+      color: var(--muted);
+      transition: transform 120ms ease;
+    }
+    details.dx-tri__card[open] > summary::after { transform: rotate(90deg); }
+    details.dx-tri__card--vasc > summary { color: #c0392b; }
+    details.dx-tri__card--neuro > summary { color: #b5651d; }
+    details.dx-tri__card > .dx-tri__list { padding: 0 14px 12px 30px; }
+    details.dx-tri__card > .dx-tri__hint {
+      padding: 0 14px 6px 30px;
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    details.dx-box {
+      background: var(--surface);
+      border: 1.5px solid color-mix(in srgb, var(--text) 18%, transparent);
+      border-radius: 10px;
+      margin: 10px 0;
+      scroll-margin-top: 8px;
+    }
+    details.dx-box > summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 12px 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 800;
+      font-size: 14.5px;
+    }
+    details.dx-box > summary::-webkit-details-marker { display: none; }
+    details.dx-box > summary::after {
+      content: "▸";
+      margin-left: auto;
+      font-size: 13px;
+      color: var(--muted);
+      transition: transform 120ms ease;
+    }
+    details.dx-box[open] > summary::after { transform: rotate(90deg); }
+    details.dx-box[open] {
+      border-color: var(--accent);
+    }
+    details.dx-box > .dx-box__body {
+      padding: 0 14px 14px;
+    }
+
+    @media (max-width: 640px) {
+      .dx-quick { gap: 6px; }
+      .dx-quick__btn { padding: 8px 4px; font-size: 11.5px; border-radius: 8px; }
+      .dx-quick__icon { font-size: 17px; }
+      .dx-quick__sub { font-size: 9.5px; }
+
+      .dx-tri { grid-template-columns: 1fr; gap: 8px; }
+      .dx-tri__card { padding: 8px 10px; }
+      details.dx-tri__card > summary { padding: 8px 10px; font-size: 12.5px; }
+      details.dx-tri__card > .dx-tri__list { padding: 0 12px 10px 26px; }
+      .dx-tri__title { font-size: 12.5px; }
+      .dx-tri__list { font-size: 12px; }
+
+      details.dx-box > summary { padding: 10px 12px; font-size: 13.5px; }
+      details.dx-box > .dx-box__body { padding: 0 12px 12px; }
+    }
+
+    .dx-step {
+      margin: 18px 0 6px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 11.5px;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+    }
+    .dx-step::before, .dx-step::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: color-mix(in srgb, var(--text) 18%, transparent);
+    }
+
+    .dx-template {
+      background: color-mix(in srgb, var(--text) 4%, var(--surface));
+      border-left: 3px solid var(--accent);
+      border-radius: 6px;
+      padding: 10px 12px;
+      margin: 6px 0 0;
+      font-size: 13px;
+      line-height: 1.6;
+      white-space: pre-wrap;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+    .dx-template__hint {
+      font-size: 11px;
+      color: var(--muted);
+      margin: 0 0 4px;
+    }
+  </style>
 </head>
 <body>
   <header class="hokuto-top">
@@ -21,182 +204,172 @@
     <article class="note-shell">
       <h1 class="page-title">脊椎破裂骨折</h1>
 
-      <!-- 即時アクションヘッダー -->
-      <div class="action-header">
-        <div class="action-header__title">⚡ 即時アクション</div>
-        <ol class="action-header__list">
-          <li><strong>高エネルギー外傷</strong>（墜落・交通）で疑う</li>
-          <li><strong>CT 必須</strong>（<strong>後柱の評価</strong>で安定性判断）</li>
-          <li><strong>Denis 分類</strong>（3 column 理論）で病型評価</li>
-          <li><strong>神経症状あれば緊急手術</strong>、不安定型も手術検討</li>
-        </ol>
-      </div>
-
-      <!-- セクションメニュータイル -->
-      <nav class="section-tiles" id="sectionMenu">
-        <a class="section-tile" href="#s1"><span class="section-tile__no">⚖️</span><span class="section-tile__name">圧迫骨折との違い<br><small>要点</small></span></a>
-        <a class="section-tile" href="#s2"><span class="section-tile__no">💥</span><span class="section-tile__name">受傷機転</span></a>
-        <a class="section-tile" href="#s3"><span class="section-tile__no">🩺</span><span class="section-tile__name">身体所見<br><small>レッドフラッグ</small></span></a>
-        <a class="section-tile" href="#s4"><span class="section-tile__no">🧲</span><span class="section-tile__name">画像<br><small>CT / MRI / Denis</small></span></a>
-        <a class="section-tile" href="#s5"><span class="section-tile__no">🏥</span><span class="section-tile__name">マネジメント<br><small>原則 即時整形</small></span></a>
-        <a class="section-tile" href="#s6"><span class="section-tile__no">🦴</span><span class="section-tile__name">横突起骨折<br><small>併発例</small></span></a>
-        <a class="section-tile" href="#s7"><span class="section-tile__no">🏠</span><span class="section-tile__name">帰宅時の説明<br><small>+ 出典</small></span></a>
+      <nav class="dx-quick" aria-label="クイックタップ">
+        <button class="dx-quick__btn" type="button" data-target="img-read">
+          <span>画像の見方</span>
+          <span class="dx-quick__sub">CT / MRI 必須</span>
+        </button>
+        <button class="dx-quick__btn" type="button" data-target="plan">
+          <span>治療方針</span>
+          <span class="dx-quick__sub">即時整形コンサルト</span>
+        </button>
+        <button class="dx-quick__btn" type="button" data-target="consult">
+          <span>コンサル文</span>
+          <span class="dx-quick__sub">そのまま貼れる</span>
+        </button>
       </nav>
 
-      <!-- 関連主訴 -->
-      <details class="sub-fold" id="related-symptoms">
-        <summary>📞 この疾患が該当する主訴</summary>
-        <div class="sub-fold__body">
+      <div class="dx-step"><span>同時並行で評価する 3 軸</span></div>
+      <div class="dx-tri">
+
+        <div class="dx-tri__card dx-tri__card--typical">
+          <div class="dx-tri__title">典型像</div>
+          <ul class="dx-tri__list">
+            <li>若年〜中年：高所転落・交通外傷（高エネ）</li>
+            <li>高齢者：軽微外傷でも DISH ではなり得る</li>
+            <li>主訴：強い背部痛・腰痛、立てない、下肢麻痺</li>
+            <li>圧痛・棘突起間ギャップ・後彎変形</li>
+            <li><strong>胸腰椎移行部（Th11-L2）</strong>に好発</li>
+          </ul>
+        </div>
+
+        <details class="dx-tri__card dx-tri__card--vasc">
+          <summary>血管</summary>
+          <p class="dx-tri__hint">高エネ外傷では <strong>多発外傷・大動脈損傷</strong>を必ず除外。</p>
+          <ul class="dx-tri__list">
+            <li>ABCD の評価、ショック傾向の有無</li>
+            <li>胸腹部 CT で大動脈損傷・実質臓器損傷</li>
+            <li>抗凝固薬例では硬膜外血腫リスク</li>
+            <li>神経原性ショックの鑑別（後述）</li>
+          </ul>
+        </details>
+
+        <details class="dx-tri__card dx-tri__card--neuro">
+          <summary>神経</summary>
+          <p class="dx-tri__hint"><strong>完全／不完全脊髄損傷</strong>の評価が最重要。<strong>ASIA</strong>を必ず記録。</p>
+          <ul class="dx-tri__list">
+            <li><strong>ASIA impairment scale（A-E）</strong></li>
+            <li><strong>MRC スコア</strong>：腸腰筋 / 大腿四頭筋 / 前脛骨筋 / 長母趾伸筋 / 下腿三頭筋</li>
+            <li>感覚レベル（デルマトーム）、Light touch / Pin prick</li>
+            <li>会陰部知覚・肛門括約筋トーヌス・Sacral sparing</li>
+            <li>残尿・尿閉、Priapism</li>
+          </ul>
+        </details>
+      </div>
+
+      <details class="dx-box" id="img-read">
+        <summary><span>画像の見方</span></summary>
+        <div class="dx-box__body">
           <ul>
-            <li><a class="wiki-link" href="../転倒.html">転倒</a> — 高エネルギー転落例で想起</li>
-            <li><span class="wiki-missing">頭部外傷評価</span> — 高エネルギー外傷の合併で同時評価</li>
+            <li><strong>胸腰椎 Xp（正面・側面）</strong>から開始</li>
+            <li>Xp で必ず追うポイント：
+              <ul>
+                <li>椎体高低下、<strong>椎体後壁の骨片後方転位</strong></li>
+                <li>椎弓根間距離の開大（正面像）</li>
+                <li>後彎変形・椎間離開</li>
+                <li>多椎体障害（高エネは複数椎体評価）</li>
+              </ul>
+            </li>
+            <li><strong>破裂骨折を疑えば必ず CT</strong>（後壁骨片の脊柱管内突出、AO 分類確定）</li>
+            <li><strong>神経症状あり → MRI</strong>（脊髄損傷・浮腫・椎間板損傷の評価）</li>
+            <li>AO Spine 分類：A（圧迫型）／B（離開型）／C（回旋型）— B・C は不安定</li>
+            <li>Load-sharing classification で手術アプローチ選択</li>
           </ul>
         </div>
       </details>
 
-      <!-- §1 圧迫骨折との違い -->
-      <section class="section-page" id="s1" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>⚖️ 圧迫骨折との違い（要）</h2>
+      <details class="dx-box" id="plan">
+        <summary><span>治療方針（緊急性高）</span></summary>
+        <div class="dx-box__body">
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>所見</th><th>方針</th><th>ER の動き</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>神経症状なし、安定型（AO A）</td>
+                  <td>入院、保存 vs 手術判断</td>
+                  <td>整形コンサルト、体幹装具</td>
+                </tr>
+                <tr>
+                  <td><strong>不安定型（AO B/C）</strong></td>
+                  <td><strong>すみやかにコンサルト</strong>、手術ほぼ必須</td>
+                  <td>絶飲食、ライン、整形即時</td>
+                </tr>
+                <tr>
+                  <td><strong>脊髄損傷（不完全）</strong></td>
+                  <td><strong>緊急手術（除圧）</strong>検討</td>
+                  <td>ICU 管理、整形即時</td>
+                </tr>
+                <tr>
+                  <td><strong>脊髄損傷（完全）</strong></td>
+                  <td><strong>すみやかにコンサルト</strong>、ICU 管理</td>
+                  <td>呼吸循環管理、整形即時</td>
+                </tr>
+                <tr>
+                  <td>呼吸障害／神経原性ショック</td>
+                  <td><strong>ICU、各科協力</strong></td>
+                  <td>挿管、昇圧（α作動）、ステロイドは推奨せず</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
 
-        <div class="callout callout-summary">
-          <div class="callout-title">破裂骨折 = 椎体の前後が潰れる高エネルギー外傷</div>
-          <div class="callout-body"><ul>
-            <li><strong>高エネルギー外傷</strong>（転落・交通事故）による椎体骨折</li>
-            <li><strong>椎体後方成分が脊柱管に突出</strong> → 脊髄損傷のリスク</li>
-            <li><strong>全例 CT 必須</strong>、神経症状の有無に関わらず <strong>即時整形</strong></li>
-            <li>圧迫骨折と違い「陳旧性」という概念はない — 所見があれば新鮮骨折</li>
-          </ul></div>
+          <h3>ER で打つ手</h3>
+          <ul>
+            <li><strong>体位は log roll、移送は backboard</strong>（脊柱中立、二次損傷予防）</li>
+            <li>頸椎カラーは頚椎損傷合併を疑う場合（多発外傷では併存頻度高い）</li>
+            <li>絶飲食、ライン確保、術前検査（採血・心電図・胸部 X 線）</li>
+            <li>鎮痛は循環動態を見ながら（オピオイド少量）</li>
+            <li><strong>ステロイド大量療法は推奨されない</strong>（有効性乏しく感染合併症増加）</li>
+            <li>呼吸障害（高位胸髄）・神経原性ショックは ICU 管理</li>
+            <li>DVT 予防（弾性ストッキング、必要時抗凝固）、便秘・尿閉対策</li>
+          </ul>
         </div>
+      </details>
 
-        <div class="table-wrap"><table><thead><tr><th></th><th>圧迫骨折</th><th>破裂骨折</th></tr></thead><tbody><tr><td>受傷機転</td><td>低エネルギー（しりもち・軽微）</td><td>高エネルギー（転落・交通）</td></tr><tr><td>変形の範囲</td><td>前方成分のみ（楔状）</td><td>前方〜後方成分まで</td></tr><tr><td>不安定性</td><td>なし</td><td><strong>強い</strong></td></tr><tr><td>神経症状</td><td>稀</td><td><strong>リスク高い</strong>（脊髄・馬尾）</td></tr><tr><td>緊急度</td><td>低い</td><td><strong>高い</strong></td></tr><tr><td>CT</td><td>不要（MRI を優先）</td><td><strong>必須</strong></td></tr></tbody></table></div>
-
-        <ul>
-          <li><strong>高齢者でも高エネルギーなら破裂骨折</strong>、低エネルギーなら圧迫骨折と割り切ってよい。</li>
-          <li>破裂骨折では <strong>楔形 ≠ 陳旧性</strong>。所見があれば新鮮骨折として扱う。</li>
-        </ul>
-      </section>
-
-      <!-- §2 受傷機転 -->
-      <section class="section-page" id="s2" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>💥 受傷機転</h2>
-
-        <ul>
-          <li><strong>高所からの転落</strong>（梯子・屋根・工事現場）</li>
-          <li><strong>交通事故</strong>（車の正面衝突・バイク転倒）</li>
-          <li><strong>ダッシュボード損傷</strong>（膝 → 大腿骨 → 骨盤 → 脊椎への軸圧）</li>
-          <li><strong>重量物の落下</strong></li>
-        </ul>
-      </section>
-
-      <!-- §3 身体所見 -->
-      <section class="section-page" id="s3" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🩺 身体所見</h2>
-
-        <ul>
-          <li><strong>背部〜腰部の強い圧痛</strong>（棘突起正中部）</li>
-          <li><strong>CFPS</strong>（closed-fist percussion sign）陽性</li>
-          <li><strong>神経所見</strong>：下肢の運動・感覚・腱反射、<strong>鞍状麻酔・膀胱直腸障害</strong>（馬尾症候群）</li>
-          <li><strong>四肢麻痺</strong>があれば救命救急センターへ搬送</li>
-        </ul>
-
-        <div class="callout callout-danger">
-          <div class="callout-title">見逃せないレッドフラッグ</div>
-          <div class="callout-body"><ul>
-            <li><strong>下肢の運動麻痺 / 感覚障害</strong></li>
-            <li><strong>膀胱直腸障害</strong></li>
-            <li><strong>鞍状麻酔</strong></li>
-            <li><strong>受傷時の一過性の麻痺</strong>（現在改善していても聴取する）</li>
-          </ul></div>
+      <details class="dx-box" id="consult">
+        <summary><span>コンサル文（カルテに貼る）</span></summary>
+        <div class="dx-box__body">
+          <p class="dx-template__hint">『他科コンサルト実践マニュアル』整形外科「脊髄損傷」項に準拠。神経学的評価（ASIA・MRC）を独立行で記載。</p>
+          <div class="dx-template">【目的】緊急手術ご相談・観血的整復ご加療依頼。
+【疾患】#1 [Th○／L○] 椎体破裂骨折（AO ○型、後壁損傷あり、脊髄損傷 [完全／不完全／なし]、ASIA [A/B/C/D/E]）
+【既往歴】[特記なし／DISH／○○]
+【内服薬】[なし／ワーファリン／DOAC ○○／抗血小板薬／ステロイド]
+【ADL（受傷前）】[独歩／杖／介助歩行／車椅子]
+【現病歴】[年齢]歳[男/女]性。[受傷機転：高所転落／交通外傷／軽微外傷＋DISH]で受傷し、[強い背部痛／下肢麻痺]で来院。
+ ・身体所見：[Th○／L○] 棘突起圧痛・棘突起間ギャップ・後彎変形
+ ・神経（ASIA・MRC）：腸腰筋 ○／大腿四頭筋 ○／前脛骨筋 ○／長母趾伸筋 ○／下腿三頭筋 ○、感覚レベル [Th○／L○ 以下消失]、Sacral sparing [あり／なし]、肛門括約筋 [収縮あり／なし]、膀胱直腸障害 [あり／なし]
+ ・血管：バイタル [安定／神経原性ショック]、Hb [○○]、多発外傷評価 [済／未]
+ ・画像：Xp [異常あり]、CT [後壁骨片の脊柱管内突出 ○○%]、MRI [脊髄損傷／浮腫／硬膜外血腫]
+ ・ER 処置：log roll 体位、頚椎カラー [装着／不要]、絶飲食 [済]、ライン [済]
+ ・術前検査：採血・心電図・胸部 X 線 [済／未]
+よろしくお願いいたします。</div>
         </div>
-      </section>
+      </details>
 
-      <!-- §4 画像 -->
-      <section class="section-page" id="s4" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🧲 画像</h2>
-
-        <h3>CT は必須</h3>
-        <ul>
-          <li>椎体後方成分の脊柱管内突出（retropulsion）を評価</li>
-          <li>椎体後壁の連続性が失われていれば破裂骨折</li>
-          <li><strong>Denis 3 column 分類</strong>（中柱の破綻が破裂骨折の定義）</li>
-        </ul>
-
-        <div class="table-wrap"><table><thead><tr><th>椎体の柱</th><th>構成</th><th>破綻の意味</th></tr></thead><tbody><tr><td>前柱</td><td>椎体前方 2/3 + 前縦靱帯</td><td>単独なら圧迫骨折</td></tr><tr><td><strong>中柱</strong></td><td>椎体後方 1/3 + 後縦靱帯</td><td><strong>破綻 = 破裂骨折</strong></td></tr><tr><td>後柱</td><td>椎弓・棘突起・後方靱帯</td><td>単独破綻は稀</td></tr></tbody></table></div>
-
-        <h3>MRI</h3>
-        <ul>
-          <li>脊髄損傷の評価</li>
-          <li>後縦靱帯・黄色靱帯の損傷評価</li>
-          <li>骨挫傷の範囲（新鮮骨折の裏付け）</li>
-        </ul>
-      </section>
-
-      <!-- §5 マネジメント -->
-      <section class="section-page" id="s5" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🏥 マネジメント — 原則 <strong>即時整形</strong></h2>
-
-        <ul>
-          <li><strong>神経症状の有無に関わらず</strong>、椎体後壁破綻を見たら整形外科 / 脊椎外科へ即コンサルト</li>
-          <li>不安定性が強ければ緊急固定術（後方固定術）</li>
-          <li>神経症状があれば減圧術を併用</li>
-          <li>安定型で神経症状なければ TLSO などの硬性コルセット + 安静で保存可能だが、<strong>判断は専門医</strong></li>
-        </ul>
-
-        <div class="callout callout-check">
-          <div class="callout-title">非整形外科医の役割</div>
-          <div class="callout-body"><ol>
-            <li><strong>CT で椎体後壁の連続性を評価</strong></li>
-            <li><strong>神経所見を丁寧にとる</strong>（下肢・肛門括約筋・膀胱直腸）</li>
-            <li><strong>即日整形 / 脊椎外科へコンサルト</strong></li>
-            <li>コンサルトまで <strong>体位変換は logroll</strong>、不必要に動かさない</li>
-          </ol></div>
+      <details class="dx-box">
+        <summary><span>関連ハブ・隣接疾患</span></summary>
+        <div class="dx-box__body">
+          <ul>
+            <li>主訴入口：<a class="wiki-link" href="../腰痛.html">腰痛</a> ／ <a class="wiki-link" href="../外傷.html">外傷</a></li>
+            <li>隣接疾患：<a class="wiki-link" href="脊椎圧迫骨折.html">脊椎圧迫骨折</a> ／ <a class="wiki-link" href="頸椎損傷.html">頸椎損傷</a></li>
+            <li>合併症対応：神経原性ショック・呼吸障害・DVT 予防</li>
+          </ul>
         </div>
-      </section>
+      </details>
 
-      <!-- §6 横突起骨折 -->
-      <section class="section-page" id="s6" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🦴 横突起骨折（併発する場合）</h2>
-
-        <ul>
-          <li>受傷機転は共通（高エネルギー）だが、単独では <strong>脊椎の安定性に影響しない</strong></li>
-          <li><strong>傍脊柱筋圧痛</strong>（椎体から 1–2 cm 外側）が身体所見のポイント</li>
-          <li>レントゲンでは腸管と重なって見えない → <strong>CT で診断</strong></li>
-          <li><strong>原則帰宅保存</strong>、疼痛強ければ入院整形で数日の鎮痛加療</li>
-          <li>高エネルギー外傷に伴う横突起骨折は、全身 CT の初回読影で見逃されることがある → 腰痛が続く例は再読影を</li>
-        </ul>
-      </section>
-
-      <!-- §7 帰宅時の説明 + 出典 -->
-      <section class="section-page" id="s7" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🏠 帰宅時の説明（稀に保存例）</h2>
-
-        <ul>
-          <li><strong>体幹のねじれ・屈曲は絶対禁止</strong></li>
-          <li>硬性コルセット装着</li>
-          <li><strong>下肢のしびれ・脱力・排尿排便障害が出たら即受診</strong></li>
-          <li>数日後の整形外科外来で再評価</li>
-        </ul>
-
-        <h3>出典</h3>
-        <ul>
-          <li><strong>増井伸高. 骨折ハンター. 中外医学社. 2019.</strong></li>
-          <li><strong>Denis F.</strong> The three column spine and its significance in the classification of acute thoracolumbar spinal injuries. <em>Spine.</em> 1983;8(8):817-31.</li>
-          <li><strong>AO Spine</strong> Thoracolumbar Spine Injury Classification System.</li>
-          <li><strong>Vaccaro AR ほか.</strong> AOSpine thoracolumbar spine injury classification system. <em>Eur Spine J.</em> 2013.</li>
-        </ul>
-
-        <h3>関連</h3>
-        <ul>
-          <li><a class="wiki-link" href="../転倒.html">転倒</a> / <a class="wiki-link" href="脊椎圧迫骨折.html">脊椎圧迫骨折</a> / <a class="wiki-link" href="頸椎損傷.html">頸椎損傷</a></li>
-        </ul>
-      </section>
+      <details class="dx-box">
+        <summary><span>出典</span></summary>
+        <div class="dx-box__body">
+          <ul>
+            <li>Vaccaro AR ほか. AO Spine Subaxial Cervical Spine Injury Classification System.</li>
+            <li>Ito Y, et al. <em>Spine.</em> 2009;34:2121-2124.</li>
+            <li>佐藤弘明・齋藤俊太郎編. 各科に本音を聞いた 他科コンサルト実践マニュアル. 羊土社.</li>
+          </ul>
+        </div>
+      </details>
 
     </article>
   </main>
@@ -215,53 +388,21 @@
 
   <script>
   (function(){
-    const menu = document.getElementById('sectionMenu');
-    const pages = document.querySelectorAll('.section-page');
-    const titleH1 = document.querySelector('.page-title');
-    const relatedSymp = document.getElementById('related-symptoms');
-
-    function showSection(id) {
-      menu.hidden = true;
-      if (titleH1) titleH1.hidden = true;
-      if (relatedSymp) relatedSymp.hidden = true;
-      pages.forEach(p => p.hidden = (p.id !== id));
-      window.scrollTo(0, 0);
-    }
-    function showMenu(scrollTarget) {
-      menu.hidden = false;
-      if (titleH1) titleH1.hidden = false;
-      if (relatedSymp) relatedSymp.hidden = false;
-      pages.forEach(p => p.hidden = true);
-      if (scrollTarget) {
-        if (scrollTarget.tagName === 'DETAILS') scrollTarget.open = true;
-        scrollTarget.scrollIntoView({behavior: 'instant', block: 'start'});
-      } else {
-        window.scrollTo(0, 0);
-      }
-    }
-    function syncFromHash() {
-      const id = (location.hash || '').replace('#','');
-      const target = id ? document.getElementById(id) : null;
-      if (target && target.classList.contains('section-page')) {
-        showSection(id);
-      } else if (target) {
-        showMenu(target);
-      } else {
-        showMenu();
-      }
-    }
-
-    window.addEventListener('hashchange', syncFromHash);
-    document.querySelectorAll('.back-to-menu').forEach(b => {
-      b.addEventListener('click', () => { history.pushState(null,'',location.pathname); showMenu(); });
+    document.querySelectorAll('.dx-quick__btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.dataset.target;
+        const target = document.getElementById(id);
+        if (!target) return;
+        target.open = true;
+        target.scrollIntoView({behavior: 'smooth', block: 'start'});
+      });
     });
+
     const navBack = document.getElementById('navBack');
     if (navBack) navBack.addEventListener('click', () => {
       if (window.history.length > 1) history.back();
       else window.location.href = '../index.html';
     });
-
-    syncFromHash();
   })();
   </script>
 </body>

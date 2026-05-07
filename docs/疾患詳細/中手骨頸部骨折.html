@@ -4,8 +4,65 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="color-scheme" content="light dark" />
-  <title>中手骨頸部骨折 | ER ノート</title>
+  <title>中手骨頸部骨折（boxer's fracture） | ER ノート</title>
   <link rel="stylesheet" href="../er-note.css" />
+  <style>
+    .dx-quick { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin: 10px 0 4px; }
+    .dx-quick__btn { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; padding: 10px 6px; border-radius: 10px; background: color-mix(in srgb, var(--accent) 10%, var(--surface)); border: 1.5px solid var(--accent); color: var(--text); text-decoration: none; font-weight: 700; font-size: 13px; line-height: 1.2; text-align: center; cursor: pointer; transition: background 120ms ease; }
+    .dx-quick__btn:hover { background: color-mix(in srgb, var(--accent) 18%, var(--surface)); }
+    .dx-quick__icon { font-size: 20px; }
+    .dx-quick__sub { font-size: 10.5px; font-weight: 500; color: var(--muted); }
+
+    .dx-tri { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin: 6px 0 4px; align-items: start; }
+    .dx-tri__card { background: var(--surface); border-radius: 10px; padding: 10px 12px; border: 1.5px solid color-mix(in srgb, var(--text) 18%, transparent); }
+    .dx-tri__card--vasc { border-color: #c0392b; background: color-mix(in srgb, #c0392b 6%, var(--surface)); }
+    .dx-tri__card--neuro { border-color: #b5651d; background: color-mix(in srgb, #b5651d 6%, var(--surface)); }
+    .dx-tri__card--typical { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 6%, var(--surface)); }
+    .dx-tri__title { display: flex; align-items: center; gap: 6px; font-weight: 800; font-size: 13.5px; margin-bottom: 4px; }
+    .dx-tri__card--vasc .dx-tri__title { color: #c0392b; }
+    .dx-tri__card--neuro .dx-tri__title { color: #b5651d; }
+    .dx-tri__list { margin: 0; padding-left: 18px; font-size: 12.5px; line-height: 1.5; }
+    .dx-tri__list li { margin: 2px 0; }
+
+    details.dx-tri__card { padding: 0; }
+    details.dx-tri__card > summary { list-style: none; cursor: pointer; padding: 10px 12px; display: flex; align-items: center; gap: 6px; font-weight: 800; font-size: 13.5px; }
+    details.dx-tri__card > summary::-webkit-details-marker { display: none; }
+    details.dx-tri__card > summary::after { content: "▸"; margin-left: auto; font-size: 12px; color: var(--muted); transition: transform 120ms ease; }
+    details.dx-tri__card[open] > summary::after { transform: rotate(90deg); }
+    details.dx-tri__card--vasc > summary { color: #c0392b; }
+    details.dx-tri__card--neuro > summary { color: #b5651d; }
+    details.dx-tri__card > .dx-tri__list { padding: 0 14px 12px 30px; }
+    details.dx-tri__card > .dx-tri__hint { padding: 0 14px 6px 30px; font-size: 11px; color: var(--muted); }
+
+    details.dx-box { background: var(--surface); border: 1.5px solid color-mix(in srgb, var(--text) 18%, transparent); border-radius: 10px; margin: 10px 0; scroll-margin-top: 8px; }
+    details.dx-box > summary { list-style: none; cursor: pointer; padding: 12px 14px; display: flex; align-items: center; gap: 8px; font-weight: 800; font-size: 14.5px; }
+    details.dx-box > summary::-webkit-details-marker { display: none; }
+    details.dx-box > summary::after { content: "▸"; margin-left: auto; font-size: 13px; color: var(--muted); transition: transform 120ms ease; }
+    details.dx-box[open] > summary::after { transform: rotate(90deg); }
+    details.dx-box[open] { border-color: var(--accent); }
+    details.dx-box > .dx-box__body { padding: 0 14px 14px; }
+
+    @media (max-width: 640px) {
+      .dx-quick { gap: 6px; }
+      .dx-quick__btn { padding: 8px 4px; font-size: 11.5px; border-radius: 8px; }
+      .dx-quick__icon { font-size: 17px; }
+      .dx-quick__sub { font-size: 9.5px; }
+      .dx-tri { grid-template-columns: 1fr; gap: 8px; }
+      .dx-tri__card { padding: 8px 10px; }
+      details.dx-tri__card > summary { padding: 8px 10px; font-size: 12.5px; }
+      details.dx-tri__card > .dx-tri__list { padding: 0 12px 10px 26px; }
+      .dx-tri__title { font-size: 12.5px; }
+      .dx-tri__list { font-size: 12px; }
+      details.dx-box > summary { padding: 10px 12px; font-size: 13.5px; }
+      details.dx-box > .dx-box__body { padding: 0 12px 12px; }
+    }
+
+    .dx-step { margin: 18px 0 6px; display: flex; align-items: center; gap: 10px; color: var(--muted); font-size: 11.5px; font-weight: 800; letter-spacing: 0.1em; }
+    .dx-step::before, .dx-step::after { content: ""; flex: 1; height: 1px; background: color-mix(in srgb, var(--text) 18%, transparent); }
+
+    .dx-template { background: color-mix(in srgb, var(--text) 4%, var(--surface)); border-left: 3px solid var(--accent); border-radius: 6px; padding: 10px 12px; margin: 6px 0 0; font-size: 13px; line-height: 1.6; white-space: pre-wrap; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+    .dx-template__hint { font-size: 11px; color: var(--muted); margin: 0 0 4px; }
+  </style>
 </head>
 <body>
   <header class="hokuto-top">
@@ -19,157 +76,181 @@
 
   <main class="hokuto-main">
     <article class="note-shell">
-      <h1 class="page-title">中手骨頸部骨折</h1>
+      <h1 class="page-title">中手骨頸部骨折（boxer's fracture）</h1>
 
-      <!-- 即時アクションヘッダー（常時 sticky） -->
-      <div class="action-header">
-        <div class="action-header__title">⚡ 即時アクション</div>
-        <ol class="action-header__list">
-          <li><strong>Boxer's fracture（第 5 中手骨）</strong>が典型 — 殴打・喧嘩で受傷した若年男性で knuckle 消失</li>
-          <li><strong>AP + lat + oblique X 線</strong>で側面像の掌側屈曲角を計測</li>
-          <li><strong>回旋変形 + angulation 閾値</strong>（5 中手骨 &gt; 30°、4 中手骨 &gt; 15°、2-3 中手骨 &gt; 10°）で<strong>整復</strong></li>
-          <li>保存（<strong>buddy taping / ulnar gutter cast</strong>）vs <strong>ピンニング</strong>。皮膚損傷あれば fight bite を念頭に</li>
-        </ol>
-      </div>
-
-      <!-- メニュータイル -->
-      <nav class="section-tiles" id="sectionMenu">
-        <a class="section-tile" href="#s1"><span class="section-tile__no">📝</span><span class="section-tile__name">受傷機転</span></a>
-        <a class="section-tile" href="#s2"><span class="section-tile__no">🩺</span><span class="section-tile__name">身体所見<br><small>回旋・knuckle</small></span></a>
-        <a class="section-tile" href="#s3"><span class="section-tile__no">🧪</span><span class="section-tile__name">画像<br><small>3 方向</small></span></a>
-        <a class="section-tile" href="#s4"><span class="section-tile__no">📐</span><span class="section-tile__name">許容転位<br><small>非整形外科医用</small></span></a>
-        <a class="section-tile" href="#s5"><span class="section-tile__no">💉</span><span class="section-tile__name">マネジメント</span></a>
-        <a class="section-tile" href="#s6"><span class="section-tile__no">⚠️</span><span class="section-tile__name">Fight bite<br><small>人咬傷</small></span></a>
-        <a class="section-tile" href="#s7"><span class="section-tile__no">🏠</span><span class="section-tile__name">帰宅時の説明</span></a>
-        <a class="section-tile" href="#s8"><span class="section-tile__no">📚</span><span class="section-tile__name">出典</span></a>
+      <nav class="dx-quick" aria-label="クイックタップ">
+        <button class="dx-quick__btn" type="button" data-target="img-read">
+          <span>画像の見方</span>
+          <span class="dx-quick__sub">屈曲角度・回旋</span>
+        </button>
+        <button class="dx-quick__btn" type="button" data-target="plan">
+          <span>治療方針</span>
+          <span class="dx-quick__sub">指別の許容角度</span>
+        </button>
+        <button class="dx-quick__btn" type="button" data-target="consult">
+          <span>コンサル文</span>
+          <span class="dx-quick__sub">そのまま貼れる</span>
+        </button>
       </nav>
 
-      <!-- 関連主訴（双方向リンク） -->
-      <details class="sub-fold" id="related-symptoms">
-        <summary>📞 この疾患が該当する主訴</summary>
-        <div class="sub-fold__body">
+      <div class="dx-step"><span>同時並行で評価する 3 軸</span></div>
+      <div class="dx-tri">
+
+        <div class="dx-tri__card dx-tri__card--typical">
+          <div class="dx-tri__title">典型像</div>
+          <ul class="dx-tri__list">
+            <li>若年男性：壁・人を殴って受傷</li>
+            <li>第 5（時に 4）中手骨頸部の腫脹・圧痛</li>
+            <li>MP 関節背側の<strong>knuckle 消失</strong></li>
+            <li><strong>回旋アライメント異常</strong>（屈曲時に指がクロス）</li>
+            <li><strong>fight bite</strong>（人歯による創）は緊急扱い</li>
+          </ul>
+        </div>
+
+        <details class="dx-tri__card dx-tri__card--vasc">
+          <summary>血管</summary>
+          <p class="dx-tri__hint">血管損傷は通常合併しない。固有指動脈の触知/拍動感・CRT を左右で比較。</p>
+          <ul class="dx-tri__list">
+            <li>橈骨・尺骨動脈触知</li>
+            <li><strong>固有指動脈</strong>の拍動・色調・CRT（&lt; 2 秒）</li>
+            <li>fight bite 創あれば化膿・腱鞘炎リスク</li>
+            <li>強い腫脹は挙上・冷却</li>
+          </ul>
+        </details>
+
+        <details class="dx-tri__card dx-tri__card--neuro">
+          <summary>神経</summary>
+          <p class="dx-tri__hint">神経損傷は通常 OK。<strong>固有指神経</strong>の感覚は独立して確認。</p>
+          <ul class="dx-tri__list">
+            <li>正中・尺骨・橈骨神経領域の運動・感覚</li>
+            <li><strong>各指の固有指神経の感覚</strong>を独立行で記録</li>
+            <li>第1背側骨間筋筋力（尺骨神経）</li>
+            <li>麻痺所見は記録</li>
+          </ul>
+        </details>
+      </div>
+
+      <details class="dx-box" id="img-read">
+        <summary><span>画像の見方</span></summary>
+        <div class="dx-box__body">
           <ul>
-            <li><a class="wiki-link" href="../手関節・手の外傷.html">手関節・手の外傷</a> — 殴打後の knuckle 消失・MCP 周囲腫脹</li>
-            <li><a class="wiki-link" href="../転倒.html">転倒</a> — 転倒時にグーで衝撃を受けて受傷</li>
+            <li><strong>手 AP・lateral・oblique（3 方向）</strong></li>
+            <li>Xp で必ず追うポイント：
+              <ul>
+                <li>頸部の骨折線（中手骨遠位端）</li>
+                <li><strong>掌側屈曲角度</strong>（lateral で計測）</li>
+                <li>短縮（隣接中手骨と対比）</li>
+                <li><strong>回旋転位</strong>は X 線では分かりにくい — 臨床診察で確認</li>
+                <li>fight bite では<strong>関節内に異物・骨片</strong>がないか</li>
+              </ul>
+            </li>
+            <li>許容屈曲角度の目安：
+              <ul>
+                <li>第 5（小指）：40〜60°</li>
+                <li>第 4（環指）：30°程度</li>
+                <li>第 2・3（示・中指）：≤ 10〜15°（許容狭い）</li>
+              </ul>
+            </li>
           </ul>
         </div>
       </details>
 
-      <!-- §1 受傷機転 -->
-      <section class="section-page" id="s1" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>📝 受傷機転</h2>
-        <ul>
-          <li><strong>殴打（壁・人）</strong>、転倒時に手をグーで打つ</li>
-          <li>第 5 中手骨頸部が最多（ボクサー骨折）</li>
-          <li>次いで第 4 中手骨頸部</li>
-        </ul>
-      </section>
+      <details class="dx-box" id="plan">
+        <summary><span>治療方針（指 × 屈曲角度 × 回旋）</span></summary>
+        <div class="dx-box__body">
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>パターン</th><th>所見</th><th>方針</th><th>ER の動き</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>第 5・4 指、許容内</td>
+                  <td>屈曲 ≤ 40〜60° / 30°、回旋なし</td>
+                  <td><strong>保存（buddy taping ／ ulnar gutter）</strong></td>
+                  <td>シーネ ＋ 翌日整形外来</td>
+                </tr>
+                <tr>
+                  <td><strong>許容超過の屈曲</strong></td>
+                  <td>第 5 &gt; 60°、第 4 &gt; 30°、第 2/3 &gt; 15°</td>
+                  <td><strong>徒手整復（Jahss 法）→ 保存 or 手術</strong></td>
+                  <td>整形相談（同日〜翌日）</td>
+                </tr>
+                <tr>
+                  <td><strong>回旋転位</strong></td>
+                  <td>屈曲時に指がクロス／爪面のずれ</td>
+                  <td><strong>手術（経皮ピンニング等）</strong></td>
+                  <td>整形相談</td>
+                </tr>
+                <tr>
+                  <td>第 2・3 指（示・中指）</td>
+                  <td>許容狭い・機能障害大</td>
+                  <td><strong>手術閾値が低い</strong></td>
+                  <td>整形相談</td>
+                </tr>
+                <tr>
+                  <td><strong>fight bite（人歯創）</strong></td>
+                  <td>MP 関節背側の打撲創</td>
+                  <td><strong>緊急洗浄・抗菌薬・整形コンサル</strong></td>
+                  <td>洗浄・破傷風・AMPC/CVA・即コンサル</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
 
-      <!-- §2 身体所見 -->
-      <section class="section-page" id="s2" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🩺 身体所見</h2>
-        <ul>
-          <li><strong>MCP 関節の腫脹</strong>（knuckle の消失）</li>
-          <li><strong>背側の圧痛 + 変形</strong>（掌側凸）</li>
-          <li><strong>回旋転位のチェック</strong>：屈曲させて指先が舟状骨結節に向かうか
-            <ul>
-              <li><strong>爪の向き</strong>が他指と揃わない = 回旋転位あり</li>
-            </ul>
-          </li>
-          <li><strong>皮膚損傷の確認</strong>：殴打で<strong>人咬傷（fight bite）</strong>の可能性</li>
-        </ul>
-      </section>
-
-      <!-- §3 画像 -->
-      <section class="section-page" id="s3" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🧪 画像</h2>
-        <ul>
-          <li>手 3 方向（正面・側面・斜位）</li>
-          <li><strong>側面像で掌側屈曲角</strong>を計測</li>
-          <li>関節内進展の有無を確認</li>
-        </ul>
-      </section>
-
-      <!-- §4 許容される転位 -->
-      <section class="section-page" id="s4" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>📐 許容される転位（非整形外科医用）</h2>
-        <div class="table-wrap"><table><thead><tr><th>中手骨</th><th>許容される掌側屈曲角</th></tr></thead><tbody><tr><td>第 2 中手骨</td><td><strong>10°</strong></td></tr><tr><td>第 3 中手骨</td><td><strong>20°</strong></td></tr><tr><td>第 4 中手骨</td><td><strong>30–40°</strong></td></tr><tr><td><strong>第 5 中手骨</strong></td><td><strong>40–50°</strong>（60° まで許容する施設もあり）</td></tr></tbody></table></div>
-        <ul>
-          <li>橈側ほど許容度が小さい（機能障害が出やすい）</li>
-          <li><strong>回旋転位は度数に関係なく手術適応</strong></li>
-        </ul>
-      </section>
-
-      <!-- §5 マネジメント -->
-      <section class="section-page" id="s5" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>💉 マネジメント</h2>
-        <h3>保存の基準</h3>
-        <ul>
-          <li>転位角度が許容範囲内</li>
-          <li><strong>回旋転位なし</strong></li>
-          <li>皮膚損傷なし</li>
-        </ul>
-        <h3>保存の方法</h3>
-        <ul>
-          <li><strong>Ulnar gutter splint</strong>（尺側半分を覆うシーネ）</li>
-          <li>MCP 関節 <strong>70–90° 屈曲位</strong>、PIP/DIP 関節は伸展位</li>
-          <li>3–4 週間固定</li>
-        </ul>
-        <h3>手術の基準（帰宅手術 or 即時整形）</h3>
-        <ul>
-          <li><strong>許容角度超え</strong></li>
-          <li><strong>回旋転位あり</strong></li>
-          <li><strong>関節内骨折</strong></li>
-          <li><strong>開放骨折・人咬傷</strong></li>
-        </ul>
-      </section>
-
-      <!-- §6 Fight bite -->
-      <section class="section-page" id="s6" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>⚠️ 人咬傷（Fight bite）の扱い</h2>
-        <div class="callout callout-danger">
-          <div class="callout-title">MCP 関節背側の創 = 人咬傷として扱う</div>
-          <div class="callout-body"><ul>
-            <li>殴打で歯が皮膚を切る → 関節内に感染源</li>
-            <li><strong>起因菌</strong>：<em>Eikenella corrodens</em>、連鎖球菌、口腔内嫌気性菌</li>
-            <li><strong>開放骨折 + 関節内感染 = 緊急洗浄 + 抗菌薬</strong></li>
-            <li><strong>アモキシシリン／クラブラン酸</strong>（経口）または <strong>SBT/ABPC</strong>（静注）</li>
-            <li>整形外科で<strong>即時洗浄</strong></li>
-          </ul></div>
+          <h3>ER で打つ手</h3>
+          <ul>
+            <li><strong>ulnar gutter シーネ</strong>（intrinsic plus 肢位：MP 70〜90°屈曲、IP 伸展）</li>
+            <li>buddy taping は軽症のみ</li>
+            <li>三角巾装着、患肢挙上指導</li>
+            <li>許容超過・回旋ずれは<strong>徒手整復のご相談</strong>を整形に</li>
+            <li>fight bite は創を縫合せず開放、抗菌薬と整形コンサル</li>
+            <li>鎮痛は NSAIDs／アセトアミノフェン</li>
+          </ul>
         </div>
-      </section>
+      </details>
 
-      <!-- §7 帰宅時の説明 -->
-      <section class="section-page" id="s7" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🏠 帰宅時の説明</h2>
-        <ul>
-          <li><strong>痛みが強い、しびれ、指が動かない</strong> → 即受診</li>
-          <li>固定中は清潔に、指先の末梢循環を確認</li>
-          <li>1 週以内に整形外科外来</li>
-        </ul>
-      </section>
+      <details class="dx-box" id="consult">
+        <summary><span>コンサル文（カルテに貼る）</span></summary>
+        <div class="dx-box__body">
+          <p class="dx-template__hint">『他科コンサルト実践マニュアル』フォーマット。許容内は外来フォロー、許容超過・回旋・fight bite は同日コンサル。</p>
+          <div class="dx-template">【目的】[整形外科外来でのご加療依頼／徒手整復のご相談・ご加療依頼]。
+【疾患】#1 [右/左]第[2/3/4/5]中手骨頸部骨折（屈曲 [○○]°、回旋転位 [なし／あり]、皮膚損傷 [なし／あり]）
+【既往歴】[特記事項なし／○○]
+【内服薬】[なし／○○]
+【ADL（受傷前）】[自立／○○]
+【現病歴】[年齢]歳[男/女]性。[受傷機転：殴打／転倒／スポーツ]で受傷し、[来院経緯]で来院。
+ ・身体所見：MP 関節背側の腫脹、knuckle [消失／健在]、回旋アライメント [問題なし／異常]、皮膚創 [なし／あり（人歯疑い：fight bite）]
+ ・血管：橈骨・尺骨動脈触知 [良好]、固有指動脈の拍動／CRT [良好]
+ ・神経：正中・尺骨・橈骨神経領域 [問題なし]、固有指神経の感覚 [問題なし]
+ ・画像：手 Xp 3 方向で第[○]中手骨頸部骨折、掌側屈曲 [○○]°、回旋 [Xp 上は明らかでない／あり]
+ ・ER 処置：ulnar gutter シーネ（intrinsic plus 肢位）、三角巾、患肢挙上指導[、創部洗浄・抗菌薬]
+よろしくお願いいたします。</div>
+        </div>
+      </details>
 
-      <!-- §8 出典 -->
-      <section class="section-page" id="s8" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>📚 出典</h2>
-        <ul>
-          <li><strong>増井伸高. 骨折ハンター. 中外医学社. 2019.</strong></li>
-          <li><strong>Poolman RW ほか.</strong> Conservative treatment for closed fifth metacarpal neck fractures. <em>Cochrane Database Syst Rev.</em> 2005.</li>
-          <li><strong>Talan DA ほか.</strong> Clinical presentation and bacteriologic analysis of infected human bites in patients presenting to emergency departments. <em>Clin Infect Dis.</em> 2003.</li>
-        </ul>
-        <h3>関連</h3>
-        <ul>
-          <li><a class="wiki-link" href="../転倒.html">転倒</a> / <a class="wiki-link" href="第1中手骨基部骨折.html">第1中手骨基部骨折</a> / <a class="wiki-link" href="舟状骨骨折.html">舟状骨骨折</a></li>
-        </ul>
-      </section>
+      <details class="dx-box">
+        <summary><span>関連ハブ・隣接疾患</span></summary>
+        <div class="dx-box__body">
+          <ul>
+            <li>主訴入口：<a class="wiki-link" href="../手関節・手の外傷.html">手関節・手の外傷</a></li>
+            <li>隣接疾患：<a class="wiki-link" href="第1中手骨基部骨折.html">第1中手骨基部骨折</a> ／ <a class="wiki-link" href="PIP関節脱臼.html">PIP 関節脱臼</a> ／ <a class="wiki-link" href="Mallet finger・Jersey finger.html">Mallet / Jersey finger</a></li>
+            <li>処置：ulnar gutter シーネ ／ buddy taping</li>
+            <li>合併症対応：fight bite は化膿性関節炎・屈筋腱鞘炎リスク、必ず整形へ</li>
+          </ul>
+        </div>
+      </details>
+
+      <details class="dx-box">
+        <summary><span>出典</span></summary>
+        <div class="dx-box__body">
+          <ul>
+            <li>増井伸高. 骨折ハンター. 中外医学社. 2019.</li>
+            <li>津下健哉. 手の外科の実際 改訂第7版. 南江堂. 2011.</li>
+            <li>佐藤弘明 ほか. 他科コンサルト実践マニュアル. 羊土社.</li>
+          </ul>
+        </div>
+      </details>
 
     </article>
   </main>
@@ -188,53 +269,20 @@
 
   <script>
   (function(){
-    const menu = document.getElementById('sectionMenu');
-    const pages = document.querySelectorAll('.section-page');
-    const titleH1 = document.querySelector('.page-title');
-    const relatedSymp = document.getElementById('related-symptoms');
-
-    function showSection(id) {
-      menu.hidden = true;
-      if (titleH1) titleH1.hidden = true;
-      if (relatedSymp) relatedSymp.hidden = true;
-      pages.forEach(p => p.hidden = (p.id !== id));
-      window.scrollTo(0, 0);
-    }
-    function showMenu(scrollTarget) {
-      menu.hidden = false;
-      if (titleH1) titleH1.hidden = false;
-      if (relatedSymp) relatedSymp.hidden = false;
-      pages.forEach(p => p.hidden = true);
-      if (scrollTarget) {
-        if (scrollTarget.tagName === 'DETAILS') scrollTarget.open = true;
-        scrollTarget.scrollIntoView({behavior: 'instant', block: 'start'});
-      } else {
-        window.scrollTo(0, 0);
-      }
-    }
-    function syncFromHash() {
-      const id = (location.hash || '').replace('#','');
-      const target = id ? document.getElementById(id) : null;
-      if (target && target.classList.contains('section-page')) {
-        showSection(id);
-      } else if (target) {
-        showMenu(target);
-      } else {
-        showMenu();
-      }
-    }
-
-    window.addEventListener('hashchange', syncFromHash);
-    document.querySelectorAll('.back-to-menu').forEach(b => {
-      b.addEventListener('click', () => { history.pushState(null,'',location.pathname); showMenu(); });
+    document.querySelectorAll('.dx-quick__btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.dataset.target;
+        const target = document.getElementById(id);
+        if (!target) return;
+        target.open = true;
+        target.scrollIntoView({behavior: 'smooth', block: 'start'});
+      });
     });
     const navBack = document.getElementById('navBack');
     if (navBack) navBack.addEventListener('click', () => {
       if (window.history.length > 1) history.back();
       else window.location.href = '../index.html';
     });
-
-    syncFromHash();
   })();
   </script>
 </body>

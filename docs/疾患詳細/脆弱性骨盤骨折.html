@@ -6,6 +6,196 @@
   <meta name="color-scheme" content="light dark" />
   <title>脆弱性骨盤骨折 | ER ノート</title>
   <link rel="stylesheet" href="../er-note.css" />
+  <style>
+    /* ============ クイックタップ（3 つを開閉トリガー） ============ */
+    .dx-quick {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px;
+      margin: 10px 0 4px;
+    }
+    .dx-quick__btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      padding: 10px 6px;
+      border-radius: 10px;
+      background: color-mix(in srgb, var(--accent) 10%, var(--surface));
+      border: 1.5px solid var(--accent);
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 13px;
+      line-height: 1.2;
+      text-align: center;
+      cursor: pointer;
+      transition: background 120ms ease;
+    }
+    .dx-quick__btn:hover {
+      background: color-mix(in srgb, var(--accent) 18%, var(--surface));
+    }
+    .dx-quick__icon { font-size: 20px; }
+    .dx-quick__sub {
+      font-size: 10.5px;
+      font-weight: 500;
+      color: var(--muted);
+    }
+
+    /* ============ 同時評価 3 列（血管・神経・典型像） ============ */
+    .dx-tri {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+      margin: 6px 0 4px;
+      align-items: start;
+    }
+    .dx-tri__card {
+      background: var(--surface);
+      border-radius: 10px;
+      padding: 10px 12px;
+      border: 1.5px solid color-mix(in srgb, var(--text) 18%, transparent);
+    }
+    .dx-tri__card--vasc { border-color: #c0392b; background: color-mix(in srgb, #c0392b 6%, var(--surface)); }
+    .dx-tri__card--neuro { border-color: #b5651d; background: color-mix(in srgb, #b5651d 6%, var(--surface)); }
+    .dx-tri__card--typical { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 6%, var(--surface)); }
+    .dx-tri__title {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 800;
+      font-size: 13.5px;
+      margin-bottom: 4px;
+    }
+    .dx-tri__card--vasc .dx-tri__title { color: #c0392b; }
+    .dx-tri__card--neuro .dx-tri__title { color: #b5651d; }
+    .dx-tri__list {
+      margin: 0;
+      padding-left: 18px;
+      font-size: 12.5px;
+      line-height: 1.5;
+    }
+    .dx-tri__list li { margin: 2px 0; }
+
+    /* details 形式の血管/神経カード：summary にチェック印、開閉時の挙動 */
+    details.dx-tri__card { padding: 0; }
+    details.dx-tri__card > summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 10px 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 800;
+      font-size: 13.5px;
+    }
+    details.dx-tri__card > summary::-webkit-details-marker { display: none; }
+    details.dx-tri__card > summary::after {
+      content: "▸";
+      margin-left: auto;
+      font-size: 12px;
+      color: var(--muted);
+      transition: transform 120ms ease;
+    }
+    details.dx-tri__card[open] > summary::after { transform: rotate(90deg); }
+    details.dx-tri__card--vasc > summary { color: #c0392b; }
+    details.dx-tri__card--neuro > summary { color: #b5651d; }
+    details.dx-tri__card > .dx-tri__list { padding: 0 14px 12px 30px; }
+    details.dx-tri__card > .dx-tri__hint {
+      padding: 0 14px 6px 30px;
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    /* ============ 大きな details ボックス（画像/治療方針/コンサル文） ============ */
+    details.dx-box {
+      background: var(--surface);
+      border: 1.5px solid color-mix(in srgb, var(--text) 18%, transparent);
+      border-radius: 10px;
+      margin: 10px 0;
+      scroll-margin-top: 8px;
+    }
+    details.dx-box > summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 12px 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 800;
+      font-size: 14.5px;
+    }
+    details.dx-box > summary::-webkit-details-marker { display: none; }
+    details.dx-box > summary::after {
+      content: "▸";
+      margin-left: auto;
+      font-size: 13px;
+      color: var(--muted);
+      transition: transform 120ms ease;
+    }
+    details.dx-box[open] > summary::after { transform: rotate(90deg); }
+    details.dx-box[open] {
+      border-color: var(--accent);
+    }
+    details.dx-box > .dx-box__body {
+      padding: 0 14px 14px;
+    }
+
+    /* スマホで 1 列に */
+    @media (max-width: 640px) {
+      .dx-quick { gap: 6px; }
+      .dx-quick__btn { padding: 8px 4px; font-size: 11.5px; border-radius: 8px; }
+      .dx-quick__icon { font-size: 17px; }
+      .dx-quick__sub { font-size: 9.5px; }
+
+      .dx-tri { grid-template-columns: 1fr; gap: 8px; }
+      .dx-tri__card { padding: 8px 10px; }
+      details.dx-tri__card > summary { padding: 8px 10px; font-size: 12.5px; }
+      details.dx-tri__card > .dx-tri__list { padding: 0 12px 10px 26px; }
+      .dx-tri__title { font-size: 12.5px; }
+      .dx-tri__list { font-size: 12px; }
+
+      details.dx-box > summary { padding: 10px 12px; font-size: 13.5px; }
+      details.dx-box > .dx-box__body { padding: 0 12px 12px; }
+    }
+
+    /* ============ 区切り帯（最小限） ============ */
+    .dx-step {
+      margin: 18px 0 6px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 11.5px;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+    }
+    .dx-step::before, .dx-step::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: color-mix(in srgb, var(--text) 18%, transparent);
+    }
+
+    /* コピペ用テンプレ */
+    .dx-template {
+      background: color-mix(in srgb, var(--text) 4%, var(--surface));
+      border-left: 3px solid var(--accent);
+      border-radius: 6px;
+      padding: 10px 12px;
+      margin: 6px 0 0;
+      font-size: 13px;
+      line-height: 1.6;
+      white-space: pre-wrap;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+    .dx-template__hint {
+      font-size: 11px;
+      color: var(--muted);
+      margin: 0 0 4px;
+    }
+  </style>
 </head>
 <body>
   <header class="hokuto-top">
@@ -21,183 +211,190 @@
     <article class="note-shell">
       <h1 class="page-title">脆弱性骨盤骨折</h1>
 
-      <!-- 即時アクションヘッダー（常時 sticky） -->
-      <div class="action-header">
-        <div class="action-header__title">⚡ 即時アクション</div>
-        <ol class="action-header__list">
-          <li><strong>高齢者の軽微外傷（しりもち・転倒）</strong>で起こる ─ 「股関節痛・腰痛・殿部痛」訴える高齢者は鑑別必須</li>
-          <li><strong>X 線 + CT で見逃しなく</strong>（Xp 感度 46-50%、仙骨は 7-44%）。FFP / Rommens 分類を意識</li>
-          <li><strong>保存療法が基本</strong>（早期離床・荷重制限の範囲でリハビリ）vs 不安定型は手術検討</li>
-          <li><strong>前環骨折は出血リスク</strong>に注意、<strong>仙骨不全骨折は MRI で診断</strong>（STIR 白・T1 黒）</li>
-        </ol>
-      </div>
-
-      <!-- §1〜§9 メニュータイル -->
-      <nav class="section-tiles" id="sectionMenu">
-        <a class="section-tile" href="#s1"><span class="section-tile__no">⚖️</span><span class="section-tile__name">成人骨盤骨折と<br><small>違う点</small></span></a>
-        <a class="section-tile" href="#s2"><span class="section-tile__no">📊</span><span class="section-tile__name">疫学・主訴</span></a>
-        <a class="section-tile" href="#s3"><span class="section-tile__no">🦴</span><span class="section-tile__name">好発部位<br><small>恥骨・坐骨・仙骨</small></span></a>
-        <a class="section-tile" href="#s4"><span class="section-tile__no">🩺</span><span class="section-tile__name">身体所見<br><small>圧痛で診断</small></span></a>
-        <a class="section-tile" href="#s5"><span class="section-tile__no">🔬</span><span class="section-tile__name">画像<br><small>CT / MRI</small></span></a>
-        <a class="section-tile" href="#s6"><span class="section-tile__no">📋</span><span class="section-tile__name">分類と治療</span></a>
-        <a class="section-tile" href="#s7"><span class="section-tile__no">🔀</span><span class="section-tile__name">Xp 陰性時<br><small>フロー</small></span></a>
-        <a class="section-tile" href="#s8"><span class="section-tile__no">💊</span><span class="section-tile__name">骨粗鬆症<br><small>介入</small></span></a>
-        <a class="section-tile" href="#s9"><span class="section-tile__no">⚠️</span><span class="section-tile__name">やりがちな<br><small>ミス</small></span></a>
+      <!-- スマホですぐ開きたい 3 つ -->
+      <nav class="dx-quick" aria-label="クイックタップ">
+        <button class="dx-quick__btn" type="button" data-target="img-read">
+          <span>画像の見方</span>
+          <span class="dx-quick__sub">Xp / CT / MRI</span>
+        </button>
+        <button class="dx-quick__btn" type="button" data-target="plan">
+          <span>治療方針</span>
+          <span class="dx-quick__sub">入院 vs 外来</span>
+        </button>
+        <button class="dx-quick__btn" type="button" data-target="consult">
+          <span>コンサル文</span>
+          <span class="dx-quick__sub">そのまま貼れる</span>
+        </button>
       </nav>
 
-      <!-- 関連主訴（双方向リンク） -->
-      <details class="sub-fold" id="related-symptoms">
-        <summary>📞 この疾患が該当する主訴</summary>
-        <div class="sub-fold__body">
+      <!-- 同時評価 3 列：典型像は常時、血管・神経は折りたたみ -->
+      <div class="dx-step"><span>同時並行で評価する 3 軸</span></div>
+      <div class="dx-tri">
+
+        <div class="dx-tri__card dx-tri__card--typical">
+          <div class="dx-tri__title">典型像</div>
+          <ul class="dx-tri__list">
+            <li>高齢女性：しりもち・軽微転倒</li>
+            <li>主訴：殿部痛／鼠径部痛／腰痛、<strong>立てない・歩けない</strong></li>
+            <li>圧痛：恥骨枝・坐骨枝、仙骨</li>
+            <li>骨盤コンプレッション・側方圧迫テスト陽性</li>
+            <li>受傷前 ADL の確認（独歩／杖／車椅子）</li>
+          </ul>
+        </div>
+
+        <details class="dx-tri__card dx-tri__card--vasc">
+          <summary>血管</summary>
+          <p class="dx-tri__hint">前環骨折・恥骨枝骨折は <strong>後腹膜出血</strong>を起こすことがある。抗凝固薬例で要警戒。</p>
+          <ul class="dx-tri__list">
+            <li>バイタル（頻脈・低血圧）と Hb 推移</li>
+            <li>抗凝固薬／抗血小板薬の有無</li>
+            <li>ショック傾向 → 造影 CT で <strong>extravasation</strong>確認</li>
+            <li>必要時 IVR（TAE）検討</li>
+          </ul>
+        </details>
+
+        <details class="dx-tri__card dx-tri__card--neuro">
+          <summary>神経</summary>
+          <p class="dx-tri__hint">仙骨骨折では <strong>L5/S1 神経根障害</strong>に注意。膀胱直腸障害は要緊急対応。</p>
+          <ul class="dx-tri__list">
+            <li><strong>下肢運動感覚</strong>（L5：足背屈・第一趾背屈）</li>
+            <li>会陰部知覚・肛門括約筋トーヌス</li>
+            <li>残尿・排尿障害の有無</li>
+            <li>麻痺あれば手術検討 → すみやかにコンサルト</li>
+          </ul>
+        </details>
+      </div>
+
+      <!-- 画像の見方 -->
+      <details class="dx-box" id="img-read">
+        <summary><span>画像の見方</span></summary>
+        <div class="dx-box__body">
           <ul>
-            <li><a class="wiki-link" href="../股関節痛.html">股関節痛</a> — 転倒後高齢者の典型主訴（94.4%）</li>
-            <li><a class="wiki-link" href="../転倒.html">転倒</a> — しりもち後の腰痛・殿部痛で必ず鑑別</li>
+            <li><strong>骨盤 Xp（正面・inlet・outlet）</strong>：感度 46-50%、仙骨は 7-44% と低い</li>
+            <li>Xp で必ず追うポイント：
+              <ul>
+                <li>恥骨枝・坐骨枝の連続性</li>
+                <li>仙腸関節の左右差</li>
+                <li>仙骨翼の縦走線（仙骨不全骨折）</li>
+              </ul>
+            </li>
+            <li><strong>体動困難・荷重不能ならまず CT</strong>（Xp 陰性でも仙骨／後環骨折を拾う）</li>
+            <li><strong>CT 陰性でも疑えば MRI</strong>（仙骨不全骨折は STIR で白、T1 で黒）</li>
+            <li>FFP（Fragility Fracture of the Pelvis）分類で重症度を判定（I：前環単独 → IV：両側不安定）</li>
+            <li>抗凝固薬例では <strong>造影 CT</strong>で出血評価</li>
           </ul>
         </div>
       </details>
 
-      <!-- §1 成人の骨盤骨折と違う -->
-      <section class="section-page" id="s1" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>⚖️ 成人の骨盤骨折と違う</h2>
-        <div class="callout callout-warning">
-          <div class="callout-title">混同厳禁</div>
-          <div class="callout-body"><p>「骨盤骨折 = ショック・IVR」というイメージは<strong>成人の骨盤骨折</strong>。 <strong>高齢者の脆弱性骨盤骨折は全く別の病態</strong>で、血行動態は安定、IVR も創外固定も不要。</p></div>
-        </div>
-        <div class="table-wrap"><table><thead><tr><th></th><th>成人の骨盤骨折（一般的）</th><th><strong>脆弱性骨盤骨折</strong></th></tr></thead><tbody><tr><td>年齢</td><td>成人</td><td>高齢</td></tr><tr><td>受傷機転</td><td>高エネルギー外傷</td><td>転倒（しりもち）</td></tr><tr><td>血行動態</td><td>しばしば不安定</td><td><strong>安定</strong></td></tr><tr><td>IVR</td><td>しばしば必要</td><td><strong>不要</strong></td></tr><tr><td>創外固定</td><td>時に必要</td><td><strong>必要なし</strong></td></tr><tr><td>対応</td><td>重症外傷センター</td><td>一般救急で対応可能</td></tr></tbody></table></div>
-      </section>
+      <!-- 治療方針 -->
+      <details class="dx-box" id="plan">
+        <summary><span>治療方針（入院 vs 外来）</span></summary>
+        <div class="dx-box__body">
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>FFP 分類</th><th>所見</th><th>方針</th><th>ER の動き</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>FFP I：前環のみ</td>
+                  <td>恥骨枝・坐骨枝、安定</td>
+                  <td><strong>歩行可能なら帰宅保存</strong></td>
+                  <td>鎮痛、翌日整形外来</td>
+                </tr>
+                <tr>
+                  <td>FFP II：後環潜在</td>
+                  <td>仙骨不全骨折（非転位）</td>
+                  <td>体動困難なら入院</td>
+                  <td>入院鎮痛・リハビリ</td>
+                </tr>
+                <tr>
+                  <td>FFP III：転位後環</td>
+                  <td>片側仙骨転位、不安定</td>
+                  <td><strong>入院、手術検討</strong></td>
+                  <td>整形コンサルト</td>
+                </tr>
+                <tr>
+                  <td><strong>FFP IV：両側不安定</strong></td>
+                  <td>両側後環＋前環</td>
+                  <td><strong>入院、手術ほぼ必須</strong></td>
+                  <td>整形コンサルト・出血評価</td>
+                </tr>
+                <tr>
+                  <td><strong>後腹膜出血／神経麻痺</strong></td>
+                  <td>ショック傾向／L5・S1 麻痺／膀胱直腸障害</td>
+                  <td><strong>緊急対応</strong></td>
+                  <td>TAE・整形即時 cons.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
 
-      <!-- §2 疫学・主訴 -->
-      <section class="section-page" id="s2" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>📊 疫学・主訴</h2>
-        <ul>
-          <li>転倒後の搬送時主訴：</li>
+          <h3>入院判断のポイント</h3>
           <ul>
-            <li><strong>股関節痛・腰痛・殿部痛 94.4%</strong></li>
-            <li>骨盤部痛そのものを訴えるのは <strong>4.8%</strong></li>
+            <li><strong>歩けない・立てない</strong>＝ ADL 喪失 → 入院（在宅では生活不能）</li>
+            <li>同居家族なし、介護力不足、独居高齢者は閾値を下げる</li>
+            <li>仙骨／後環骨折・複数骨折は入院</li>
+            <li>抗凝固薬内服例で Hb 低下 → 入院・出血評価</li>
+            <li>歩行可能な前環単独骨折は帰宅可（鎮痛 ＋ 翌日整形外来）</li>
           </ul>
-          <li>つまり<strong>「股関節痛」「腰痛」「殿部痛」を訴える高齢者では必ず鑑別に</strong></li>
-        </ul>
-      </section>
 
-      <!-- §3 好発部位 -->
-      <section class="section-page" id="s3" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🦴 好発部位 — 恥骨・坐骨・仙骨の 3 点</h2>
-        <ul>
-          <li><strong>恥骨骨折</strong></li>
-          <li><strong>坐骨骨折</strong></li>
-          <li><strong>仙骨骨折</strong>（Xp 感度 7–44%、見逃し最多）</li>
-        </ul>
-        <div class="callout callout-check">
-          <div class="callout-title">どれか 1 つあれば他の箇所も探す</div>
-          <div class="callout-body"><p>脆弱性骨折は多発しやすい。</p>
+          <h3>ER で打つ手</h3>
           <ul>
-            <li><strong>恥骨骨折 → 坐骨 / 仙骨も探す</strong></li>
-            <li><strong>坐骨骨折 → 恥骨 / 仙骨も探す</strong></li>
-            <li>Xp で恥坐骨骨折があれば <strong>CT を追加して仙骨を確認</strong></li>
-          </ul></div>
+            <li>鎮痛：アセトアミノフェン中心、高齢者は <strong>NSAIDs を避ける</strong>（腎・消化管）</li>
+            <li>強い疼痛にはオピオイド少量、レスキューで対応</li>
+            <li>絶飲食指示（手術可能性ある場合）、ライン確保</li>
+            <li>抗凝固薬の有無を確認、出血があれば中和検討</li>
+            <li>骨粗鬆症治療を導入／継続（受傷後早期）</li>
+            <li>DVT 予防（弾性ストッキング、必要時抗凝固）</li>
+          </ul>
         </div>
-      </section>
+      </details>
 
-      <!-- §4 身体所見 -->
-      <section class="section-page" id="s4" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🩺 身体所見 — 体表から触れる骨は圧痛で診断</h2>
-        <div class="table-wrap"><table><thead><tr><th>骨</th><th>診察体位</th></tr></thead><tbody><tr><td><strong>恥骨</strong></td><td>臥位、恥骨結合の直上を圧迫</td></tr><tr><td><strong>坐骨</strong></td><td><strong>股関節屈曲位</strong>で坐骨結節を圧迫</td></tr><tr><td><strong>仙骨</strong></td><td><strong>側臥位</strong>で仙骨後面を圧迫</td></tr></tbody></table></div>
-        <ul>
-          <li><strong>体表から触れる骨 = 圧痛があれば骨折の可能性が高い</strong>（骨盤骨折の身体診察で診断率 100% とする報告も）</li>
-          <li>関節内の骨（大腿骨近位部など）は直接触れないので、<strong>内外旋痛</strong>で代用</li>
-        </ul>
-      </section>
+      <!-- コンサル文 -->
+      <details class="dx-box" id="consult">
+        <summary><span>コンサル文（カルテに貼る）</span></summary>
+        <div class="dx-box__body">
+          <p class="dx-template__hint">『他科コンサルト実践マニュアル』の院内紹介状フォーマットに準拠（【目的】【疾患】【既往歴】【内服薬】【ADL】【現病歴】）。空欄を埋めるだけで通る形式。</p>
+          <div class="dx-template">【目的】入院加療・観血的整復のご相談。
+【疾患】#1 脆弱性骨盤骨折（FFP ○型、[前環／後環／両側]、神経障害 [あり／なし]）
+【既往歴】[骨粗鬆症／椎体骨折既往／○○]
+【内服薬】[なし／ワーファリン／DOAC ○○／抗血小板薬／ステロイド／BP・デノスマブ]
+【ADL（受傷前）】[独歩／杖／介助歩行／車椅子]、独居 [あり／なし]
+【現病歴】[年齢]歳[男/女]性。[受傷機転：しりもち／軽微転倒]で受傷し、[殿部痛／鼠径部痛／腰痛]で来院。[歩行可／不可]。
+ ・身体所見：恥骨枝・坐骨枝・仙骨 [圧痛部位]、骨盤コンプレッション [陽／陰]
+ ・神経：下肢運動感覚 [問題なし／L5 麻痺／S1 麻痺]、会陰部知覚 [正常／低下]、膀胱直腸障害 [なし／あり]
+ ・血管：バイタル安定 [はい／いいえ]、Hb [○○]、抗凝固内服中の出血評価 [済／未]
+ ・画像：骨盤 Xp [異常あり／なし]、CT [○○骨折確認／陰性]、MRI [施行済／未]
+ ・ER 処置：鎮痛 [アセトアミノフェン／オピオイド]、ライン確保 [済／未]、絶飲食 [済／未]
+ ・術前検査：採血・心電図・胸部 X 線 [済／未]
+よろしくお願いいたします。</div>
+        </div>
+      </details>
 
-      <!-- §5 画像 -->
-      <section class="section-page" id="s5" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🔬 画像</h2>
-        <h3>第 1 選択：CT（単純で可）</h3>
-        <ul>
-          <li><strong>Xp 感度 46–50%</strong> — Xp だけでは信頼できない</li>
-          <li><strong>単純 CT</strong> で恥骨・坐骨・仙骨を評価</li>
-          <li>造影は不要(血行動態が安定していれば)</li>
-          <li><strong>血腫疑い・血圧低下</strong>があれば造影 CT</li>
-        </ul>
-        <h3>MRI が必要な場面</h3>
-        <ul>
-          <li>CT でも骨折線が不明瞭 / 仙骨不全骨折 occult の疑い</li>
-          <li>CT で骨折あっても筋挫傷など鑑別が残るとき</li>
-          <li><strong>STIR 白・T1 黒</strong>で確定</li>
-        </ul>
-      </section>
+      <!-- 関連ハブ -->
+      <details class="dx-box">
+        <summary><span>関連ハブ・隣接疾患</span></summary>
+        <div class="dx-box__body">
+          <ul>
+            <li>主訴入口：<a class="wiki-link" href="../転倒.html">転倒</a> ／ <a class="wiki-link" href="../腰痛.html">腰痛</a></li>
+            <li>隣接疾患：<a class="wiki-link" href="大腿骨近位部骨折.html">大腿骨近位部骨折</a> ／ <a class="wiki-link" href="脊椎圧迫骨折.html">脊椎圧迫骨折</a></li>
+            <li>合併症対応：DVT 予防、廃用予防、<a class="wiki-link" href="骨粗鬆症治療.html">骨粗鬆症治療</a></li>
+          </ul>
+        </div>
+      </details>
 
-      <!-- §6 分類と治療 -->
-      <section class="section-page" id="s6" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>📋 分類と治療</h2>
-        <h3>非整形外科医目線のシンプル分類</h3>
-        <div class="table-wrap"><table><thead><tr><th>分類</th><th>骨折部位</th><th>安定性</th><th>対応</th></tr></thead><tbody><tr><td><strong>安定型</strong></td><td>恥坐骨のみ</td><td>安定</td><td>荷重制限なし。痛みが弱ければ通院 or <strong>帰宅保存</strong></td></tr><tr><td><strong>部分安定型</strong></td><td>恥坐骨 + 仙骨</td><td>部分的不安定</td><td><strong>4–8 週の荷重制限</strong> → リハビリ目的で <strong>入院整形</strong></td></tr><tr><td>不安定型</td><td>完全転位・後方要素損傷</td><td>不安定</td><td>整形外科コンサルト（稀）</td></tr></tbody></table></div>
-        <ul>
-          <li>大半は保存加療</li>
-          <li>通院可能な安定型でも<strong>痛みで歩けないなら入院</strong></li>
-          <li>コンサルト時は「恥骨・坐骨・仙骨のどこに骨折あり、安定型 or 部分安定型」と伝えるとスムーズ</li>
-        </ul>
-        <h3>疼痛管理</h3>
-        <ul>
-          <li><strong>アセリオ®（アセトアミノフェン）15 mg/kg 静注</strong></li>
-          <li>NSAIDs は高齢者で避ける</li>
-          <li>入院後はリハビリ（荷重制限の範囲で早期離床）</li>
-        </ul>
-      </section>
-
-      <!-- §7 Xp 陰性時のフロー -->
-      <section class="section-page" id="s7" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🔀 Xp 陰性時のフロー</h2>
-        <pre><code>転倒後股関節痛 + Xp 陰性
- ├─ 股関節の内外旋で疼痛 → 大腿骨近位部骨折 occult を疑う → MRI / CT
- ├─ 恥骨 / 坐骨 / 仙骨の圧痛 → 脆弱性骨盤骨折を疑う → CT
- ├─ 両方陰性で疼痛強い → MRI で筋挫傷を含めて評価
- └─ すべて陰性 → 保存加療、再診指示</code></pre>
-      </section>
-
-      <!-- §8 骨粗鬆症介入 -->
-      <section class="section-page" id="s8" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>💊 骨粗鬆症介入</h2>
-        <ul>
-          <li>脆弱性骨盤骨折は骨密度が低い場合に<strong>ビスホスホネート適応</strong></li>
-          <li>整形外科フォローで骨密度測定 → 処方となることが多い</li>
-          <li>退院時に未処方なら整形外科外来での骨粗鬆症評価を依頼</li>
-        </ul>
-        <h3>関連ページ</h3>
-        <ul>
-          <li><a class="wiki-link" href="../転倒.html">転倒</a></li>
-          <li><a class="wiki-link" href="../股関節痛.html">股関節痛</a></li>
-          <li><a class="wiki-link" href="大腿骨近位部骨折.html">大腿骨近位部骨折</a></li>
-          <li><a class="wiki-link" href="脊椎圧迫骨折.html">脊椎圧迫骨折</a></li>
-          <li><a class="wiki-link" href="骨粗鬆症治療.html">骨粗鬆症治療</a></li>
-        </ul>
-        <h3>出典</h3>
-        <ul>
-          <li><strong>増井伸高. 骨折ハンター. 中外医学社. 2019</strong>（第 3 章：高齢者・股関節痛ハンター②）</li>
-          <li><strong>Rommens PM, Hofmann A.</strong> Comprehensive classification of fragility fractures of the pelvic ring. <em>Injury.</em> 2013.</li>
-          <li><strong>Henes FO ほか.</strong> CT versus MRI for pelvic fragility fractures. <em>Skeletal Radiol.</em> 2012.</li>
-        </ul>
-      </section>
-
-      <!-- §9 やりがちなミス -->
-      <section class="section-page" id="s9" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>⚠️ やりがちなミス</h2>
-        <ul>
-          <li>「Xp で骨折なし」で帰宅（Xp 感度 46–50% しかない）</li>
-          <li>恥坐骨骨折を見つけて満足（仙骨骨折が隠れている）</li>
-          <li>成人の骨盤骨折と混同して IVR を考える</li>
-          <li>身体所見で骨を触らない（恥骨・坐骨・仙骨は体表から触れる）</li>
-          <li>NSAIDs を高齢者に処方</li>
-        </ul>
-      </section>
+      <!-- 出典 -->
+      <details class="dx-box">
+        <summary><span>出典</span></summary>
+        <div class="dx-box__body">
+          <ul>
+            <li>Rommens PM, Hofmann A. Comprehensive classification of fragility fractures of the pelvic ring. <em>Injury.</em> 2013.</li>
+            <li>増井伸高. 骨折ハンター. 中外医学社. 2019.</li>
+            <li>佐藤弘明・齋藤俊太郎編. 各科に本音を聞いた 他科コンサルト実践マニュアル. 羊土社.</li>
+          </ul>
+        </div>
+      </details>
 
     </article>
   </main>
@@ -216,53 +413,21 @@
 
   <script>
   (function(){
-    const menu = document.getElementById('sectionMenu');
-    const pages = document.querySelectorAll('.section-page');
-    const titleH1 = document.querySelector('.page-title');
-    const relatedSymp = document.getElementById('related-symptoms');
-
-    function showSection(id) {
-      menu.hidden = true;
-      if (titleH1) titleH1.hidden = true;
-      if (relatedSymp) relatedSymp.hidden = true;
-      pages.forEach(p => p.hidden = (p.id !== id));
-      window.scrollTo(0, 0);
-    }
-    function showMenu(scrollTarget) {
-      menu.hidden = false;
-      if (titleH1) titleH1.hidden = false;
-      if (relatedSymp) relatedSymp.hidden = false;
-      pages.forEach(p => p.hidden = true);
-      if (scrollTarget) {
-        if (scrollTarget.tagName === 'DETAILS') scrollTarget.open = true;
-        scrollTarget.scrollIntoView({behavior: 'instant', block: 'start'});
-      } else {
-        window.scrollTo(0, 0);
-      }
-    }
-    function syncFromHash() {
-      const id = (location.hash || '').replace('#','');
-      const target = id ? document.getElementById(id) : null;
-      if (target && target.classList.contains('section-page')) {
-        showSection(id);
-      } else if (target) {
-        showMenu(target);
-      } else {
-        showMenu();
-      }
-    }
-
-    window.addEventListener('hashchange', syncFromHash);
-    document.querySelectorAll('.back-to-menu').forEach(b => {
-      b.addEventListener('click', () => { history.pushState(null,'',location.pathname); showMenu(); });
+    document.querySelectorAll('.dx-quick__btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.dataset.target;
+        const target = document.getElementById(id);
+        if (!target) return;
+        target.open = true;
+        target.scrollIntoView({behavior: 'smooth', block: 'start'});
+      });
     });
+
     const navBack = document.getElementById('navBack');
     if (navBack) navBack.addEventListener('click', () => {
       if (window.history.length > 1) history.back();
       else window.location.href = '../index.html';
     });
-
-    syncFromHash();
   })();
   </script>
 </body>

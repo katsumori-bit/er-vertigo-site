@@ -6,6 +6,196 @@
   <meta name="color-scheme" content="light dark" />
   <title>第5中足骨近位端骨折 | ER ノート</title>
   <link rel="stylesheet" href="../er-note.css" />
+  <style>
+    /* ============ クイックタップ（3 つを開閉トリガー） ============ */
+    .dx-quick {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px;
+      margin: 10px 0 4px;
+    }
+    .dx-quick__btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      padding: 10px 6px;
+      border-radius: 10px;
+      background: color-mix(in srgb, var(--accent) 10%, var(--surface));
+      border: 1.5px solid var(--accent);
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 13px;
+      line-height: 1.2;
+      text-align: center;
+      cursor: pointer;
+      transition: background 120ms ease;
+    }
+    .dx-quick__btn:hover {
+      background: color-mix(in srgb, var(--accent) 18%, var(--surface));
+    }
+    .dx-quick__icon { font-size: 20px; }
+    .dx-quick__sub {
+      font-size: 10.5px;
+      font-weight: 500;
+      color: var(--muted);
+    }
+
+    /* ============ 同時評価 3 列（血管・神経・典型像） ============ */
+    .dx-tri {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+      margin: 6px 0 4px;
+      align-items: start;
+    }
+    .dx-tri__card {
+      background: var(--surface);
+      border-radius: 10px;
+      padding: 10px 12px;
+      border: 1.5px solid color-mix(in srgb, var(--text) 18%, transparent);
+    }
+    .dx-tri__card--vasc { border-color: #c0392b; background: color-mix(in srgb, #c0392b 6%, var(--surface)); }
+    .dx-tri__card--neuro { border-color: #b5651d; background: color-mix(in srgb, #b5651d 6%, var(--surface)); }
+    .dx-tri__card--typical { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 6%, var(--surface)); }
+    .dx-tri__title {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 800;
+      font-size: 13.5px;
+      margin-bottom: 4px;
+    }
+    .dx-tri__card--vasc .dx-tri__title { color: #c0392b; }
+    .dx-tri__card--neuro .dx-tri__title { color: #b5651d; }
+    .dx-tri__list {
+      margin: 0;
+      padding-left: 18px;
+      font-size: 12.5px;
+      line-height: 1.5;
+    }
+    .dx-tri__list li { margin: 2px 0; }
+
+    /* details 形式の血管/神経カード：summary にチェック印、開閉時の挙動 */
+    details.dx-tri__card { padding: 0; }
+    details.dx-tri__card > summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 10px 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 800;
+      font-size: 13.5px;
+    }
+    details.dx-tri__card > summary::-webkit-details-marker { display: none; }
+    details.dx-tri__card > summary::after {
+      content: "▸";
+      margin-left: auto;
+      font-size: 12px;
+      color: var(--muted);
+      transition: transform 120ms ease;
+    }
+    details.dx-tri__card[open] > summary::after { transform: rotate(90deg); }
+    details.dx-tri__card--vasc > summary { color: #c0392b; }
+    details.dx-tri__card--neuro > summary { color: #b5651d; }
+    details.dx-tri__card > .dx-tri__list { padding: 0 14px 12px 30px; }
+    details.dx-tri__card > .dx-tri__hint {
+      padding: 0 14px 6px 30px;
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    /* ============ 大きな details ボックス（画像/治療方針/コンサル文） ============ */
+    details.dx-box {
+      background: var(--surface);
+      border: 1.5px solid color-mix(in srgb, var(--text) 18%, transparent);
+      border-radius: 10px;
+      margin: 10px 0;
+      scroll-margin-top: 8px;
+    }
+    details.dx-box > summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 12px 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 800;
+      font-size: 14.5px;
+    }
+    details.dx-box > summary::-webkit-details-marker { display: none; }
+    details.dx-box > summary::after {
+      content: "▸";
+      margin-left: auto;
+      font-size: 13px;
+      color: var(--muted);
+      transition: transform 120ms ease;
+    }
+    details.dx-box[open] > summary::after { transform: rotate(90deg); }
+    details.dx-box[open] {
+      border-color: var(--accent);
+    }
+    details.dx-box > .dx-box__body {
+      padding: 0 14px 14px;
+    }
+
+    /* スマホで 1 列に */
+    @media (max-width: 640px) {
+      .dx-quick { gap: 6px; }
+      .dx-quick__btn { padding: 8px 4px; font-size: 11.5px; border-radius: 8px; }
+      .dx-quick__icon { font-size: 17px; }
+      .dx-quick__sub { font-size: 9.5px; }
+
+      .dx-tri { grid-template-columns: 1fr; gap: 8px; }
+      .dx-tri__card { padding: 8px 10px; }
+      details.dx-tri__card > summary { padding: 8px 10px; font-size: 12.5px; }
+      details.dx-tri__card > .dx-tri__list { padding: 0 12px 10px 26px; }
+      .dx-tri__title { font-size: 12.5px; }
+      .dx-tri__list { font-size: 12px; }
+
+      details.dx-box > summary { padding: 10px 12px; font-size: 13.5px; }
+      details.dx-box > .dx-box__body { padding: 0 12px 12px; }
+    }
+
+    /* ============ 区切り帯（最小限） ============ */
+    .dx-step {
+      margin: 18px 0 6px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 11.5px;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+    }
+    .dx-step::before, .dx-step::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: color-mix(in srgb, var(--text) 18%, transparent);
+    }
+
+    /* コピペ用テンプレ */
+    .dx-template {
+      background: color-mix(in srgb, var(--text) 4%, var(--surface));
+      border-left: 3px solid var(--accent);
+      border-radius: 6px;
+      padding: 10px 12px;
+      margin: 6px 0 0;
+      font-size: 13px;
+      line-height: 1.6;
+      white-space: pre-wrap;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+    .dx-template__hint {
+      font-size: 11px;
+      color: var(--muted);
+      margin: 0 0 4px;
+    }
+  </style>
 </head>
 <body>
   <header class="hokuto-top">
@@ -21,167 +211,183 @@
     <article class="note-shell">
       <h1 class="page-title">第5中足骨近位端骨折</h1>
 
-      <!-- 即時アクションヘッダー（常時 sticky） -->
-      <div class="action-header">
-        <div class="action-header__title">⚡ 即時アクション</div>
-        <ol class="action-header__list">
-          <li><strong>Jones 骨折 vs avulsion 骨折</strong>の区別が重要</li>
-          <li>AP+oblique+lat</li>
-          <li><strong>Jones 骨折は癒合不良リスク高</strong>（メタフィセス領域）</li>
-          <li>保存可だが<strong>運動選手は手術検討</strong>（早期復帰）</li>
-        </ol>
-      </div>
-
-      <!-- メニュータイル -->
-      <nav class="section-tiles" id="sectionMenu">
-        <a class="section-tile" href="#s1"><span class="section-tile__no">🦴</span><span class="section-tile__name">解剖と血流</span></a>
-        <a class="section-tile" href="#s2"><span class="section-tile__no">📊</span><span class="section-tile__name">3 つの<br><small>骨折ゾーン</small></span></a>
-        <a class="section-tile" href="#s3"><span class="section-tile__no">💥</span><span class="section-tile__name">受傷機転</span></a>
-        <a class="section-tile" href="#s4"><span class="section-tile__no">🩺</span><span class="section-tile__name">身体所見</span></a>
-        <a class="section-tile" href="#s5"><span class="section-tile__no">📷</span><span class="section-tile__name">画像</span></a>
-        <a class="section-tile" href="#s6"><span class="section-tile__no">💉</span><span class="section-tile__name">マネジメント<br><small>Zone 別</small></span></a>
-        <a class="section-tile" href="#s7"><span class="section-tile__no">🩻</span><span class="section-tile__name">非整形外科医<br><small>の役割</small></span></a>
-        <a class="section-tile" href="#s8"><span class="section-tile__no">📝</span><span class="section-tile__name">紹介状の<br><small>ポイント</small></span></a>
-        <a class="section-tile" href="#s9"><span class="section-tile__no">🏠</span><span class="section-tile__name">帰宅時の説明<br><small>＋出典</small></span></a>
+      <!-- スマホですぐ開きたい 3 つ -->
+      <nav class="dx-quick" aria-label="クイックタップ">
+        <button class="dx-quick__btn" type="button" data-target="img-read">
+          <span>画像の見方</span>
+          <span class="dx-quick__sub">3 zone の見分け</span>
+        </button>
+        <button class="dx-quick__btn" type="button" data-target="plan">
+          <span>治療方針</span>
+          <span class="dx-quick__sub">avulsion / Jones / 骨幹</span>
+        </button>
+        <button class="dx-quick__btn" type="button" data-target="consult">
+          <span>コンサル文</span>
+          <span class="dx-quick__sub">そのまま貼れる</span>
+        </button>
       </nav>
 
-      <!-- 関連主訴（双方向リンク） -->
-      <details class="sub-fold" id="related-symptoms">
-        <summary>📞 この疾患が該当する主訴</summary>
-        <div class="sub-fold__body">
+      <!-- 同時評価 3 列：典型像は常時、血管・神経は折りたたみ -->
+      <div class="dx-step"><span>同時並行で評価する 3 軸</span></div>
+      <div class="dx-tri">
+
+        <div class="dx-tri__card dx-tri__card--typical">
+          <div class="dx-tri__title">典型像</div>
+          <ul class="dx-tri__list">
+            <li><strong>足関節内反 → 腓骨筋牽引で粗面が剥離</strong>（avulsion）が主機序</li>
+            <li>ハイヒールなど踵の高い靴で起きやすい（<strong>「ハイヒール骨折」</strong>）</li>
+            <li>所見：<strong>第 5 中足骨基部の限局圧痛・腫脹・皮下出血</strong>（左右比較で視診から疑える）</li>
+            <li><strong>必ず両側とも裸足にして確認</strong>（足関節外傷で見逃し多い）</li>
+            <li>Jones（直達外力／骨幹移行部）／疲労（スポーツ反復／骨幹部）も鑑別</li>
+          </ul>
+        </div>
+
+        <details class="dx-tri__card dx-tri__card--vasc">
+          <summary>血管</summary>
+          <p class="dx-tri__hint">通常は血管障害の問題は薄い。ただし <strong>Jones 骨折は癒合不全リスク</strong>（zone 2 は乏血性）。</p>
+          <ul class="dx-tri__list">
+            <li><strong>足背・後脛骨動脈</strong>を確認（合併損傷除外）</li>
+            <li>zone 2（Jones）は<strong>水分供給が乏しい</strong>領域 → 偽関節リスク</li>
+            <li>転位・腫脹強い場合は循環チェックを怠らない</li>
+            <li>開放創なければ通常 ER で血管問題は少ない</li>
+          </ul>
+        </details>
+
+        <details class="dx-tri__card dx-tri__card--neuro">
+          <summary>神経</summary>
+          <p class="dx-tri__hint">通常は神経障害なし。<strong>腓腹神経</strong>領域感覚を一応確認。</p>
+          <ul class="dx-tri__list">
+            <li><strong>足背外側感覚</strong>（腓腹神経）</li>
+            <li>足趾運動（屈伸）</li>
+            <li>麻痺所見あれば他病態（足関節脱臼骨折など）を疑う</li>
+            <li>記録は最小限でよい</li>
+          </ul>
+        </details>
+      </div>
+
+      <!-- 画像の見方 -->
+      <details class="dx-box" id="img-read">
+        <summary><span>画像の見方</span></summary>
+        <div class="dx-box__body">
           <ul>
-            <li><a class="wiki-link" href="../足関節・足部の外傷.html">足関節・足部の外傷</a> — 足外側痛・第 5 中足骨基部の圧痛</li>
-            <li><a class="wiki-link" href="../転倒.html">転倒</a> — 内反捻挫で受傷することが多い</li>
+            <li><strong>足部 AP・側面・斜位（3 方向）</strong>必須</li>
+            <li><strong>典型的見逃し</strong>：avulsion 骨折線が<strong>第 4 中足骨・楔状骨関節面と一直線になり、関節のように見えてしまう</strong> → 読影前に骨折線イメージを持つ</li>
+            <li><strong>3 zone での部位同定が決定的</strong>：
+              <ul>
+                <li><strong>zone 1：base avulsion（粗面）</strong> — 内反受傷／ハイヒール、保存で治る</li>
+                <li><strong>zone 2：Jones 骨折</strong>（骨幹端〜骨幹移行部）— 直達外力、癒合不全多い</li>
+                <li><strong>zone 3：proximal diaphyseal</strong>（疲労骨折）— スポーツ反復負荷</li>
+              </ul>
+            </li>
+            <li>骨折線の<strong>横走 vs 縦走</strong>を確認（縦走＝avulsion、横走＝Jones）</li>
+            <li><strong>正常変異との鑑別</strong>：os vesalianum（辺縁が平滑・両側性）、二次骨化中心、apophysis（小児）</li>
+            <li>偽関節リスクが高く、<strong>転位 ≧ 3 mm は手術考慮</strong>（avulsion でも）</li>
+            <li>急性期 CT・MRI は基本不要</li>
           </ul>
         </div>
       </details>
 
-      <!-- §1 解剖と血流 -->
-      <section class="section-page" id="s1" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🦴 解剖と血流</h2>
-        <ul>
-          <li>第 5 中足骨 = 足の外側</li>
-          <li><strong>基部〜骨幹移行部は血流の watershed zone</strong> → 治癒しにくい</li>
-        </ul>
-      </section>
+      <!-- 治療方針 -->
+      <details class="dx-box" id="plan">
+        <summary><span>治療方針（zone × マネジメント）</span></summary>
+        <div class="dx-box__body">
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>zone（部位）</th><th>所見</th><th>マネジメント</th><th>ER の動き</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>zone 1：base avulsion</strong></td>
+                  <td>結節部の裂離、転位 &lt; 2 mm</td>
+                  <td><strong>帰宅保存</strong>（弾性包帯／hard sole）</td>
+                  <td>シーネ任意・荷重可・整形外来 1-2 週</td>
+                </tr>
+                <tr>
+                  <td>zone 1：転位大／関節面進展</td>
+                  <td>関節面 30% 以上 or 段差 2 mm</td>
+                  <td><strong>手術検討</strong>（張力帯／スクリュー）</td>
+                  <td>シーネ ＋ 整形 cons.</td>
+                </tr>
+                <tr>
+                  <td><strong>zone 2：Jones 骨折</strong></td>
+                  <td>骨幹端〜骨幹移行部の横骨折</td>
+                  <td><strong>非荷重ギプス 6-8 週 or 髄内スクリュー</strong></td>
+                  <td>シーネ ＋ 整形外来（早期）</td>
+                </tr>
+                <tr>
+                  <td><strong>zone 3：proximal diaphysis</strong></td>
+                  <td>骨幹近位、しばしば疲労骨折</td>
+                  <td><strong>手術が望ましい</strong>（スポーツ復帰早期）</td>
+                  <td>非荷重 ＋ 整形 cons.</td>
+                </tr>
+                <tr>
+                  <td>open / 多発合併</td>
+                  <td>創あり／他骨折合併</td>
+                  <td><strong>緊急コンサル</strong></td>
+                  <td>洗浄・抗菌薬・破傷風</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
 
-      <!-- §2 3 つの骨折ゾーン -->
-      <section class="section-page" id="s2" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>📊 3 つの骨折ゾーン</h2>
-        <div class="table-wrap"><table><thead><tr><th>Zone</th><th>位置</th><th>別名</th><th>治癒性</th><th>治療</th></tr></thead><tbody><tr><td><strong>Zone 1</strong></td><td><strong>最近位（粗面）</strong>、関節外</td><td><strong>Pseudo-Jones 骨折 / 撕脱骨折</strong></td><td>血流豊富、良好</td><td><strong>保存</strong></td></tr><tr><td><strong>Zone 2</strong></td><td><strong>骨幹移行部</strong></td><td><strong>Jones 骨折</strong></td><td><strong>偽関節率高い</strong></td><td>帰宅手術 or ギプス 6–8 週</td></tr><tr><td><strong>Zone 3</strong></td><td><strong>骨幹部近位</strong>（疲労骨折好発）</td><td>ストレス骨折</td><td>偽関節率さらに高い</td><td><strong>手術が原則</strong></td></tr></tbody></table></div>
-      </section>
+          <h3>ER で打つ手（骨折ハンター準拠）</h3>
+          <ul>
+            <li><strong>後方固定 ＋ 松葉杖</strong>を基本に、<strong>帰宅保存 or 帰宅手術</strong>として後日整形外来</li>
+            <li>zone 1 avulsion でも<strong>転位 ≧ 3 mm は手術考慮</strong>（虚血で偽関節になりうる）</li>
+            <li><strong>zone 2（Jones）以遠は必ず非荷重</strong>（癒合不全予防）</li>
+            <li>シーネ固定（足関節中間位、足趾露出）</li>
+            <li>クーリング・挙上・痛みに応じて NSAIDs</li>
+            <li>「足首を捻った」だけで足関節捻挫として扱わない（<strong>必ず両側裸足で第 5 中足骨基部を視診・触診</strong>）</li>
+            <li>整形外来は 1-2 週以内に</li>
+          </ul>
+        </div>
+      </details>
 
-      <!-- §3 受傷機転 -->
-      <section class="section-page" id="s3" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>💥 受傷機転</h2>
-        <ul>
-          <li><strong>Zone 1</strong>：<strong>内反捻挫</strong>（短腓骨筋腱の牽引撕脱）</li>
-          <li><strong>Zone 2</strong>：急性外傷 + 慢性微細外力</li>
-          <li><strong>Zone 3</strong>：反復スポーツ（ランニング・バスケ）→ 疲労骨折</li>
-        </ul>
-      </section>
+      <!-- コンサル文 -->
+      <details class="dx-box" id="consult">
+        <summary><span>コンサル文（カルテに貼る）</span></summary>
+        <div class="dx-box__body">
+          <p class="dx-template__hint">『他科コンサルト実践マニュアル』の院内紹介状フォーマットに準拠（【目的】【疾患】【既往歴】【内服薬】【ADL】【現病歴】）。空欄を埋めるだけで通る形式。</p>
+          <div class="dx-template">【目的】今後の加療方針のご相談（zone [1/2/3] による方針確認）。
+【疾患】#1 [右/左]第 5 中足骨近位端骨折（zone [1：base avulsion／2：Jones／3：proximal diaphysis]、転位 [○○ mm]）
+【既往歴】[特記事項なし／○○]
+【内服薬】[なし／ワーファリン／DOAC ○○／抗血小板薬 ○○]
+【ADL（受傷前）】[独歩／杖／介助歩行／車椅子／スポーツ：○○]
+【現病歴】[年齢]歳[男/女]性。[受傷機転：足関節内反強制／スポーツ／段差つまずき]で受傷し、[来院経緯]で来院。
+ ・身体所見：第 5 中足骨基部限局圧痛、腫脹 [軽度／中等度]、荷重 [可／不能]
+ ・血管：足背動脈・後脛骨動脈 良好
+ ・神経：腓腹神経領域 問題なし
+ ・画像：Xp（AP・側面・斜位）で第 5 中足骨近位端骨折（zone ○）、転位 [○○ mm]
+ ・ER 処置：[弾性包帯／シーネ固定]、[荷重可／非荷重]、整形外来予約
+よろしくお願いいたします。</div>
+        </div>
+      </details>
 
-      <!-- §4 身体所見 -->
-      <section class="section-page" id="s4" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🩺 身体所見</h2>
-        <ul>
-          <li><strong>第 5 中足骨基部の圧痛</strong> → Ottawa Foot Rules に含まれる</li>
-          <li>腫脹・皮下血腫</li>
-          <li>荷重困難</li>
-        </ul>
-      </section>
+      <!-- 関連ハブ -->
+      <details class="dx-box">
+        <summary><span>関連ハブ・隣接疾患</span></summary>
+        <div class="dx-box__body">
+          <ul>
+            <li>主訴入口：<a class="wiki-link" href="../足関節の外傷・痛み.html">足関節の外傷・痛み</a> ／ <a class="wiki-link" href="../転倒.html">転倒</a></li>
+            <li>隣接疾患：<a class="wiki-link" href="足関節捻挫.html">足関節捻挫</a> ／ <a class="wiki-link" href="リスフラン関節脱臼骨折.html">リスフラン関節脱臼骨折</a> ／ <a class="wiki-link" href="距骨骨折.html">距骨骨折</a></li>
+            <li>処置：<a class="wiki-link" href="シーネ固定.html">シーネ固定</a></li>
+            <li>合併症対応：Jones 骨折は偽関節率高、スポーツ選手は手術積極的</li>
+          </ul>
+        </div>
+      </details>
 
-      <!-- §5 画像 -->
-      <section class="section-page" id="s5" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>📷 画像</h2>
-
-        <h3>レントゲン</h3>
-        <ul>
-          <li>足 3 方向</li>
-          <li><strong>骨折線の位置</strong>で Zone を判別（最も重要）</li>
-          <li><strong>第 5 中足骨の副骨（os vesalianum）</strong> と誤診しないように：<strong>辺縁が平滑なら副骨</strong></li>
-        </ul>
-      </section>
-
-      <!-- §6 マネジメント -->
-      <section class="section-page" id="s6" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>💉 マネジメント</h2>
-
-        <h3>Zone 1（Pseudo-Jones）</h3>
-        <ul>
-          <li><strong>保存治療が基本</strong></li>
-          <li><strong>短下肢ギプス</strong>（非荷重）1–2 週 → 装具で荷重可</li>
-          <li>多くは 6 週で癒合</li>
-          <li>痛みが引けば荷重開始</li>
-        </ul>
-
-        <h3>Zone 2（Jones 骨折）</h3>
-        <ul>
-          <li><strong>偽関節率 10–30%</strong></li>
-          <li>保存：<strong>非荷重ギプス 6–8 週</strong></li>
-          <li>手術：<strong>髄内スクリュー固定</strong>（アスリートでは第一選択）</li>
-          <li><strong>帰宅手術 or ギプス固定</strong> → 整形外科判断</li>
-        </ul>
-
-        <h3>Zone 3（疲労骨折・骨幹部近位）</h3>
-        <ul>
-          <li><strong>手術が原則</strong>（保存での癒合率低い）</li>
-          <li>慢性経過が多い → 外来で手術計画</li>
-        </ul>
-      </section>
-
-      <!-- §7 非整形外科医の役割 -->
-      <section class="section-page" id="s7" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🩻 非整形外科医の役割</h2>
-        <ol>
-          <li><strong>第 5 中足骨基部の圧痛 → レントゲン撮影</strong></li>
-          <li><strong>Zone 判別</strong>（レントゲンで骨折線の位置を特定）</li>
-          <li><strong>Zone 1</strong> → ギプス or 装具で保存 → 整形外科外来</li>
-          <li><strong>Zone 2–3</strong> → <strong>帰宅手術</strong> として紹介、非荷重</li>
-          <li>最低限 <strong>U-slab or 短下肢シーネで固定</strong></li>
-        </ol>
-      </section>
-
-      <!-- §8 紹介状のポイント -->
-      <section class="section-page" id="s8" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>📝 紹介状のポイント</h2>
-        <ul>
-          <li>骨折の Zone（1/2/3）を明記</li>
-          <li>スポーツ・仕事内容（手術適応の判断材料）</li>
-          <li>受傷日時と骨折線の鮮明度（新鮮 or 慢性経過）</li>
-        </ul>
-      </section>
-
-      <!-- §9 帰宅時の説明 ＋ 出典 ＋ 関連 -->
-      <section class="section-page" id="s9" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🏠 帰宅時の説明</h2>
-        <ul>
-          <li><strong>Zone 1</strong> は多くが保存で治る、安心させる</li>
-          <li><strong>Zone 2–3</strong> は「偽関節になりやすい骨折」と説明、手術適応の可能性を伝える</li>
-          <li>全例で非荷重〜部分荷重を指示</li>
-        </ul>
-
-        <h3>出典</h3>
-        <ul>
-          <li><strong>増井伸高. 骨折ハンター. 中外医学社. 2019.</strong></li>
-          <li><strong>Jones R.</strong> Fracture of the base of the fifth metatarsal bone by indirect violence. <em>Ann Surg.</em> 1902.</li>
-          <li><strong>Lawrence SJ, Botte MJ.</strong> Jones&#x27; fractures and related fractures of the proximal fifth metatarsal. <em>Foot Ankle.</em> 1993.</li>
-        </ul>
-
-        <h3>関連</h3>
-        <ul>
-          <li><a class="wiki-link" href="../転倒.html">転倒</a> / <a class="wiki-link" href="足関節痛.html">足関節痛</a> / <a class="wiki-link" href="ATFL損傷.html">ATFL損傷</a> / <a class="wiki-link" href="リスフラン関節脱臼骨折.html">リスフラン関節脱臼骨折</a></li>
-        </ul>
-      </section>
+      <!-- 出典 -->
+      <details class="dx-box">
+        <summary><span>出典</span></summary>
+        <div class="dx-box__body">
+          <ul>
+            <li>増井伸高. 骨折ハンター. 中外医学社. 2019.</li>
+            <li>Lawrence SJ, Botte MJ. Jones' fractures and related fractures of the proximal fifth metatarsal. <em>Foot Ankle.</em> 1993.</li>
+            <li>Cheung CN, Lui TH. Proximal fifth metatarsal fractures. <em>Open Orthop J.</em> 2016.</li>
+          </ul>
+        </div>
+      </details>
 
     </article>
   </main>
@@ -200,53 +406,22 @@
 
   <script>
   (function(){
-    const menu = document.getElementById('sectionMenu');
-    const pages = document.querySelectorAll('.section-page');
-    const titleH1 = document.querySelector('.page-title');
-    const relatedSymp = document.getElementById('related-symptoms');
-
-    function showSection(id) {
-      menu.hidden = true;
-      if (titleH1) titleH1.hidden = true;
-      if (relatedSymp) relatedSymp.hidden = true;
-      pages.forEach(p => p.hidden = (p.id !== id));
-      window.scrollTo(0, 0);
-    }
-    function showMenu(scrollTarget) {
-      menu.hidden = false;
-      if (titleH1) titleH1.hidden = false;
-      if (relatedSymp) relatedSymp.hidden = false;
-      pages.forEach(p => p.hidden = true);
-      if (scrollTarget) {
-        if (scrollTarget.tagName === 'DETAILS') scrollTarget.open = true;
-        scrollTarget.scrollIntoView({behavior: 'instant', block: 'start'});
-      } else {
-        window.scrollTo(0, 0);
-      }
-    }
-    function syncFromHash() {
-      const id = (location.hash || '').replace('#','');
-      const target = id ? document.getElementById(id) : null;
-      if (target && target.classList.contains('section-page')) {
-        showSection(id);
-      } else if (target) {
-        showMenu(target);
-      } else {
-        showMenu();
-      }
-    }
-
-    window.addEventListener('hashchange', syncFromHash);
-    document.querySelectorAll('.back-to-menu').forEach(b => {
-      b.addEventListener('click', () => { history.pushState(null,'',location.pathname); showMenu(); });
+    // クイックタップで対応 details を開いてスクロール
+    document.querySelectorAll('.dx-quick__btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.dataset.target;
+        const target = document.getElementById(id);
+        if (!target) return;
+        target.open = true;
+        target.scrollIntoView({behavior: 'smooth', block: 'start'});
+      });
     });
+
     const navBack = document.getElementById('navBack');
     if (navBack) navBack.addEventListener('click', () => {
       if (window.history.length > 1) history.back();
       else window.location.href = '../index.html';
     });
-
-    syncFromHash();
   })();
   </script>
 </body>

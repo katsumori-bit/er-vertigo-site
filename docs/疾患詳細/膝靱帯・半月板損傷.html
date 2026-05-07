@@ -6,6 +6,196 @@
   <meta name="color-scheme" content="light dark" />
   <title>膝靱帯・半月板損傷 | ER ノート</title>
   <link rel="stylesheet" href="../er-note.css" />
+  <style>
+    /* ============ クイックタップ（3 つを開閉トリガー） ============ */
+    .dx-quick {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px;
+      margin: 10px 0 4px;
+    }
+    .dx-quick__btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      padding: 10px 6px;
+      border-radius: 10px;
+      background: color-mix(in srgb, var(--accent) 10%, var(--surface));
+      border: 1.5px solid var(--accent);
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 13px;
+      line-height: 1.2;
+      text-align: center;
+      cursor: pointer;
+      transition: background 120ms ease;
+    }
+    .dx-quick__btn:hover {
+      background: color-mix(in srgb, var(--accent) 18%, var(--surface));
+    }
+    .dx-quick__icon { font-size: 20px; }
+    .dx-quick__sub {
+      font-size: 10.5px;
+      font-weight: 500;
+      color: var(--muted);
+    }
+
+    /* ============ 同時評価 3 列（血管・神経・典型像） ============ */
+    .dx-tri {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+      margin: 6px 0 4px;
+      align-items: start;
+    }
+    .dx-tri__card {
+      background: var(--surface);
+      border-radius: 10px;
+      padding: 10px 12px;
+      border: 1.5px solid color-mix(in srgb, var(--text) 18%, transparent);
+    }
+    .dx-tri__card--vasc { border-color: #c0392b; background: color-mix(in srgb, #c0392b 6%, var(--surface)); }
+    .dx-tri__card--neuro { border-color: #b5651d; background: color-mix(in srgb, #b5651d 6%, var(--surface)); }
+    .dx-tri__card--typical { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 6%, var(--surface)); }
+    .dx-tri__title {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 800;
+      font-size: 13.5px;
+      margin-bottom: 4px;
+    }
+    .dx-tri__card--vasc .dx-tri__title { color: #c0392b; }
+    .dx-tri__card--neuro .dx-tri__title { color: #b5651d; }
+    .dx-tri__list {
+      margin: 0;
+      padding-left: 18px;
+      font-size: 12.5px;
+      line-height: 1.5;
+    }
+    .dx-tri__list li { margin: 2px 0; }
+
+    /* details 形式の血管/神経カード：summary にチェック印、開閉時の挙動 */
+    details.dx-tri__card { padding: 0; }
+    details.dx-tri__card > summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 10px 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 800;
+      font-size: 13.5px;
+    }
+    details.dx-tri__card > summary::-webkit-details-marker { display: none; }
+    details.dx-tri__card > summary::after {
+      content: "▸";
+      margin-left: auto;
+      font-size: 12px;
+      color: var(--muted);
+      transition: transform 120ms ease;
+    }
+    details.dx-tri__card[open] > summary::after { transform: rotate(90deg); }
+    details.dx-tri__card--vasc > summary { color: #c0392b; }
+    details.dx-tri__card--neuro > summary { color: #b5651d; }
+    details.dx-tri__card > .dx-tri__list { padding: 0 14px 12px 30px; }
+    details.dx-tri__card > .dx-tri__hint {
+      padding: 0 14px 6px 30px;
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    /* ============ 大きな details ボックス（画像/治療方針/コンサル文） ============ */
+    details.dx-box {
+      background: var(--surface);
+      border: 1.5px solid color-mix(in srgb, var(--text) 18%, transparent);
+      border-radius: 10px;
+      margin: 10px 0;
+      scroll-margin-top: 8px;
+    }
+    details.dx-box > summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 12px 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 800;
+      font-size: 14.5px;
+    }
+    details.dx-box > summary::-webkit-details-marker { display: none; }
+    details.dx-box > summary::after {
+      content: "▸";
+      margin-left: auto;
+      font-size: 13px;
+      color: var(--muted);
+      transition: transform 120ms ease;
+    }
+    details.dx-box[open] > summary::after { transform: rotate(90deg); }
+    details.dx-box[open] {
+      border-color: var(--accent);
+    }
+    details.dx-box > .dx-box__body {
+      padding: 0 14px 14px;
+    }
+
+    /* スマホで 1 列に */
+    @media (max-width: 640px) {
+      .dx-quick { gap: 6px; }
+      .dx-quick__btn { padding: 8px 4px; font-size: 11.5px; border-radius: 8px; }
+      .dx-quick__icon { font-size: 17px; }
+      .dx-quick__sub { font-size: 9.5px; }
+
+      .dx-tri { grid-template-columns: 1fr; gap: 8px; }
+      .dx-tri__card { padding: 8px 10px; }
+      details.dx-tri__card > summary { padding: 8px 10px; font-size: 12.5px; }
+      details.dx-tri__card > .dx-tri__list { padding: 0 12px 10px 26px; }
+      .dx-tri__title { font-size: 12.5px; }
+      .dx-tri__list { font-size: 12px; }
+
+      details.dx-box > summary { padding: 10px 12px; font-size: 13.5px; }
+      details.dx-box > .dx-box__body { padding: 0 12px 12px; }
+    }
+
+    /* ============ 区切り帯（最小限） ============ */
+    .dx-step {
+      margin: 18px 0 6px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 11.5px;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+    }
+    .dx-step::before, .dx-step::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: color-mix(in srgb, var(--text) 18%, transparent);
+    }
+
+    /* コピペ用テンプレ */
+    .dx-template {
+      background: color-mix(in srgb, var(--text) 4%, var(--surface));
+      border-left: 3px solid var(--accent);
+      border-radius: 6px;
+      padding: 10px 12px;
+      margin: 6px 0 0;
+      font-size: 13px;
+      line-height: 1.6;
+      white-space: pre-wrap;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+    .dx-template__hint {
+      font-size: 11px;
+      color: var(--muted);
+      margin: 0 0 4px;
+    }
+  </style>
 </head>
 <body>
   <header class="hokuto-top">
@@ -21,205 +211,230 @@
     <article class="note-shell">
       <h1 class="page-title">膝靱帯・半月板損傷</h1>
 
-      <!-- 即時アクションヘッダー（常時 sticky） -->
-      <div class="action-header">
-        <div class="action-header__title">⚡ 即時アクション</div>
-        <ol class="action-header__list">
-          <li><strong>ACL / PCL / MCL / LCL / 半月板</strong> を区別（pop 音 + 急速血腫は ACL、外反痛は MCL、ロッキングは半月板）</li>
-          <li><strong>Lachman / anterior drawer / pivot shift / McMurray</strong> で評価（Lachman が ACL に最も鋭敏）</li>
-          <li><strong>MRI</strong> で確定（整形外科外来で。ER では Ottawa Knee Rules で骨折除外＋ヒンジ装具固定）</li>
-          <li>若年 active は<strong>手術</strong>、高齢非 active は<strong>保存</strong>（年齢・活動性・不安定性で判断）</li>
-        </ol>
-      </div>
-
-      <!-- §1〜§8 メニュータイル -->
-      <nav class="section-tiles" id="sectionMenu">
-        <a class="section-tile" href="#s1"><span class="section-tile__no">🔢</span><span class="section-tile__name">膝外傷の<br><small>除外順序</small></span></a>
-        <a class="section-tile" href="#s2"><span class="section-tile__no">🦵</span><span class="section-tile__name">ACL 損傷<br><small>前十字靱帯</small></span></a>
-        <a class="section-tile" href="#s3"><span class="section-tile__no">↔️</span><span class="section-tile__name">MCL 損傷<br><small>内側側副</small></span></a>
-        <a class="section-tile" href="#s4"><span class="section-tile__no">↩️</span><span class="section-tile__name">LCL 損傷<br><small>外側側副</small></span></a>
-        <a class="section-tile" href="#s5"><span class="section-tile__no">🚗</span><span class="section-tile__name">PCL 損傷<br><small>後十字靱帯</small></span></a>
-        <a class="section-tile" href="#s6"><span class="section-tile__no">🌙</span><span class="section-tile__name">半月板<br><small>損傷</small></span></a>
-        <a class="section-tile" href="#s7"><span class="section-tile__no">📐</span><span class="section-tile__name">Ottawa<br><small>Knee Rules</small></span></a>
-        <a class="section-tile" href="#s8"><span class="section-tile__no">🏥</span><span class="section-tile__name">ER 対応<br><small>+ 出典</small></span></a>
+      <!-- スマホですぐ開きたい 3 つ -->
+      <nav class="dx-quick" aria-label="クイックタップ">
+        <button class="dx-quick__btn" type="button" data-target="img-read">
+          <span>診察手順</span>
+          <span class="dx-quick__sub">Lachman / lever / 関節穿刺</span>
+        </button>
+        <button class="dx-quick__btn" type="button" data-target="plan">
+          <span>治療方針</span>
+          <span class="dx-quick__sub">暫定診断＋帰宅</span>
+        </button>
+        <button class="dx-quick__btn" type="button" data-target="consult">
+          <span>コンサル文</span>
+          <span class="dx-quick__sub">そのまま貼れる</span>
+        </button>
       </nav>
 
-      <!-- 関連主訴（双方向リンク） -->
-      <details class="sub-fold" id="related-symptoms">
-        <summary>📞 この疾患が該当する主訴</summary>
-        <div class="sub-fold__body">
+      <!-- 同時評価 3 列：典型像は常時、ACL・MCL は折りたたみ -->
+      <div class="dx-step"><span>同時並行で評価する 3 軸</span></div>
+      <div class="dx-tri">
+
+        <div class="dx-tri__card dx-tri__card--typical">
+          <div class="dx-tri__title">典型像</div>
+          <ul class="dx-tri__list">
+            <li><strong>非整形外科医は ACL と MCL の 2 つだけ評価できれば OK</strong></li>
+            <li>PCL（スポーツ膝外傷の 7%）／単独 LCL は稀 → 整形医に任せる</li>
+            <li>半月板は身体所見で確定不能、ER は<strong>暫定診断で OK</strong></li>
+            <li>ゴール：暫定診断＋帰宅時の固定</li>
+            <li>MRI 読影は専門医でも難しい → 非整形外科医は手出ししない</li>
+          </ul>
+        </div>
+
+        <details class="dx-tri__card dx-tri__card--vasc">
+          <summary>ACL 損傷</summary>
+          <p class="dx-tri__hint">『非接触性スポーツ外傷＋pop 音 90%＋関節内血腫』で強く疑う。</p>
+          <ul class="dx-tri__list">
+            <li>2/3 が非接触型（ジャンプ着地・切り返しで膝外反強制）</li>
+            <li><strong>受傷時の pop 音は 90% で聴取</strong></li>
+            <li><strong>非骨折性の急性関節内出血の 72% は ACL 損傷</strong></li>
+            <li>Lachman <strong>感度 84%・特異度 100%</strong>（必修）</li>
+            <li>lever テスト <strong>98%・100%</strong>（女性研修医でも可）</li>
+            <li>前方引き出し（62%・67%）はあまり有用でない</li>
+          </ul>
+        </details>
+
+        <details class="dx-tri__card dx-tri__card--neuro">
+          <summary>MCL 損傷</summary>
+          <p class="dx-tri__hint">接触性外傷＋膝外反強制（タックル）。エコーで関節外靱帯を直接評価可能。</p>
+          <ul class="dx-tri__list">
+            <li>内側関節裂隙の圧痛＋外反ストレステスト陽性</li>
+            <li>I 度（不全断裂・安定性 +）→ <strong>ACL 合併 20%</strong></li>
+            <li>II 度（不全断裂・安定性なし）→ <strong>ACL 合併 52%</strong></li>
+            <li>III 度（完全断裂）→ <strong>ACL 合併 78%</strong></li>
+            <li>I・II 度の MCL 単独は帰宅保存が基本</li>
+          </ul>
+        </details>
+      </div>
+
+      <!-- 診察手順 -->
+      <details class="dx-box" id="img-read">
+        <summary><span>診察手順</span></summary>
+        <div class="dx-box__body">
+          <h3>除外順序</h3>
+          <ol>
+            <li><strong>骨折</strong>（レントゲン・必要なら CT）— 大腿骨遠位端／脛骨高原／膝蓋骨</li>
+            <li><strong>脱臼</strong>（膝蓋骨・膝関節）</li>
+            <li><strong>occult fracture</strong>（CT 陰性でも MRI で見つかる）</li>
+            <li><strong>靱帯・半月板損傷</strong>（臨床所見＋関節穿刺＋後日 MRI）</li>
+          </ol>
+
+          <h3>ACL 損傷の身体所見</h3>
+          <div class="table-wrap"><table>
+            <thead><tr><th>テスト</th><th>感度</th><th>特異度</th><th>備考</th></tr></thead>
+            <tbody>
+              <tr><td>前方引き出し試験（90°屈曲）</td><td>62%</td><td>67%</td><td>あまり有用でない</td></tr>
+              <tr><td><strong>Lachman テスト（20–30°屈曲）</strong></td><td><strong>84%</strong></td><td><strong>100%</strong></td><td>非整形外科医必修。エンドポイント不明=断裂</td></tr>
+              <tr><td><strong>lever テスト</strong></td><td><strong>98%</strong></td><td><strong>100%</strong></td><td>力のない女性研修医でも評価可、踵が上がれば正常</td></tr>
+              <tr><td>包括的診察</td><td>82%</td><td>94%</td><td>—</td></tr>
+            </tbody>
+          </table></div>
+          <p>Lachman のコツ：筋肉質の男性で大腿が太く片手で持てない時は、<strong>自分の膝を患者の大腿下面に入れる</strong>と腕力なしでも評価可能。<strong>必ず健側も実施し左右差を比較</strong>。</p>
+
+          <h3>MCL 損傷の身体所見</h3>
           <ul>
-            <li><span class="wiki-missing">膝の外傷・痛み</span> — 膝内障の総称、ER では除外診断</li>
-            <li><a class="wiki-link" href="../転倒.html">転倒</a> — 膝を捻って受傷、ピボット・着地</li>
+            <li>内側関節裂隙の圧痛</li>
+            <li>外反ストレステスト（30° 屈曲位）— 内側痛の誘発と左右動揺性で評価</li>
+            <li>厳密な角度評価は整形医に任せる（非整形医は陽/陰性だけで OK）</li>
+          </ul>
+
+          <h3>MCL のエコー評価（関節外靱帯）</h3>
+          <ul>
+            <li>伸展位で膝内側にプローベを当て、<strong>左右比較</strong></li>
+            <li>損傷側は MCL が<strong>膨化＋低エコー</strong>、靱帯線維の line が不明瞭</li>
+            <li>関節外靱帯のため、ACL（読影難しい）と違ってエコーで評価しやすい</li>
+          </ul>
+
+          <h3>半月板損傷</h3>
+          <ul>
+            <li>キャッチング（引っかかり）／ロッキング（ある角度で全く動かない）が手がかり</li>
+            <li>身体所見の感度・特異度は低い（<strong>McMurray 53%/59%</strong>、関節線圧痛 79%/15%）</li>
+            <li>内側半月板損傷が外側の 5 倍（MCL に強固に付着）</li>
+            <li>無痛性半月板損傷（70 歳以上の 56%、変形性膝関節症の 68–90%）が偽陽性となる</li>
+            <li>ER は<strong>診断できなくてよい</strong>。暫定診断＋情報収集が役割</li>
+          </ul>
+
+          <h3>骨折除外ルール（オタワ膝・ピッツバーグ膝）</h3>
+          <p>1 つも該当しなければ骨折は否定的（特異度は低い）。</p>
+          <ul>
+            <li><strong>オタワ膝（感度 98.5%）</strong>：①55 歳以上 or 18 歳未満、②腓骨頭圧痛、③単独の膝蓋骨圧痛、④90° 屈曲不可、⑤4 歩歩行不能</li>
+            <li><strong>ピッツバーグ膝（感度 86–100%）</strong>：①50 歳以上 or 12 歳未満、②4 歩歩行不能</li>
+            <li>日本では撮影省略でなく『帰宅前の安心の太鼓判』として使う。<strong>55 歳以上には適応外</strong>（occult fracture 除外できない）</li>
+          </ul>
+
+          <h3>関節穿刺で暫定診断（CT 陰性で MRI なしの夜間・休日）</h3>
+          <p>急性関節内出血の三大原因：ACL 損傷（45–52%）／半月板損傷（21–27%）／occult fracture（13%）。</p>
+          <div class="table-wrap"><table>
+            <thead><tr><th>所見</th><th>暫定診断</th><th>マネジメント</th></tr></thead>
+            <tbody>
+              <tr><td><strong>脂肪滴あり</strong></td><td>大腿骨遠位端／脛骨高原の occult fracture</td><td>固定して<strong>入院整形</strong></td></tr>
+              <tr><td>脂肪滴なし＋出血 ≥ 10 cc</td><td><strong>ACL 損傷</strong></td><td>ニーブレース＋松葉杖、帰宅手術 or 帰宅保存</td></tr>
+              <tr><td>脂肪滴なし＋出血 &lt; 10 cc</td><td><strong>MCL 損傷 or 半月板損傷</strong></td><td>ニーブレース＋松葉杖、帰宅手術 or 帰宅保存</td></tr>
+            </tbody>
+          </table></div>
+          <ul>
+            <li>用意するもの：<strong>18G 針＋20 cc 注射器</strong></li>
+            <li>仰臥位で膝蓋骨の位置を触診で確認、<strong>外側から穿刺</strong>（膝蓋骨の真裏に針があるイメージ）</li>
+            <li>局麻はそれ自体の疼痛が強いため<strong>不要</strong></li>
           </ul>
         </div>
       </details>
 
-      <!-- §1 膝外傷の除外順序 -->
-      <section class="section-page" id="s1" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🔢 膝外傷の除外順序</h2>
-        <p>#靱帯損傷 #半月板 #膝関節 #ER #スポーツ外傷</p>
+      <!-- 治療方針 -->
+      <details class="dx-box" id="plan">
+        <summary><span>治療方針（暫定診断 → 帰宅 / 入院）</span></summary>
+        <div class="dx-box__body">
+          <h3>ER 対応フロー</h3>
+          <ol>
+            <li>膝外傷で<strong>大腿骨遠位端／脛骨高原／膝蓋骨</strong>を画像前に鑑別</li>
+            <li>レントゲン → 必要なら CT。診断微妙なら CT 閾値を下げる</li>
+            <li>骨折・脱臼除外後 → <strong>occult fracture／靱帯／半月板</strong>を考える</li>
+            <li>身体所見（Lachman・lever・外反ストレス・McMurray）と病歴（pop 音・コンタクト性）で暫定診断</li>
+            <li>MRI が撮れる平日日中なら occult fracture 除外目的で MRI</li>
+            <li>夜間・休日で MRI 不可なら<strong>関節穿刺</strong>で 3 群に振り分け</li>
+            <li>ACL／MCL／半月板暫定診断は<strong>ニーブレース＋松葉杖＋帰宅手術 or 帰宅保存</strong>、後日整形外来（1–2 週以内）</li>
+            <li>occult fracture（脂肪滴あり）は<strong>入院整形</strong></li>
+          </ol>
 
-        <div class="callout callout-summary">
-          <div class="callout-title">膝内障 = 膝の靱帯・半月板損傷を総称、ER では除外診断で</div>
-          <div class="callout-body"><ul>
-            <li><strong>関節内骨折・脱臼を除外</strong>した後に疑う</li>
-            <li><strong>ACL 断裂</strong>：pop 音 + 急激な血腫</li>
-            <li><strong>MCL 損傷</strong>：外反ストレスの痛み</li>
-            <li><strong>半月板損傷</strong>：膝の引っかかり・ロッキング</li>
-            <li>ER では<strong>身体所見 + 装具固定 + 整形外科紹介</strong>で十分</li>
-          </ul></div>
+          <h3>ACL 損傷のマネジメント</h3>
+          <ul>
+            <li><strong>ニーブレース固定 + 松葉杖</strong>で<strong>帰宅手術 or 帰宅保存</strong></li>
+            <li>院内紹介なら MRI を予約しておくと親切</li>
+            <li>手術になることが多い外傷であることを患者に説明</li>
+            <li>MRI は感度 92–94%・特異度 95–100% だが偽陽性あり、<strong>整形医が総合診断</strong></li>
+          </ul>
+
+          <h3>MCL 損傷のマネジメント</h3>
+          <ul>
+            <li>合併骨折のない MCL 損傷（±ACL 損傷）：<strong>帰宅保存</strong>（時に帰宅手術）</li>
+            <li>修復能力高く、I・II 度の MCL 単独は帰宅保存が基本</li>
+            <li>ニーブレース＋松葉杖、再診指示</li>
+          </ul>
+
+          <h3>半月板損傷のマネジメント</h3>
+          <ul>
+            <li>緊急手術は<strong>ない</strong>。手術判断は経時的に整形医が行う</li>
+            <li>急性期半月板損傷 ≒ <strong>帰宅保存 or 帰宅手術</strong> でよい</li>
+            <li>外周 10–25% は <strong>red zone</strong>（自然治癒可）／<strong>white zone</strong>（自由縁、手術必要）</li>
+            <li>ニーブレース＋松葉杖処方で帰宅、後日整形外来</li>
+          </ul>
+
+          <h3>PCL／LCL 損傷（整形に任せる）</h3>
+          <ul>
+            <li>PCL：ダッシュボード損傷（膝屈曲位で脛骨が後方に押される）が典型、後方引き出しテスト陽性</li>
+            <li>LCL 単独：膝内側からの内反ストレス（稀）、<strong>後外側支持機構（PLC）合併で神経血管損傷リスク</strong></li>
+            <li>疑えば MRI＋整形外科紹介</li>
+          </ul>
         </div>
+      </details>
 
-        <ol>
-          <li><strong>骨折</strong>（レントゲン・必要なら CT）</li>
-          <li><strong>脱臼</strong>（膝蓋骨・膝関節）</li>
-          <li><strong>靱帯・半月板損傷</strong>（臨床所見 + MRI）</li>
-        </ol>
-      </section>
+      <!-- コンサル文 -->
+      <details class="dx-box" id="consult">
+        <summary><span>コンサル文（カルテに貼る）</span></summary>
+        <div class="dx-box__body">
+          <p class="dx-template__hint">『他科コンサルト実践マニュアル』の院内紹介状フォーマットに準拠（【目的】【疾患】【既往歴】【内服薬】【ADL】【現病歴】）。空欄を埋めるだけで通る形式。</p>
+          <div class="dx-template">【目的】後日整形外科外来での MRI 評価・ご加療依頼。
+【疾患】#1 [右/左][ACL 損傷／MCL 損傷（I/II/III 度）／半月板損傷／occult fracture]の疑い
+【既往歴】[特記事項なし／○○]
+【内服薬】[なし／ワーファリン／DOAC ○○／抗血小板薬 ○○]
+【ADL（受傷前）】[独歩／杖／介助歩行／車椅子]
+【現病歴】[年齢]歳[男/女]性。[受傷機転：ジャンプ着地で膝外反／タックルで外反強制／ピボット動作／高齢者の捻り]で受傷し、[来院経緯]で来院。
+ ・受傷時 pop 音 [あり／なし]、キャッチング・ロッキング [あり／なし]
+ ・身体所見：Lachman [陰性／陽性]、lever [陰性／陽性]、外反ストレス [陰性／陽性]、McMurray [陰性／陽性]、内側関節裂隙圧痛 [なし／あり]
+ ・画像：膝 AP+側面[+skyline view]、骨折 [なし／あり]、CT [未／施行済で陰性]
+ ・関節穿刺：[未施行／脂肪滴なし＋出血○cc／脂肪滴あり]
+ ・暫定診断：ACL 損傷／MCL 損傷／半月板損傷／occult fracture
+ ・ER 処置：ニーブレース固定＋松葉杖処方
+ ・帰宅予定（後日整形外来 1–2 週以内予約）／MRI 予約 [済／未]
+よろしくお願いいたします。</div>
+        </div>
+      </details>
 
-      <!-- §2 ACL 損傷 -->
-      <section class="section-page" id="s2" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🦵 ACL（前十字靱帯）損傷</h2>
+      <!-- 関連ハブ -->
+      <details class="dx-box">
+        <summary><span>関連ハブ・隣接疾患</span></summary>
+        <div class="dx-box__body">
+          <ul>
+            <li>主訴入口：<a class="wiki-link" href="../膝の外傷・痛み.html">膝の外傷・痛み</a> ／ <a class="wiki-link" href="../転倒.html">転倒</a></li>
+            <li>隣接疾患：<a class="wiki-link" href="大腿骨遠位端骨折.html">大腿骨遠位端骨折</a> ／ <a class="wiki-link" href="脛骨高原骨折.html">脛骨高原骨折</a> ／ <a class="wiki-link" href="膝蓋骨骨折・脱臼.html">膝蓋骨骨折・脱臼</a></li>
+          </ul>
+        </div>
+      </details>
 
-        <h3>受傷機転</h3>
-        <ul>
-          <li><strong>非接触型</strong>：ピボット動作・着地で膝を捻る（バスケ・サッカー）</li>
-          <li><strong>接触型</strong>：タックル</li>
-          <li><strong>女性に多い</strong>（男性の 2–8 倍）</li>
-        </ul>
-
-        <h3>身体所見</h3>
-        <ul>
-          <li><strong>受傷時に「パキッ」という pop 音</strong></li>
-          <li><strong>急激な関節内血腫</strong>（1–2 時間でピーク）</li>
-          <li><strong>Lachman test</strong>：30° 屈曲で脛骨前方引き出し → 陽性（感度 85%）</li>
-          <li><strong>前方引き出しテスト</strong>：90° 屈曲（感度 55%）</li>
-          <li><strong>Pivot shift test</strong>：感度 24% だが特異度 98%</li>
-        </ul>
-
-        <h3>マネジメント</h3>
-        <ul>
-          <li>血腫は関節穿刺で排液することもあるが、ER では不要</li>
-          <li><strong>ヒンジ装具 + 松葉杖</strong></li>
-          <li><strong>MRI</strong> で靱帯・半月板評価（整形外科外来で）</li>
-          <li><strong>手術 vs 保存</strong>：年齢・活動性・不安定性で判断</li>
-        </ul>
-      </section>
-
-      <!-- §3 MCL 損傷 -->
-      <section class="section-page" id="s3" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>↔️ MCL（内側側副靱帯）損傷</h2>
-
-        <h3>受傷機転</h3>
-        <ul>
-          <li>膝外側からの <strong>外反ストレス</strong>（ラグビー・アメフトのタックル）</li>
-        </ul>
-
-        <h3>身体所見</h3>
-        <ul>
-          <li><strong>内側関節裂隙の圧痛</strong></li>
-          <li><strong>外反ストレステスト</strong>（30° 屈曲位）：不安定性 → 陽性</li>
-        </ul>
-
-        <h3>分類・治療</h3>
-        <div class="table-wrap"><table><thead><tr><th>Grade</th><th>所見</th><th>治療</th></tr></thead><tbody><tr><td>I</td><td>部分断裂、不安定性なし</td><td>装具で保存</td></tr><tr><td>II</td><td>部分断裂、軽度不安定</td><td>装具 4–6 週</td></tr><tr><td>III</td><td>完全断裂、明らかな不安定</td><td>保存 or ACL 合併例は手術</td></tr></tbody></table></div>
-        <ul>
-          <li>保存治療が基本（血流豊富で修復良好）</li>
-        </ul>
-      </section>
-
-      <!-- §4 LCL 損傷 -->
-      <section class="section-page" id="s4" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>↩️ LCL（外側側副靱帯）損傷</h2>
-        <ul>
-          <li>膝内側からの内反ストレス（稀）</li>
-          <li>後外側支持機構（PLC）合併で <strong>神経血管損傷リスク</strong></li>
-          <li>疑えば MRI + 整形外科紹介</li>
-        </ul>
-      </section>
-
-      <!-- §5 PCL 損傷 -->
-      <section class="section-page" id="s5" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🚗 PCL（後十字靱帯）損傷</h2>
-        <ul>
-          <li><strong>ダッシュボード損傷</strong>（膝屈曲位で脛骨が後方に押される）</li>
-          <li><strong>後方引き出しテスト</strong> 陽性</li>
-          <li>単独断裂は保存でも良好、合併例は手術</li>
-        </ul>
-      </section>
-
-      <!-- §6 半月板損傷 -->
-      <section class="section-page" id="s6" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🌙 半月板損傷</h2>
-
-        <h3>受傷機転</h3>
-        <ul>
-          <li>膝を <strong>屈曲 + 回旋</strong></li>
-          <li>年齢で病態が異なる：若年は外傷性、中年以降は退行性</li>
-        </ul>
-
-        <h3>身体所見</h3>
-        <ul>
-          <li><strong>関節裂隙の圧痛</strong></li>
-          <li><strong>McMurray test</strong>：屈曲 → 外旋 or 内旋で伸展、関節裂隙に clicking</li>
-          <li><strong>Apley 圧迫テスト</strong></li>
-          <li><strong>ロッキング</strong>（bucket handle tear で膝が伸びない）</li>
-        </ul>
-
-        <h3>マネジメント</h3>
-        <ul>
-          <li>MRI で確定診断</li>
-          <li><strong>ロッキング</strong> → 早期関節鏡</li>
-          <li><strong>退行性変化</strong> → 保存優先、リハビリ</li>
-        </ul>
-      </section>
-
-      <!-- §7 Ottawa Knee Rules -->
-      <section class="section-page" id="s7" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>📐 Ottawa Knee Rules（レントゲン撮影基準）</h2>
-        <ul>
-          <li><strong>膝痛で以下のいずれかなら撮影</strong>：</li>
-        </ul>
-        <ol>
-          <li><strong>55 歳以上</strong></li>
-          <li><strong>腓骨頭の圧痛</strong></li>
-          <li><strong>膝蓋骨単独の圧痛</strong>（他の圧痛なし）</li>
-          <li><strong>膝の 90° 屈曲ができない</strong></li>
-          <li><strong>受傷直後 + ER で合計 4 歩歩けない</strong></li>
-        </ol>
-      </section>
-
-      <!-- §8 ER 対応 + 出典 -->
-      <section class="section-page" id="s8" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🏥 ER での対応</h2>
-        <ol>
-          <li><strong>Ottawa Knee Rules</strong> でレントゲン適応を判断</li>
-          <li>骨折・脱臼を除外</li>
-          <li>靱帯・半月板損傷を疑えば <strong>ヒンジ装具 + 松葉杖</strong></li>
-          <li><strong>帰宅保存 or 帰宅手術</strong> として整形外科外来へ（1–2 週以内）</li>
-        </ol>
-
-        <h3>出典</h3>
-        <ul>
-          <li><strong>増井伸高. 骨折ハンター. 中外医学社. 2019.</strong></li>
-          <li><strong>Stiell IG ほか.</strong> Derivation of a decision rule for the use of radiography in acute knee injuries. <em>Ann Emerg Med.</em> 1995.</li>
-          <li><strong>Benjaminse A ほか.</strong> Clinical diagnosis of an anterior cruciate ligament rupture: a meta-analysis. <em>J Orthop Sports Phys Ther.</em> 2006.</li>
-        </ul>
-
-        <h3>関連</h3>
-        <ul>
-          <li><a class="wiki-link" href="../転倒.html">転倒</a> / <a class="wiki-link" href="膝蓋骨骨折・脱臼.html">膝蓋骨骨折・脱臼</a> / <a class="wiki-link" href="脛骨高原骨折.html">脛骨高原骨折</a></li>
-        </ul>
-      </section>
+      <!-- 出典 -->
+      <details class="dx-box">
+        <summary><span>出典</span></summary>
+        <div class="dx-box__body">
+          <ul>
+            <li>増井伸高. 骨折ハンター. 中外医学社. 2019（第 16 章：膝関節痛ハンター②）</li>
+            <li>Stiell IG ほか. Derivation of a decision rule for the use of radiography in acute knee injuries. <em>Ann Emerg Med.</em> 1995（オタワ膝ルール）</li>
+            <li>Bauer SJ ほか. A clinical decision rule in the evaluation of acute knee injuries. <em>J Emerg Med.</em> 1995（ピッツバーグ膝ルール）</li>
+            <li>Benjaminse A ほか. Clinical diagnosis of an anterior cruciate ligament rupture: a meta-analysis. <em>J Orthop Sports Phys Ther.</em> 2006.</li>
+            <li>Lelli A ほか. The lever sign: a new clinical test for the diagnosis of ACL lesions. <em>Knee Surg Sports Traumatol Arthrosc.</em> 2016.</li>
+          </ul>
+        </div>
+      </details>
 
     </article>
   </main>
@@ -238,53 +453,22 @@
 
   <script>
   (function(){
-    const menu = document.getElementById('sectionMenu');
-    const pages = document.querySelectorAll('.section-page');
-    const titleH1 = document.querySelector('.page-title');
-    const relatedSymp = document.getElementById('related-symptoms');
-
-    function showSection(id) {
-      menu.hidden = true;
-      if (titleH1) titleH1.hidden = true;
-      if (relatedSymp) relatedSymp.hidden = true;
-      pages.forEach(p => p.hidden = (p.id !== id));
-      window.scrollTo(0, 0);
-    }
-    function showMenu(scrollTarget) {
-      menu.hidden = false;
-      if (titleH1) titleH1.hidden = false;
-      if (relatedSymp) relatedSymp.hidden = false;
-      pages.forEach(p => p.hidden = true);
-      if (scrollTarget) {
-        if (scrollTarget.tagName === 'DETAILS') scrollTarget.open = true;
-        scrollTarget.scrollIntoView({behavior: 'instant', block: 'start'});
-      } else {
-        window.scrollTo(0, 0);
-      }
-    }
-    function syncFromHash() {
-      const id = (location.hash || '').replace('#','');
-      const target = id ? document.getElementById(id) : null;
-      if (target && target.classList.contains('section-page')) {
-        showSection(id);
-      } else if (target) {
-        showMenu(target);
-      } else {
-        showMenu();
-      }
-    }
-
-    window.addEventListener('hashchange', syncFromHash);
-    document.querySelectorAll('.back-to-menu').forEach(b => {
-      b.addEventListener('click', () => { history.pushState(null,'',location.pathname); showMenu(); });
+    // クイックタップで対応 details を開いてスクロール
+    document.querySelectorAll('.dx-quick__btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.dataset.target;
+        const target = document.getElementById(id);
+        if (!target) return;
+        target.open = true;
+        target.scrollIntoView({behavior: 'smooth', block: 'start'});
+      });
     });
+
     const navBack = document.getElementById('navBack');
     if (navBack) navBack.addEventListener('click', () => {
       if (window.history.length > 1) history.back();
       else window.location.href = '../index.html';
     });
-
-    syncFromHash();
   })();
   </script>
 </body>

@@ -4,8 +4,65 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="color-scheme" content="light dark" />
-  <title>Mallet finger・Jersey finger | ER ノート</title>
+  <title>Mallet finger / Jersey finger | ER ノート</title>
   <link rel="stylesheet" href="../er-note.css" />
+  <style>
+    .dx-quick { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin: 10px 0 4px; }
+    .dx-quick__btn { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; padding: 10px 6px; border-radius: 10px; background: color-mix(in srgb, var(--accent) 10%, var(--surface)); border: 1.5px solid var(--accent); color: var(--text); text-decoration: none; font-weight: 700; font-size: 13px; line-height: 1.2; text-align: center; cursor: pointer; transition: background 120ms ease; }
+    .dx-quick__btn:hover { background: color-mix(in srgb, var(--accent) 18%, var(--surface)); }
+    .dx-quick__icon { font-size: 20px; }
+    .dx-quick__sub { font-size: 10.5px; font-weight: 500; color: var(--muted); }
+
+    .dx-tri { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin: 6px 0 4px; align-items: start; }
+    .dx-tri__card { background: var(--surface); border-radius: 10px; padding: 10px 12px; border: 1.5px solid color-mix(in srgb, var(--text) 18%, transparent); }
+    .dx-tri__card--vasc { border-color: #c0392b; background: color-mix(in srgb, #c0392b 6%, var(--surface)); }
+    .dx-tri__card--neuro { border-color: #b5651d; background: color-mix(in srgb, #b5651d 6%, var(--surface)); }
+    .dx-tri__card--typical { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 6%, var(--surface)); }
+    .dx-tri__title { display: flex; align-items: center; gap: 6px; font-weight: 800; font-size: 13.5px; margin-bottom: 4px; }
+    .dx-tri__card--vasc .dx-tri__title { color: #c0392b; }
+    .dx-tri__card--neuro .dx-tri__title { color: #b5651d; }
+    .dx-tri__list { margin: 0; padding-left: 18px; font-size: 12.5px; line-height: 1.5; }
+    .dx-tri__list li { margin: 2px 0; }
+
+    details.dx-tri__card { padding: 0; }
+    details.dx-tri__card > summary { list-style: none; cursor: pointer; padding: 10px 12px; display: flex; align-items: center; gap: 6px; font-weight: 800; font-size: 13.5px; }
+    details.dx-tri__card > summary::-webkit-details-marker { display: none; }
+    details.dx-tri__card > summary::after { content: "▸"; margin-left: auto; font-size: 12px; color: var(--muted); transition: transform 120ms ease; }
+    details.dx-tri__card[open] > summary::after { transform: rotate(90deg); }
+    details.dx-tri__card--vasc > summary { color: #c0392b; }
+    details.dx-tri__card--neuro > summary { color: #b5651d; }
+    details.dx-tri__card > .dx-tri__list { padding: 0 14px 12px 30px; }
+    details.dx-tri__card > .dx-tri__hint { padding: 0 14px 6px 30px; font-size: 11px; color: var(--muted); }
+
+    details.dx-box { background: var(--surface); border: 1.5px solid color-mix(in srgb, var(--text) 18%, transparent); border-radius: 10px; margin: 10px 0; scroll-margin-top: 8px; }
+    details.dx-box > summary { list-style: none; cursor: pointer; padding: 12px 14px; display: flex; align-items: center; gap: 8px; font-weight: 800; font-size: 14.5px; }
+    details.dx-box > summary::-webkit-details-marker { display: none; }
+    details.dx-box > summary::after { content: "▸"; margin-left: auto; font-size: 13px; color: var(--muted); transition: transform 120ms ease; }
+    details.dx-box[open] > summary::after { transform: rotate(90deg); }
+    details.dx-box[open] { border-color: var(--accent); }
+    details.dx-box > .dx-box__body { padding: 0 14px 14px; }
+
+    @media (max-width: 640px) {
+      .dx-quick { gap: 6px; }
+      .dx-quick__btn { padding: 8px 4px; font-size: 11.5px; border-radius: 8px; }
+      .dx-quick__icon { font-size: 17px; }
+      .dx-quick__sub { font-size: 9.5px; }
+      .dx-tri { grid-template-columns: 1fr; gap: 8px; }
+      .dx-tri__card { padding: 8px 10px; }
+      details.dx-tri__card > summary { padding: 8px 10px; font-size: 12.5px; }
+      details.dx-tri__card > .dx-tri__list { padding: 0 12px 10px 26px; }
+      .dx-tri__title { font-size: 12.5px; }
+      .dx-tri__list { font-size: 12px; }
+      details.dx-box > summary { padding: 10px 12px; font-size: 13.5px; }
+      details.dx-box > .dx-box__body { padding: 0 12px 12px; }
+    }
+
+    .dx-step { margin: 18px 0 6px; display: flex; align-items: center; gap: 10px; color: var(--muted); font-size: 11.5px; font-weight: 800; letter-spacing: 0.1em; }
+    .dx-step::before, .dx-step::after { content: ""; flex: 1; height: 1px; background: color-mix(in srgb, var(--text) 18%, transparent); }
+
+    .dx-template { background: color-mix(in srgb, var(--text) 4%, var(--surface)); border-left: 3px solid var(--accent); border-radius: 6px; padding: 10px 12px; margin: 6px 0 0; font-size: 13px; line-height: 1.6; white-space: pre-wrap; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+    .dx-template__hint { font-size: 11px; color: var(--muted); margin: 0 0 4px; }
+  </style>
 </head>
 <body>
   <header class="hokuto-top">
@@ -19,158 +76,179 @@
 
   <main class="hokuto-main">
     <article class="note-shell">
-      <h1 class="page-title">Mallet finger・Jersey finger</h1>
+      <h1 class="page-title">Mallet finger / Jersey finger</h1>
 
-      <!-- 即時アクションヘッダー（常時 sticky） -->
-      <div class="action-header">
-        <div class="action-header__title">⚡ 即時アクション</div>
-        <ol class="action-header__list">
-          <li><strong>Mallet = DIP 伸展不能</strong>（伸筋腱付着部断裂） — 槌のように DIP が下垂</li>
-          <li><strong>Jersey = DIP 屈曲不能</strong>（屈筋腱 profundus 引き抜き、<strong>4 指（環指）最多</strong>）</li>
-          <li>X 線で<strong>骨片</strong>確認（Mallet は背側 bone vs soft tissue、Jersey は掌側骨片・腱退縮）</li>
-          <li>Mallet は<strong>副木 6-8 週</strong>（DIP 伸展位）、Jersey は<strong>手術</strong>（早期、7-10 日以内）</li>
-        </ol>
-      </div>
-
-      <!-- メニュータイル -->
-      <nav class="section-tiles" id="sectionMenu">
-        <a class="section-tile" href="#s1"><span class="section-tile__no">🔨</span><span class="section-tile__name">Mallet finger<br><small>受傷機転・所見</small></span></a>
-        <a class="section-tile" href="#s2"><span class="section-tile__no">🧪</span><span class="section-tile__name">Mallet 画像</span></a>
-        <a class="section-tile" href="#s3"><span class="section-tile__no">💉</span><span class="section-tile__name">Mallet マネジメント</span></a>
-        <a class="section-tile" href="#s4"><span class="section-tile__no">👕</span><span class="section-tile__name">Jersey finger<br><small>受傷機転・所見</small></span></a>
-        <a class="section-tile" href="#s5"><span class="section-tile__no">🧪</span><span class="section-tile__name">Jersey 画像・対応</span></a>
-        <a class="section-tile" href="#s6"><span class="section-tile__no">🔍</span><span class="section-tile__name">鑑別のコツ</span></a>
-        <a class="section-tile" href="#s7"><span class="section-tile__no">🏠</span><span class="section-tile__name">帰宅時の説明</span></a>
-        <a class="section-tile" href="#s8"><span class="section-tile__no">📚</span><span class="section-tile__name">出典</span></a>
+      <nav class="dx-quick" aria-label="クイックタップ">
+        <button class="dx-quick__btn" type="button" data-target="img-read">
+          <span>画像の見方</span>
+          <span class="dx-quick__sub">骨片・関節亜脱臼</span>
+        </button>
+        <button class="dx-quick__btn" type="button" data-target="plan">
+          <span>治療方針</span>
+          <span class="dx-quick__sub">伸展位固定 vs 早期手術</span>
+        </button>
+        <button class="dx-quick__btn" type="button" data-target="consult">
+          <span>コンサル文</span>
+          <span class="dx-quick__sub">そのまま貼れる</span>
+        </button>
       </nav>
 
-      <!-- 関連主訴（双方向リンク） -->
-      <details class="sub-fold" id="related-symptoms">
-        <summary>📞 この疾患が該当する主訴</summary>
-        <div class="sub-fold__body">
+      <div class="dx-step"><span>同時並行で評価する 3 軸</span></div>
+      <div class="dx-tri">
+
+        <div class="dx-tri__card dx-tri__card--typical">
+          <div class="dx-tri__title">典型像</div>
+          <ul class="dx-tri__list">
+            <li><strong>Mallet finger</strong>＝伸筋腱（終止腱）断裂／末節骨基部裂離 → DIP <strong>自動伸展不能</strong></li>
+            <li><strong>Jersey finger</strong>＝FDP 腱断裂（環指多） → DIP <strong>自動屈曲不能</strong></li>
+            <li>受傷機転：球技（ボールが指先に当たる）／ジャージを掴んだ</li>
+            <li>DIP 関節周囲の腫脹・圧痛</li>
+            <li>初療で見落とされやすい（軽症に見える）</li>
+          </ul>
+        </div>
+
+        <details class="dx-tri__card dx-tri__card--vasc">
+          <summary>血管</summary>
+          <p class="dx-tri__hint">血管損傷は通常合併しない。固有指動脈の触知/拍動感・CRT を必ず確認。</p>
+          <ul class="dx-tri__list">
+            <li><strong>固有指動脈</strong>の拍動・色調・CRT（&lt; 2 秒）</li>
+            <li>左右指で比較</li>
+            <li>強い腫脹は挙上・冷却</li>
+            <li>創あれば洗浄・破傷風</li>
+          </ul>
+        </details>
+
+        <details class="dx-tri__card dx-tri__card--neuro">
+          <summary>神経</summary>
+          <p class="dx-tri__hint">神経損傷は通常 OK。<strong>固有指神経</strong>の感覚を独立して確認。</p>
+          <ul class="dx-tri__list">
+            <li>各指の固有指神経の感覚（橈尺両側）</li>
+            <li>正中・尺骨・橈骨神経領域 [問題なし]</li>
+            <li>麻痺所見は記録</li>
+            <li>腱損傷と神経損傷を分けて評価</li>
+          </ul>
+        </details>
+      </div>
+
+      <details class="dx-box" id="img-read">
+        <summary><span>画像の見方</span></summary>
+        <div class="dx-box__body">
           <ul>
-            <li><a class="wiki-link" href="../手関節・手の外傷.html">手関節・手の外傷</a> — 突き指・指の自動運動不能</li>
+            <li><strong>患指 AP・lateral・oblique（3 方向）</strong></li>
+            <li>Mallet：
+              <ul>
+                <li>末節骨基部背側の<strong>裂離骨片</strong>の有無・大きさ</li>
+                <li>関節面の<strong>1/3 以上を占める骨片</strong>は要手術</li>
+                <li>DIP 関節の<strong>掌側亜脱臼</strong>の有無（lateral）</li>
+              </ul>
+            </li>
+            <li>Jersey：
+              <ul>
+                <li>末節骨基部掌側の裂離骨片を探す</li>
+                <li>骨片が掌側で近位に retraction していることがある</li>
+                <li>Xp で骨片が見えない型もあり、<strong>身体所見が決め手</strong></li>
+              </ul>
+            </li>
+            <li>骨片陰性の腱断裂は MRI / 超音波で評価</li>
           </ul>
         </div>
       </details>
 
-      <!-- §1 Mallet finger -->
-      <section class="section-page" id="s1" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🔨 Mallet finger（槌指）</h2>
-        <h3>受傷機転</h3>
-        <ul>
-          <li><strong>DIP 関節に強制屈曲</strong>（ボール・布団シーツ・ドアで指先を突く）</li>
-          <li>伸筋腱終末部の断裂 ± 末節骨背側の撕脱骨折</li>
-        </ul>
-        <h3>身体所見</h3>
-        <ul>
-          <li><strong>DIP 関節の自動伸展不可</strong></li>
-          <li>他動伸展は可能（痛みあり）</li>
-          <li><strong>DIP が屈曲位で下垂</strong>（槌のよう）</li>
-        </ul>
-      </section>
+      <details class="dx-box" id="plan">
+        <summary><span>治療方針（タイプ × 骨片）</span></summary>
+        <div class="dx-box__body">
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>タイプ</th><th>所見</th><th>方針</th><th>ER の動き</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Mallet・腱性</td>
+                  <td>骨片なし、自動伸展不能</td>
+                  <td><strong>保存：DIP 伸展位固定 6〜8 週</strong></td>
+                  <td>Stack 副子／アルミ副子 ＋ 翌日整形</td>
+                </tr>
+                <tr>
+                  <td>Mallet・骨性（小骨片）</td>
+                  <td>関節面 &lt; 1/3、亜脱臼なし</td>
+                  <td><strong>保存：DIP 伸展位固定</strong></td>
+                  <td>Stack 副子 ＋ 翌日整形</td>
+                </tr>
+                <tr>
+                  <td><strong>Mallet・骨性（大骨片／亜脱臼）</strong></td>
+                  <td>関節面 ≥ 1/3 ／DIP 掌側亜脱臼</td>
+                  <td><strong>手術（経皮ピンニング等）</strong></td>
+                  <td>整形相談</td>
+                </tr>
+                <tr>
+                  <td><strong>Jersey finger</strong></td>
+                  <td>DIP 自動屈曲不能（FDP）</td>
+                  <td><strong>早期手術（受傷後 1〜2 週以内）</strong></td>
+                  <td><strong>同日コンサル</strong>（腱断端 retraction 進行する）</td>
+                </tr>
+                <tr>
+                  <td>開放創合併</td>
+                  <td>創あり</td>
+                  <td><strong>洗浄・抗菌薬・整形相談</strong></td>
+                  <td>洗浄・破傷風・即コンサル</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
 
-      <!-- §2 Mallet 画像 -->
-      <section class="section-page" id="s2" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🧪 Mallet 画像</h2>
-        <ul>
-          <li>末節骨側面像で<strong>背側の撕脱骨片</strong>を確認</li>
-          <li>関節面 1/3 以上の骨片 → 手術考慮</li>
-        </ul>
-      </section>
+          <h3>ER で打つ手</h3>
+          <ul>
+            <li>Mallet：<strong>DIP 関節を伸展位（または軽度過伸展）で固定</strong>。PIP 関節は動かせるように</li>
+            <li>固定具：Stack 副子 / アルミ副子 / カスタム熱可塑性</li>
+            <li>固定中の DIP 屈曲を絶対禁忌として本人に説明（「外す時も伸展のまま」）</li>
+            <li>Jersey：シーネ固定 ＋ <strong>同日コンサル</strong>（早期手術が予後を決める）</li>
+            <li>鎮痛は NSAIDs／アセトアミノフェン</li>
+          </ul>
+        </div>
+      </details>
 
-      <!-- §3 Mallet マネジメント -->
-      <section class="section-page" id="s3" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>💉 Mallet マネジメント</h2>
-        <h3>保存（ほぼ全例）</h3>
-        <ul>
-          <li><strong>DIP 伸展位固定</strong>（過伸展ぎみ）、<strong>PIP は自由</strong></li>
-          <li><strong>stack splint</strong> or アルミシーネ</li>
-          <li><strong>6–8 週間完全固定</strong>、1 日も外さない（外すと再断裂）</li>
-          <li>その後さらに 2–4 週夜間固定</li>
-        </ul>
-        <h3>手術</h3>
-        <ul>
-          <li>関節面 <strong>1/3 以上</strong>の骨片</li>
-          <li>掌側亜脱臼を伴う</li>
-          <li>保存で改善しない chronic mallet</li>
-        </ul>
-      </section>
+      <details class="dx-box" id="consult">
+        <summary><span>コンサル文（カルテに貼る）</span></summary>
+        <div class="dx-box__body">
+          <p class="dx-template__hint">『他科コンサルト実践マニュアル』フォーマット。Mallet 保存型は外来フォロー、Jersey と Mallet 大骨片は同日コンサル。</p>
+          <div class="dx-template">【目的】[整形外科外来でのご加療依頼／早期手術のご相談・ご加療依頼]。
+【疾患】#1 [右/左][第○指]Mallet finger（[腱性／骨性、関節面 ○○/○○、亜脱臼 なし／あり]）／#1 [右/左][第○指]Jersey finger（FDP 断裂疑い）
+【既往歴】[特記事項なし／○○]
+【内服薬】[なし／○○]
+【ADL（受傷前）】[自立／○○]
+【現病歴】[年齢]歳[男/女]性。[受傷機転：球技でボールが指先に／ジャージを掴んだ／突き指]で受傷し、[来院経緯]で来院。
+ ・身体所見：DIP 関節の腫脹・圧痛、自動 [伸展／屈曲] 不能、他動可動 [良好]、皮膚損傷 [なし／あり]
+ ・血管：固有指動脈の拍動／CRT [良好]、左右指比較で問題なし
+ ・神経：固有指神経の感覚 [問題なし]、正中・尺骨・橈骨神経領域 [問題なし]
+ ・画像：患指 Xp 3 方向で[末節骨基部背側／掌側]の裂離骨片 [なし／あり、大きさ ○○]、DIP 亜脱臼 [なし／あり]
+ ・ER 処置：[DIP 伸展位 Stack 副子固定／シーネ固定]、患肢挙上指導
+よろしくお願いいたします。</div>
+        </div>
+      </details>
 
-      <!-- §4 Jersey finger -->
-      <section class="section-page" id="s4" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>👕 Jersey finger</h2>
-        <h3>受傷機転</h3>
-        <ul>
-          <li>ラグビー・アメフトで<strong>相手のジャージをつかんで指が引っ張られる</strong></li>
-          <li>深指屈筋腱の終末部断裂 ± 撕脱骨折</li>
-          <li><strong>環指に多い</strong>（指のつかみ方で環指に負荷がかかる）</li>
-        </ul>
-        <h3>身体所見</h3>
-        <ul>
-          <li><strong>DIP 関節の自動屈曲不可</strong></li>
-          <li>他の指を伸展位で保持させ、評価対象の DIP だけ屈曲できるかチェック</li>
-          <li><strong>他動屈曲は可能</strong></li>
-        </ul>
-      </section>
+      <details class="dx-box">
+        <summary><span>関連ハブ・隣接疾患</span></summary>
+        <div class="dx-box__body">
+          <ul>
+            <li>主訴入口：<a class="wiki-link" href="../手関節・手の外傷.html">手関節・手の外傷</a></li>
+            <li>隣接疾患：<a class="wiki-link" href="PIP関節脱臼.html">PIP 関節脱臼</a> ／ <a class="wiki-link" href="中手骨頸部骨折.html">中手骨頸部骨折</a> ／ <a class="wiki-link" href="ゲームキーパー母指.html">ゲームキーパー母指</a></li>
+            <li>処置：Stack 副子 ／ アルミ副子</li>
+            <li>合併症対応：Jersey は <strong>retraction 進行で再建困難</strong>、早期手術が必須</li>
+          </ul>
+        </div>
+      </details>
 
-      <!-- §5 Jersey 画像・対応 -->
-      <section class="section-page" id="s5" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🧪 Jersey 画像・ER 対応</h2>
-        <h3>画像</h3>
-        <ul>
-          <li>末節骨側面像で<strong>掌側の撕脱骨片</strong>を確認</li>
-          <li>腱の退縮位置（レベル）を MRI で評価することもある</li>
-        </ul>
-        <h3>マネジメント — <strong>ほぼ全例手術</strong></h3>
-        <ul>
-          <li>深指屈筋腱を早期に（<strong>7–10 日以内</strong>）再固定しないと予後不良</li>
-          <li>紹介は<strong>帰宅手術として 3–5 日以内</strong></li>
-        </ul>
-        <h4>ER での対応</h4>
-        <ol>
-          <li><strong>DIP 屈曲位のシーネ固定</strong></li>
-          <li><strong>即日〜数日以内</strong>に整形外科（手外科）へ紹介</li>
-        </ol>
-      </section>
-
-      <!-- §6 鑑別のコツ -->
-      <section class="section-page" id="s6" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🔍 鑑別のコツ</h2>
-        <div class="table-wrap"><table><thead><tr><th></th><th>Mallet</th><th>Jersey</th></tr></thead><tbody><tr><td>障害</td><td>自動<strong>伸展</strong>不可</td><td>自動<strong>屈曲</strong>不可</td></tr><tr><td>腱</td><td>伸筋腱</td><td>深指屈筋腱</td></tr><tr><td>受傷機転</td><td>突き指（屈曲強制）</td><td>引っ張られる（伸展強制）</td></tr><tr><td>多い指</td><td>どの指でも</td><td><strong>環指</strong></td></tr><tr><td>治療</td><td><strong>保存が原則</strong></td><td><strong>手術が原則</strong></td></tr></tbody></table></div>
-      </section>
-
-      <!-- §7 帰宅時の説明 -->
-      <section class="section-page" id="s7" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🏠 帰宅時の説明</h2>
-        <ul>
-          <li>Mallet は <strong>1 度でも外すと振り出しに戻る</strong> → 入浴・着替えも注意</li>
-          <li>皮膚トラブルで固定外れる場合は整形外科で代替法検討</li>
-          <li>Jersey は早期手術が必要 — 3–5 日以内に手外科</li>
-        </ul>
-      </section>
-
-      <!-- §8 出典 -->
-      <section class="section-page" id="s8" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>📚 出典</h2>
-        <ul>
-          <li><strong>増井伸高. 骨折ハンター. 中外医学社. 2019.</strong></li>
-          <li><strong>Lin JD, Strauch RJ.</strong> Closed soft tissue extensor mechanism injuries (mallet, boutonniere, and sagittal band). <em>J Hand Surg Am.</em> 2014.</li>
-          <li><strong>Leddy JP, Packer JW.</strong> Avulsion of the profundus tendon insertion in athletes. <em>J Hand Surg Am.</em> 1977.</li>
-        </ul>
-        <h3>関連</h3>
-        <ul>
-          <li><a class="wiki-link" href="../転倒.html">転倒</a> / <a class="wiki-link" href="PIP関節脱臼.html">PIP関節脱臼</a> / <a class="wiki-link" href="ゲームキーパー母指.html">ゲームキーパー母指</a></li>
-        </ul>
-      </section>
+      <details class="dx-box">
+        <summary><span>出典</span></summary>
+        <div class="dx-box__body">
+          <ul>
+            <li>増井伸高. 骨折ハンター. 中外医学社. 2019.</li>
+            <li>津下健哉. 手の外科の実際 改訂第7版. 南江堂. 2011.</li>
+            <li>佐藤弘明 ほか. 他科コンサルト実践マニュアル. 羊土社.</li>
+          </ul>
+        </div>
+      </details>
 
     </article>
   </main>
@@ -189,53 +267,20 @@
 
   <script>
   (function(){
-    const menu = document.getElementById('sectionMenu');
-    const pages = document.querySelectorAll('.section-page');
-    const titleH1 = document.querySelector('.page-title');
-    const relatedSymp = document.getElementById('related-symptoms');
-
-    function showSection(id) {
-      menu.hidden = true;
-      if (titleH1) titleH1.hidden = true;
-      if (relatedSymp) relatedSymp.hidden = true;
-      pages.forEach(p => p.hidden = (p.id !== id));
-      window.scrollTo(0, 0);
-    }
-    function showMenu(scrollTarget) {
-      menu.hidden = false;
-      if (titleH1) titleH1.hidden = false;
-      if (relatedSymp) relatedSymp.hidden = false;
-      pages.forEach(p => p.hidden = true);
-      if (scrollTarget) {
-        if (scrollTarget.tagName === 'DETAILS') scrollTarget.open = true;
-        scrollTarget.scrollIntoView({behavior: 'instant', block: 'start'});
-      } else {
-        window.scrollTo(0, 0);
-      }
-    }
-    function syncFromHash() {
-      const id = (location.hash || '').replace('#','');
-      const target = id ? document.getElementById(id) : null;
-      if (target && target.classList.contains('section-page')) {
-        showSection(id);
-      } else if (target) {
-        showMenu(target);
-      } else {
-        showMenu();
-      }
-    }
-
-    window.addEventListener('hashchange', syncFromHash);
-    document.querySelectorAll('.back-to-menu').forEach(b => {
-      b.addEventListener('click', () => { history.pushState(null,'',location.pathname); showMenu(); });
+    document.querySelectorAll('.dx-quick__btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.dataset.target;
+        const target = document.getElementById(id);
+        if (!target) return;
+        target.open = true;
+        target.scrollIntoView({behavior: 'smooth', block: 'start'});
+      });
     });
     const navBack = document.getElementById('navBack');
     if (navBack) navBack.addEventListener('click', () => {
       if (window.history.length > 1) history.back();
       else window.location.href = '../index.html';
     });
-
-    syncFromHash();
   })();
   </script>
 </body>

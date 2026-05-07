@@ -6,6 +6,196 @@
   <meta name="color-scheme" content="light dark" />
   <title>開放骨折 | ER ノート</title>
   <link rel="stylesheet" href="../er-note.css" />
+  <style>
+    /* ============ クイックタップ（3 つを開閉トリガー） ============ */
+    .dx-quick {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px;
+      margin: 10px 0 4px;
+    }
+    .dx-quick__btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      padding: 10px 6px;
+      border-radius: 10px;
+      background: color-mix(in srgb, var(--accent) 10%, var(--surface));
+      border: 1.5px solid var(--accent);
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 13px;
+      line-height: 1.2;
+      text-align: center;
+      cursor: pointer;
+      transition: background 120ms ease;
+    }
+    .dx-quick__btn:hover {
+      background: color-mix(in srgb, var(--accent) 18%, var(--surface));
+    }
+    .dx-quick__icon { font-size: 20px; }
+    .dx-quick__sub {
+      font-size: 10.5px;
+      font-weight: 500;
+      color: var(--muted);
+    }
+
+    /* ============ 同時評価 3 列（血管・神経・典型像） ============ */
+    .dx-tri {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+      margin: 6px 0 4px;
+      align-items: start;
+    }
+    .dx-tri__card {
+      background: var(--surface);
+      border-radius: 10px;
+      padding: 10px 12px;
+      border: 1.5px solid color-mix(in srgb, var(--text) 18%, transparent);
+    }
+    .dx-tri__card--vasc { border-color: #c0392b; background: color-mix(in srgb, #c0392b 6%, var(--surface)); }
+    .dx-tri__card--neuro { border-color: #b5651d; background: color-mix(in srgb, #b5651d 6%, var(--surface)); }
+    .dx-tri__card--typical { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 6%, var(--surface)); }
+    .dx-tri__title {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 800;
+      font-size: 13.5px;
+      margin-bottom: 4px;
+    }
+    .dx-tri__card--vasc .dx-tri__title { color: #c0392b; }
+    .dx-tri__card--neuro .dx-tri__title { color: #b5651d; }
+    .dx-tri__list {
+      margin: 0;
+      padding-left: 18px;
+      font-size: 12.5px;
+      line-height: 1.5;
+    }
+    .dx-tri__list li { margin: 2px 0; }
+
+    /* details 形式の血管/神経カード：summary にチェック印、開閉時の挙動 */
+    details.dx-tri__card { padding: 0; }
+    details.dx-tri__card > summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 10px 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 800;
+      font-size: 13.5px;
+    }
+    details.dx-tri__card > summary::-webkit-details-marker { display: none; }
+    details.dx-tri__card > summary::after {
+      content: "▸";
+      margin-left: auto;
+      font-size: 12px;
+      color: var(--muted);
+      transition: transform 120ms ease;
+    }
+    details.dx-tri__card[open] > summary::after { transform: rotate(90deg); }
+    details.dx-tri__card--vasc > summary { color: #c0392b; }
+    details.dx-tri__card--neuro > summary { color: #b5651d; }
+    details.dx-tri__card > .dx-tri__list { padding: 0 14px 12px 30px; }
+    details.dx-tri__card > .dx-tri__hint {
+      padding: 0 14px 6px 30px;
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    /* ============ 大きな details ボックス（画像/治療方針/コンサル文） ============ */
+    details.dx-box {
+      background: var(--surface);
+      border: 1.5px solid color-mix(in srgb, var(--text) 18%, transparent);
+      border-radius: 10px;
+      margin: 10px 0;
+      scroll-margin-top: 8px;
+    }
+    details.dx-box > summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 12px 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 800;
+      font-size: 14.5px;
+    }
+    details.dx-box > summary::-webkit-details-marker { display: none; }
+    details.dx-box > summary::after {
+      content: "▸";
+      margin-left: auto;
+      font-size: 13px;
+      color: var(--muted);
+      transition: transform 120ms ease;
+    }
+    details.dx-box[open] > summary::after { transform: rotate(90deg); }
+    details.dx-box[open] {
+      border-color: var(--accent);
+    }
+    details.dx-box > .dx-box__body {
+      padding: 0 14px 14px;
+    }
+
+    /* スマホで 1 列に */
+    @media (max-width: 640px) {
+      .dx-quick { gap: 6px; }
+      .dx-quick__btn { padding: 8px 4px; font-size: 11.5px; border-radius: 8px; }
+      .dx-quick__icon { font-size: 17px; }
+      .dx-quick__sub { font-size: 9.5px; }
+
+      .dx-tri { grid-template-columns: 1fr; gap: 8px; }
+      .dx-tri__card { padding: 8px 10px; }
+      details.dx-tri__card > summary { padding: 8px 10px; font-size: 12.5px; }
+      details.dx-tri__card > .dx-tri__list { padding: 0 12px 10px 26px; }
+      .dx-tri__title { font-size: 12.5px; }
+      .dx-tri__list { font-size: 12px; }
+
+      details.dx-box > summary { padding: 10px 12px; font-size: 13.5px; }
+      details.dx-box > .dx-box__body { padding: 0 12px 12px; }
+    }
+
+    /* ============ 区切り帯（最小限） ============ */
+    .dx-step {
+      margin: 18px 0 6px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 11.5px;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+    }
+    .dx-step::before, .dx-step::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: color-mix(in srgb, var(--text) 18%, transparent);
+    }
+
+    /* コピペ用テンプレ */
+    .dx-template {
+      background: color-mix(in srgb, var(--text) 4%, var(--surface));
+      border-left: 3px solid var(--accent);
+      border-radius: 6px;
+      padding: 10px 12px;
+      margin: 6px 0 0;
+      font-size: 13px;
+      line-height: 1.6;
+      white-space: pre-wrap;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+    .dx-template__hint {
+      font-size: 11px;
+      color: var(--muted);
+      margin: 0 0 4px;
+    }
+  </style>
 </head>
 <body>
   <header class="hokuto-top">
@@ -21,154 +211,201 @@
     <article class="note-shell">
       <h1 class="page-title">開放骨折</h1>
 
-      <!-- 即時アクションヘッダー（常時 sticky） -->
-      <div class="action-header">
-        <div class="action-header__title">⚡ 即時アクション</div>
-        <ol class="action-header__list">
-          <li><strong>Gustilo-Anderson 分類（Ⅰ-Ⅲc）</strong>で重症度判定 ─ Ⅰ：&lt; 1 cm 清潔／Ⅱ：1-10 cm／Ⅲa-c：高度損傷</li>
-          <li><strong>洗浄 + デブリードマン + 創閉鎖 + 早期 ABx</strong>（<strong>ER 1 時間以内</strong>に抗菌薬投与開始）</li>
-          <li><strong>破傷風予防</strong>（接種歴チェック → トキソイド + 必要なら破傷風免疫グロブリン TIG）</li>
-          <li><strong>早期手術</strong>（手術室での徹底洗浄・デブリ：<strong>6-24 h 以内が推奨</strong>）</li>
-        </ol>
-      </div>
-
-      <!-- §1〜§9 メニュータイル -->
-      <nav class="section-tiles" id="sectionMenu">
-        <a class="section-tile" href="#s1"><span class="section-tile__no">📖</span><span class="section-tile__name">定義</span></a>
-        <a class="section-tile" href="#s2"><span class="section-tile__no">🦴</span><span class="section-tile__name">好発部位</span></a>
-        <a class="section-tile" href="#s3"><span class="section-tile__no">📊</span><span class="section-tile__name">Gustilo<br><small>分類</small></span></a>
-        <a class="section-tile" href="#s4"><span class="section-tile__no">🚑</span><span class="section-tile__name">ER 対応<br><small>1 h 以内</small></span></a>
-        <a class="section-tile" href="#s5"><span class="section-tile__no">💉</span><span class="section-tile__name">抗菌薬</span></a>
-        <a class="section-tile" href="#s6"><span class="section-tile__no">💊</span><span class="section-tile__name">破傷風<br><small>予防</small></span></a>
-        <a class="section-tile" href="#s7"><span class="section-tile__no">⏱️</span><span class="section-tile__name">タイムライン</span></a>
-        <a class="section-tile" href="#s8"><span class="section-tile__no">⚠️</span><span class="section-tile__name">合併症</span></a>
-        <a class="section-tile" href="#s9"><span class="section-tile__no">🕳️</span><span class="section-tile__name">落とし穴</span></a>
+      <!-- スマホですぐ開きたい 3 つ -->
+      <nav class="dx-quick" aria-label="クイックタップ">
+        <button class="dx-quick__btn" type="button" data-target="img-read">
+          <span>画像の見方</span>
+          <span class="dx-quick__sub">脱衣 / Gustilo</span>
+        </button>
+        <button class="dx-quick__btn" type="button" data-target="plan">
+          <span>治療方針</span>
+          <span class="dx-quick__sub">3 h ABx / 6 h 洗浄</span>
+        </button>
+        <button class="dx-quick__btn" type="button" data-target="consult">
+          <span>コンサル文</span>
+          <span class="dx-quick__sub">そのまま貼れる</span>
+        </button>
       </nav>
 
-      <!-- 関連主訴（双方向リンク） -->
-      <details class="sub-fold" id="related-symptoms">
-        <summary>📞 この疾患が該当する主訴</summary>
-        <div class="sub-fold__body">
+      <!-- 同時評価 3 列：典型像は常時、血管・神経は折りたたみ -->
+      <div class="dx-step"><span>同時並行で評価する 3 軸</span></div>
+      <div class="dx-tri">
+
+        <div class="dx-tri__card dx-tri__card--typical">
+          <div class="dx-tri__title">典型像</div>
+          <ul class="dx-tri__list">
+            <li><strong>診察の極意は脱衣</strong>。両側ズボン/スカート/靴下を完全脱衣</li>
+            <li>骨折部直下に <strong>1 cm 未満のピンホールでも開放</strong>として扱う</li>
+            <li>好発：<strong>脛骨骨幹部（最多）</strong>、前腕、手指、足趾</li>
+            <li>骨が見えなくても皮膚創と骨折部が交通すれば開放</li>
+            <li>所見：裂創 ＋ 骨折部圧痛、骨断端突出の有無</li>
+          </ul>
+        </div>
+
+        <details class="dx-tri__card dx-tri__card--vasc">
+          <summary>血管</summary>
+          <p class="dx-tri__hint"><strong>Gustilo IIIC</strong>＝動脈損傷を伴うため、CTA / 血管外科を念頭に。</p>
+          <ul class="dx-tri__list">
+            <li><strong>足背・後脛骨動脈</strong>（または橈骨・尺骨動脈）の触知（左右比較）</li>
+            <li>動脈性出血は<strong>ガーゼ圧迫で確実に弱まる</strong>。整形到着まで押さえ続ける</li>
+            <li>触れない／弱い → ABI < 0.9 で CTA、虚血 6 時間以内に血管再建</li>
+            <li>多発外傷では <strong>Damage Control Orthopedics</strong></li>
+          </ul>
+        </details>
+
+        <details class="dx-tri__card dx-tri__card--neuro">
+          <summary>神経</summary>
+          <p class="dx-tri__hint">骨断端突出と固定肢位で末梢神経麻痺を起こすため、初診時の所見記録が責任分界点になる。</p>
+          <ul class="dx-tri__list">
+            <li>下腿：腓骨神経（足背屈・第一趾背屈、足背外側感覚）</li>
+            <li>前腕：橈骨/正中/尺骨神経（OK サイン・指伸展・小指外転）</li>
+            <li>麻痺所見は<strong>カルテに必ず記載</strong>（後の責任分界点）</li>
+            <li>固定後にも再評価して変化があればすぐ報告</li>
+          </ul>
+        </details>
+      </div>
+
+      <!-- 画像の見方 -->
+      <details class="dx-box" id="img-read">
+        <summary><span>画像の見方・診察の極意</span></summary>
+        <div class="dx-box__body">
+          <h3>診察の極意は脱衣</h3>
           <ul>
-            <li><span class="wiki-missing">手関節・手の外傷</span> — 指・手の刺し傷でも骨と交通すれば開放骨折</li>
-            <li><span class="wiki-missing">膝の外傷・痛み</span> — 高エネルギー外傷で発生</li>
-            <li><span class="wiki-missing">足関節・足部の外傷</span> — 脛骨遠位部・足部の開放骨折</li>
-            <li><a class="wiki-link" href="../転倒.html">転倒</a> — 高所転落・交通外傷で多い</li>
+            <li>四肢外傷は<strong>両側ズボン/スカートを完全脱がせ</strong>、疼痛部に裂創がないか必ず確認（脛骨骨幹部骨折は最好発）</li>
+            <li>激痛で脱衣困難なら、患者の了解を得て衣服を切ってよい</li>
+            <li><strong>靴下・足袋も脱がせて</strong>足趾外傷の創を確認</li>
+            <li>表面の汚染は生食で軽く洗浄して、開放骨折かどうかを必ず確認</li>
+          </ul>
+          <h3>「ピンホールでも開放」の原則</h3>
+          <ul>
+            <li>骨折部の<strong>骨・骨髄が外界に露出</strong>している状態が開放骨折</li>
+            <li>皮膚創 <strong>1 mm でも開放骨折</strong>（骨折部と通じていれば）</li>
+            <li><strong>骨が見えなくても開放</strong>（皮膚創下で骨折部と交通していれば）</li>
+            <li>初学者の典型的な誤解：「小さいから開放骨折ではない」は誤り</li>
+            <li>手指の小裂創 ＋ 骨折は背側の直達外力で容易に開放となる</li>
+          </ul>
+          <h3>X 線・写真</h3>
+          <ul>
+            <li><strong>創の写真撮影</strong>（カルテ・紹介用、被覆前に必ず撮る）</li>
+            <li>受傷部位の <strong>2 方向 ＋ 隣接関節を含めて</strong>撮影</li>
+            <li>気腫・異物の有無（草・土・衣服残渣の混入）</li>
+            <li>多発外傷では FAST・全身 CT も並行</li>
+          </ul>
+          <h3>Gustilo 分類（重症度伝達 ＋ 抗菌薬選択）</h3>
+          <div class="table-wrap"><table>
+            <thead><tr><th>Grade</th><th>裂創</th><th>その他</th></tr></thead>
+            <tbody>
+              <tr><td><strong>I</strong></td><td>< 1 cm</td><td>軽度汚染、軟部損傷少</td></tr>
+              <tr><td><strong>II</strong></td><td>1–10 cm</td><td>中等度</td></tr>
+              <tr><td><strong>IIIA</strong></td><td>> 10 cm</td><td>閉創ができそう</td></tr>
+              <tr><td><strong>IIIB</strong></td><td>> 10 cm</td><td>閉創困難・骨露出あり</td></tr>
+              <tr><td><strong>IIIC</strong></td><td>> 10 cm</td><td>修復が必要な動脈損傷あり</td></tr>
+            </tbody>
+          </table></div>
+          <p>非整形外科医も Gustilo を使う 2 つの理由：(1) 電話の向こうで創を見られない整形外科医に<strong>重症度が伝わる</strong>、(2) 分類によって<strong>初回抗菌薬の選択が変わる</strong>。</p>
+        </div>
+      </details>
+
+      <!-- 治療方針 -->
+      <details class="dx-box" id="plan">
+        <summary><span>治療方針（時間軸 ＋ 抗菌薬 ＋ 破傷風）</span></summary>
+        <div class="dx-box__body">
+          <h3>時間軸（覚え方は 3 / 6）</h3>
+          <div class="table-wrap"><table>
+            <thead><tr><th>時間</th><th>行動</th></tr></thead>
+            <tbody>
+              <tr><td>0–15 分</td><td>脱衣して創を確認、ABCDE、創写真、Gustilo 分類</td></tr>
+              <tr><td>診断直後</td><td><strong>セファゾリン 2 g 開始</strong>、破傷風 2 剤同時筋注</td></tr>
+              <tr><td><strong>3 時間以内</strong></td><td><strong>抗菌薬の初回投与完了</strong></td></tr>
+              <tr><td>1 h 以内</td><td>整形外科コンサルト、生食ガーゼ被覆、アルミフェンスシーネ固定</td></tr>
+              <tr><td><strong>6 時間以内</strong></td><td><strong>手術室での創洗浄・デブリドマン</strong></td></tr>
+            </tbody>
+          </table></div>
+
+          <h3>抗菌薬（受傷から 3 時間以内に開始）</h3>
+          <div class="table-wrap"><table>
+            <thead><tr><th>Grade</th><th>推奨抗菌薬</th></tr></thead>
+            <tbody>
+              <tr><td><strong>I・II</strong></td><td><strong>セファゾリン 2 g</strong> 静注（生食 100 mL を 1 時間）</td></tr>
+              <tr><td><strong>III</strong>（10 cm 以上）</td><td><strong>セファゾリン 2 g ＋ ゲンタマイシン 2 mg/kg</strong></td></tr>
+              <tr><td>土壌・水・農作業の汚染</td><td>＋ ペニシリン（Clostridium 対策）</td></tr>
+              <tr><td>淡水・下水</td><td>＋ フルオロキノロン（Pseudomonas 対策）</td></tr>
+            </tbody>
+          </table></div>
+          <ul>
+            <li>薬の種類と量は覚えておき、研修医でも自己判断で前倒しで開始する</li>
+            <li>初回は<strong>腎機能にかかわらず top dose</strong>でよい</li>
+            <li>キーワードは「2」：<strong>2 種類</strong>（セファゾリン 2 g ＋ ゲンタマイシン 2 mg/kg）／破傷風 <strong>2 剤</strong>同時筋注</li>
+          </ul>
+
+          <h3>破傷風予防（2 剤を同時筋注）</h3>
+          <ul>
+            <li>原則：開放骨折はすべて contaminated として扱う</li>
+            <li><strong>テタガム®P 筋注シリンジ 250 単位</strong>（抗破傷風ヒト免疫グロブリン）</li>
+            <li><strong>沈降破傷風トキソイド「生研」0.5 mL</strong></li>
+            <li>2 剤を<strong>同時に投与</strong>する（部位は分ける）</li>
+          </ul>
+
+          <h3>創処置・固定</h3>
+          <ul>
+            <li><strong>骨断端は押し戻さない</strong>（細菌を骨折部に送り込むことになる）</li>
+            <li>確認後は<strong>生食ガーゼで創を被覆</strong>（縫合しない）</li>
+            <li>本格的な洗浄・デブリドマンは手術室で。エビデンスは<strong>低圧・生理食塩水で十分</strong>（FLOW 試験）</li>
+            <li><strong>アルミフェンスシーネ</strong>で副子固定、関節を含めて位置を大きく変えない</li>
+            <li>挙上・アイシング</li>
           </ul>
         </div>
       </details>
 
-      <!-- §1 定義 -->
-      <section class="section-page" id="s1" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>📖 定義</h2>
-        <ul>
-          <li>骨折部の <strong>骨・骨髄が外界に露出</strong> している状態</li>
-          <li>皮膚創 <strong>1 mm でも開放骨折</strong>（骨折部と通じていれば）</li>
-          <li><strong>骨が見えなくても開放</strong>（皮膚創下で骨折部と交通していれば）</li>
-        </ul>
-      </section>
+      <!-- コンサル文 -->
+      <details class="dx-box" id="consult">
+        <summary><span>コンサル文（カルテに貼る）</span></summary>
+        <div class="dx-box__body">
+          <p class="dx-template__hint">『他科コンサルト実践マニュアル』の院内紹介状フォーマットに準拠（【目的】【疾患】【既往歴】【内服薬】【ADL】【現病歴】）。空欄を埋めるだけで通る形式。</p>
+          <div class="dx-template">【目的】開放骨折に対する緊急手術（洗浄・デブリドマン）のご相談・ご加療依頼。
+【疾患】#1 [部位]開放骨折 Gustilo [I/II/IIIA/IIIB/IIIC]
+【既往歴】[特記事項なし／○○]
+【内服薬】[なし／ワーファリン／DOAC ○○／抗血小板薬 ○○]
+【ADL（受傷前）】[独歩／杖／介助歩行／車椅子]
+【現病歴】[年齢]歳[男/女]性。[受傷機転：交通外傷／高所転落／挫滅]で受傷し、[来院経緯]で来院。
+ ・身体所見：[部位]に裂創 [○ cm]、骨断端[突出あり／なし]、汚染 [軽度／中等度／土壌・水]
+ ・血管：足背・後脛骨動脈（または橈尺骨動脈） [良好／弱／触知不能]、ABI [○○]
+ ・神経：[腓骨神経／橈骨神経 ほか]領域 [問題なし／麻痺]
+ ・画像：Xp で [部位]骨折、創写真撮影済
+ ・ER 処置：診断直後に<strong>セファゾリン 2 g [+ ゲンタマイシン 2 mg/kg]</strong>開始（受傷から ○ 時間後）
+       破傷風予防（テタガム®P 250 単位 ＋ 沈降破傷風トキソイド「生研」0.5 mL）2 剤同時筋注 [済／未]
+       生食ガーゼで創被覆、アルミフェンスシーネ固定、骨断端は押し戻していない
+ ・術前検査：採血・心電図・胸部 X 線 [済／未]
+よろしくお願いいたします。</div>
+        </div>
+      </details>
 
-      <!-- §2 好発部位 -->
-      <section class="section-page" id="s2" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🦴 好発部位</h2>
-        <ul>
-          <li><strong>脛骨骨幹部</strong>（下腿は皮下組織が薄く突き抜けやすい）</li>
-          <li>前腕・上腕</li>
-          <li>指・手</li>
-        </ul>
-      </section>
+      <!-- 関連ハブ -->
+      <details class="dx-box">
+        <summary><span>関連ハブ・隣接疾患</span></summary>
+        <div class="dx-box__body">
+          <ul>
+            <li>主訴入口：<a class="wiki-link" href="../転倒.html">転倒</a></li>
+            <li>隣接疾患：<a class="wiki-link" href="脛骨骨幹部骨折.html">脛骨骨幹部骨折</a> ／ <a class="wiki-link" href="コンパートメント症候群.html">コンパートメント症候群</a></li>
+            <li>合併症対応：高エネ外傷では<strong>コンパートメント症候群</strong>が必発レベル → 入院後 24–48 時間頻回診察</li>
+            <li>感染症評価：Grade III で骨髄炎 10–50%、術後 follow を整形外科に依頼</li>
+          </ul>
+        </div>
+      </details>
 
-      <!-- §3 Gustilo 分類 -->
-      <section class="section-page" id="s3" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>📊 Gustilo 分類</h2>
-        <div class="table-wrap"><table><thead><tr><th>Grade</th><th>創の状態</th><th>軟部組織損傷</th><th>汚染</th></tr></thead><tbody><tr><td><strong>I</strong></td><td>&lt; 1 cm、清潔</td><td>軽度</td><td>軽度</td></tr><tr><td><strong>II</strong></td><td>1–10 cm</td><td>中等度、皮膚瓣なし</td><td>中等度</td></tr><tr><td><strong>IIIA</strong></td><td>&gt; 10 cm or 高度軟部組織損傷</td><td>高度だが骨被覆可</td><td>高度</td></tr><tr><td><strong>IIIB</strong></td><td>同上 + <strong>骨被覆困難、骨膜剥離</strong></td><td>高度</td><td>高度</td></tr><tr><td><strong>IIIC</strong></td><td>同上 + <strong>動脈損傷で修復必要</strong></td><td>高度</td><td>高度</td></tr></tbody></table></div>
-      </section>
-
-      <!-- §4 ER 対応 -->
-      <section class="section-page" id="s4" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🚑 ER での対応（6–8 時間以内に全部やる）</h2>
-        <h3>1. 初期評価</h3>
-        <ul>
-          <li><strong>ABCDE</strong>、多発外傷の有無</li>
-          <li>創の写真撮影（カルテ・紹介用）</li>
-          <li><strong>末梢循環・神経所見</strong></li>
-        </ul>
-        <h3>2. 創処置</h3>
-        <ul>
-          <li><strong>生理食塩水で洗浄</strong>（3 L 以上、Grade III は 6–9 L）</li>
-          <li><strong>滅菌ガーゼ被覆</strong>（徹底的なデブリドマンは手術室で）</li>
-          <li>骨片は元に戻さない（整形外科の判断）</li>
-        </ul>
-        <h3>5. シーネ固定</h3>
-        <ul>
-          <li><strong>関節を含めて固定</strong>、位置を大きく変えない</li>
-          <li>挙上・アイシング</li>
-        </ul>
-        <h3>6. 整形外科コンサルト</h3>
-        <ul>
-          <li><strong>即時整形</strong> → 手術室で徹底洗浄・デブリドマン・外固定 or 内固定</li>
-          <li>多発外傷では <strong>Damage Control Orthopedics</strong></li>
-        </ul>
-      </section>
-
-      <!-- §5 抗菌薬 -->
-      <section class="section-page" id="s5" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>💉 抗菌薬（受診から 1 時間以内）</h2>
-        <div class="table-wrap"><table><thead><tr><th>Grade</th><th>推奨抗菌薬</th></tr></thead><tbody><tr><td><strong>I・II</strong></td><td><strong>セファゾリン</strong> 2 g iv</td></tr><tr><td><strong>III</strong></td><td><strong>セファゾリン + アミノグリコシド（ゲンタマイシン）</strong></td></tr><tr><td><strong>土壌・水・農作業の汚染</strong></td><td>+ <strong>ペニシリン</strong>（クロストリジウム対策）</td></tr><tr><td><strong>淡水・下水</strong></td><td>+ <strong>フルオロキノロン</strong>（Pseudomonas 対策）</td></tr></tbody></table></div>
-      </section>
-
-      <!-- §6 破傷風予防 -->
-      <section class="section-page" id="s6" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>💊 破傷風予防</h2>
-        <ul>
-          <li><strong>破傷風トキソイド最終接種から 10 年以内 + clean minor wound</strong> → 不要</li>
-          <li><strong>5 年以内 + contaminated</strong> → 不要</li>
-          <li><strong>10 年経過 or 不明</strong> → <strong>トキソイド</strong></li>
-          <li><strong>ワクチン歴 3 回未満 + contaminated</strong> → <strong>トキソイド + 破傷風免疫グロブリン（TIG）</strong></li>
-        </ul>
-      </section>
-
-      <!-- §7 タイムライン -->
-      <section class="section-page" id="s7" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>⏱️ 時間のタイムライン</h2>
-        <div class="table-wrap"><table><thead><tr><th>時間</th><th>行動</th></tr></thead><tbody><tr><td>0–15 分</td><td>ABCDE、外傷評価、創写真</td></tr><tr><td>15–60 分</td><td><strong>抗菌薬投与</strong>、破傷風判定、洗浄、シーネ固定</td></tr><tr><td>1 h 以内</td><td><strong>整形外科コンサルト</strong></td></tr><tr><td>6–8 h 以内</td><td>手術室での洗浄・デブリドマン</td></tr></tbody></table></div>
-      </section>
-
-      <!-- §8 合併症 -->
-      <section class="section-page" id="s8" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>⚠️ 合併症</h2>
-        <div class="table-wrap"><table><thead><tr><th>合併症</th><th>背景</th></tr></thead><tbody><tr><td><strong>感染</strong>（骨髄炎）</td><td>Grade III で 10–50%</td></tr><tr><td><strong>不癒合・偽関節</strong></td><td>軟部組織損傷の程度に比例</td></tr><tr><td><strong>コンパートメント症候群</strong></td><td>高エネルギーで必発レベル</td></tr><tr><td><strong>血管・神経損傷</strong></td><td>Grade IIIC</td></tr></tbody></table></div>
-      </section>
-
-      <!-- §9 落とし穴 -->
-      <section class="section-page" id="s9" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🕳️ 落とし穴</h2>
-        <ul>
-          <li><strong>小さな刺し傷</strong>でも骨折部と交通していれば開放骨折</li>
-          <li><strong>創を縫合してしまわない</strong>（感染を閉じ込める）</li>
-          <li><strong>病院内の「開放骨折プロトコル」</strong> を把握しておく</li>
-        </ul>
-        <h3>関連</h3>
-        <ul>
-          <li><a class="wiki-link" href="../転倒.html">転倒</a> / <a class="wiki-link" href="脛骨骨幹部骨折.html">脛骨骨幹部骨折</a> / <a class="wiki-link" href="コンパートメント症候群.html">コンパートメント症候群</a></li>
-        </ul>
-        <h3>出典</h3>
-        <ul>
-          <li><strong>増井伸高. 骨折ハンター. 中外医学社. 2019.</strong></li>
-          <li><strong>Gustilo RB, Anderson JT.</strong> <em>J Bone Joint Surg Am.</em> 1976.</li>
-          <li><strong>EAST guidelines.</strong> Prophylactic antibiotics in open fractures of long bones. <em>J Trauma.</em> 2011.</li>
-          <li><strong>ATLS 10th edition.</strong></li>
-        </ul>
-      </section>
+      <!-- 出典 -->
+      <details class="dx-box">
+        <summary><span>出典</span></summary>
+        <div class="dx-box__body">
+          <ul>
+            <li>増井伸高. 骨折ハンター. 中外医学社. 2019（第 17 章：下腿痛ハンター — 脛骨骨幹部骨折・開放骨折）</li>
+            <li>Gustilo RB, Anderson JT. Prevention of infection in the treatment of open fractures. <em>J Bone Joint Surg Am.</em> 1976;58(4):453–8.</li>
+            <li>EAST guidelines. Prophylactic antibiotics in open fractures of long bones. <em>J Trauma.</em> 2011.</li>
+            <li>FLOW Investigators. A trial of wound irrigation in the initial management of open fracture wounds. <em>N Engl J Med.</em> 2015;373(27):2629–41.</li>
+            <li>ATLS 10th edition.</li>
+          </ul>
+        </div>
+      </details>
 
     </article>
   </main>
@@ -187,53 +424,22 @@
 
   <script>
   (function(){
-    const menu = document.getElementById('sectionMenu');
-    const pages = document.querySelectorAll('.section-page');
-    const titleH1 = document.querySelector('.page-title');
-    const relatedSymp = document.getElementById('related-symptoms');
-
-    function showSection(id) {
-      menu.hidden = true;
-      if (titleH1) titleH1.hidden = true;
-      if (relatedSymp) relatedSymp.hidden = true;
-      pages.forEach(p => p.hidden = (p.id !== id));
-      window.scrollTo(0, 0);
-    }
-    function showMenu(scrollTarget) {
-      menu.hidden = false;
-      if (titleH1) titleH1.hidden = false;
-      if (relatedSymp) relatedSymp.hidden = false;
-      pages.forEach(p => p.hidden = true);
-      if (scrollTarget) {
-        if (scrollTarget.tagName === 'DETAILS') scrollTarget.open = true;
-        scrollTarget.scrollIntoView({behavior: 'instant', block: 'start'});
-      } else {
-        window.scrollTo(0, 0);
-      }
-    }
-    function syncFromHash() {
-      const id = (location.hash || '').replace('#','');
-      const target = id ? document.getElementById(id) : null;
-      if (target && target.classList.contains('section-page')) {
-        showSection(id);
-      } else if (target) {
-        showMenu(target);
-      } else {
-        showMenu();
-      }
-    }
-
-    window.addEventListener('hashchange', syncFromHash);
-    document.querySelectorAll('.back-to-menu').forEach(b => {
-      b.addEventListener('click', () => { history.pushState(null,'',location.pathname); showMenu(); });
+    // クイックタップで対応 details を開いてスクロール
+    document.querySelectorAll('.dx-quick__btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.dataset.target;
+        const target = document.getElementById(id);
+        if (!target) return;
+        target.open = true;
+        target.scrollIntoView({behavior: 'smooth', block: 'start'});
+      });
     });
+
     const navBack = document.getElementById('navBack');
     if (navBack) navBack.addEventListener('click', () => {
       if (window.history.length > 1) history.back();
       else window.location.href = '../index.html';
     });
-
-    syncFromHash();
   })();
   </script>
 </body>

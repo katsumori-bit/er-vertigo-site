@@ -6,6 +6,196 @@
   <meta name="color-scheme" content="light dark" />
   <title>小児骨端線骨折 | ER ノート</title>
   <link rel="stylesheet" href="../er-note.css" />
+  <style>
+    /* ============ クイックタップ（3 つを開閉トリガー） ============ */
+    .dx-quick {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px;
+      margin: 10px 0 4px;
+    }
+    .dx-quick__btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      padding: 10px 6px;
+      border-radius: 10px;
+      background: color-mix(in srgb, var(--accent) 10%, var(--surface));
+      border: 1.5px solid var(--accent);
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 13px;
+      line-height: 1.2;
+      text-align: center;
+      cursor: pointer;
+      transition: background 120ms ease;
+    }
+    .dx-quick__btn:hover {
+      background: color-mix(in srgb, var(--accent) 18%, var(--surface));
+    }
+    .dx-quick__icon { font-size: 20px; }
+    .dx-quick__sub {
+      font-size: 10.5px;
+      font-weight: 500;
+      color: var(--muted);
+    }
+
+    /* ============ 同時評価 3 列（血管・神経・典型像） ============ */
+    .dx-tri {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+      margin: 6px 0 4px;
+      align-items: start;
+    }
+    .dx-tri__card {
+      background: var(--surface);
+      border-radius: 10px;
+      padding: 10px 12px;
+      border: 1.5px solid color-mix(in srgb, var(--text) 18%, transparent);
+    }
+    .dx-tri__card--vasc { border-color: #c0392b; background: color-mix(in srgb, #c0392b 6%, var(--surface)); }
+    .dx-tri__card--neuro { border-color: #b5651d; background: color-mix(in srgb, #b5651d 6%, var(--surface)); }
+    .dx-tri__card--typical { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 6%, var(--surface)); }
+    .dx-tri__title {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 800;
+      font-size: 13.5px;
+      margin-bottom: 4px;
+    }
+    .dx-tri__card--vasc .dx-tri__title { color: #c0392b; }
+    .dx-tri__card--neuro .dx-tri__title { color: #b5651d; }
+    .dx-tri__list {
+      margin: 0;
+      padding-left: 18px;
+      font-size: 12.5px;
+      line-height: 1.5;
+    }
+    .dx-tri__list li { margin: 2px 0; }
+
+    /* details 形式の血管/神経カード：summary にチェック印、開閉時の挙動 */
+    details.dx-tri__card { padding: 0; }
+    details.dx-tri__card > summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 10px 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 800;
+      font-size: 13.5px;
+    }
+    details.dx-tri__card > summary::-webkit-details-marker { display: none; }
+    details.dx-tri__card > summary::after {
+      content: "▸";
+      margin-left: auto;
+      font-size: 12px;
+      color: var(--muted);
+      transition: transform 120ms ease;
+    }
+    details.dx-tri__card[open] > summary::after { transform: rotate(90deg); }
+    details.dx-tri__card--vasc > summary { color: #c0392b; }
+    details.dx-tri__card--neuro > summary { color: #b5651d; }
+    details.dx-tri__card > .dx-tri__list { padding: 0 14px 12px 30px; }
+    details.dx-tri__card > .dx-tri__hint {
+      padding: 0 14px 6px 30px;
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    /* ============ 大きな details ボックス（画像/治療方針/コンサル文） ============ */
+    details.dx-box {
+      background: var(--surface);
+      border: 1.5px solid color-mix(in srgb, var(--text) 18%, transparent);
+      border-radius: 10px;
+      margin: 10px 0;
+      scroll-margin-top: 8px;
+    }
+    details.dx-box > summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 12px 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 800;
+      font-size: 14.5px;
+    }
+    details.dx-box > summary::-webkit-details-marker { display: none; }
+    details.dx-box > summary::after {
+      content: "▸";
+      margin-left: auto;
+      font-size: 13px;
+      color: var(--muted);
+      transition: transform 120ms ease;
+    }
+    details.dx-box[open] > summary::after { transform: rotate(90deg); }
+    details.dx-box[open] {
+      border-color: var(--accent);
+    }
+    details.dx-box > .dx-box__body {
+      padding: 0 14px 14px;
+    }
+
+    /* スマホで 1 列に */
+    @media (max-width: 640px) {
+      .dx-quick { gap: 6px; }
+      .dx-quick__btn { padding: 8px 4px; font-size: 11.5px; border-radius: 8px; }
+      .dx-quick__icon { font-size: 17px; }
+      .dx-quick__sub { font-size: 9.5px; }
+
+      .dx-tri { grid-template-columns: 1fr; gap: 8px; }
+      .dx-tri__card { padding: 8px 10px; }
+      details.dx-tri__card > summary { padding: 8px 10px; font-size: 12.5px; }
+      details.dx-tri__card > .dx-tri__list { padding: 0 12px 10px 26px; }
+      .dx-tri__title { font-size: 12.5px; }
+      .dx-tri__list { font-size: 12px; }
+
+      details.dx-box > summary { padding: 10px 12px; font-size: 13.5px; }
+      details.dx-box > .dx-box__body { padding: 0 12px 12px; }
+    }
+
+    /* ============ 区切り帯（最小限） ============ */
+    .dx-step {
+      margin: 18px 0 6px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 11.5px;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+    }
+    .dx-step::before, .dx-step::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: color-mix(in srgb, var(--text) 18%, transparent);
+    }
+
+    /* コピペ用テンプレ */
+    .dx-template {
+      background: color-mix(in srgb, var(--text) 4%, var(--surface));
+      border-left: 3px solid var(--accent);
+      border-radius: 6px;
+      padding: 10px 12px;
+      margin: 6px 0 0;
+      font-size: 13px;
+      line-height: 1.6;
+      white-space: pre-wrap;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+    .dx-template__hint {
+      font-size: 11px;
+      color: var(--muted);
+      margin: 0 0 4px;
+    }
+  </style>
 </head>
 <body>
   <header class="hokuto-top">
@@ -21,164 +211,214 @@
     <article class="note-shell">
       <h1 class="page-title">小児骨端線骨折</h1>
 
-      <!-- 即時アクションヘッダー（常時 sticky） -->
-      <div class="action-header">
-        <div class="action-header__title">⚡ 即時アクション</div>
-        <ol class="action-header__list">
-          <li><strong>Salter-Harris 分類（Ⅰ-Ⅴ）</strong> ─ Ⅰ：骨端線のみ／Ⅱ：+骨幹端（最多 75%）／Ⅲ：関節内／Ⅳ：貫通／Ⅴ：圧挫</li>
-          <li><strong>X 線（健側との比較）</strong>2 方向撮影、Ⅰ・Ⅴ は X 線で見えにくく <strong>圧痛 + 年齢で診断</strong></li>
-          <li><strong>Ⅲ-Ⅴ は手術検討</strong>（関節面・成長板損傷の解剖学的整復が必要）</li>
-          <li><strong>成長障害・変形</strong>のリスク ─ 全例整形外科紹介、6-12 ヶ月の長期 follow-up が必要</li>
-        </ol>
-      </div>
-
-      <!-- §1〜§9 メニュータイル -->
-      <nav class="section-tiles" id="sectionMenu">
-        <a class="section-tile" href="#s1"><span class="section-tile__no">🦴</span><span class="section-tile__name">解剖</span></a>
-        <a class="section-tile" href="#s2"><span class="section-tile__no">📊</span><span class="section-tile__name">Salter-Harris<br><small>分類</small></span></a>
-        <a class="section-tile" href="#s3"><span class="section-tile__no">⚡</span><span class="section-tile__name">受傷機転</span></a>
-        <a class="section-tile" href="#s4"><span class="section-tile__no">🩺</span><span class="section-tile__name">身体所見</span></a>
-        <a class="section-tile" href="#s5"><span class="section-tile__no">🔬</span><span class="section-tile__name">画像<br><small>X 線・MRI</small></span></a>
-        <a class="section-tile" href="#s6"><span class="section-tile__no">🏥</span><span class="section-tile__name">マネジメント</span></a>
-        <a class="section-tile" href="#s7"><span class="section-tile__no">👨‍⚕️</span><span class="section-tile__name">非整形医の<br><small>役割</small></span></a>
-        <a class="section-tile" href="#s8"><span class="section-tile__no">⚠️</span><span class="section-tile__name">合併症</span></a>
-        <a class="section-tile" href="#s9"><span class="section-tile__no">💬</span><span class="section-tile__name">親への説明</span></a>
+      <!-- スマホですぐ開きたい 3 つ -->
+      <nav class="dx-quick" aria-label="クイックタップ">
+        <button class="dx-quick__btn" type="button" data-target="img-read">
+          <span>画像の見方</span>
+          <span class="dx-quick__sub">健側比較 / SH イメージ</span>
+        </button>
+        <button class="dx-quick__btn" type="button" data-target="plan">
+          <span>治療方針</span>
+          <span class="dx-quick__sub">2 mm / 関節内で手術</span>
+        </button>
+        <button class="dx-quick__btn" type="button" data-target="consult">
+          <span>コンサル文</span>
+          <span class="dx-quick__sub">そのまま貼れる</span>
+        </button>
       </nav>
 
-      <!-- 関連主訴（双方向リンク） -->
-      <details class="sub-fold" id="related-symptoms">
-        <summary>📞 この疾患が該当する主訴</summary>
-        <div class="sub-fold__body">
+      <!-- 同時評価 3 列：典型像は常時、血管・神経は折りたたみ -->
+      <div class="dx-step"><span>同時並行で評価する 3 軸</span></div>
+      <div class="dx-tri">
+
+        <div class="dx-tri__card dx-tri__card--typical">
+          <div class="dx-tri__title">典型像</div>
+          <ul class="dx-tri__list">
+            <li><strong>骨端線損傷は小児骨折の 18%</strong>。靭帯 > 骨端線の強度</li>
+            <li>14–15 歳頃に骨端線が閉鎖して成人型に</li>
+            <li>骨端線損傷で<strong>四肢長不一致</strong>のリスク</li>
+            <li>所見：骨端線直上の限局圧痛、若木骨折は片側変形のみ</li>
+            <li>FOOSH・足関節捻り・MP 関節の過度撓屈尺屈＋回旋など</li>
+          </ul>
+        </div>
+
+        <details class="dx-tri__card dx-tri__card--vasc">
+          <summary>血管</summary>
+          <p class="dx-tri__hint">小児上腕骨顆上骨折は<strong>上腕動脈損傷</strong>に注意。Volkmann 拘縮の前駆病態となる。</p>
+          <ul class="dx-tri__list">
+            <li>橈骨動脈触知（左右比較）、毛細血管再充満時間</li>
+            <li>触れない／弱い → 上級医・整形へ即時相談</li>
+            <li>非整形外科医が<strong>きついギプスを巻かない</strong>（コンパートメント誘発）</li>
+            <li>手関節は<strong>sugar tong splint</strong>を選択</li>
+          </ul>
+        </details>
+
+        <details class="dx-tri__card dx-tri__card--neuro">
+          <summary>神経</summary>
+          <p class="dx-tri__hint">上腕骨顆上骨折は<strong>正中神経・前骨間神経</strong>麻痺、外顆骨折は尺骨神経麻痺の可能性。</p>
+          <ul class="dx-tri__list">
+            <li>上肢：OK サイン（前骨間神経）、母指外転（正中）、小指外転（尺骨）</li>
+            <li>下肢：足関節背屈・第一趾背屈、足背外側感覚（腓骨神経）</li>
+            <li>記録を残す（後の責任分界点）</li>
+            <li>麻痺があれば固定肢位の見直し ＋ 整形へ即時相談</li>
+          </ul>
+        </details>
+      </div>
+
+      <!-- 画像の見方 -->
+      <details class="dx-box" id="img-read">
+        <summary><span>画像の見方（Salter-Harris は骨折線イメージ）</span></summary>
+        <div class="dx-box__body">
+          <h3>解剖</h3>
           <ul>
-            <li><span class="wiki-missing">手関節・手の外傷</span> — 小児の手関節橈骨遠位骨端線損傷で多い</li>
-            <li><span class="wiki-missing">膝の外傷・痛み</span> — 大腿骨遠位・脛骨近位の骨端線損傷</li>
-            <li><span class="wiki-missing">足関節・足部の外傷</span> — 脛骨遠位骨端線（Tillaux 骨折等）で多い</li>
-            <li><a class="wiki-link" href="../転倒.html">転倒</a> — 運動中・転倒で発症</li>
+            <li>小児の長管骨は端の<strong>骨端線（成長軟骨板）</strong>で伸びる</li>
+            <li><strong>靭帯 > 骨端線の強度</strong>のため、外力は靭帯を避けて骨端線に集中</li>
+            <li><strong>14–15 歳頃に骨端線が閉鎖</strong>して成人と同じ外傷になる</li>
+            <li>骨端線が損傷して骨が伸びなくなると、<strong>四肢長不一致（変形）</strong>を起こすことがある</li>
+          </ul>
+
+          <h3>Salter-Harris は「分類」でなく「骨折線イメージ」</h3>
+          <p>非整形外科医にとって Salter-Harris は<strong>分類ではなく骨折線イメージ</strong>として使う。頻度の高い骨折は Type が決まっているため、<strong>事前にイメージを持っておくことで読影できる</strong>。逆に分類を知らないと微細な骨折線を見落とす。</p>
+          <div class="table-wrap"><table>
+            <thead><tr><th>Type</th><th>骨折線</th><th>頻度</th><th>成長障害リスク</th></tr></thead>
+            <tbody>
+              <tr><td><strong>I</strong></td><td>骨端線のみ（水平剥離）</td><td>6%</td><td>低（保存）</td></tr>
+              <tr><td><strong>II</strong></td><td>骨端線 ＋ 骨幹端</td><td><strong>75%（最多）</strong></td><td>低（多くは保存）</td></tr>
+              <tr><td><strong>III</strong></td><td>骨端線 ＋ 骨端（関節内）</td><td>8%</td><td>中（手術が多い）</td></tr>
+              <tr><td><strong>IV</strong></td><td>骨幹端 ＋ 骨端線 ＋ 骨端を貫通</td><td>10%</td><td>高（解剖学的整復 → 手術）</td></tr>
+              <tr><td><strong>V</strong></td><td>骨端線の圧挫</td><td>1%</td><td>最高（X 線で見えにくい）</td></tr>
+            </tbody>
+          </table></div>
+
+          <h3>頻度の高い 4 つはイメージを丸暗記</h3>
+          <div class="table-wrap"><table>
+            <thead><tr><th>骨折</th><th>典型 Type</th></tr></thead>
+            <tbody>
+              <tr><td><strong>上腕骨外顆骨折</strong></td><td><strong>Type IV</strong>（小児肘・FOOSH）</td></tr>
+              <tr><td><strong>橈骨遠位端骨折</strong></td><td><strong>Type I・II</strong>（II で転位 15° 以内なら保存）</td></tr>
+              <tr><td><strong>基節骨基部骨折</strong>（小指好発）</td><td><strong>Type II</strong>（25° 以上 or 1.5 mm 以上の離開で手術検討）</td></tr>
+              <tr><td><strong>脛骨遠位端骨折（Tillaux 骨折）</strong></td><td><strong>Type III</strong>。<strong>小児関節内骨折の 5–10%</strong>。骨端線が部分的に閉じる時期に起こる</td></tr>
+            </tbody>
+          </table></div>
+
+          <h3>X 線（健側比較が原則）</h3>
+          <ul>
+            <li>患部 <strong>2 方向（正面・側面）＋ 健側を必ず撮影</strong>して比較</li>
+            <li>左右差が骨折線の発見に直結（特に Type I・II・V）</li>
+            <li>肘の正常基準線：<strong>anterior humeral line</strong>（上腕骨顆上骨折）、<strong>radiocapitellar line</strong>（上腕骨外顆骨折・Monteggia）— 延長線が小頭の中心を通らなければ異常</li>
+            <li>手関節：橈骨遠位端の<strong>背側</strong>にのみ骨折線が入る<strong>若木骨折</strong>パターンを意識</li>
+          </ul>
+
+          <h3>身体所見の特徴</h3>
+          <ul>
+            <li>骨端線の直上に<strong>限局した圧痛</strong></li>
+            <li>小児は<strong>若木骨折（greenstick）</strong>で片側だけ骨折線が入って反対側は屈曲変形のみのこともある</li>
+            <li>Type I は骨折線が見えないことが多く、<strong>圧痛 ＋ 年齢 ＋ 健側比較</strong>で診断</li>
+            <li>Type V は圧挫により骨端線がわずかに狭小化するのみ。<strong>後日 follow で診断確定</strong>することもある</li>
+            <li>小児外傷で「画像陰性」だからといって帰すのは危険。<strong>圧痛があれば Type I として固定 ＋ 整形外科紹介</strong></li>
           </ul>
         </div>
       </details>
 
-      <!-- §1 解剖 -->
-      <section class="section-page" id="s1" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🦴 解剖</h2>
-        <ul>
-          <li>小児の骨端と骨幹の間に <strong>骨端線（成長軟骨板）</strong> がある</li>
-          <li><strong>靱帯 &gt; 骨端線の強度</strong> → 外力は靱帯を避けて骨端線に集中</li>
-          <li>骨端線の損傷 → <strong>成長障害（短縮・変形）</strong></li>
-        </ul>
-      </section>
+      <!-- 治療方針 -->
+      <details class="dx-box" id="plan">
+        <summary><span>治療方針（転位 ＋ 関節内で手術判断）</span></summary>
+        <div class="dx-box__body">
+          <h3>転位の有無で disposition を決める</h3>
+          <ul>
+            <li><strong>転位が小さい</strong> → 帰宅保存（外固定 ＋ 三角巾）→ 後日整形外科外来</li>
+            <li><strong>転位 2 mm 以上 or 関節内</strong> → 即時整形（手術検討）</li>
+            <li>迷ったら<strong>オーバートリアージ</strong>。子どもの怪我は日中受診が多く相談しやすい</li>
+          </ul>
 
-      <!-- §2 Salter-Harris 分類 -->
-      <section class="section-page" id="s2" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>📊 Salter-Harris 分類</h2>
-        <div class="table-wrap"><table><thead><tr><th>Type</th><th>骨折線</th><th>頻度</th><th>成長障害リスク</th></tr></thead><tbody><tr><td><strong>I</strong></td><td>骨端線のみを通る（骨折なし、水平剥離）</td><td>6%</td><td><strong>低</strong></td></tr><tr><td><strong>II</strong></td><td>骨端線 + 骨幹端</td><td><strong>75%</strong>（最多）</td><td>低</td></tr><tr><td><strong>III</strong></td><td>骨端線 + 骨端（関節内）</td><td>8%</td><td>中</td></tr><tr><td><strong>IV</strong></td><td>骨幹端 + 骨端線 + 骨端</td><td>10%</td><td><strong>高</strong></td></tr><tr><td><strong>V</strong></td><td>骨端線の圧挫</td><td>1%</td><td><strong>最高</strong>（レントゲンで見えにくい）</td></tr></tbody></table></div>
-        <div class="callout callout-tip">
-          <div class="callout-title">覚え方（SALTR）</div>
-          <div class="callout-body"><ul>
-            <li><strong>S</strong>lipped（Type I）：骨端線で滑る</li>
-            <li><strong>A</strong>bove（Type II）：骨端線の上（骨幹端）</li>
-            <li><strong>L</strong>ower（Type III）：骨端線の下（骨端）</li>
-            <li><strong>T</strong>hrough（Type IV）：骨幹端 + 骨端線 + 骨端を貫く</li>
-            <li><strong>R</strong>ammed（Type V）：圧挫（ram = 突き刺す）</li>
-          </ul></div>
+          <h3>Type 別の治療</h3>
+          <div class="table-wrap"><table>
+            <thead><tr><th>Type</th><th>治療</th></tr></thead>
+            <tbody>
+              <tr><td>I</td><td>シーネ固定 3–6 週、転位あれば整復</td></tr>
+              <tr><td>II</td><td>シーネ固定（橈骨遠位端は転位 15° 以内なら整復不要、15° 以上で整復）。基節骨基部骨折は 25° 以上 or 1.5 mm 以上の離開で手術検討</td></tr>
+              <tr><td>III</td><td><strong>関節内のため手術が多い</strong>（Tillaux 骨折は日中：即時整形／夜間：帰宅手術）</td></tr>
+              <tr><td>IV</td><td><strong>手術</strong>（上腕骨外顆骨折は典型例。<strong>転位 2 mm 以上で手術適応</strong>）</td></tr>
+              <tr><td>V</td><td>早期診断困難、手術適応は専門医判断</td></tr>
+            </tbody>
+          </table></div>
+
+          <h3>長期 follow（必須）</h3>
+          <ul>
+            <li>成長障害評価のため<strong>全例整形外科紹介</strong>、<strong>6–12 か月の定期観察</strong></li>
+            <li>合併症：成長障害（短縮・変形）／関節不整合（III–IV）／早期骨端線閉鎖（V）／外傷性関節症</li>
+          </ul>
+
+          <h3>帰宅時の鎮痛薬</h3>
+          <ul>
+            <li><strong>イブプロフェン 10 mg/kg/day を 3 分割投与</strong>（最大 600 mg/day）が小児骨折の第一選択（アセトアミノフェンと差はないが副作用が少なく満足度高い）</li>
+          </ul>
+
+          <h3>非整形外科医の役割（やりがちなミスを避ける）</h3>
+          <ol>
+            <li>小児外傷は<strong>年齢別の頻度</strong>から鑑別を挙げる（小学校高学年〜中学 1 年の足関節外傷では<strong>靭帯損傷より骨端線骨折を疑う</strong>）</li>
+            <li><strong>骨折線イメージ</strong>を持って X 線を読む</li>
+            <li><strong>健側比較撮影</strong>を必ず行う</li>
+            <li>画像陰性でも<strong>圧痛あれば Type I として固定 ＋ 整形外科紹介</strong></li>
+            <li>小児に<strong>きついギプスは禁</strong>（Volkmann 拘縮）。手関節は sugar tong splint を選択</li>
+            <li>全例で<strong>長期 follow（6–12 か月）</strong>を依頼</li>
+          </ol>
+
+          <h3>親への説明</h3>
+          <ul>
+            <li>「骨端線は成長に大切な部分、骨折すると後で成長に影響することがあります」</li>
+            <li>「定期的なレントゲンでの確認が必要です」</li>
+          </ul>
         </div>
-      </section>
+      </details>
 
-      <!-- §3 受傷機転 -->
-      <section class="section-page" id="s3" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>⚡ 受傷機転</h2>
-        <ul>
-          <li>小児の運動中・転倒</li>
-          <li><strong>成長期の運動負荷</strong>（野球肘、ジャンパー膝など）</li>
-        </ul>
-      </section>
+      <!-- コンサル文 -->
+      <details class="dx-box" id="consult">
+        <summary><span>コンサル文（カルテに貼る）</span></summary>
+        <div class="dx-box__body">
+          <p class="dx-template__hint">『他科コンサルト実践マニュアル』の院内紹介状フォーマットに準拠。コンサルト時の病名は<strong>「○○骨折（Salter-Harris Type ○）」</strong>と表現する（Jakob 等の他分類はあえて触れない）。</p>
+          <div class="dx-template">【目的】[手術検討／後日外来 follow 相談]目的にご加療依頼。
+【疾患】#1 [部位]骨折（<strong>Salter-Harris Type ○</strong>）
+【既往歴】[特記事項なし／○○]
+【内服薬】[なし／○○]
+【ADL（受傷前）】[年齢相応の活動／○○]
+【現病歴】[年齢]歳[男/女]児。[受傷機転：FOOSH／足関節捻り／MP 関節の撓屈尺屈＋回旋／遊具事故]で受傷し、[来院経緯]で来院。
+ ・身体所見：[部位]骨端線直上の限局圧痛、腫脹 [軽度／中等度／高度]、変形 [なし／若木骨折様の片側変形あり]
+ ・血管：橈骨／足背動脈 [良好／弱]、CRT [○ 秒]
+ ・神経：[正中／前骨間／尺骨／腓骨] [問題なし／麻痺]
+ ・画像：Xp 患部 2 方向 ＋ <strong>健側比較撮影</strong>済。<strong>骨折線イメージ</strong>から Salter-Harris Type ○ と判断、転位 [○ mm／なし]、関節内進展 [あり／なし]
+ ・anterior humeral line / radiocapitellar line：[正常／逸脱]（肘の場合）
+ ・ER 処置：シーネ固定（きついギプスは回避）、三角巾、イブプロフェン 10 mg/kg/day 3 分割で帰宅時鎮痛 [予定／不要]
+ ・disposition：[転位小さく帰宅保存／転位 2 mm 以上 or 関節内のため即時整形依頼]
+ ・成長障害評価のため<strong>6–12 か月の長期 follow</strong>をお願いいたします。
+よろしくお願いいたします。</div>
+        </div>
+      </details>
 
-      <!-- §4 身体所見 -->
-      <section class="section-page" id="s4" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🩺 身体所見</h2>
-        <ul>
-          <li>骨端線の直上に <strong>限局した圧痛</strong></li>
-          <li>腫脹・変形は骨折の程度による</li>
-          <li><strong>Type I はレントゲンで見えない</strong> → <strong>圧痛 + 年齢</strong>で診断</li>
-        </ul>
-      </section>
+      <!-- 関連ハブ -->
+      <details class="dx-box">
+        <summary><span>関連ハブ・隣接疾患</span></summary>
+        <div class="dx-box__body">
+          <ul>
+            <li>主訴入口：<a class="wiki-link" href="../転倒.html">転倒</a></li>
+            <li>隣接疾患：<a class="wiki-link" href="上腕骨顆上骨折.html">上腕骨顆上骨折</a> ／ <a class="wiki-link" href="肘内障.html">肘内障</a> ／ <a class="wiki-link" href="コンパートメント症候群.html">コンパートメント症候群</a></li>
+            <li>合併症経路：きついギプス → コンパートメント症候群（Volkmann 拘縮）</li>
+            <li>長期 follow：成長障害評価のため <strong>6–12 か月</strong>整形外来</li>
+          </ul>
+        </div>
+      </details>
 
-      <!-- §5 画像 -->
-      <section class="section-page" id="s5" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🔬 画像</h2>
-        <h3>レントゲン</h3>
-        <ul>
-          <li>患部 2 方向 + 健側の比較撮影</li>
-          <li><strong>Type I</strong>：骨折線見えない、骨端の transposition or 健側との比較で判断</li>
-          <li><strong>Type V</strong>：圧挫像、骨端線が狭小化</li>
-        </ul>
-        <h3>MRI / CT</h3>
-        <ul>
-          <li>確定困難例、手術計画で使用</li>
-        </ul>
-      </section>
-
-      <!-- §6 マネジメント -->
-      <section class="section-page" id="s6" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🏥 マネジメント</h2>
-        <h3>全例で整形外科紹介</h3>
-        <ul>
-          <li>成長障害評価のため <strong>長期 follow 必須</strong>（受傷後 6–12 ヶ月は定期観察）</li>
-        </ul>
-        <h3>治療</h3>
-        <div class="table-wrap"><table><thead><tr><th>Type</th><th>治療</th></tr></thead><tbody><tr><td>I</td><td>シーネ固定 3–6 週、転位あれば整復</td></tr><tr><td>II</td><td>シーネ固定、転位あれば整復（関節内は慎重）</td></tr><tr><td>III</td><td><strong>手術が多い</strong>（関節内のため解剖学的整復必要）</td></tr><tr><td>IV</td><td><strong>手術</strong>（骨幹端 + 骨端線 + 骨端を解剖学的に整復）</td></tr><tr><td>V</td><td>早期診断困難、手術適応は慎重</td></tr></tbody></table></div>
-      </section>
-
-      <!-- §7 非整形外科医の役割 -->
-      <section class="section-page" id="s7" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>👨‍⚕️ 非整形外科医の役割</h2>
-        <ol>
-          <li><strong>小児の外傷は骨端線骨折を常に疑う</strong></li>
-          <li><strong>両側撮影</strong>（健側との比較）</li>
-          <li>画像陰性でも <strong>圧痛あれば Type I として固定</strong></li>
-          <li>全例 <strong>整形外科外来紹介</strong>、成長障害の長期評価を</li>
-        </ol>
-      </section>
-
-      <!-- §8 合併症 -->
-      <section class="section-page" id="s8" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>⚠️ 合併症</h2>
-        <ul>
-          <li><strong>成長障害</strong>（短縮・変形）</li>
-          <li><strong>関節不整合</strong>（Type III–IV）</li>
-          <li><strong>早期骨端線閉鎖</strong>（Type V）</li>
-          <li><strong>外傷性関節症</strong>（関節内骨折）</li>
-        </ul>
-      </section>
-
-      <!-- §9 親への説明 -->
-      <section class="section-page" id="s9" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>💬 親への説明</h2>
-        <ul>
-          <li>「骨端線は成長に大切な部分、骨折すると後で成長に影響することがあります」</li>
-          <li>「定期的なレントゲンでの確認が必要です」</li>
-          <li><strong>長期 follow の重要性</strong>を強調</li>
-        </ul>
-        <h3>関連</h3>
-        <ul>
-          <li><a class="wiki-link" href="../転倒.html">転倒</a> / <a class="wiki-link" href="上腕骨顆上骨折.html">上腕骨顆上骨折</a> / <a class="wiki-link" href="肘内障.html">肘内障</a></li>
-        </ul>
-        <h3>出典</h3>
-        <ul>
-          <li><strong>増井伸高. 骨折ハンター. 中外医学社. 2019.</strong></li>
-          <li><strong>Salter RB, Harris WR.</strong> Injuries involving the epiphyseal plate. <em>J Bone Joint Surg Am.</em> 1963.</li>
-          <li><strong>Mizuta T ほか.</strong> Statistical analysis of the incidence of physeal injuries. <em>J Pediatr Orthop.</em> 1987.</li>
-        </ul>
-      </section>
+      <!-- 出典 -->
+      <details class="dx-box">
+        <summary><span>出典</span></summary>
+        <div class="dx-box__body">
+          <ul>
+            <li>増井伸高. 骨折ハンター. 中外医学社. 2019（第 10 章：小児・肘関節痛ハンター③／第 14 章：小児・骨折ハンター／第 19 章：足関節痛ハンター② — Tillaux 骨折）</li>
+            <li>Salter RB, Harris WR. Injuries involving the epiphyseal plate. <em>J Bone Joint Surg Am.</em> 1963;45:587–622.</li>
+            <li>Drendel AL ほか. A randomized clinical trial of ibuprofen versus acetaminophen with codeine for acute pediatric arm fracture pain. <em>Ann Emerg Med.</em> 2009.</li>
+          </ul>
+        </div>
+      </details>
 
     </article>
   </main>
@@ -197,53 +437,22 @@
 
   <script>
   (function(){
-    const menu = document.getElementById('sectionMenu');
-    const pages = document.querySelectorAll('.section-page');
-    const titleH1 = document.querySelector('.page-title');
-    const relatedSymp = document.getElementById('related-symptoms');
-
-    function showSection(id) {
-      menu.hidden = true;
-      if (titleH1) titleH1.hidden = true;
-      if (relatedSymp) relatedSymp.hidden = true;
-      pages.forEach(p => p.hidden = (p.id !== id));
-      window.scrollTo(0, 0);
-    }
-    function showMenu(scrollTarget) {
-      menu.hidden = false;
-      if (titleH1) titleH1.hidden = false;
-      if (relatedSymp) relatedSymp.hidden = false;
-      pages.forEach(p => p.hidden = true);
-      if (scrollTarget) {
-        if (scrollTarget.tagName === 'DETAILS') scrollTarget.open = true;
-        scrollTarget.scrollIntoView({behavior: 'instant', block: 'start'});
-      } else {
-        window.scrollTo(0, 0);
-      }
-    }
-    function syncFromHash() {
-      const id = (location.hash || '').replace('#','');
-      const target = id ? document.getElementById(id) : null;
-      if (target && target.classList.contains('section-page')) {
-        showSection(id);
-      } else if (target) {
-        showMenu(target);
-      } else {
-        showMenu();
-      }
-    }
-
-    window.addEventListener('hashchange', syncFromHash);
-    document.querySelectorAll('.back-to-menu').forEach(b => {
-      b.addEventListener('click', () => { history.pushState(null,'',location.pathname); showMenu(); });
+    // クイックタップで対応 details を開いてスクロール
+    document.querySelectorAll('.dx-quick__btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.dataset.target;
+        const target = document.getElementById(id);
+        if (!target) return;
+        target.open = true;
+        target.scrollIntoView({behavior: 'smooth', block: 'start'});
+      });
     });
+
     const navBack = document.getElementById('navBack');
     if (navBack) navBack.addEventListener('click', () => {
       if (window.history.length > 1) history.back();
       else window.location.href = '../index.html';
     });
-
-    syncFromHash();
   })();
   </script>
 </body>
