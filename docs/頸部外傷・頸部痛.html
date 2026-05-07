@@ -25,138 +25,321 @@
       <div class="action-header">
         <div class="action-header__title">⚡ 即時アクション</div>
         <ol class="action-header__list">
-          <li><strong>頸椎固定を継続</strong>（カラー / 用手 inline 固定）— <strong>NEXUS / Canadian C-spine</strong> で除外可なら解除</li>
-          <li><strong>気道・呼吸</strong>を最優先 — <strong>C5 以上で麻痺リスク</strong>、横隔膜麻痺＝呼吸停止を念頭</li>
-          <li><strong>CT 適応</strong>：Canadian C-spine（高リスク要素 / 危険な受傷機転）+ 高エネルギー外傷で閾値を下げる</li>
-          <li><strong>椎骨動脈損傷</strong>を念頭 — 神経所見・大血管損傷リスク・回旋外傷で <strong>CTA</strong> を検討</li>
+          <li><strong>頸椎固定を継続</strong>（カラー / 用手 in-line 固定）— <strong>NEXUS / Canadian C-spine</strong> で除外できなければ解除しない</li>
+          <li><strong>気道・呼吸を最優先</strong> — <strong>C3–5 横隔神経</strong>＝呼吸停止リスク。低換気・腹式呼吸消失に注意</li>
+          <li><strong>外傷あり vs 外傷なし</strong>で大きく分岐。非外傷の致死的頸部痛（髄膜炎・SAH・椎骨動脈解離）も常に頭に置く</li>
+          <li><strong>椎骨動脈損傷</strong>を念頭 — 高エネルギー・回旋外傷・頸椎横突孔骨折で <strong>CTA</strong> を検討</li>
         </ol>
       </div>
 
       <!-- §タイル -->
       <nav class="section-tiles" id="sectionMenu">
-        <a class="section-tile" href="#s1"><span class="section-tile__no">🚨</span><span class="section-tile__name">Red flags<br><small>致死・後遺症</small></span></a>
-        <a class="section-tile" href="#s2"><span class="section-tile__no">🛡</span><span class="section-tile__name">頸椎固定<br><small>NEXUS / Canadian</small></span></a>
-        <a class="section-tile" href="#s3"><span class="section-tile__no">🩺</span><span class="section-tile__name">診察と評価</span></a>
-        <a class="section-tile" href="#s4"><span class="section-tile__no">🔬</span><span class="section-tile__name">画像の置き方<br><small>Xp / CT / MRI / CTA</small></span></a>
-        <a class="section-tile" href="#s5"><span class="section-tile__no">🧠</span><span class="section-tile__name">主要鑑別</span></a>
+        <a class="section-tile" href="#s1"><span class="section-tile__no">🚨</span><span class="section-tile__name">Red flags<br><small>命・赤旗</small></span></a>
+        <a class="section-tile" href="#s2"><span class="section-tile__no">🧭</span><span class="section-tile__name">鑑別の枠組み<br><small>外傷あり / なし</small></span></a>
+        <a class="section-tile" href="#s3"><span class="section-tile__no">🦴</span><span class="section-tile__name">主要病態詳細</span></a>
+        <a class="section-tile" href="#s4"><span class="section-tile__no">🩺</span><span class="section-tile__name">身体所見・画像<br><small>NEXUS / CCSR</small></span></a>
+        <a class="section-tile" href="#s5"><span class="section-tile__no">💊</span><span class="section-tile__name">マネジメント</span></a>
         <a class="section-tile" href="#s6"><span class="section-tile__no">📤</span><span class="section-tile__name">disposition</span></a>
-        <a class="section-tile" href="#s7"><span class="section-tile__no">⚠️</span><span class="section-tile__name">ピットフォール</span></a>
-        <a class="section-tile" href="#s8"><span class="section-tile__no">📚</span><span class="section-tile__name">出典・リンク</span></a>
+        <a class="section-tile" href="#s7"><span class="section-tile__no">📝</span><span class="section-tile__name">カルテテンプレ</span></a>
+        <a class="section-tile" href="#s8"><span class="section-tile__no">⚠️</span><span class="section-tile__name">見落とし・ミス</span></a>
+        <a class="section-tile" href="#s9"><span class="section-tile__no">📚</span><span class="section-tile__name">出典・関連</span></a>
       </nav>
 
       <!-- §1 Red flags -->
       <section class="section-page" id="s1" hidden>
         <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🚨 Red flags（致死・後遺症を外す）</h2>
-
-        <h3>これがあれば頸椎固定を緩めない</h3>
-        <ul>
-          <li><strong>四肢麻痺・感覚低下</strong>（不全麻痺含む）</li>
-          <li><strong>頸部正中圧痛</strong></li>
-          <li><strong>意識障害を伴う外傷</strong>（評価困難 → 固定継続）</li>
-          <li><strong>高エネルギー外傷</strong>（高所転落・歩行者と車・車外放出）</li>
-          <li><strong>高齢者の軽微外傷</strong>でも中心性頸髄損傷を起こしうる</li>
-          <li><strong>抗凝固薬</strong>内服</li>
-          <li>頸部・後頭部痛 + 神経所見 → <strong>椎骨動脈損傷</strong>を疑う</li>
-        </ul>
+        <h2>🚨 Red flags（命と後遺症を外す）</h2>
 
         <div class="callout callout-danger">
-          <div class="callout-title">危険所見あり</div>
+          <div class="callout-title">これがあれば固定を緩めない・即時介入</div>
           <div class="callout-body">
-            <p>頸椎保護を継続し、<strong>整形外科 / 脊椎外科</strong>へ早期コンサルト。気道管理は in-line stabilization で。</p>
             <ul>
-              <li><span class="wiki-missing">頸髄損傷</span>（中心性頸髄損傷を含む）</li>
-              <li><a class="wiki-link" href="疾患詳細/頸椎損傷.html">頸椎損傷</a>（骨傷）</li>
-              <li><span class="wiki-missing">椎骨動脈損傷</span>（外傷性解離）</li>
+              <li><strong>呼吸不全・腹式呼吸消失</strong> — C3–5 横隔神経。SpO2 低下・低換気は <strong>高位頸髄損傷</strong>を示唆</li>
+              <li><strong>四肢麻痺・対麻痺・感覚レベル</strong>（不全麻痺含む）</li>
+              <li><strong>神経原性ショック</strong>（高位頸髄）— 徐脈 + 低血圧 + 末梢温暖</li>
+              <li><strong>頸部正中圧痛</strong>・新規の頸部変形</li>
+              <li><strong>意識障害・酩酊</strong>を伴う頸部外傷（評価困難 → 固定継続）</li>
+              <li><strong>高エネルギー外傷</strong>（高所転落・高速衝突・歩行者と車・車外放出）</li>
+              <li><strong>高齢者の軽微外傷</strong>でも中心性頸髄損傷を起こしうる（過伸展機転）</li>
+              <li><strong>抗凝固薬</strong>内服例 — 微小外傷でも頸部血腫・硬膜外血腫</li>
+              <li><strong>後頸部の打撲機転</strong>＋神経所見・めまい → <strong>椎骨動脈損傷</strong></li>
+              <li><strong>皮下気腫・嗄声・嚥下時痛・吐血</strong> — 喉頭・気管・食道損傷</li>
             </ul>
           </div>
         </div>
+
+        <h3>非外傷でも忘れない致死的頸部痛</h3>
+        <div class="callout callout-danger">
+          <div class="callout-title">「ただの寝違え・凝り」と片付けない</div>
+          <div class="callout-body">
+            <ul>
+              <li><strong>髄膜炎</strong> — 発熱 + 項部硬直 + 意識変容。Kernig / Brudzinski</li>
+              <li><strong>くも膜下出血</strong> — 突発の頭頸部痛、emesis、意識消失先行</li>
+              <li><strong>椎骨動脈解離</strong> — 後頭部〜後頸部痛、回旋誘発、めまい・後方循環梗塞</li>
+              <li><strong>咽後膿瘍・頸部蜂窩織炎</strong> — 嚥下時痛、開口障害、発熱</li>
+              <li><strong>頸動脈解離</strong> — 一側性頸部痛、Horner、片麻痺</li>
+              <li><strong>頸髄硬膜外膿瘍</strong> — 発熱 + 進行性の四肢麻痺、糖尿病・透析・薬物使用歴</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="callout callout-warning">
+          <div class="callout-title">気道介入は in-line stabilization が原則</div>
+          <div class="callout-body">
+            <p>頸椎損傷疑いでの挿管は<strong>用手 in-line</strong>で行う。過度の頸部進展を避ける。ビデオ喉頭鏡が有用。輪状軟骨圧迫は喉頭損傷例では避ける。</p>
+          </div>
+        </div>
+
+        <h3>並行して外す</h3>
+        <ul>
+          <li>頭部の合併損傷 → <a class="wiki-link" href="頭部外傷評価.html">頭部外傷評価</a></li>
+          <li>失神先行の転倒 → <a class="wiki-link" href="意識消失.html">意識消失</a></li>
+          <li>意識障害下で評価困難 → <a class="wiki-link" href="意識障害.html">意識障害</a></li>
+        </ul>
       </section>
 
-      <!-- §2 頸椎固定 -->
+      <!-- §2 鑑別の枠組み -->
       <section class="section-page" id="s2" hidden>
         <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🛡 頸椎固定の判断（NEXUS / Canadian C-spine）</h2>
+        <h2>🧭 鑑別の枠組み</h2>
 
-        <p>「外して良いか」を意識的に判断する。固定は<strong>除外できれば解除</strong>。漫然と続けない。</p>
+        <p>まず<strong>外傷の有無</strong>で大きく二分する。非外傷の致死的鑑別を逃さないことが第一歩。</p>
 
-        <details class="sub-fold">
-          <summary>NEXUS 基準（5 つすべて陰性で固定解除可）</summary>
-          <div class="sub-fold__body">
-            <ul>
-              <li><strong>後頸部正中圧痛なし</strong></li>
-              <li><strong>中毒なし</strong>（アルコール・薬物）</li>
-              <li><strong>意識清明</strong>（GCS 15、見当識保持）</li>
-              <li><strong>局所神経所見なし</strong></li>
-              <li><strong>気が逸れる損傷なし</strong>（distracting injury）</li>
-            </ul>
-            <p>すべて陰性なら<strong>画像不要</strong>として固定解除を検討。</p>
-          </div>
-        </details>
-
-        <details class="sub-fold">
-          <summary>Canadian C-spine Rule</summary>
-          <div class="sub-fold__body">
-            <p>意識清明で安定した外傷成人に適用。</p>
-            <ul>
-              <li><strong>高リスク要素</strong>（1 つでもあれば画像）：65 歳以上、危険な受傷機転（高所転落・車外放出・高速衝突）、四肢のしびれ</li>
-              <li><strong>低リスク要素</strong>（1 つもなければ可動域評価へ）：単純追突、座位で評価可、歩行可、遅発性発症、正中圧痛なし</li>
-              <li><strong>能動的に左右 45° 回旋可</strong> → 画像不要で固定解除可</li>
-            </ul>
-          </div>
-        </details>
-
-        <div class="callout callout-warning">
-          <div class="callout-title">適用が外れる場面に注意</div>
-          <div class="callout-body">
-            <p>意識障害・中毒・高エネルギー外傷・神経所見ありのときは <strong>NEXUS / Canadian の適用外</strong>。固定継続のうえ画像で評価する。</p>
-          </div>
+        <h3>外傷あり</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>カテゴリ</th><th>典型像</th><th>主な病態</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><strong>高エネルギー</strong></td>
+                <td>高所転落、高速衝突、車外放出、歩行者と車、ダイブ</td>
+                <td>頸椎骨折・脱臼、頸髄損傷、椎骨動脈損傷、Pilon 様軸圧、多発外傷</td>
+              </tr>
+              <tr>
+                <td><strong>低エネルギー（成人）</strong></td>
+                <td>追突、軽微転倒、スポーツ</td>
+                <td>外傷性頸部症候群（むち打ち）、Quebec Grade I–II、軟部組織損傷</td>
+              </tr>
+              <tr>
+                <td><strong>高齢者の軽微外傷</strong></td>
+                <td>転倒で顔から打撲、過伸展、脳挫傷併発</td>
+                <td><strong>中心性頸髄損傷</strong>、歯突起骨折（Type II が多い）、後弓骨折</td>
+              </tr>
+              <tr>
+                <td><strong>小児</strong></td>
+                <td>スポーツ、ダイブ、自動車事故</td>
+                <td><strong>SCIWORA</strong>（X 線・CT 陰性で脊髄症状）、上位頸椎が損傷を受けやすい</td>
+              </tr>
+              <tr>
+                <td><strong>絞扼・縊頸</strong></td>
+                <td>首吊り、絞殺、シートベルト損傷</td>
+                <td>気道狭窄、頸動脈損傷、低酸素脳症、舌骨骨折</td>
+              </tr>
+              <tr>
+                <td><strong>穿通性</strong></td>
+                <td>刺創、銃創</td>
+                <td>気管・食道・血管損傷（zone I–III）、即時手術 / 血管外科</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
-      </section>
 
-      <!-- §3 診察と評価 -->
-      <section class="section-page" id="s3" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🩺 診察と評価</h2>
-
-        <h3>その場で行う最小セット</h3>
-        <ul>
-          <li><strong>受傷機転の確認</strong>（高エネルギー / 軽微 / 失神先行）</li>
-          <li><strong>頸椎固定継続のまま</strong>視診・触診（後頸部正中圧痛、変形、皮下気腫）</li>
-          <li><strong>神経学的評価</strong>：四肢の運動・感覚・腱反射、肛門括約筋反射、Babinski</li>
-          <li><strong>気道・呼吸</strong>：呼吸パターン、横隔膜運動、SpO2</li>
-          <li><strong>四肢の左右差</strong>（中心性頸髄損傷では<strong>上肢 &gt; 下肢</strong>の不全麻痺）</li>
-          <li><strong>頸部前面・側面・後頭部の損傷</strong>（喉頭・気管・大血管・甲状腺）</li>
-        </ul>
+        <h3>外傷なし</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>分類</th><th>手がかり</th><th>進む先</th></tr></thead>
+            <tbody>
+              <tr><td><strong>致死的</strong></td><td>髄膜炎、SAH、椎骨動脈解離、咽後膿瘍、硬膜外膿瘍、頸動脈解離</td><td>S1 を再確認</td></tr>
+              <tr><td><strong>炎症・感染</strong></td><td>頸部リンパ節炎、化膿性筋炎、副咽頭間隙感染、亜急性甲状腺炎</td><td>耳鼻科 / 内科</td></tr>
+              <tr><td><strong>変性疾患</strong></td><td>頸椎症、頸椎症性脊髄症、頸椎症性神経根症</td><td>整形外科外来</td></tr>
+              <tr><td><strong>機能性・筋骨格</strong></td><td>寝違え（急性筋筋膜性頸部痛）、緊張型頭痛の関連痛、姿勢性</td><td>外来フォロー</td></tr>
+              <tr><td><strong>関連痛</strong></td><td>急性冠症候群（顎・頸部放散）、横隔膜刺激、肺尖部腫瘍</td><td>内科 / 心臓血管系</td></tr>
+              <tr><td><strong>遷延するむち打ち</strong></td><td>受傷数週後の慢性疼痛、心理社会的因子</td><td>整形・ペインクリニック</td></tr>
+            </tbody>
+          </table>
+        </div>
 
         <div class="callout callout-tip">
-          <div class="callout-title">中心性頸髄損傷の早期サイン</div>
+          <div class="callout-title">「外傷なし」と決めつけない</div>
           <div class="callout-body">
-            <p>高齢者の軽微外傷（特に過伸展）で、<strong>上肢優位の不全麻痺・手指の巧緻運動低下・尿閉</strong>を見たら疑う。CT では骨傷なく見える → MRI へ。</p>
-          </div>
-        </div>
-
-        <div class="callout callout-warning">
-          <div class="callout-title">気道管理時の注意</div>
-          <div class="callout-body">
-            <p>頸椎損傷疑いでの挿管は <strong>用手 in-line stabilization</strong> で行う。輪状軟骨圧迫・過度の頸部進展は避ける。ビデオ喉頭鏡が有用。</p>
+            <p>高齢者・酩酊・認知症では受傷歴が拾えないことがある。<strong>頸部正中圧痛</strong>と<strong>神経所見</strong>を必ず取り、機転不明でも疑いがあれば画像へ進む。</p>
           </div>
         </div>
       </section>
 
-      <!-- §4 画像の置き方 -->
+      <!-- §3 主要病態詳細 -->
+      <section class="section-page" id="s3" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🦴 主要病態詳細</h2>
+
+        <h3>上位頸椎（C1–2）の骨折</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>病態</th><th>機転</th><th>特徴・注意</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Jefferson 骨折</strong>（C1 破裂骨折）</td><td>軸圧（ダイブ・物が頭上から）</td><td>C1 前後弓の破裂。横靱帯断裂で<strong>不安定型</strong>。Open mouth 像で側方転位</td></tr>
+              <tr><td><strong>歯突起骨折</strong>（C2）</td><td>過屈曲・過伸展。高齢者の軽微外傷</td><td>Type II（基部）が最多で偽関節になりやすい。高齢者で見落としやすい</td></tr>
+              <tr><td><strong>Hangman 骨折</strong>（C2 椎弓根）</td><td>過伸展 + 軸圧（自動車事故）</td><td>両側 pars 骨折。多くは神経学的に保たれるが不安定</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>下位頸椎（C3–7）の損傷</h3>
+        <ul>
+          <li><strong>圧迫骨折</strong>：屈曲 + 軸圧。前方楔状変形。比較的安定だが破裂で後方転位なら不安定</li>
+          <li><strong>破裂骨折</strong>：軸圧。後方の骨片が脊柱管に侵入 → 脊髄損傷</li>
+          <li><strong>屈曲涙滴骨折</strong>：屈曲 + 圧迫。前方下端の三角骨片。脊髄損傷の合併が多い</li>
+          <li><strong>伸展涙滴骨折</strong>：過伸展。前縦靱帯付着部の小骨片。比較的良好</li>
+          <li><strong>両側 facet 脱臼</strong>：屈曲 - 牽引。50% 以上の前方転位、強い不安定性、脊髄損傷高率</li>
+          <li><strong>片側 facet 脱臼</strong>：屈曲 + 回旋。25% の前方転位、神経根症状</li>
+        </ul>
+
+        <h3>頸髄損傷</h3>
+        <div class="callout callout-check">
+          <div class="callout-title">完全 vs 不完全（ASIA 分類）</div>
+          <div class="callout-body">
+            <ul>
+              <li><strong>ASIA A 完全</strong>：S4–5 を含めた感覚・運動全消失</li>
+              <li><strong>ASIA B</strong>：感覚は保たれ運動消失</li>
+              <li><strong>ASIA C/D</strong>：運動が部分的に保たれる（C：主要筋群の半数以上が grade &lt; 3、D：grade ≥ 3）</li>
+              <li><strong>ASIA E</strong>：正常</li>
+            </ul>
+            <p>初期は<strong>脊髄ショック</strong>でフラットになっている可能性。球海綿体反射の有無で区別を試みる（24–48 h で回復）。</p>
+          </div>
+        </div>
+
+        <h3>不完全頸髄損傷の症候群</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>症候群</th><th>典型像</th><th>機転</th></tr></thead>
+            <tbody>
+              <tr><td><strong>中心性頸髄損傷</strong></td><td><strong>上肢 &gt; 下肢</strong>の運動麻痺、手指の巧緻運動低下、温痛覚障害が斑状</td><td>高齢の過伸展（顔面から転倒）。CT で骨傷なし → MRI</td></tr>
+              <tr><td><strong>前脊髄症候群</strong></td><td>運動完全麻痺 + 温痛覚消失、振動・位置覚保たれる</td><td>軸圧、前脊髄動脈虚血</td></tr>
+              <tr><td><strong>Brown–Séquard</strong></td><td>同側運動・深部感覚消失、対側温痛覚消失</td><td>穿通性。一側髄損傷</td></tr>
+              <tr><td><strong>後脊髄症候群</strong></td><td>後索の振動・位置覚障害、運動保たれる</td><td>稀。過伸展で後方圧迫</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>外傷性頸部症候群（むち打ち / Quebec 分類）</h3>
+        <div class="callout callout-tip">
+          <div class="callout-title">Quebec Task Force 分類</div>
+          <div class="callout-body">
+            <ul>
+              <li><strong>Grade 0</strong>：症状なし、所見なし</li>
+              <li><strong>Grade I</strong>：頸部痛・凝りのみ、他覚所見なし</li>
+              <li><strong>Grade II</strong>：頸部症状 + 筋骨格所見（圧痛・可動域制限）</li>
+              <li><strong>Grade III</strong>：頸部症状 + 神経学的所見（反射低下・筋力低下・感覚障害）</li>
+              <li><strong>Grade IV</strong>：頸部症状 + 骨折・脱臼</li>
+            </ul>
+            <p>I–II の大半は数週で軽快。II 以下は早期の頸部運動・通常活動再開が予後良好。</p>
+          </div>
+        </div>
+
+        <h3>椎骨動脈損傷（BCVI）</h3>
+        <div class="callout callout-warning">
+          <div class="callout-title">Modified Denver / Memphis screening</div>
+          <div class="callout-body">
+            <p>以下のいずれかで <strong>頸部 CTA</strong> を考慮。</p>
+            <ul>
+              <li>後頭部・後頸部の打撲、高エネルギー、回旋・過伸展機転</li>
+              <li>頸椎骨折、特に <strong>横突孔骨折</strong>・C1–3 損傷・facet 脱臼</li>
+              <li>Le Fort II/III 顔面骨折、頭蓋底骨折（特に岩錐部・斜台）</li>
+              <li>GCS &lt; 8 の頭部外傷で原因不明</li>
+              <li>頸部血管雑音、Horner 症候群、頸部血腫</li>
+              <li>所見と画像が説明できない局所神経所見・後方循環症状</li>
+            </ul>
+            <p>遅発性脳梗塞のリスクが高く、診断がついたら抗血栓療法（抗血小板 or 抗凝固）を脳外科 / 血管外科と相談。</p>
+          </div>
+        </div>
+
+        <h3>その他</h3>
+        <ul>
+          <li><strong>頸椎症性脊髄症</strong>（CSM）— 緩徐な手指巧緻運動障害・歩行障害。<strong>Hoffmann 反射</strong>陽性、Babinski、痙性歩行</li>
+          <li><strong>頸椎症性神経根症</strong> — デルマトーム性の上肢痛・しびれ。Spurling テスト</li>
+          <li><strong>SCIWORA</strong>（小児）— 画像陰性で脊髄症状あり。MRI で脊髄信号変化を評価</li>
+          <li><strong>喉頭・気管損傷</strong> — 嗄声、皮下気腫、ハンドルマーク。CT + 耳鼻科</li>
+          <li><strong>食道損傷</strong> — 縦隔気腫、嚥下時痛、吐血。造影 / 内視鏡</li>
+        </ul>
+
+        <p>骨傷の全体像は <a class="wiki-link" href="疾患詳細/頸椎損傷.html">頸椎損傷</a> ページへ。</p>
+      </section>
+
+      <!-- §4 身体所見・画像 -->
       <section class="section-page" id="s4" hidden>
         <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🔬 画像の置き方</h2>
+        <h2>🩺 身体所見・画像</h2>
 
+        <h3>診察の最小セット（固定継続のまま）</h3>
+        <ul>
+          <li><strong>受傷機転</strong>（高エネ / 軽微 / 失神先行 / 機転不明）</li>
+          <li><strong>後頸部正中圧痛</strong>を一指で触知。広い圧痛＝筋筋膜性、棘突起の限局圧痛＝骨傷示唆</li>
+          <li><strong>視診・触診</strong>：変形、皮下気腫、頸部血腫、ハンドルマーク、絞扼痕</li>
+          <li><strong>四肢の運動・感覚・腱反射・Babinski</strong>、肛門周囲感覚と肛門括約筋緊張</li>
+          <li><strong>呼吸パターン</strong>：腹式呼吸消失・浅速呼吸・SpO2 低下は高位頸髄を示唆</li>
+          <li><strong>脈・血圧</strong>：徐脈 + 低血圧 + 末梢温暖 = 神経原性ショック</li>
+          <li><strong>頸部前面・側面・後頭部</strong>（喉頭・気管・大血管・甲状腺）</li>
+          <li><strong>巧緻運動</strong>：握力左右差、つまみ動作、Hoffmann 反射（CSM スクリーニング）</li>
+          <li><strong>項部硬直・Kernig</strong>（非外傷の致死的鑑別）</li>
+        </ul>
+
+        <h3>NEXUS 基準</h3>
+        <div class="callout callout-check">
+          <div class="callout-title">5 項目すべて陰性で画像不要・固定解除可</div>
+          <div class="callout-body">
+            <ul>
+              <li><strong>後頸部正中圧痛なし</strong></li>
+              <li><strong>中毒なし</strong>（アルコール・薬物・鎮静）</li>
+              <li><strong>意識清明</strong>（GCS 15、見当識保持）</li>
+              <li><strong>局所神経所見なし</strong></li>
+              <li><strong>気が逸れる損傷なし</strong>（distracting injury：長管骨骨折、腹部痛など）</li>
+            </ul>
+            <p>感度は高いが特異度は低い。陰性で画像省略・陽性なら CT へ。</p>
+          </div>
+        </div>
+
+        <h3>Canadian C-Spine Rule（CCSR）</h3>
+        <div class="callout callout-check">
+          <div class="callout-title">3 ステップで判定（GCS 15 の安定外傷成人）</div>
+          <div class="callout-body">
+            <p><strong>Step 1：高リスク要素</strong>（1 つでもあれば画像）</p>
+            <ul>
+              <li>65 歳以上</li>
+              <li>危険な受傷機転（高所転落 ≥ 1 m / 5 段、車外放出、転覆、自転車との衝突、高速衝突）</li>
+              <li>四肢のしびれ・刺すような痛み</li>
+            </ul>
+            <p><strong>Step 2：低リスク要素</strong>（少なくとも 1 つあれば Step 3 へ。なければ画像）</p>
+            <ul>
+              <li>単純追突</li>
+              <li>ER で座位を取れた</li>
+              <li>受傷後いつでも歩行可能</li>
+              <li>頸部痛が遅発性（受傷直後ではない）</li>
+              <li>後頸部正中圧痛なし</li>
+            </ul>
+            <p><strong>Step 3：能動回旋</strong></p>
+            <ul>
+              <li>左右 <strong>45°</strong> 自由に回せれば画像不要・固定解除可</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="callout callout-warning">
+          <div class="callout-title">適用が外れる場面</div>
+          <div class="callout-body">
+            <p>意識障害・中毒・神経所見あり・<strong>非外傷</strong>・小児・穿通性外傷・既存の脊椎疾患では <strong>NEXUS / CCSR の適用外</strong>。固定継続のうえ画像で評価する。</p>
+          </div>
+        </div>
+
+        <h3>画像の置き方</h3>
         <div class="table-wrap">
           <table>
             <thead><tr><th>モダリティ</th><th>得意</th><th>選ぶとき</th></tr></thead>
             <tbody>
-              <tr><td><strong>頸椎 Xp</strong>（3 方向）</td><td>明確な脱臼・骨折</td><td>軽微外傷で CT 不要なとき。<strong>感度低い</strong>ので除外には弱い</td></tr>
-              <tr><td><strong>頸椎 CT</strong></td><td>骨傷・脱臼・椎間板損傷の間接所見</td><td>第一選択。NEXUS / Canadian で陽性、高エネルギー外傷、意識障害例</td></tr>
-              <tr><td><strong>頸椎 MRI</strong></td><td>脊髄・椎間板・靱帯・硬膜外血腫</td><td>神経所見あり、CT 陰性でも症状が説明できないとき、<strong>中心性頸髄損傷</strong>疑い</td></tr>
-              <tr><td><strong>頸部 CTA</strong></td><td>椎骨動脈・頸動脈損傷</td><td>神経所見 + 大血管損傷リスク（高エネルギー、回旋外傷、頸椎横突孔骨折、Le Fort II/III、Horner 症候群）</td></tr>
+              <tr><td><strong>頸椎 Xp</strong>（3 方向）</td><td>明確な脱臼・大きな骨折</td><td>感度が低く除外には弱い。CT が使えない環境の暫定。日常的には推奨されない</td></tr>
+              <tr><td><strong>頸椎 CT</strong>（C0–T1）</td><td>骨傷・脱臼・椎間板損傷の間接所見</td><td><strong>第一選択</strong>。NEXUS / CCSR で陽性、高エネルギー、意識障害例。<strong>頭部 CT 撮るときは頸椎下端まで含める</strong></td></tr>
+              <tr><td><strong>頸椎 MRI</strong></td><td>脊髄・椎間板・靱帯・硬膜外血腫・SCIWORA</td><td>神経所見あり、CT 陰性でも症状が説明できないとき、中心性頸髄損傷疑い、SCIWORA 疑い、CSM 評価</td></tr>
+              <tr><td><strong>頸部 CTA</strong></td><td>椎骨動脈・頸動脈損傷</td><td>BCVI スクリーニング陽性、頸椎横突孔骨折、後頭部痛 + 神経所見</td></tr>
+              <tr><td><strong>頸部 CT 軟部</strong></td><td>喉頭・気管・食道・咽後間隙</td><td>皮下気腫、嗄声、嚥下時痛、絞扼、咽後膿瘍疑い</td></tr>
             </tbody>
           </table>
         </div>
@@ -164,26 +347,85 @@
         <div class="callout callout-warning">
           <div class="callout-title">CT 正常 = 頸髄損傷除外ではない</div>
           <div class="callout-body">
-            <p>SCIWORA / 中心性頸髄損傷・靱帯損傷・硬膜外血腫は CT では拾えない。<strong>神経所見があれば MRI</strong>。</p>
+            <p>SCIWORA、中心性頸髄損傷、靱帯損傷、硬膜外血腫は CT では拾えない。<strong>神経所見があれば MRI</strong>。</p>
           </div>
         </div>
       </section>
 
-      <!-- §5 主要鑑別 -->
+      <!-- §5 マネジメント -->
       <section class="section-page" id="s5" hidden>
         <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🧠 主要鑑別</h2>
+        <h2>💊 マネジメント</h2>
 
+        <h3>頸椎固定の解除条件</h3>
+        <div class="callout callout-check">
+          <div class="callout-title">以下をすべて満たすときに解除を検討</div>
+          <div class="callout-body">
+            <ul>
+              <li>NEXUS 5 項目すべて陰性、または CCSR で「画像不要」と判定</li>
+              <li>能動的な左右 45° 回旋が可能（CCSR Step 3）</li>
+              <li>新規神経所見なし</li>
+              <li>適用除外条件（意識障害・中毒・神経所見）に該当しない</li>
+            </ul>
+          </div>
+        </div>
+
+        <h3>固定を続ける目安</h3>
+        <ul>
+          <li><strong>軟性カラー</strong>：軽症・むち打ち Grade I–II の鎮痛目的に短期。<strong>長期装着は予後を悪化</strong>させ得る</li>
+          <li><strong>硬性カラー</strong>：骨傷・脱臼確定、または評価困難で固定継続が必要なとき。整形に引き継ぎ</li>
+          <li>むち打ちでは<strong>早期の通常活動再開</strong>が遷延予防につながる</li>
+        </ul>
+
+        <h3>不安定骨折・脱臼の初期対応</h3>
+        <ul>
+          <li><strong>用手 in-line stabilization</strong> を維持、ログロール、硬性カラー + 可能なら背板</li>
+          <li><strong>整形外科 / 脊椎外科にコンサルト</strong>。手術適応・牽引の判断は専門科</li>
+          <li>気道介入：ビデオ喉頭鏡、頸部の動きを最小化</li>
+          <li>ASIA A の完全麻痺でも初期は脊髄ショックの可能性 → 評価を経時的に再確認</li>
+        </ul>
+
+        <h3>神経原性ショックへの対応</h3>
+        <div class="callout callout-warning">
+          <div class="callout-title">徐脈 + 低血圧 + 末梢温暖</div>
+          <div class="callout-body">
+            <ul>
+              <li>輸液で前負荷を上げる（過剰輸液に注意。脊髄浮腫を悪化させ得る）</li>
+              <li>輸液不応なら<strong>昇圧薬</strong>（ノルアドレナリン or フェニレフリン）</li>
+              <li>徐脈強い場合は<strong>アトロピン</strong>。重症ではペーシング</li>
+              <li><strong>出血性ショックを並行して必ず除外</strong>（FAST、骨盤・大腿骨）</li>
+              <li>MAP 目標は <strong>85–90 mmHg</strong> を脊椎外科と相談（脊髄灌流維持）</li>
+            </ul>
+          </div>
+        </div>
+
+        <h3>ステロイド</h3>
+        <div class="callout callout-warning">
+          <div class="callout-title">急性頸髄損傷のメチルプレドニゾロン大量投与は<strong>ルーチン推奨されない</strong></div>
+          <div class="callout-body">
+            <p>NASCIS II/III 以降、利益が不明確で<strong>合併症（感染、消化管出血、血糖上昇）</strong>のリスクが上回るとされ、現在はルーチン非推奨。投与は脊椎外科と個別に相談。</p>
+          </div>
+        </div>
+
+        <h3>鎮痛・対症療法</h3>
+        <ul>
+          <li>NSAIDs / アセトアミノフェン（出血傾向・抗凝固例は注意）</li>
+          <li>筋弛緩薬は短期に限定</li>
+          <li>むち打ちでは<strong>早期の頸部可動・温熱・通常活動</strong>を推奨</li>
+          <li>遷延例にはペインクリニック・リハ介入</li>
+        </ul>
+
+        <h3>コンサルト分担</h3>
         <div class="table-wrap">
           <table>
-            <thead><tr><th>病態</th><th>手がかり</th><th>進む先</th></tr></thead>
+            <thead><tr><th>状況</th><th>コンサルト先</th></tr></thead>
             <tbody>
-              <tr><td><strong>頸椎損傷（骨傷）</strong></td><td>正中圧痛、神経症状、高エネルギー</td><td><a class="wiki-link" href="疾患詳細/頸椎損傷.html">頸椎損傷</a></td></tr>
-              <tr><td><strong>中心性頸髄損傷</strong></td><td>高齢・過伸展、上肢優位の不全麻痺、CT 骨傷なし</td><td><span class="wiki-missing">頸髄損傷</span></td></tr>
-              <tr><td><strong>椎骨動脈損傷</strong></td><td>後頭部痛、めまい、構音障害、視野欠損、高エネルギー / 回旋外傷</td><td><span class="wiki-missing">椎骨動脈損傷</span></td></tr>
-              <tr><td><strong>外傷性頸部症候群</strong>（むち打ち様）</td><td>頸部痛中心、神経症状乏しい、遅発症状あり</td><td><a class="wiki-link" href="転倒.html">転倒</a> で再診基準を確認</td></tr>
-              <tr><td><strong>喉頭・気管損傷</strong></td><td>発声異常、皮下気腫、嗄声、呼吸困難</td><td>耳鼻科 / 外科</td></tr>
-              <tr><td><strong>頸部血腫・大血管損傷</strong></td><td>進行性腫脹、ショック、雑音</td><td>血管外科 / 救命</td></tr>
+              <tr><td>頸椎骨折・脱臼</td><td>脊椎外科 / 整形外科</td></tr>
+              <tr><td>頸髄損傷（神経所見あり）</td><td>脊椎外科 + 神経内科 / 脳外科</td></tr>
+              <tr><td>椎骨動脈・頸動脈損傷</td><td>脳神経外科 / 血管外科</td></tr>
+              <tr><td>喉頭・気管損傷</td><td>耳鼻咽喉科 / 呼吸器外科</td></tr>
+              <tr><td>食道損傷</td><td>消化器外科 / 食道外科</td></tr>
+              <tr><td>非外傷の致死的頸部痛</td><td>髄膜炎・SAH→脳神経内科 / 脳外科、感染→感染症内科</td></tr>
             </tbody>
           </table>
         </div>
@@ -194,59 +436,157 @@
         <button class="back-to-menu" type="button">← メニューへ</button>
         <h2>📤 disposition</h2>
 
-        <h3>帰宅を考えやすい</h3>
+        <h3>帰宅可</h3>
         <ul>
-          <li>NEXUS / Canadian で固定解除可、神経所見なし、画像陰性</li>
-          <li>外傷性頸部症候群で機能保たれる</li>
-          <li>独居でなく、フォロー可能</li>
+          <li>NEXUS / CCSR で画像不要、神経所見なし、機能保たれる</li>
+          <li>むち打ち Grade I–II で疼痛コントロール可、独居でない、フォロー可</li>
+          <li>頸椎症性神経根症で安定、外来フォロー可能</li>
+        </ul>
+
+        <h3>観察入院 / 短期 ICU 不要</h3>
+        <ul>
+          <li>骨傷なしだが疼痛強く ADL 困難</li>
+          <li>抗凝固薬例で受傷から経過短く血腫・遅発性出血を経過観察</li>
+          <li>むち打ち Grade III（軽度神経所見あり）で経過観察方針</li>
         </ul>
 
         <h3>入院 / コンサルト</h3>
         <ul>
-          <li><strong>頸椎骨折・脱臼</strong> → 整形 / 脊椎外科に即コンサルト</li>
-          <li><strong>頸髄損傷の疑い</strong>（神経所見あり）→ 入院、MRI 評価、脊椎外科</li>
-          <li><strong>椎骨動脈損傷の疑い</strong> → CTA、脳外 / 血管外科コンサルト、抗血栓療法を相談</li>
-          <li><strong>気道閉塞リスク</strong>（喉頭損傷、頸部腫脹進行）→ ICU、早期気道確保</li>
+          <li><strong>頸椎骨折・脱臼</strong> → 脊椎外科に即コンサルト・入院</li>
+          <li><strong>頸髄損傷の疑い</strong>（神経所見あり）→ MRI 評価後、脊椎外科 / 神経内科</li>
+          <li><strong>椎骨動脈・頸動脈損傷</strong> → CTA、脳外 / 血管外科、抗血栓療法を相談</li>
           <li><strong>意識障害があり頸椎評価困難</strong> → 固定継続のうえ入院</li>
+          <li><strong>非外傷の致死的鑑別</strong>確定 → 各専門科</li>
         </ul>
+
+        <h3>ICU/HCU</h3>
+        <ul>
+          <li>高位頸髄損傷（C5 以上）／神経原性ショック</li>
+          <li>気道閉塞リスク（喉頭損傷、頸部腫脹進行、絞扼後）</li>
+          <li>不安定骨折で術前管理が必要</li>
+          <li>多発外傷の合併</li>
+        </ul>
+
+        <h3>むち打ち帰宅時の説明</h3>
+        <div class="callout callout-tip">
+          <div class="callout-title">伝えること</div>
+          <div class="callout-body">
+            <ul>
+              <li>大半は<strong>数日〜数週で自然軽快</strong>。早期の通常活動再開が回復を早める</li>
+              <li>長期のカラー固定はかえって遷延を招くことがある</li>
+              <li>鎮痛薬の使い方、温熱・ストレッチの目安</li>
+              <li><strong>再受診のタイミング</strong>：手のしびれ・脱力、巧緻運動障害、排尿障害、激しい後頭部痛・めまい、症状が増悪・新規出現</li>
+              <li>2 週以上遷延する場合は整形外科外来へ</li>
+            </ul>
+          </div>
+        </div>
       </section>
 
-      <!-- §7 ピットフォール -->
+      <!-- §7 カルテテンプレ -->
       <section class="section-page" id="s7" hidden>
         <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>⚠️ ピットフォール</h2>
+        <h2>📝 カルテテンプレ</h2>
 
-        <ul>
-          <li><strong>NEXUS / Canadian の適用外で当てはめる</strong>（意識障害・中毒・高エネルギー）</li>
-          <li><strong>CT 正常で安心する</strong> — 中心性頸髄損傷・靱帯損傷・SCIWORA は写らない</li>
-          <li><strong>高齢者の軽微外傷を軽視</strong> — 過伸展で中心性頸髄損傷が起こる</li>
-          <li><strong>椎骨動脈損傷を考えない</strong> — 後頭部痛・めまい + 高エネルギーで CTA を</li>
-          <li><strong>外傷性頸部症候群で帰すときに遅発症状の説明をしない</strong></li>
-          <li><strong>気道管理で頸部を動かす</strong> — in-line stabilization が原則</li>
-          <li><strong>抗凝固薬例の頸部血腫</strong>を見逃す（進行性腫脹に注意）</li>
-        </ul>
+        <pre class="chart-template">
+【頸部外傷・頸部痛】
+受傷機転：[ 高エネ / 低エネ / 機転不明 / 非外傷 ]
+        詳細：[ 例：歩行中に転倒し顔面打撲、過伸展機転 ]
+受傷時間：[          ]　来院時間：[          ]
+失神先行：[ あり / なし ]
+抗凝固薬：[ なし / DOAC / ワルファリン / 抗血小板 ]
+
+主訴：[ 頸部痛 / しびれ / 脱力 / めまい ]
+発症様式：[ 受傷直後 / 遅発性 ]　部位：[ 後頸部正中 / 一側 / 前頸部 ]
+
+身体所見
+  バイタル：BP [   /   ]　HR [    ]　SpO2 [    ]　呼吸：[ 胸式 / 腹式低下 ]
+  視診：変形 [ - / + ]　皮下気腫 [ - / + ]　血腫・打撲痕：[          ]
+  圧痛：後頸部正中 [ - / + ]　部位：[          ]
+  可動域：能動回旋 左 [   °] 右 [   °]
+  神経学的：MMT 上肢 [ R5/L5 ]、下肢 [ R5/L5 ]
+        感覚 [ 正常 / 低下 ]　Babinski [ - / + ]　Hoffmann [ - / + ]
+        肛門周囲感覚 [ 正常 / 低下 ]　括約筋緊張 [ 正常 / 低下 ]
+  項部硬直：[ - / + ]（非外傷時）
+
+NEXUS：正中圧痛 [ ]　中毒 [ ]　意識清明 [ ]　神経所見 [ ]　distracting [ ]
+        → 全陰性なら画像不要 / 解除可
+CCSR：高リスク [ あり / なし ]　低リスク [ あり / なし ]　45° 回旋 [ 可 / 不可 ]
+        → 判定：[ 画像不要 / 画像 ]
+
+画像：[ Xp / 頸椎 CT / MRI / CTA / 頸部軟部 CT / 撮像せず ]
+所見：[                                                        ]
+
+評価：[ 例：高齢者の過伸展で中心性頸髄損傷を疑う。CT 骨傷なし、MRI へ ]
+方針：固定継続 [ 用手 / 軟性カラー / 硬性カラー ]
+      コンサルト：[ 脊椎外科 / 脳外科 / 耳鼻科 / 血管外科 ]
+      disposition：[ 帰宅 / 観察 / 入院 / ICU ]
+帰宅時の指示：[ 再受診基準を口頭・書面で説明 ]
+</pre>
       </section>
 
-      <!-- §8 出典・リンク -->
+      <!-- §8 見落とし・ミス -->
       <section class="section-page" id="s8" hidden>
         <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>📚 出典・リンク</h2>
+        <h2>⚠️ 見落とし・ミス</h2>
+
+        <ul>
+          <li><strong>高齢者の中心性頸髄損傷</strong>を見逃す — 軽微な顔面打撲・転倒でも過伸展で起こる。CT 骨傷なくても上肢優位の脱力・巧緻運動障害があれば MRI へ</li>
+          <li><strong>転倒で頭部だけ見て頸椎を触らない</strong> — 頭部 CT を撮るときは<strong>頸椎下端（C7–T1）まで含める</strong>。頭部単独の評価で済ませない</li>
+          <li><strong>酩酊・意識障害下で NEXUS / CCSR を当てて「異常なし」</strong>とする — 適用外。固定継続のうえ画像</li>
+          <li><strong>椎骨動脈損傷の遅発性発症</strong>を考えない — 後頭部痛 + 後方循環症状 + 高エネ・回旋・横突孔骨折で CTA</li>
+          <li><strong>歯突起骨折を Open mouth 像のみで除外</strong> — 高齢者では撮像困難・読影困難。<strong>CT を低い閾値で</strong></li>
+          <li><strong>外傷性頸部症候群を「ただのむち打ち」で軽視</strong> — Grade III 以上は神経所見あり。Grade を分けて評価し、再受診基準を説明</li>
+          <li><strong>長期の硬性カラー固定でむち打ちを悪化させる</strong> — Grade I–II は早期可動・通常活動が予後良好</li>
+          <li><strong>頸部血腫・気道閉塞の進行を見逃す</strong> — 抗凝固例・絞扼・喉頭損傷例。受診時 OK でも数時間で進行する</li>
+          <li><strong>非外傷の致死的頸部痛</strong>を「凝り・寝違え」で帰す — 髄膜炎・SAH・椎骨動脈解離・咽後膿瘍・硬膜外膿瘍。発熱・突発・神経所見・嚥下時痛が手がかり</li>
+          <li><strong>抗凝固薬例の遅発性硬膜外血腫</strong>を見逃す — 軽微外傷でも経過観察 + 再受診指示</li>
+          <li><strong>SCIWORA を CT 陰性で除外</strong> — 小児・若年で神経症状あれば MRI</li>
+          <li><strong>気道介入で頸部を動かす</strong> — in-line stabilization が原則。事前計画を立てる</li>
+        </ul>
+
+        <div class="callout callout-tip">
+          <div class="callout-title">最低限やる「セーフティネット」</div>
+          <div class="callout-body">
+            <ul>
+              <li>頸椎クリアランスの判定根拠（NEXUS / CCSR）をカルテに残す</li>
+              <li>適用外なら理由を書く</li>
+              <li>帰宅時は<strong>具体的な再受診基準</strong>を口頭・書面で渡す</li>
+              <li>抗凝固例・高齢者・むち打ち Grade III は<strong>翌日 follow-up</strong>を設定</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- §9 出典・関連 -->
+      <section class="section-page" id="s9" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>📚 出典・関連リンク</h2>
 
         <h3>主要文献</h3>
         <ul>
-          <li><strong>NEXUS</strong>：Hoffman JR ほか. <em>N Engl J Med.</em> 2000.</li>
-          <li><strong>Canadian C-spine Rule</strong>：Stiell IG ほか. <em>JAMA.</em> 2001.</li>
-          <li><strong>椎骨動脈損傷スクリーニング</strong>：Modified Denver / Memphis criteria.</li>
+          <li><strong>NEXUS（NEXUS Low-Risk Criteria）</strong>：Hoffman JR ほか. <em>N Engl J Med.</em> 2000;343:94–9.</li>
+          <li><strong>Canadian C-Spine Rule</strong>：Stiell IG ほか. <em>JAMA.</em> 2001;286:1841–8.</li>
+          <li><strong>NEXUS vs CCSR 直接比較</strong>：Stiell IG ほか. <em>N Engl J Med.</em> 2003;349:2510–8.</li>
+          <li><strong>Quebec Task Force on Whiplash-Associated Disorders</strong>：Spitzer WO ほか. <em>Spine.</em> 1995;20(8 Suppl):1S–73S.</li>
+          <li><strong>BCVI スクリーニング</strong>：Modified Denver criteria（Biffl WL ほか）／Memphis criteria. EAST / WTA ガイドライン参照.</li>
+          <li><strong>急性頸髄損傷ステロイド</strong>：NASCIS II/III の限界と現行推奨（AOSpine / AANS：ルーチン非推奨）.</li>
+          <li><strong>SCIWORA</strong>：Pang D ほか. 小児脊髄損傷で X 線・CT 陰性のケース.</li>
+          <li><strong>ASIA Impairment Scale</strong>：International Standards for Neurological Classification of Spinal Cord Injury（ASIA / ISCoS）.</li>
         </ul>
 
-        <h3>関連ページ</h3>
+        <h3>本サイト内の関連ページ</h3>
         <ul>
-          <li><a class="wiki-link" href="転倒.html">転倒</a> / <a class="wiki-link" href="頭部外傷評価.html">頭部外傷評価</a></li>
-          <li><a class="wiki-link" href="疾患詳細/頸椎損傷.html">頸椎損傷</a> / <span class="wiki-missing">頸髄損傷</span> / <span class="wiki-missing">椎骨動脈損傷</span></li>
-          <li><a class="wiki-link" href="意識障害.html">意識障害</a> / <a class="wiki-link" href="意識消失.html">意識消失</a></li>
+          <li><a class="wiki-link" href="頭部外傷評価.html">頭部外傷評価</a> — 並走で評価する</li>
+          <li><a class="wiki-link" href="転倒.html">転倒</a> — 呼ばれ元、再受診基準</li>
+          <li><a class="wiki-link" href="意識消失.html">意識消失</a> — 失神先行の転倒</li>
+          <li><a class="wiki-link" href="意識障害.html">意識障害</a> — 評価困難例の枠組み</li>
+          <li><a class="wiki-link" href="疾患詳細/頸椎損傷.html">頸椎損傷（疾患詳細）</a> — 骨傷の詳細</li>
+          <li><span class="wiki-missing">頸髄損傷</span> — 中心性頸髄損傷を含む</li>
+          <li><span class="wiki-missing">椎骨動脈損傷</span> — 外傷性解離・BCVI</li>
+          <li><span class="wiki-missing">むち打ち（外傷性頸部症候群）</span> — Quebec 分類と遷延例</li>
         </ul>
 
-        <p>#ER #救急 #頸部外傷 #頸椎損傷 #頸髄損傷 #NEXUS #Canadian #椎骨動脈損傷 #中心性頸髄損傷</p>
+        <p>#ER #救急 #頸部外傷 #頸部痛 #頸椎損傷 #頸髄損傷 #中心性頸髄損傷 #NEXUS #CCSR #Canadian #椎骨動脈損傷 #BCVI #SCIWORA #むち打ち #Quebec #髄膜炎 #SAH</p>
       </section>
 
     </article>

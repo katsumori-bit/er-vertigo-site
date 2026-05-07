@@ -6,6 +6,59 @@
   <meta name="color-scheme" content="light dark" />
   <title>頭部外傷評価 | ER ノート</title>
   <link rel="stylesheet" href="er-note.css" />
+  <style>
+    /* GCS 表（このページ専用・小型化） */
+    .gcs-table { font-size: 0.9rem; }
+    .gcs-table th, .gcs-table td { padding: 4px 6px; }
+    .gcs-table th { background: color-mix(in srgb, var(--text) 6%, var(--surface)); }
+
+    /* 区分ピル（軽症・中等症・重症） */
+    .severity-pill {
+      display: inline-block; padding: 1px 9px; border-radius: 999px;
+      font-size: 0.78rem; font-weight: 700; letter-spacing: 0.04em;
+      border: 1.5px solid currentColor;
+    }
+    .severity-pill--mild     { color: #2e7d32; }
+    .severity-pill--moderate { color: #b87900; }
+    .severity-pill--severe   { color: #c0392b; }
+
+    /* CT 適応のクイックチェックボックス */
+    .quick-check {
+      background: var(--surface);
+      border: 1.5px solid color-mix(in srgb, var(--text) 14%, transparent);
+      border-radius: 10px;
+      padding: 10px 14px;
+      margin: 0.6rem 0;
+    }
+    .quick-check__title {
+      font-weight: 800; font-size: 0.95rem; margin-bottom: 6px;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .quick-check__list {
+      list-style: none; margin: 0; padding: 0;
+      display: flex; flex-direction: column; gap: 3px;
+    }
+    .quick-check__list li {
+      font-size: 0.86rem; line-height: 1.45;
+      padding: 3px 6px; border-radius: 5px;
+      background: color-mix(in srgb, var(--text) 3%, var(--surface));
+    }
+    .quick-check__list li::before {
+      content: "▢ "; color: var(--muted); font-weight: 700;
+    }
+
+    /* カルテテンプレ */
+    .chart-tmpl {
+      background: color-mix(in srgb, var(--text) 4%, var(--surface));
+      border: 1px dashed color-mix(in srgb, var(--text) 25%, transparent);
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-family: ui-monospace, "SFMono-Regular", Consolas, monospace;
+      font-size: 0.82rem; line-height: 1.55;
+      white-space: pre-wrap;
+      color: var(--text);
+    }
+  </style>
 </head>
 <body>
   <header class="hokuto-top">
@@ -21,253 +74,571 @@
     <article class="note-shell">
       <h1 class="page-title">頭部外傷評価</h1>
 
-      <!-- 即時アクションヘッダー（常時 sticky） -->
+      <!-- 即時アクションヘッダー -->
       <div class="action-header">
         <div class="action-header__title">⚡ 即時アクション</div>
         <ol class="action-header__list">
-          <li><strong>GCS + 瞳孔 + 片麻痺</strong>を最初に確認 — ヘルニア徴候は即 CT</li>
-          <li><strong>抗凝固薬・高齢・複数受傷で必ず CT</strong> — 軽微外傷でも閾値を下げる</li>
-          <li><strong>Canadian CT Head Rule / NOC</strong> を当てて CT 適応を判断</li>
-          <li><strong>軽症でも観察期間</strong>：抗凝固例は 24 h、若年単純打撲は短時間 + 帰宅説明徹底</li>
+          <li><strong>GCS + 瞳孔 + 片麻痺</strong>を 5 分以内に取る — ヘルニア徴候は即 CT</li>
+          <li><strong>抗凝固薬・高齢・複数受傷</strong>では軽微外傷でも閾値を下げて CT</li>
+          <li><strong>Canadian CT Head Rule（成人）／ PECARN（小児）</strong>で適応を判断</li>
+          <li><strong>頸椎を同時に外す</strong> — 頭部外傷では頸椎損傷を 5〜10% 合併</li>
+          <li><strong>抗凝固薬例の CT 正常 → 帰宅 vs 観察入院</strong>は本人・家族と擦り合わせ</li>
         </ol>
       </div>
 
       <!-- §タイル -->
       <nav class="section-tiles" id="sectionMenu">
-        <a class="section-tile" href="#s1"><span class="section-tile__no">🚨</span><span class="section-tile__name">命に関わるサイン</span></a>
-        <a class="section-tile" href="#s2"><span class="section-tile__no">📐</span><span class="section-tile__name">CT 適応<br><small>Canadian / NOC / Falls</small></span></a>
-        <a class="section-tile" href="#s3"><span class="section-tile__no">🔬</span><span class="section-tile__name">CT で疑う病態</span></a>
-        <a class="section-tile" href="#s4"><span class="section-tile__no">📷</span><span class="section-tile__name">CT 読影手順</span></a>
-        <a class="section-tile" href="#s5"><span class="section-tile__no">💊</span><span class="section-tile__name">抗凝固薬・抗血小板薬</span></a>
-        <a class="section-tile" href="#s6"><span class="section-tile__no">🩺</span><span class="section-tile__name">身体所見</span></a>
-        <a class="section-tile" href="#s7"><span class="section-tile__no">📤</span><span class="section-tile__name">disposition</span></a>
-        <a class="section-tile" href="#s8"><span class="section-tile__no">📝</span><span class="section-tile__name">帰宅時の説明</span></a>
-        <a class="section-tile" href="#s9"><span class="section-tile__no">📚</span><span class="section-tile__name">出典・リンク</span></a>
+        <a class="section-tile" href="#s1"><span class="section-tile__no">🚨</span><span class="section-tile__name">Red flags<br><small>命・赤旗</small></span></a>
+        <a class="section-tile" href="#s2"><span class="section-tile__no">🧭</span><span class="section-tile__name">鑑別の枠組み<br><small>年齢・機転・重症度</small></span></a>
+        <a class="section-tile" href="#s3"><span class="section-tile__no">🔬</span><span class="section-tile__name">主要病態<br><small>EDH／SDH／tSAH ほか</small></span></a>
+        <a class="section-tile" href="#s4"><span class="section-tile__no">📐</span><span class="section-tile__name">所見・CT 適応<br><small>Canadian / NICE / PECARN</small></span></a>
+        <a class="section-tile" href="#s5"><span class="section-tile__no">💊</span><span class="section-tile__name">マネジメント<br><small>抗凝固リバース・ICP</small></span></a>
+        <a class="section-tile" href="#s6"><span class="section-tile__no">📤</span><span class="section-tile__name">disposition<br><small>帰宅／観察／コンサルト</small></span></a>
+        <a class="section-tile" href="#s7"><span class="section-tile__no">📝</span><span class="section-tile__name">カルテテンプレ</span></a>
+        <a class="section-tile" href="#s8"><span class="section-tile__no">⚠️</span><span class="section-tile__name">見落とし・ピットフォール</span></a>
+        <a class="section-tile" href="#s9"><span class="section-tile__no">📚</span><span class="section-tile__name">出典・関連</span></a>
       </nav>
 
-      <!-- §1 命に関わるサイン -->
+      <!-- ============================================================== -->
+      <!-- §1 Red flags / 命・赤旗                                         -->
+      <!-- ============================================================== -->
       <section class="section-page" id="s1" hidden>
         <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🚨 命に関わるサイン</h2>
+        <h2>🚨 Red flags（命・赤旗）</h2>
+
+        <p>頭部外傷で最初に拾うべきは「<strong>頭蓋内圧亢進・ヘルニア</strong>」と「<strong>進行性出血</strong>」のサインだ。これがあれば問診中であっても CT 室を予約し、脳神経外科に声掛けする。</p>
 
         <div class="callout callout-danger">
-          <div class="callout-title">これがあれば即 CT・脳神経外科</div>
+          <div class="callout-title">これがあれば即 CT・脳外コンサクト</div>
           <div class="callout-body">
             <ul>
-              <li><strong>GCS 低下 / 意識変容</strong></li>
-              <li><strong>瞳孔不同・対光反射消失</strong></li>
-              <li><strong>新規の片麻痺・けいれん</strong></li>
-              <li><strong>頭蓋底骨折徴候</strong>（Battle 徴候、Raccoon eyes、耳・鼻からの液体漏出）</li>
-              <li><strong>反復する嘔吐</strong></li>
-              <li><strong>徐脈 + 高血圧 = Cushing 反応</strong>（頭蓋内圧亢進）</li>
+              <li><strong>GCS ≤ 14</strong>（受傷 2 時間後も 15 に戻らない場合を含む）</li>
+              <li><strong>瞳孔不同・対光反射消失</strong>（ヘルニア兆候）</li>
+              <li><strong>新規の片麻痺・構音障害・けいれん</strong></li>
+              <li><strong>頭蓋底骨折所見</strong>：Battle 徴候／Raccoon eyes／髄液鼻漏・耳漏／鼓室血腫</li>
+              <li><strong>開放性／陥没頭蓋骨折</strong>を疑う頭皮損傷</li>
+              <li><strong>嘔吐 ≥ 2 回</strong>／受傷後 30 分以上の健忘／強い持続性頭痛</li>
+              <li><strong>目撃された意識消失</strong>（受傷直後の lucid interval を見ない）</li>
+              <li><strong>抗凝固薬・抗血小板薬</strong>内服例の頭部打撲（軽症でも）</li>
+              <li><strong>Cushing 反応</strong>：徐脈 + 高血圧 + 不規則呼吸</li>
+              <li><strong>出血性ショック</strong>：成人では頭蓋内出血単独でショックを来しにくい → 他部位出血の併発を疑う</li>
             </ul>
-            <p>いずれかで <strong>即座に頭部 CT</strong>、出血所見があれば <strong>脳神経外科コンサルト</strong>。気道は in-line stabilization で確保。</p>
           </div>
         </div>
 
         <h3>並行で外す</h3>
         <ul>
-          <li>頸椎損傷の併発 → <a class="wiki-link" href="頸部外傷・頸部痛.html">頸部外傷・頸部痛</a></li>
-          <li>失神先行の転倒 → <a class="wiki-link" href="意識消失.html">意識消失</a></li>
-          <li>意識障害の鑑別 → <a class="wiki-link" href="意識障害.html">意識障害</a></li>
+          <li>頸椎損傷の併発 → <a class="wiki-link" href="頸部外傷・頸部痛.html">頸部外傷・頸部痛</a> / <a class="wiki-link" href="疾患詳細/頸椎損傷.html">頸椎損傷</a></li>
+          <li>失神先行の転倒（心原性／神経調節性） → <a class="wiki-link" href="意識消失.html">意識消失</a></li>
+          <li>意識障害の鑑別（外傷以外の原因も） → <a class="wiki-link" href="意識障害.html">意識障害</a></li>
+          <li>呼ばれ元の受傷フロー → <a class="wiki-link" href="転倒.html">転倒</a></li>
+        </ul>
+
+        <div class="callout callout-warning">
+          <div class="callout-title">最初の 5 分でやること</div>
+          <div class="callout-body">
+            <ol>
+              <li>気道評価：GCS ≤ 8 なら気道確保準備（in-line stabilization で頸椎保護）</li>
+              <li>呼吸：SpO<sub>2</sub> ≥ 94%、無呼吸・不規則呼吸はヘルニア徴候</li>
+              <li>循環：低血圧は二次性脳損傷を悪化させる。SBP ≥ 110 mmHg を目標</li>
+              <li>GCS（E・V・M）と瞳孔径・対光反射、四肢麻痺の有無を記録</li>
+              <li>抗凝固薬・抗血小板薬の内服歴を必ず確認（家族・お薬手帳・薬局問い合わせ）</li>
+            </ol>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================================== -->
+      <!-- §2 鑑別の枠組み                                                  -->
+      <!-- ============================================================== -->
+      <section class="section-page" id="s2" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🧭 鑑別の枠組み</h2>
+
+        <h3>重症度区分（GCS ベース）</h3>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>区分</th><th>GCS</th><th>主な対応</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="severity-pill severity-pill--mild">軽症</span></td>
+                <td>13–15</td>
+                <td>大半はここ。CT 適応を decision rule で判定。観察時間と帰宅説明が鍵</td>
+              </tr>
+              <tr>
+                <td><span class="severity-pill severity-pill--moderate">中等症</span></td>
+                <td>9–12</td>
+                <td>全例 CT。入院・neuro-check 1〜2 時間ごと、悪化で再 CT</td>
+              </tr>
+              <tr>
+                <td><span class="severity-pill severity-pill--severe">重症</span></td>
+                <td>≤ 8</td>
+                <td>気道確保。ICU 管理、脳外コンサルト、ICP・CPP を意識</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>GCS のおさらい</h3>
+        <div class="table-wrap">
+          <table class="gcs-table">
+            <thead>
+              <tr><th>項目</th><th>4</th><th>3</th><th>2</th><th>1</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>E（開眼）</td><td>自発</td><td>呼びかけ</td><td>痛み</td><td>なし</td></tr>
+              <tr><td>V（言語）</td><td>見当識あり / 5</td><td>混乱 / 4</td><td>不適切語 / 3</td><td>理解不能音 / 2、なし / 1</td></tr>
+              <tr><td>M（運動）</td><td>命令従う / 6</td><td>払いのけ / 5</td><td>逃避屈曲 / 4</td><td>異常屈曲 / 3、伸展 / 2、なし / 1</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="dx-note" style="font-size:0.83rem; color:var(--muted); margin-top:6px;">挿管中は V を「T」と表記し、E + M で評価する。発語困難・失語性では V を慎重に。</p>
+
+        <h3>年齢別の見方</h3>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>年齢</th><th>主な機転</th><th>典型病態・着眼点</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>小児（≤ 16 歳）</td>
+                <td>低位転落、自転車、スポーツ、虐待</td>
+                <td>骨折なしでも DAI／脳浮腫が起きうる。<strong>PECARN</strong> で CT 適応。乳児で原因不明の頭蓋内出血は <strong>非偶発的外傷（NAI）</strong>を疑う</td>
+              </tr>
+              <tr>
+                <td>成人（17–64）</td>
+                <td>交通外傷、転落、暴行、スポーツ</td>
+                <td>EDH（側頭骨骨折＋中硬膜動脈）、tSAH、脳挫傷。lucid interval を念頭に</td>
+              </tr>
+              <tr>
+                <td>高齢（≥ 65）</td>
+                <td>同一平面転倒（最多）、階段、抗凝固薬内服</td>
+                <td>軽微外傷でも SDH。<strong>慢性硬膜下血腫</strong>は数週後発症（→ §8）</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>機転で危険度を上げる因子</h3>
+        <ul>
+          <li><strong>高エネルギー機転</strong>：歩行者対自動車、車外放出、1 m / 階段 5 段以上からの転落、自転車事故</li>
+          <li><strong>抗凝固薬・抗血小板薬</strong>：ワルファリン、DOAC、二剤抗血小板薬</li>
+          <li><strong>飲酒</strong>：意識障害が外傷由来か飲酒由来か区別困難 → CT を低い閾値で（→ <a class="wiki-link" href="転倒.html#s3-alcohol">飲酒後転倒</a>）</li>
+          <li><strong>凝固障害</strong>：肝硬変、血液疾患</li>
+          <li><strong>頭部手術歴・シャント</strong>、てんかん既往</li>
+          <li><strong>独居・認知症</strong>：観察体制が組めず disposition で詰まりやすい</li>
         </ul>
       </section>
 
-      <!-- §2 CT 適応 -->
-      <section class="section-page" id="s2" hidden>
+      <!-- ============================================================== -->
+      <!-- §3 主要病態                                                     -->
+      <!-- ============================================================== -->
+      <section class="section-page" id="s3" hidden>
         <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>📐 CT を撮るかの判断</h2>
+        <h2>🔬 主要病態と CT サイン</h2>
 
-        <h3>Canadian CT Head Rule（GCS 13–15 の成人に適用）</h3>
-        <div class="callout callout-check">
-          <div class="callout-title">どれか 1 つでも該当すれば CT</div>
+        <p>CT は「出血の有無」だけでなく「<strong>緊急開頭が必要か</strong>」「<strong>遅発性出血リスクがどこにあるか</strong>」を読むために撮る。</p>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>病態</th><th>典型像</th><th>臨床像</th><th>マネジメント</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>急性硬膜外血腫（EDH）</td>
+                <td>側頭骨折 + <strong>凸レンズ状（biconvex）</strong>高吸収域。縫合線を越えない</td>
+                <td>典型は <strong>lucid interval</strong>（受傷直後の意識回復）の後に急速に悪化</td>
+                <td>厚さ・正中偏位で緊急開頭。即脳外コンサルト</td>
+              </tr>
+              <tr>
+                <td>急性硬膜下血腫（acute SDH）</td>
+                <td><strong>三日月状（crescent）</strong>高吸収域。縫合線を越える</td>
+                <td>高エネ機転や高齢者の軽微外傷。意識変容が前面</td>
+                <td>厚さ ≥ 10 mm／正中偏位 ≥ 5 mm／GCS 低下で開頭適応</td>
+              </tr>
+              <tr>
+                <td>慢性硬膜下血腫（chronic SDH）</td>
+                <td>低吸収〜混在吸収域、しばしば被膜あり</td>
+                <td>受傷 2〜8 週後の<strong>歩行障害・認知低下・片麻痺</strong>。高齢者・抗凝固例</td>
+                <td>増大・症状ありで穿頭洗浄。少量無症状は外来 follow</td>
+              </tr>
+              <tr>
+                <td>外傷性くも膜下出血（tSAH）</td>
+                <td>脳溝・シルビウス裂・基底槽の高吸収域</td>
+                <td>頭痛・嘔吐。動脈瘤性 SAH との鑑別を意識</td>
+                <td>再出血・血管攣縮を念頭に経過観察。広範例は脳外管理</td>
+              </tr>
+              <tr>
+                <td>脳挫傷・外傷性脳内血腫</td>
+                <td><strong>前頭葉・側頭葉</strong>の斑状出血、周囲浮腫</td>
+                <td>受傷部位の対側に好発（contre-coup）。時間で進展</td>
+                <td>6〜12 時間後の再 CT で増大評価</td>
+              </tr>
+              <tr>
+                <td>びまん性軸索損傷（DAI）</td>
+                <td>初回 CT は陰性 or 軽度。皮髄境界・脳梁・脳幹に点状出血</td>
+                <td>機転に対して<strong>不釣合な意識障害</strong></td>
+                <td>MRI（DWI／SWI）で診断。支持療法主体</td>
+              </tr>
+              <tr>
+                <td>脳室内出血（IVH）</td>
+                <td>脳室内の高吸収域、急性水頭症</td>
+                <td>意識低下、嘔吐</td>
+                <td>水頭症あれば脳室ドレナージを脳外と相談</td>
+              </tr>
+              <tr>
+                <td>頭蓋底骨折</td>
+                <td>骨条件で前頭蓋底・側頭骨に骨折線、含気腔の液面</td>
+                <td>Battle／Raccoon／鼓室血腫／髄液漏</td>
+                <td>髄液漏・聴力低下・脳神経麻痺を評価。経鼻挿管・経鼻胃管は禁</td>
+              </tr>
+              <tr>
+                <td>頭皮裂創・帽状腱膜下血腫</td>
+                <td>皮下軟部腫脹</td>
+                <td>小児では<strong>循環血液量の 10〜30%</strong>を貯めうる</td>
+                <td>圧迫止血、創縫合、破傷風確認</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout callout-tip">
+          <div class="callout-title">EDH と SDH を 1 行で見分ける</div>
           <div class="callout-body">
-            <p><strong>高リスク（神経外科介入の予測）</strong></p>
+            <ul>
+              <li><strong>EDH</strong>：凸レンズ・縫合線を越えない・側頭骨骨折を伴う</li>
+              <li><strong>SDH</strong>：三日月・縫合線を越える・脳実質との境界がスムーズ</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================================== -->
+      <!-- §4 所見・CT 適応                                                 -->
+      <!-- ============================================================== -->
+      <section class="section-page" id="s4" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>📐 身体所見と CT 適応</h2>
+
+        <h3>身体所見のチェックリスト</h3>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>部位</th><th>見るもの</th><th>意味</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>意識</td><td>GCS、見当識、近時記憶（受傷前後の健忘）</td><td>受傷後の<strong>変化</strong>を重視</td></tr>
+              <tr><td>瞳孔</td><td>左右差・対光反射・大きさ</td><td>不同 → ヘルニア。両側散大固定 → 重症</td></tr>
+              <tr><td>頭皮</td><td>腫脹・裂創・圧痛（<strong>後頭部・髪の中</strong>も必ず）</td><td>受傷部位の確認、開放骨折の検出</td></tr>
+              <tr><td>側頭後部</td><td>Battle 徴候（耳介後部の皮下出血）</td><td>側頭骨／後頭蓋底骨折</td></tr>
+              <tr><td>眼窩周囲</td><td>Raccoon eyes（両眼周囲血腫）</td><td>前頭蓋底骨折</td></tr>
+              <tr><td>鼓膜・鼓室</td><td>鼓室血腫、外耳道の血液・髄液</td><td>側頭骨骨折</td></tr>
+              <tr><td>鼻腔</td><td>髄液鼻漏（halo sign、糖陽性）</td><td>前頭蓋底骨折</td></tr>
+              <tr><td>脳神経</td><td>顔面神経・聴神経・動眼神経・嗅覚</td><td>頭蓋底骨折・脳幹圧迫</td></tr>
+              <tr><td>頸部</td><td>正中圧痛・神経症状</td><td>頸椎損傷の併発（<a class="wiki-link" href="頸部外傷・頸部痛.html">頸部外傷・頸部痛</a>）</td></tr>
+              <tr><td>四肢</td><td>左右差・麻痺・腱反射・Babinski</td><td>片麻痺の検出</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Canadian CT Head Rule（成人 GCS 13–15）</h3>
+        <div class="callout callout-check">
+          <div class="callout-title">該当 1 つでも → CT</div>
+          <div class="callout-body">
+            <p><strong>高リスク（脳外科介入を予測）</strong></p>
             <ul>
               <li>受傷 2 時間後も GCS &lt; 15</li>
-              <li>開放性・陥没骨折が疑われる</li>
-              <li>頭蓋底骨折徴候</li>
-              <li>受傷後の嘔吐 2 回以上</li>
+              <li>開放性・陥没頭蓋骨折を疑う</li>
+              <li>頭蓋底骨折所見</li>
+              <li>嘔吐 ≥ 2 回</li>
               <li>65 歳以上</li>
             </ul>
             <p><strong>中等度リスク（CT で出血を検出）</strong></p>
             <ul>
               <li>受傷前 30 分以上の健忘</li>
-              <li>危険な受傷機転（歩行者と車、車外放出、1 m 以上または階段 5 段以上からの転落）</li>
+              <li>危険な機転（歩行者対車、車外放出、1 m または階段 5 段以上の転落）</li>
             </ul>
-          </div>
-        </div>
-
-        <h3>Falls Decision Rule（高齢転倒で CT を控えられる条件）</h3>
-        <div class="callout callout-tip">
-          <div class="callout-title">以下を <strong>すべて</strong>満たすときに限り CT を控えてよい</div>
-          <div class="callout-body">
-            <ul>
-              <li>頭を打った形跡がない</li>
-              <li>転倒前後の健忘がない</li>
-              <li>神経学的診察で新規異常がない</li>
-              <li>抗凝固薬を内服していない</li>
-            </ul>
-            <p>感度 98.6%、NPV 99.8%。1 つでも当てはまらない場合は CT を優先する。</p>
           </div>
         </div>
 
         <div class="callout callout-warning">
-          <div class="callout-title">適用外に注意</div>
+          <div class="callout-title">Canadian の適用外</div>
           <div class="callout-body">
-            <p>意識障害例（GCS &lt; 13）・<strong>抗凝固薬内服</strong>・小児（PECARN を別に）・貫通損傷では <strong>Canadian / NOC の適用外</strong>。CT 閾値を下げる。</p>
+            <p>GCS &lt; 13、<strong>抗凝固・抗血小板薬内服</strong>、けいれん発症、貫通損傷、明らかな頭蓋内疾患既往（脳室シャント等）、妊婦、16 歳未満は<strong>適用外</strong>。<strong>低い閾値で CT</strong>。</p>
           </div>
         </div>
-      </section>
 
-      <!-- §3 CT で疑う病態 -->
-      <section class="section-page" id="s3" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🔬 何を疑って CT を撮るか</h2>
-
-        <p>頭部 CT は「出血があるか」だけでなく、<strong>今すぐ介入が必要な病態</strong>を拾うために撮る。</p>
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr><th>疑う病態</th><th>CT で見るポイント</th><th>次アクション</th></tr>
-            </thead>
-            <tbody>
-              <tr><td>急性硬膜外血腫（EDH）</td><td>レンズ状（凸レンズ状）高吸収域、骨折合併</td><td>脳外科へ緊急コンサルト</td></tr>
-              <tr><td>急性硬膜下血腫（SDH）</td><td>三日月状高吸収域、正中偏位の有無</td><td>神経所見と偏位で手術適応判断</td></tr>
-              <tr><td>外傷性くも膜下出血（tSAH）</td><td>脳溝・シルビウス裂・基底槽の高吸収域</td><td>再出血/血管攣縮リスクを踏まえ管理</td></tr>
-              <tr><td>脳挫傷・脳内血腫</td><td>前頭葉/側頭葉の斑状出血、周囲浮腫</td><td>時間経過で増悪しうるため再評価</td></tr>
-              <tr><td>脳室内出血（IVH）</td><td>脳室内の高吸収域、急性水頭症の有無</td><td>脳外科へ相談</td></tr>
-              <tr><td>びまん性脳浮腫</td><td>灰白質白質境界の消失、脳溝狭小化</td><td>気道・換気・脳圧管理を優先</td></tr>
-              <tr><td>頭蓋骨骨折（陥没/頭蓋底）</td><td>骨条件で線状骨折・陥没・気脳症を確認</td><td>髄液漏や感染リスクを評価</td></tr>
-            </tbody>
-          </table>
-        </div>
-        <p>関連ページ：<a class="wiki-link" href="頭痛.html">頭痛</a> / <a class="wiki-link" href="意識障害.html">意識障害</a> / <a class="wiki-link" href="意識消失.html">意識消失</a></p>
-      </section>
-
-      <!-- §4 CT 読影手順 -->
-      <section class="section-page" id="s4" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>📷 CT 画像の評価手順（読む順番）</h2>
-
-        <div class="callout callout-check">
-          <div class="callout-title">見落としを減らす 7 ステップ</div>
-          <div class="callout-body">
-            <ol>
-              <li><strong>左右差</strong>（まず全体を俯瞰）</li>
-              <li><strong>頭蓋外→頭蓋内</strong>（頭皮血腫、気脳症、骨折）</li>
-              <li><strong>出血の場所</strong>（EDH/SDH/SAH/脳内/脳室内）</li>
-              <li><strong>mass effect</strong>（正中偏位、脳槽圧排、脳室変形）</li>
-              <li><strong>脳浮腫</strong>（灰白質白質境界、脳溝の消失）</li>
-              <li><strong>骨条件で再確認</strong>（頭蓋骨・頭蓋底・陥没）</li>
-              <li><strong>前回画像と比較</strong>（可能なら）</li>
-            </ol>
-            <p>実務上は <strong>脳実質条件 + 骨条件</strong> を最低 1 回ずつ通す。症状増悪や抗凝固薬内服例では再検を低い閾値で考える。</p>
-          </div>
-        </div>
-      </section>
-
-      <!-- §5 抗凝固薬・抗血小板薬 -->
-      <section class="section-page" id="s5" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>💊 抗凝固薬・抗血小板薬</h2>
-
+        <h3>NICE CG232（NICE Head Injury 2023 update）の要点</h3>
         <ul>
-          <li><strong>軽微な外傷でも頭蓋内出血のリスクが高い</strong>。疑わしければ撮る。</li>
-          <li>初回 CT で出血あり → <strong>数時間後に再撮影</strong>を検討する</li>
-          <li>初回 CT 正常でも <strong>遅発性出血</strong>に注意する（24–72 時間）</li>
-          <li><strong>ワルファリン</strong>：PT-INR を確認し、出血あればビタミン K ± PCC で拮抗</li>
-          <li><strong>DOAC</strong>：施設の拮抗プロトコルに従う</li>
-          <li>出血所見があれば <strong>脳神経外科コンサルト</strong></li>
+          <li>受傷後 1 時間以内の CT：GCS &lt; 13、受傷 2 時間後の GCS &lt; 15、開放／陥没／頭蓋底骨折所見、けいれん、嘔吐 ≥ 1 回、focal neuro</li>
+          <li>受傷後 8 時間以内の CT：65 歳以上＋意識消失または健忘、危険な機転、30 分以上の前向健忘、<strong>抗凝固薬内服</strong>（GCS 15・所見陰性でも撮影が原則）</li>
+          <li>抗凝固薬例：<strong>受傷から CT までの時間目標を施設で決める</strong></li>
         </ul>
 
-        <div class="callout callout-warning">
-          <div class="callout-title">観察期間の目安</div>
+        <h3>PECARN（&lt; 18 歳の小児）</h3>
+        <div class="callout callout-check">
+          <div class="callout-title">2 つの年齢群で別ルール</div>
           <div class="callout-body">
-            <p>抗凝固薬内服例は <strong>24 時間の観察入院</strong>を基本に検討。帰宅させる場合も<strong>遅発性出血の説明</strong>と同居者見守りを必須に。</p>
+            <p><strong>2 歳未満</strong>：GCS ≤ 14／意識変容／頭蓋骨触知異常／非前頭部の頭皮血腫／意識消失 ≥ 5 秒／重症な機転／親が「いつもと違う」と訴える</p>
+            <p><strong>2 歳以上</strong>：GCS ≤ 14／意識変容／頭蓋底骨折所見／意識消失／嘔吐／重症な機転／重度頭痛</p>
+            <p>該当なし → CT 不要が許容される。一部該当（中間層）は<strong>観察 4〜6 時間</strong>で経過判断。</p>
           </div>
+        </div>
+
+        <h3>使い分けの目安</h3>
+        <ul>
+          <li>成人軽症：<strong>Canadian CT Head Rule</strong> を主軸、抗凝固例・適用外は別判断</li>
+          <li>小児：<strong>PECARN</strong> を主軸、機転と親の違和感も組み込む</li>
+          <li>高齢の同一平面転倒：抗凝固薬・神経所見・健忘の有無で粘って判断（→ <a class="wiki-link" href="転倒.html">転倒</a>）</li>
+        </ul>
+
+        <div class="quick-check">
+          <div class="quick-check__title">📷 撮影オーダーの備忘</div>
+          <ul class="quick-check__list">
+            <li>頭部単純 CT（脳実質条件 + <strong>骨条件</strong> 必須）</li>
+            <li>頸椎を同時に外せていなければ <strong>頸椎 CT</strong> をセットで（高エネ・神経所見・酩酊で評価困難なとき）</li>
+            <li>顔面骨折を疑えば顔面 CT、側頭骨骨折疑いは側頭骨薄スライス</li>
+            <li>抗凝固薬例で初回 CT 陰性 → <strong>4〜6 時間後の再 CT</strong> を考慮</li>
+            <li>機転に対して意識障害が不釣合 → MRI（DWI／SWI）で DAI 評価</li>
+          </ul>
         </div>
       </section>
 
-      <!-- §6 身体所見 -->
-      <section class="section-page" id="s6" hidden>
+      <!-- ============================================================== -->
+      <!-- §5 マネジメント                                                  -->
+      <!-- ============================================================== -->
+      <section class="section-page" id="s5" hidden>
         <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🩺 身体所見のチェック</h2>
+        <h2>💊 マネジメント</h2>
 
+        <h3>軽症（GCS 13–15）の経過観察</h3>
+        <ul>
+          <li>CT 撮影後、ER で <strong>4〜6 時間</strong>の neuro check（GCS・瞳孔・麻痺）</li>
+          <li>抗凝固薬・抗血小板薬例：原則 <strong>24 時間の入院観察</strong>。少なくとも 4〜6 時間後に再評価し、施設方針で再 CT を検討</li>
+          <li>意識クリア・所見陰性・観察体制が確保できれば帰宅。<strong>口頭 + 書面で再受診基準</strong>を渡す（→ §6）</li>
+        </ul>
+
+        <h3>抗凝固薬・抗血小板薬のリバース</h3>
+        <p>「<strong>頭蓋内出血が確認された／強く疑う</strong>」場合の標準的な拮抗。施設のプロトコルと薬剤部・血液製剤を必ず確認。</p>
         <div class="table-wrap">
           <table>
             <thead>
-              <tr><th>部位</th><th>所見</th><th>意味</th></tr>
+              <tr><th>薬剤</th><th>第一選択の拮抗</th><th>補助</th></tr>
             </thead>
             <tbody>
-              <tr><td>意識</td><td>GCS、見当識、記憶</td><td>受傷後の変化を重視する</td></tr>
-              <tr><td>瞳孔</td><td>左右差・対光反射</td><td>脳ヘルニア徴候</td></tr>
-              <tr><td>頭皮</td><td>腫脹・裂創・圧痛（<strong>後頭部も必ず</strong>）</td><td>受傷部位の把握</td></tr>
-              <tr><td>側頭後部</td><td>Battle 徴候</td><td>側頭骨骨折</td></tr>
-              <tr><td>眼窩周囲</td><td>Raccoon eyes</td><td>前頭蓋底骨折</td></tr>
-              <tr><td>耳・鼻</td><td>液体漏出</td><td>髄液漏</td></tr>
-              <tr><td>頸部</td><td>正中圧痛・神経症状</td><td>頸椎損傷の併発を外す（→ <a class="wiki-link" href="頸部外傷・頸部痛.html">頸部外傷・頸部痛</a>）</td></tr>
-              <tr><td>四肢</td><td>左右差・麻痺</td><td>片麻痺の検出</td></tr>
+              <tr><td>ワルファリン</td><td><strong>4F-PCC</strong>（PT-INR 値で投与量決定）+ <strong>ビタミン K</strong> 静注</td><td>FFP は 4F-PCC が無いときに代替</td></tr>
+              <tr><td>ダビガトラン</td><td><strong>イダルシズマブ</strong>（特異的中和抗体）</td><td>不可なら活性炭（直近内服）、PCC、透析を考慮</td></tr>
+              <tr><td>第 Xa 因子阻害（リバーロキサバン・アピキサバン・エドキサバン）</td><td><strong>アンデキサネット アルファ</strong>（適応・在庫確認）</td><td>無ければ <strong>4F-PCC</strong> を代替で投与</td></tr>
+              <tr><td>未分画ヘパリン</td><td><strong>プロタミン硫酸</strong>（直近 1 mg / 100 単位の目安）</td><td>低分子ヘパリンは部分的に拮抗</td></tr>
+              <tr><td>抗血小板薬（アスピリン・クロピドグレル・プラスグレル）</td><td>原則<strong>輸血で中和できない</strong>。緊急開頭時は脳外と相談し血小板輸血を個別判断</td><td>PATCH 試験以降、ルーチン血小板輸血は推奨されない</td></tr>
             </tbody>
           </table>
         </div>
+
+        <h3>頭蓋内圧亢進への初期対応</h3>
+        <div class="callout callout-important">
+          <div class="callout-title">手順</div>
+          <div class="callout-body">
+            <ol>
+              <li><strong>気道確保</strong>：GCS ≤ 8 で挿管。低酸素・高 CO<sub>2</sub> を避ける（PaCO<sub>2</sub> 35〜40 mmHg を目安）</li>
+              <li><strong>ヘッドアップ 30°</strong>、頸部正中、頸部圧迫を避ける</li>
+              <li><strong>循環</strong>：SBP ≥ 110 mmHg を維持。低血圧は予後を悪化させる</li>
+              <li><strong>浸透圧療法</strong>：高張食塩水（3% NaCl）または D-マンニトール（脳外と相談）</li>
+              <li><strong>けいれん</strong>：レベチラセタムで予防／治療。長時間けいれんは<strong>頭蓋内圧をさらに上げる</strong></li>
+              <li><strong>体温・血糖</strong>：高体温・高血糖を避ける</li>
+              <li><strong>過換気</strong>：救命的脳ヘルニアの一時しのぎとして PaCO<sub>2</sub> 30〜35 mmHg。長時間は禁</li>
+            </ol>
+          </div>
+        </div>
+
+        <h3>脳外コンサルト・開頭の閾値（目安）</h3>
+        <ul>
+          <li>EDH：厚さ ≥ 15 mm、midline shift ≥ 5 mm、容量 ≥ 30 mL、GCS 低下</li>
+          <li>SDH：厚さ ≥ 10 mm または midline shift ≥ 5 mm</li>
+          <li>陥没骨折：陥没幅が頭蓋骨厚を超える、開放性</li>
+          <li>急性水頭症（IVH 合併）／進行性意識低下／瞳孔不同の出現</li>
+          <li><strong>抗凝固薬例の頭蓋内出血</strong>はサイズに関わらずコンサルト</li>
+        </ul>
+
+        <h3>再受診・再評価の基準（軽症で帰宅させたあと）</h3>
+        <ul>
+          <li>意識がぼんやりする・反応が鈍くなる・覚まされにくい</li>
+          <li>強い頭痛が続く・嘔吐が止まらない</li>
+          <li>けいれん、手足の脱力、ろれつが回らない、視野異常</li>
+          <li>歩行が不安定、性格変化（数日〜数週後の慢性硬膜下血腫）</li>
+          <li>耳・鼻からの透明な液体漏出</li>
+        </ul>
       </section>
 
-      <!-- §7 disposition -->
-      <section class="section-page" id="s7" hidden>
+      <!-- ============================================================== -->
+      <!-- §6 disposition                                                 -->
+      <!-- ============================================================== -->
+      <section class="section-page" id="s6" hidden>
         <button class="back-to-menu" type="button">← メニューへ</button>
         <h2>📤 disposition</h2>
 
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>状況</th><th>原則の方針</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>CT で頭蓋内出血</td><td>脳外コンサルト＋入院（HCU／ICU を含む）</td></tr>
+              <tr><td>GCS &lt; 13 が遷延</td><td>入院。気道・循環安定化＋再 CT 計画</td></tr>
+              <tr><td>陥没／頭蓋底骨折</td><td>脳外・耳鼻科とコンサルト、入院</td></tr>
+              <tr><td>CT 正常 + 抗凝固／抗血小板薬</td><td><strong>24 時間の経過観察入院</strong>を基本。本人・家族に説明し、強く帰宅希望なら同居者見守り＋書面の再受診基準＋電話到達確保で個別判断</td></tr>
+              <tr><td>CT 正常 + 抗凝固なし + 症状安定</td><td>4〜6 時間 ER 観察後、帰宅可。書面で再受診基準を渡す</td></tr>
+              <tr><td>独居・認知症・観察できない</td><td>見守りが確保できるまで帰宅を控える</td></tr>
+              <tr><td>頸椎損傷併発疑い</td><td>頸椎カラー継続。整形・脊椎外科にコンサルト</td></tr>
+              <tr><td>失神先行</td><td>循環器・神経で原因精査（→ <a class="wiki-link" href="意識消失.html">意識消失</a>）</td></tr>
+              <tr><td>NAI を疑う小児</td><td>小児科・児童相談所と連携。安易に帰宅させない</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout callout-warning">
+          <div class="callout-title">抗凝固薬例の「CT 正常 → 帰宅 vs 観察入院」</div>
+          <div class="callout-body">
+            <p>遅発性頭蓋内出血のリスクは数% 報告がある一方、絶対値は施設・薬剤・年齢で差が大きい。実務では次を擦り合わせる。</p>
+            <ul>
+              <li><strong>勧める観察入院</strong>：高齢、抗血小板薬併用、転倒の高さ、独居、来院まで時間が経っている、家族の不安が強い</li>
+              <li><strong>帰宅でも回せる条件</strong>：症状なし、信頼できる同居者、夜間の電話・受診手段、書面の再受診基準を理解、4〜6 時間後の再 CT 陰性確認（施設プロトコル次第）</li>
+              <li>判断は<strong>カルテに根拠を書く</strong>（同意経過・代替案の説明）</li>
+            </ul>
+          </div>
+        </div>
+
+        <h3>転院・コンサルトの組み立て</h3>
         <ul>
-          <li><strong>CT で出血</strong> → 脳神経外科コンサルト、入院</li>
-          <li><strong>CT 正常 + 抗凝固薬あり</strong> → 経過観察入院（24 h 目安）または十分な帰宅説明</li>
-          <li><strong>CT 正常 + 抗凝固薬なし + 症状安定</strong> → 帰宅可</li>
-          <li><strong>独居・認知症</strong> → 見守りが確保できるまで帰宅を控える</li>
-          <li><strong>頸椎損傷併発疑い</strong> → 整形 / 脊椎外科</li>
-          <li><strong>失神が先行</strong> → 循環器・神経内科で原因精査</li>
+          <li>院内に脳神経外科がない → 出血所見・気道不安定・GCS 低下なら<strong>早期転院</strong>。電話で受け入れ確認 → CT 画像転送 → 救急車選定</li>
+          <li>転院搬送中：気道・循環の安定化が最優先。SBP ≥ 110、SpO<sub>2</sub> ≥ 94%、血糖 140〜180 を目標</li>
         </ul>
       </section>
 
-      <!-- §8 帰宅時の説明 -->
-      <section class="section-page" id="s8" hidden>
+      <!-- ============================================================== -->
+      <!-- §7 カルテテンプレ                                                -->
+      <!-- ============================================================== -->
+      <section class="section-page" id="s7" hidden>
         <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>📝 帰宅時の説明（必ず伝える）</h2>
+        <h2>📝 カルテテンプレ</h2>
 
-        <div class="callout callout-tip">
-          <div class="callout-title">次の症状があればすぐ再受診</div>
-          <div class="callout-body">
-            <ul>
-              <li>意識がぼんやりする・反応が鈍くなる</li>
-              <li>強い頭痛・嘔吐が続く</li>
-              <li>けいれん、手足の力が入らない、ろれつが回らない</li>
-              <li>受傷後数日以内の<strong>性格変化</strong>や<strong>歩行障害</strong>（遅発性出血・慢性硬膜下血腫）</li>
-            </ul>
-            <p>同居者・Key person にも口頭 + 書面で説明。抗凝固薬内服例では特に強調。</p>
-          </div>
-        </div>
+        <p>そのまま貼って必要箇所だけ書き換える。抗凝固薬・CT 適応根拠・帰宅説明の 3 点が抜けやすい。</p>
+
+        <div class="chart-tmpl">#頭部外傷
+[受傷機転]
+　日時：　　／　　　　　　時頃
+　状況：転倒（屋内 / 屋外、同一平面 / 高所＿m）／交通外傷／暴行／スポーツ／その他
+　目撃：あり / なし　　失神先行：あり / なし / 不明
+　受傷部位：前頭部 / 後頭部 / 側頭部 / 顔面　受傷直後の意識消失：あり（＿秒）/ なし / 不明
+
+[既往・内服]
+　抗凝固薬：なし / ワルファリン / DOAC（＿）　最終内服：
+　抗血小板薬：なし / アスピリン / クロピドグレル / 二剤
+　飲酒：なし / あり（量）　 認知症：あり / なし　 独居：あり / なし
+
+[来院時]
+　バイタル：BP　／　　 HR　　 SpO₂　 RR　 BT
+　GCS：E　 V　 M　＝合計
+　瞳孔：右　 mm 対光（＋／−）　左　 mm 対光（＋／−）
+　四肢麻痺：なし / あり（部位）　 けいれん：なし / あり
+　頭部：頭皮血腫／裂創／圧痛／後頭部所見
+　頭蓋底徴候：Battle（−）Raccoon（−）耳漏・鼻漏（−）鼓室血腫（−）
+　頸部：正中圧痛（−／＋）神経所見（−／＋）
+
+[判断・CT 適応]
+　Decision rule：Canadian / PECARN / NICE　該当項目：
+　CT 撮影：あり / なし　 撮影理由：
+
+[CT 所見]
+　脳実質：　　　　　　／　骨条件：
+　出血の有無・部位・サイズ・midline shift：
+
+[マネジメント]
+　脳外コンサルト：した / 不要　 再 CT 計画：　時間後
+　抗凝固リバース：（薬剤と量）
+　ICP 対策：ヘッドアップ／浸透圧／挿管
+
+[disposition]
+　入院（病棟・観察 / HCU / ICU）／ 帰宅 / 転院
+　観察時間：　時間　　帰宅の根拠：
+
+[帰宅説明（行う場合）]
+　書面で再受診基準を渡し、家族に口頭でも説明
+　主な再受診サイン：意識低下、強い頭痛、嘔吐反復、けいれん、麻痺、性格変化、歩行障害、髄液漏疑い
+</div>
       </section>
 
-      <!-- §9 出典・リンク -->
+      <!-- ============================================================== -->
+      <!-- §8 見落とし・ピットフォール                                       -->
+      <!-- ============================================================== -->
+      <section class="section-page" id="s8" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>⚠️ 見落とし・ピットフォール</h2>
+
+        <div class="callout callout-warning">
+          <div class="callout-title">必ず思い出す 10 項目</div>
+          <div class="callout-body">
+            <ul>
+              <li><strong>抗凝固薬の確認漏れ</strong>：本人が言わないことが多い。お薬手帳、家族、薬局へ電話確認</li>
+              <li><strong>飲酒で覆い隠される頭蓋内出血</strong>：意識障害を「酔っているだけ」と片付けない（→ <a class="wiki-link" href="転倒.html#s3-alcohol">飲酒後転倒</a>）</li>
+              <li><strong>慢性硬膜下血腫</strong>：受傷の数週後の歩行障害・認知低下・片麻痺で発症。受傷を本人が忘れていることも</li>
+              <li><strong>後頭部の裂創を仰臥位で見落とす</strong>：必ず頭をひっくり返して髪の中を触る</li>
+              <li><strong>頭蓋底骨折の所見</strong>：Battle／Raccoon／鼓室血腫／髄液漏。経鼻挿管・経鼻胃管は禁忌</li>
+              <li><strong>頸椎損傷の合併</strong>：頭部外傷では頸椎を必ず外す（→ <a class="wiki-link" href="頸部外傷・頸部痛.html">頸部外傷・頸部痛</a>）</li>
+              <li><strong>lucid interval を見ずに帰宅</strong>：受傷直後の意識回復に騙されない。EDH の典型</li>
+              <li><strong>機転に不釣合な意識障害</strong>：DAI を疑い MRI を考慮</li>
+              <li><strong>初回 CT 陰性で安心</strong>：抗凝固例・進行所見・脳挫傷ではフォロー CT を計画</li>
+              <li><strong>小児の non-accidental injury（NAI）</strong>：機転と所見の不一致、多発損傷、不自然な皮下出血、養育者の供述変化を疑う</li>
+            </ul>
+          </div>
+        </div>
+
+        <h3>典型的なシナリオ</h3>
+        <ul>
+          <li>「酔って転んで頭を打った」→ 意識障害を飲酒のせいにして CT を遅らせ、SDH を見逃す</li>
+          <li>「DOAC 飲んでないと言ったのに、実は」→ 家族確認・薬局電話を怠ると初回 CT すら撮らないことも</li>
+          <li>「lucid interval」→ ER で会話できていた患者が観察中に急速に意識低下。EDH の典型経過</li>
+          <li>「2 週前に転んだだけ」→ 高齢者の歩行障害・性格変化は<strong>慢性硬膜下血腫</strong>を疑う</li>
+          <li>「乳児の繰り返す頭部打撲」→ NAI のレッドフラグ。小児科コンサルト</li>
+        </ul>
+      </section>
+
+      <!-- ============================================================== -->
+      <!-- §9 出典・関連                                                    -->
+      <!-- ============================================================== -->
       <section class="section-page" id="s9" hidden>
         <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>📚 出典・リンク</h2>
+        <h2>📚 出典・関連リンク</h2>
 
-        <h3>主要文献</h3>
+        <h3>主要文献・ガイドライン</h3>
         <ul>
-          <li><strong>Canadian CT Head Rule</strong>：Stiell IG ほか. <em>Lancet.</em> 2001.</li>
+          <li><strong>Canadian CT Head Rule</strong>：Stiell IG ほか. <em>Lancet.</em> 2001;357(9266):1391-1396.</li>
+          <li><strong>NICE CG232 Head injury: assessment and early management</strong>（2023 update）.</li>
+          <li><strong>PECARN（小児頭部外傷の CT 適応）</strong>：Kuppermann N ほか. <em>Lancet.</em> 2009;374(9696):1160-1170.</li>
           <li><strong>Falls Decision Rule</strong>：Abdulaziz K ほか. <em>CMAJ.</em> 2023;195(47):E1614.</li>
+          <li><strong>Brain Trauma Foundation: Guidelines for the Management of Severe Traumatic Brain Injury</strong>（4th edition, 2016 / Update 系列）.</li>
+          <li><strong>AHA / ASA TBI 関連声明</strong>：頭蓋内圧管理・血圧目標・浸透圧療法.</li>
+          <li><strong>PATCH 試験</strong>：Baharoglu MI ほか. <em>Lancet.</em> 2016;387(10038):2605-2613.（抗血小板薬服用中の頭蓋内出血に対する血小板輸血）</li>
           <li><strong>日本医療安全調査機構 提言 9 号</strong>（2019）：入院中の転倒・転落による頭部外傷に係る死亡事例の分析.</li>
         </ul>
 
-        <h3>関連ページ</h3>
+        <h3>本サイト内の関連ページ</h3>
         <ul>
-          <li><a class="wiki-link" href="転倒.html">転倒</a>（全体像に戻る）</li>
-          <li><a class="wiki-link" href="頸部外傷・頸部痛.html">頸部外傷・頸部痛</a></li>
-          <li><a class="wiki-link" href="意識消失.html">意識消失</a>（失神が先行した転倒）</li>
-          <li><a class="wiki-link" href="意識障害.html">意識障害</a></li>
+          <li><a class="wiki-link" href="転倒.html">転倒</a>（呼ばれ元の主訴フロー）</li>
+          <li><a class="wiki-link" href="転倒.html#s3-alcohol">転倒 §3 飲酒後転倒</a>（飲酒で覆い隠される頭蓋内出血）</li>
+          <li><a class="wiki-link" href="頸部外傷・頸部痛.html">頸部外傷・頸部痛</a>（並走・必ず外す）</li>
+          <li><a class="wiki-link" href="疾患詳細/頸椎損傷.html">頸椎損傷（疾患詳細）</a></li>
+          <li><a class="wiki-link" href="意識消失.html">意識消失</a>（失神先行例）</li>
+          <li><a class="wiki-link" href="意識障害.html">意識障害</a>（外傷以外の鑑別）</li>
+          <li><a class="wiki-link" href="頭痛.html">頭痛</a>（受傷後頭痛・くも膜下を含む）</li>
+          <li><a class="wiki-link" href="疾患詳細/神経診察.html">神経診察</a>（GCS 以外の所見も）</li>
         </ul>
 
-        <p>#ER #救急 #頭部外傷 #CanadianCTHeadRule #FallsDecisionRule #抗凝固薬 #慢性硬膜下血腫</p>
+        <p>#ER #救急 #頭部外傷 #TBI #CanadianCTHeadRule #PECARN #NICEcg232 #抗凝固薬 #DOAC #SDH #EDH #慢性硬膜下血腫 #頭蓋底骨折</p>
       </section>
 
     </article>
