@@ -381,9 +381,6 @@
       .dx-imaging > summary { font-size: 12px; }
       .dx-imaging__list { font-size: 11.5px; }
     }
-
-    /* §メニュータイル非表示 */
-    .section-tiles { display: none !important; }
   </style>
 </head>
 <body>
@@ -408,7 +405,7 @@
         </div>
 
         <div class="flow-canvas">
-          <div class="dx-flow" role="group" aria-label="肩外傷の単純化診療フロー">
+          <div class="dx-flow" role="group" aria-label="肩外傷・痛みの単純化診療フロー">
 
             <!-- L0: Red flags -->
             <div class="dx-layer dx-layer--root">
@@ -497,6 +494,10 @@
                   <div class="dx-node__title">上腕骨近位部骨折</div>
                   <div class="dx-node__sub">成人では稀だが除外</div>
                 </a>
+                <a class="dx-node" href="疾患詳細/上肢骨折の固定/上腕骨骨幹部骨折.html">
+                  <div class="dx-node__title">上腕骨骨幹部骨折</div>
+                  <div class="dx-node__sub">病的骨折・橈骨神経麻痺に注意</div>
+                </a>
               </div>
 
               <!-- 3) 画像正常・挙上不能 -->
@@ -537,6 +538,7 @@
               <li><label><input type="checkbox" data-key="h-seizure"> <span><strong>てんかん発作・電撃傷</strong> <span class="dx-checklist__sub">後方脱臼の典型シーン。見逃しに直結</span></span></label></li>
               <li><label><input type="checkbox" data-key="h-adl"> <span><strong>もとの ADL・利き手・職業／趣味</strong> <span class="dx-checklist__sub">紹介状に必ず記載（手術 vs 保存の判断材料）</span></span></label></li>
               <li><label><input type="checkbox" data-key="h-lift"> <span><strong>受傷後の挙上可否</strong> <span class="dx-checklist__sub">画像正常で挙上不能=腱板損傷を想起</span></span></label></li>
+              <li><label><input type="checkbox" data-key="h-pop"> <span><strong>ポップ音・突然の脱力</strong> <span class="dx-checklist__sub">急性腱板断裂（受傷直後の挙上不能）も示唆</span></span></label></li>
             </ul>
           </details>
 
@@ -554,7 +556,7 @@
               <li><label><input type="checkbox" data-key="e-ac"> <span><strong>肩鎖関節の圧痛・段差</strong> <span class="dx-checklist__sub">ピアノキー徴候も確認</span></span></label></li>
               <li><label><input type="checkbox" data-key="e-axillary"> <span><strong>腋窩神経</strong> <span class="dx-checklist__sub">deltoid 外側皮膚知覚 + 三角筋収縮（脱臼で最多障害）</span></span></label></li>
               <li><label><input type="checkbox" data-key="e-vessel"> <span><strong>橈骨動脈・末梢血流</strong> <span class="dx-checklist__sub">触知低下／左右差／毛細血管再充満／皮膚色温</span></span></label></li>
-              <li><label><input type="checkbox" data-key="e-distal"> <span><strong>末梢神経（正中・橈・尺）</strong> <span class="dx-checklist__sub">手指の運動 + 知覚</span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-distal"> <span><strong>末梢神経（正中・橈・尺）</strong> <span class="dx-checklist__sub">手指の運動 + 知覚。橈骨神経麻痺は上腕骨骨幹部骨折で 12〜18%</span></span></label></li>
               <li><label><input type="checkbox" data-key="e-rom"> <span><strong>ROM（脱臼疑いでは無理に動かさない）</strong> <span class="dx-checklist__sub">外旋不能 = 後方脱臼を強く示唆</span></span></label></li>
               <li><label><input type="checkbox" data-key="e-cuff"> <span><strong>腱板の 4 つの身体所見</strong> <span class="dx-checklist__sub">painful arc／drop arm／external rotation lag／internal rotation lag</span></span></label></li>
               <li><label><input type="checkbox" data-key="e-recheck"> <span><strong>整復・固定後の再評価</strong> <span class="dx-checklist__sub">腋窩神経 + 末梢神経血管 + X 線</span></span></label></li>
@@ -587,6 +589,10 @@
               <li class="dx-rule is-critical">
                 <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>高齢者で脱臼+外科頸骨折</span></div>
                 <div class="dx-rule__then">牽引しても骨頭が戻らない。<strong>非整形科医での整復はトライしない</strong>、即整形コール</div>
+              </li>
+              <li class="dx-rule is-critical">
+                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>上腕骨骨幹部骨折＋下垂手（drop hand）</span></div>
+                <div class="dx-rule__then"><strong>橈骨神経麻痺</strong>を疑う（合併 12〜18%）。多くは保存で 3〜4 か月以内に回復</div>
               </li>
             </ul>
 
@@ -628,6 +634,10 @@
                 <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>高齢者・脱臼+大結節骨折</span></div>
                 <div class="dx-rule__then">非整形科医も整復トライ。<strong>大結節は整復後にほぼ元位置へ戻る</strong>ため、戻れば成人脱臼と同じ管理</div>
               </li>
+              <li class="dx-rule">
+                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>初回脱臼（特に若年）</span></div>
+                <div class="dx-rule__then">初回は<strong>2〜3 週固定 + 整形紹介</strong>。Bankart 修復術の早期検討も</div>
+              </li>
             </ul>
 
             <h4 class="dx-rules-l2__group">ピットフォール</h4>
@@ -657,12 +667,24 @@
                 <div class="dx-rule__then">初回は<strong>2〜3 週固定 + 整形紹介</strong>、反復は短期固定。固定期間と紹介プロトコルが違う</div>
               </li>
               <li class="dx-rule is-pitfall">
-                <div class="dx-rule__if"><span class="dx-rule__tag">⚠</span><span>「単なる肩こり」で帰宅指示</span></div>
-                <div class="dx-rule__then">外傷後の挙上困難を慢性肩こりと誤認。<strong>4 つの身体所見</strong>で腱板損傷を最後に疑う</div>
+                <div class="dx-rule__if"><span class="dx-rule__tag">⚠</span><span>外傷後の挙上困難を「単なる肩こり」で帰宅</span></div>
+                <div class="dx-rule__then">慢性肩こりと誤認。<strong>4 つの身体所見</strong>で腱板損傷を最後に疑う</div>
               </li>
               <li class="dx-rule is-pitfall">
                 <div class="dx-rule__if"><span class="dx-rule__tag">⚠</span><span>鎖骨骨折で 8 字包帯にこだわる</span></div>
                 <div class="dx-rule__then">成人は<strong>三角巾±バストバンド or クラビクルバンド</strong>でアウトカム同等</div>
+              </li>
+              <li class="dx-rule is-pitfall">
+                <div class="dx-rule__if"><span class="dx-rule__tag">⚠</span><span>AC 関節脱臼にクラビクルバンド</span></div>
+                <div class="dx-rule__then"><strong>三角巾 ± バストバンド</strong>が正解。クラビクルバンドは使わない</div>
+              </li>
+              <li class="dx-rule is-pitfall">
+                <div class="dx-rule__if"><span class="dx-rule__tag">⚠</span><span>ER で腱板に関節内ステロイド注射</span></div>
+                <div class="dx-rule__then">腱を傷つけるリスク。ER は身体所見で疑うところまで、注射は整形外来で</div>
+              </li>
+              <li class="dx-rule is-pitfall">
+                <div class="dx-rule__if"><span class="dx-rule__tag">⚠</span><span>軽微外力での上腕骨骨幹部骨折</span></div>
+                <div class="dx-rule__then"><strong>病的骨折</strong>を疑う（転移性骨腫瘍・多発性骨髄腫など）。胸部画像と全身評価</div>
               </li>
             </ul>
           </details>
@@ -683,438 +705,30 @@
         </div>
       </div>
 
-      <!-- メニュータイル（非表示） -->
-      <nav class="section-tiles" id="sectionMenu">
-        <a class="section-tile" href="#s1"><span class="section-tile__no">🚨</span><span class="section-tile__name">Red flags</span></a>
-        <a class="section-tile" href="#s2"><span class="section-tile__no">🧭</span><span class="section-tile__name">鑑別の枠組み</span></a>
-        <a class="section-tile" href="#s3"><span class="section-tile__no">🦴</span><span class="section-tile__name">主要疾患</span></a>
-        <a class="section-tile" href="#s4"><span class="section-tile__no">🩺</span><span class="section-tile__name">身体所見・画像</span></a>
-        <a class="section-tile" href="#s5"><span class="section-tile__no">📤</span><span class="section-tile__name">マネジメント</span></a>
-        <a class="section-tile" href="#s6"><span class="section-tile__no">🏠</span><span class="section-tile__name">disposition</span></a>
-        <a class="section-tile" href="#s7"><span class="section-tile__no">📝</span><span class="section-tile__name">カルテテンプレ</span></a>
-        <a class="section-tile" href="#s8"><span class="section-tile__no">⚠️</span><span class="section-tile__name">見落とし</span></a>
-        <a class="section-tile" href="#s9"><span class="section-tile__no">📚</span><span class="section-tile__name">出典・関連</span></a>
-      </nav>
+      <!-- 出典・関連リンク -->
+      <h3>関連ページ</h3>
+      <ul>
+        <li><a class="wiki-link" href="疾患詳細/肩関節脱臼.html">肩関節脱臼</a></li>
+        <li><a class="wiki-link" href="疾患詳細/肩鎖関節脱臼.html">肩鎖関節脱臼</a></li>
+        <li><a class="wiki-link" href="疾患詳細/上肢骨折の固定/上腕骨近位部骨折.html">上腕骨近位部骨折</a></li>
+        <li><a class="wiki-link" href="疾患詳細/上肢骨折の固定/鎖骨骨折.html">鎖骨骨折</a></li>
+        <li><a class="wiki-link" href="疾患詳細/腱板損傷.html">腱板損傷</a></li>
+        <li><a class="wiki-link" href="疾患詳細/上肢骨折の固定/上腕骨骨幹部骨折.html">上腕骨骨幹部骨折</a></li>
+        <li><a class="wiki-link" href="疾患詳細/開放骨折.html">開放骨折</a></li>
+        <li><a class="wiki-link" href="転倒.html">転倒</a></li>
+      </ul>
 
-      <!-- §1 Red flags -->
-      <section class="section-page" id="s1" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🚨 Red flags（命・四肢温存）</h2>
+      <h3>主な根拠</h3>
+      <ul>
+        <li>上腕骨近位部骨折は脆弱性骨折として 4 番目に多く、80% が安定型で保存加療。転位例でも RCT で手術 vs 保存に機能予後差なしの報告</li>
+        <li>肩関節脱臼は全脱臼の 50%、前方が 90〜98%。Bankart 87% / Hill-Sachs 54〜76% を合併</li>
+        <li>鎖骨骨折は肩外傷の 42% を占める。中央1/3 が 69〜80%、87% が間接外力（肩から落ちる）</li>
+        <li>肩鎖関節脱臼の X 線：特異度 90% / 感度 41%。Type I/II は X 線陰性が普通で身体所見で診断</li>
+        <li>腱板損傷：エコー・MRI の完全断裂感度・特異度は 90% 前後だが、部分断裂で感度低下。70 歳以上は無症候性が約半数</li>
+        <li>腱板の身体所見：painful arc（71/81%）／drop arm（24/93%）／external rotation lag（47/94%）／internal rotation lag（97/83%）</li>
+      </ul>
 
-        <h3>血管</h3>
-        <ul>
-          <li>橈骨動脈触知低下／左右差、上肢の冷感・蒼白</li>
-          <li>毛細血管再充満時間延長、末梢 SpO2 低下、皮膚色温の異常</li>
-          <li>高エネルギー外傷後の脱臼・骨折で <strong>腋窩動脈損傷</strong> を疑う（脱臼整復後にも血流再評価）</li>
-        </ul>
-
-        <h3>神経</h3>
-        <ul>
-          <li><strong>腋窩神経</strong>：deltoid 外側皮膚の知覚 + 三角筋収縮 — 肩関節脱臼で最多障害、整復前後で必ず評価</li>
-          <li><strong>正中・橈骨・尺骨</strong>：手指の運動 + 知覚</li>
-          <li>高齢・高エネルギー外傷では <strong>腕神経叢損傷</strong> も</li>
-        </ul>
-
-        <h3>その他</h3>
-        <ul>
-          <li>開放外傷（皮膚損傷 + 骨折・脱臼）</li>
-          <li>整復不能な脱臼、著明な変形</li>
-          <li>高齢者の脱臼+外科頸骨折（牽引で骨頭が戻らない）</li>
-          <li>てんかん発作／電撃傷後の <strong>後方脱臼</strong>（内旋固定 + 外旋不能）</li>
-        </ul>
-
-        <div class="callout callout-danger">
-          <div class="callout-title">1 つでもあれば即整形コンサルト</div>
-          <div class="callout-body">
-            <p>主な緊急鑑別：</p>
-            <ul>
-              <li><span class="wiki-missing">腋窩動脈損傷</span> / <span class="wiki-missing">腋窩神経損傷</span> / <span class="wiki-missing">腕神経叢損傷</span></li>
-              <li><a class="wiki-link" href="疾患詳細/肩関節脱臼.html">肩関節脱臼</a>（整復不能・後方脱臼・脱臼骨折）</li>
-              <li><a class="wiki-link" href="疾患詳細/開放骨折.html">開放骨折</a> / <a class="wiki-link" href="疾患詳細/上肢骨折の固定/上腕骨近位部骨折.html">上腕骨近位部骨折</a>（4-part / 脱臼骨折）</li>
-            </ul>
-          </div>
-        </div>
-      </section>
-
-      <!-- §2 鑑別の枠組み -->
-      <section class="section-page" id="s2" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🧭 鑑別の枠組み（年齢で頻度が変わる）</h2>
-
-        <p>肩外傷は「鎖骨 ⇒ 上腕骨 ⇒ 腱板」の順で診察すると見逃しが減る。年齢で疾患頻度が大きく変わるのが最大の特徴。</p>
-
-        <div class="table-wrap">
-          <table>
-            <thead><tr><th></th><th>上腕骨近位部</th><th>肩関節脱臼</th><th>鎖骨骨折</th><th>肩鎖関節脱臼</th><th>腱板損傷</th></tr></thead>
-            <tbody>
-              <tr><td><strong>高齢者</strong></td><td>◎ 最多</td><td>○（±大結節骨折）</td><td>○（特に内側1/3）</td><td>▲ 稀</td><td>▲ 急性は稀／無症候性多い</td></tr>
-              <tr><td><strong>成人</strong></td><td>▲ 高エネのみ</td><td>○ 大本命</td><td>◎ 最多</td><td>○ 男性に多い</td><td>○ 直達外力／重量物</td></tr>
-              <tr><td><strong>小児</strong></td><td>▲ 稀</td><td>◆ 非常に稀</td><td>○</td><td>◆ 稀</td><td>◆ 稀</td></tr>
-            </tbody>
-          </table>
-        </div>
-
-        <h3>診察手順（疾患頻度ベース）</h3>
-        <ol>
-          <li><strong>鎖骨に疼痛あり</strong> ⇒ 鎖骨骨折／肩鎖関節脱臼を疑い、<strong>鎖骨2方向</strong>で評価（小児はここまで）</li>
-          <li><strong>鎖骨に疼痛なし</strong> ⇒ 上腕骨近位部骨折／肩関節脱臼を疑い、<strong>肩2方向（AP+Y）+ 腋窩位</strong>（高齢者はここまでで多くは決まる）</li>
-          <li><strong>身体所見と画像で①②がない</strong> ⇒ <strong>腱板損傷</strong>を疑い、4 つの身体所見を確認</li>
-        </ol>
-
-        <div class="callout callout-tip">
-          <div class="callout-title">画像前に鑑別を立てる</div>
-          <div class="callout-body"><p>画像をオーダーする前に「<strong>この年齢・この機転なら何？</strong>」を口に出す。鎖骨骨折を疑えば鎖骨2方向、後方脱臼を疑えば腋窩位、と<strong>撮影オーダーが変わる</strong>。撮ってから考えるのではなく、考えてから撮る。</p></div>
-        </div>
-      </section>
-
-      <!-- §3 主要疾患 -->
-      <section class="section-page" id="s3" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🦴 主要疾患の詳細</h2>
-
-        <details class="sub-fold" open>
-          <summary>1. 上腕骨近位部骨折（高齢者の転倒で 9 割）</summary>
-          <div class="sub-fold__body">
-            <ul>
-              <li><strong>頻度</strong>：脊椎・大腿骨近位・橈骨遠位に次ぐ 4 番目に多い脆弱性骨折。高齢者では低エネ転倒で起こる</li>
-              <li><strong>診断</strong>：明確骨折タイプ。診察は最低限にして肩 X 線（AP+Y）で診断</li>
-              <li><strong>Neer 分類</strong>：解剖頸／外科頸／大結節／小結節の 4 セグメントで、転位 1 cm 以上 or 45° 以上で 1 part 増える。手術考慮は 2-part 以上で、CT が必須</li>
-              <li><strong>初期対応</strong>：<strong>三角巾 ± バストバンド</strong>のみで OK。腕の重さで自然に整復位</li>
-              <li><strong>マネジメント</strong>：80% は安定型で保存、転位例も RCT で手術と保存に機能予後差なしの報告あり。多くは<strong>帰宅保存</strong>、一部が<strong>帰宅手術</strong></li>
-              <li><strong>紹介状</strong>：もとの ADL ／利き手／職業を必ず記載、可能なら CT 添付</li>
-              <li>詳細：<a class="wiki-link" href="疾患詳細/上肢骨折の固定/上腕骨近位部骨折.html">上腕骨近位部骨折</a></li>
-            </ul>
-          </div>
-        </details>
-
-        <details class="sub-fold">
-          <summary>2. 肩関節脱臼（成人の激痛肩の大本命）</summary>
-          <div class="sub-fold__body">
-            <ul>
-              <li><strong>頻度</strong>：全脱臼の 50%。前方脱臼が 90〜98% を占め、後方は日本では稀</li>
-              <li><strong>身体所見</strong>：自動運動不可、squared off shoulder、外転外旋位で固定。リピーターは「前と同じで腕が外れた」</li>
-              <li><strong>画像</strong>：肩 AP + Y view + 腋窩位。AP のみだと後方脱臼を見落とす（light bulb sign）</li>
-              <li><strong>合併症</strong>：<strong>Bankart 病変</strong>（関節窩前下縁骨折／87%）と <strong>Hill-Sachs 病変</strong>（骨頭陥没／54〜76%）。緊急性は低く後日整形外来で評価</li>
-              <li><strong>整復前</strong>：腋窩神経・末梢神経血管を必ず評価。関節内リドカイン注入（IAL）が外来でも安全</li>
-              <li><strong>整復法</strong>：1 人で行える <strong>外旋+Milch 法</strong>（仰臥位）から開始 → 整復不可なら 2 人で <strong>肩甲骨回旋+Stimson 法</strong>（腹臥位）→ 困難なら静脈麻酔で<strong>反対牽引法</strong></li>
-              <li><strong>整復後</strong>：必ず <strong>X 線（AP+Y）+ 腋窩神経再評価</strong>、三角巾 ± バストバンド固定で帰宅保存、整形外来へ紹介</li>
-              <li><strong>後方脱臼</strong>：てんかん発作／電撃傷／高エネ外傷の<strong>内旋固定 + 外旋不能</strong>で疑う。<strong>腋窩位</strong>必須</li>
-              <li><strong>高齢者の脱臼骨折</strong>：大結節骨折は整復後にほぼ元位置に戻るため成人と同じ対応。<strong>外科頸骨折</strong>は牽引で戻らず観血的整復が必要 → 即整形コール</li>
-              <li>詳細：<a class="wiki-link" href="疾患詳細/肩関節脱臼.html">肩関節脱臼</a></li>
-            </ul>
-          </div>
-        </details>
-
-        <details class="sub-fold">
-          <summary>3. 鎖骨骨折（成人の肩外傷で最多／全肩外傷の 42%）</summary>
-          <div class="sub-fold__body">
-            <ul>
-              <li><strong>受傷機転</strong>：87% が「肩から落ちた」間接外力で起こる。直達外力は 7% のみ</li>
-              <li><strong>分類</strong>：内側1/3（21〜28%、高齢の脆弱性）／<strong>中央1/3</strong>（69〜80%、最多）／外側1/3（稀、多くは手術）</li>
-              <li><strong>診察</strong>：肩外傷全例で<strong>鎖骨を内側から外側まで触診</strong>。圧痛があれば<strong>鎖骨2方向</strong>をオーダー（肩2方向では微妙骨折タイプ）</li>
-              <li><strong>初期対応</strong>：三角巾 ± バストバンド or クラビクルバンド。アウトカムは同等</li>
-              <li><strong>マネジメント</strong>：内側1/3・中央1/3 は<strong>帰宅保存</strong>、外側1/3 は<strong>帰宅手術</strong>が一般的。中央1/3 でも転位大は癒合不全 15% → 手術考慮（2.2% に減）</li>
-              <li><strong>紹介状</strong>：機能予後を考慮できるよう、ADL／趣味／職業を記載</li>
-              <li>詳細：<a class="wiki-link" href="疾患詳細/上肢骨折の固定/鎖骨骨折.html">鎖骨骨折</a></li>
-            </ul>
-          </div>
-        </details>
-
-        <details class="sub-fold">
-          <summary>4. 肩鎖関節脱臼（Rockwood 分類）</summary>
-          <div class="sub-fold__body">
-            <ul>
-              <li><strong>受傷機転</strong>：コンタクトスポーツ／転倒で肩を強打。男女比 5:1</li>
-              <li><strong>身体所見</strong>：肩鎖関節限局の圧痛、段差変形、<strong>ピアノキー徴候</strong>（飛び上がった鎖骨を押すと戻る）</li>
-              <li><strong>画像</strong>：肩関節 AP（特異度 90% / 感度 41%）。<strong>肩峰下端〜鎖骨下端の距離</strong>で評価<ul>
-                  <li>13 mm 未満 → <strong>Type I/II</strong>（保存）</li>
-                  <li>13 mm 以上 → <strong>Type III 以上</strong>（手術考慮）</li>
-                </ul>
-              </li>
-              <li><strong>注意</strong>：Type I/II は X 線では転位なし → <strong>身体所見で疑い診断</strong>。圧痛＋ピアノキー陰性で疑い、紹介状に「臨床的に肩鎖関節脱臼を疑う」と記載</li>
-              <li><strong>初期対応</strong>：三角巾 ± バストバンド（<strong>クラビクルバンドは使わない</strong>）。Type I で 1 週間／Type II で 3 週間固定の帰宅保存。Type III 以上は<strong>帰宅手術</strong>or 帰宅保存（機能予後と趣味・職業から個別判断）</li>
-              <li>詳細：<a class="wiki-link" href="疾患詳細/肩鎖関節脱臼.html">肩鎖関節脱臼</a></li>
-            </ul>
-          </div>
-        </details>
-
-        <details class="sub-fold">
-          <summary>5. 腱板損傷（X 線陰性で挙上不能なら最後に疑う）</summary>
-          <div class="sub-fold__body">
-            <ul>
-              <li><strong>解剖</strong>：肩甲下筋／棘上筋／棘下筋／小円筋の 4 つの小筋（rotator cuff）が骨頭を臼蓋に引き寄せる</li>
-              <li><strong>受傷機転</strong>：直達外力／FOOSH／重量物挙上。<strong>急性 10% / 慢性 90%</strong></li>
-              <li><strong>診断の壁</strong>：レントゲン・CT では診断不可（軟部組織）。エコー・MRI は完全断裂で感度・特異度 90% 前後だが部分断裂で感度低下。<strong>70 歳以上は約半数が無症候性腱板損傷</strong>のため、画像所見が陳旧か急性か判別困難</li>
-              <li><strong>4 つの身体所見</strong>（特異度高い、紹介状に必須）：
-                <ul>
-                  <li><strong>painful arc test</strong>（棘上筋）：90〜120° で疼痛、120°超で軽快。感度 71% / 特異度 81%</li>
-                  <li><strong>drop arm test</strong>（棘上筋）：90° 外転位で保持できず腕が落ちる。感度 24% / 特異度 93%</li>
-                  <li><strong>external rotation lag test</strong>（棘上＋棘下筋）：外旋位を保持できず内旋に戻る。感度 47% / 特異度 94%</li>
-                  <li><strong>internal rotation lag test</strong>（肩甲下筋）：腰から離した手背が腰に戻ってしまう。感度 97% / 特異度 83%</li>
-                </ul>
-              </li>
-              <li><strong>初期対応</strong>：三角巾固定 + 内服鎮痛のみ。<strong>関節内ステロイド注射は ER で行わない</strong>（腱を傷つけるリスク）</li>
-              <li><strong>マネジメント</strong>：44〜88% が保存加療（帰宅保存）、若年・完全断裂は鏡視下修復術（帰宅手術）。整形外来で正確診断と方針決定</li>
-              <li>詳細：<a class="wiki-link" href="疾患詳細/腱板損傷.html">腱板損傷</a></li>
-            </ul>
-          </div>
-        </details>
-      </section>
-
-      <!-- §4 身体所見・画像 -->
-      <section class="section-page" id="s4" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🩺 身体所見・画像のポイント</h2>
-
-        <h3>視診・触診（肩外傷全例の最低セット）</h3>
-        <ul>
-          <li>視診：squared off shoulder（前方脱臼）／段差変形（肩鎖関節・鎖骨）／腫脹・皮下出血／開放創</li>
-          <li>触診：<strong>鎖骨を内側→外側まで全長</strong>／肩鎖関節／肩峰／大結節／骨頭の位置</li>
-          <li>ROM：自動・他動（脱臼疑いでは無理に動かさない）。外旋不能 = 後方脱臼</li>
-          <li>神経血管：<strong>腋窩神経</strong>（deltoid 外側知覚＋三角筋収縮）／橈骨動脈／末梢神経・末梢血流</li>
-        </ul>
-
-        <h3>X 線：撮影方向の使い分け</h3>
-        <div class="table-wrap">
-          <table>
-            <thead><tr><th>撮影方向</th><th>分かること</th><th>注意</th></tr></thead>
-            <tbody>
-              <tr>
-                <td><strong>肩 AP（true AP）</strong></td>
-                <td>骨頭位置／骨折線／関節裂隙</td>
-                <td>後方脱臼は light bulb sign のみで分かりにくい</td>
-              </tr>
-              <tr>
-                <td><strong>Y view（scapular Y）</strong></td>
-                <td>骨頭の前後位置（前方 vs 後方の判定）</td>
-                <td>Y の交点に骨頭がない = 脱臼</td>
-              </tr>
-              <tr>
-                <td><strong>腋窩位</strong></td>
-                <td>関節適合／Hill-Sachs／Bankart</td>
-                <td><strong>後方脱臼の確定に最有用</strong>。疼痛で困難なら Velpeau 代用</td>
-              </tr>
-              <tr>
-                <td><strong>鎖骨2方向</strong></td>
-                <td>鎖骨骨折（明確骨折タイプ）</td>
-                <td>鎖骨に圧痛があれば必ず追加</td>
-              </tr>
-              <tr>
-                <td>Zanca view</td>
-                <td>肩鎖関節の grade 判定補助</td>
-                <td>必須ではない</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        <h3>CT・MRI・エコー</h3>
-        <ul>
-          <li><strong>CT</strong>：上腕骨近位部骨折の Neer 分類（手術考慮例）／脱臼骨折／骨頭陥没疑い。整形外来までに準備しておくと very good</li>
-          <li><strong>MRI</strong>：腱板損傷（完全断裂の感度・特異度 90% 前後）／Bankart・Hill-Sachs。ER で必須ではない</li>
-          <li><strong>エコー</strong>：腱板損傷（MRI と同等の感度・特異度）。ER でも実施可能だが、ER で診断確定は不要</li>
-        </ul>
-
-        <div class="callout callout-warning">
-          <div class="callout-title">1 方向のみで判断しない</div>
-          <div class="callout-body">
-            <ul>
-              <li>AP のみで「整復済み」と判断しない → Y view／腋窩位で確認</li>
-              <li>整復後も必ず <strong>X 線で位置 + 大結節骨折／Hill-Sachs／Bankart を再評価</strong></li>
-              <li>4-part 骨折・脱臼骨折は CT 追加</li>
-            </ul>
-          </div>
-        </div>
-      </section>
-
-      <!-- §5 マネジメント -->
-      <section class="section-page" id="s5" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>📤 マネジメント（5 択分類）</h2>
-
-        <p>上肢外傷のゴールは「骨が美しく癒合する解剖学的ゴール」ではなく「上肢が使える機能的ゴール」。多少のずれより機能を優先する。</p>
-
-        <div class="table-wrap">
-          <table>
-            <thead><tr><th>分類</th><th>該当例</th><th>対応</th></tr></thead>
-            <tbody>
-              <tr>
-                <td><strong>即時整形</strong></td>
-                <td>整復不能脱臼／後方脱臼／脱臼骨折で外科頸骨折／開放骨折／血管神経損傷</td>
-                <td>即コンサルト、観血的整復・手術室準備</td>
-              </tr>
-              <tr>
-                <td><strong>入院整形</strong></td>
-                <td>4-part 上腕骨近位部骨折／転位大の鎖骨骨折／疼痛コントロール困難な高齢者</td>
-                <td>整形入院。社会的入院も判断</td>
-              </tr>
-              <tr>
-                <td><strong>帰宅手術</strong></td>
-                <td>鎖骨外側1/3 ／中央1/3 で転位大／肩鎖関節脱臼 Type III 以上で機能要求高い／腱板完全断裂の若年</td>
-                <td>三角巾固定で帰宅、後日整形外来で手術相談</td>
-              </tr>
-              <tr>
-                <td><strong>帰宅保存</strong></td>
-                <td>上腕骨近位部骨折の大半／肩関節脱臼整復後／鎖骨骨折（内側・中央）／肩鎖関節脱臼 I/II ／腱板損傷の多く</td>
-                <td>三角巾 ± バストバンド、整形外来紹介</td>
-              </tr>
-              <tr>
-                <td><strong>再診不要</strong></td>
-                <td>軽度打撲のみで X 線陰性、ROM 制限なし、腱板テストすべて陰性</td>
-                <td>NSAIDs／アセトアミノフェン、悪化時受診</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        <h3>固定の選び方</h3>
-        <ul>
-          <li><strong>肩関節脱臼整復後</strong>：三角巾 + swathe（バストバンド）、初回 2〜3 週／反復は短期</li>
-          <li><strong>上腕骨近位部骨折</strong>：三角巾 ± バストバンド、転位大なら U 字副木追加もあり</li>
-          <li><strong>鎖骨骨折</strong>：三角巾 ± バストバンド or クラビクルバンド（成人はどちらでも同等）</li>
-          <li><strong>肩鎖関節脱臼</strong>：三角巾 ± バストバンド（クラビクルバンドは使わない）</li>
-          <li><strong>腱板損傷</strong>：三角巾固定</li>
-        </ul>
-
-        <h3>鎮痛・整復補助</h3>
-        <ul>
-          <li>第一選択：アセトアミノフェン、必要時 NSAIDs</li>
-          <li>整復前：<strong>関節内リドカイン注入（IAL）</strong>が外来でも安全。呼吸抑制少ない</li>
-          <li>静注：フェンタニル／モルヒネ ± ベンゾジアゼピン少量</li>
-          <li>整復困難例：透視下＋静脈麻酔（処置鎮静、モニター下）</li>
-        </ul>
-
-        <div class="callout callout-tip">
-          <div class="callout-title">紹介状に必ず書く 4 点</div>
-          <div class="callout-body">
-            <ul>
-              <li>もとの ADL（独居か／杖か／介助か）</li>
-              <li>利き手・職業・趣味（手術 vs 保存の判断材料）</li>
-              <li>整復前後の X 線（脱臼例）</li>
-              <li>身体所見の所見名（とくに腱板の 4 テストはどれが陽性か）</li>
-            </ul>
-          </div>
-        </div>
-      </section>
-
-      <!-- §6 disposition -->
-      <section class="section-page" id="s6" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🏠 disposition・帰宅説明・フォロー</h2>
-
-        <h3>初回脱臼 vs 反復性脱臼</h3>
-        <div class="table-wrap">
-          <table>
-            <thead><tr><th></th><th>初回脱臼</th><th>反復性脱臼</th></tr></thead>
-            <tbody>
-              <tr><td>固定期間</td><td>2〜3 週間（年齢で調整）</td><td>数日〜1 週間</td></tr>
-              <tr><td>紹介</td><td>整形外来へ必ず（Bankart/Hill-Sachs 評価）</td><td>受診歴ある主治医優先</td></tr>
-              <tr><td>20 歳代の若年</td><td>再脱臼率高く、早期手術選択肢を説明</td><td>手術適応を相談（鏡視下 Bankart 修復）</td></tr>
-            </tbody>
-          </table>
-        </div>
-
-        <h3>帰宅前の患者説明</h3>
-        <ul>
-          <li>肩関節脱臼後：「これだけ大きな関節が外れた時には、レントゲンで映らない骨折が起こっているかも知れません。緊急性はないので、後日整形外科で評価してもらいましょう」</li>
-          <li>上腕骨近位部骨折：「立派な骨折に見えても、多くは三角巾の固定だけで治ります。腕の重さで自然に整復位になります」</li>
-          <li>腱板損傷疑い：「ER ではレントゲンで骨折を除外するところまで。診断確定と治療方針は整形外来で MRI/エコーが要ります。ほとんどは保存加療です」</li>
-          <li>共通：固定後の指先の<strong>色温・知覚・運動</strong>を本人に教え、悪化時すぐ受診</li>
-        </ul>
-
-        <h3>入院 / 整形コンサルトの目安</h3>
-        <ul>
-          <li>整復不能な脱臼、後方脱臼、脱臼骨折（外科頸骨折を伴うもの）</li>
-          <li>血管神経損傷、開放骨折</li>
-          <li>4-part 上腕骨近位部骨折、転位大の鎖骨骨折</li>
-          <li>高齢者で疼痛コントロール困難・独居で安全性低い（社会的入院）</li>
-          <li>夜間で整形対応不能 + 再評価が必要な例</li>
-        </ul>
-      </section>
-
-      <!-- §7 カルテテンプレ -->
-      <section class="section-page" id="s7" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>📝 カルテテンプレート</h2>
-
-        <h3>初診時所見</h3>
-        <pre style="white-space: pre-wrap; font-size: 12.5px; background: var(--surface); padding: 10px; border-radius: 8px;">
-【主訴】 〇側肩痛
-【受傷機転】 〇日前、〇〇で（転倒／肩から落ちた／腕を引かれた／FOOSH／直達）
-【既往】 脱臼歴：あり（〇回）／なし、利き手：〇、職業：〇、ADL：〇
-
-【視診】 squared off shoulder：あり／なし、段差変形（肩鎖関節／鎖骨）：あり／なし、開放創：あり／なし
-【触診】 鎖骨（内側〜外側）圧痛：〇、肩鎖関節圧痛：〇、大結節圧痛：〇
-【ROM】 自動挙上：可／不可、外旋：可／不可（不可なら後方脱臼を想起）
-【神経】 腋窩神経（deltoid 外側知覚 + 三角筋収縮）：正常／異常、正中・橈・尺：正常／異常
-【血管】 橈骨動脈：触知良好／低下、左右差：なし／あり、CRT：〇秒、皮膚色温：正常
-【腱板テスト】 painful arc：〇、drop arm：〇、external rotation lag：〇、internal rotation lag：〇
-
-【画像】
-肩 AP：〇
-Y view：骨頭は Y 交点に：あり／なし
-腋窩位：〇
-（鎖骨2方向／CT は適応で追加）
-
-【評価】 〇〇（疾患名）
-【処置】 関節内リドカイン → 〇法で整復／三角巾 ± バストバンド固定
-【整復後】 神経・血管再評価：〇、X 線（AP+Y）再撮影：〇
-【方針】 帰宅保存／帰宅手術／入院整形／即時整形
-【再診】 〇月〇日 整形外科外来（紹介状＋整復前後の画像添付）
-        </pre>
-      </section>
-
-      <!-- §8 見落とし -->
-      <section class="section-page" id="s8" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>⚠️ 見落とし・やりがちなミス</h2>
-
-        <ul>
-          <li><strong>後方脱臼を AP のみで見落とす</strong> — てんかん発作後・電撃傷後の肩痛では Y view／腋窩位を必ず追加。「内旋固定 + 外旋不能」を見たら腋窩位</li>
-          <li><strong>整復前後で腋窩神経をチェックしない</strong> — 整復による神経障害を見逃す。<strong>整復前と整復後で別々に記録</strong>するクセを</li>
-          <li><strong>整復後 X 線を撮らない</strong> — 大結節骨折・再脱臼・骨頭位置の確認漏れ</li>
-          <li><strong>肩関節 2 方向だけで終了</strong> — 鎖骨骨折・肩鎖関節脱臼が微妙骨折タイプで写る。<strong>鎖骨を必ず触診</strong>し、痛みあれば鎖骨2方向へ</li>
-          <li><strong>高齢者の挙上困難を「腱板」と即断</strong> — 上腕骨近位部骨折を X 線で先に除外。70 歳以上は無症候性腱板損傷も多く、画像のみでは判定不可</li>
-          <li><strong>初回脱臼と反復性脱臼を同じ管理</strong> — 固定期間と紹介プロトコルが違う</li>
-          <li><strong>外傷後の挙上困難を「単なる肩こり」で帰宅</strong> — 4 つの腱板テストを必ず実施</li>
-          <li><strong>高齢者の脱臼骨折で外科頸骨折を整復しようとする</strong> — 牽引で骨頭が戻らない。即整形コール</li>
-          <li><strong>鎖骨骨折で 8 字包帯にこだわる</strong> — 三角巾 or クラビクルバンドでアウトカム同等</li>
-          <li><strong>腱板損傷を疑って ER で関節内ステロイド注射</strong> — 腱を傷つけるリスク。ER では身体所見で疑うところまで</li>
-          <li><strong>AC 関節脱臼にクラビクルバンド</strong> — 三角巾 ± バストバンドが正解。クラビクルバンドは使わない</li>
-        </ul>
-      </section>
-
-      <!-- §9 出典・関連 -->
-      <section class="section-page" id="s9" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>📚 出典・関連リンク</h2>
-
-        <h3>関連ページ（本サイト内）</h3>
-        <ul>
-          <li><a class="wiki-link" href="疾患詳細/肩関節脱臼.html">肩関節脱臼</a></li>
-          <li><a class="wiki-link" href="疾患詳細/肩鎖関節脱臼.html">肩鎖関節脱臼</a></li>
-          <li><a class="wiki-link" href="疾患詳細/上肢骨折の固定/上腕骨近位部骨折.html">上腕骨近位部骨折</a></li>
-          <li><a class="wiki-link" href="疾患詳細/上肢骨折の固定/鎖骨骨折.html">鎖骨骨折</a></li>
-          <li><a class="wiki-link" href="疾患詳細/腱板損傷.html">腱板損傷</a></li>
-          <li><a class="wiki-link" href="疾患詳細/上肢骨折の固定/上腕骨骨幹部骨折.html">上腕骨骨幹部骨折</a></li>
-          <li><a class="wiki-link" href="疾患詳細/開放骨折.html">開放骨折</a></li>
-          <li><a class="wiki-link" href="転倒.html">転倒</a></li>
-          <li><span class="wiki-missing">腋窩神経損傷</span> / <span class="wiki-missing">腋窩動脈損傷</span> / <span class="wiki-missing">腕神経叢損傷</span></li>
-        </ul>
-
-        <h3>主な根拠（要点）</h3>
-        <ul>
-          <li>上腕骨近位部骨折は脆弱性骨折として 4 番目に多く、高齢者では 75〜87% が低エネ転倒で発生。80% が安定型で保存加療</li>
-          <li>転位例でも RCT で手術と保存に機能予後差なしの報告（Rangan ら）</li>
-          <li>肩関節脱臼は全脱臼の 50%、前方が 90〜98%。Bankart 87% / Hill-Sachs 54〜76% を合併</li>
-          <li>鎖骨骨折は肩外傷の 42% を占める。中央1/3 が 69〜80%、87% が間接外力（肩から落ちる）</li>
-          <li>肩鎖関節脱臼の X 線：特異度 90% / 感度 41%。Type I/II は X 線陰性が普通で身体所見で診断</li>
-          <li>腱板損傷：エコー・MRI の完全断裂感度・特異度は 90% 前後だが、部分断裂で感度低下。70 歳以上は無症候性が約半数</li>
-          <li>腱板の身体所見：painful arc（71/81%）／drop arm（24/93%）／external rotation lag（47/94%）／internal rotation lag（97/83%）</li>
-        </ul>
-
-        <p>#ER #救急 #肩 #肩関節脱臼 #上腕骨近位部骨折 #鎖骨骨折 #肩鎖関節脱臼 #腱板損傷 #整形外科</p>
-      </section>
+      <p>#ER #救急 #肩 #肩関節脱臼 #上腕骨近位部骨折 #鎖骨骨折 #肩鎖関節脱臼 #腱板損傷 #整形外科</p>
 
     </article>
   </main>
@@ -1183,55 +797,11 @@ Y view：骨頭は Y 交点に：あり／なし
       });
     });
 
-    // §セクションページ遷移
-    const menu = document.getElementById('sectionMenu');
-    const pages = document.querySelectorAll('.section-page');
-    const titleH1 = document.querySelector('.page-title');
-    const flowBoxEl = document.getElementById('flowBox');
-
-    function showSection(id) {
-      if (menu) menu.hidden = true;
-      if (titleH1) titleH1.hidden = true;
-      if (flowBoxEl) flowBoxEl.hidden = true;
-      pages.forEach(p => p.hidden = (p.id !== id));
-      window.scrollTo(0, 0);
-    }
-    function showMenu(scrollTarget) {
-      if (menu) menu.hidden = false;
-      if (titleH1) titleH1.hidden = false;
-      if (flowBoxEl) flowBoxEl.hidden = false;
-      pages.forEach(p => p.hidden = true);
-      if (scrollTarget) {
-        if (scrollTarget.tagName === 'DETAILS') scrollTarget.open = true;
-        scrollTarget.scrollIntoView({behavior: 'instant', block: 'start'});
-      } else {
-        window.scrollTo(0, 0);
-      }
-    }
-    function syncFromHash() {
-      const id = (location.hash || '').replace('#','');
-      const target = id ? document.getElementById(id) : null;
-      if (target && target.classList.contains('section-page')) {
-        showSection(id);
-      } else if (target) {
-        showMenu(target);
-      } else {
-        showMenu();
-      }
-    }
-
-    window.addEventListener('hashchange', syncFromHash);
-    document.querySelectorAll('.back-to-menu').forEach(b => {
-      b.addEventListener('click', () => { history.pushState(null,'',location.pathname); showMenu(); });
-    });
-
     const navBack = document.getElementById('navBack');
     if (navBack) navBack.addEventListener('click', () => {
       if (window.history.length > 1) history.back();
       else window.location.href = 'index.html';
     });
-
-    syncFromHash();
   })();
   </script>
 </body>

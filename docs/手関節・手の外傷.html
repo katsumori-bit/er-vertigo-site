@@ -457,13 +457,13 @@
                   <div class="dx-node__title">舟状骨骨折</div>
                   <div class="dx-node__sub">嗅ぎたばこ窩圧痛。初回 X-line 陰性 10〜20%</div>
                 </a>
-                <a class="dx-node" href="#s4-triquetrum">
+                <a class="dx-node" href="#triquetrum">
                   <div class="dx-node__title">三角骨骨折（背側剥離）</div>
                   <div class="dx-node__sub">手根骨骨折の 2 番手</div>
                 </a>
 
                 <div class="dx-tree__group">高エネ・正中神経症状</div>
-                <a class="dx-node dx-node--danger" href="#s4-perilunate">
+                <a class="dx-node dx-node--danger" href="#perilunate">
                   <div class="dx-node__title">月状骨周囲脱臼／月状骨脱臼</div>
                   <div class="dx-node__sub">側面で lunate の整列を確認</div>
                 </a>
@@ -524,13 +524,13 @@
                   <div class="dx-node__title">PIP 関節脱臼／volar plate 損傷</div>
                   <div class="dx-node__sub">背側脱臼が多い。Wilson 骨折を確認</div>
                 </a>
-                <a class="dx-node" href="#s5-central">
+                <a class="dx-node" href="#central-slip">
                   <div class="dx-node__title">総指伸筋腱中央索断裂</div>
                   <div class="dx-node__sub">最初は伸展可。1か月でボタン指変形</div>
                 </a>
 
                 <div class="dx-tree__group">爪外傷</div>
-                <a class="dx-node" href="#s5-distalphalanx">
+                <a class="dx-node" href="#distal-phalanx">
                   <div class="dx-node__title">末節骨骨折＋爪外傷</div>
                   <div class="dx-node__sub">爪床裂創／爪下血腫</div>
                 </a>
@@ -603,9 +603,9 @@
                 <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>前腕緊満＋受動指伸展で激痛</span></div>
                 <div class="dx-rule__then"><strong>前腕／手内コンパートメント症候群</strong>を疑う。緊急減張</div>
               </li>
-              <li class="dx-rule is-critical">
+              <li class="dx-rule is-critical" id="perilunate">
                 <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>高エネ外傷＋手関節腫脹＋正中神経症状</span></div>
-                <div class="dx-rule__then"><strong>月状骨周囲脱臼／月状骨脱臼</strong>を疑う。整形即コール</div>
+                <div class="dx-rule__then"><strong>月状骨周囲脱臼／月状骨脱臼</strong>を疑う。側面像で lunate の整列確認・整形即コール</div>
               </li>
               <li class="dx-rule is-critical">
                 <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>非整形外科医がギプス（cast）でぐるぐる巻きにする誘惑</span></div>
@@ -639,7 +639,7 @@
                 <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>PIP 過伸展でその場整復された突指</span></div>
                 <div class="dx-rule__then"><strong>volar plate 損傷（coach finger）</strong>を疑う。X-line で Wilson 骨折・V サイン、軽度屈曲位固定で整形へ</div>
               </li>
-              <li class="dx-rule">
+              <li class="dx-rule" id="central-slip">
                 <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>突指後に PIP は伸展可だが背側に圧痛</span></div>
                 <div class="dx-rule__then"><strong>総指伸筋腱中央索断裂</strong>を疑う。1 か月でボタン指変形になる前に PIP 伸展位固定</div>
               </li>
@@ -658,6 +658,14 @@
               <li class="dx-rule">
                 <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>中手骨／指骨骨幹部骨折</span></div>
                 <div class="dx-rule__then">必ず<strong>ベッドサイドで開放骨折と回旋変形</strong>を評価。レントゲンだけでマネジメントしない</div>
+              </li>
+              <li class="dx-rule" id="triquetrum">
+                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>尺骨延長線上・小指球の真下に圧痛</span></div>
+                <div class="dx-rule__then"><strong>三角骨骨折（背側剥離）</strong>を疑う。斜位像・側面像で背側チップを確認、sugar tong splint で対応</div>
+              </li>
+              <li class="dx-rule" id="distal-phalanx">
+                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>挟まれ／ハンマー打撲＋爪外傷</span></div>
+                <div class="dx-rule__then"><strong>末節骨骨折</strong>を疑い、爪床裂創／爪下血腫を評価。50% 以上の血腫は 18G 針ドレナージ</div>
               </li>
             </ul>
 
@@ -695,6 +703,10 @@
                 <div class="dx-rule__if"><span class="dx-rule__tag">⚠</span><span>指の回旋変形を見落とす</span></div>
                 <div class="dx-rule__then">伸展位ではわからない。<strong>屈曲位で爪面が舟状骨を向くか</strong>確認</div>
               </li>
+              <li class="dx-rule is-pitfall">
+                <div class="dx-rule__if"><span class="dx-rule__tag">⚠</span><span>橈骨遠位端骨折で尺骨茎状突起骨折を見落とす</span></div>
+                <div class="dx-rule__then">51〜66% に併発。<strong>橈骨遠位端を見つけたら尺骨茎状突起も確認</strong></div>
+              </li>
             </ul>
           </details>
 
@@ -708,658 +720,56 @@
               <li><strong>母指</strong>：AP + 側面（CMC 関節を含めて撮影）</li>
               <li><strong>指（DIP / PIP / MP）</strong>：指単独で AP + <strong>真の側面</strong>。Mallet finger は側面で骨性 mallet を探す</li>
               <li><strong>CT 追加</strong>：橈骨遠位端の関節内骨折／月状骨周囲脱臼／第1中手骨基部の関節内骨折</li>
-              <li><strong>MRI 追加</strong>：occult な舟状骨骨折／UCL 損傷（感度 96％）</li>
+              <li><strong>MRI 追加</strong>：occult な舟状骨骨折（感度 96%／特異度 98%）／UCL 損傷（感度 96%／特異度 95%）</li>
             </ul>
           </details>
 
         </div>
       </div>
 
-      <!-- メニュータイル -->
-      <nav class="section-tiles" id="sectionMenu">
-        <a class="section-tile" href="#s1"><span class="section-tile__no">🚨</span><span class="section-tile__name">Red flags<br><small>血流・神経・開放</small></span></a>
-        <a class="section-tile" href="#s2"><span class="section-tile__no">🧭</span><span class="section-tile__name">鑑別の枠組み<br><small>年齢・受傷機転で絞る</small></span></a>
-        <a class="section-tile" href="#s3"><span class="section-tile__no">🩻</span><span class="section-tile__name">手関節の骨折<br><small>橈骨遠位端／舟状骨</small></span></a>
-        <a class="section-tile" href="#s4"><span class="section-tile__no">🤚</span><span class="section-tile__name">中手骨・基部<br><small>boxer's／Bennett／月状骨周囲</small></span></a>
-        <a class="section-tile" href="#s5"><span class="section-tile__no">✋</span><span class="section-tile__name">指の腱・脱臼<br><small>Mallet/Jersey/PIP/UCL</small></span></a>
-        <a class="section-tile" href="#s6"><span class="section-tile__no">🩹</span><span class="section-tile__name">マネジメントと固定<br><small>5択分類・splint 一覧</small></span></a>
-        <a class="section-tile" href="#s7"><span class="section-tile__no">📤</span><span class="section-tile__name">disposition<br><small>帰宅説明・フォロー</small></span></a>
-        <a class="section-tile" href="#s8"><span class="section-tile__no">📝</span><span class="section-tile__name">カルテ・紹介状<br><small>テンプレ</small></span></a>
-        <a class="section-tile" href="#s9"><span class="section-tile__no">⚠️</span><span class="section-tile__name">見落とし・ミス</span></a>
-        <a class="section-tile" href="#s10"><span class="section-tile__no">📚</span><span class="section-tile__name">出典・関連リンク</span></a>
-      </nav>
-
-      <!-- §1 Red flags -->
-      <section class="section-page" id="s1" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🚨 §1 命・四肢温存の Red flags</h2>
-
-        <p>手関節〜手の外傷では「整復不能」「血流障害」「開放骨折」「コンパートメント」の 4 つを最初に除外する。これらは <strong>X-line を待たず即時整形コンサルト</strong>。</p>
-
-        <h3>血流</h3>
-        <ul>
-          <li>橈骨動脈・尺骨動脈触知の左右差、毛細血管再充満時間の延長（&gt; 2 秒）</li>
-          <li>末梢 SpO2 低下、患肢冷感・蒼白・チアノーゼ</li>
-          <li>整復不能な脱臼骨折＋血流障害 → <strong>X-line 前に整復</strong>を試みる</li>
-        </ul>
-
-        <h3>神経</h3>
-        <ul>
-          <li><strong>正中神経</strong>：母指対立、示指掌側の知覚（月状骨周囲脱臼で出やすい）</li>
-          <li><strong>尺骨神経</strong>：小指外転・指内転、小指側の知覚</li>
-          <li><strong>橈骨神経</strong>：手関節背屈（drop hand）、母指・示指間背側の知覚</li>
-        </ul>
-
-        <h3>開放骨折・fight bite</h3>
-        <ul>
-          <li>骨折部の数 mm の裂創でも<strong>開放骨折として扱う</strong></li>
-          <li>素手での殴打 → MP 背側の咬創様裂創は <strong>fight bite</strong>。歯が手背を貫通して伸筋腱断裂・関節内感染のリスク</li>
-          <li><a class="wiki-link" href="疾患詳細/開放骨折.html">開放骨折</a>に準じて洗浄・抗菌薬・破傷風予防・整形コンサルト</li>
-        </ul>
-
-        <h3>コンパートメント症候群</h3>
-        <ul>
-          <li>前腕の緊満感、激痛、<strong>受動指伸展で増悪</strong>する深部痛</li>
-          <li>感覚低下・脈拍消失は晩期所見（出てからでは遅い）</li>
-          <li>非整形外科医のギプス（cast）巻きすぎは医原性コンパートメントの誘因 → 初期は<strong>シーネ（splint）</strong>で対応</li>
-          <li>詳細 → <a class="wiki-link" href="疾患詳細/コンパートメント症候群.html">コンパートメント症候群</a></li>
-        </ul>
-
-        <div class="callout callout-danger">
-          <div class="callout-title">1 つでもあれば即整形コンサルト</div>
-          <div class="callout-body">
-            <p>以下は X-line 待ちでなく整形 stat：</p>
-            <ul>
-              <li>整復不能な脱臼骨折／皮膚緊張・血流障害</li>
-              <li><a class="wiki-link" href="疾患詳細/開放骨折.html">開放骨折</a>／fight bite</li>
-              <li><a class="wiki-link" href="疾患詳細/コンパートメント症候群.html">コンパートメント症候群</a>を疑う前腕緊満</li>
-              <li>月状骨周囲脱臼／月状骨脱臼（高エネ＋正中神経症状）</li>
-              <li>Jersey finger（FDP 断裂は早期手術が望ましい）</li>
-            </ul>
-          </div>
-        </div>
-      </section>
-
-      <!-- §2 鑑別の枠組み -->
-      <section class="section-page" id="s2" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🧭 §2 鑑別の枠組み（年齢・受傷機転で絞る）</h2>
-
-        <p>手関節〜手の外傷は「<strong>受傷機転と年齢で一発診断</strong>」が原則。多数の鑑別を並べるより、典型エピソードから 1 つに絞り、画像で確認する。</p>
-
-        <h3>FOOSH（fall on outstretched hand）— 手関節痛</h3>
-        <div class="table-wrap">
-          <table>
-            <thead><tr><th>年齢</th><th>第一鑑別</th><th>キーポイント</th></tr></thead>
-            <tbody>
-              <tr><td>高齢者</td><td>橈骨遠位端骨折（一択）</td><td>脆弱性骨折ナンバーワン。明確骨折タイプ。多くは整復＋シーネ＋整形外来</td></tr>
-              <tr><td>成人</td><td>舟状骨骨折／橈骨遠位端骨折</td><td>snuffbox 圧痛で舟状骨を疑う。occult fracture が多い</td></tr>
-              <tr><td>小児（小学校高学年〜中学生）</td><td>橈骨遠位端骨折（一択）</td><td>若木骨折／Salter-Harris I・II が多い。左右比較が決め手</td></tr>
-              <tr><td>幼児〜小学校低学年</td><td>上腕骨顆上骨折</td><td>手関節より肘外傷を疑え（→ <a class="wiki-link" href="疾患詳細/上腕骨顆上骨折.html">上腕骨顆上骨折</a>）</td></tr>
-            </tbody>
-          </table>
-        </div>
-
-        <h3>母指基部の痛み — snuffbox 近傍</h3>
-        <div class="table-wrap">
-          <table>
-            <thead><tr><th>受傷機転</th><th>第一鑑別</th><th>鑑別ポイント</th></tr></thead>
-            <tbody>
-              <tr><td>掌を広げて転倒（FOOSH）</td><td>舟状骨骨折</td><td>母指は<strong>動かせる</strong>。snuffbox 圧痛＋scaphoid tubercle</td></tr>
-              <tr><td>拳で殴った／軸圧</td><td>第1中手骨基部骨折</td><td>母指の<strong>運動制限</strong>あり。snuffbox 近傍痛</td></tr>
-              <tr><td>母指を橈側に持っていかれた（スキーストック・転倒で棒状物把持）</td><td>ゲームキーパー母指（UCL 損傷）</td><td>母指 MP 尺側の圧痛＋動揺性。X-line は正常</td></tr>
-            </tbody>
-          </table>
-        </div>
-
-        <h3>手背・中手骨の痛み</h3>
-        <ul>
-          <li><strong>拳で殴打 → 第5中手骨頸部骨折（boxer's fracture）</strong>。knuckle 消失。fight bite を必ず除外。</li>
-          <li><strong>手背に直達外力 → 中手骨／基節骨／中節骨 骨幹部骨折</strong>。背側の伸筋腱損傷リスク。開放骨折を必ず除外。</li>
-          <li><strong>小児の MP 関節痛（高学年〜中学生）→ 基節骨基部骨折（Salter-Harris II）</strong>。小指最多。中手骨頭中央を通る基節骨の正中線で評価。</li>
-        </ul>
-
-        <h3>指（DIP / PIP）の痛み・変形</h3>
-        <div class="table-wrap">
-          <table>
-            <thead><tr><th>受傷機転</th><th>診断</th><th>キーサイン</th></tr></thead>
-            <tbody>
-              <tr><td>突指で DIP 伸展位に強い屈曲負荷</td><td>Mallet finger</td><td>DIP 単独伸展不能。側面で骨性 mallet を確認</td></tr>
-              <tr><td>掴んでもがく（jersey をつかむ）</td><td>Jersey finger</td><td>DIP 単独屈曲不能。環指 75%</td></tr>
-              <tr><td>PIP 過伸展（突き指）</td><td>PIP 関節脱臼／volar plate 損傷</td><td>視診で背側転位。Wilson 骨折を確認</td></tr>
-              <tr><td>突指で PIP 背側に痛みあり、伸展可</td><td>総指伸筋腱中央索断裂</td><td>PIP 90° 屈曲位からテーブルを押す力で左右差判定</td></tr>
-              <tr><td>挟まれ／ハンマー打撲</td><td>末節骨骨折＋爪外傷</td><td>爪床裂創／爪下血腫</td></tr>
-            </tbody>
-          </table>
-        </div>
-
-        <div class="callout callout-tip">
-          <div class="callout-title">「snuffbox の圧痛」 = 舟状骨ではない</div>
-          <div class="callout-body"><p>snuffbox 近傍は舟状骨の真下だが、<strong>第1中手骨基部</strong>もすぐ隣にある。母指の運動制限の有無、受傷機転（FOOSH か殴打か）で鑑別する。迷ったら X-line を撮ってから身体所見を取り直す。</p></div>
-        </div>
-      </section>
-
-      <!-- §3 手関節の骨折 -->
-      <section class="section-page" id="s3" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🩻 §3 手関節の骨折（橈骨遠位端／舟状骨）</h2>
-
-        <details class="sub-fold" open>
-          <summary>橈骨遠位端骨折 — 高齢者・小児の最多</summary>
-          <div class="sub-fold__body">
-            <ul>
-              <li>高齢者では脆弱性骨折の約 1/5 を占め、上肢外傷の最多。多くは 60〜70 代で、低エネルギー転倒でも折れる。</li>
-              <li>小児でも超コモン。小学校高学年〜中学生では橈骨遠位端骨折と上腕骨顆上骨折が小児骨折のツートップ。</li>
-              <li>典型は <strong>FOOSH 後の dinner fork 変形</strong>。占有率が高すぎて、典型エピソードでは「橈骨遠位端骨折一択」。</li>
-              <li>診断の枠組み：①橈側圧痛、②腫脹、③回内・回外制限。<strong>3 つすべてなしで感度 99%</strong>（小児の若木骨折評価で有用）。</li>
-            </ul>
-
-            <h4>非整形外科医が紹介状に書くべき手術適応 3 点</h4>
-            <ol>
-              <li><strong>活動性</strong>（職業・趣味・介護度）— 患者ニーズが手術判断に直結</li>
-              <li><strong>関節内 / 外</strong>（AO 分類 A=関節外、B/C=関節内）— 関節内は原則手術</li>
-              <li><strong>整復後の保持性</strong>（外固定でずれるか）— 不安定なら手術</li>
-            </ol>
-
-            <h4>整復するか？</h4>
-            <ul>
-              <li>高齢者の高度転位例ではガイドラインも徒手整復を推奨。整復で除痛され、次回受診まで楽になる。</li>
-              <li>整形外科医を夜間呼ぶほどではない。<strong>研修医・救急医はマスターすべき手技</strong>。完璧でなくても 80 点で十分。</li>
-              <li>小児で転位が強い場合は<strong>麻酔リスクと一発整復</strong>のため整形へ整復依頼を考慮。</li>
-            </ul>
-
-            <h4>固定</h4>
-            <ul>
-              <li><strong>sugar tong splint</strong>（前腕掌側〜背側の U 字）＋三角巾。軽度掌屈〜中間位、背屈は禁忌。</li>
-              <li>ER で巻いたシーネはそのまま約 1 か月使ってもらえることが多い。「具体的な期間は整形医が決める」と説明。</li>
-              <li>慣れない非整形外科医のギプスは<strong>圧迫過多でコンパートメント</strong>のリスク → 初診はシーネ。</li>
-            </ul>
-
-            <p>詳細 → <a class="wiki-link" href="疾患詳細/上肢骨折の固定/橈骨遠位端骨折.html">橈骨遠位端骨折</a>／<span class="wiki-missing">sugar tong splint の巻き方</span></p>
-          </div>
-        </details>
-
-        <details class="sub-fold">
-          <summary>舟状骨骨折 — 成人 FOOSH の見落としチャンピオン</summary>
-          <div class="sub-fold__body">
-            <ul>
-              <li>15〜30 歳に多い。手根骨骨折の約 70% を占め、整形外科医でも初診の 10% で見逃すと言われる。</li>
-              <li>舟状骨は<strong>遠位からのみ栄養動脈</strong>が走るため、近位骨折は阻血で偽関節・骨壊死を起こす。骨癒合に半年かかることもある → 見逃しは訴訟リスク。</li>
-            </ul>
-
-            <h4>感度の高い 3 つの圧痛所見（除外用）</h4>
-            <ul>
-              <li><strong>snuffbox の圧痛</strong>（感度 96%）— 母指背屈で見える 2 本の腱の間を背側から押す</li>
-              <li><strong>scaphoid tubercle の圧痛</strong>（感度 92%）— 掌側から舟状骨結節を押す</li>
-              <li><strong>thumb compression（軸圧痛）</strong>（感度 82%）— 母指を長軸方向に押し込む</li>
-              <li>1 つでも陽性なら舟状骨骨折疑いとして対応する</li>
-            </ul>
-
-            <h4>画像診断の現実</h4>
-            <ul>
-              <li>レントゲンの感度 80%。<strong>初回 X-line 陰性が 10〜20%</strong>、10〜14 日後の再撮影でも感度 41%。</li>
-              <li>MRI 感度 96% / 特異度 98% が gold standard。CT 感度 83%。</li>
-              <li>ER では夜間 MRI が撮れないため、身体所見で疑ったら<strong>固定して後日 MRI／CT</strong>を予約検査で。</li>
-            </ul>
-
-            <h4>固定とフォロー</h4>
-            <ul>
-              <li><strong>thumb spica splint</strong>（母指まで含めた前腕シーネ）。前腕の途中までなので三角巾は不要。</li>
-              <li>骨折線が明確なら離開 1 mm 以内は保存。1 mm 以上 or 近位骨折は手術考慮。</li>
-              <li>後日整形再診で CT（明確骨折）または MRI（occult）を確認できるよう情報提供。</li>
-            </ul>
-
-            <p>詳細 → <a class="wiki-link" href="疾患詳細/舟状骨骨折.html">舟状骨骨折</a>／<span class="wiki-missing">thumb spica splint の巻き方</span></p>
-          </div>
-        </details>
-
-        <details class="sub-fold" id="s4-triquetrum">
-          <summary>三角骨骨折（背側剥離骨折）</summary>
-          <div class="sub-fold__body">
-            <ul>
-              <li>手根骨骨折の約 18%。舟状骨に次いで多い。</li>
-              <li>尺骨延長線上、小指球の真下が三角骨。掌側・背側を挟むように圧痛確認。</li>
-              <li>背側の靭帯剥離骨折（背側チップ骨折）が典型。<strong>斜位像・側面像</strong>で見える。</li>
-              <li>固定は橈骨遠位端骨折と同じ sugar tong splint＋三角巾で OK。後日整形再診。</li>
-            </ul>
-          </div>
-        </details>
-
-        <details class="sub-fold" id="s4-perilunate">
-          <summary>月状骨周囲脱臼／月状骨脱臼（赤旗）</summary>
-          <div class="sub-fold__body">
-            <ul>
-              <li>高エネルギー外傷（転落・交通外傷）が典型。手関節腫脹＋<strong>正中神経症状</strong>を見たら疑う。</li>
-              <li>AP では捉えにくい。<strong>側面像</strong>で月状骨と有頭骨の整列を必ず確認（lunate の三角形配置・spilled teacup sign）。</li>
-              <li><strong>整形 stat</strong>。観血的整復・内固定が原則。</li>
-            </ul>
-            <p>詳細 → <span class="wiki-missing">月状骨周囲脱臼</span></p>
-          </div>
-        </details>
-      </section>
-
-      <!-- §4 中手骨・基部 -->
-      <section class="section-page" id="s4" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🤚 §4 中手骨・第1中手骨基部</h2>
-
-        <details class="sub-fold" open>
-          <summary>第5中手骨頸部骨折（boxer's fracture）</summary>
-          <div class="sub-fold__body">
-            <ul>
-              <li>素手で相手の顔面を殴打 → 中手骨長軸への軸圧で発生。<strong>第4・5</strong>中手骨に多い。</li>
-              <li>視診で knuckle が消失している。中手骨の 2 方向は<strong>正面＋斜位</strong>（側面は骨が重なり読めない）。</li>
-              <li>整復目標値は文献で 20〜70° と意見が分かれる。<strong>ER は整復せず gutter splint で仮固定</strong>でよい。</li>
-              <li>固定は <strong>ulnar gutter splint</strong>（第4・5）／radial gutter splint（第2・3）。MP 70° 屈曲位。</li>
-            </ul>
-
-            <h4>fight bite（clenched-fist injuries）</h4>
-            <ul>
-              <li>素手の殴打で MP 背側に裂創 → 相手の歯が手背を貫通している。</li>
-              <li>合併症は 75% に及ぶ（伸筋腱断裂、関節内感染、骨髄炎）。</li>
-              <li>初期対応：十分な洗浄＋異物確認＋抗菌薬。</li>
-              <li>外来時：<strong>ユナシン®（SBT/ABPC）3 g 点滴</strong>。帰宅処方：<strong>サワシリン®＋オーグメンチン®</strong>を整形外来再診まで。</li>
-              <li>背景に人格障害がある可能性 → 精神科併診も検討。</li>
-            </ul>
-
-            <p>詳細 → <a class="wiki-link" href="疾患詳細/中手骨頸部骨折.html">中手骨頸部骨折</a></p>
-          </div>
-        </details>
-
-        <details class="sub-fold">
-          <summary>第1中手骨基部骨折（Bennett／Rolando／関節外）</summary>
-          <div class="sub-fold__body">
-            <ul>
-              <li>受傷機転：拳で殴打／母指軸圧／転倒。FOOSH の舟状骨骨折と<strong>母指の動かしやすさ</strong>で鑑別（基部骨折は運動制限あり）。</li>
-              <li>occult fracture は稀で、明確骨折タイプ。鑑別に挙がれば見つかる。</li>
-            </ul>
-
-            <h4>分類（紹介状に明記）</h4>
-            <ul>
-              <li><strong>関節外（横骨折・斜骨折）</strong>：保存（thumb spica）が多い。多数派。</li>
-              <li><strong>Bennett 骨折</strong>（関節内＋亜脱臼）：基部に三角骨片が残り、APL が末梢骨片を橈側へ牽引。<strong>原則手術</strong>。</li>
-              <li><strong>Rolando 骨折</strong>（関節内 Y 字粉砕）：稀。手術。</li>
-              <li>小児では Salter-Harris II が多い。</li>
-            </ul>
-
-            <h4>固定</h4>
-            <ul>
-              <li>分類によらず ER 初期対応は <strong>thumb spica splint</strong>。Bennett 疑いは手術可能病院へ紹介。</li>
-            </ul>
-
-            <p>詳細 → <a class="wiki-link" href="疾患詳細/第1中手骨基部骨折.html">第1中手骨基部骨折</a></p>
-          </div>
-        </details>
-
-        <details class="sub-fold">
-          <summary>中手骨／基節骨／中節骨 骨幹部骨折（成人・示指〜小指）</summary>
-          <div class="sub-fold__body">
-            <ul>
-              <li>非整形外科医的には示指〜小指の中手骨・基節骨・中節骨の骨幹部骨折は<strong>初期対応が同じ</strong>。母指は別扱い。</li>
-              <li>受傷機転は<strong>背側からの直達外力</strong>がほとんど → 開放骨折・伸筋腱損傷のリスク高。</li>
-              <li><strong>レントゲンだけでマネジメントしない</strong>。必ずベッドサイドへ：
-                <ul>
-                  <li>① <strong>開放骨折</strong>を必ず確認（数 mm の裂創でも開放扱い）</li>
-                  <li>② <strong>回旋変形</strong>を屈曲位で確認（爪面が舟状骨を向くか）</li>
-                  <li>③ 伸筋腱損傷は急性期評価が困難 → 整形外来で再評価依頼</li>
-                </ul>
-              </li>
-              <li>固定は <strong>gutter splint</strong>（第2・3＝radial、第4・5＝ulnar）。中節骨で転位小さければバディ固定。</li>
-              <li>横骨折は転位小で<strong>帰宅保存</strong>、斜・螺旋骨折は転位大で<strong>帰宅手術</strong>が多い。</li>
-            </ul>
-
-            <p>詳細 → <a class="wiki-link" href="疾患詳細/上肢骨折の固定/手・指の骨折.html">手・指の骨折</a></p>
-          </div>
-        </details>
-
-        <details class="sub-fold">
-          <summary>小児の基節骨基部骨折（小学校高学年〜中学生）</summary>
-          <div class="sub-fold__body">
-            <ul>
-              <li>小児の MP 関節外傷では最頻。<strong>小指最多</strong>、次いで環指・中指。示指は稀。</li>
-              <li>機転：MP の過度な撓屈・尺屈＋回旋。Salter-Harris II が典型。</li>
-              <li>転位が小さくイメージなしでは見逃す。<strong>基節骨の正中線</strong>が中手骨頭中央を通っているか左右で比較。</li>
-              <li>固定は ulnar gutter splint。後日整形外来で 25° 以上 or 1.5 mm 以上の離開なら手術考慮。</li>
-            </ul>
-          </div>
-        </details>
-      </section>
-
-      <!-- §5 指の腱・脱臼 -->
-      <section class="section-page" id="s5" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>✋ §5 指の腱損傷・脱臼（一発診断・固定指示）</h2>
-
-        <p>指の外傷は<strong>受傷機転からの一発診断</strong>が原則。腱損傷はレントゲン正常 ≠ 経過観察。骨が 4 週で治るのに対し、<strong>腱は 6 週以上かかる</strong>。すべて整形外来へつなぐ。</p>
-
-        <details class="sub-fold" open>
-          <summary>Mallet finger（DIP 伸展不能、突指の代表）</summary>
-          <div class="sub-fold__body">
-            <ul>
-              <li>指腱損傷で最頻。指を伸ばした状態でボールがぶつかる典型。</li>
-              <li>視診で DIP が屈曲位（槌状）。DIP 単独伸展ができない。</li>
-              <li><strong>側面像</strong>で骨性 mallet（伸筋腱付着部の関節内剥離）を必ず確認。</li>
-              <li>固定：<strong>DIP 完全伸展位 6 週間</strong>（PIP はフリーで OK）。途中で曲げると振り出しに戻るので「絶対に伸ばし続ける」と説明。</li>
-              <li>ER ではペーパークリップ固定でも次回整形外来までは十分。整形医が好みの装具に変える。</li>
-              <li>関節面 1/3 以上の骨片や掌側亜脱臼は手術考慮。</li>
-            </ul>
-
-            <p>詳細 → <a class="wiki-link" href="疾患詳細/Mallet finger・Jersey finger.html">Mallet finger・Jersey finger</a></p>
-          </div>
-        </details>
-
-        <details class="sub-fold">
-          <summary>Jersey finger（DIP 屈曲不能、FDP 断裂）</summary>
-          <div class="sub-fold__body">
-            <ul>
-              <li>強く屈曲した指に伸展力が加わって発生（ジャージ／道着を掴んだ瞬間）。</li>
-              <li><strong>環指 75%</strong>。DIP 掌側の疼痛・腫脹。</li>
-              <li>身体所見：PIP を固定して<strong>DIP の単独屈曲</strong>を確認（FDP テスト）。感度 100%／特異度 76%。</li>
-              <li>FDP 断端は中節骨〜PIP〜掌側へ retract する（Type II が最多）→ 保存治療では戻らない。<strong>多くが手術</strong>、後療法 6〜8 週。</li>
-              <li>初期対応：DIP・PIP 軽度屈曲位でペーパークリップ固定し、<strong>近日中に整形外科</strong>へ。</li>
-            </ul>
-
-            <p>詳細 → <a class="wiki-link" href="疾患詳細/Mallet finger・Jersey finger.html">Mallet finger・Jersey finger</a></p>
-          </div>
-        </details>
-
-        <details class="sub-fold">
-          <summary>PIP 関節脱臼／volar plate 損傷（coach finger）</summary>
-          <div class="sub-fold__body">
-            <ul>
-              <li>手指で最多の関節脱臼。背側脱臼か側方脱臼。視診で診断は明らか。</li>
-              <li>ER 流れ：①視診で診断 → ②<strong>web block で先に鎮痛</strong> → ③整復前 X-line（待ち時間で麻酔が効く）→ ④長軸牽引で整復 → ⑤整復後 X-line（剥離骨折評価）→ ⑥バディ固定。</li>
-              <li>整復前後の X-line で<strong>Wilson 骨折</strong>（中節骨掌側近位の剥離骨折）を必ず確認。関節面に大きく掛かれば手術。</li>
-              <li>背側脱臼では<strong>volar plate 損傷</strong>を伴うことが多い。単独 volar plate 損傷では伸筋腱に引かれて PIP が背屈変形（不全脱臼の V サインが出ることあり）。</li>
-              <li>固定は PIP <strong>20〜30° 屈曲位でバディテープ</strong>。脱臼単独でも volar plate 損傷の合併を念頭に同じ屈曲位固定。</li>
-              <li>「引っ張れば治る」で固定なし→拘縮（coach finger）が残る古典的失敗例。<strong>必ず整形外来再診</strong>を指示。</li>
-            </ul>
-
-            <p>詳細 → <a class="wiki-link" href="疾患詳細/PIP関節脱臼.html">PIP関節脱臼</a></p>
-          </div>
-        </details>
-
-        <details class="sub-fold" id="s5-central">
-          <summary>総指伸筋腱中央索断裂（ボタン指変形の前駆）</summary>
-          <div class="sub-fold__body">
-            <ul>
-              <li>突指で PIP の伸筋腱中央索が断裂。受傷直後は側索が残るので<strong>PIP は伸展できる</strong>＝正常に見える。</li>
-              <li>無治療で 1 か月後に<strong>ボタン指変形</strong>として戻ってくる典型的見落とし疾患。</li>
-              <li>評価：PIP より中枢を机上に置き、PIP を 90° 屈曲位で<strong>テーブルから持ち上げる力に対する抵抗</strong>を左右で比較。PIP 背側の自発痛・圧痛もヒント。</li>
-              <li>固定：<strong>PIP 伸展位</strong>でペーパークリップ固定。整形外来で正式装具に。</li>
-            </ul>
-          </div>
-        </details>
-
-        <details class="sub-fold">
-          <summary>ゲームキーパー母指（母指 MP UCL 損傷）</summary>
-          <div class="sub-fold__body">
-            <ul>
-              <li>機転：母指の<strong>過度の橈屈</strong>（スキーストック・転倒で棒状物把持・バトン）。</li>
-              <li>非整形外科医は<strong>病歴＋MP 尺側の圧痛</strong>で暫定診断 → thumb spica で固定 → 整形外来へつなぐで合格。</li>
-              <li>動揺性評価（MP 屈曲位で 30° 以上 or 健側より 15° 以上）は強い疼痛で正確に取れないことが多い → 整形医に任せて OK。</li>
-              <li>X-line・CT で靭帯は写らないが、<strong>剥離骨折</strong>がないかは確認。</li>
-              <li>MRI 感度 96%／特異度 95%。後日 MRI 予約も検討。</li>
-              <li><strong>Stener 病変</strong>（断裂端が母指内転筋腱膜の表面に絡まる）は手術適応。</li>
-              <li>放置すると母指でモノをつまむ動作の重大な機能障害をきたす。</li>
-            </ul>
-
-            <p>詳細 → <a class="wiki-link" href="疾患詳細/ゲームキーパー母指.html">ゲームキーパー母指</a></p>
-          </div>
-        </details>
-
-        <details class="sub-fold" id="s5-distalphalanx">
-          <summary>末節骨骨折＋爪外傷</summary>
-          <div class="sub-fold__body">
-            <ul>
-              <li>手の骨折で最多。ハンマー打撲、ドアに挟まれ、機械への巻き込み。</li>
-              <li>解剖：房（tuft）／骨幹部／関節面（基部）。<strong>房の骨折＋爪外傷</strong>が典型。</li>
-              <li>固定はアルフェンス U 字で<strong>DIP 固定、PIP・MP フリー</strong>。爪自体がシーネ役を果たす。</li>
-
-              <h4>爪床裂創</h4>
-              <ul>
-                <li>教科書：抜爪 → 爪床縫合（垂直マットレス）→ 爪戻し（生体スプリント）。</li>
-                <li>ER の現実解：洗浄しサージカルテープで爪を固定し<strong>翌日整形外科外来</strong>へ。</li>
-                <li>軽度汚染なら抗菌薬は必須でない（汚染高度なら投与）。</li>
-              </ul>
-
-              <h4>爪下血腫</h4>
-              <ul>
-                <li>血腫が爪の<strong>50% 以上</strong>なら 18G 針でドレナージ。痛みが消える。</li>
-                <li>大きな血腫でも単純ドレナージと抜爪で予後は変わらない。</li>
-              </ul>
-            </ul>
-          </div>
-        </details>
-      </section>
-
-      <!-- §6 マネジメントと固定 -->
-      <section class="section-page" id="s6" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🩹 §6 マネジメントの 5 択分類と固定一覧</h2>
-
-        <h3>上肢外傷の 5 択分類</h3>
-        <p>上肢外傷は原則「歩行通院可能」「待機手術が多い」ため、ほぼすべて<strong>帰宅保存／帰宅手術</strong>のいずれか。例外（即時整形）は限定的。</p>
-        <div class="table-wrap">
-          <table>
-            <thead><tr><th>分類</th><th>意味</th><th>該当例</th></tr></thead>
-            <tbody>
-              <tr><td>即時整形</td><td>夜間でも整形コール</td><td>開放骨折／血流障害／整復不能脱臼／コンパートメント／月状骨周囲脱臼</td></tr>
-              <tr><td>帰宅手術</td><td>後日手術前提でシーネ</td><td>関節内骨折・転位大の橈骨遠位端／Bennett／Jersey finger／斜・螺旋骨幹部骨折</td></tr>
-              <tr><td>帰宅保存</td><td>後日整形外来でシーネ継続</td><td>転位小の関節外骨折／Mallet／PIP 脱臼整復後／三角骨／中手骨頸部</td></tr>
-              <tr><td>外来追加検査</td><td>シーネしつつ MRI／CT 予約</td><td>舟状骨疑い（occult）／UCL 損傷</td></tr>
-              <tr><td>処置のみ</td><td>固定・縫合・ドレナージ</td><td>爪下血腫／爪床裂創（軽度）</td></tr>
-            </tbody>
-          </table>
-        </div>
-
-        <h3>固定の選び方（一発で覚える）</h3>
-        <div class="table-wrap">
-          <table>
-            <thead><tr><th>疾患</th><th>固定</th><th>肢位</th></tr></thead>
-            <tbody>
-              <tr><td>橈骨遠位端骨折／三角骨骨折</td><td>sugar tong splint＋三角巾</td><td>軽度掌屈〜中間位（背屈は禁忌）</td></tr>
-              <tr><td>舟状骨骨折（疑い含む）</td><td>thumb spica splint</td><td>母指含めた前腕シーネ。三角巾は不要</td></tr>
-              <tr><td>第1中手骨基部骨折</td><td>thumb spica splint</td><td>関節内・外問わず ER は同じ</td></tr>
-              <tr><td>ゲームキーパー母指（UCL）</td><td>thumb spica splint</td><td>母指 MP を保護</td></tr>
-              <tr><td>第5中手骨頸部（boxer's）</td><td>ulnar gutter splint</td><td>MP 70° 屈曲位</td></tr>
-              <tr><td>第2・3 中手骨／基節骨</td><td>radial gutter splint</td><td>MP 70° 屈曲位</td></tr>
-              <tr><td>中節骨（転位小）</td><td>buddy taping</td><td>隣指と固定</td></tr>
-              <tr><td>PIP 関節脱臼／volar plate 損傷</td><td>buddy taping＋ペーパークリップ</td><td>PIP 20〜30° 屈曲位</td></tr>
-              <tr><td>Mallet finger</td><td>Stack 副木 or ペーパークリップ</td><td>DIP 完全伸展位 6 週（PIP フリー）</td></tr>
-              <tr><td>Jersey finger</td><td>ペーパークリップで PIP 固定</td><td>DIP・PIP 軽度屈曲位</td></tr>
-              <tr><td>中央索断裂</td><td>ペーパークリップ</td><td>PIP 伸展位</td></tr>
-              <tr><td>末節骨骨折</td><td>アルフェンス U 字</td><td>DIP 固定、PIP・MP フリー</td></tr>
-            </tbody>
-          </table>
-        </div>
-
-        <h3>鎮痛</h3>
-        <ul>
-          <li>第一選択：<strong>アセトアミノフェン</strong>内服。出血傾向・腎機能に問題なければ NSAIDs（成人）。</li>
-          <li>小児：イブプロフェン 10 mg/kg/day 分 3（600 mg/day を超えない）— 鎮痛効果・副作用ともコデイン／アセトアミノフェンと差がないが両親満足度高し。</li>
-          <li>整復前：<strong>hematoma block</strong>（橈骨遠位端骨折）／<strong>web block</strong>（PIP 脱臼）／オピオイド静注。</li>
-          <li>冷却＋挙上を併用。</li>
-        </ul>
-
-        <div class="callout callout-tip">
-          <div class="callout-title">固定後は必ず再評価</div>
-          <div class="callout-body"><p>シーネ装着後に<strong>神経血管所見を再確認</strong>。指先の色・温度・知覚・運動を本人にも教え、悪化時はすぐ受診と説明する。ギプスでぐるぐる巻きは初診医が圧迫過多にしやすく、コンパートメントの誘因になる。</p></div>
-        </div>
-
-        <div class="callout callout-warning">
-          <div class="callout-title">用語整理：シーネとギプス</div>
-          <div class="callout-body"><p><strong>シーネ（splint, 副木）</strong>は板状で<strong>圧迫が逃げる</strong>ため初診向き。<strong>ギプス（cast）</strong>はぐるぐる巻きで保持力は強いが圧迫過多のリスク。腫脹がある急性期は必ずシーネで対応する。</p></div>
-        </div>
-      </section>
-
-      <!-- §7 disposition -->
-      <section class="section-page" id="s7" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>📤 §7 disposition と帰宅説明</h2>
-
-        <h3>帰宅可（保存／待機手術）</h3>
-        <ul>
-          <li>転位の少ない閉鎖骨折で適切な splint 固定済み</li>
-          <li>神経血管異常なし、疼痛コントロール可能</li>
-          <li>整形外来受診（数日〜1 週間以内）が確実に確保できる</li>
-          <li>家族のサポートあり、片手生活で食事・排泄が可能</li>
-        </ul>
-
-        <h3>整形 stat（即時整形コンサルト）</h3>
-        <ul>
-          <li><a class="wiki-link" href="疾患詳細/開放骨折.html">開放骨折</a> ／ fight bite</li>
-          <li>血流障害／整復不能な脱臼骨折</li>
-          <li><a class="wiki-link" href="疾患詳細/コンパートメント症候群.html">コンパートメント症候群</a></li>
-          <li>月状骨周囲脱臼／月状骨脱臼</li>
-          <li>Jersey finger（早期手術が望ましい）</li>
-        </ul>
-
-        <h3>入院考慮</h3>
-        <ul>
-          <li>多発外傷／高齢で疼痛コントロール困難</li>
-          <li>独居でセルフケア困難・付き添いなし</li>
-          <li>夜間で整形対応不能だが再評価必要例</li>
-        </ul>
-
-        <h3>帰宅時の説明テンプレ</h3>
-        <ul>
-          <li>「<strong>シーネは指先の色・温度・しびれを毎日チェック</strong>。冷たい・蒼白・しびれが強くなる・激痛が出れば夜中でも受診」</li>
-          <li>「<strong>水濡れ厳禁</strong>。入浴時はビニールでカバー」</li>
-          <li>「<strong>挙上＋冷却</strong>を 1〜2 日続ける」</li>
-          <li>橈骨遠位端骨折：「保存でも約 1 か月固定。具体的期間は整形医が決定」</li>
-          <li>舟状骨骨折疑い：「初回 X-line 陰性でも骨折が後で見つかることがある。固定して再評価が必要」</li>
-          <li>Mallet finger：「<strong>6 週間絶対に DIP を曲げない</strong>。1 度でも曲げると振り出し」</li>
-          <li>PIP 脱臼後：「最初の 1 週間は ROM 制限、その後徐々に動かす。<strong>整形再診を必ず</strong>」</li>
-          <li>UCL 損傷：「靭帯損傷は MRI で評価。手術になる可能性あり」</li>
-          <li>fight bite：「人の口腔内細菌は感染リスクが高い。発熱・発赤・腫脹増悪なら即受診」</li>
-        </ul>
-      </section>
-
-      <!-- §8 カルテ・紹介状テンプレ -->
-      <section class="section-page" id="s8" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>📝 §8 カルテ・紹介状のテンプレ</h2>
-
-        <h3>カルテ最小構成</h3>
-        <ul>
-          <li><strong>S</strong>：受傷時刻／機転／力の方向／既往（骨粗鬆症・抗凝固薬）／利き手・職業</li>
-          <li><strong>O</strong>：バイタル／視診（変形・腫脹・皮膚損傷・爪外傷）／圧痛部位／可動域／神経（正中・尺骨・橈骨）／血管（橈・尺動脈、CRT、SpO2）／腱（FDP・FDS・伸筋腱・中央索）／回旋整列</li>
-          <li><strong>A</strong>：診断名＋分類（関節内 / 外、Salter-Harris、Bennett 等）＋ red flags なし／あり</li>
-          <li><strong>P</strong>：整復の有無、固定法、鎮痛、フォロー先・時期、説明済み事項</li>
-        </ul>
-
-        <h3>橈骨遠位端骨折 紹介状テンプレ</h3>
-        <div class="callout callout-example">
-          <div class="callout-title">例</div>
-          <div class="callout-body">
-<pre>○○病院 整形外科 御机下
-患者：○○ ○○ ○○歳 ○性
-診断：右橈骨遠位端骨折（関節外／A2 相当）
-
-転倒で右手をついて当院時間外受診されました。X 線にて
-上記診断、関節内に骨折線はないと判断しました。
-転位は軽度〜中等度で、sugar tong splint で初期固定を
-行いました（整復実施済／非実施）。
-
-患者は ○○（職業／趣味）を継続したい意向で、活動性は
-高いと判断しています。既往は ○○、内服は ○○ です。
-
-今後の加療を貴院でお願いいたします。</pre>
-          </div>
-        </div>
-
-        <h3>第1中手骨基部骨折 紹介状の書き分け</h3>
-        <ul>
-          <li>関節外横骨折 → 「第1中手骨基部の横骨折で関節外骨折」</li>
-          <li>Bennett 骨折 → 「第1中手骨基部 Bennett 骨折（CMC 関節内＋亜脱臼、三角骨片あり）」</li>
-          <li>Rolando 骨折 → 「第1中手骨基部 Rolando 骨折（関節内 Y 字粉砕）」</li>
-        </ul>
-
-        <h3>舟状骨骨折疑い（X-line 陰性）紹介状テンプレ</h3>
-        <div class="callout callout-example">
-          <div class="callout-title">例</div>
-          <div class="callout-body">
-<pre>FOOSH の受傷機転で snuffbox／scaphoid tubercle に
-圧痛あり、舟状骨骨折を疑い thumb spica splint で固定
-としました。初回 X-line では骨折線は明らかではありません。
-○月○日 MRI 予約済（または 10〜14 日後の再撮影予定）。
-ご加療よろしくお願いいたします。</pre>
-          </div>
-        </div>
-      </section>
-
-      <!-- §9 見落とし・ミス -->
-      <section class="section-page" id="s9" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>⚠️ §9 見落とし・ミス（古典的失敗集）</h2>
-
-        <ul>
-          <li><strong>初回 X-line 陰性で舟状骨骨折を「捻挫」で帰宅</strong> — 偽陰性 10〜20%。snuffbox／scaphoid tubercle／thumb compression のうち 1 つでも陽性なら固定＋再評価。</li>
-          <li><strong>月状骨周囲脱臼を AP のみで見落とす</strong> — 高エネ＋正中神経症状なら<strong>側面像</strong>で月状骨と有頭骨の整列を確認。</li>
-          <li><strong>橈骨遠位端骨折で尺骨茎状突起骨折を見落とす</strong> — 51〜66% に併発。一緒に評価。</li>
-          <li><strong>Mallet finger を「打撲・突指」で経過観察</strong> — DIP 単独伸展を確認。骨性 mallet を側面像で見る。</li>
-          <li><strong>PIP 関節脱臼を「引っ張れば治る」で固定なし</strong> — coach finger として拘縮が残る古典的失敗。整復後はバディ＋整形再診を必ず。</li>
-          <li><strong>総指伸筋腱中央索断裂を見落とす</strong> — 受傷直後は PIP 伸展可で正常に見える。突指＋PIP 背側痛なら抵抗テストで左右差を取る。</li>
-          <li><strong>母指 UCL 損傷を「捻挫」扱い</strong> — Stener 病変は手術。病歴＋MP 尺側圧痛で暫定診断。</li>
-          <li><strong>fight bite を単純な裂創として縫合</strong> — 関節内感染・伸筋腱断裂のリスク。洗浄＋抗菌薬＋整形コンサルト。</li>
-          <li><strong>第1中手骨基部骨折を舟状骨骨折と勘違い</strong> — 母指の運動制限の有無、受傷機転（殴打 vs FOOSH）で鑑別。</li>
-          <li><strong>中手骨／指骨骨幹部骨折を X-line だけで判断</strong> — 必ずベッドサイドへ。開放骨折・回旋変形を漏らさない。</li>
-          <li><strong>Jersey finger を見つけずに帰宅</strong> — DIP 単独屈曲を必ずチェック。多くは手術、後療法 6〜8 週。</li>
-          <li><strong>固定後の神経血管チェックを忘れる</strong> — 装着前後で必ず比較。指先の所見を本人にも教える。</li>
-          <li><strong>ギプスで初診を巻きすぎてコンパートメント</strong> — 急性期はシーネ。ギプスは整形外来で。</li>
-          <li><strong>指の回旋変形を伸展位で見て「異常なし」</strong> — 屈曲位で爪面が舟状骨を向くかを必ず確認。</li>
-          <li><strong>小児の若木骨折を見逃す</strong> — 微妙骨折タイプが典型。左右比較＋3 所見（橈側圧痛・腫脹・回内外制限）で評価。</li>
-        </ul>
-      </section>
-
-      <!-- §10 関連リンク -->
-      <section class="section-page" id="s10" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>📚 §10 出典・関連リンク</h2>
-
-        <h3>このページの主要骨格</h3>
-        <ul>
-          <li>骨折ハンター（仲田和正・林寛之 監修系）— 第4章 高齢者・手関節痛、第11章 小児/成人・手関節痛、第12〜13章 手指痛</li>
-          <li>AO 分類（橈骨遠位端骨折）／Salter-Harris 分類（小児骨端線骨折）／Wilson 骨折（PIP 剥離）</li>
-          <li>UCL 損傷の MRI 感度・特異度、舟状骨各検査の感度・特異度（骨折ハンターより）</li>
-        </ul>
-
-        <h3>疾患詳細ページ</h3>
-        <ul>
-          <li><a class="wiki-link" href="疾患詳細/上肢骨折の固定/橈骨遠位端骨折.html">橈骨遠位端骨折</a></li>
-          <li><a class="wiki-link" href="疾患詳細/舟状骨骨折.html">舟状骨骨折</a></li>
-          <li><a class="wiki-link" href="疾患詳細/第1中手骨基部骨折.html">第1中手骨基部骨折</a></li>
-          <li><a class="wiki-link" href="疾患詳細/中手骨頸部骨折.html">中手骨頸部骨折</a></li>
-          <li><a class="wiki-link" href="疾患詳細/上肢骨折の固定/手・指の骨折.html">手・指の骨折（中手骨／基節骨／中節骨／末節骨）</a></li>
-          <li><a class="wiki-link" href="疾患詳細/Mallet finger・Jersey finger.html">Mallet finger・Jersey finger</a></li>
-          <li><a class="wiki-link" href="疾患詳細/PIP関節脱臼.html">PIP 関節脱臼</a></li>
-          <li><a class="wiki-link" href="疾患詳細/ゲームキーパー母指.html">ゲームキーパー母指</a></li>
-        </ul>
-
-        <h3>関連の上肢ページ</h3>
-        <ul>
-          <li><a class="wiki-link" href="疾患詳細/上肢骨折の固定/前腕骨折.html">前腕骨折</a></li>
-          <li><a class="wiki-link" href="疾患詳細/上肢骨折の固定/肘周囲骨折.html">肘周囲骨折</a></li>
-          <li><a class="wiki-link" href="疾患詳細/橈骨頭骨折.html">橈骨頭骨折</a></li>
-          <li><a class="wiki-link" href="疾患詳細/上腕骨顆上骨折.html">上腕骨顆上骨折</a></li>
-          <li><a class="wiki-link" href="疾患詳細/開放骨折.html">開放骨折</a></li>
-          <li><a class="wiki-link" href="疾患詳細/コンパートメント症候群.html">コンパートメント症候群</a></li>
-          <li><a class="wiki-link" href="転倒.html">転倒</a></li>
-        </ul>
-
-        <h3>未作成（リンク予約）</h3>
-        <ul>
-          <li><span class="wiki-missing">月状骨周囲脱臼／月状骨脱臼</span></li>
-          <li><span class="wiki-missing">三角骨骨折（背側剥離）</span></li>
-          <li><span class="wiki-missing">総指伸筋腱中央索断裂・ボタン指変形</span></li>
-          <li><span class="wiki-missing">爪床裂創・爪下血腫の処置</span></li>
-          <li><span class="wiki-missing">sugar tong splint の巻き方</span> ／ <span class="wiki-missing">thumb spica splint の巻き方</span> ／ <span class="wiki-missing">gutter splint の巻き方</span> ／ <span class="wiki-missing">ペーパークリップ固定</span></li>
-          <li><span class="wiki-missing">手のコンパートメント症候群</span> ／ <span class="wiki-missing">Stener 病変</span></li>
-        </ul>
-
-        <p>#ER #救急 #手関節 #手の外傷 #橈骨遠位端骨折 #舟状骨骨折 #Mallet #Jersey #PIP脱臼 #ゲームキーパー母指 #boxer's_fracture #FOOSH #整形外科</p>
-      </section>
+      <h2>関連リンク・出典</h2>
+
+      <h3>疾患詳細ページ</h3>
+      <ul>
+        <li><a class="wiki-link" href="疾患詳細/上肢骨折の固定/橈骨遠位端骨折.html">橈骨遠位端骨折</a></li>
+        <li><a class="wiki-link" href="疾患詳細/舟状骨骨折.html">舟状骨骨折</a></li>
+        <li><a class="wiki-link" href="疾患詳細/第1中手骨基部骨折.html">第1中手骨基部骨折</a></li>
+        <li><a class="wiki-link" href="疾患詳細/中手骨頸部骨折.html">中手骨頸部骨折</a></li>
+        <li><a class="wiki-link" href="疾患詳細/上肢骨折の固定/手・指の骨折.html">手・指の骨折（中手骨／基節骨／中節骨／末節骨）</a></li>
+        <li><a class="wiki-link" href="疾患詳細/Mallet finger・Jersey finger.html">Mallet finger・Jersey finger</a></li>
+        <li><a class="wiki-link" href="疾患詳細/PIP関節脱臼.html">PIP 関節脱臼</a></li>
+        <li><a class="wiki-link" href="疾患詳細/ゲームキーパー母指.html">ゲームキーパー母指</a></li>
+      </ul>
+
+      <h3>関連の上肢ページ</h3>
+      <ul>
+        <li><a class="wiki-link" href="疾患詳細/上肢骨折の固定/前腕骨折.html">前腕骨折</a></li>
+        <li><a class="wiki-link" href="疾患詳細/上肢骨折の固定/肘周囲骨折.html">肘周囲骨折</a></li>
+        <li><a class="wiki-link" href="疾患詳細/橈骨頭骨折.html">橈骨頭骨折</a></li>
+        <li><a class="wiki-link" href="疾患詳細/上腕骨顆上骨折.html">上腕骨顆上骨折</a></li>
+        <li><a class="wiki-link" href="疾患詳細/開放骨折.html">開放骨折</a></li>
+        <li><a class="wiki-link" href="疾患詳細/コンパートメント症候群.html">コンパートメント症候群</a></li>
+        <li><a class="wiki-link" href="転倒.html">転倒</a></li>
+      </ul>
+
+      <h3>未作成（リンク予約）</h3>
+      <ul>
+        <li><span class="wiki-missing">月状骨周囲脱臼／月状骨脱臼</span></li>
+        <li><span class="wiki-missing">三角骨骨折（背側剥離）</span></li>
+        <li><span class="wiki-missing">総指伸筋腱中央索断裂・ボタン指変形</span></li>
+        <li><span class="wiki-missing">爪床裂創・爪下血腫の処置</span></li>
+        <li><span class="wiki-missing">sugar tong splint の巻き方</span> ／ <span class="wiki-missing">thumb spica splint の巻き方</span> ／ <span class="wiki-missing">gutter splint の巻き方</span> ／ <span class="wiki-missing">ペーパークリップ固定</span></li>
+        <li><span class="wiki-missing">手のコンパートメント症候群</span> ／ <span class="wiki-missing">Stener 病変</span></li>
+      </ul>
+
+      <h3>このページの主要骨格</h3>
+      <ul>
+        <li>骨折ハンター（仲田和正・林寛之 監修系）— 第4章 高齢者・手関節痛、第11〜14章 小児/成人・手関節痛・手指痛</li>
+        <li>AO 分類（橈骨遠位端骨折）／Salter-Harris 分類（小児骨端線骨折）／Wilson 骨折（PIP 剥離）</li>
+        <li>UCL 損傷の MRI 感度・特異度、舟状骨各検査の感度・特異度（骨折ハンターより）</li>
+      </ul>
+
+      <p>#ER #救急 #手関節 #手の外傷 #橈骨遠位端骨折 #舟状骨骨折 #Mallet #Jersey #PIP脱臼 #ゲームキーパー母指 #boxer's_fracture #FOOSH #整形外科</p>
 
     </article>
   </main>
@@ -1378,9 +788,9 @@
 
   <script>
   (function(){
-    // 単純化診療フローの開閉
     const flowBox = document.getElementById('flowBox');
     const flowBoxClose = document.getElementById('flowBoxClose');
+
     if (flowBox && flowBoxClose) {
       const dismiss = () => { flowBox.hidden = true; };
       flowBoxClose.addEventListener('click', dismiss);
@@ -1428,54 +838,11 @@
       });
     });
 
-    // §セクションページ式ナビ（ハッシュ連動）
-    const menu = document.getElementById('sectionMenu');
-    const pages = document.querySelectorAll('.section-page');
-    const titleH1 = document.querySelector('.page-title');
-    const flowBoxEl = document.getElementById('flowBox');
-
-    function showSection(id) {
-      if (menu) menu.hidden = true;
-      if (titleH1) titleH1.hidden = true;
-      if (flowBoxEl) flowBoxEl.hidden = true;
-      pages.forEach(p => p.hidden = (p.id !== id));
-      window.scrollTo(0, 0);
-    }
-    function showMenu(scrollTarget) {
-      if (menu) menu.hidden = false;
-      if (titleH1) titleH1.hidden = false;
-      if (flowBoxEl) flowBoxEl.hidden = false;
-      pages.forEach(p => p.hidden = true);
-      if (scrollTarget) {
-        if (scrollTarget.tagName === 'DETAILS') scrollTarget.open = true;
-        scrollTarget.scrollIntoView({behavior: 'instant', block: 'start'});
-      } else {
-        window.scrollTo(0, 0);
-      }
-    }
-    function syncFromHash() {
-      const id = (location.hash || '').replace('#','');
-      const target = id ? document.getElementById(id) : null;
-      if (target && target.classList.contains('section-page')) {
-        showSection(id);
-      } else if (target) {
-        showMenu(target);
-      } else {
-        showMenu();
-      }
-    }
-
-    window.addEventListener('hashchange', syncFromHash);
-    document.querySelectorAll('.back-to-menu').forEach(b => {
-      b.addEventListener('click', () => { history.pushState(null,'',location.pathname); showMenu(); });
-    });
     const navBack = document.getElementById('navBack');
     if (navBack) navBack.addEventListener('click', () => {
       if (window.history.length > 1) history.back();
       else window.location.href = 'index.html';
     });
-
-    syncFromHash();
   })();
   </script>
 </body>
