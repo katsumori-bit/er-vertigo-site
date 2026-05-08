@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="color-scheme" content="light dark" />
+  <title>LEAD（下肢閉塞性動脈疾患） | ER ノート</title>
+  <link rel="stylesheet" href="../er-note.css" />
+</head>
+<body>
+  <header class="hokuto-top">
+    <a class="hokuto-top__btn" href="../薬剤情報.html">
+      <span class="hokuto-top__icon">℞</span><span>薬剤情報</span>
+    </a>
+    <a class="hokuto-top__btn" href="../表計算.html">
+      <span class="hokuto-top__icon">⊞</span><span>表計算</span>
+    </a>
+  </header>
+
+  <main class="hokuto-main">
+    <article class="note-shell">
+      <h1 class="page-title">LEAD（下肢閉塞性動脈疾患）</h1>
+
+      <!-- 即時アクションヘッダー（常時 sticky） -->
+      <div class="action-header">
+        <div class="action-header__title">⚡ 即時アクション</div>
+        <ol class="action-header__list">
+          <li><strong>ALI（5P）疑い</strong> → <strong>未分画ヘパリン静注</strong>＋<strong>循環器内科・心臓血管外科に即コール</strong>（4–6h で不可逆）</li>
+          <li><strong>ABI ≤ 0.90 = LEAD 確定</strong>／<strong>≥ 1.40 は中膜石灰化の偽高値</strong> → SPP/TBI に切替</li>
+          <li><strong>CLTI（Rutherford 4–6 群）</strong>＝ 救肢のため <strong>血行再建ほぼ必須</strong>。機を逃すと不可逆 — 早期介入</li>
+          <li><strong>二次予防</strong>：抗血小板（ASA or クロピドグレル）＋スタチン＋禁煙＋運動療法（クラス I）</li>
+        </ol>
+      </div>
+
+      <!-- メニュータイル -->
+      <nav class="section-tiles" id="sectionMenu">
+        <a class="section-tile" href="#s1"><span class="section-tile__no">📋</span><span class="section-tile__name">前提<br><small>定義 / 解剖 / 鑑別</small></span></a>
+        <a class="section-tile" href="#s2"><span class="section-tile__no">🧮</span><span class="section-tile__name">分類評価<br><small>Fontaine / Rutherford / WIfI</small></span></a>
+        <a class="section-tile" href="#s3"><span class="section-tile__no">🔬</span><span class="section-tile__name">診断<br><small>病歴 / ABI / 画像</small></span></a>
+        <a class="section-tile" href="#s4"><span class="section-tile__no">💊</span><span class="section-tile__name">治療判断<br><small>運動 / 薬物 / 血行再建</small></span></a>
+        <a class="section-tile" href="#s5"><span class="section-tile__no">🚨</span><span class="section-tile__name">重症対応<br><small>CLTI / ALI</small></span></a>
+        <a class="section-tile" href="#s6"><span class="section-tile__no">🏥</span><span class="section-tile__name">入院・帰宅・予防</span></a>
+        <a class="section-tile" href="#s7"><span class="section-tile__no">⚠️</span><span class="section-tile__name">やりがちなミス</span></a>
+        <a class="section-tile" href="#s8"><span class="section-tile__no">📞</span><span class="section-tile__name">コンサル文</span></a>
+        <a class="section-tile" href="#s9"><span class="section-tile__no">📚</span><span class="section-tile__name">出典・関連リンク</span></a>
+      </nav>
+
+      <!-- 関連主訴（双方向リンク） -->
+      <details class="sub-fold" id="related-symptoms">
+        <summary>📞 この疾患が該当する主訴</summary>
+        <div class="sub-fold__body">
+          <ul>
+            <li><a class="wiki-link" href="../下肢痛.html">下肢痛</a> — 間欠性跛行・安静時痛・潰瘍／壊疽／ALI 5P</li>
+            <li><a class="wiki-link" href="../胸痛.html">胸痛</a> — 多血管疾患（PVD）として ACS 併存（REACH Registry 約 60%）</li>
+            <li><a class="wiki-link" href="../意識消失.html">意識消失</a> — 透析例の血圧低下／ALI の心原性塞栓源（Af）共有</li>
+          </ul>
+        </div>
+      </details>
+
+      <!-- §1 前提 -->
+      <section class="section-page" id="s1" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>📋 前提</h2>
+
+        <div class="callout callout-summary">
+          <div class="callout-title">このページの使い方</div>
+          <div class="callout-body"><ol>
+            <li><a class="wiki-link" href="../下肢痛.html">下肢痛</a> から LEAD/ALI を疑った時点で開く</li>
+            <li>まず <strong>Fontaine／Rutherford</strong> で重症度を決め、CLTI なら <strong>WIfI</strong> も評価</li>
+            <li>ABI/SPP・画像で病変部位を確定、運動・薬物・血行再建の組み合わせを判断</li>
+            <li><strong>5P が揃えば §5（重症対応）</strong>へ — ALI は 4–6h で不可逆</li>
+          </ol></div>
+        </div>
+
+        <h3>定義</h3>
+        <ul>
+          <li><strong>LEAD（lower extremity artery disease）</strong>：下肢動脈の閉塞性疾患。動脈硬化性 LEAD ＝ 旧称 ASO</li>
+          <li><strong>PAD（末梢動脈疾患）</strong>の一部（PAD は冠動脈以外の四肢／頸／腹部内臓／腎／大動脈の閉塞性疾患の総称）</li>
+        </ul>
+
+        <h3>下肢動脈の解剖</h3>
+        <p>腹部大動脈 → 総腸骨動脈 → 鼠径靭帯越え<strong>大腿動脈</strong> → <strong>Hunter 管（内転筋管）</strong> → <strong>膝窩動脈</strong> → 前脛骨／後脛骨／腓骨動脈の<strong>3 枝</strong>。閉塞高位の推定とインターベンションの計画に必須。</p>
+
+        <h3>非動脈硬化性の鑑別</h3>
+        <ul>
+          <li>膠原病（RA・SSc・SLE）</li>
+          <li>血管炎（Buerger 病、高安動脈炎）</li>
+          <li>動脈瘤の血栓形成</li>
+          <li>外的圧迫（膝窩動脈捕捉症候群など）</li>
+          <li>外傷性／医原性</li>
+        </ul>
+
+        <div class="callout callout-tip">
+          <div class="callout-title">「LEAD を鑑別に入れる」が出発点</div>
+          <div class="callout-body"><p>LEAD の診療には地域格差が大きい。鑑別に入れて適切に評価できないと <strong>治療遅延 → 下肢切断・致死的事態</strong>に直結する。歩くと足が痛い／傷が治らないを腰椎症・糖尿病性神経障害に流さない。</p></div>
+        </div>
+      </section>
+
+      <!-- §2 分類評価 -->
+      <section class="section-page" id="s2" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🧮 分類評価（Fontaine / Rutherford / WIfI）</h2>
+
+        <h3>Fontaine 分類 ／ Rutherford 分類</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Fontaine</th><th>Rutherford</th></tr></thead>
+          <tbody>
+            <tr><td>I 度 無症状</td><td>0 群 無症状</td></tr>
+            <tr><td>II 度 間欠性跛行</td><td>1 群 軽度／2 群 中等度／3 群 重度（200 m 歩行で跛行が目安）</td></tr>
+            <tr><td>III 度 虚血性安静時疼痛</td><td>4 群 安静時疼痛</td></tr>
+            <tr><td>IV 度 潰瘍／壊疽</td><td>5 群 小さな潰瘍・壊疽／6 群 大きな潰瘍・壊疽（MP 関節より近位）</td></tr>
+          </tbody>
+        </table></div>
+
+        <div class="callout callout-warning">
+          <div class="callout-title">Rutherford 4〜6 群 = CLTI（包括的高度慢性下肢虚血）</div>
+          <div class="callout-body"><p>予後不良群。<strong>救肢のため血行再建がほぼ必須</strong>で、機を逃すと不可逆。WIfI 分類で個別評価する。</p></div>
+        </div>
+
+        <h3>WIfI 分類（CLTI で使う）</h3>
+        <ul>
+          <li><strong>W（Wound 創傷）</strong>
+            <ul>
+              <li>0 ＝ なし</li>
+              <li>1 ＝ 壊疽なしの小創</li>
+              <li>2 ＝ 骨／関節／腱に達する深い創 or 足趾壊疽</li>
+              <li>3 ＝ 広範潰瘍 or 踵部潰瘍 or 足趾以外への壊疽</li>
+            </ul>
+          </li>
+          <li><strong>I（Ischemia 虚血）</strong>：ABI、足首血圧、TP/TcPO₂、SPP 値で 4 段階
+            <ul>
+              <li>0 ＝ ABI ≥ 0.80, SPP ≥ 50</li>
+              <li>3 ＝ ABI &lt; 0.40, SPP &lt; 30</li>
+            </ul>
+          </li>
+          <li><strong>fI（foot Infection 感染）</strong>
+            <ul>
+              <li>0 ＝ なし</li>
+              <li>1 ＝ 皮膚・皮下の限局感染</li>
+              <li>2 ＝ 広範な皮下感染や深部感染（膿瘍／骨髄炎／筋膜炎）</li>
+              <li>3 ＝ SIRS を伴う</li>
+            </ul>
+          </li>
+        </ul>
+        <p>3 因子の組み合わせで <strong>5 臨床ステージ</strong>に分類、予後予測にも使う。</p>
+
+        <div class="callout callout-tip">
+          <div class="callout-title">カルテ記載のクセをつける</div>
+          <div class="callout-body"><p>LEAD 症例はカルテに「<strong>Rutherford ○ 群、Fontaine ○ 度</strong>」を記載。CLTI 例はさらに「W○ I○ fI○」を加える — 多科で共通言語になる。</p></div>
+        </div>
+      </section>
+
+      <!-- §3 診断 -->
+      <section class="section-page" id="s3" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🔬 診断</h2>
+
+        <h3>間欠性跛行の鑑別</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>鑑別</th><th>痛みの特徴・誘発・軽減</th></tr></thead>
+          <tbody>
+            <tr><td><strong>虚血性（LEAD）</strong></td><td>下腿の症状が多い。<strong>一定の歩行距離で誘発、休憩で数分で軽減</strong>。末梢冷感や潰瘍を伴うことも。<strong>内腸骨動脈病変は勃起障害</strong>を伴う（Leriche 症候群）。</td></tr>
+            <tr><td><strong>神経性（腰部脊柱管狭窄症など）</strong></td><td>中枢側（臀部〜下腿後面）が多い。日によって誘発距離が変わる。<strong>自転車や前屈で軽減（shopping cart sign 陽性）</strong>。立位／坐位でも疼痛持続することあり。</td></tr>
+            <tr><td><strong>慢性静脈不全症</strong></td><td>下腿全体、立位／坐位で残存、<strong>下肢挙上で改善</strong>。</td></tr>
+            <tr><td><strong>変形性膝関節症</strong></td><td>中年以降の女性、立位／歩行開始時にも痛む。</td></tr>
+          </tbody>
+        </table></div>
+
+        <h3>身体所見のポイント</h3>
+        <ul>
+          <li><strong>靴と靴下を必ず脱がせる</strong>、可能なら左右比較（皮膚色調・毛量・爪形状の左右差）</li>
+          <li>足背・足底・<strong>趾間まで観察</strong>（潰瘍を見落とさない）</li>
+          <li>触診：冷感、発赤、脈触知（<strong>大腿／膝窩／足背／後脛骨動脈</strong>、触れなければドプラ）</li>
+          <li>感染徴候（発赤、圧痛）</li>
+          <li><strong>糖尿病背景では神経障害で疼痛がマスクされる</strong>ため、無症候のまま潰瘍進行することも</li>
+        </ul>
+
+        <div class="callout callout-tip">
+          <div class="callout-title">LEAD は多血管疾患（PVD）の一部</div>
+          <div class="callout-body"><p>胸部症状、神経学的所見も合わせて確認（<strong>REACH Registry で約 60% に複数の動脈硬化性疾患を併存</strong>）。労作時胸部症状や心電図変化、透析例の血圧低下を再確認することで他病態の早期発見につながる。</p></div>
+        </div>
+
+        <h3>機能検査</h3>
+        <ul>
+          <li><strong>ABI（足関節上腕血圧比）</strong>
+            <ul>
+              <li>正常 1.00〜1.40</li>
+              <li><strong>≤ 0.90 で主幹動脈の狭窄／閉塞</strong></li>
+              <li>0.91〜0.99 はボーダー</li>
+              <li><strong>≥ 1.40 は中膜石灰化で偽高値</strong>（CKD・糖尿病）</li>
+            </ul>
+          </li>
+          <li><strong>SPP（皮膚灌流圧）</strong>：レーザー反射による毛細血管循環評価
+            <ul>
+              <li><strong>SPP ≥ 40 mmHg で治癒見込み</strong></li>
+              <li>&lt; 30 mmHg は治癒可能性低</li>
+            </ul>
+          </li>
+          <li>TBI（toe-brachial index）：石灰化偽高値の代替評価</li>
+        </ul>
+
+        <h3>画像検査</h3>
+        <ul>
+          <li><strong>下肢血管エコー</strong>：簡便・非侵襲。血管径、石灰化、プラーク性状、瘤、ドプラで狭窄度・血流評価。術前評価＋術後フォロー</li>
+          <li><strong>CTA（CT angiography）</strong>：石灰化を含む病変の性状・範囲。VR、MIP、dual energy CT 石灰化除去画像</li>
+          <li><strong>MRA</strong>：造影 CT 禁忌例</li>
+          <li><strong>血管造影</strong>：通常は<strong>治療目的</strong>（血管内治療時）に施行</li>
+        </ul>
+      </section>
+
+      <!-- §4 重症度治療判断 -->
+      <section class="section-page" id="s4" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>💊 重症度治療判断（Rutherford 1–3：間欠性跛行）</h2>
+
+        <p>LEAD の診療は<strong>多科連携</strong>：血管内治療は循環器内科／血管外科／放射線科、創傷管理は形成外科／皮膚科／整形外科などで担当が異なる。<strong>自施設のフローを把握</strong>。全例で<strong>リスク管理＋運動療法＋薬物療法</strong>を導入し、それでも改善しなければ血行再建。</p>
+
+        <h3>運動療法（クラス I — 初期治療として血行再建より優先）</h3>
+        <ul>
+          <li><strong>トレッドミルやトラック歩行、1 回 30〜60 分、週 3 回</strong>程度</li>
+          <li>歩行効率・内皮機能・骨格筋機能向上</li>
+          <li>監視下運動療法のほうが在宅単独より効果が高い</li>
+        </ul>
+
+        <h3>薬物療法</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>薬剤</th><th>位置づけ／注意</th></tr></thead>
+          <tbody>
+            <tr><td><strong>シロスタゾール</strong></td><td>跛行距離改善のエビデンス最多、<strong>3〜6 か月投与</strong>で改善。<strong>心拍数増加作用があり心不全例では禁忌</strong>、心疾患併存時は避ける</td></tr>
+            <tr><td><strong>アスピリン or クロピドグレル</strong></td><td>脳心血管イベント抑制目的で推奨</td></tr>
+            <tr><td><strong>スタチン</strong></td><td>全 LEAD 患者に推奨（クラス I）。<strong>LDL 目標</strong>：一次予防 &lt; 120／CAD 併存 &lt; 100／ACS or 糖尿病併存 &lt; 70 mg/dL</td></tr>
+            <tr><td><strong>プロスタグランジン I₂・E₁ 製剤</strong></td><td>跛行距離改善の報告あり</td></tr>
+            <tr><td><strong>リバーロキサバン（イグザレルト）</strong></td><td><strong>2022 年 6 月より血行再建後 LEAD に保険適応拡大</strong>（VOYAGER PAD 試験）。アスピリン併用で MACE/MALE 抑制</td></tr>
+          </tbody>
+        </table></div>
+
+        <h3>リスク因子管理</h3>
+        <p>禁煙・血圧・血糖・脂質。<strong>禁煙は最も効果的</strong>（喫煙継続例は血行再建後の再閉塞率が顕著に高い）。</p>
+
+        <h3>血行再建の適応と選択</h3>
+        <ul>
+          <li>運動・薬物で改善なしの場合に検討</li>
+          <li>血管内治療（カテーテル）vs 外科的（バイパス、内膜摘除術）の選択は<strong>患者背景・病変部位・施設で異なる</strong></li>
+          <li>一般的に複雑病変ほど外科、重篤併存疾患ありなら経験豊富チームでカテも選択肢</li>
+        </ul>
+
+        <div class="table-wrap"><table>
+          <thead><tr><th>病変部位</th><th>第一選択</th></tr></thead>
+          <tbody>
+            <tr><td><strong>腸骨動脈領域</strong></td><td>ステント開存安定で<strong>血管内治療が第一選択</strong></td></tr>
+            <tr><td><strong>浅大腿動脈（SFA）</strong></td><td>長区間でも<strong>血管内治療が拡大適応</strong></td></tr>
+            <tr><td><strong>総大腿動脈（CFA）</strong></td><td>屈曲部のため <strong>non-stenting zone</strong>、高度石灰化では<strong>外科的内膜摘除術</strong></td></tr>
+          </tbody>
+        </table></div>
+
+        <ul>
+          <li>血行再建後は抗血小板薬（場合により 2 剤併用）</li>
+          <li>VOYAGER PAD 以降は<strong>低用量リバーロキサバン＋ASA</strong>が主流の選択肢</li>
+        </ul>
+
+        <div class="callout callout-tip">
+          <div class="callout-title">「リスク管理＋運動＋薬物」が前提</div>
+          <div class="callout-body"><p>血行再建だけ先行しても、リスク管理を怠れば再閉塞・他血管イベントで予後悪化。<strong>包括的管理</strong>を組み立てるのが本筋。</p></div>
+        </div>
+      </section>
+
+      <!-- §5 重症対応（CLTI + ALI） -->
+      <section class="section-page" id="s5" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🚨 重症対応（CLTI / ALI）</h2>
+
+        <h3>CLTI（Rutherford 4〜6 群）— 包括的高度慢性下肢虚血</h3>
+        <ul>
+          <li><strong>PLAN コンセプト</strong>：<strong>P</strong>atient（患者リスク）／<strong>L</strong>imb staging（下肢重症度）／<strong>AN</strong>atomic pattern（下肢血管の解剖）</li>
+          <li><strong>WIfI 分類</strong>に沿って各専門家が包括的に管理</li>
+        </ul>
+
+        <h4>創傷管理（wound hygiene concept）</h4>
+        <ol>
+          <li>創部と周辺を<strong>せっけん＋大量の水でしっかり洗浄</strong>（優しくではない）</li>
+          <li><strong>バイオフィルムを含む汚染物質をデブリードマンで除去</strong></li>
+          <li>創縁を整える</li>
+          <li>外用剤／被覆材で被覆</li>
+        </ol>
+
+        <h4>感染合併</h4>
+        <ul>
+          <li>深部感染（骨髄炎など）は <strong>X 線／MRI 評価＋抗菌薬＋ドレナージ／デブリードマン</strong></li>
+          <li>膠原病合併ならステロイド／免疫抑制薬も</li>
+        </ul>
+
+        <div class="callout callout-danger">
+          <div class="callout-title">CLTI の血行再建は機を逃すな</div>
+          <div class="callout-body"><p><strong>救肢のため血行再建ほぼ必須、機を逃すと不可逆</strong>。早期介入を。判断遅れによる切断は QOL・予後に大きく響く。</p></div>
+        </div>
+
+        <h4>補助療法・緩和</h4>
+        <ul>
+          <li><strong>LDL アフェレシス</strong>：難治例</li>
+          <li><strong>脊髄刺激療法</strong>：難治性慢性疼痛（no-option CLTI 例）</li>
+          <li><strong>一次切断や保存的治療</strong>：全身状態不良で長期予後限定例</li>
+          <li><strong>SDM（Shared Decision Making）</strong>：患者・家族の価値観を治療方針に反映。「治療のゴールは？侵襲的治療をやらない選択肢は？」を深く話し合う</li>
+        </ul>
+
+        <h4>多科連携（フットケアチーム）</h4>
+        <p>循環器・整形・皮膚・フットケア指導士・WOC ナース・総合内科・感染症・内分泌・腎臓内科。</p>
+
+        <hr>
+
+        <h3>急性下肢虚血（ALI）— 末梢動脈の STEMI</h3>
+        <p>下肢血流が急速に途絶。発症は突然、<strong>4〜6 時間で非可逆的組織変化</strong>に進む。</p>
+
+        <h4>5P（特徴的所見）</h4>
+        <ul>
+          <li><strong>Pain</strong>（疼痛）</li>
+          <li><strong>Paresthesia</strong>（知覚鈍麻）</li>
+          <li><strong>Pallor</strong>（蒼白）</li>
+          <li><strong>Pulselessness</strong>（脈拍消失）</li>
+          <li><strong>Paralysis</strong>（運動麻痺）</li>
+        </ul>
+
+        <h4>臨床分類（Rutherford）</h4>
+        <div class="table-wrap"><table>
+          <thead><tr><th>群</th><th>定義（感覚／筋力／ドプラ）</th><th>方針</th></tr></thead>
+          <tbody>
+            <tr><td><strong>I 救肢可能（即時性なし）</strong></td><td>感覚消失なし／筋力低下なし／動脈・静脈ドプラ聴取可能</td><td>抗凝固＋精査の上で待機的治療</td></tr>
+            <tr><td><strong>IIa 境界型</strong></td><td>軽度（足趾のみ）感覚消失／筋力低下なし／動脈ドプラ聴取不能のことあり</td><td>ただちに治療すれば救肢可能</td></tr>
+            <tr><td><strong>IIb 即時型</strong></td><td>足趾以外にも安静時疼痛／軽〜中等度筋力低下／通常動脈ドプラ聴取不能</td><td><strong>即時血行再建</strong>で救肢可能</td></tr>
+            <tr><td><strong>III 不可逆性</strong></td><td>重度〜感覚消失／重度〜麻痺（硬直）／動脈・静脈ドプラ共に聴取不能</td><td><strong>切断術</strong>となる可能性高</td></tr>
+          </tbody>
+        </table></div>
+
+        <h4>原因</h4>
+        <ul>
+          <li>心原性塞栓症（<strong>Af</strong>、MI 後）</li>
+          <li>非心原性（アテローム塞栓）</li>
+          <li>血栓症（血管炎）</li>
+          <li>医原性（カテーテル・CV 穿刺後）</li>
+          <li>外傷性</li>
+        </ul>
+
+        <h4>治療</h4>
+        <div class="callout callout-danger">
+          <div class="callout-title">診断つき次第、即座に動く</div>
+          <div class="callout-body"><ul>
+            <li><strong>未分画ヘパリン静注</strong>（80 U/kg bolus → 18 U/kg/h、aPTT で調節）</li>
+            <li><strong>感覚／運動所見を時系列で記録</strong>＋早期血行再建（血栓吸引含む血管内治療、Fogarty カテーテルでの血栓除去）</li>
+            <li><strong>循環器内科・心臓血管外科に即コンサルト</strong></li>
+            <li>虚血時間が長い場合の血行再建後は<strong>コンパートメント症候群</strong>（下腿緊満、腓骨神経麻痺）に注意、必要なら<strong>減張切開（fasciotomy）</strong></li>
+            <li>再灌流障害に備えて CK・K・Cre を時系列で追跡</li>
+          </ul></div>
+        </div>
+      </section>
+
+      <!-- §6 入院・帰宅・予防 -->
+      <section class="section-page" id="s6" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🏥 入院・帰宅・予防</h2>
+
+        <h3>入院（ICU/HCU レベル）</h3>
+        <ul>
+          <li><strong>ALI</strong>：必ず ICU／心臓血管外科病棟、循環器・血管外科に即連絡</li>
+          <li><strong>CLTI で重症感染合併</strong>（壊疽進行・SIRS）、敗血症性ショック</li>
+          <li>血行再建周術期</li>
+        </ul>
+
+        <h3>一般病棟入院</h3>
+        <ul>
+          <li>CLTI で創傷管理が外来困難</li>
+          <li>抗血小板＋抗凝固の導入や周術期管理</li>
+        </ul>
+
+        <h3>外来管理</h3>
+        <ul>
+          <li>Rutherford 1–3（間欠性跛行）でリスク管理＋運動＋薬物が外来で完結する例</li>
+          <li>定期 ABI・SPP フォロー、血行再建後の開存性評価</li>
+        </ul>
+
+        <h3>二次予防（全例で徹底）</h3>
+        <div class="callout callout-summary">
+          <div class="callout-title">LEAD 患者は心血管イベント高リスク</div>
+          <div class="callout-body"><ul>
+            <li><strong>禁煙</strong>（最も効果的）</li>
+            <li><strong>抗血小板薬</strong>（ASA 100 mg or クロピドグレル 75 mg）</li>
+            <li><strong>スタチン</strong>（LDL 目標：CAD 併存 &lt; 100、ACS or DM 併存 &lt; 70）</li>
+            <li><strong>血圧管理</strong>（&lt; 130/80 を目安、ACE-I/ARB 推奨）</li>
+            <li><strong>血糖管理</strong>（HbA1c 個別目標）</li>
+            <li><strong>運動療法</strong>（30–60 分／週 3 回、生涯継続）</li>
+            <li>血行再建後はリバーロキサバン低用量＋ASA を考慮</li>
+          </ul></div>
+        </div>
+
+        <h3>SDM とフットケアチーム</h3>
+        <ul>
+          <li><strong>SDM</strong>：患者・家族の価値観を治療方針に反映（特に CLTI の救肢 vs 切断）</li>
+          <li>フットケアチーム（多科連携）でセルフケア教育・履物指導・定期診察</li>
+          <li>糖尿病例は<strong>毎日のフットチェック</strong>を指導</li>
+        </ul>
+      </section>
+
+      <!-- §7 やりがちなミス -->
+      <section class="section-page" id="s7" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>⚠️ やりがちなミス</h2>
+
+        <div class="callout callout-warning">
+          <div class="callout-title">①「神経性跛行」と決めつけて LEAD を見逃す</div>
+          <div class="callout-body"><p>腰部脊柱管狭窄症と LEAD は<strong>合併</strong>もある。下肢痛主訴では<strong>必ず ABI を測る</strong>。一定距離で誘発・休憩で軽減・前屈で軽減しない・末梢冷感／脈触知不良は虚血性を示唆。</p></div>
+        </div>
+
+        <div class="callout callout-warning">
+          <div class="callout-title">② 糖尿病で疼痛がマスクされ進行を見落とす</div>
+          <div class="callout-body"><p>糖尿病性神経障害により無症候のまま潰瘍・壊疽が進行する。<strong>痛みが弱くても潰瘍があれば LEAD・骨髄炎を必ず疑う</strong>。毎回の足底・趾間チェックを習慣化。</p></div>
+        </div>
+
+        <div class="callout callout-warning">
+          <div class="callout-title">③ ABI ≥ 1.40 を「正常」と読む</div>
+          <div class="callout-body"><p>CKD・糖尿病例の<strong>中膜石灰化による偽高値</strong>。ABI 高値＝動脈が硬くて圧迫できないだけで虚血の重症度を反映していない。<strong>SPP／TBI に切替</strong>、SPP &lt; 30 は治癒困難。</p></div>
+        </div>
+
+        <div class="callout callout-warning">
+          <div class="callout-title">④ ALI を「慢性 LEAD の急性増悪」と誤認</div>
+          <div class="callout-body"><p>慢性 LEAD は徐々に進行し側副血行が発達するが、<strong>ALI は突然・側副なし・4–6h で不可逆</strong>。5P が揃ったら経過観察ではなく<strong>即ヘパリン＋コンサルト</strong>。Af の有無を確認。</p></div>
+        </div>
+
+        <div class="callout callout-danger">
+          <div class="callout-title">⑤ 血行再建後のコンパートメント症候群を見逃す</div>
+          <div class="callout-body"><p>長時間虚血の血行再建後は<strong>再灌流障害＋コンパートメント症候群</strong>のリスク。下腿緊満・passive stretch pain・腓骨神経麻痺（足背知覚低下・足趾背屈不能）に注意、必要なら<strong>減張切開（fasciotomy）</strong>。</p></div>
+        </div>
+      </section>
+
+      <!-- §8 コンサル文 -->
+      <section class="section-page" id="s8" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>📞 コンサル文（カルテに貼る）</h2>
+
+        <p>『他科コンサルト実践マニュアル』の院内紹介状フォーマットに準拠（【目的】【疾患】【既往歴】【内服薬】【ADL】【現病歴】）。<strong>抗血小板・抗凝固薬の有無</strong>は出血／血栓リスク評価に直結するので必ず明記。</p>
+
+        <h3>循環器内科 / 心臓血管外科宛て（ALI・血行再建相談）</h3>
+        <div class="callout callout-summary">
+          <div class="callout-body">
+<pre>【目的】急性下肢虚血（ALI、Rutherford [I／IIa／IIb／III]）の血行再建適応相談。
+【疾患】#1 急性下肢虚血（[右／左][大腿／膝窩／下腿]レベル閉塞）
+　　　　#2 [心房細動（塞栓源）／陳旧性 MI／血管炎／医原性／○○]
+　　　　#3 [慢性 LEAD（Fontaine ○ 度、Rutherford ○ 群）／なし]
+【既往歴】[特記事項なし／DM／HT／脂質異常／喫煙歴 ○ 年／脳血管障害／CAD／○○]
+【内服薬】[なし／抗血小板薬 ○○／抗凝固薬 ○○／スタチン／降圧薬／○○]
+【ADL（発症前）】[独歩／杖／介助／車椅子]
+【現病歴】[年齢]歳[男／女]性。[受診経緯：突然の下肢疼痛／冷感／麻痺]で来院。
+ ・バイタル：BP ○/○、HR ○、SpO2 ○%、体温 ○、心電図 [洞調律／Af／○○]
+ ・5P 所見：Pain [○]、Pulselessness [大腿／膝窩／後脛骨／足背 触知 有／無]、Pallor [○]、Paresthesia [○]、Paralysis [○]
+ ・身体：左右温度差 [○]、皮膚色調 [○]、下腿緊満 [なし／あり]、ドプラ聴取 [動脈 ○／静脈 ○]
+ ・血液：WBC ○、CK ○、乳酸 ○、Cre ○、K ○、PT-INR ○、APTT ○、D-dimer ○
+ ・画像：[造影 CT で○部閉塞／側副血行 ○／血栓性状 ○]
+ ・ER 処置：未分画ヘパリン [○○ U bolus → ○○ U/h]（aPTT 目標 1.5–2.5 倍）、酸素 [不要／○ L]
+ ・Rutherford 臨床分類：[I／IIa／IIb／III]、虚血時間：推定 ○ 時間
+よろしくお願いいたします。</pre>
+          </div>
+        </div>
+
+        <h3>血管外科宛て（CLTI・血行再建／救肢相談）</h3>
+        <div class="callout callout-summary">
+          <div class="callout-body">
+<pre>【目的】CLTI（Rutherford ○ 群、WIfI W○ I○ fI○）の血行再建・救肢方針相談。
+【疾患】#1 慢性下肢閉塞性動脈疾患（Fontaine ○ 度、Rutherford ○ 群）
+　　　　#2 [○部潰瘍／壊疽]、感染：[なし／表在／深部／SIRS]
+　　　　#3 [DM 性足病変／透析／○○]
+【既往歴】[DM HbA1c ○、HD 導入 ○ 年、脳梗塞、CAD、○○]
+【内服薬】[抗血小板薬 ○○／抗凝固薬 ○○／スタチン／DM 薬／降圧薬／○○]
+【ADL（発症前）】[独歩／杖／介助／車椅子・ベッド上]
+【現病歴】[年齢]歳[男／女]性。[安静時痛／非治癒性潰瘍／壊疽進行]で来院。
+ ・経過：[○ 週前から○部に潰瘍／○ ヶ月前から間欠性跛行 ○ m]
+ ・身体：脈触知 [大腿 ○／膝窩 ○／後脛骨 ○／足背 ○]、創部 [部位／サイズ／深達度]、感染所見 [○]
+ ・機能検査：ABI [右 ○／左 ○]、SPP [右 ○／左 ○ mmHg]、TBI ○
+ ・画像：[CTA で○動脈閉塞、側副 ○／エコーで石灰化 ○]
+ ・血液：WBC ○、CRP ○、HbA1c ○、Cre ○、Alb ○
+ ・WIfI：W○ I○ fI○（臨床ステージ ○）
+ ・ER 処置：[抗菌薬 ○○ 開始／創傷洗浄／デブリ／なし]
+よろしくお願いいたします。</pre>
+          </div>
+        </div>
+
+        <h3>形成外科 / 皮膚科宛て（創傷管理・デブリ）</h3>
+        <div class="callout callout-summary">
+          <div class="callout-body">
+<pre>【目的】CLTI 合併足趾壊疽／非治癒性下肢潰瘍の創傷管理・デブリードマン依頼。
+【疾患】#1 CLTI（Fontaine IV 度、Rutherford ○ 群、WIfI W○ I○ fI○）
+　　　　#2 [○部潰瘍／壊疽]、感染：[なし／表在／深部（骨髄炎疑い）]
+　　　　#3 [DM／HD／○○]
+【既往歴】[DM HbA1c ○、HD ○ 年、脳梗塞、CAD、○○]
+【内服薬】[抗血小板薬／抗凝固薬／スタチン／DM 薬／○○]
+【ADL（発症前）】[独歩／杖／介助／車椅子]
+【現病歴】[年齢]歳[男／女]性。[○ 週前から○部に潰瘍／壊疽]で来院。
+ ・創部所見：[部位／サイズ／深達度（皮下／筋膜／骨）／滲出液／壊死組織／周囲発赤／圧痛]
+ ・感染：[なし／限局／深部／SIRS]、培養 [採取済／未]
+ ・機能検査：ABI ○、SPP ○ mmHg
+ ・画像：[XP で骨破壊 ○／MRI で骨髄炎 ○／CTA で○動脈閉塞]
+ ・血液：WBC ○、CRP ○、HbA1c ○、Alb ○
+ ・血行再建：[実施済（○ 月 ○ 日、○）／予定／適応評価中／適応外]
+ ・ER 処置：創部洗浄、被覆 [○○ 軟膏／○○ ドレッシング]、抗菌薬 [○○]
+ご一緒に管理いただけますと幸いです。よろしくお願いいたします。</pre>
+          </div>
+        </div>
+      </section>
+
+      <!-- §9 出典・関連リンク -->
+      <section class="section-page" id="s9" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>📚 出典・関連リンク</h2>
+
+        <h3>主要ガイドライン</h3>
+        <ul>
+          <li><strong>JCS/JSVS/JCC 2022</strong>：末梢動脈疾患ガイドライン（2022 年改訂版）</li>
+          <li><strong>ESC/ESVS 2017</strong>：Aboyans V ほか. ESC Guidelines on the Diagnosis and Treatment of Peripheral Arterial Diseases. <em>Eur Heart J.</em> 2018;39:763-816.</li>
+          <li><strong>Global Vascular Guidelines 2019</strong>（CLTI）：Conte MS, Bradbury AW ほか. <em>J Vasc Surg.</em> 2019;69(6S):3S-125S.</li>
+          <li><strong>VOYAGER PAD 2020</strong>：Bonaca MP ほか. Rivaroxaban in Peripheral Artery Disease after Revascularization. <em>N Engl J Med.</em> 2020;382:1994-2004.</li>
+          <li><strong>BASIL-2 / BEST-CLI 2022</strong>：CLTI の血行再建戦略（バイパス vs 血管内）</li>
+        </ul>
+
+        <h3>このページから張るリンク</h3>
+        <ul>
+          <li><a class="wiki-link" href="../下肢痛.html">下肢痛</a></li>
+          <li><a class="wiki-link" href="../胸痛.html">胸痛（多血管疾患併存）</a></li>
+          <li><a class="wiki-link" href="../意識消失.html">意識消失（透析血圧低下／心原性塞栓源）</a></li>
+          <li><a class="wiki-link" href="肺塞栓.html">肺塞栓（DVT 合併）</a></li>
+          <li><a class="wiki-link" href="STEMI.html">STEMI（多血管疾患）</a></li>
+          <li><span class="wiki-missing">DVT</span></li>
+          <li><span class="wiki-missing">蜂窩織炎</span></li>
+          <li><span class="wiki-missing">コンパートメント症候群</span></li>
+          <li><span class="wiki-missing">糖尿病性足病変</span></li>
+        </ul>
+
+        <p>#ER #循環器 #LEAD #ASO #ALI #CLTI #PAD</p>
+      </section>
+
+    </article>
+  </main>
+
+  <nav class="hokuto-bottom">
+    <button class="hokuto-bottom__btn" type="button" id="navBack">
+      <span class="hokuto-bottom__icon">←</span><span>戻る</span>
+    </button>
+    <a class="hokuto-bottom__btn" href="../ツール.html">
+      <span class="hokuto-bottom__icon">⚙</span><span>ツール</span>
+    </a>
+    <a class="hokuto-bottom__btn" href="../index.html">
+      <span class="hokuto-bottom__icon">⌂</span><span>ホーム</span>
+    </a>
+  </nav>
+
+  <script>
+  (function(){
+    const menu = document.getElementById('sectionMenu');
+    const pages = document.querySelectorAll('.section-page');
+    const titleH1 = document.querySelector('.page-title');
+    const relatedSymp = document.getElementById('related-symptoms');
+
+    function showSection(id) {
+      menu.hidden = true;
+      if (titleH1) titleH1.hidden = true;
+      if (relatedSymp) relatedSymp.hidden = true;
+      pages.forEach(p => p.hidden = (p.id !== id));
+      window.scrollTo(0, 0);
+    }
+    function showMenu(scrollTarget) {
+      menu.hidden = false;
+      if (titleH1) titleH1.hidden = false;
+      if (relatedSymp) relatedSymp.hidden = false;
+      pages.forEach(p => p.hidden = true);
+      if (scrollTarget) {
+        if (scrollTarget.tagName === 'DETAILS') scrollTarget.open = true;
+        scrollTarget.scrollIntoView({behavior: 'instant', block: 'start'});
+      } else {
+        window.scrollTo(0, 0);
+      }
+    }
+    function syncFromHash() {
+      const id = (location.hash || '').replace('#','');
+      const target = id ? document.getElementById(id) : null;
+      if (target && target.classList.contains('section-page')) {
+        showSection(id);
+      } else if (target) {
+        showMenu(target);
+      } else {
+        showMenu();
+      }
+    }
+
+    window.addEventListener('hashchange', syncFromHash);
+    document.querySelectorAll('.back-to-menu').forEach(b => {
+      b.addEventListener('click', () => { history.pushState(null,'',location.pathname); showMenu(); });
+    });
+    const navBack = document.getElementById('navBack');
+    if (navBack) navBack.addEventListener('click', () => {
+      if (window.history.length > 1) history.back();
+      else window.location.href = '../index.html';
+    });
+
+    syncFromHash();
+  })();
+  </script>
+</body>
+</html>

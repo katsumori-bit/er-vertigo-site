@@ -6,6 +6,157 @@
   <meta name="color-scheme" content="light dark" />
   <title>頭痛 | ER ノート</title>
   <link rel="stylesheet" href="er-note.css" />
+  <style>
+    /* === 診療フロー（このページ専用、めまい/転倒方式） === */
+    .flow-box { position: static; user-select: none; }
+    .flow-box__title {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 0.5rem; cursor: default; padding: 2px 0;
+    }
+    .flow-canvas {
+      background: var(--surface);
+      border-radius: 10px;
+      padding: 14px 10px 18px;
+      margin-top: 0.55rem;
+      overflow-x: auto; overflow-y: hidden;
+      -webkit-overflow-scrolling: touch;
+      touch-action: pan-x pan-y pinch-zoom;
+    }
+    .flow-canvas__hint {
+      font-size: 0.72rem; color: var(--muted);
+      text-align: center; margin: 0 0 0.6rem 0;
+    }
+    .dx-flow {
+      min-width: 720px; margin: 0 auto; padding: 4px 6px 8px;
+      font-size: 14px; line-height: 1.45; color: var(--text); font-family: inherit;
+    }
+    .dx-node {
+      background: var(--surface);
+      border: 1.5px solid color-mix(in srgb, var(--text) 22%, transparent);
+      border-radius: 10px; padding: 8px 12px; text-align: center;
+      box-shadow: 0 1px 2px var(--shadow, rgba(0,0,0,0.06));
+      min-height: 38px;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 2px; text-decoration: none; color: var(--text);
+    }
+    .dx-node__title { font-weight: 700; font-size: 13.5px; }
+    .dx-node__sub   { font-size: 11.5px; color: var(--muted); font-weight: 500; }
+    .dx-node--decision {
+      background: color-mix(in srgb, var(--accent) 12%, var(--surface));
+      border-color: var(--accent); border-radius: 14px;
+    }
+    .dx-node--danger {
+      background: color-mix(in srgb, #c0392b 14%, var(--surface));
+      border-color: #c0392b;
+    }
+    .dx-node--danger .dx-node__title { color: #c0392b; }
+    .dx-node--action {
+      background: color-mix(in srgb, var(--text) 5%, var(--surface));
+      border-style: dashed;
+    }
+    .dx-node--external {
+      border-style: dashed; position: relative;
+      background: color-mix(in srgb, var(--accent) 6%, var(--surface));
+    }
+    .dx-node--external::after {
+      content: "↗"; position: absolute; top: 4px; right: 8px;
+      font-size: 12px; color: var(--accent); opacity: 0.85;
+    }
+    .dx-node--warn {
+      background: color-mix(in srgb, #d4a017 14%, var(--surface));
+      border-color: #d4a017;
+    }
+    .dx-node--warn .dx-node__title { color: #9b7508; }
+
+    .dx-layer { display: grid; gap: 14px; align-items: stretch; margin: 0; }
+    .dx-layer--root   { grid-template-columns: 1fr; justify-items: center; }
+    .dx-layer--root > * { max-width: 360px; }
+    .dx-layer--branch { grid-template-columns: 1fr 1fr; }
+    .dx-layer--quad   { grid-template-columns: repeat(4, 1fr); }
+
+    .dx-arrow {
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      position: relative; margin: 4px 0; min-height: 44px;
+      color: var(--muted); font-size: 11.5px; font-weight: 600;
+    }
+    .dx-arrow::before {
+      content: ""; width: 2px; height: 100%; min-height: 38px;
+      background: color-mix(in srgb, var(--text) 35%, transparent);
+    }
+    .dx-arrow::after {
+      content: ""; position: absolute; bottom: 0;
+      width: 0; height: 0;
+      border-left: 5px solid transparent; border-right: 5px solid transparent;
+      border-top: 7px solid color-mix(in srgb, var(--text) 35%, transparent);
+    }
+    .dx-arrow__label {
+      background: var(--surface); padding: 1px 8px; border-radius: 999px;
+      border: 1px solid color-mix(in srgb, var(--text) 18%, transparent);
+      position: absolute; left: 50%; top: 50%;
+      transform: translate(-50%, -50%); white-space: nowrap; z-index: 1;
+    }
+
+    .dx-fork {
+      display: grid; grid-template-columns: 1fr 1fr;
+      position: relative; min-height: 38px; margin: 2px 0 4px;
+    }
+    .dx-fork::before {
+      content: ""; position: absolute;
+      top: 0; left: 25%; right: 25%; height: 2px;
+      background: color-mix(in srgb, var(--text) 35%, transparent);
+    }
+    .dx-fork__leg {
+      position: relative; display: flex; flex-direction: column;
+      align-items: center; justify-content: flex-end;
+      padding-top: 4px; padding-bottom: 4px;
+      font-size: 11.5px; font-weight: 600; color: var(--muted);
+      min-height: 36px;
+    }
+    .dx-fork__leg::before {
+      content: ""; width: 2px; flex: 1;
+      background: color-mix(in srgb, var(--text) 35%, transparent);
+    }
+    .dx-fork__leg::after {
+      content: ""; position: absolute; bottom: 0;
+      width: 0; height: 0;
+      border-left: 5px solid transparent; border-right: 5px solid transparent;
+      border-top: 7px solid color-mix(in srgb, var(--text) 35%, transparent);
+    }
+    .dx-fork__label {
+      background: var(--surface); padding: 1px 8px; border-radius: 999px;
+      border: 1px solid color-mix(in srgb, var(--text) 18%, transparent);
+      margin-bottom: 2px; z-index: 1;
+    }
+
+    /* §タイル非表示 */
+    .section-tiles { display: none !important; }
+
+    /* スマホ縮小 */
+    @media (max-width: 600px) {
+      .dx-flow { min-width: 0; font-size: 11px; padding: 2px 0 6px; }
+      .flow-canvas { overflow-x: hidden; padding: 8px 6px 12px; }
+      .flow-canvas__hint { font-size: 0.62rem; margin-bottom: 0.35rem; }
+      .dx-node { padding: 4px 5px; min-height: 28px; border-radius: 7px; gap: 1px; }
+      .dx-node__title { font-size: 10px; line-height: 1.22; }
+      .dx-node__sub   { font-size: 8.5px; line-height: 1.25; }
+      .dx-node--decision { border-radius: 8px; }
+      .dx-node--external::after { top: 2px; right: 4px; font-size: 9px; }
+      .dx-layer { gap: 5px; }
+      .dx-layer--root > * { max-width: none; width: 100%; }
+      .dx-layer--quad { grid-template-columns: 1fr 1fr; }
+      .dx-arrow { min-height: 22px; margin: 1px 0; }
+      .dx-arrow::before { min-height: 18px; width: 1.5px; }
+      .dx-arrow::after { border-left-width: 4px; border-right-width: 4px; border-top-width: 6px; }
+      .dx-arrow__label { font-size: 8.5px; padding: 0 4px; line-height: 1.4; }
+      .dx-fork { min-height: 22px; }
+      .dx-fork::before { height: 1.5px; }
+      .dx-fork__leg { min-height: 22px; padding-top: 2px; padding-bottom: 2px; font-size: 9px; }
+      .dx-fork__leg::before { width: 1.5px; }
+      .dx-fork__leg::after { border-left-width: 4px; border-right-width: 4px; border-top-width: 6px; }
+      .dx-fork__label { font-size: 8.5px; padding: 0 4px; margin-bottom: 0; }
+    }
+  </style>
 </head>
 <body>
   <header class="hokuto-top">
@@ -21,18 +172,110 @@
     <article class="note-shell">
       <h1 class="page-title">頭痛</h1>
 
-      <!-- 即時アクションヘッダー -->
-      <div class="action-header">
-        <div class="action-header__title">⚡ 即時アクション</div>
-        <ol class="action-header__list">
-          <li><strong>SAH / 髄膜炎 / GCA / 緑内障</strong>を最初に外す（致死・失明）</li>
-          <li><strong>雷鳴頭痛 → 頭部単純 CT 即施行</strong>（6h 以内なら高感度）</li>
-          <li><strong>SNNOOP10 red flags</strong> を 5 秒で確認（雷鳴・発熱・神経症状・妊娠/産褥・眼痛+視力低下・50歳以上新規・癌/免疫不全/抗凝固薬・乳頭浮腫/体位増悪・外傷/穿刺後）</li>
-          <li><strong>CT 陰性でも SAH 疑いが残れば LP または CTA</strong>（6h 超 / 神経所見あり）</li>
-        </ol>
+      <!-- 診療フロー -->
+      <div class="action-header flow-box" id="flowBox">
+        <div class="action-header__title flow-box__title">
+          <span>🗺 頭痛の診療フロー</span>
+        </div>
+        <div class="flow-canvas">
+          <p class="flow-canvas__hint">赤旗 SNNOOP10 → 二次性ならパターン分岐 → 一次性なら対症療法</p>
+          <div class="dx-flow" role="group" aria-label="頭痛の診療フロー">
+
+            <!-- L0: 赤旗チェック -->
+            <div class="dx-layer dx-layer--root">
+              <a class="dx-node dx-node--danger" href="#s1">
+                <div class="dx-node__title">🚨 赤旗 SNNOOP10（最初の 5 秒）</div>
+                <div class="dx-node__sub">雷鳴 / 発熱 / 神経 / 妊娠 / 眼痛 / 50歳新規 / 癌・抗凝固 / 乳頭浮腫・体位増悪 / 外傷・穿刺</div>
+              </a>
+            </div>
+
+            <!-- 赤旗あり / なし のフォーク -->
+            <div class="dx-fork">
+              <div class="dx-fork__leg"><span class="dx-fork__label">1 つでもあり</span></div>
+              <div class="dx-fork__leg"><span class="dx-fork__label">なし＋いつもの頭痛</span></div>
+            </div>
+
+            <!-- L1: 二次性 vs 一次性 -->
+            <div class="dx-layer dx-layer--branch">
+              <a class="dx-node dx-node--decision" href="#s2">
+                <div class="dx-node__title">二次性疑い</div>
+                <div class="dx-node__sub">パターンで first を絞る</div>
+              </a>
+              <a class="dx-node dx-node--decision" href="#s5">
+                <div class="dx-node__title">一次性</div>
+                <div class="dx-node__sub">片頭痛・緊張型・群発</div>
+              </a>
+            </div>
+
+            <div class="dx-arrow"><span class="dx-arrow__label">二次性側 ↓ パターン</span></div>
+
+            <!-- L2: 緊急除外 4 パターン -->
+            <div class="dx-layer dx-layer--quad">
+              <a class="dx-node dx-node--danger" href="#s2">
+                <div class="dx-node__title">雷鳴頭痛</div>
+                <div class="dx-node__sub">SAH first<br>単純 CT</div>
+              </a>
+              <a class="dx-node dx-node--danger" href="#s2">
+                <div class="dx-node__title">発熱＋項部</div>
+                <div class="dx-node__sub">髄膜炎<br>1h 以内 ABx</div>
+              </a>
+              <a class="dx-node dx-node--danger" href="#s2">
+                <div class="dx-node__title">神経症状</div>
+                <div class="dx-node__sub">脳卒中・脳炎<br>頭部画像</div>
+              </a>
+              <a class="dx-node dx-node--warn" href="#s2">
+                <div class="dx-node__title">妊娠／産褥</div>
+                <div class="dx-node__sub">子癇/CVST/PRES<br>血圧・尿蛋白</div>
+              </a>
+            </div>
+
+            <div class="dx-arrow"><span class="dx-arrow__label">↓ 状況依存</span></div>
+
+            <!-- L3: 状況依存 4 パターン -->
+            <div class="dx-layer dx-layer--quad">
+              <a class="dx-node dx-node--warn" href="#s2">
+                <div class="dx-node__title">眼痛＋視力低下</div>
+                <div class="dx-node__sub">緑内障<br>眼科コンサル</div>
+              </a>
+              <a class="dx-node dx-node--warn" href="#s2">
+                <div class="dx-node__title">50 歳以上新規</div>
+                <div class="dx-node__sub">GCA<br>ESR/CRP</div>
+              </a>
+              <a class="dx-node dx-node--warn" href="#s2">
+                <div class="dx-node__title">ICP 異常</div>
+                <div class="dx-node__sub">朝強い/咳増悪<br>立位増悪</div>
+              </a>
+              <a class="dx-node dx-node--action" href="#s4">
+                <div class="dx-node__title">画像／LP 判断</div>
+                <div class="dx-node__sub">CT/CTA/LP/ESR</div>
+              </a>
+            </div>
+
+            <!-- 合流：診察・disposition -->
+            <div class="dx-arrow"><span class="dx-arrow__label">合流</span></div>
+            <div class="dx-layer dx-layer--branch">
+              <a class="dx-node dx-node--action" href="#s3">
+                <div class="dx-node__title">最低限の診察</div>
+                <div class="dx-node__sub">意識/血圧/瞳孔/麻痺/小脳/歩行</div>
+              </a>
+              <a class="dx-node dx-node--external" href="疾患詳細/頭痛の対症療法.html">
+                <div class="dx-node__title">頭痛の対症療法</div>
+                <div class="dx-node__sub">薬剤・用量・帰宅処方</div>
+              </a>
+            </div>
+
+            <div class="dx-arrow"><span class="dx-arrow__label">↓</span></div>
+            <div class="dx-layer dx-layer--root">
+              <a class="dx-node dx-node--decision" href="#s6">
+                <div class="dx-node__title">📤 disposition</div>
+                <div class="dx-node__sub">帰宅 / 入院 / 専門科コンサルト</div>
+              </a>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <!-- §タイル -->
+      <!-- §タイル（フロー直リンクで代替、CSS で非表示） -->
       <nav class="section-tiles" id="sectionMenu">
         <a class="section-tile" href="#s1"><span class="section-tile__no">🚨</span><span class="section-tile__name">最初の 5 秒<br><small>赤旗 SNNOOP10</small></span></a>
         <a class="section-tile" href="#s2"><span class="section-tile__no">🎯</span><span class="section-tile__name">パターン別 first<br><small>雷鳴 / 発熱 / 妊娠 / 眼痛 ほか</small></span></a>
