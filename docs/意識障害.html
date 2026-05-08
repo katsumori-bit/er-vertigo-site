@@ -6,6 +6,164 @@
   <meta name="color-scheme" content="light dark" />
   <title>意識障害</title>
   <link rel="stylesheet" href="er-note.css" />
+  <style>
+    /* === 診療フロー（このページ専用） === */
+    .flow-box { position: static; user-select: none; }
+    .flow-box__title {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 0.5rem; cursor: default; padding: 2px 0;
+    }
+    .flow-canvas {
+      background: var(--surface);
+      border-radius: 10px;
+      padding: 14px 10px 18px;
+      margin-top: 0.55rem;
+      overflow-x: auto; overflow-y: hidden;
+      -webkit-overflow-scrolling: touch;
+      touch-action: pan-x pan-y pinch-zoom;
+    }
+    .flow-canvas__hint {
+      font-size: 0.72rem; color: var(--muted);
+      text-align: center; margin: 0 0 0.6rem 0;
+    }
+    .dx-flow {
+      min-width: 720px; margin: 0 auto; padding: 4px 6px 8px;
+      font-size: 14px; line-height: 1.45; color: var(--text); font-family: inherit;
+    }
+    .dx-node {
+      background: var(--surface);
+      border: 1.5px solid color-mix(in srgb, var(--text) 22%, transparent);
+      border-radius: 10px; padding: 8px 12px; text-align: center;
+      box-shadow: 0 1px 2px var(--shadow, rgba(0,0,0,0.06));
+      min-height: 38px;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 2px; text-decoration: none; color: var(--text);
+    }
+    .dx-node__title { font-weight: 700; font-size: 13.5px; }
+    .dx-node__sub   { font-size: 11.5px; color: var(--muted); font-weight: 500; }
+    .dx-node--decision {
+      background: color-mix(in srgb, var(--accent) 12%, var(--surface));
+      border-color: var(--accent); border-radius: 14px;
+    }
+    .dx-node--danger {
+      background: color-mix(in srgb, #c0392b 14%, var(--surface));
+      border-color: #c0392b;
+    }
+    .dx-node--danger .dx-node__title { color: #c0392b; }
+    .dx-node--action {
+      background: color-mix(in srgb, var(--text) 5%, var(--surface));
+      border-style: dashed;
+    }
+    .dx-node--external {
+      border-style: dashed; position: relative;
+      background: color-mix(in srgb, var(--accent) 6%, var(--surface));
+    }
+    .dx-node--external::after {
+      content: "↗"; position: absolute; top: 4px; right: 8px;
+      font-size: 12px; color: var(--accent); opacity: 0.85;
+    }
+    .dx-node--warn {
+      background: color-mix(in srgb, #d4a017 14%, var(--surface));
+      border-color: #d4a017;
+    }
+    .dx-node--warn .dx-node__title { color: #9b7508; }
+
+    .dx-layer { display: grid; gap: 14px; align-items: stretch; margin: 0; }
+    .dx-layer--root   { grid-template-columns: 1fr; justify-items: center; }
+    .dx-layer--root > * { max-width: 360px; }
+    .dx-layer--branch { grid-template-columns: 1fr 1fr; }
+    .dx-layer--tri    { grid-template-columns: repeat(3, 1fr); }
+    .dx-layer--quad   { grid-template-columns: repeat(4, 1fr); }
+    .dx-layer--quint  { grid-template-columns: repeat(5, 1fr); }
+    .dx-layer--hex    { grid-template-columns: repeat(6, 1fr); }
+
+    .dx-arrow {
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      position: relative; margin: 4px 0; min-height: 44px;
+      color: var(--muted); font-size: 11.5px; font-weight: 600;
+    }
+    .dx-arrow::before {
+      content: ""; width: 2px; height: 100%; min-height: 38px;
+      background: color-mix(in srgb, var(--text) 35%, transparent);
+    }
+    .dx-arrow::after {
+      content: ""; position: absolute; bottom: 0;
+      width: 0; height: 0;
+      border-left: 5px solid transparent; border-right: 5px solid transparent;
+      border-top: 7px solid color-mix(in srgb, var(--text) 35%, transparent);
+    }
+    .dx-arrow__label {
+      background: var(--surface); padding: 1px 8px; border-radius: 999px;
+      border: 1px solid color-mix(in srgb, var(--text) 18%, transparent);
+      position: absolute; left: 50%; top: 50%;
+      transform: translate(-50%, -50%); white-space: nowrap; z-index: 1;
+    }
+
+    /* L0 行：ABCD ボックスを中央線上に配置、横に矢印＋ボタンを overlay */
+    .l0-row {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 60px;
+      margin: 0;
+    }
+    .l0-row__main {
+      max-width: 360px;
+      width: 100%;
+      cursor: default;
+    }
+    .l0-row__addon {
+      position: absolute;
+      left: calc(50% + 188px);
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      white-space: nowrap;
+    }
+    .l0-row__arrow {
+      font-size: 22px;
+      font-weight: 700;
+      color: color-mix(in srgb, var(--text) 55%, transparent);
+      padding: 0 4px;
+      flex-shrink: 0;
+    }
+    .l0-row__btn {
+      max-width: 200px;
+      white-space: normal;
+    }
+
+    .section-tiles { display: none !important; }
+
+    @media (max-width: 600px) {
+      .dx-flow { min-width: 0; font-size: 11px; padding: 2px 0 6px; }
+      .flow-canvas { overflow-x: hidden; padding: 8px 6px 12px; }
+      .flow-canvas__hint { font-size: 0.62rem; margin-bottom: 0.35rem; }
+      .dx-node { padding: 4px 5px; min-height: 28px; border-radius: 7px; gap: 1px; }
+      .dx-node__title { font-size: 10px; line-height: 1.22; }
+      .dx-node__sub   { font-size: 8.5px; line-height: 1.25; }
+      .dx-node--decision { border-radius: 8px; }
+      .dx-node--external::after { top: 2px; right: 4px; font-size: 9px; }
+      .dx-layer { gap: 5px; }
+      .dx-layer--root > * { max-width: none; width: 100%; }
+      .dx-layer--tri  { grid-template-columns: repeat(3, 1fr); }
+      .dx-layer--quad { grid-template-columns: 1fr 1fr; }
+      .dx-layer--quint { grid-template-columns: repeat(3, 1fr); }
+      .dx-layer--hex   { grid-template-columns: repeat(3, 1fr); }
+      .dx-arrow { min-height: 22px; margin: 1px 0; }
+      .dx-arrow::before { min-height: 18px; width: 1.5px; }
+      .dx-arrow::after { border-left-width: 4px; border-right-width: 4px; border-top-width: 6px; }
+      .dx-arrow__label { font-size: 8.5px; padding: 0 4px; line-height: 1.4; }
+      .l0-row { flex-direction: column; gap: 6px; min-height: 0; }
+      .l0-row__addon { position: static; transform: none; flex-direction: column; gap: 4px; }
+      .l0-row__arrow { transform: rotate(90deg); padding: 0; font-size: 16px; }
+      .l0-row__btn { max-width: 100%; width: 100%; }
+      .l0-row__main { max-width: 100%; }
+    }
+  </style>
 </head>
 <body>
   <header class="hokuto-top">
@@ -21,23 +179,175 @@
     <article class="note-shell">
       <h1 class="page-title">意識障害</h1>
 
+      <!-- 診療フロー -->
+      <div class="action-header flow-box" id="flowBox">
+        <div class="action-header__title flow-box__title">
+          <span>意識障害の診療フロー</span>
+        </div>
+        <div class="flow-canvas">
+          <p class="flow-canvas__hint">ABCD ＋血糖 → 6 項目同時並行 → 鑑別 4 軸 → 詰まったら補完 → 原因別 dispo</p>
+          <div class="dx-flow" role="group" aria-label="意識障害の診療フロー">
+
+            <!-- L0: ABCD評価（中央線上）→ 第①軸（ABCと低血糖、押せる） -->
+            <div class="l0-row">
+              <div class="dx-node dx-node--danger l0-row__main">
+                <div class="dx-node__title">ABCD ＋バイタル＋血糖</div>
+                <div class="dx-node__sub">気道／呼吸／循環／意識（GCS・瞳孔）／HR・BP・RR・SpO2・BT＋指先血糖</div>
+              </div>
+              <div class="l0-row__addon">
+                <div class="l0-row__arrow">→</div>
+                <a class="dx-node dx-node--decision l0-row__btn" href="#s4">
+                  <div class="dx-node__title">① ABC と低血糖</div>
+                  <div class="dx-node__sub">脳血流低下（ABC 異常由来）<br>低血糖 / qSOFA / Cushing</div>
+                </a>
+              </div>
+            </div>
+
+            <p class="flow-canvas__hint" style="background:color-mix(in srgb,#c0392b 10%,var(--surface));border:1px solid #c0392b;border-radius:8px;padding:8px 12px;margin:8px 0;font-size:11.5px;line-height:1.55;color:var(--text);text-align:left;">
+              <strong>Coma Cocktail</strong><br>
+              <span style="font-weight:500;">
+              血糖 &lt; 70 mg/dL or 不明 → <strong>B1 100mg → 50% ブドウ糖 40mL</strong>（B1 先行 = Wernicke 回避）
+              </span>
+            </p>
+
+            <div class="dx-arrow"><span class="dx-arrow__label">↓ 同時並行（5–10 分）</span></div>
+
+            <!-- L1: 来院時 5 項目（問診 / 身体診察 / 血液検査 / 心電図 / 頭部 CT） -->
+            <p class="flow-canvas__hint" style="margin:6px 0 4px;font-weight:700;">来院時 5 項目（同時並行）</p>
+            <div class="dx-layer dx-layer--quint">
+              <a class="dx-node dx-node--action" href="#s3-hx">
+                <div class="dx-node__title">問診</div>
+                <div class="dx-node__sub">普段 GCS/ADL<br>と現在を比較</div>
+              </a>
+              <a class="dx-node dx-node--action" href="#s3-pe">
+                <div class="dx-node__title">身体診察</div>
+                <div class="dx-node__sub">意識障害下の<br>神経所見</div>
+              </a>
+              <a class="dx-node dx-node--action" href="#s3a">
+                <div class="dx-node__title">血液検査</div>
+                <div class="dx-node__sub">VBG＋フルパネル<br>培養は発熱時</div>
+              </a>
+              <a class="dx-node dx-node--action" href="#s3c">
+                <div class="dx-node__title">心電図 12 誘導</div>
+                <div class="dx-node__sub">ベッドサイド／5 分</div>
+              </a>
+              <a class="dx-node dx-node--action" href="#s3d">
+                <div class="dx-node__title">頭部 CT</div>
+                <div class="dx-node__sub">ほぼ全例<br>先に枠取り</div>
+              </a>
+            </div>
+
+            <div class="dx-arrow"><span class="dx-arrow__label">②〜⑤ の順で吟味</span></div>
+
+            <!-- L2: 鑑別の残り 4 軸（①は L0 横に移動済み） -->
+            <p class="flow-canvas__hint" style="margin:6px 0 4px;font-weight:700;">鑑別 4 軸（②〜⑤）</p>
+            <div class="dx-layer dx-layer--quad">
+              <a class="dx-node dx-node--decision" href="#s4">
+                <div class="dx-node__title">② 血ガス・血液値</div>
+                <div class="dx-node__sub">低血糖/CO2ナル/CO中毒<br>低Na/高Ca/低Mg</div>
+              </a>
+              <a class="dx-node dx-node--decision" href="#s4">
+                <div class="dx-node__title">③ 神経所見</div>
+                <div class="dx-node__sub">脳卒中<br>髄膜炎・脳炎/NCSE</div>
+              </a>
+              <a class="dx-node dx-node--decision" href="#s4">
+                <div class="dx-node__title">④ 頭部 CT</div>
+                <div class="dx-node__sub">脳出血/SAH/SDH<br>腫瘍/膿瘍</div>
+              </a>
+              <a class="dx-node dx-node--decision" href="#s4">
+                <div class="dx-node__title">⑤ 追加検査</div>
+                <div class="dx-node__sub">Wernicke/甲状腺/粘液水腫<br>副腎/HHS</div>
+              </a>
+            </div>
+
+            <div class="dx-arrow"><span class="dx-arrow__label">⑤でも決まらない時</span></div>
+
+            <!-- L3: 詰まったら（補完・確認） -->
+            <p class="flow-canvas__hint" style="margin:6px 0 4px;font-weight:700;">詰まったら（ABCDEs が見逃し本丸）</p>
+            <div class="dx-layer dx-layer--tri">
+              <a class="dx-node" href="#s5">
+                <div class="dx-node__title">鑑別確認リスト</div>
+                <div class="dx-node__sub">DONT/VITAL/LABO<br>BRAIN/それ以外</div>
+              </a>
+              <a class="dx-node" href="#s5">
+                <div class="dx-node__title">AIUEOTIPS</div>
+                <div class="dx-node__sub">網羅 mnemonic</div>
+              </a>
+              <a class="dx-node dx-node--warn" href="#s5">
+                <div class="dx-node__title">ABCDEs（見逃し本丸）</div>
+                <div class="dx-node__sub">自己免疫脳炎/CVT<br>PRES/薬剤性/ADEM</div>
+              </a>
+            </div>
+
+            <div class="dx-arrow"><span class="dx-arrow__label">原因が絞れたら</span></div>
+
+            <!-- L4: 原因別 dispo（同ページ #s6） -->
+            <p class="flow-canvas__hint" style="margin:6px 0 4px;font-weight:700;">原因別 dispo</p>
+            <div class="dx-layer dx-layer--quint">
+              <a class="dx-node dx-node--decision" href="#s6">
+                <div class="dx-node__title">内分泌・代謝</div>
+                <div class="dx-node__sub">低血糖/DKA/HHS<br>Wernicke/NH3/副腎</div>
+              </a>
+              <a class="dx-node dx-node--decision" href="#s6">
+                <div class="dx-node__title">電解質異常</div>
+                <div class="dx-node__sub">低Na/高Na<br>高Ca</div>
+              </a>
+              <a class="dx-node dx-node--decision" href="#s6">
+                <div class="dx-node__title">中毒</div>
+                <div class="dx-node__sub">オピオイド/CO<br>BZD/薬剤性</div>
+              </a>
+              <a class="dx-node dx-node--decision" href="#s6">
+                <div class="dx-node__title">CNS（神経）</div>
+                <div class="dx-node__sub">脳卒中/髄膜炎<br>NCSE/自己免疫</div>
+              </a>
+              <a class="dx-node dx-node--decision" href="#s6">
+                <div class="dx-node__title">全身</div>
+                <div class="dx-node__sub">敗血症<br>各種ショック</div>
+              </a>
+            </div>
+
+            <!-- 補足リンク -->
+            <div class="dx-layer dx-layer--quad" style="margin-top:18px;">
+              <a class="dx-node dx-node--action" href="#s1">
+                <div class="dx-node__title">来院前</div>
+                <div class="dx-node__sub">ホットライン</div>
+              </a>
+              <a class="dx-node dx-node--action" href="#s7">
+                <div class="dx-node__title">カルテテンプレ</div>
+                <div class="dx-node__sub">S/O/A/P</div>
+              </a>
+              <a class="dx-node dx-node--action" href="#s8">
+                <div class="dx-node__title">やりがちなミス</div>
+              </a>
+              <a class="dx-node dx-node--action" href="#s9">
+                <div class="dx-node__title">出典・リンク</div>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- §タイル -->
       <nav class="section-tiles" id="sectionMenu">
-        <a class="section-tile" href="#s1"><span class="section-tile__no">📞</span><span class="section-tile__name">来院前</span></a>
+        <a class="section-tile" href="#s1"><span class="section-tile__no"></span><span class="section-tile__name">来院前</span></a>
         <a class="section-tile" href="#s2"><span class="section-tile__no">ABCD</span><span class="section-tile__name">到着直後</span></a>
-        <a class="section-tile" href="#s3"><span class="section-tile__no">🩸</span><span class="section-tile__name">来院時<br><small>血糖 / 血ガス / 採血 / CT</small></span></a>
-        <a class="section-tile" href="#s4"><span class="section-tile__no">🔍</span><span class="section-tile__name">鑑別ステップ ①〜⑤</span></a>
-        <a class="section-tile" href="#s5"><span class="section-tile__no">🧠</span><span class="section-tile__name">鑑別の補完・確認<br><small>リスト / AIUEOTIPS / ABCDEs</small></span></a>
-        <a class="section-tile" href="#s6"><span class="section-tile__no">📤</span><span class="section-tile__name">disposition</span></a>
-        <a class="section-tile" href="#s7"><span class="section-tile__no">📝</span><span class="section-tile__name">カルテテンプレ（S/O/A/P）</span></a>
-        <a class="section-tile" href="#s8"><span class="section-tile__no">⚠️</span><span class="section-tile__name">やりがちなミス</span></a>
-        <a class="section-tile" href="#s9"><span class="section-tile__no">📚</span><span class="section-tile__name">出典・リンク</span></a>
+        <a class="section-tile" href="#s3-hx"><span class="section-tile__no"></span><span class="section-tile__name">問診</span></a>
+        <a class="section-tile" href="#s3-pe"><span class="section-tile__no"></span><span class="section-tile__name">身体診察</span></a>
+        <a class="section-tile" href="#s3a"><span class="section-tile__no"></span><span class="section-tile__name">血液検査</span></a>
+        <a class="section-tile" href="#s3c"><span class="section-tile__no"></span><span class="section-tile__name">心電図 12 誘導</span></a>
+        <a class="section-tile" href="#s3d"><span class="section-tile__no"></span><span class="section-tile__name">頭部 CT</span></a>
+        <a class="section-tile" href="#s4"><span class="section-tile__no"></span><span class="section-tile__name">鑑別ステップ ①〜⑤</span></a>
+        <a class="section-tile" href="#s5"><span class="section-tile__no"></span><span class="section-tile__name">鑑別の補完・確認<br><small>リスト / AIUEOTIPS / ABCDEs</small></span></a>
+        <a class="section-tile" href="#s6"><span class="section-tile__no"></span><span class="section-tile__name">disposition</span></a>
+        <a class="section-tile" href="#s7"><span class="section-tile__no"></span><span class="section-tile__name">カルテテンプレ（S/O/A/P）</span></a>
+        <a class="section-tile" href="#s8"><span class="section-tile__no"></span><span class="section-tile__name">やりがちなミス</span></a>
+        <a class="section-tile" href="#s9"><span class="section-tile__no"></span><span class="section-tile__name">出典・リンク</span></a>
       </nav>
 
       <!-- §1 来院前 -->
       <section class="section-page" id="s1" hidden>
         <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>📞 来院前に確認すべきこと</h2>
+        <h2>来院前に確認すべきこと</h2>
 
         <div class="callout callout-tip">
           <div class="callout-title">ホットラインから患者到着まで</div>
@@ -45,7 +355,7 @@
         </div>
 
         <details class="sub-fold">
-          <summary>📞 救急隊ホットラインで聞く（10 項目）</summary>
+          <summary>救急隊ホットラインで聞く（10 項目）</summary>
           <div class="sub-fold__body">
             <ul>
               <li><strong>年齢・性別・主訴</strong>、現場の状況（場所・目撃者）</li>
@@ -63,7 +373,7 @@
         </details>
 
         <details class="sub-fold">
-          <summary>🚦 振り分け：失神 / けいれん / 意識障害</summary>
+          <summary>振り分け：失神 / けいれん / 意識障害</summary>
           <div class="sub-fold__body">
             <ul>
               <li><strong>失神的エピソード + 意識は戻っている</strong> → <a class="wiki-link" href="意識消失.html">意識消失</a> ページへ</li>
@@ -75,7 +385,7 @@
         </details>
 
         <details class="sub-fold">
-          <summary>🛏 蘇生室・物品準備</summary>
+          <summary>蘇生室・物品準備</summary>
           <div class="sub-fold__body">
             <ul>
               <li><strong>蘇生室</strong>を確保、モニター（心電図・SpO2・NIBP・BT）装着準備</li>
@@ -89,7 +399,7 @@
         </details>
 
         <details class="sub-fold">
-          <summary>🏥 関連科への heads up（必要に応じて）</summary>
+          <summary>関連科への heads up（必要に応じて）</summary>
           <div class="sub-fold__body">
             <ul>
               <li><strong>頭部 CT 室</strong>を空けておく（放射線科にコール）</li>
@@ -106,15 +416,15 @@
       <!-- §2 到着直後 -->
       <section class="section-page" id="s2" hidden>
         <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>ABCD + バイタル（到着直後 / Primary Survey）</h2>
+        <h2>ABCD ＋バイタル（Primary Survey）</h2>
 
         <div class="callout callout-danger">
-          <div class="callout-title">🚨 危険サイン — 見つけたら即対応</div>
+          <div class="callout-title">危険サイン — 即対応</div>
           <div class="callout-body">
             <ul>
               <li><strong>A：気道が保てない</strong>（GCS ≤ 8 / いびき様呼吸 / 嘔吐）→ <strong>気道確保・挿管準備</strong></li>
               <li><strong>C：ショック</strong>（低血圧・頻脈・末梢冷感）→ 輸液・昇圧、原因鑑別（出血 / 敗血症 / 閉塞性 → §6 dispo の「全身」へ）</li>
-              <li><strong>D：瞳孔不同 + 意識低下</strong> → <strong>脳ヘルニア</strong>を疑う → <strong>頭部 CT を最優先</strong>（§3 来院時 ④ CT へ即移送）</li>
+              <li><strong>D：瞳孔不同 + 意識低下</strong> → <strong>脳ヘルニア</strong>を疑う → <strong><a class="wiki-link" href="#s3d">頭部 CT を最優先</a></strong>（即移送）</li>
               <li><strong>けいれん持続</strong>（&gt; 5 分 or 連続）→ <strong>けいれん重積</strong>として治療を ABCD と並行で先行</li>
               <li><strong>V：高度低体温</strong>（&lt; 30°C）→ 加温（受動 → 能動）、不整脈モニタ強化、循環安定まで CPR 中止せず</li>
             </ul>
@@ -127,122 +437,206 @@
         </div>
       </section>
 
-      <!-- §3 来院時（血糖 / 血ガス / 採血 / CT / Coma Cocktail） -->
-      <section class="section-page" id="s3" hidden>
+      <!-- §3-hx 問診（普段との比較が最重要） -->
+      <section class="section-page" id="s3-hx" hidden>
         <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🩸 来院時にやること</h2>
+        <h2>問診（普段との比較が最優先）</h2>
+
+        <div class="callout callout-danger">
+          <div class="callout-title">普段の GCS / ADL と「今」を比較</div>
+          <div class="callout-body">
+            <p>判断の起点は「<strong>普段からどれだけ落ちているか</strong>」。家族・施設・救急隊・お薬手帳から徹底取得。</p>
+            <ul>
+              <li><strong>普段の GCS</strong>（認知症・既存意識障害）</li>
+              <li><strong>普段の ADL</strong>（更衣・食事・移動・排泄・整容、要支援/要介護度）</li>
+              <li><strong>普段の会話レベル</strong></li>
+              <li><strong>普段の認知・指示理解</strong>（見当識）</li>
+            </ul>
+            <p>例：普段 GCS 12 → 来院 GCS 10 = <strong>2 ポイント低下</strong>で急性意識障害扱い。「もともとボケてる」で片付けない。</p>
+          </div>
+        </div>
+
+        <h3>標準項目</h3>
+        <ul>
+          <li><strong>onset</strong>：急性／亜急性／慢性、発症時刻／最終 well-known time</li>
+          <li><strong>けいれん目撃</strong>の有無、舌咬傷、尿失禁、完全回復</li>
+          <li><strong>外傷</strong>の有無（頭部外傷・転倒）、抗凝固薬使用なら見逃し注意</li>
+          <li><strong>既往</strong>：糖尿病・肝硬変・腎不全・透析・甲状腺・副腎・癌・脳血管障害・てんかん</li>
+          <li><strong>内服</strong>：特に <strong>抗凝固薬・血糖降下薬・向精神薬・免疫抑制薬</strong>、お薬手帳必須</li>
+          <li><strong>アレルギー</strong>（薬剤・食物）</li>
+          <li><strong>最終食事</strong>（時刻・量）</li>
+          <li><strong>曝露</strong>：CO（暖房・閉鎖空間）、薬物、アルコール、化学物質</li>
+          <li><strong>仕事・住環境</strong>（独居／施設／キーパーソン）</li>
+          <li><strong>家族歴</strong>（てんかん・心血管・突然死）</li>
+        </ul>
 
         <div class="callout callout-tip">
-          <div class="callout-title">来院後 5〜10 分のオーダー順</div>
-          <div class="callout-body"><p>ABCD（§2）と並行で進める。<strong>① 血糖（指先） → ② 血ガス → ③ 採血セット → ④ 頭部 CT → ⑤ Coma Cocktail</strong> の流れで動く。</p></div>
+          <div class="callout-body"><p>情報源は救急隊・家族・施設・お薬手帳など複数経路から並行に。来院時に取れなければ後追いで OK。<strong>「普段の状態」が分かるまで評価は完成しない</strong>。</p></div>
+        </div>
+      </section>
+
+      <!-- §3-pe 身体診察（意識障害下でできる神経所見） -->
+      <section class="section-page" id="s3-pe" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>身体診察（意識障害下でできる神経所見）</h2>
+
+        <div class="callout callout-tip">
+          <div class="callout-body"><p>協力なしでも観察と他動運動で多くが取れる。<strong>左右差</strong>を意識。目的は中枢病変・髄膜炎・SAH のスクリーニング。</p></div>
+        </div>
+
+        <h3>神経学的所見（中枢病変の拾い上げ）</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>所見</th><th>意義</th></tr></thead>
+          <tbody>
+            <tr><td><strong>眼位・共同偏視</strong></td><td>偏位方向の大脳半球病変／けいれん後は逆側</td></tr>
+            <tr><td><strong>瞳孔</strong>：左右差 / pinpoint / 散大</td><td>ヘルニア（左右差）／橋出血・オピオイド（pinpoint）／抗コリン・心停止後（散大）</td></tr>
+            <tr><td><strong>対光反射・角膜反射</strong></td><td>脳幹機能</td></tr>
+            <tr><td><strong>呼吸パターン</strong></td><td>Cheyne-Stokes（両側大脳・間脳）／中枢性過呼吸（中脳橋）／失調性呼吸（延髄）</td></tr>
+            <tr><td><strong>指にぎり（左右）</strong></td><td>左右差で<strong>片麻痺</strong>検出（協力なしでも取れる）</td></tr>
+            <tr><td><strong>疼痛刺激での四肢の動き</strong></td><td>除脳硬直（中脳・橋上部）／除皮質硬直（間脳以上）／局在化反応</td></tr>
+            <tr><td><strong>項部硬直・Kernig 徴候</strong></td><td>髄膜炎・SAH</td></tr>
+            <tr><td><strong>腱反射・Babinski 徴候</strong></td><td>左右差で錐体路障害／上位ニューロン障害</td></tr>
+          </tbody>
+        </table></div>
+
+        <h3>全身所見（中枢以外の手がかり）</h3>
+        <ul>
+          <li><strong>体温</strong>：低体温（&lt; 35°C）／高体温（敗血症・甲状腺クリーゼ・悪性症候群・熱中症）</li>
+          <li><strong>口腔・舌咬傷</strong>：けいれん後を示唆</li>
+          <li><strong>外傷痕</strong>：頭部・体幹の打撲、抗凝固薬使用なら見逃し注意</li>
+          <li><strong>皮膚</strong>：黄疸（肝性脳症）／薬物使用痕（注射部位）／肝硬変所見（クモ状血管腫・腹壁静脈怒張）／チアノーゼ・蒼白</li>
+          <li><strong>口臭</strong>：アセトン臭（DKA）／甘酸臭（肝性昏睡）／アルコール臭</li>
+          <li><strong>失禁</strong>：けいれん後／泌尿器疾患</li>
+        </ul>
+      </section>
+
+      <!-- §3a 血ガス（VBG/ABG） -->
+      <section class="section-page" id="s3a" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>血液検査（血ガス＋採血パネル）</h2>
+
+        <div class="callout callout-tip">
+          <div class="callout-body"><p>同じ採血で出す。<strong>血ガス</strong>は VBG で十分・5 分で結果。<strong>採血パネル</strong>は原因が広範なので最初に広く拾う。</p></div>
+        </div>
+
+        <h3>血ガス：即時で見る項目</h3>
+        <ul>
+          <li><strong>pH / PaCO2 / HCO3 / lactate</strong> — 代謝性アシドーシス（Lac↑ → ショック・腸管虚血・敗血症）、CO2 ナルコーシス</li>
+          <li><strong>Na / K / Cl / iCa / glucose / Hb</strong> — 電解質異常・血糖の即時確認</li>
+          <li><strong>COHb</strong> — CO 中毒（パルスオキシメータでは見えない！）</li>
+          <li><strong>MetHb</strong>（疑わしい曝露歴があれば）</li>
+          <li><strong>Anion gap</strong>：MUDPILES（Methanol / Uremia / DKA / Paraldehyde / Iron-INH / Lactate / Ethylene glycol / Salicylate）</li>
+        </ul>
+
+        <div class="callout callout-warning">
+          <div class="callout-body"><p>意識障害で <strong>説明のつかない代謝性アシドーシス</strong> を見たら <strong>septic abdomen</strong>（腸管虚血・敗血症）も鑑別に。</p></div>
         </div>
 
         <div class="callout callout-danger">
-          <div class="callout-title">① 意識障害 = まず血糖（指先）</div>
-          <div class="callout-body"><p>最も頻度が高く、最も早く治せる原因。<strong>指先血糖を真っ先に</strong>。</p>
+          <div class="callout-title">血糖は指先＋血ガスで二重チェック</div>
+          <div class="callout-body">
             <ul>
-              <li><strong>低血糖（&lt; 70 mg/dL）</strong> → <strong>B1 先行 → 50% ブドウ糖 40 mL IV</strong>（→ ⑤ Coma Cocktail）</li>
-              <li><strong>高血糖（&gt; 400 + 脱水 + アシドーシス）</strong> → DKA / HHS → <a class="wiki-link" href="疾患詳細/DKA・HHS.html">DKA・HHS</a></li>
+              <li><strong>低血糖（&lt; 70 mg/dL）または血糖不明</strong> → <strong>B1 100 mg IV → 50% ブドウ糖 40 mL IV</strong>（B1 が先：Wernicke 誘発回避のため当院は全例で先行投与）</li>
+              <li><strong>高血糖（&gt; 400 mg/dL ＋脱水＋アシドーシス）</strong> → DKA / HHS → <a class="wiki-link" href="疾患詳細/DKA・HHS.html">DKA・HHS</a></li>
             </ul>
           </div>
         </div>
 
-        <details class="sub-fold">
-          <summary>② 血ガス（VBG / ABG）</summary>
-          <div class="sub-fold__body">
-            <p>5 分で結果が出る。<strong>VBG で十分</strong>なことが多い（ABG は重症呼吸不全・酸素化評価が必要なときに）。</p>
-            <h4>チェック項目（一気に拾う）</h4>
+        <h3>採血パネル：意識障害で広く出すもの</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>項目</th><th>狙い</th></tr></thead>
+          <tbody>
+            <tr><td><strong>CBC + 分画</strong></td><td>感染、貧血、血小板（TMA / DIC）</td></tr>
+            <tr><td><strong>生化学</strong>：BUN / Cr、AST / ALT / γ-GTP / T-Bil、Na / K / Cl / Ca / Mg / P</td><td>尿毒症、肝性脳症、電解質異常、ALP/Bil で胆道</td></tr>
+            <tr><td><strong>NH3</strong></td><td>肝性脳症、尿素サイクル、バルプロ酸</td></tr>
+            <tr><td><strong>CRP / プロカルシトニン</strong></td><td>感染、敗血症</td></tr>
+            <tr><td><strong>凝固</strong>：PT-INR / APTT / D-dimer</td><td>抗凝固薬、DIC、CVT</td></tr>
+            <tr><td><strong>血糖 / HbA1c</strong></td><td>DKA / HHS の評価</td></tr>
+          </tbody>
+        </table></div>
+
+        <h3>必要時のみ追加</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>項目</th><th>条件</th></tr></thead>
+          <tbody>
+            <tr><td><strong>血液培養 2 セット</strong></td><td><strong>発熱・敗血症疑い時のみ</strong>（抗菌薬投与前に必ず）</td></tr>
+            <tr><td><strong>TSH / fT3 / fT4</strong></td><td>亜急性経過、甲状腺クリーゼ／粘液水腫昏睡疑い</td></tr>
+            <tr><td><strong>コルチゾール / ACTH</strong></td><td>副腎クリーゼ疑い（低 Na＋高 K＋低血糖）</td></tr>
+            <tr><td><strong>薬物スクリーニング・アルコール</strong></td><td>急性中毒疑い</td></tr>
+            <tr><td><strong>尿検査・尿培養・尿薬物</strong></td><td>尿路感染、薬物中毒、妊娠反応（妊娠可能女性）</td></tr>
+          </tbody>
+        </table></div>
+      </section>
+
+      <!-- §3c 心電図 12 誘導 -->
+      <section class="section-page" id="s3c" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>心電図 12 誘導</h2>
+
+        <p>意識障害でも<strong>標準オーダー</strong>。脳血流低下の原因（心筋虚血・致死性不整脈・伝導障害）をベッドサイドで即拾う。</p>
+
+        <div class="table-wrap"><table>
+          <thead><tr><th>所見</th><th>意義</th></tr></thead>
+          <tbody>
+            <tr><td><strong>ST 上昇 / 低下、T 波変化</strong></td><td>ACS — 失神・意識障害の心原性。下壁 STEMI で徐脈・迷走神経反射性意識障害</td></tr>
+            <tr><td><strong>QT 延長</strong></td><td>Torsades de Pointes 誘発 → 失神・意識障害。電解質（低 K・低 Mg）、薬剤性</td></tr>
+            <tr><td><strong>高 K（テント T、QRS 幅広、サイン波）</strong></td><td>急性腎障害・透析患者・薬剤（ACE-I/ARB/K 製剤）</td></tr>
+            <tr><td><strong>Brugada パターン</strong></td><td>失神・突然死の鑑別。発熱で顕在化することも</td></tr>
+            <tr><td><strong>徐脈・伝導障害</strong>（AV ブロック II–III、洞停止）</td><td>失神・脳血流低下、薬剤性（β遮断・Ca 拮抗・ジゴキシン）</td></tr>
+            <tr><td><strong>S1Q3T3、右軸偏位、不完全右脚ブロック</strong></td><td>急性 PE → 脳血流低下による意識障害</td></tr>
+            <tr><td><strong>Osborn 波（J 波）</strong></td><td>低体温の傍証（&lt; 32°C で出やすい）</td></tr>
+          </tbody>
+        </table></div>
+      </section>
+
+      <!-- §3d 頭部 CT -->
+      <section class="section-page" id="s3d" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>頭部 CT</h2>
+
+        <p><strong>実質ほぼ全例</strong>。先に CT 室を確保（§1 で heads up 済みなら即移送）。</p>
+
+        <h3>CT を撮る適応（明示）</h3>
+        <ul>
+          <li><strong>新規の局所神経症状</strong>（片麻痺・失語・瞳孔不同）</li>
+          <li><strong>頭部外傷疑い</strong>（転倒・出血・打撲痕）</li>
+          <li><strong>抗凝固薬・抗血小板薬</strong>内服</li>
+          <li><strong>原因不明の急性意識障害</strong></li>
+          <li><strong>項部硬直</strong>（SAH / 髄膜炎）</li>
+          <li><strong>けいれん後</strong>の遷延意識障害</li>
+          <li><strong>高齢者</strong>（明らかな代謝性原因がない場合）</li>
+        </ul>
+
+        <h3>単純 vs 造影 vs MRI</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>モダリティ</th><th>得意</th><th>選ぶとき</th></tr></thead>
+          <tbody>
+            <tr><td><strong>単純 CT</strong></td><td>急性出血、SAH、大きな占拠性病変、ヘルニア</td><td>第一選択。ほとんどはこれで足りる</td></tr>
+            <tr><td><strong>造影 CT</strong></td><td>脳腫瘍、脳膿瘍、CVT（CTV）</td><td>占拠性病変・感染・静脈洞血栓を疑うとき追加</td></tr>
+            <tr><td><strong>MRI / DWI</strong></td><td>超急性期梗塞、脳幹病変、脳炎</td><td>CT 陰性 + 持続意識障害、脳梗塞超急性期、CVT 確定（MRV）</td></tr>
+            <tr><td><strong>CTA / MRA</strong></td><td>脳血管病変、解離、もやもや</td><td>SAH 後の動脈瘤同定、血管炎疑い</td></tr>
+          </tbody>
+        </table></div>
+
+        <div class="callout callout-warning">
+          <div class="callout-title">CT 正常でも安心しない</div>
+          <div class="callout-body">
             <ul>
-              <li><strong>pH / PaCO2 / HCO3 / lactate</strong> — 代謝性アシドーシス（Lac↑ → ショック・腸管虚血・敗血症）、CO2 ナルコーシス</li>
-              <li><strong>Na / K / Cl / iCa / glucose / Hb</strong> — 電解質異常・血糖の即時確認</li>
-              <li><strong>COHb</strong> — CO 中毒（パルスオキシメータでは見えない！）</li>
-              <li><strong>MetHb</strong>（疑わしい曝露歴があれば）</li>
-              <li><strong>Anion gap</strong>：MUDPILES（Methanol / Uremia / DKA / Paraldehyde / Iron-INH / Lactate / Ethylene glycol / Salicylate）</li>
+              <li><strong>超急性期梗塞</strong>（24 h 以内）は CT 陰性が普通。疑えば MRI / DWI</li>
+              <li><strong>CVT・PRES・自己免疫性脳炎・NCSE</strong> は CT 正常がデフォルト</li>
+              <li><strong>extraluminal air・微細出血</strong>は見落とされる</li>
+              <li><strong>髄膜炎の髄液採取</strong>：占拠性病変 / 局所所見 / 意識低下 / 凝固異常があるなら CT 後に</li>
             </ul>
-            <div class="callout callout-warning">
-              <div class="callout-body"><p>意識障害で <strong>説明のつかない代謝性アシドーシス</strong> を見たら <strong>septic abdomen</strong>（腸管虚血・敗血症）も鑑別に。</p></div>
-            </div>
           </div>
-        </details>
-
-        <details class="sub-fold">
-          <summary>③ 採血セット（フルパネル）</summary>
-          <div class="sub-fold__body">
-            <p>意識障害は<strong>原因が広範</strong>。最初の採血で広く拾う。</p>
-            <div class="table-wrap"><table><thead><tr><th>項目</th><th>狙い</th></tr></thead><tbody>
-              <tr><td><strong>CBC + 分画</strong></td><td>感染、貧血、血小板（TMA / DIC）</td></tr>
-              <tr><td><strong>生化学</strong>：BUN / Cr、AST / ALT / γ-GTP / T-Bil、Na / K / Cl / Ca / Mg / P</td><td>尿毒症、肝性脳症、電解質異常、ALP/Bil で胆道</td></tr>
-              <tr><td><strong>NH3</strong></td><td>肝性脳症、尿素サイクル、バルプロ酸</td></tr>
-              <tr><td><strong>CRP / プロカルシトニン</strong></td><td>感染、敗血症</td></tr>
-              <tr><td><strong>凝固</strong>：PT-INR / APTT / D-dimer</td><td>抗凝固薬、DIC、CVT</td></tr>
-              <tr><td><strong>TSH / fT3 / fT4</strong>（亜急性疑い）</td><td>甲状腺クリーゼ、粘液水腫昏睡</td></tr>
-              <tr><td><strong>コルチゾール / ACTH</strong>（疑えば）</td><td>副腎クリーゼ</td></tr>
-              <tr><td><strong>血糖 / HbA1c</strong></td><td>DKA / HHS の評価</td></tr>
-              <tr><td><strong>薬物スクリーニング・アルコール</strong>（疑えば）</td><td>急性中毒</td></tr>
-              <tr><td><strong>血液培養 2 セット</strong>（発熱・敗血症疑い）</td><td>抗菌薬投与前に必ず</td></tr>
-              <tr><td><strong>尿検査・尿培養・尿薬物</strong></td><td>尿路感染、薬物中毒、妊娠反応（妊娠可能女性）</td></tr>
-              <tr><td><strong>心電図 12 誘導</strong></td><td>ACS、QT 延長、高 K（テント T）、Brugada、徐脈・伝導障害</td></tr>
-            </tbody></table></div>
-          </div>
-        </details>
-
-        <details class="sub-fold">
-          <summary>④ 頭部 CT のオーダー</summary>
-          <div class="sub-fold__body">
-            <p>意識障害では<strong>実質ほぼ全例 CT</strong>。先に CT 室に予約しておく（→ §1 来院前で heads up 済みなら即移送）。</p>
-
-            <h4>CT を撮る適応（明示）</h4>
-            <ul>
-              <li><strong>新規の局所神経症状</strong>（片麻痺・失語・瞳孔不同）</li>
-              <li><strong>頭部外傷疑い</strong>（転倒・出血・打撲痕）</li>
-              <li><strong>抗凝固薬・抗血小板薬</strong>内服</li>
-              <li><strong>原因不明の急性意識障害</strong></li>
-              <li><strong>項部硬直</strong>（SAH / 髄膜炎）</li>
-              <li><strong>けいれん後</strong>の遷延意識障害</li>
-              <li><strong>高齢者</strong>（明らかな代謝性原因がない場合）</li>
-            </ul>
-
-            <h4>単純 vs 造影 vs MRI</h4>
-            <div class="table-wrap"><table><thead><tr><th>モダリティ</th><th>得意</th><th>選ぶとき</th></tr></thead><tbody>
-              <tr><td><strong>単純 CT</strong></td><td>急性出血、SAH、大きな占拠性病変、ヘルニア</td><td>第一選択。ほとんどはこれで足りる</td></tr>
-              <tr><td><strong>造影 CT</strong></td><td>脳腫瘍、脳膿瘍、CVT（CTV）</td><td>占拠性病変・感染・静脈洞血栓を疑うとき追加</td></tr>
-              <tr><td><strong>MRI / DWI</strong></td><td>超急性期梗塞、脳幹病変、脳炎</td><td>CT 陰性 + 持続意識障害、脳梗塞超急性期、CVT 確定（MRV）</td></tr>
-              <tr><td><strong>CTA / MRA</strong></td><td>脳血管病変、解離、もやもや</td><td>SAH 後の動脈瘤同定、血管炎疑い</td></tr>
-            </tbody></table></div>
-
-            <div class="callout callout-warning">
-              <div class="callout-title">CT 正常でも安心しない</div>
-              <div class="callout-body">
-                <ul>
-                  <li><strong>超急性期梗塞</strong>（24 h 以内）は CT 陰性が普通。疑えば MRI / DWI</li>
-                  <li><strong>CVT・PRES・自己免疫性脳炎・NCSE</strong> は CT 正常がデフォルト</li>
-                  <li><strong>extraluminal air・微細出血</strong>は見落とされる</li>
-                  <li><strong>髄膜炎の髄液採取</strong>：占拠性病変 / 局所所見 / 意識低下 / 凝固異常があるなら CT 後に</li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </details>
-
-        <details class="sub-fold">
-          <summary>⑤ 診断的治療（Coma Cocktail）</summary>
-          <div class="sub-fold__body">
-            <div class="table-wrap"><table><thead><tr><th>状況</th><th>投与</th></tr></thead><tbody><tr><td><strong>低血糖 or 血糖不明 + アルコール / 低栄養</strong></td><td><strong>チアミン 100 mg IV</strong> → <strong>50% ブドウ糖 40 mL IV</strong></td></tr><tr><td><strong>縮瞳 + 呼吸抑制（オピオイド疑い）</strong></td><td><strong>ナロキソン 0.4–2 mg IV</strong>（反復可）</td></tr><tr><td><strong>アルコール多飲・低栄養</strong></td><td><strong>チアミン 100 mg IV</strong>（Wernicke 予防）</td></tr></tbody></table></div>
-            <div class="callout callout-warning">
-              <div class="callout-title">チアミンはブドウ糖の前に</div>
-              <div class="callout-body"><p>低栄養・アルコール多飲者にブドウ糖先行で <strong>Wernicke 脳症を誘発</strong>しうる。迷ったら <strong>B1 を先</strong>。</p></div>
-            </div>
-          </div>
-        </details>
+        </div>
       </section>
 
       <!-- §4 鑑別ステップ ①〜⑤ -->
       <section class="section-page" id="s4" hidden>
         <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🔍 意識障害 s/o の鑑別ステップ【①〜⑤】</h2>
+        <h2>鑑別ステップ ①〜⑤</h2>
         <div class="callout callout-tip">
-          <div class="callout-title">網羅的 mnemonic より先に、<strong>順番</strong>を決める</div>
-          <div class="callout-body"><p>AIUEOTIPS は抜けを作らない網羅表。<strong>時系列に何から潰すか</strong>は別の話。 下の ①〜⑤ を順に走らせる。</p></div>
+          <div class="callout-body"><p>AIUEOTIPS は網羅表。<strong>順番</strong>は別の話。下の ①〜⑤ を順に走らせる。</p></div>
         </div>
 
         <details class="sub-fold">
@@ -313,7 +707,8 @@
       <!-- §5 鑑別の補完・確認（旧 §5/§6/§7 を統合） -->
       <section class="section-page" id="s5" hidden>
         <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🧠 鑑別の補完・確認</h2>
+        <h2>鑑別の補完・確認</h2>
+
 
         <div class="callout callout-tip">
           <div class="callout-title">使い分け（鑑別ステップ ①〜⑤ で詰まったら）</div>
@@ -327,7 +722,7 @@
         </div>
 
         <details class="sub-fold">
-          <summary>📋 鑑別確認リスト（DONT / VITAL / LABO / BRAIN / それ以外）</summary>
+          <summary>鑑別確認リスト（DONT / VITAL / LABO / BRAIN / それ以外）</summary>
           <div class="sub-fold__body">
             <p>除外できたら消していく。順に当てはめて穴を見つける。</p>
 
@@ -391,7 +786,7 @@
       <!-- §6 disposition -->
       <section class="section-page" id="s6" hidden>
         <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>📤 disposition</h2>
+        <h2>disposition</h2>
 
         <h3>一般ルール（行き先の決め方）</h3>
         <ul>
@@ -601,7 +996,7 @@
       <!-- §7 カルテテンプレ -->
       <section class="section-page" id="s7" hidden>
         <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>📝 カルテテンプレ（S/O/A/P）</h2>
+        <h2>カルテテンプレ</h2>
         <div class="callout callout-note">
           <div class="callout-title">S/O/A/P で書く</div>
           <div class="callout-body">
@@ -616,7 +1011,7 @@
       <!-- §8 やりがちなミス -->
       <section class="section-page" id="s8" hidden>
         <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>⚠️ やりがちなミス</h2>
+        <h2>やりがちなミス</h2>
         <ul>
           <li><strong>血糖を後回し</strong>にする</li>
           <li><strong>B1 を入れずにブドウ糖先行</strong>（Wernicke 誘発）</li>
@@ -630,7 +1025,7 @@
       <!-- §9 出典・リンク -->
       <section class="section-page" id="s9" hidden>
         <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>📚 出典・リンク</h2>
+        <h2>出典・リンク</h2>
 
         <details class="sub-fold">
           <summary>出典（鑑別フレーム・疫学）</summary>
