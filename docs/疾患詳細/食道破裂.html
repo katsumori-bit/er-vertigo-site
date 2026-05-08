@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="color-scheme" content="light dark" />
+  <title>食道破裂（Boerhaave 症候群） | ER ノート</title>
+  <link rel="stylesheet" href="../er-note.css" />
+  <style>
+    /* === 診療フロー（このページ専用） === */
+    .flow-box { position: static; user-select: none; }
+    .flow-box__title {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 0.5rem; cursor: default; padding: 2px 0;
+    }
+    .flow-canvas {
+      background: var(--surface);
+      border-radius: 10px;
+      padding: 14px 10px 18px;
+      margin-top: 0.55rem;
+      overflow-x: auto; overflow-y: hidden;
+      -webkit-overflow-scrolling: touch;
+      touch-action: pan-x pan-y pinch-zoom;
+    }
+    .flow-canvas__hint {
+      font-size: 0.72rem; color: var(--muted);
+      text-align: center; margin: 0 0 0.6rem 0;
+    }
+    .flow-canvas__divider {
+      text-align: center; font-weight: 700; font-size: 12px;
+      color: var(--accent); margin: 14px 0 8px;
+      border-top: 1px dashed color-mix(in srgb, var(--text) 25%, transparent);
+      padding-top: 10px; letter-spacing: 1px;
+    }
+    .dx-flow {
+      min-width: 720px; margin: 0 auto; padding: 4px 6px 8px;
+      font-size: 14px; line-height: 1.45; color: var(--text); font-family: inherit;
+    }
+    .dx-node {
+      background: var(--surface);
+      border: 1.5px solid color-mix(in srgb, var(--text) 22%, transparent);
+      border-radius: 10px; padding: 8px 12px; text-align: center;
+      box-shadow: 0 1px 2px var(--shadow, rgba(0,0,0,0.06));
+      min-height: 38px;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 2px; text-decoration: none; color: var(--text);
+    }
+    .dx-node__title { font-weight: 700; font-size: 13.5px; }
+    .dx-node__sub   { font-size: 11.5px; color: var(--muted); font-weight: 500; }
+    .dx-node--decision {
+      background: color-mix(in srgb, var(--accent) 12%, var(--surface));
+      border-color: var(--accent); border-radius: 14px;
+    }
+    .dx-node--danger {
+      background: color-mix(in srgb, #c0392b 14%, var(--surface));
+      border-color: #c0392b;
+    }
+    .dx-node--danger .dx-node__title { color: #c0392b; }
+    .dx-node--action {
+      background: color-mix(in srgb, var(--text) 5%, var(--surface));
+      border-style: dashed;
+    }
+    .dx-node--external {
+      border-style: dashed; position: relative;
+      background: color-mix(in srgb, var(--accent) 6%, var(--surface));
+    }
+    .dx-node--external::after {
+      content: "↗"; position: absolute; top: 4px; right: 8px;
+      font-size: 12px; color: var(--accent); opacity: 0.85;
+    }
+    .dx-node--warn {
+      background: color-mix(in srgb, #d4a017 14%, var(--surface));
+      border-color: #d4a017;
+    }
+    .dx-node--warn .dx-node__title { color: #9b7508; }
+
+    .dx-layer { display: grid; gap: 14px; align-items: stretch; margin: 0; }
+    .dx-layer--root   { grid-template-columns: 1fr; justify-items: center; }
+    .dx-layer--root > * { max-width: 360px; }
+    .dx-layer--branch { grid-template-columns: 1fr 1fr; }
+    .dx-layer--tri    { grid-template-columns: repeat(3, 1fr); }
+    .dx-layer--quad   { grid-template-columns: repeat(4, 1fr); }
+    .dx-layer--quint  { grid-template-columns: repeat(5, 1fr); }
+    .dx-layer--hex    { grid-template-columns: repeat(6, 1fr); }
+
+    .dx-arrow {
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      position: relative; margin: 4px 0; min-height: 44px;
+      color: var(--muted); font-size: 11.5px; font-weight: 600;
+    }
+    .dx-arrow::before {
+      content: ""; width: 2px; height: 100%; min-height: 38px;
+      background: color-mix(in srgb, var(--text) 35%, transparent);
+    }
+    .dx-arrow::after {
+      content: ""; position: absolute; bottom: 0;
+      width: 0; height: 0;
+      border-left: 5px solid transparent; border-right: 5px solid transparent;
+      border-top: 7px solid color-mix(in srgb, var(--text) 35%, transparent);
+    }
+    .dx-arrow__label {
+      background: var(--surface); padding: 1px 8px; border-radius: 999px;
+      border: 1px solid color-mix(in srgb, var(--text) 18%, transparent);
+      position: absolute; left: 50%; top: 50%;
+      transform: translate(-50%, -50%); white-space: nowrap; z-index: 1;
+    }
+
+    .dx-fork {
+      display: grid; grid-template-columns: 1fr 1fr;
+      position: relative; min-height: 38px; margin: 2px 0 4px;
+    }
+    .dx-fork::before {
+      content: ""; position: absolute;
+      top: 0; left: 25%; right: 25%; height: 2px;
+      background: color-mix(in srgb, var(--text) 35%, transparent);
+    }
+    .dx-fork__leg {
+      position: relative; display: flex; flex-direction: column;
+      align-items: center; justify-content: flex-end;
+      padding-top: 4px; padding-bottom: 4px;
+      font-size: 11.5px; font-weight: 600; color: var(--muted);
+      min-height: 36px;
+    }
+    .dx-fork__leg::before {
+      content: ""; width: 2px; flex: 1;
+      background: color-mix(in srgb, var(--text) 35%, transparent);
+    }
+    .dx-fork__leg::after {
+      content: ""; position: absolute; bottom: 0;
+      width: 0; height: 0;
+      border-left: 5px solid transparent; border-right: 5px solid transparent;
+      border-top: 7px solid color-mix(in srgb, var(--text) 35%, transparent);
+    }
+    .dx-fork__label {
+      background: var(--surface); padding: 1px 8px; border-radius: 999px;
+      border: 1px solid color-mix(in srgb, var(--text) 18%, transparent);
+      margin-bottom: 2px; z-index: 1;
+    }
+
+    .section-tiles { display: none !important; }
+
+    @media (max-width: 600px) {
+      .dx-flow { min-width: 0; font-size: 11px; padding: 2px 0 6px; }
+      .flow-canvas { overflow-x: hidden; padding: 8px 6px 12px; }
+      .flow-canvas__hint { font-size: 0.62rem; margin-bottom: 0.35rem; }
+      .flow-canvas__divider { font-size: 10px; margin: 8px 0 5px; padding-top: 6px; }
+      .dx-node { padding: 4px 5px; min-height: 28px; border-radius: 7px; gap: 1px; }
+      .dx-node__title { font-size: 10px; line-height: 1.22; }
+      .dx-node__sub   { font-size: 8.5px; line-height: 1.25; }
+      .dx-node--decision { border-radius: 8px; }
+      .dx-node--external::after { top: 2px; right: 4px; font-size: 9px; }
+      .dx-layer { gap: 5px; }
+      .dx-layer--root > * { max-width: none; width: 100%; }
+      .dx-layer--tri  { grid-template-columns: repeat(3, 1fr); }
+      .dx-layer--quad { grid-template-columns: 1fr 1fr; }
+      .dx-layer--quint { grid-template-columns: repeat(3, 1fr); }
+      .dx-layer--hex   { grid-template-columns: repeat(3, 1fr); }
+      .dx-arrow { min-height: 22px; margin: 1px 0; }
+      .dx-arrow::before { min-height: 18px; width: 1.5px; }
+      .dx-arrow::after { border-left-width: 4px; border-right-width: 4px; border-top-width: 6px; }
+      .dx-arrow__label { font-size: 8.5px; padding: 0 4px; line-height: 1.4; }
+      .dx-fork { min-height: 22px; }
+      .dx-fork::before { height: 1.5px; }
+      .dx-fork__leg { min-height: 22px; padding-top: 2px; padding-bottom: 2px; font-size: 9px; }
+      .dx-fork__leg::before { width: 1.5px; }
+      .dx-fork__leg::after { border-left-width: 4px; border-right-width: 4px; border-top-width: 6px; }
+      .dx-fork__label { font-size: 8.5px; padding: 0 4px; margin-bottom: 0; }
+    }
+  </style>
+</head>
+<body>
+  <header class="hokuto-top">
+    <a class="hokuto-top__btn" href="../薬剤情報.html">
+      <span class="hokuto-top__icon">℞</span><span>薬剤情報</span>
+    </a>
+    <a class="hokuto-top__btn" href="../表計算.html">
+      <span class="hokuto-top__icon">⊞</span><span>表計算</span>
+    </a>
+  </header>
+
+  <main class="hokuto-main">
+    <article class="note-shell">
+      <h1 class="page-title">食道破裂（Boerhaave 症候群）</h1>
+
+      <!-- 診療フロー -->
+      <div class="action-header flow-box" id="flowBox">
+        <div class="action-header__title flow-box__title">
+          <span>🗺 食道破裂の診療フロー（疑う → Mackler → 確定 → 初期管理 → 治療分岐）</span>
+        </div>
+        <div class="flow-canvas">
+          <p class="flow-canvas__hint">嘔吐後／処置後の胸痛＋皮下気腫で疑う → 三徴と並列評価 → 水溶性造影剤＋造影 CT で確定 → 絶食・抗菌薬・PPI／経鼻胃管禁 → Pittsburgh score で保存 vs 緊急手術</p>
+          <div class="dx-flow" role="group" aria-label="食道破裂の診療フロー">
+
+            <!-- L0: トリガー -->
+            <div class="dx-layer dx-layer--root">
+              <a class="dx-node dx-node--danger" href="#s1">
+                <div class="dx-node__title">🚨 食道破裂を疑うトリガー</div>
+                <div class="dx-node__sub">嘔吐後／内視鏡後の胸痛・呼吸困難・皮下気腫</div>
+              </a>
+            </div>
+
+            <div class="dx-arrow"><span class="dx-arrow__label">↓ 三徴を確認</span></div>
+
+            <!-- L1: Mackler 三徴 -->
+            <div class="dx-layer dx-layer--root">
+              <a class="dx-node dx-node--decision" href="#s2">
+                <div class="dx-node__title">Mackler 三徴を確認</div>
+                <div class="dx-node__sub">嘔吐後の胸痛／皮下気腫／縦隔気腫</div>
+              </a>
+            </div>
+
+            <div class="dx-arrow"><span class="dx-arrow__label">↓ 同時並行</span></div>
+
+            <!-- L2: 3 軸並列 -->
+            <div class="dx-layer dx-layer--tri">
+              <a class="dx-node dx-node--action" href="#s2">
+                <div class="dx-node__title">問診</div>
+                <div class="dx-node__sub">嘔吐／努責／内視鏡・挿管・TEE 歴／異物</div>
+              </a>
+              <a class="dx-node dx-node--action" href="#s2">
+                <div class="dx-node__title">身体所見</div>
+                <div class="dx-node__sub">捻髪音／Hamman 徴候／左胸水・発熱</div>
+              </a>
+              <a class="dx-node dx-node--action" href="#s4">
+                <div class="dx-node__title">画像</div>
+                <div class="dx-node__sub">CXR ／食道造影／造影 CT</div>
+              </a>
+            </div>
+
+            <div class="dx-arrow"><span class="dx-arrow__label">↓ 鑑別を並列で潰す</span></div>
+
+            <!-- L2b: 鑑別 -->
+            <p class="flow-canvas__hint" style="margin:6px 0 4px;font-weight:700;">並列で除外する致死的胸痛</p>
+            <div class="dx-layer dx-layer--quad">
+              <a class="dx-node dx-node--external" href="../胸痛.html">
+                <div class="dx-node__title">ACS</div>
+                <div class="dx-node__sub">ECG ／トロポニン</div>
+              </a>
+              <a class="dx-node dx-node--external" href="大動脈解離.html">
+                <div class="dx-node__title">大動脈解離</div>
+                <div class="dx-node__sub">引き裂く痛／血圧左右差</div>
+              </a>
+              <a class="dx-node dx-node--external" href="肺塞栓.html">
+                <div class="dx-node__title">PE</div>
+                <div class="dx-node__sub">突然・低酸素・頻脈</div>
+              </a>
+              <a class="dx-node dx-node--external" href="気胸.html">
+                <div class="dx-node__title">気胸</div>
+                <div class="dx-node__sub">片側呼吸音消失</div>
+              </a>
+            </div>
+
+            <div class="dx-arrow"><span class="dx-arrow__label">↓ 確定診断</span></div>
+
+            <!-- L3: 確定診断 -->
+            <div class="dx-layer dx-layer--root">
+              <a class="dx-node dx-node--decision" href="#s4">
+                <div class="dx-node__title">📷 確定診断</div>
+                <div class="dx-node__sub">水溶性造影剤食道造影で漏出 ／造影 CT で食道壁不連続・縦隔気腫・縦隔膿瘍</div>
+              </a>
+            </div>
+
+            <div class="dx-arrow"><span class="dx-arrow__label">↓ 即時に開始</span></div>
+
+            <!-- L4: 初期管理 -->
+            <div class="dx-layer dx-layer--root">
+              <a class="dx-node dx-node--action" href="#s6">
+                <div class="dx-node__title">💊 初期管理</div>
+                <div class="dx-node__sub">絶食／広域抗菌薬＋抗真菌／PPI 静注／鎮痛／<strong>経鼻胃管挿入は禁忌</strong></div>
+              </a>
+            </div>
+
+            <div class="dx-arrow"><span class="dx-arrow__label">↓ 重症度評価</span></div>
+
+            <!-- L5: Pittsburgh score -->
+            <div class="dx-layer dx-layer--root">
+              <a class="dx-node dx-node--decision" href="#s5">
+                <div class="dx-node__title">📊 Pittsburgh perforation severity score</div>
+                <div class="dx-node__sub">10 項目で保存 vs 手術を判断</div>
+              </a>
+            </div>
+
+            <div class="dx-fork">
+              <div class="dx-fork__leg">
+                <span class="dx-fork__label">低スコア・限局・&lt;24 h</span>
+              </div>
+              <div class="dx-fork__leg">
+                <span class="dx-fork__label">高スコア・敗血症・&gt;24 h</span>
+              </div>
+            </div>
+
+            <!-- L6: 治療分岐 -->
+            <div class="dx-layer dx-layer--branch">
+              <a class="dx-node dx-node--action" href="#s7">
+                <div class="dx-node__title">保存的治療</div>
+                <div class="dx-node__sub">ESI/ESS／ステント／ドレナージ／経空腸栄養 or TPN</div>
+              </a>
+              <a class="dx-node dx-node--danger" href="#s8">
+                <div class="dx-node__title">緊急手術</div>
+                <div class="dx-node__sub">一次縫合／T-tube／VATS／開胸／食道切除</div>
+              </a>
+            </div>
+
+            <div class="dx-arrow"><span class="dx-arrow__label">↓ 並行して</span></div>
+
+            <!-- L7: コンサルト -->
+            <div class="dx-layer dx-layer--root">
+              <a class="dx-node dx-node--external" href="#s9">
+                <div class="dx-node__title">📞 コンサルト</div>
+                <div class="dx-node__sub">食道外科／消化器外科／ICU を直ちに</div>
+              </a>
+            </div>
+
+            <div class="flow-canvas__divider">参考</div>
+
+            <div class="dx-layer dx-layer--branch">
+              <a class="dx-node dx-node--warn" href="#s10">
+                <div class="dx-node__title">⚠️ やりがちなミス</div>
+                <div class="dx-node__sub">経鼻胃管で穿孔拡大／ACS・解離と誤診／皮下気腫見逃し</div>
+              </a>
+              <a class="dx-node dx-node--external" href="#s11">
+                <div class="dx-node__title">📚 出典・関連</div>
+                <div class="dx-node__sub">Pittsburgh score／日本食道学会</div>
+              </a>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- メニュータイル（非表示・互換用） -->
+      <nav class="section-tiles" id="sectionMenu" hidden>
+        <a class="section-tile" href="#s1"><span class="section-tile__name">病態</span></a>
+      </nav>
+
+      <!-- 関連主訴（双方向リンク） -->
+      <details class="sub-fold" id="related-symptoms">
+        <summary>📞 この疾患が該当する主訴</summary>
+        <div class="sub-fold__body">
+          <ul>
+            <li><a class="wiki-link" href="../胸痛.html">胸痛</a> — 嘔吐後・処置後の胸痛＋皮下気腫は致死的胸痛 6 鑑別の一つ</li>
+            <li><a class="wiki-link" href="../嘔気・嘔吐.html">嘔気・嘔吐</a> — 強い嘔吐／努責の直後発症が Boerhaave の典型</li>
+            <li><a class="wiki-link" href="../腹痛.html">腹痛</a> — 下部食道破裂は心窩部痛・上腹部痛として来院することがある</li>
+            <li><a class="wiki-link" href="../呼吸困難.html">呼吸困難</a> — 縦隔気腫・胸水・縦隔膿瘍で呼吸困難主訴になり得る</li>
+          </ul>
+        </div>
+      </details>
+
+      <!-- §s1 病態と分類 -->
+      <section class="section-page" id="s1" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🧬 病態と分類</h2>
+
+        <div class="callout callout-summary">
+          <div class="callout-title">押さえるポイント</div>
+          <div class="callout-body"><ul>
+            <li>食道破裂は<strong>食道全層裂創</strong>。多くは<strong>左下部食道（横隔膜直上）</strong>。</li>
+            <li>原因の多くは<strong>医原性（内視鏡関連）</strong>。次いで<strong>自然破裂（Boerhaave）</strong>、外傷、異物。</li>
+            <li>縦隔・胸腔への漏出 → <strong>縦隔炎・縦隔膿瘍・膿胸・敗血症</strong>へ進展する致死的疾患。</li>
+            <li><strong>24 時間以内に診断・治療</strong>できるかで予後が決定的に変わる。</li>
+          </ul></div>
+        </div>
+
+        <h3>原因による分類</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>分類</th><th>内容／典型像</th></tr></thead>
+          <tbody>
+            <tr><td><strong>自然破裂（Boerhaave 症候群）</strong></td><td>強い<strong>嘔吐</strong>・努責・分娩いきみ・けいれん後の<strong>左下部食道後壁の全層裂創</strong>。中年男性の暴飲暴食後が古典像。</td></tr>
+            <tr><td><strong>医原性</strong>（最多）</td><td>内視鏡（生検／拡張／止血／EMR・ESD）／<strong>挿管・経鼻胃管</strong>／TEE（経食道エコー）／胸部・心臓手術／頸部手術。</td></tr>
+            <tr><td><strong>外傷性</strong></td><td>鈍的（交通外傷・胸部圧挫）／穿通（刺創・銃創）。頸部食道は穿通外傷で多い。</td></tr>
+            <tr><td><strong>異物</strong></td><td>魚骨・PTP シート・義歯・電池（小児）。穿孔・縦隔膿瘍を合併。</td></tr>
+            <tr><td><strong>薬剤（Pill esophagitis）</strong></td><td>NSAIDs／ビスホスホネート／テトラサイクリン／鉄剤などが少量水で内服 → 食道潰瘍 → まれに穿孔。PPI 不足の食道炎が背景。</td></tr>
+            <tr><td><strong>悪性腫瘍</strong></td><td>食道癌の自壊・治療（化学放射線後）に伴う穿孔。</td></tr>
+          </tbody>
+        </table></div>
+
+        <h3>解剖と漏出の方向</h3>
+        <ul>
+          <li><strong>頸部食道</strong>：頸部皮下気腫・頸部膿瘍として現れる。</li>
+          <li><strong>胸部食道</strong>：縦隔気腫・縦隔炎・<strong>左胸水</strong>（下部）／右胸水（中部・上部）。</li>
+          <li><strong>腹部食道</strong>：気腹・腹膜炎像。</li>
+        </ul>
+      </section>
+
+      <!-- §s2 Mackler 三徴と身体所見 -->
+      <section class="section-page" id="s2" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🔍 Mackler 三徴と身体所見</h2>
+
+        <div class="callout callout-danger">
+          <div class="callout-title">Mackler 三徴 — 揃うのは半数程度</div>
+          <div class="callout-body"><ol>
+            <li><strong>嘔吐後の胸痛</strong>（多くは下部食道なので<strong>心窩部・左下背部</strong>に放散）</li>
+            <li><strong>皮下気腫</strong>（頸部・前胸部の<strong>捻髪音</strong>）</li>
+            <li><strong>縦隔気腫</strong>（CXR で）</li>
+          </ol>
+          <p>三徴が揃わない症例も多く、「<strong>嘔吐後の胸痛</strong>」だけでも疑うのが鉄則。</p></div>
+        </div>
+
+        <h3>問診で必ず聞くこと</h3>
+        <ul>
+          <li><strong>嘔吐・努責の有無</strong>、暴飲暴食、けいれん、分娩、激しい咳</li>
+          <li><strong>処置歴</strong>：内視鏡（数時間〜数日内）・挿管・経鼻胃管・TEE</li>
+          <li><strong>異物誤飲</strong>（魚骨・PTP・義歯）</li>
+          <li>食道癌・食道狭窄の既往、治療歴</li>
+          <li>NSAIDs／ビスホスホネート／テトラサイクリンの内服</li>
+        </ul>
+
+        <h3>身体所見</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>所見</th><th>意味</th></tr></thead>
+          <tbody>
+            <tr><td><strong>発熱・頻脈・頻呼吸</strong></td><td>縦隔炎・敗血症の進行</td></tr>
+            <tr><td><strong>頸部・前胸部の捻髪音</strong></td><td>皮下気腫（指で触れて握雪感）</td></tr>
+            <tr><td><strong>Hamman 徴候</strong></td><td>縦隔気腫による<strong>収縮期に同期するパリパリ音</strong>（左側臥位で聴こえやすい）</td></tr>
+            <tr><td><strong>胸水（左優位）</strong></td><td>下部食道破裂の典型。胸水穿刺で<strong>食物残渣・低 pH・高アミラーゼ</strong>を確認できれば確定的</td></tr>
+            <tr><td><strong>腹膜刺激徴候</strong></td><td>腹部食道破裂で出現</td></tr>
+            <tr><td><strong>ショック・意識障害</strong></td><td>敗血症性ショック</td></tr>
+          </tbody>
+        </table></div>
+      </section>
+
+      <!-- §s3 鑑別 -->
+      <section class="section-page" id="s3" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🆚 鑑別 — 致死的胸痛との見分け</h2>
+
+        <div class="table-wrap"><table>
+          <thead><tr><th>鑑別</th><th>食道破裂との違い</th></tr></thead>
+          <tbody>
+            <tr><td><a class="wiki-link" href="../胸痛.html">ACS</a></td><td>労作・放散・冷汗が中心。ECG の ST 変化・トロポニン上昇。皮下気腫・縦隔気腫はなし。<strong>嘔吐は ACS でも起こる</strong>ので「嘔吐後だから食道」と決めつけない。</td></tr>
+            <tr><td><a class="wiki-link" href="大動脈解離.html">大動脈解離</a></td><td>引き裂くような痛み・血圧左右差・新規 AR・縦隔拡大。造影 CT で診断。皮下気腫はなし。</td></tr>
+            <tr><td><a class="wiki-link" href="肺塞栓.html">PE</a></td><td>突然の呼吸困難・低酸素・頻脈・右心負荷。皮下気腫はなし。</td></tr>
+            <tr><td><a class="wiki-link" href="気胸.html">気胸</a></td><td>片側呼吸音消失・突然胸痛。<strong>緊張性気胸＋食道破裂は合併し得る</strong>（縦隔気腫が両者で出る）。</td></tr>
+            <tr><td>急性膵炎</td><td>心窩部痛＋背部放散・高アミラーゼ・CT で膵腫大。<strong>胸水アミラーゼ高値だけでは食道破裂と鑑別不能</strong>（膵炎でも胸水アミラーゼ↑する）。</td></tr>
+            <tr><td>急性心膜炎</td><td>前傾で軽快・心膜摩擦音・PR 低下／広範 ST 上昇。皮下気腫はなし。</td></tr>
+            <tr><td>Mallory-Weiss 症候群</td><td>嘔吐後の<strong>吐血</strong>が主体（粘膜裂創）。胸痛・縦隔気腫は出ない。</td></tr>
+          </tbody>
+        </table></div>
+
+        <div class="callout callout-warning">
+          <div class="callout-title">「嘔吐後の胸痛」は心筋梗塞の可能性も残す</div>
+          <div class="callout-body"><p>下壁梗塞は嘔吐で発症することがある。<strong>初期 ECG ＋トロポニンを必ず</strong>取り、画像で食道破裂を確定するまで ACS を捨てない。</p></div>
+        </div>
+      </section>
+
+      <!-- §s4 画像診断 -->
+      <section class="section-page" id="s4" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>📷 画像診断</h2>
+
+        <h3>胸部 X 線（CXR）</h3>
+        <ul>
+          <li><strong>縦隔気腫</strong>（縦隔の透亮線）／<strong>皮下気腫</strong>（頸部・胸壁）</li>
+          <li><strong>縦隔拡大</strong>・気管偏位</li>
+          <li><strong>左胸水</strong>（下部食道破裂）／<strong>右胸水</strong>（中部・上部食道）</li>
+          <li><strong>V sign of Naclerio</strong>：左横隔膜上・下行大動脈に沿う V 字状の透亮線（縦隔気腫所見）</li>
+          <li>正常 CXR で否定はできない（早期では所見が乏しい）</li>
+        </ul>
+
+        <h3>水溶性造影剤食道造影（第一選択の確定検査）</h3>
+        <ul>
+          <li><strong>ガストログラフィン</strong>を経口投与 → 漏出を直接可視化</li>
+          <li>漏出部位・大きさ・縦隔／胸腔への進展・<strong>食道内に戻るか（contained leak）</strong>を評価</li>
+          <li>ガストログラフィンで陰性なら<strong>希釈バリウム</strong>追加で感度↑（バリウム単独は縦隔への漏出で炎症増悪リスクのため第一選択にしない）</li>
+          <li>誤嚥リスクが高い患者ではバリウム禁忌</li>
+        </ul>
+
+        <h3>造影 CT（実臨床でファーストになることが多い）</h3>
+        <ul>
+          <li><strong>縦隔気腫</strong>・<strong>食道周囲の気泡</strong>・<strong>食道壁不連続</strong></li>
+          <li><strong>縦隔膿瘍</strong>・胸水（左優位）／膿胸</li>
+          <li>経口造影併用（CT esophagography）で漏出を直接描出</li>
+          <li>鑑別（解離・PE・縦隔腫瘍）と同時に評価できるのが利点</li>
+        </ul>
+
+        <h3>上部消化管内視鏡</h3>
+        <ul>
+          <li>直接観察できるが<strong>送気で穿孔を拡大させるリスク</strong>あり</li>
+          <li>造影で診断不確実な症例・ステント留置同時施行など、<strong>消化器内科／外科と協議のうえ</strong>慎重に施行</li>
+        </ul>
+
+        <h3>胸水穿刺（参考）</h3>
+        <ul>
+          <li><strong>食物残渣</strong>・<strong>低 pH（&lt; 6）</strong>・<strong>高アミラーゼ</strong>（唾液由来）→ 食道破裂を強く示唆</li>
+          <li>確定診断補助として有用</li>
+        </ul>
+      </section>
+
+      <!-- §s5 重症度評価（Pittsburgh score） -->
+      <section class="section-page" id="s5" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>📊 重症度評価 — Pittsburgh perforation severity score</h2>
+
+        <p>Abbas らが提唱した 10 項目スコア。<strong>保存的治療で行けるか／緊急手術が要るか</strong>を判断する補助。</p>
+
+        <h3>10 項目（各 1〜3 点、合計 18 点）</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>項目</th><th>点数</th></tr></thead>
+          <tbody>
+            <tr><td>年齢 &gt; 75 歳</td><td>1</td></tr>
+            <tr><td>頻脈 HR &gt; 100/min</td><td>1</td></tr>
+            <tr><td>白血球 &gt; 10,000/μL</td><td>1</td></tr>
+            <tr><td>胸水（CXR / CT）</td><td>1</td></tr>
+            <tr><td>発熱 &gt; 38.5℃</td><td>2</td></tr>
+            <tr><td>皮下気腫（造影で食道外）</td><td>2</td></tr>
+            <tr><td>診断遅延 &gt; 24 時間</td><td>2</td></tr>
+            <tr><td>悪性腫瘍合併</td><td>3</td></tr>
+            <tr><td>呼吸不全（呼吸器装着）</td><td>3</td></tr>
+            <tr><td>非限局性漏出（造影で free leak）</td><td>3</td></tr>
+          </tbody>
+        </table></div>
+
+        <h3>スコアの目安</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>合計</th><th>方針の目安</th></tr></thead>
+          <tbody>
+            <tr><td><strong>≤ 2 点</strong></td><td>低リスク。保存的治療（限局・&lt; 24 h なら）。死亡率 &lt; 5%</td></tr>
+            <tr><td><strong>3〜5 点</strong></td><td>中リスク。慎重に保存 or 低侵襲（ステント・ドレナージ）／外科併診</td></tr>
+            <tr><td><strong>≥ 6 点</strong></td><td>高リスク。<strong>緊急手術を含む積極治療</strong>。死亡率 20〜30% 以上</td></tr>
+          </tbody>
+        </table></div>
+
+        <div class="callout callout-summary">
+          <div class="callout-title">スコアは補助、判断は病態</div>
+          <div class="callout-body"><p>Pittsburgh score は<strong>客観化のための補助</strong>。実臨床では、漏出の<strong>限局性（contained）</strong>・<strong>診断までの時間</strong>・<strong>敗血症の有無</strong>・<strong>全身予備能</strong>を総合して食道外科と決定する。</p></div>
+        </div>
+      </section>
+
+      <!-- §s6 初期管理 -->
+      <section class="section-page" id="s6" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>💊 初期管理（ER で必ずやる）</h2>
+
+        <div class="callout callout-danger">
+          <div class="callout-title">経鼻胃管挿入は禁忌</div>
+          <div class="callout-body"><p>盲目的な経鼻胃管挿入は<strong>穿孔を拡大させる</strong>。減圧目的でも ER 単独判断で入れない。必要なら<strong>食道外科と相談のうえ内視鏡下に留置</strong>する。</p></div>
+        </div>
+
+        <h3>初期セット</h3>
+        <ul>
+          <li><strong>絶飲食</strong>（NPO）／2 本ライン確保／晶質液で輸液蘇生</li>
+          <li>モニタ（SpO₂・心電図・血圧・尿量）／必要なら ICU 入室準備</li>
+          <li><strong>血液培養 2 セット</strong>＋胸水培養（穿刺できれば）</li>
+          <li>採血（血算・生化・凝固・乳酸・血ガス）／ECG ／トロポニン</li>
+        </ul>
+
+        <h3>抗菌薬</h3>
+        <ul>
+          <li><strong>広域抗菌薬</strong>を直ちに開始：<strong>ピペラシリン・タゾバクタム 4.5 g 6 時間ごと</strong>（重症 / MRSA 疑いなら<strong>バンコマイシン</strong>追加）</li>
+          <li><strong>抗真菌薬</strong>追加：<strong>フルコナゾール 400 mg/日</strong>（口腔内常在 Candida のカバー）／重症例はミカファンギン</li>
+          <li>βラクタムアレルギーなら<strong>カルバペネム</strong>＋バンコマイシン</li>
+        </ul>
+
+        <h3>酸分泌抑制</h3>
+        <ul>
+          <li><strong>PPI 静注</strong>：ランソプラゾール 30 mg ／エソメプラゾール 20〜40 mg を 1 日 1〜2 回</li>
+          <li>胃酸の食道・縦隔への暴露を減らす</li>
+        </ul>
+
+        <h3>鎮痛・栄養</h3>
+        <ul>
+          <li>鎮痛：<strong>モルヒネ静注</strong>（5 mg を頻回滴定）／フェンタニル</li>
+          <li>栄養：早期に<strong>経空腸栄養（経鼻空腸チューブ／空腸瘻）</strong>または<strong>TPN</strong>を開始（<strong>経口・経胃は禁</strong>）</li>
+          <li>胸水・縦隔膿瘍があれば<strong>胸腔ドレナージ</strong>を早期に</li>
+        </ul>
+      </section>
+
+      <!-- §s7 保存的治療 -->
+      <section class="section-page" id="s7" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🩹 保存的治療の適応と限界</h2>
+
+        <h3>保存可能の条件（すべて満たす）</h3>
+        <ul>
+          <li><strong>診断 24 時間以内</strong></li>
+          <li><strong>敗血症・ショックなし</strong></li>
+          <li>漏出が<strong>限局（contained leak）</strong>：造影で<strong>食道内に戻る</strong>／縦隔・胸腔に大きな膿瘍を作らない</li>
+          <li>胸腔内・腹腔内への大量漏出なし</li>
+          <li>悪性腫瘍・遠位狭窄など治療を阻害する基礎疾患なし</li>
+          <li>全身予備能あり・継続的にモニタ可能</li>
+        </ul>
+
+        <h3>保存的治療の柱</h3>
+        <ol>
+          <li><strong>絶食＋抗菌薬＋抗真菌＋ PPI</strong>（§s6 のセットを継続）</li>
+          <li><strong>胸腔ドレナージ</strong>：胸水・膿胸があれば早期に</li>
+          <li><strong>栄養経路</strong>：経空腸栄養（NJ ／空腸瘻）が標準。短期なら TPN。</li>
+          <li><strong>内視鏡的 stenting（ESI: Endoscopic Stent Insertion）</strong>：被覆型自己拡張ステントで漏出をシールする。短期（4〜8 週）留置。</li>
+          <li><strong>内視鏡的 vacuum therapy（ESS / EVT）</strong>：縦隔欠損腔にスポンジ＋陰圧をかけ、肉芽形成と縮小を促す。最近の選択肢として有用。</li>
+          <li><strong>OTSC クリップ／endoscopic suturing</strong>：小さな穿孔の閉鎖に。</li>
+          <li>3〜5 日ごとに造影／CT で漏出評価。<strong>悪化があれば手術へ転換</strong>。</li>
+        </ol>
+
+        <div class="callout callout-warning">
+          <div class="callout-title">保存に固執しない</div>
+          <div class="callout-body"><p>初期に「保存で行けそう」と判断しても、<strong>発熱・敗血症・新規膿瘍・漏出拡大</strong>があれば即座に外科へバトンを渡す。粘って予後を悪化させない。</p></div>
+        </div>
+      </section>
+
+      <!-- §s8 手術治療 -->
+      <section class="section-page" id="s8" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🔪 手術治療</h2>
+
+        <h3>緊急手術の適応</h3>
+        <ul>
+          <li><strong>診断 &gt; 24 時間</strong>／<strong>大きな漏出</strong>／<strong>非限局漏出（free leak）</strong></li>
+          <li>縦隔／胸腔の<strong>膿瘍形成</strong>・膿胸</li>
+          <li><strong>敗血症・ショック</strong></li>
+          <li>食道癌・遠位狭窄など保存治療を阻害する病変</li>
+          <li>保存治療中の悪化（発熱・新規膿瘍・漏出拡大）</li>
+        </ul>
+
+        <h3>術式</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>術式</th><th>適応・要点</th></tr></thead>
+          <tbody>
+            <tr><td><strong>一次縫合（primary repair）</strong></td><td><strong>24 時間以内・組織が健常</strong>な症例の標準。胸膜・横隔膜・有茎弁（intercostal flap）で補強し縦隔ドレナージを置く。</td></tr>
+            <tr><td><strong>T-tube（外瘻化）</strong></td><td>組織が脆弱で一次縫合困難な遅延例。<strong>制御された外瘻</strong>を作って治癒を待つ。</td></tr>
+            <tr><td><strong>VATS（胸腔鏡下）</strong></td><td>限局性穿孔・中等度胸腔汚染。低侵襲だが施設・術者依存。</td></tr>
+            <tr><td><strong>開胸（thoracotomy）</strong></td><td>広範縦隔炎・膿胸の標準。デブリードマン・ドレナージ・必要なら一次縫合 + 補強。</td></tr>
+            <tr><td><strong>食道切除（esophagectomy）</strong></td><td>食道癌合併・広範壊死・繰り返す再漏出。後日再建（胃管挙上）。</td></tr>
+            <tr><td><strong>食道排除（exclusion）／頸部食道瘻</strong></td><td>制御不能な敗血症で食道を一時的に「外す」損害制御戦略。</td></tr>
+          </tbody>
+        </table></div>
+
+        <h3>術後管理</h3>
+        <ul>
+          <li>ICU 管理／継続抗菌薬・抗真菌</li>
+          <li>胸腔・縦隔ドレナージ／空腸瘻からの経腸栄養</li>
+          <li>術後 5〜7 日で造影確認 → 漏出なければ段階的に経口再開</li>
+        </ul>
+      </section>
+
+      <!-- §s9 コンサルト文 -->
+      <section class="section-page" id="s9" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>📞 コンサルト文（食道外科／消化器外科）</h2>
+
+        <div class="callout callout-summary">
+          <div class="callout-title">コンサルトのタイミング</div>
+          <div class="callout-body"><ul>
+            <li><strong>疑った時点で電話</strong>：確定診断を待たない。Mackler 三徴・嘔吐後胸痛＋皮下気腫の段階で食道外科オンコールへ。</li>
+            <li><strong>同時に ICU・麻酔科</strong>にも声を掛けておく（緊急手術・気道管理に備える）。</li>
+            <li>確定後は<strong>造影所見・Pittsburgh score・胸水所見</strong>を整理して再連絡。</li>
+          </ul></div>
+        </div>
+
+        <h3>院内紹介状（書面）テンプレート</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>項目</th><th>記載例</th></tr></thead>
+          <tbody>
+            <tr><td><strong>【目的】</strong></td><td>食道破裂の疑いに対するご相談・ご加療依頼</td></tr>
+            <tr><td><strong>【疾患】</strong></td><td>#1 食道破裂（Boerhaave 症候群疑い、左下部食道）／#2 縦隔気腫・左胸水／#3 敗血症</td></tr>
+            <tr><td><strong>【既往歴】</strong></td><td>逆流性食道炎・高血圧・2 型糖尿病など特記事項を記載／なければ「特記事項なし」</td></tr>
+            <tr><td><strong>【内服薬】</strong></td><td>抗凝固薬・抗血小板薬・PPI・NSAIDs・ビスホスホネートの有無を明記（手術判断・原因評価に直結）</td></tr>
+            <tr><td><strong>【ADL】</strong></td><td>受傷前の ADL（独歩／杖／介助／車椅子）</td></tr>
+            <tr><td><strong>【現病歴】</strong></td><td>時系列で：いつから／嘔吐・努責・処置歴／主訴・来院経緯／バイタル／身体所見（捻髪音・Hamman・胸水）／血液検査（WBC・CRP・乳酸）／画像（CXR：縦隔気腫・皮下気腫・左胸水／造影 CT：食道壁不連続・縦隔気腫・縦隔膿瘍／食道造影：漏出部位）／Pittsburgh score（点数・内訳）／ER 処置（絶食・抗菌薬開始時刻・PPI 静注・胸腔ドレーン挿入・経鼻胃管なし）<br>よろしくお願いいたします。</td></tr>
+          </tbody>
+        </table></div>
+
+        <h3>電話コンサルトの順序</h3>
+        <ol>
+          <li>自己紹介（所属・名前）</li>
+          <li>相手の確認（食道外科オンコール担当か）</li>
+          <li>要件を端的に：「○歳 ○性、嘔吐後の胸痛＋皮下気腫で<strong>食道破裂を強く疑い</strong>、緊急コンサルトをお願いしたい」</li>
+          <li>詳細：既往・内服・現病歴・バイタル・画像所見・Pittsburgh score・ER で開始済みの治療・依頼内容（緊急手術 or 内視鏡的ステント検討）</li>
+        </ol>
+
+        <div class="callout callout-warning">
+          <div class="callout-title">伝え忘れない要素</div>
+          <div class="callout-body"><ul>
+            <li><strong>診断までの時間</strong>（&lt; 24 h か &gt; 24 h か）— 治療方針が変わる</li>
+            <li><strong>敗血症の有無</strong>（qSOFA・乳酸）</li>
+            <li><strong>抗凝固薬・抗血小板薬</strong>の最終服用</li>
+            <li><strong>胸腔ドレーンの有無・排液性状</strong></li>
+            <li><strong>経鼻胃管を入れていないこと</strong>（明示的に）</li>
+          </ul></div>
+        </div>
+      </section>
+
+      <!-- §s10 やりがちなミス -->
+      <section class="section-page" id="s10" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>⚠️ やりがちなミス</h2>
+
+        <ul>
+          <li><strong>経鼻胃管をルーチンで挿入</strong>：盲目的挿入は穿孔を拡大させる。食道外科・内視鏡下に行う。</li>
+          <li><strong>心筋梗塞・大動脈解離と誤診</strong>：嘔吐後の胸痛は ACS でも起きる。<strong>ECG ＋トロポニン＋造影 CT</strong>を並列で動かす。</li>
+          <li><strong>皮下気腫を見逃す</strong>：頸部・前胸部を触り損ねる。<strong>毎回触診する習慣</strong>。</li>
+          <li><strong>CXR 正常で除外</strong>：早期は所見が乏しい。疑ったら<strong>造影 CT または食道造影</strong>へ。</li>
+          <li><strong>診断 24 時間以上の放置</strong>：死亡率が <strong>10% → 30〜50%</strong> に跳ね上がる。疑った時点で外科コール。</li>
+          <li><strong>培養を取らずに抗菌薬</strong>：血液培養 2 セット・胸水培養を抗菌薬投与前に必ず採取。</li>
+          <li><strong>PPI 内服指示</strong>：絶食中は<strong>静注</strong>に切り替える。</li>
+          <li><strong>胸水アミラーゼだけで決める</strong>：膵炎でも胸水アミラーゼは上がる。pH ・食物残渣・造影所見と総合。</li>
+          <li><strong>「Mallory-Weiss だろう」で帰す</strong>：両者は別疾患。胸痛・縦隔気腫があれば食道破裂。</li>
+          <li><strong>保存治療に固執</strong>：悪化サイン（発熱再燃・新規膿瘍・漏出拡大）で即手術転換。</li>
+        </ul>
+      </section>
+
+      <!-- §s11 出典・関連リンク -->
+      <section class="section-page" id="s11" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>📚 出典・関連リンク</h2>
+
+        <h3>主な出典</h3>
+        <ul>
+          <li><strong>Pittsburgh perforation severity score</strong>：Abbas G ほか. Contemporaneous management of esophageal perforation. <em>Surgery.</em> 2009;146(4):749-756.
+            <p><a class="wiki-link" href="https://doi.org/10.1016/j.surg.2009.06.058">https://doi.org/10.1016/j.surg.2009.06.058</a></p>
+          </li>
+          <li><strong>WSES guidelines</strong>：Chirica M ほか. Esophageal emergencies: WSES guidelines. <em>World J Emerg Surg.</em> 2019;14:26.
+            <p><a class="wiki-link" href="https://doi.org/10.1186/s13017-019-0245-2">https://doi.org/10.1186/s13017-019-0245-2</a></p>
+          </li>
+          <li><strong>Boerhaave 原著</strong>：Boerhaave H. Atrocis, nec descripti prius, morbi historia (1724). 強い嘔吐後の致死的食道破裂の最初の記載。</li>
+          <li><strong>日本食道学会</strong>：食道穿孔・破裂の診療指針（食道疾患診療ガイドライン）</li>
+          <li><strong>Brinster CJ ほか</strong>. Evolving options in the management of esophageal perforation. <em>Ann Thorac Surg.</em> 2004;77(4):1475-1483.</li>
+          <li><strong>ESGE</strong>：Endoscopic management of GI perforations. <em>Endoscopy.</em> 2020.</li>
+        </ul>
+
+        <h3>関連ページ</h3>
+        <ul>
+          <li><a class="wiki-link" href="../胸痛.html">胸痛</a> — 主訴フロー（致死的胸痛 6 鑑別）</li>
+          <li><a class="wiki-link" href="../嘔気・嘔吐.html">嘔気・嘔吐</a> — 主訴フロー</li>
+          <li><a class="wiki-link" href="../腹痛.html">腹痛</a> — 主訴フロー（下部食道破裂が心窩部痛で来る）</li>
+          <li><a class="wiki-link" href="../呼吸困難.html">呼吸困難</a> — 主訴フロー</li>
+          <li><a class="wiki-link" href="気胸.html">気胸</a> — 縦隔気腫・皮下気腫の鑑別</li>
+          <li><a class="wiki-link" href="肺塞栓.html">肺塞栓</a></li>
+          <li><span class="wiki-missing">大動脈解離</span></li>
+        </ul>
+
+        <p>#ER #救急 #食道破裂 #Boerhaave #縦隔気腫 #Pittsburgh_score</p>
+      </section>
+
+    </article>
+  </main>
+
+  <nav class="hokuto-bottom">
+    <button class="hokuto-bottom__btn" type="button" id="navBack">
+      <span class="hokuto-bottom__icon">←</span><span>戻る</span>
+    </button>
+    <a class="hokuto-bottom__btn" href="../ツール.html">
+      <span class="hokuto-bottom__icon">⚙</span><span>ツール</span>
+    </a>
+    <a class="hokuto-bottom__btn" href="../index.html">
+      <span class="hokuto-bottom__icon">⌂</span><span>ホーム</span>
+    </a>
+  </nav>
+
+  <script>
+  (function(){
+    const menu = document.getElementById('sectionMenu');
+    const pages = document.querySelectorAll('.section-page');
+    const titleH1 = document.querySelector('.page-title');
+    const flowBoxes = document.querySelectorAll('.flow-box');
+    const actionHeaders = document.querySelectorAll('.action-header:not(.flow-box)');
+    const relatedSymp = document.getElementById('related-symptoms');
+
+    function showSection(id) {
+      if (menu) menu.hidden = true;
+      if (titleH1) titleH1.hidden = true;
+      flowBoxes.forEach(b => b.hidden = true);
+      actionHeaders.forEach(h => h.hidden = true);
+      if (relatedSymp) relatedSymp.hidden = true;
+      pages.forEach(p => p.hidden = (p.id !== id));
+      window.scrollTo(0, 0);
+    }
+    function showMenu(scrollTarget) {
+      if (menu) menu.hidden = false;
+      if (titleH1) titleH1.hidden = false;
+      flowBoxes.forEach(b => b.hidden = false);
+      actionHeaders.forEach(h => h.hidden = false);
+      if (relatedSymp) relatedSymp.hidden = false;
+      pages.forEach(p => p.hidden = true);
+      if (scrollTarget) {
+        if (scrollTarget.tagName === 'DETAILS') scrollTarget.open = true;
+        scrollTarget.scrollIntoView({behavior: 'instant', block: 'start'});
+      } else {
+        window.scrollTo(0, 0);
+      }
+    }
+    function syncFromHash() {
+      const id = (location.hash || '').replace('#','');
+      const target = id ? document.getElementById(id) : null;
+      if (target && target.classList.contains('section-page')) {
+        showSection(id);
+      } else if (target) {
+        showMenu(target);
+      } else {
+        showMenu();
+      }
+    }
+
+    window.addEventListener('hashchange', syncFromHash);
+    document.querySelectorAll('.back-to-menu').forEach(b => {
+      b.addEventListener('click', () => { history.pushState(null,'',location.pathname); showMenu(); });
+    });
+    const navBack = document.getElementById('navBack');
+    if (navBack) navBack.addEventListener('click', () => {
+      if (window.history.length > 1) history.back();
+      else window.location.href = '../index.html';
+    });
+
+    syncFromHash();
+  })();
+  </script>
+</body>
+</html>

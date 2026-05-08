@@ -6,6 +6,168 @@
   <meta name="color-scheme" content="light dark" />
   <title>肺塞栓 | ER ノート</title>
   <link rel="stylesheet" href="../er-note.css" />
+  <style>
+    /* === 診療フロー（このページ専用） === */
+    .flow-box { position: static; user-select: none; }
+    .flow-box__title {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 0.5rem; cursor: default; padding: 2px 0;
+    }
+    .flow-canvas {
+      background: var(--surface);
+      border-radius: 10px;
+      padding: 14px 10px 18px;
+      margin-top: 0.55rem;
+      overflow-x: auto; overflow-y: hidden;
+      -webkit-overflow-scrolling: touch;
+      touch-action: pan-x pan-y pinch-zoom;
+    }
+    .flow-canvas__hint {
+      font-size: 0.72rem; color: var(--muted);
+      text-align: center; margin: 0 0 0.6rem 0;
+    }
+    .flow-canvas__divider {
+      text-align: center; font-weight: 700; font-size: 12px;
+      color: var(--accent); margin: 14px 0 8px;
+      border-top: 1px dashed color-mix(in srgb, var(--text) 25%, transparent);
+      padding-top: 10px; letter-spacing: 1px;
+    }
+    .dx-flow {
+      min-width: 720px; margin: 0 auto; padding: 4px 6px 8px;
+      font-size: 14px; line-height: 1.45; color: var(--text); font-family: inherit;
+    }
+    .dx-node {
+      background: var(--surface);
+      border: 1.5px solid color-mix(in srgb, var(--text) 22%, transparent);
+      border-radius: 10px; padding: 8px 12px; text-align: center;
+      box-shadow: 0 1px 2px var(--shadow, rgba(0,0,0,0.06));
+      min-height: 38px;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 2px; text-decoration: none; color: var(--text);
+    }
+    .dx-node__title { font-weight: 700; font-size: 13.5px; }
+    .dx-node__sub   { font-size: 11.5px; color: var(--muted); font-weight: 500; }
+    .dx-node--decision {
+      background: color-mix(in srgb, var(--accent) 12%, var(--surface));
+      border-color: var(--accent); border-radius: 14px;
+    }
+    .dx-node--danger {
+      background: color-mix(in srgb, #c0392b 14%, var(--surface));
+      border-color: #c0392b;
+    }
+    .dx-node--danger .dx-node__title { color: #c0392b; }
+    .dx-node--action {
+      background: color-mix(in srgb, var(--text) 5%, var(--surface));
+      border-style: dashed;
+    }
+    .dx-node--external {
+      border-style: dashed; position: relative;
+      background: color-mix(in srgb, var(--accent) 6%, var(--surface));
+    }
+    .dx-node--external::after {
+      content: "↗"; position: absolute; top: 4px; right: 8px;
+      font-size: 12px; color: var(--accent); opacity: 0.85;
+    }
+    .dx-node--warn {
+      background: color-mix(in srgb, #d4a017 14%, var(--surface));
+      border-color: #d4a017;
+    }
+    .dx-node--warn .dx-node__title { color: #9b7508; }
+
+    .dx-layer { display: grid; gap: 14px; align-items: stretch; margin: 0; }
+    .dx-layer--root   { grid-template-columns: 1fr; justify-items: center; }
+    .dx-layer--root > * { max-width: 360px; }
+    .dx-layer--branch { grid-template-columns: 1fr 1fr; }
+    .dx-layer--tri    { grid-template-columns: repeat(3, 1fr); }
+    .dx-layer--quad   { grid-template-columns: repeat(4, 1fr); }
+    .dx-layer--quint  { grid-template-columns: repeat(5, 1fr); }
+    .dx-layer--hex    { grid-template-columns: repeat(6, 1fr); }
+
+    .dx-arrow {
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      position: relative; margin: 4px 0; min-height: 44px;
+      color: var(--muted); font-size: 11.5px; font-weight: 600;
+    }
+    .dx-arrow::before {
+      content: ""; width: 2px; height: 100%; min-height: 38px;
+      background: color-mix(in srgb, var(--text) 35%, transparent);
+    }
+    .dx-arrow::after {
+      content: ""; position: absolute; bottom: 0;
+      width: 0; height: 0;
+      border-left: 5px solid transparent; border-right: 5px solid transparent;
+      border-top: 7px solid color-mix(in srgb, var(--text) 35%, transparent);
+    }
+    .dx-arrow__label {
+      background: var(--surface); padding: 1px 8px; border-radius: 999px;
+      border: 1px solid color-mix(in srgb, var(--text) 18%, transparent);
+      position: absolute; left: 50%; top: 50%;
+      transform: translate(-50%, -50%); white-space: nowrap; z-index: 1;
+    }
+
+    .dx-fork {
+      display: grid; grid-template-columns: 1fr 1fr;
+      position: relative; min-height: 38px; margin: 2px 0 4px;
+    }
+    .dx-fork::before {
+      content: ""; position: absolute;
+      top: 0; left: 25%; right: 25%; height: 2px;
+      background: color-mix(in srgb, var(--text) 35%, transparent);
+    }
+    .dx-fork__leg {
+      position: relative; display: flex; flex-direction: column;
+      align-items: center; justify-content: flex-end;
+      padding-top: 4px; padding-bottom: 4px;
+      font-size: 11.5px; font-weight: 600; color: var(--muted);
+      min-height: 36px;
+    }
+    .dx-fork__leg::before {
+      content: ""; width: 2px; flex: 1;
+      background: color-mix(in srgb, var(--text) 35%, transparent);
+    }
+    .dx-fork__leg::after {
+      content: ""; position: absolute; bottom: 0;
+      width: 0; height: 0;
+      border-left: 5px solid transparent; border-right: 5px solid transparent;
+      border-top: 7px solid color-mix(in srgb, var(--text) 35%, transparent);
+    }
+    .dx-fork__label {
+      background: var(--surface); padding: 1px 8px; border-radius: 999px;
+      border: 1px solid color-mix(in srgb, var(--text) 18%, transparent);
+      margin-bottom: 2px; z-index: 1;
+    }
+
+    .section-tiles { display: none !important; }
+
+    @media (max-width: 600px) {
+      .dx-flow { min-width: 0; font-size: 11px; padding: 2px 0 6px; }
+      .flow-canvas { overflow-x: hidden; padding: 8px 6px 12px; }
+      .flow-canvas__hint { font-size: 0.62rem; margin-bottom: 0.35rem; }
+      .flow-canvas__divider { font-size: 10px; margin: 8px 0 5px; padding-top: 6px; }
+      .dx-node { padding: 4px 5px; min-height: 28px; border-radius: 7px; gap: 1px; }
+      .dx-node__title { font-size: 10px; line-height: 1.22; }
+      .dx-node__sub   { font-size: 8.5px; line-height: 1.25; }
+      .dx-node--decision { border-radius: 8px; }
+      .dx-node--external::after { top: 2px; right: 4px; font-size: 9px; }
+      .dx-layer { gap: 5px; }
+      .dx-layer--root > * { max-width: none; width: 100%; }
+      .dx-layer--tri  { grid-template-columns: repeat(3, 1fr); }
+      .dx-layer--quad { grid-template-columns: 1fr 1fr; }
+      .dx-layer--quint { grid-template-columns: repeat(3, 1fr); }
+      .dx-layer--hex   { grid-template-columns: repeat(3, 1fr); }
+      .dx-arrow { min-height: 22px; margin: 1px 0; }
+      .dx-arrow::before { min-height: 18px; width: 1.5px; }
+      .dx-arrow::after { border-left-width: 4px; border-right-width: 4px; border-top-width: 6px; }
+      .dx-arrow__label { font-size: 8.5px; padding: 0 4px; line-height: 1.4; }
+      .dx-fork { min-height: 22px; }
+      .dx-fork::before { height: 1.5px; }
+      .dx-fork__leg { min-height: 22px; padding-top: 2px; padding-bottom: 2px; font-size: 9px; }
+      .dx-fork__leg::before { width: 1.5px; }
+      .dx-fork__leg::after { border-left-width: 4px; border-right-width: 4px; border-top-width: 6px; }
+      .dx-fork__label { font-size: 8.5px; padding: 0 4px; margin-bottom: 0; }
+    }
+  </style>
 </head>
 <body>
   <header class="hokuto-top">
@@ -21,6 +183,187 @@
     <article class="note-shell">
       <h1 class="page-title">肺塞栓（PE）</h1>
 
+      <!-- 診療フロー -->
+      <div class="action-header flow-box" id="flowBox">
+        <div class="action-header__title flow-box__title">
+          <span>🗺 肺塞栓の診療フロー（疑う → 前確率 → 画像 → 重症度 → 治療）</span>
+        </div>
+        <div class="flow-canvas">
+          <p class="flow-canvas__hint">トリガーで疑う → 前確率＋PERC → 確定画像 → 重症度層別 → 主病態別治療 → 抗凝固管理 → 入院 vs 外来</p>
+          <div class="dx-flow" role="group" aria-label="肺塞栓の診療フロー">
+
+            <!-- L0: トリガー -->
+            <div class="dx-layer dx-layer--root">
+              <a class="dx-node dx-node--danger" href="#s1">
+                <div class="dx-node__title">🚨 PE を疑うトリガー</div>
+                <div class="dx-node__sub">突然の呼吸困難＋頻脈／低酸素／片側下腿腫脹／喀血／術後・臥床・担癌</div>
+              </a>
+            </div>
+
+            <p class="flow-canvas__hint" style="background:color-mix(in srgb,#c0392b 12%,var(--surface));border:1px solid #c0392b;border-radius:8px;padding:6px 10px;margin:6px 0;font-size:11px;line-height:1.45;color:var(--text);text-align:center;">
+              💥 <strong>ショック合併（SBP &lt; 90）なら massive PE として即対応</strong><br>
+              <span style="font-weight:500;">D-dimer に時間を使わず bedside POCUS ＋ 造影 CT 直行 → 循環器・心臓血管外科コール</span>
+            </p>
+
+            <div class="dx-arrow"><span class="dx-arrow__label">↓ 前確率</span></div>
+
+            <!-- L1: 前確率 -->
+            <div class="dx-layer dx-layer--root">
+              <a class="dx-node dx-node--decision" href="#s2">
+                <div class="dx-node__title">📊 前確率評価</div>
+                <div class="dx-node__sub">Wells / 改訂 Geneva / PERC</div>
+              </a>
+            </div>
+
+            <!-- 前確率の分岐 -->
+            <div class="dx-fork">
+              <div class="dx-fork__leg"><span class="dx-fork__label">低＋PERC 全陰</span></div>
+              <div class="dx-fork__leg"><span class="dx-fork__label">中等度</span></div>
+            </div>
+            <div class="dx-layer dx-layer--branch">
+              <a class="dx-node dx-node--action" href="#s2">
+                <div class="dx-node__title">PE 検査不要</div>
+                <div class="dx-node__sub">D-dimer も省略可</div>
+              </a>
+              <a class="dx-node dx-node--action" href="#s3">
+                <div class="dx-node__title">D-dimer で除外</div>
+                <div class="dx-node__sub">年齢調整カットオフ<br>陰性なら除外</div>
+              </a>
+            </div>
+
+            <div class="dx-arrow"><span class="dx-arrow__label">高確率 or D-dimer 陽性</span></div>
+
+            <!-- L2: 画像確定 -->
+            <div class="dx-layer dx-layer--root">
+              <a class="dx-node dx-node--action" href="#s3">
+                <div class="dx-node__title">🩻 造影 CT（CTPA）で確定</div>
+                <div class="dx-node__sub">充盈欠損／RV/LV 比／IVS 偏位／McConnell（POCUS）／Hampton's hump</div>
+              </a>
+            </div>
+
+            <p class="flow-canvas__hint" style="background:color-mix(in srgb,#d4a017 12%,var(--surface));border:1px solid #d4a017;border-radius:8px;padding:6px 10px;margin:6px 0;font-size:11px;line-height:1.45;color:var(--text);text-align:center;">
+              💡 <strong>造影禁忌（腎不全・造影剤アレルギー）なら V/Q シンチ</strong><br>
+              <span style="font-weight:500;">妊婦も V/Q が選択肢（被ばくは CTPA より少ない場合あり）。bedside POCUS ＋ 下肢 CUS で補強。</span>
+            </p>
+
+            <div class="dx-arrow"><span class="dx-arrow__label">↓ 重症度層別</span></div>
+
+            <!-- L3: 重症度層別 -->
+            <div class="dx-layer dx-layer--root">
+              <a class="dx-node dx-node--decision" href="#s4">
+                <div class="dx-node__title">📊 重症度層別</div>
+                <div class="dx-node__sub">血圧 ＋ RV 機能 ＋ トロポニン ＋ PESI / sPESI</div>
+              </a>
+            </div>
+
+            <div class="dx-arrow"><span class="dx-arrow__label">3 群に分ける</span></div>
+
+            <!-- L4: 重症度 3 群 -->
+            <div class="dx-layer dx-layer--tri">
+              <a class="dx-node dx-node--danger" href="#s4">
+                <div class="dx-node__title">High-risk（massive）</div>
+                <div class="dx-node__sub">SBP &lt; 90 ／心停止<br>持続的低血圧</div>
+              </a>
+              <a class="dx-node dx-node--warn" href="#s4">
+                <div class="dx-node__title">Intermediate（submassive）</div>
+                <div class="dx-node__sub">RV 障害 ± Tn 陽性<br>BP は維持</div>
+              </a>
+              <a class="dx-node" href="#s4">
+                <div class="dx-node__title">Low-risk</div>
+                <div class="dx-node__sub">RV 正常＋Tn 陰性<br>sPESI 0 / PESI I-II</div>
+              </a>
+            </div>
+
+            <div class="dx-arrow"><span class="dx-arrow__label">↓ 主病態別の治療</span></div>
+
+            <!-- L5: 治療選択 -->
+            <div class="dx-layer dx-layer--quad">
+              <a class="dx-node dx-node--action" href="#s5">
+                <div class="dx-node__title">血栓溶解</div>
+                <div class="dx-node__sub">massive 第一選択<br>tPA／モンテプラーゼ</div>
+              </a>
+              <a class="dx-node dx-node--action" href="#s5">
+                <div class="dx-node__title">IVR ／ 外科</div>
+                <div class="dx-node__sub">溶解禁忌・抵抗例<br>カテ血栓除去／ECMO</div>
+              </a>
+              <a class="dx-node dx-node--action" href="#s5">
+                <div class="dx-node__title">抗凝固（全例）</div>
+                <div class="dx-node__sub">DOAC／UFH／LMWH</div>
+              </a>
+              <a class="dx-node dx-node--action" href="#s5">
+                <div class="dx-node__title">IVC フィルター</div>
+                <div class="dx-node__sub">抗凝固禁忌・再発例</div>
+              </a>
+            </div>
+
+            <div class="dx-arrow"><span class="dx-arrow__label">↓ 抗凝固の選択</span></div>
+
+            <!-- L6: 抗凝固 -->
+            <div class="dx-layer dx-layer--quint">
+              <a class="dx-node dx-node--action" href="#s5">
+                <div class="dx-node__title">DOAC</div>
+                <div class="dx-node__sub">血行動態安定例<br>第一選択</div>
+              </a>
+              <a class="dx-node dx-node--action" href="#s5">
+                <div class="dx-node__title">UFH 静注</div>
+                <div class="dx-node__sub">重症・腎不全<br>溶解候補</div>
+              </a>
+              <a class="dx-node dx-node--action" href="#s5">
+                <div class="dx-node__title">LMWH</div>
+                <div class="dx-node__sub">担癌・妊娠</div>
+              </a>
+              <a class="dx-node dx-node--warn" href="#s5">
+                <div class="dx-node__title">HIT 注意</div>
+                <div class="dx-node__sub">アルガトロバン<br>非ヘパリン</div>
+              </a>
+              <a class="dx-node dx-node--action" href="#s5">
+                <div class="dx-node__title">期間決定</div>
+                <div class="dx-node__sub">誘発 3 ヶ月／<br>担癌・素因は無期限</div>
+              </a>
+            </div>
+
+            <div class="dx-arrow"><span class="dx-arrow__label">↓ 入院 vs 外来</span></div>
+
+            <!-- L7: 入院・外来判断 -->
+            <div class="dx-layer dx-layer--tri">
+              <a class="dx-node dx-node--danger" href="#s6">
+                <div class="dx-node__title">ICU／HCU</div>
+                <div class="dx-node__sub">High-risk<br>Intermediate-high</div>
+              </a>
+              <a class="dx-node dx-node--action" href="#s6">
+                <div class="dx-node__title">一般病棟</div>
+                <div class="dx-node__sub">Intermediate-low<br>サポート弱い Low-risk</div>
+              </a>
+              <a class="dx-node dx-node--action" href="#s6">
+                <div class="dx-node__title">外来 DOAC</div>
+                <div class="dx-node__sub">HESTIA／sPESI 0<br>条件を満たす Low-risk</div>
+              </a>
+            </div>
+
+            <div class="flow-canvas__divider">補助参照</div>
+
+            <div class="dx-layer dx-layer--quad">
+              <a class="dx-node dx-node--external" href="#s7">
+                <div class="dx-node__title">⚠️ やりがちなミス</div>
+                <div class="dx-node__sub">CXR 正常で安心／D-d 過信</div>
+              </a>
+              <a class="dx-node dx-node--external" href="#s8">
+                <div class="dx-node__title">📞 コンサル文</div>
+                <div class="dx-node__sub">循内・心外／呼吸器</div>
+              </a>
+              <a class="dx-node dx-node--external" href="#s9">
+                <div class="dx-node__title">📚 出典・関連</div>
+                <div class="dx-node__sub">ESC 2019／AHA 2011</div>
+              </a>
+              <a class="dx-node dx-node--external" href="../呼吸困難.html">
+                <div class="dx-node__title">⬅ 呼吸困難へ戻る</div>
+                <div class="dx-node__sub">主訴フローへ</div>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- 即時アクションヘッダー（常時 sticky） -->
       <div class="action-header">
         <div class="action-header__title">⚡ 即時アクション</div>
@@ -32,7 +375,7 @@
         </ol>
       </div>
 
-      <!-- メニュータイル -->
+      <!-- メニュータイル（CSS で非表示、フロー直リンクで代替） -->
       <nav class="section-tiles" id="sectionMenu">
         <a class="section-tile" href="#s1"><span class="section-tile__no">📋</span><span class="section-tile__name">前提<br><small>呼吸困難から</small></span></a>
         <a class="section-tile" href="#s2"><span class="section-tile__no">🧮</span><span class="section-tile__name">前確率評価<br><small>Wells / Geneva</small></span></a>
@@ -483,18 +826,24 @@
     const menu = document.getElementById('sectionMenu');
     const pages = document.querySelectorAll('.section-page');
     const titleH1 = document.querySelector('.page-title');
+    const flowBoxes = document.querySelectorAll('.flow-box');
+    const actionHeaders = document.querySelectorAll('.action-header:not(.flow-box)');
     const relatedSymp = document.getElementById('related-symptoms');
 
     function showSection(id) {
-      menu.hidden = true;
+      if (menu) menu.hidden = true;
       if (titleH1) titleH1.hidden = true;
+      flowBoxes.forEach(b => b.hidden = true);
+      actionHeaders.forEach(h => h.hidden = true);
       if (relatedSymp) relatedSymp.hidden = true;
       pages.forEach(p => p.hidden = (p.id !== id));
       window.scrollTo(0, 0);
     }
     function showMenu(scrollTarget) {
-      menu.hidden = false;
+      if (menu) menu.hidden = false;
       if (titleH1) titleH1.hidden = false;
+      flowBoxes.forEach(b => b.hidden = false);
+      actionHeaders.forEach(h => h.hidden = false);
       if (relatedSymp) relatedSymp.hidden = false;
       pages.forEach(p => p.hidden = true);
       if (scrollTarget) {

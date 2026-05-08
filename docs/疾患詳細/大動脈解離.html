@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="color-scheme" content="light dark" />
+  <title>大動脈解離 | ER ノート</title>
+  <link rel="stylesheet" href="../er-note.css" />
+  <style>
+    /* === 診療フロー（このページ専用） === */
+    .flow-box { position: static; user-select: none; }
+    .flow-box__title {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 0.5rem; cursor: default; padding: 2px 0;
+    }
+    .flow-canvas {
+      background: var(--surface);
+      border-radius: 10px;
+      padding: 14px 10px 18px;
+      margin-top: 0.55rem;
+      overflow-x: auto; overflow-y: hidden;
+      -webkit-overflow-scrolling: touch;
+      touch-action: pan-x pan-y pinch-zoom;
+    }
+    .flow-canvas__hint {
+      font-size: 0.72rem; color: var(--muted);
+      text-align: center; margin: 0 0 0.6rem 0;
+    }
+    .flow-canvas__divider {
+      text-align: center; font-weight: 700; font-size: 12px;
+      color: var(--accent); margin: 14px 0 8px;
+      border-top: 1px dashed color-mix(in srgb, var(--text) 25%, transparent);
+      padding-top: 10px; letter-spacing: 1px;
+    }
+    .dx-flow {
+      min-width: 720px; margin: 0 auto; padding: 4px 6px 8px;
+      font-size: 14px; line-height: 1.45; color: var(--text); font-family: inherit;
+    }
+    .dx-node {
+      background: var(--surface);
+      border: 1.5px solid color-mix(in srgb, var(--text) 22%, transparent);
+      border-radius: 10px; padding: 8px 12px; text-align: center;
+      box-shadow: 0 1px 2px var(--shadow, rgba(0,0,0,0.06));
+      min-height: 38px;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 2px; text-decoration: none; color: var(--text);
+    }
+    .dx-node__title { font-weight: 700; font-size: 13.5px; }
+    .dx-node__sub   { font-size: 11.5px; color: var(--muted); font-weight: 500; }
+    .dx-node--decision {
+      background: color-mix(in srgb, var(--accent) 12%, var(--surface));
+      border-color: var(--accent); border-radius: 14px;
+    }
+    .dx-node--danger {
+      background: color-mix(in srgb, #c0392b 14%, var(--surface));
+      border-color: #c0392b;
+    }
+    .dx-node--danger .dx-node__title { color: #c0392b; }
+    .dx-node--action {
+      background: color-mix(in srgb, var(--text) 5%, var(--surface));
+      border-style: dashed;
+    }
+    .dx-node--external {
+      border-style: dashed; position: relative;
+      background: color-mix(in srgb, var(--accent) 6%, var(--surface));
+    }
+    .dx-node--external::after {
+      content: "↗"; position: absolute; top: 4px; right: 8px;
+      font-size: 12px; color: var(--accent); opacity: 0.85;
+    }
+    .dx-node--warn {
+      background: color-mix(in srgb, #d4a017 14%, var(--surface));
+      border-color: #d4a017;
+    }
+    .dx-node--warn .dx-node__title { color: #9b7508; }
+
+    .dx-layer { display: grid; gap: 14px; align-items: stretch; margin: 0; }
+    .dx-layer--root   { grid-template-columns: 1fr; justify-items: center; }
+    .dx-layer--root > * { max-width: 360px; }
+    .dx-layer--branch { grid-template-columns: 1fr 1fr; }
+    .dx-layer--tri    { grid-template-columns: repeat(3, 1fr); }
+    .dx-layer--quad   { grid-template-columns: repeat(4, 1fr); }
+    .dx-layer--quint  { grid-template-columns: repeat(5, 1fr); }
+    .dx-layer--hex    { grid-template-columns: repeat(6, 1fr); }
+
+    .dx-arrow {
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      position: relative; margin: 4px 0; min-height: 44px;
+      color: var(--muted); font-size: 11.5px; font-weight: 600;
+    }
+    .dx-arrow::before {
+      content: ""; width: 2px; height: 100%; min-height: 38px;
+      background: color-mix(in srgb, var(--text) 35%, transparent);
+    }
+    .dx-arrow::after {
+      content: ""; position: absolute; bottom: 0;
+      width: 0; height: 0;
+      border-left: 5px solid transparent; border-right: 5px solid transparent;
+      border-top: 7px solid color-mix(in srgb, var(--text) 35%, transparent);
+    }
+    .dx-arrow__label {
+      background: var(--surface); padding: 1px 8px; border-radius: 999px;
+      border: 1px solid color-mix(in srgb, var(--text) 18%, transparent);
+      position: absolute; left: 50%; top: 50%;
+      transform: translate(-50%, -50%); white-space: nowrap; z-index: 1;
+    }
+
+    .dx-fork {
+      display: grid; grid-template-columns: 1fr 1fr;
+      position: relative; min-height: 38px; margin: 2px 0 4px;
+    }
+    .dx-fork::before {
+      content: ""; position: absolute;
+      top: 0; left: 25%; right: 25%; height: 2px;
+      background: color-mix(in srgb, var(--text) 35%, transparent);
+    }
+    .dx-fork__leg {
+      position: relative; display: flex; flex-direction: column;
+      align-items: center; justify-content: flex-end;
+      padding-top: 4px; padding-bottom: 4px;
+      font-size: 11.5px; font-weight: 600; color: var(--muted);
+      min-height: 36px;
+    }
+    .dx-fork__leg::before {
+      content: ""; width: 2px; flex: 1;
+      background: color-mix(in srgb, var(--text) 35%, transparent);
+    }
+    .dx-fork__leg::after {
+      content: ""; position: absolute; bottom: 0;
+      width: 0; height: 0;
+      border-left: 5px solid transparent; border-right: 5px solid transparent;
+      border-top: 7px solid color-mix(in srgb, var(--text) 35%, transparent);
+    }
+    .dx-fork__label {
+      background: var(--surface); padding: 1px 8px; border-radius: 999px;
+      border: 1px solid color-mix(in srgb, var(--text) 18%, transparent);
+      margin-bottom: 2px; z-index: 1;
+    }
+
+    .section-tiles { display: none !important; }
+
+    @media (max-width: 600px) {
+      .dx-flow { min-width: 0; font-size: 11px; padding: 2px 0 6px; }
+      .flow-canvas { overflow-x: hidden; padding: 8px 6px 12px; }
+      .flow-canvas__hint { font-size: 0.62rem; margin-bottom: 0.35rem; }
+      .flow-canvas__divider { font-size: 10px; margin: 8px 0 5px; padding-top: 6px; }
+      .dx-node { padding: 4px 5px; min-height: 28px; border-radius: 7px; gap: 1px; }
+      .dx-node__title { font-size: 10px; line-height: 1.22; }
+      .dx-node__sub   { font-size: 8.5px; line-height: 1.25; }
+      .dx-node--decision { border-radius: 8px; }
+      .dx-node--external::after { top: 2px; right: 4px; font-size: 9px; }
+      .dx-layer { gap: 5px; }
+      .dx-layer--root > * { max-width: none; width: 100%; }
+      .dx-layer--tri  { grid-template-columns: repeat(3, 1fr); }
+      .dx-layer--quad { grid-template-columns: 1fr 1fr; }
+      .dx-layer--quint { grid-template-columns: repeat(3, 1fr); }
+      .dx-layer--hex   { grid-template-columns: repeat(3, 1fr); }
+      .dx-arrow { min-height: 22px; margin: 1px 0; }
+      .dx-arrow::before { min-height: 18px; width: 1.5px; }
+      .dx-arrow::after { border-left-width: 4px; border-right-width: 4px; border-top-width: 6px; }
+      .dx-arrow__label { font-size: 8.5px; padding: 0 4px; line-height: 1.4; }
+      .dx-fork { min-height: 22px; }
+      .dx-fork::before { height: 1.5px; }
+      .dx-fork__leg { min-height: 22px; padding-top: 2px; padding-bottom: 2px; font-size: 9px; }
+      .dx-fork__leg::before { width: 1.5px; }
+      .dx-fork__leg::after { border-left-width: 4px; border-right-width: 4px; border-top-width: 6px; }
+      .dx-fork__label { font-size: 8.5px; padding: 0 4px; margin-bottom: 0; }
+    }
+  </style>
+</head>
+<body>
+  <header class="hokuto-top">
+    <a class="hokuto-top__btn" href="../薬剤情報.html">
+      <span class="hokuto-top__icon">℞</span><span>薬剤情報</span>
+    </a>
+    <a class="hokuto-top__btn" href="../表計算.html">
+      <span class="hokuto-top__icon">⊞</span><span>表計算</span>
+    </a>
+  </header>
+
+  <main class="hokuto-main">
+    <article class="note-shell">
+      <h1 class="page-title">大動脈解離</h1>
+
+      <!-- 診療フロー -->
+      <div class="action-header flow-box" id="flowBox">
+        <div class="action-header__title flow-box__title">
+          <span>🗺 大動脈解離の診療フロー（疑う → 確定 → Stanford 分岐 → 急性期管理）</span>
+        </div>
+        <div class="flow-canvas">
+          <p class="flow-canvas__hint">突然発症の引き裂く胸背部痛で疑う → ADD-RS と造影 CT で確定 → Stanford 分類で外科 vs 内科を即決 → 降圧・心拍数管理を並行</p>
+          <div class="dx-flow" role="group" aria-label="大動脈解離の診療フロー">
+
+            <!-- L0: 疑うトリガー -->
+            <div class="dx-layer dx-layer--root">
+              <a class="dx-node dx-node--danger" href="#s1">
+                <div class="dx-node__title">🚨 大動脈解離を疑うトリガー</div>
+                <div class="dx-node__sub">突然発症・引き裂く胸背部痛・移動する痛み・上肢血圧差 ≥20 mmHg・新規 AR・神経症状・タンポナーデ</div>
+              </a>
+            </div>
+
+            <div class="dx-arrow"><span class="dx-arrow__label">↓ 疑ったら 3 ステップ</span></div>
+
+            <!-- L1: 確定診断 3 軸 -->
+            <p class="flow-canvas__hint" style="margin:6px 0 4px;font-weight:700;">疑い → 除外補助 → 確定の 3 ステップ</p>
+            <div class="dx-layer dx-layer--tri">
+              <a class="dx-node dx-node--decision" href="#s2">
+                <div class="dx-node__title">ADD-RS</div>
+                <div class="dx-node__sub">高リスク病歴／疼痛／所見<br>≤1 + D-d 陰性で除外補助</div>
+              </a>
+              <a class="dx-node dx-node--action" href="#s2">
+                <div class="dx-node__title">D-dimer</div>
+                <div class="dx-node__sub">単独除外は不可<br>ADD-RS と組み合わせて使う</div>
+              </a>
+              <a class="dx-node dx-node--decision" href="#s3">
+                <div class="dx-node__title">造影 CT</div>
+                <div class="dx-node__sub">根部〜骨盤<br>真腔／偽腔／IMH／PAU</div>
+              </a>
+            </div>
+
+            <div class="dx-arrow"><span class="dx-arrow__label">↓ 確定したら病型分岐</span></div>
+
+            <!-- L2: Stanford 分類 -->
+            <div class="dx-layer dx-layer--root">
+              <a class="dx-node dx-node--decision" href="#s3">
+                <div class="dx-node__title">📊 Stanford 分類</div>
+                <div class="dx-node__sub">上行を含むか否かで治療が真逆</div>
+              </a>
+            </div>
+
+            <!-- fork: A vs B -->
+            <div class="dx-fork">
+              <div class="dx-fork__leg"><span class="dx-fork__label">上行 (+)</span></div>
+              <div class="dx-fork__leg"><span class="dx-fork__label">下行のみ</span></div>
+            </div>
+
+            <div class="dx-layer dx-layer--branch">
+              <a class="dx-node dx-node--danger" href="#s4">
+                <div class="dx-node__title">Stanford A</div>
+                <div class="dx-node__sub">緊急手術<br>心臓外科に即コール</div>
+              </a>
+              <a class="dx-node dx-node--warn" href="#s5">
+                <div class="dx-node__title">Stanford B</div>
+                <div class="dx-node__sub">原則内科管理<br>合併症あり → TEVAR</div>
+              </a>
+            </div>
+
+            <div class="dx-arrow"><span class="dx-arrow__label">↓ 病型を問わず並行</span></div>
+
+            <!-- L3: 急性期管理 -->
+            <div class="dx-layer dx-layer--root">
+              <a class="dx-node dx-node--action" href="#s6">
+                <div class="dx-node__title">💊 急性期管理（impulse 制御）</div>
+                <div class="dx-node__sub">SBP 100-120 / HR ≤60 ／ β 遮断薬先行 → Ca 拮抗薬 ／ モルヒネで鎮痛</div>
+              </a>
+            </div>
+
+            <div class="dx-arrow"><span class="dx-arrow__label">↓ 進行・合併症</span></div>
+
+            <!-- L4: 合併症 quad -->
+            <p class="flow-canvas__hint" style="margin:6px 0 4px;font-weight:700;">致死的合併症（A 型に多い）と malperfusion</p>
+            <div class="dx-layer dx-layer--quad">
+              <a class="dx-node dx-node--danger" href="#s7">
+                <div class="dx-node__title">心タンポナーデ</div>
+                <div class="dx-node__sub">A 型で最多死因<br>奇脈・ベック三徴</div>
+              </a>
+              <a class="dx-node dx-node--danger" href="#s7">
+                <div class="dx-node__title">急性 AR</div>
+                <div class="dx-node__sub">弁尖逸脱<br>急性肺水腫</div>
+              </a>
+              <a class="dx-node dx-node--danger" href="#s7">
+                <div class="dx-node__title">冠動脈解離</div>
+                <div class="dx-node__sub">下壁 STEMI 様<br>右冠動脈口に多い</div>
+              </a>
+              <a class="dx-node dx-node--danger" href="#s7">
+                <div class="dx-node__title">malperfusion</div>
+                <div class="dx-node__sub">脳・脊髄・腸間膜<br>腎・下肢の虚血</div>
+              </a>
+            </div>
+
+            <div class="dx-arrow"><span class="dx-arrow__label">↓ コンサルト</span></div>
+
+            <!-- L5: コンサルト先 -->
+            <div class="dx-layer dx-layer--branch">
+              <a class="dx-node dx-node--external" href="#s8">
+                <div class="dx-node__title">心臓血管外科</div>
+                <div class="dx-node__sub">A 型は確定即コール<br>B 型 + 合併症</div>
+              </a>
+              <a class="dx-node dx-node--external" href="#s8">
+                <div class="dx-node__title">循環器内科</div>
+                <div class="dx-node__sub">B 型の内科管理<br>降圧・ICU 管理</div>
+              </a>
+            </div>
+
+            <div class="flow-canvas__divider">補助情報</div>
+
+            <div class="dx-layer dx-layer--branch">
+              <a class="dx-node dx-node--warn" href="#s9">
+                <div class="dx-node__title">⚠️ やりがちなミス</div>
+                <div class="dx-node__sub">抗血小板・抗凝固を流す／降圧不足／A 型を見逃す</div>
+              </a>
+              <a class="dx-node dx-node--external" href="#s10">
+                <div class="dx-node__title">📚 出典・関連リンク</div>
+                <div class="dx-node__sub">2022 ACC/AHA／JCS 2020</div>
+              </a>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- メニュータイル（非表示・互換用） -->
+      <nav class="section-tiles" id="sectionMenu" hidden>
+        <a class="section-tile" href="#s1"><span class="section-tile__name">疑うトリガー</span></a>
+      </nav>
+
+      <!-- 関連主訴（双方向リンク） -->
+      <details class="sub-fold" id="related-symptoms">
+        <summary>📞 この疾患が該当する主訴</summary>
+        <div class="sub-fold__body">
+          <ul>
+            <li><a class="wiki-link" href="../胸痛.html">胸痛</a> — 致死 5 の一角。突然・引き裂く・移動・上肢血圧差・新規 AR で疑う</li>
+            <li><a class="wiki-link" href="../呼吸困難.html">呼吸困難</a> — 急性 AR による肺水腫／心タンポナーデ／血胸・縦隔血腫</li>
+            <li><a class="wiki-link" href="../意識消失.html">意識消失</a> — 弓部分枝解離による脳虚血／タンポナーデによる失神</li>
+            <li><span class="wiki-missing">腹痛</span> — 腸間膜虚血／腎虚血／腹部大動脈に進展した B 型</li>
+          </ul>
+        </div>
+      </details>
+
+      <!-- §s1 疑うトリガーと初期評価 -->
+      <section class="section-page" id="s1" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🚨 疑うトリガーと初期評価</h2>
+
+        <div class="callout callout-summary">
+          <div class="callout-title">疑った瞬間に勝負がつく</div>
+          <div class="callout-body"><ul>
+            <li>急性大動脈解離は<strong>1 時間ごとに約 1〜2% 死亡が積み上がる</strong>。初療で疑えるかが全て。</li>
+            <li>「<strong>胸痛＋背部痛</strong>」「<strong>移動する痛み</strong>」「<strong>引き裂く／鋭い</strong>」のいずれかで必ずスクリーニング。</li>
+            <li>典型例より<strong>非典型例で見逃す</strong>（無痛性・失神主訴・腹痛のみ・脳卒中様）。</li>
+          </ul></div>
+        </div>
+
+        <h3>疑うトリガー（ADD-RS の元になる 3 カテゴリ）</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>カテゴリ</th><th>具体的所見</th></tr></thead>
+          <tbody>
+            <tr><td><strong>① 高リスク病歴</strong></td><td>Marfan・血管型 Ehlers-Danlos・大動脈疾患の家族歴・既知の大動脈瘤・大動脈弁手術・最近の大動脈操作</td></tr>
+            <tr><td><strong>② 疼痛特性</strong></td><td><strong>突然発症</strong>／<strong>引き裂く・鋭い・激烈</strong>／胸・背・腹に<strong>移動する</strong></td></tr>
+            <tr><td><strong>③ 身体所見</strong></td><td><strong>脈拍欠損／上肢血圧差 ≥20 mmHg</strong>／<strong>新規 AR 雑音</strong>／<strong>低血圧・ショック</strong>／<strong>巣症状（脳虚血・対麻痺）</strong></td></tr>
+          </tbody>
+        </table></div>
+
+        <h3>初療 5 分でやること</h3>
+        <ol>
+          <li><strong>両上肢血圧</strong>と<strong>頸動脈・四肢動脈触知</strong>（左右差・脈拍欠損）</li>
+          <li><strong>心電図</strong>（下壁 STEMI 様 = 右冠動脈口の解離をまず除外）</li>
+          <li><strong>聴診</strong>（新規 AR・心音減弱）</li>
+          <li><strong>POCUS</strong>（心嚢液／TR 圧較差／IVC／腹部大動脈の内膜フラップ）</li>
+          <li><strong>採血ルート確保＋血型／クロスマッチ</strong>を同時に出す</li>
+        </ol>
+
+        <div class="callout callout-warning">
+          <div class="callout-title">非典型プレゼンテーションを忘れない</div>
+          <div class="callout-body"><ul>
+            <li><strong>失神のみ</strong>（弓部分枝解離・タンポナーデ）</li>
+            <li><strong>脳卒中様</strong>（左総頸動脈解離 → 右片麻痺）</li>
+            <li><strong>下壁 STEMI 様</strong>（右冠動脈口の解離）— PCI で抗血栓 → 致命的</li>
+            <li><strong>対麻痺・腸間膜虚血・無尿・下肢虚血</strong>（malperfusion）</li>
+            <li><strong>無痛性</strong>解離が約 5〜10% 存在する</li>
+          </ul></div>
+        </div>
+      </section>
+
+      <!-- §s2 ADD-RS と D-dimer -->
+      <section class="section-page" id="s2" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🧮 ADD-RS スコアと D-dimer</h2>
+
+        <h3>ADD-RS（Aortic Dissection Detection Risk Score）</h3>
+        <ul>
+          <li>3 カテゴリ（高リスク病歴／疼痛特性／身体所見）。<strong>各カテゴリに 1 つでも該当すれば 1 点</strong>。</li>
+          <li>0 点＝低／1 点＝中／2-3 点＝高。</li>
+        </ul>
+
+        <h3>ADvISED 試験のフレーム</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>ADD-RS</th><th>D-dimer</th><th>方針</th></tr></thead>
+          <tbody>
+            <tr><td>0 点</td><td>陰性（&lt;500 ng/mL）</td><td><strong>除外可</strong>（造影 CT 不要）</td></tr>
+            <tr><td>1 点</td><td>陰性</td><td><strong>除外補助</strong>。臨床判断で慎重に</td></tr>
+            <tr><td>1 点</td><td>陽性</td><td><strong>造影 CT</strong></td></tr>
+            <tr><td>2-3 点</td><td>—</td><td><strong>D-dimer 不要、即造影 CT</strong></td></tr>
+          </tbody>
+        </table></div>
+
+        <div class="callout callout-warning">
+          <div class="callout-title">D-dimer 単独で除外しない</div>
+          <div class="callout-body"><ul>
+            <li>偽陰性が一定割合存在する（<strong>IMH／短い解離／血栓化偽腔</strong>では D-dimer が上がりにくい）。</li>
+            <li><strong>ADD-RS とセット</strong>で初めて除外補助になる（ADvISED 試験 2018, Nazerian P）。</li>
+            <li>強い臨床疑いがあれば D-dimer 陰性でも造影 CT。</li>
+          </ul></div>
+        </div>
+
+        <h3>鑑別診断</h3>
+        <ul>
+          <li><strong>ACS</strong>（特に下壁 STEMI 様）— 抗血小板・抗凝固を入れる前に解離を否定</li>
+          <li><strong>PE</strong> — 突然の呼吸困難＋胸痛で重なる</li>
+          <li><strong>食道破裂（Boerhaave）</strong> — 嘔吐後の胸痛・縦隔気腫</li>
+          <li><strong>急性腹症</strong>（腸間膜虚血・破裂性 AAA）</li>
+          <li><strong>脳卒中</strong>（弓部分枝解離による）</li>
+        </ul>
+      </section>
+
+      <!-- §s3 造影 CT 所見と Stanford 分類 -->
+      <section class="section-page" id="s3" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>📷 造影 CT 所見と Stanford 分類</h2>
+
+        <h3>撮影プロトコル</h3>
+        <ul>
+          <li><strong>単純＋造影（動脈相）の 2 相</strong>。</li>
+          <li>範囲：<strong>頸部根部から骨盤</strong>まで（弓部分枝・腎動脈・腸骨動脈の評価）。</li>
+          <li>スライス薄切（1 mm 以下）で<strong>真腔／偽腔／内膜フラップ／エントリー位置</strong>を同定。</li>
+        </ul>
+
+        <h3>所見の見方</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>所見</th><th>読み方</th></tr></thead>
+          <tbody>
+            <tr><td><strong>内膜フラップ</strong></td><td>大動脈内腔を 2 つに分ける線状低吸収。<strong>古典的解離の確定所見</strong></td></tr>
+            <tr><td><strong>真腔／偽腔</strong></td><td>真腔は通常小さく流速速い／偽腔は大きく流速遅く血栓化することも。<strong>cobweb sign（蜘蛛の巣）</strong>は偽腔のサイン</td></tr>
+            <tr><td><strong>IMH（壁内血腫）</strong></td><td><strong>内膜フラップなし</strong>、単純 CT で<strong>三日月状の高吸収壁肥厚（&gt;5 mm）</strong>。造影で増強されない</td></tr>
+            <tr><td><strong>PAU（penetrating atherosclerotic ulcer）</strong></td><td>動脈硬化性プラークに<strong>潰瘍様陥凹＋造影効果</strong>。下行大動脈が好発</td></tr>
+            <tr><td><strong>心嚢液</strong></td><td>A 型 → タンポナーデ徴候</td></tr>
+            <tr><td><strong>分枝閉塞</strong></td><td>弓部分枝・冠動脈口・腹腔／上腸間膜／腎／腸骨 — malperfusion の評価</td></tr>
+          </tbody>
+        </table></div>
+
+        <h3>Stanford 分類</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>分類</th><th>範囲</th><th>頻度</th><th>治療方針</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Stanford A</strong></td><td><strong>上行大動脈を含む</strong>（DeBakey I・II 相当）</td><td>約 60-70%</td><td><strong>緊急手術</strong>（無治療では 24h 死亡 1〜2%/h）</td></tr>
+            <tr><td><strong>Stanford B</strong></td><td><strong>上行を含まず下行のみ</strong>（左鎖骨下動脈分岐より遠位）</td><td>約 30-40%</td><td>原則<strong>内科管理</strong>。合併症（破裂・malperfusion・難治痛・進行性）あり → <strong>TEVAR</strong></td></tr>
+          </tbody>
+        </table></div>
+
+        <h3>代替モダリティ</h3>
+        <ul>
+          <li><strong>TEE（経食道心エコー）</strong>：CT 撮影困難な不安定例・術中評価。A 型の確定に有用</li>
+          <li><strong>MRI</strong>：慢性解離の経過観察・造影禁忌例</li>
+          <li>救急初療の第一選択は<strong>造影 CT</strong>で動かない</li>
+        </ul>
+      </section>
+
+      <!-- §s4 Stanford A の方針 -->
+      <section class="section-page" id="s4" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>❤️‍🔥 Stanford A — 緊急手術</h2>
+
+        <div class="callout callout-danger">
+          <div class="callout-title">Stanford A は確定即コール・即手術</div>
+          <div class="callout-body"><ul>
+            <li><strong>無治療死亡率は 1〜2%/h</strong>。診断 → コール → 手術室の時間を 1 分でも短くする。</li>
+            <li>確定 CT 画像が出た瞬間に<strong>心臓血管外科オンコール</strong>に電話。</li>
+            <li>転院搬送が必要な場合も<strong>降圧・心拍数管理は搬送中も継続</strong>。</li>
+          </ul></div>
+        </div>
+
+        <h3>術式</h3>
+        <ul>
+          <li><strong>上行大動脈置換</strong>（人工血管）が基本</li>
+          <li>大動脈基部に及ぶ → <strong>Bentall 手術／David 手術</strong>（弁温存）</li>
+          <li>弓部に及ぶ → <strong>弓部置換／total arch replacement／FET（frozen elephant trunk）</strong></li>
+          <li>冠動脈口解離 → <strong>CABG 併施</strong></li>
+        </ul>
+
+        <h3>術前にやっておくこと</h3>
+        <ul>
+          <li><strong>輸血準備</strong>（クロスマッチ、RBC 4-6 単位以上、新鮮凍結血漿、血小板）</li>
+          <li><strong>動脈圧ライン</strong>（解離していない側の橈骨）</li>
+          <li><strong>中心静脈ライン</strong>（必要に応じて）</li>
+          <li><strong>抗血小板・抗凝固は禁</strong>（出血助長）</li>
+          <li><strong>降圧・心拍数管理を継続</strong>（§s6）</li>
+          <li>同意書（手術・輸血・ICU・補助循環）</li>
+        </ul>
+
+        <div class="callout callout-warning">
+          <div class="callout-title">高齢・併存症で手術リスクが高くても</div>
+          <div class="callout-body"><p>「手術不能」と即断しない。<strong>心臓外科と必ず相談</strong>。最近は 80 代でも適応例がある。手術しないと<strong>院内死亡 50% 以上</strong>。</p></div>
+        </div>
+      </section>
+
+      <!-- §s5 Stanford B の方針 -->
+      <section class="section-page" id="s5" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🩺 Stanford B — 内科管理 ／ TEVAR</h2>
+
+        <h3>分類</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>サブタイプ</th><th>所見</th><th>方針</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Uncomplicated B（非合併型）</strong></td><td>合併症なし／血行動態安定／疼痛コントロール可</td><td><strong>内科管理</strong>（ICU で降圧・心拍数管理）</td></tr>
+            <tr><td><strong>Complicated B（合併型）</strong></td><td>破裂・切迫破裂・malperfusion（脳・脊髄・腸間膜・腎・下肢）・難治痛・難治高血圧・急速進行</td><td><strong>TEVAR（胸部ステントグラフト）が第一選択</strong></td></tr>
+          </tbody>
+        </table></div>
+
+        <h3>内科管理の柱</h3>
+        <ul>
+          <li>ICU モニタ（動脈圧ライン・尿量・四肢脈拍・神経所見）</li>
+          <li>SBP 100-120 mmHg／HR ≤60 bpm を維持（§s6）</li>
+          <li>疼痛コントロール（モルヒネ）</li>
+          <li><strong>連日の造影 CT は不要</strong>。症状変化で再撮影</li>
+          <li>退院後も<strong>長期降圧（β 遮断薬・ARB）</strong>と<strong>定期画像フォロー</strong></li>
+        </ul>
+
+        <h3>TEVAR の適応タイミング</h3>
+        <ul>
+          <li>破裂・切迫破裂 → <strong>緊急 TEVAR</strong></li>
+          <li>malperfusion → <strong>緊急 TEVAR ± fenestration / 分枝バイパス</strong></li>
+          <li>近年は uncomplicated でも<strong>亜急性期（2 週〜3 ヵ月）の preemptive TEVAR</strong>で長期予後を改善する報告（INSTEAD-XL／ADSORB）</li>
+        </ul>
+
+        <div class="callout callout-warning">
+          <div class="callout-title">B 型でも「内科管理だから安全」ではない</div>
+          <div class="callout-body"><p>初期の院内死亡率は 10% 前後。<strong>malperfusion を毎時間チェック</strong>（四肢脈拍・腹痛・尿量・下肢運動）。腎機能と乳酸を経時的に。</p></div>
+        </div>
+      </section>
+
+      <!-- §s6 急性期管理 -->
+      <section class="section-page" id="s6" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>💊 急性期管理（impulse 制御）</h2>
+
+        <div class="callout callout-summary">
+          <div class="callout-title">血圧と心拍数を「同時に」下げる</div>
+          <div class="callout-body"><ul>
+            <li>目標：<strong>SBP 100-120 mmHg／HR ≤60 bpm</strong>（脳・腎・腸の灌流を保ちつつ大動脈壁ストレスを下げる）。</li>
+            <li>「dP/dt（圧の立ち上がり速度）」を下げる発想。<strong>β 遮断薬を先行</strong>させてから血管拡張薬を足す。</li>
+            <li>逆順（血管拡張薬を先行）で反射性頻脈が起き、解離が進展する。</li>
+          </ul></div>
+        </div>
+
+        <h3>第一選択：β 遮断薬（持続静注）</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>薬剤</th><th>用量</th><th>備考</th></tr></thead>
+          <tbody>
+            <tr><td><strong>ランジオロール（オノアクト）</strong></td><td>1〜10 γ で開始、HR で調整</td><td>超短時間作用、心機能低下例にも使いやすい</td></tr>
+            <tr><td><strong>エスモロール</strong></td><td>0.5 mg/kg ボーラス → 50〜200 γ</td><td>超短時間作用</td></tr>
+            <tr><td><strong>プロプラノロール</strong></td><td>1 mg ずつ静注（最大 5 mg）</td><td>持続静注のラインを取るまでの繋ぎ</td></tr>
+          </tbody>
+        </table></div>
+
+        <h3>追加：Ca 拮抗薬（β で SBP が下がらないとき）</h3>
+        <ul>
+          <li><strong>ニカルジピン</strong> 1〜10 γ で持続静注（5 分ごとに titrate）</li>
+          <li><strong>ニトロプルシド</strong> 0.25〜10 γ も可だが、<strong>β 単独より先に使うのは禁</strong>（反射性頻脈）</li>
+        </ul>
+
+        <h3>鎮痛</h3>
+        <ul>
+          <li><strong>硫酸モルヒネ</strong> 2〜4 mg 静注、必要に応じて反復</li>
+          <li>痛みを取ることでカテコラミン分泌が抑えられ降圧が容易になる</li>
+        </ul>
+
+        <h3>禁忌・注意</h3>
+        <div class="callout callout-danger">
+          <div class="callout-title">抗血小板・抗凝固は禁</div>
+          <div class="callout-body"><ul>
+            <li><strong>ASA／クロピドグレル／ヘパリン／DOAC は禁</strong>（出血助長）。</li>
+            <li>下壁 STEMI 様 ECG で<strong>ACS と取り違えて DAPT・ヘパリン</strong>を入れると致命的。<strong>「下壁 STEMI 様＋上肢血圧差」は必ず造影 CT で解離を否定</strong>。</li>
+            <li>急性 AR の重症例では<strong>β 遮断薬で代償頻脈が消えてショック</strong>になることがある。慎重に titrate。</li>
+            <li>気管支喘息・高度徐脈・II 度以上の AVB ではβ 遮断薬を避け、Ca 拮抗薬（ジルチアゼム静注）を考慮。</li>
+          </ul></div>
+        </div>
+      </section>
+
+      <!-- §s7 合併症 -->
+      <section class="section-page" id="s7" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>⚡ 合併症</h2>
+
+        <div class="callout callout-summary">
+          <div class="callout-title">A 型の死亡原因の大半は合併症</div>
+          <div class="callout-body"><p>解離そのものより、<strong>心タンポナーデ・急性 AR・冠動脈解離</strong>が直接の死因。診断と並行で常にチェック。</p></div>
+        </div>
+
+        <h3>① 心タンポナーデ（A 型に多い・最頻死因）</h3>
+        <ul>
+          <li><strong>奇脈・ベック三徴（低血圧・心音減弱・頸静脈怒張）</strong></li>
+          <li>POCUS で心嚢液＋右房・右室虚脱</li>
+          <li>原則<strong>心嚢穿刺は避ける</strong>（圧解放で出血再開・予後悪化）。<strong>手術室直行</strong>が原則</li>
+          <li>ショックで搬送できないときのみ少量（30〜50 mL）穿刺で繋ぐ</li>
+        </ul>
+
+        <h3>② 急性 AR</h3>
+        <ul>
+          <li>弁尖の支持構造が解離で破綻 → 急性肺水腫</li>
+          <li>新規拡張期雑音・S3</li>
+          <li>急性 AR では<strong>IABP は禁忌</strong>（拡張期に逆流増悪）</li>
+          <li>NPPV／挿管で凌ぎ、即手術へ</li>
+        </ul>
+
+        <h3>③ 冠動脈解離（下壁 STEMI 様）</h3>
+        <ul>
+          <li>右冠動脈口が解離に巻き込まれる頻度が高い → <strong>下壁 ST 上昇</strong></li>
+          <li>「下壁 STEMI で抗血小板 → 致命的」を避けるため、<strong>下壁 STEMI＋上肢血圧差・新規 AR</strong>では必ず造影 CT 先行</li>
+          <li>解離合併冠動脈解離は<strong>手術＋ CABG</strong>が原則</li>
+        </ul>
+
+        <h3>④ 脳虚血（弓部分枝閉塞）</h3>
+        <ul>
+          <li>左総頸動脈／腕頭動脈解離 → 片麻痺・意識障害</li>
+          <li><strong>tPA は禁忌</strong>（出血助長）。緊急手術で再灌流</li>
+        </ul>
+
+        <h3>⑤ 対麻痺（前脊髄動脈虚血）</h3>
+        <ul>
+          <li>下行大動脈解離で Adamkiewicz 動脈や肋間動脈閉塞 → 急性対麻痺</li>
+          <li>術後にも起こり得る。<strong>髄液ドレナージ／MAP 高め維持</strong>で予防</li>
+        </ul>
+
+        <h3>⑥ malperfusion（腸間膜・腎・下肢）</h3>
+        <ul>
+          <li><strong>腸間膜虚血</strong>：腹痛・乳酸上昇・代謝性アシドーシス</li>
+          <li><strong>腎虚血</strong>：無尿・Cre 急上昇</li>
+          <li><strong>下肢虚血</strong>：左右の脈拍差・冷感・疼痛・知覚低下</li>
+          <li>合併型 B 型として<strong>緊急 TEVAR ± fenestration / 分枝バイパス</strong></li>
+        </ul>
+      </section>
+
+      <!-- §s8 コンサルト文 -->
+      <section class="section-page" id="s8" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>📞 コンサルト文（テンプレート）</h2>
+
+        <p>『他科コンサルト実践マニュアル』の院内紹介状フォーマットに準拠（【目的】【疾患】【既往歴】【内服薬】【ADL】【現病歴】）。<strong>抗血小板・抗凝固歴</strong>は出血リスク評価に直結するので必ず明記。</p>
+
+        <h3>心臓血管外科宛て（Stanford A）</h3>
+        <div class="callout callout-summary">
+          <div class="callout-body">
+<pre>【目的】Stanford A 型急性大動脈解離の緊急手術依頼。
+【疾患】#1 急性大動脈解離 Stanford A（DeBakey [I／II]）
+　　　　#2 [心タンポナーデ／急性 AR／冠動脈解離／脳虚血／対麻痺／malperfusion／なし]
+　　　　#3 [既知大動脈疾患／なし]
+【既往歴】[高血圧／Marfan／大動脈疾患の家族歴／既知 AAA／○○]
+【内服薬】[なし／降圧薬 ○○／抗血小板薬 ○○（最終内服：○○）／抗凝固薬 ○○（最終：○○）]
+【ADL（発症前）】[独歩／杖／介助／車椅子]
+【現病歴】[年齢]歳[男／女]性。[受診経緯：突然の引き裂く胸背部痛／失神／脳卒中様／下壁 STEMI 様]で来院。
+ ・バイタル：BP 右○/○・左○/○（差 ○ mmHg）、HR ○、RR ○、SpO2 ○%、体温 ○
+ ・身体所見：上肢血圧差 [あり／なし]、脈拍欠損 [部位]、新規 AR 雑音 [あり／なし]、頸静脈怒張 [あり／なし]、神経所見 [なし／○○]
+ ・心電図：[正常／下壁 ST 上昇／低電位／○○]
+ ・血液：D-dimer ○ ng/mL、トロポニン ○、Cre ○、Hb ○、Plt ○、PT-INR ○、乳酸 ○
+ ・画像：造影 CT で[上行〜弓部〜下行〜腹部]に解離、エントリー [部位]、心嚢液 [あり／なし]、分枝 [○○]、RV/LV 比 ○
+ ・POCUS：心嚢液 [あり／なし]、AR [Sellers ○]、IVC ○ mm
+ ・ER 処置：ランジオロール ○ γ・ニカルジピン ○ γ で SBP ○／HR ○、モルヒネ ○ mg、輸血クロス ○ 単位準備、動脈ライン [○○側]
+ ・抗血小板・抗凝固：[未投与／○○ 投与済（時刻 ○○）]
+よろしくお願いいたします。</pre>
+          </div>
+        </div>
+
+        <h3>循環器内科宛て（Stanford B uncomplicated）</h3>
+        <div class="callout callout-summary">
+          <div class="callout-body">
+<pre>【目的】Stanford B 型急性大動脈解離（uncomplicated）の ICU 内科管理依頼。
+【疾患】#1 急性大動脈解離 Stanford B（左鎖骨下分岐遠位〜[腹部／腸骨])
+　　　　#2 [合併症なし／○○]
+　　　　#3 [高血圧／既知大動脈疾患／○○]
+【既往歴】[高血圧／喫煙／○○]
+【内服薬】[降圧薬 ○○／なし]
+【ADL（発症前）】[独歩／○○]
+【現病歴】[年齢]歳[男／女]性。[突然の背部痛／胸背部痛]で来院。
+ ・バイタル：BP ○/○、HR ○、RR ○、SpO2 ○%、体温 ○
+ ・身体所見：上肢血圧差 [なし／あり]、四肢脈拍 [対称]、神経所見なし、腹部所見なし
+ ・心電図：[正常／○○]
+ ・血液：D-dimer ○、トロポニン陰性、Cre ○、乳酸 ○
+ ・画像：造影 CT で下行大動脈〜[範囲]に解離、エントリー [部位]、分枝閉塞なし、破裂・血腫なし、偽腔 [開存／血栓化]
+ ・重症度：Uncomplicated B、合併症なし
+ ・ER 処置：ランジオロール ○ γ・ニカルジピン ○ γ で SBP ○／HR ○、モルヒネ ○ mg、動脈ライン [○○側]
+ ・抗血小板・抗凝固：[未投与／○○]
+よろしくお願いいたします。</pre>
+          </div>
+        </div>
+      </section>
+
+      <!-- §s9 やりがちなミス -->
+      <section class="section-page" id="s9" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>⚠️ やりがちなミス</h2>
+
+        <ul>
+          <li><strong>下壁 STEMI 様 ECG で抗血小板・ヘパリンを即投与</strong>：右冠動脈口の解離を見落とすと致命的。<strong>上肢血圧差・新規 AR・引き裂く痛み</strong>の有無を必ず確認</li>
+          <li><strong>D-dimer 陰性で除外</strong>：単独除外は不可。<strong>ADD-RS とセット</strong>で初めて除外補助</li>
+          <li><strong>降圧不足のまま放置</strong>：SBP 140 のままでは進展する。<strong>SBP 100-120／HR ≤60 を 30 分以内に</strong></li>
+          <li><strong>β 遮断薬を入れずにニカルジピン単独</strong>：反射性頻脈で dP/dt が上昇し進展</li>
+          <li><strong>無痛性／非典型例で疑わない</strong>：失神のみ・脳卒中様・対麻痺のみ・腹痛のみで来る症例がある</li>
+          <li><strong>A 型を見逃して時間を浪費</strong>：1 時間で 1〜2% 死亡が積み重なる。確定即コール</li>
+          <li><strong>急性 AR に IABP</strong>：禁忌。拡張期逆流が増悪</li>
+          <li><strong>タンポナーデで心嚢穿刺を急ぐ</strong>：圧解放で再出血。原則手術室直行</li>
+          <li><strong>B 型を「内科だから安心」</strong>：malperfusion・破裂・進行を毎時間チェック</li>
+          <li><strong>転院搬送中の降圧中断</strong>：搬送中も持続静注を継続</li>
+        </ul>
+      </section>
+
+      <!-- §s10 出典・関連リンク -->
+      <section class="section-page" id="s10" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>📚 出典・関連リンク</h2>
+
+        <h3>主な出典</h3>
+        <ul>
+          <li><strong>2022 ACC/AHA Guideline for the Diagnosis and Management of Aortic Disease</strong>：Isselbacher EM ほか. <em>Circulation.</em> 2022;146:e334-e482.
+            <p><a class="wiki-link" href="https://doi.org/10.1161/CIR.0000000000001106">https://doi.org/10.1161/CIR.0000000000001106</a></p>
+          </li>
+          <li><strong>JCS 2020 大動脈瘤・大動脈解離診療ガイドライン</strong>：荻野均ほか. 日本循環器学会.
+            <p><a class="wiki-link" href="https://www.j-circ.or.jp/cms/wp-content/uploads/2020/07/JCS2020_Ogino.pdf">JCS 2020 ガイドライン PDF</a></p>
+          </li>
+          <li><strong>ADvISED 試験</strong>：Nazerian P ほか. Diagnostic Accuracy of the Aortic Dissection Detection Risk Score Plus D-Dimer for Acute Aortic Syndromes. <em>Circulation.</em> 2018;137:250-258.</li>
+          <li><strong>IRAD（International Registry of Acute Aortic Dissection）</strong>：疫学・予後の reference</li>
+          <li><strong>INSTEAD-XL 試験</strong>：Nienaber CA ほか. Endovascular Repair of Type B Aortic Dissection: Long-term Results. <em>Circ Cardiovasc Interv.</em> 2013;6:407-416.</li>
+        </ul>
+
+        <h3>関連ページ</h3>
+        <ul>
+          <li><a class="wiki-link" href="../胸痛.html">胸痛</a> — 致死 5 のフロー</li>
+          <li><a class="wiki-link" href="../呼吸困難.html">呼吸困難</a> — 急性 AR・タンポナーデ</li>
+          <li><a class="wiki-link" href="../意識消失.html">意識消失</a> — 弓部分枝解離・タンポナーデ</li>
+          <li><a class="wiki-link" href="STEMI.html">STEMI</a> — 下壁 STEMI 様 ECG の鑑別</li>
+          <li><a class="wiki-link" href="急性心不全.html">急性心不全</a> — CHAMPIT の M（機械的合併症）</li>
+          <li><a class="wiki-link" href="肺塞栓.html">肺塞栓</a> — D-dimer と造影 CT の使い分け</li>
+          <li><a class="wiki-link" href="破裂性腹部大動脈瘤.html">破裂性腹部大動脈瘤</a></li>
+        </ul>
+
+        <p>#ER #救急 #大動脈解離 #Stanford #ADD-RS #ADvISED #IMH #PAU #malperfusion</p>
+      </section>
+
+    </article>
+  </main>
+
+  <nav class="hokuto-bottom">
+    <button class="hokuto-bottom__btn" type="button" id="navBack">
+      <span class="hokuto-bottom__icon">←</span><span>戻る</span>
+    </button>
+    <a class="hokuto-bottom__btn" href="../ツール.html">
+      <span class="hokuto-bottom__icon">⚙</span><span>ツール</span>
+    </a>
+    <a class="hokuto-bottom__btn" href="../index.html">
+      <span class="hokuto-bottom__icon">⌂</span><span>ホーム</span>
+    </a>
+  </nav>
+
+  <script>
+  (function(){
+    const menu = document.getElementById('sectionMenu');
+    const pages = document.querySelectorAll('.section-page');
+    const titleH1 = document.querySelector('.page-title');
+    const flowBoxes = document.querySelectorAll('.flow-box');
+    const actionHeaders = document.querySelectorAll('.action-header:not(.flow-box)');
+    const relatedSymp = document.getElementById('related-symptoms');
+
+    function showSection(id) {
+      if (menu) menu.hidden = true;
+      if (titleH1) titleH1.hidden = true;
+      flowBoxes.forEach(b => b.hidden = true);
+      actionHeaders.forEach(h => h.hidden = true);
+      if (relatedSymp) relatedSymp.hidden = true;
+      pages.forEach(p => p.hidden = (p.id !== id));
+      window.scrollTo(0, 0);
+    }
+    function showMenu(scrollTarget) {
+      if (menu) menu.hidden = false;
+      if (titleH1) titleH1.hidden = false;
+      flowBoxes.forEach(b => b.hidden = false);
+      actionHeaders.forEach(h => h.hidden = false);
+      if (relatedSymp) relatedSymp.hidden = false;
+      pages.forEach(p => p.hidden = true);
+      if (scrollTarget) {
+        if (scrollTarget.tagName === 'DETAILS') scrollTarget.open = true;
+        scrollTarget.scrollIntoView({behavior: 'instant', block: 'start'});
+      } else {
+        window.scrollTo(0, 0);
+      }
+    }
+    function syncFromHash() {
+      const id = (location.hash || '').replace('#','');
+      const target = id ? document.getElementById(id) : null;
+      if (target && target.classList.contains('section-page')) {
+        showSection(id);
+      } else if (target) {
+        showMenu(target);
+      } else {
+        showMenu();
+      }
+    }
+
+    window.addEventListener('hashchange', syncFromHash);
+    document.querySelectorAll('.back-to-menu').forEach(b => {
+      b.addEventListener('click', () => { history.pushState(null,'',location.pathname); showMenu(); });
+    });
+    const navBack = document.getElementById('navBack');
+    if (navBack) navBack.addEventListener('click', () => {
+      if (window.history.length > 1) history.back();
+      else window.location.href = '../index.html';
+    });
+
+    syncFromHash();
+  })();
+  </script>
+</body>
+</html>

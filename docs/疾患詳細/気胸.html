@@ -6,6 +6,168 @@
   <meta name="color-scheme" content="light dark" />
   <title>気胸 | ER ノート</title>
   <link rel="stylesheet" href="../er-note.css" />
+  <style>
+    /* === 診療フロー（このページ専用） === */
+    .flow-box { position: static; user-select: none; }
+    .flow-box__title {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 0.5rem; cursor: default; padding: 2px 0;
+    }
+    .flow-canvas {
+      background: var(--surface);
+      border-radius: 10px;
+      padding: 14px 10px 18px;
+      margin-top: 0.55rem;
+      overflow-x: auto; overflow-y: hidden;
+      -webkit-overflow-scrolling: touch;
+      touch-action: pan-x pan-y pinch-zoom;
+    }
+    .flow-canvas__hint {
+      font-size: 0.72rem; color: var(--muted);
+      text-align: center; margin: 0 0 0.6rem 0;
+    }
+    .flow-canvas__divider {
+      text-align: center; font-weight: 700; font-size: 12px;
+      color: var(--accent); margin: 14px 0 8px;
+      border-top: 1px dashed color-mix(in srgb, var(--text) 25%, transparent);
+      padding-top: 10px; letter-spacing: 1px;
+    }
+    .dx-flow {
+      min-width: 720px; margin: 0 auto; padding: 4px 6px 8px;
+      font-size: 14px; line-height: 1.45; color: var(--text); font-family: inherit;
+    }
+    .dx-node {
+      background: var(--surface);
+      border: 1.5px solid color-mix(in srgb, var(--text) 22%, transparent);
+      border-radius: 10px; padding: 8px 12px; text-align: center;
+      box-shadow: 0 1px 2px var(--shadow, rgba(0,0,0,0.06));
+      min-height: 38px;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 2px; text-decoration: none; color: var(--text);
+    }
+    .dx-node__title { font-weight: 700; font-size: 13.5px; }
+    .dx-node__sub   { font-size: 11.5px; color: var(--muted); font-weight: 500; }
+    .dx-node--decision {
+      background: color-mix(in srgb, var(--accent) 12%, var(--surface));
+      border-color: var(--accent); border-radius: 14px;
+    }
+    .dx-node--danger {
+      background: color-mix(in srgb, #c0392b 14%, var(--surface));
+      border-color: #c0392b;
+    }
+    .dx-node--danger .dx-node__title { color: #c0392b; }
+    .dx-node--action {
+      background: color-mix(in srgb, var(--text) 5%, var(--surface));
+      border-style: dashed;
+    }
+    .dx-node--external {
+      border-style: dashed; position: relative;
+      background: color-mix(in srgb, var(--accent) 6%, var(--surface));
+    }
+    .dx-node--external::after {
+      content: "↗"; position: absolute; top: 4px; right: 8px;
+      font-size: 12px; color: var(--accent); opacity: 0.85;
+    }
+    .dx-node--warn {
+      background: color-mix(in srgb, #d4a017 14%, var(--surface));
+      border-color: #d4a017;
+    }
+    .dx-node--warn .dx-node__title { color: #9b7508; }
+
+    .dx-layer { display: grid; gap: 14px; align-items: stretch; margin: 0; }
+    .dx-layer--root   { grid-template-columns: 1fr; justify-items: center; }
+    .dx-layer--root > * { max-width: 360px; }
+    .dx-layer--branch { grid-template-columns: 1fr 1fr; }
+    .dx-layer--tri    { grid-template-columns: repeat(3, 1fr); }
+    .dx-layer--quad   { grid-template-columns: repeat(4, 1fr); }
+    .dx-layer--quint  { grid-template-columns: repeat(5, 1fr); }
+    .dx-layer--hex    { grid-template-columns: repeat(6, 1fr); }
+
+    .dx-arrow {
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      position: relative; margin: 4px 0; min-height: 44px;
+      color: var(--muted); font-size: 11.5px; font-weight: 600;
+    }
+    .dx-arrow::before {
+      content: ""; width: 2px; height: 100%; min-height: 38px;
+      background: color-mix(in srgb, var(--text) 35%, transparent);
+    }
+    .dx-arrow::after {
+      content: ""; position: absolute; bottom: 0;
+      width: 0; height: 0;
+      border-left: 5px solid transparent; border-right: 5px solid transparent;
+      border-top: 7px solid color-mix(in srgb, var(--text) 35%, transparent);
+    }
+    .dx-arrow__label {
+      background: var(--surface); padding: 1px 8px; border-radius: 999px;
+      border: 1px solid color-mix(in srgb, var(--text) 18%, transparent);
+      position: absolute; left: 50%; top: 50%;
+      transform: translate(-50%, -50%); white-space: nowrap; z-index: 1;
+    }
+
+    .dx-fork {
+      display: grid; grid-template-columns: 1fr 1fr;
+      position: relative; min-height: 38px; margin: 2px 0 4px;
+    }
+    .dx-fork::before {
+      content: ""; position: absolute;
+      top: 0; left: 25%; right: 25%; height: 2px;
+      background: color-mix(in srgb, var(--text) 35%, transparent);
+    }
+    .dx-fork__leg {
+      position: relative; display: flex; flex-direction: column;
+      align-items: center; justify-content: flex-end;
+      padding-top: 4px; padding-bottom: 4px;
+      font-size: 11.5px; font-weight: 600; color: var(--muted);
+      min-height: 36px;
+    }
+    .dx-fork__leg::before {
+      content: ""; width: 2px; flex: 1;
+      background: color-mix(in srgb, var(--text) 35%, transparent);
+    }
+    .dx-fork__leg::after {
+      content: ""; position: absolute; bottom: 0;
+      width: 0; height: 0;
+      border-left: 5px solid transparent; border-right: 5px solid transparent;
+      border-top: 7px solid color-mix(in srgb, var(--text) 35%, transparent);
+    }
+    .dx-fork__label {
+      background: var(--surface); padding: 1px 8px; border-radius: 999px;
+      border: 1px solid color-mix(in srgb, var(--text) 18%, transparent);
+      margin-bottom: 2px; z-index: 1;
+    }
+
+    .section-tiles { display: none !important; }
+
+    @media (max-width: 600px) {
+      .dx-flow { min-width: 0; font-size: 11px; padding: 2px 0 6px; }
+      .flow-canvas { overflow-x: hidden; padding: 8px 6px 12px; }
+      .flow-canvas__hint { font-size: 0.62rem; margin-bottom: 0.35rem; }
+      .flow-canvas__divider { font-size: 10px; margin: 8px 0 5px; padding-top: 6px; }
+      .dx-node { padding: 4px 5px; min-height: 28px; border-radius: 7px; gap: 1px; }
+      .dx-node__title { font-size: 10px; line-height: 1.22; }
+      .dx-node__sub   { font-size: 8.5px; line-height: 1.25; }
+      .dx-node--decision { border-radius: 8px; }
+      .dx-node--external::after { top: 2px; right: 4px; font-size: 9px; }
+      .dx-layer { gap: 5px; }
+      .dx-layer--root > * { max-width: none; width: 100%; }
+      .dx-layer--tri  { grid-template-columns: repeat(3, 1fr); }
+      .dx-layer--quad { grid-template-columns: 1fr 1fr; }
+      .dx-layer--quint { grid-template-columns: repeat(3, 1fr); }
+      .dx-layer--hex   { grid-template-columns: repeat(3, 1fr); }
+      .dx-arrow { min-height: 22px; margin: 1px 0; }
+      .dx-arrow::before { min-height: 18px; width: 1.5px; }
+      .dx-arrow::after { border-left-width: 4px; border-right-width: 4px; border-top-width: 6px; }
+      .dx-arrow__label { font-size: 8.5px; padding: 0 4px; line-height: 1.4; }
+      .dx-fork { min-height: 22px; }
+      .dx-fork::before { height: 1.5px; }
+      .dx-fork__leg { min-height: 22px; padding-top: 2px; padding-bottom: 2px; font-size: 9px; }
+      .dx-fork__leg::before { width: 1.5px; }
+      .dx-fork__leg::after { border-left-width: 4px; border-right-width: 4px; border-top-width: 6px; }
+      .dx-fork__label { font-size: 8.5px; padding: 0 4px; margin-bottom: 0; }
+    }
+  </style>
 </head>
 <body>
   <header class="hokuto-top">
@@ -21,23 +183,153 @@
     <article class="note-shell">
       <h1 class="page-title">気胸</h1>
 
-      <!-- 即時アクションヘッダー（常時 sticky） -->
-      <div class="action-header">
-        <div class="action-header__title">⚡ 即時アクション</div>
-        <ol class="action-header__list">
-          <li><strong>緊張性気胸は臨床診断</strong>：片側呼吸音消失＋頸静脈怒張＋低血圧／ショック → <strong>画像を待たず第 2 肋間鎖骨中線（または第 4-5 肋間前腋窩線）で減圧穿刺</strong></li>
-          <li><strong>突然発症の片側胸痛＋呼吸困難</strong> → CXR / POCUS で診断（POCUS：lung sliding 消失＋lung point は CXR より高感度）</li>
-          <li><strong>分類を即決</strong>：自然気胸（PSP / SSP）／外傷性／医原性 — その後の治療方針が変わる</li>
-          <li><strong>大きさ・症状・基礎疾患で治療を選ぶ</strong>：観察 → 酸素 → カテーテル脱気 → 胸腔ドレナージ → 手術（VATS）</li>
-        </ol>
+      <!-- 診療フロー -->
+      <div class="action-header flow-box" id="flowBox">
+        <div class="action-header__title flow-box__title">
+          <span>🗺 気胸の診療フロー（緊張性除外 → 診断 → 分類 → 治療 → 退院）</span>
+        </div>
+        <div class="flow-canvas">
+          <p class="flow-canvas__hint">最初に緊張性気胸を臨床診断で除外 → トリガーで疑う → CXR/POCUS で確定 → 分類 → BTS で治療選択 → 合併症と退院方針</p>
+          <div class="dx-flow" role="group" aria-label="気胸の診療フロー">
+
+            <!-- L0: 緊張性気胸を即除外 -->
+            <div class="dx-layer dx-layer--root">
+              <a class="dx-node dx-node--danger" href="#s5">
+                <div class="dx-node__title">🚨 緊張性気胸を即除外</div>
+                <div class="dx-node__sub">片側呼吸音消失＋頸静脈怒張＋健側 shift＋ショック → 画像を待たず針減圧→ドレナージ</div>
+              </a>
+            </div>
+
+            <div class="dx-arrow"><span class="dx-arrow__label">否定 or 安定後</span></div>
+
+            <!-- L1: 疑うトリガー -->
+            <div class="dx-layer dx-layer--root">
+              <a class="dx-node dx-node--decision" href="#s1">
+                <div class="dx-node__title">🔍 気胸を疑うトリガー</div>
+                <div class="dx-node__sub">突然発症の片側胸痛＋呼吸困難／外傷／中心静脈穿刺後／人工呼吸下の急変</div>
+              </a>
+            </div>
+
+            <div class="dx-arrow"><span class="dx-arrow__label">↓ 画像で確定</span></div>
+
+            <!-- L2: 診断 -->
+            <div class="dx-layer dx-layer--root">
+              <a class="dx-node dx-node--action" href="#s3">
+                <div class="dx-node__title">🩻 診断</div>
+                <div class="dx-node__sub">CXR（visceral pleural line／deep sulcus sign）／POCUS（lung sliding 消失・lung point）／低線量 CT</div>
+              </a>
+            </div>
+
+            <div class="dx-arrow"><span class="dx-arrow__label">↓ 病型を決める</span></div>
+
+            <!-- L3: 分類 -->
+            <div class="dx-layer dx-layer--root">
+              <a class="dx-node dx-node--decision" href="#s2">
+                <div class="dx-node__title">📊 分類</div>
+                <div class="dx-node__sub">背景・病態で 6 群に振り分け → 治療方針が変わる</div>
+              </a>
+            </div>
+
+            <div class="dx-arrow"><span class="dx-arrow__label">↓ 6 群</span></div>
+
+            <!-- L4: 6 群（hex） -->
+            <div class="dx-layer dx-layer--hex">
+              <a class="dx-node dx-node--action" href="#s2">
+                <div class="dx-node__title">PSP</div>
+                <div class="dx-node__sub">原発性自然<br>若年やせ型・喫煙</div>
+              </a>
+              <a class="dx-node dx-node--action" href="#s2">
+                <div class="dx-node__title">SSP</div>
+                <div class="dx-node__sub">続発性自然<br>COPD／ILD／肺癌</div>
+              </a>
+              <a class="dx-node dx-node--action" href="#s2">
+                <div class="dx-node__title">外傷性</div>
+                <div class="dx-node__sub">鈍的・穿通<br>肋骨骨折・血胸合併</div>
+              </a>
+              <a class="dx-node dx-node--action" href="#s2">
+                <div class="dx-node__title">医原性</div>
+                <div class="dx-node__sub">CV／胸腔穿刺／TBLB<br>バロトラウマ</div>
+              </a>
+              <a class="dx-node dx-node--danger" href="#s5">
+                <div class="dx-node__title">緊張性</div>
+                <div class="dx-node__sub">臨床診断で即減圧<br>CXR を待たない</div>
+              </a>
+              <a class="dx-node dx-node--action" href="#s2">
+                <div class="dx-node__title">月経随伴</div>
+                <div class="dx-node__sub">右側・反復<br>月経 72h 以内</div>
+              </a>
+            </div>
+
+            <div class="dx-arrow"><span class="dx-arrow__label">↓ サイズ＋症状で判断</span></div>
+
+            <!-- L5: 治療判断（BTS） -->
+            <div class="dx-layer dx-layer--root">
+              <a class="dx-node dx-node--decision" href="#s4">
+                <div class="dx-node__title">📊 治療判断（BTS algorithm）</div>
+                <div class="dx-node__sub">大きさ（≥ 2 cm）／症状／基礎肺疾患 → 観察 vs カテーテル脱気 vs 胸腔ドレナージ</div>
+              </a>
+            </div>
+
+            <div class="dx-arrow"><span class="dx-arrow__label">↓ 介入（手技）</span></div>
+
+            <!-- L6: 治療（手技 quad） -->
+            <div class="dx-layer dx-layer--quad">
+              <a class="dx-node dx-node--action" href="#s4">
+                <div class="dx-node__title">経過観察＋酸素</div>
+                <div class="dx-node__sub">小さい PSP・無症状<br>高濃度 O2 で吸収促進</div>
+              </a>
+              <a class="dx-node dx-node--action" href="#s4">
+                <div class="dx-node__title">カテーテル脱気</div>
+                <div class="dx-node__sub">PSP 大／有症状<br>16-18 G／2.5 L まで</div>
+              </a>
+              <a class="dx-node dx-node--action" href="#s4">
+                <div class="dx-node__title">胸腔ドレナージ</div>
+                <div class="dx-node__sub">SSP／外傷／緊張性後<br>safe triangle・8-14 Fr</div>
+              </a>
+              <a class="dx-node dx-node--danger" href="#s5">
+                <div class="dx-node__title">針減圧／finger thoracostomy</div>
+                <div class="dx-node__sub">緊張性<br>ATLS 10：第 4-5 肋間前腋窩線</div>
+              </a>
+            </div>
+
+            <div class="dx-arrow"><span class="dx-arrow__label">↓ 介入後の合併症</span></div>
+
+            <!-- L7: 合併症 -->
+            <div class="dx-layer dx-layer--root">
+              <a class="dx-node dx-node--warn" href="#s4">
+                <div class="dx-node__title">⚠️ 合併症</div>
+                <div class="dx-node__sub">再膨張性肺水腫の予防（初期吸引量を絞る・急な持続吸引を避ける）／血気胸の管理</div>
+              </a>
+            </div>
+
+            <div class="flow-canvas__divider">退院・再発予防・引き継ぎ</div>
+
+            <!-- L8: 外部参照 -->
+            <div class="dx-layer dx-layer--tri">
+              <a class="dx-node dx-node--external" href="#s6">
+                <div class="dx-node__title">🏥 入院・帰宅・再発予防</div>
+                <div class="dx-node__sub">禁煙／フライト／ダイビング／VATS 適応</div>
+              </a>
+              <a class="dx-node dx-node--external" href="#s7">
+                <div class="dx-node__title">⚠️ やりがちなミス</div>
+                <div class="dx-node__sub">仰臥位 CXR 見逃し／SSP 帰宅／陰圧急かけ</div>
+              </a>
+              <a class="dx-node dx-node--external" href="#s8">
+                <div class="dx-node__title">📞 コンサル文</div>
+                <div class="dx-node__sub">呼吸器外科／救急科</div>
+              </a>
+            </div>
+
+          </div>
+        </div>
       </div>
 
-      <!-- メニュータイル -->
-      <nav class="section-tiles" id="sectionMenu">
-        <a class="section-tile" href="#s1"><span class="section-tile__no">📋</span><span class="section-tile__name">前提<br><small>呼吸困難から</small></span></a>
-        <a class="section-tile" href="#s2"><span class="section-tile__no">🗂️</span><span class="section-tile__name">分類<br><small>PSP/SSP/外傷/医原</small></span></a>
-        <a class="section-tile" href="#s3"><span class="section-tile__no">🔬</span><span class="section-tile__name">診断<br><small>CXR / POCUS / CT</small></span></a>
-        <a class="section-tile" href="#s4"><span class="section-tile__no">💉</span><span class="section-tile__name">治療判断<br><small>観察/脱気/ドレーン</small></span></a>
+      <!-- メニュータイル（非表示・互換用） -->
+      <nav class="section-tiles" id="sectionMenu" hidden>
+        <a class="section-tile" href="#s1"><span class="section-tile__no">📋</span><span class="section-tile__name">前提</span></a>
+        <a class="section-tile" href="#s2"><span class="section-tile__no">🗂️</span><span class="section-tile__name">分類</span></a>
+        <a class="section-tile" href="#s3"><span class="section-tile__no">🔬</span><span class="section-tile__name">診断</span></a>
+        <a class="section-tile" href="#s4"><span class="section-tile__no">💉</span><span class="section-tile__name">治療判断</span></a>
         <a class="section-tile" href="#s5"><span class="section-tile__no">🚨</span><span class="section-tile__name">緊張性気胸の対応</span></a>
         <a class="section-tile" href="#s6"><span class="section-tile__no">🏥</span><span class="section-tile__name">入院・帰宅・再発予防</span></a>
         <a class="section-tile" href="#s7"><span class="section-tile__no">⚠️</span><span class="section-tile__name">やりがちなミス</span></a>
@@ -66,7 +358,7 @@
           <div class="callout-body"><ol>
             <li><a class="wiki-link" href="../呼吸困難.html">呼吸困難</a> や <a class="wiki-link" href="../胸痛.html">胸痛</a> から気胸を疑った時点で開く</li>
             <li>まず <strong>緊張性気胸かどうか</strong>を判断 — 画像を待たず減圧する判断</li>
-            <li>次に<strong>分類（PSP / SSP / 外傷 / 医原）</strong>と<strong>大きさ</strong>で治療を選ぶ</li>
+            <li>次に<strong>分類（PSP／SSP／外傷／医原）</strong>と<strong>大きさ</strong>で治療を選ぶ</li>
             <li>呼吸器外科への引き継ぎ時にコンサル文を整える</li>
           </ol></div>
         </div>
@@ -100,7 +392,7 @@
         </table></div>
 
         <div class="callout callout-tip">
-          <div class="callout-title">PSP / SSP の典型像</div>
+          <div class="callout-title">PSP／SSP の典型像</div>
           <div class="callout-body"><ul>
             <li><strong>PSP</strong>：10-30 代男性、長身やせ型、喫煙者。安静時・軽労作で突然発症</li>
             <li><strong>SSP</strong>：50 歳以上、COPD・喫煙歴。同じ気胸でも酸素需要・症状が PSP より重い</li>
@@ -137,14 +429,14 @@
             <li><strong>lung sliding 消失</strong>（リアルタイム動画で胸膜の動きが見えない）</li>
             <li><strong>B ライン消失</strong>（A ラインのみ）</li>
             <li><strong>lung point</strong>：気胸境界の動的所見、特異度ほぼ 100%</li>
-            <li>M モードで「<strong>barcode / stratosphere sign</strong>」（正常は seashore sign）</li>
+            <li>M モードで「<strong>barcode／stratosphere sign</strong>」（正常は seashore sign）</li>
             <li>外傷の eFAST に組み込まれている</li>
           </ul></div>
         </div>
 
         <h3>胸部 CT</h3>
         <ul>
-          <li>少量気胸・bleb / bulla の評価、外傷例の精査、再発の手術判断</li>
+          <li>少量気胸・bleb／bulla の評価、外傷例の精査、再発の手術判断</li>
           <li>初発の小さな PSP では必須ではない</li>
         </ul>
 
@@ -165,7 +457,7 @@
         <div class="table-wrap"><table>
           <thead><tr><th>状況</th><th>方針</th></tr></thead>
           <tbody>
-            <tr><td><strong>緊張性気胸</strong></td><td><strong>即減圧穿刺 → 胸腔ドレナージ</strong>（§5 参照）</td></tr>
+            <tr><td><strong>緊張性気胸</strong></td><td><strong>即減圧穿刺 → 胸腔ドレナージ</strong>（<a class="wiki-link" href="#s5">§5 参照</a>）</td></tr>
             <tr><td>PSP・小さい・無症状</td><td><strong>経過観察＋酸素</strong>（高濃度酸素で吸収速度 4 倍）。外来観察可</td></tr>
             <tr><td>PSP・大きい or 有症状</td><td><strong>カテーテル脱気</strong>（needle aspiration）が第一選択（BTS 2010）。失敗で胸腔ドレナージ</td></tr>
             <tr><td>SSP（基礎肺疾患あり）</td><td>原則 <strong>胸腔ドレナージ</strong>。小さくて無症状でも入院観察</td></tr>
@@ -178,7 +470,7 @@
         <h3>カテーテル脱気（needle aspiration）</h3>
         <ul>
           <li>第 2 肋間鎖骨中線または第 4-5 肋間前腋窩線</li>
-          <li>16-18 G の留置針 / 専用キット → 三方活栓 → シリンジで吸引</li>
+          <li>16-18 G の留置針／専用キット → 三方活栓 → シリンジで吸引</li>
           <li>2.5 L まで吸引して再 CXR、改善なければドレナージへ</li>
         </ul>
 
@@ -201,6 +493,13 @@
           <div class="callout-title">再膨張性肺水腫（RPE）に注意</div>
           <div class="callout-body"><p>長時間虚脱した肺を急速に再膨張すると<strong>同側の肺水腫</strong>を起こすことがある。大量・長期間の気胸では<strong>初期吸引量を絞る</strong>、持続吸引を急にかけない。</p></div>
         </div>
+
+        <h3>合併症の管理</h3>
+        <ul>
+          <li><strong>再膨張性肺水腫</strong>：低酸素・咳・泡沫痰 → 酸素・体位・必要なら NIV、利尿薬は慎重</li>
+          <li><strong>血気胸</strong>：ドレーンから血性排液持続 → 大径ドレーン・輸血準備・呼吸器外科コンサル（持続出血で開胸）</li>
+          <li><strong>皮下気腫</strong>：縦隔気腫合併に注意、ドレーン位置・吸引圧を再確認</li>
+        </ul>
       </section>
 
       <!-- §5 緊張性気胸の対応 -->
@@ -232,7 +531,7 @@
         <ul>
           <li>必ず <strong>胸腔ドレナージ</strong>を留置（穿刺だけでは再緊張する）</li>
           <li>減圧後の CXR で評価、人工呼吸器使用中は陽圧で進行しやすいので継続観察</li>
-          <li>呼吸器外科 / 救急に引き継ぎ</li>
+          <li>呼吸器外科／救急に引き継ぎ</li>
         </ul>
 
         <div class="callout callout-warning">
@@ -264,7 +563,7 @@
         <h3>再発予防</h3>
         <ul>
           <li><strong>禁煙</strong>：PSP の最大の修正可能因子（再発率を大きく下げる）</li>
-          <li>PSP <strong>2 回目以降</strong> / 持続的気漏 / 両側性 / 職業的にハイリスク（パイロット・ダイバー）→ <strong>胸膜癒着術 or VATS による bullectomy + 胸膜固定</strong></li>
+          <li>PSP <strong>2 回目以降</strong>／持続的気漏／両側性／職業的にハイリスク（パイロット・ダイバー）→ <strong>胸膜癒着術 or VATS による bullectomy ＋ 胸膜固定</strong></li>
           <li>気胸後の<strong>飛行機搭乗</strong>：完全消失確認後、目安は<strong>X 線で消失から 1 週間以上、術後は 2 週間以上</strong>（学会により差。BTS は 1 週間、米国胸部学会・航空医学では条件付き）</li>
           <li>気胸後の<strong>スキューバダイビング</strong>：手術しない限り原則永久に禁止（BTS）</li>
           <li>激しい運動・重量挙げは消失確認まで控える</li>
@@ -305,25 +604,25 @@
         <h2>📞 コンサル文（カルテに貼る）</h2>
         <p>『他科コンサルト実践マニュアル』の院内紹介状フォーマットに準拠（【目的】【疾患】【既往歴】【内服薬】【ADL】【現病歴】）。<strong>緊張性気胸の初期対応は救急科</strong>、<strong>ドレナージ後の管理・再発予防・手術は呼吸器外科</strong>へ。</p>
 
-        <h3>呼吸器外科宛て（PSP / SSP / 外傷性のドレナージ後）</h3>
+        <h3>呼吸器外科宛て（PSP／SSP／外傷性のドレナージ後）</h3>
         <div class="callout callout-summary">
           <div class="callout-body">
-<pre>【目的】[右／左]気胸（[PSP／SSP／外傷性／医原性]）の入院加療相談。
-【疾患】#1 [右／左]気胸（[PSP／SSP／外傷性／医原性]、[初発／○ 回目]）
-　　　　#2 [基礎肺疾患：COPD／間質性肺炎／肺癌／なし]
-　　　　#3 [合併損傷：肋骨骨折／血胸／肺挫傷／なし]
-【既往歴】[特記事項なし／気胸既往（○ 年前、[同側／反対側]）／○○]
-【内服薬】[なし／○○]
-【ADL（発症前）】[独歩／杖／介助／車椅子]
-【現病歴】[年齢]歳[男／女]性。[受診経緯：突然の片側胸痛・呼吸困難／外傷／○○]で来院。
- ・バイタル：BP ○/○、HR ○、RR ○、SpO2 ○%（room air／O2 ○ L）、体温 ○
- ・身体所見：[右／左]呼吸音減弱・消失、打診鼓音、頸静脈怒張 [なし／あり]、胸壁圧痛 [なし／あり]
- ・喫煙歴：[なし／○ 本×○ 年]、体格：身長 ○ cm、体重 ○ kg
- ・画像：CXR で[右／左]気胸（BTS 基準で[肺尖〜胸壁 ○ cm／&lt; 2 cm／≥ 2 cm]）、CT で [bleb / bulla あり／なし／○○]
- ・POCUS：lung sliding 消失、lung point [あり／なし]
- ・ER 処置：[酸素 ○ L／カテーテル脱気（○ mL 排気）／胸腔ドレナージ留置（[右／左] 第 ○ 肋間 ○ 線、○ Fr、水封 ± 吸引 -○ cmH2O）]
- ・気漏：[あり／なし]、肺再膨張：[良好／部分的／不良]
- ・合併損傷：[なし／○○]
+<pre>【目的】［右／左］気胸（［PSP／SSP／外傷性／医原性］）の入院加療相談。
+【疾患】#1 ［右／左］気胸（［PSP／SSP／外傷性／医原性］、［初発／○ 回目］）
+　　　　#2 ［基礎肺疾患：COPD／間質性肺炎／肺癌／なし］
+　　　　#3 ［合併損傷：肋骨骨折／血胸／肺挫傷／なし］
+【既往歴】［特記事項なし／気胸既往（○ 年前、［同側／反対側］）／○○］
+【内服薬】［なし／○○］
+【ADL（発症前）】［独歩／杖／介助／車椅子］
+【現病歴】［年齢］歳［男／女］性。［受診経緯：突然の片側胸痛・呼吸困難／外傷／○○］で来院。
+ ・バイタル：BP ○／○、HR ○、RR ○、SpO2 ○％（room air／O2 ○ L）、体温 ○
+ ・身体所見：［右／左］呼吸音減弱・消失、打診鼓音、頸静脈怒張 ［なし／あり］、胸壁圧痛 ［なし／あり］
+ ・喫煙歴：［なし／○ 本×○ 年］、体格：身長 ○ cm、体重 ○ kg
+ ・画像：CXR で［右／左］気胸（BTS 基準で［肺尖〜胸壁 ○ cm／&lt; 2 cm／≥ 2 cm］）、CT で ［bleb／bulla あり／なし／○○］
+ ・POCUS：lung sliding 消失、lung point ［あり／なし］
+ ・ER 処置：［酸素 ○ L／カテーテル脱気（○ mL 排気）／胸腔ドレナージ留置（［右／左］ 第 ○ 肋間 ○ 線、○ Fr、水封 ± 吸引 -○ cmH2O）］
+ ・気漏：［あり／なし］、肺再膨張：［良好／部分的／不良］
+ ・合併損傷：［なし／○○］
 よろしくお願いいたします。</pre>
           </div>
         </div>
@@ -332,18 +631,18 @@
         <div class="callout callout-summary">
           <div class="callout-body">
 <pre>【目的】緊張性気胸の初期対応・集中管理のご依頼。
-【疾患】#1 [右／左]緊張性気胸（[原因：外傷／医原性／自然／人工呼吸下]）
-　　　　#2 [合併：肋骨骨折／血胸／ショック／心停止後／○○]
-【既往歴】[特記事項なし／○○]
-【内服薬】[なし／○○]
-【現病歴】[年齢]歳[男／女]性。[受診経緯／発生状況]。
- ・到着時バイタル：BP ○/○、HR ○、RR ○、SpO2 ○%、意識 GCS ○
- ・3 徴：[右／左]呼吸音消失、頸静脈怒張、ショック → 臨床診断で減圧
- ・減圧穿刺：[第 4-5 肋間前腋窩線／第 2 肋間鎖骨中線] にて 14 G 留置針、空気漏出を確認
- ・減圧後バイタル：BP ○/○、HR ○、SpO2 ○%
- ・胸腔ドレナージ：[留置済（○ Fr、水封）／準備中]
- ・CXR（減圧後）：[肺再膨張良好／部分的／○○]
- ・人工呼吸：[なし／装着中（モード ○、PEEP ○）]
+【疾患】#1 ［右／左］緊張性気胸（［原因：外傷／医原性／自然／人工呼吸下］）
+　　　　#2 ［合併：肋骨骨折／血胸／ショック／心停止後／○○］
+【既往歴】［特記事項なし／○○］
+【内服薬】［なし／○○］
+【現病歴】［年齢］歳［男／女］性。［受診経緯／発生状況］。
+ ・到着時バイタル：BP ○／○、HR ○、RR ○、SpO2 ○％、意識 GCS ○
+ ・3 徴：［右／左］呼吸音消失、頸静脈怒張、ショック → 臨床診断で減圧
+ ・減圧穿刺：［第 4-5 肋間前腋窩線／第 2 肋間鎖骨中線］ にて 14 G 留置針、空気漏出を確認
+ ・減圧後バイタル：BP ○／○、HR ○、SpO2 ○％
+ ・胸腔ドレナージ：［留置済（○ Fr、水封）／準備中］
+ ・CXR（減圧後）：［肺再膨張良好／部分的／○○］
+ ・人工呼吸：［なし／装着中（モード ○、PEEP ○）］
 よろしくお願いいたします。</pre>
           </div>
         </div>
@@ -362,7 +661,7 @@
           <li><strong>ACCP 2001</strong>：Baumann MH ほか. Management of spontaneous pneumothorax: an American College of Chest Physicians Delphi consensus statement. <em>Chest.</em> 2001;119:590-602.</li>
           <li><strong>ATLS 10th edition</strong>：American College of Surgeons. Advanced Trauma Life Support — needle decompression site update（第 4-5 肋間前腋窩線）.</li>
           <li><strong>BTS Pleural Disease 2023 update</strong>：Roberts ME ほか. <em>Thorax.</em> 2023.</li>
-          <li><strong>UpToDate</strong>：Treatment of primary spontaneous pneumothorax / Treatment of secondary spontaneous pneumothorax / Pneumothorax in adults: epidemiology and etiology</li>
+          <li><strong>UpToDate</strong>：Treatment of primary spontaneous pneumothorax／Treatment of secondary spontaneous pneumothorax／Pneumothorax in adults: epidemiology and etiology</li>
         </ul>
 
         <h3>POCUS・診断補助</h3>
@@ -402,18 +701,24 @@
     const menu = document.getElementById('sectionMenu');
     const pages = document.querySelectorAll('.section-page');
     const titleH1 = document.querySelector('.page-title');
+    const flowBoxes = document.querySelectorAll('.flow-box');
+    const actionHeaders = document.querySelectorAll('.action-header:not(.flow-box)');
     const relatedSymp = document.getElementById('related-symptoms');
 
     function showSection(id) {
-      menu.hidden = true;
+      if (menu) menu.hidden = true;
       if (titleH1) titleH1.hidden = true;
+      flowBoxes.forEach(b => b.hidden = true);
+      actionHeaders.forEach(h => h.hidden = true);
       if (relatedSymp) relatedSymp.hidden = true;
       pages.forEach(p => p.hidden = (p.id !== id));
       window.scrollTo(0, 0);
     }
     function showMenu(scrollTarget) {
-      menu.hidden = false;
+      if (menu) menu.hidden = false;
       if (titleH1) titleH1.hidden = false;
+      flowBoxes.forEach(b => b.hidden = false);
+      actionHeaders.forEach(h => h.hidden = false);
       if (relatedSymp) relatedSymp.hidden = false;
       pages.forEach(p => p.hidden = true);
       if (scrollTarget) {
