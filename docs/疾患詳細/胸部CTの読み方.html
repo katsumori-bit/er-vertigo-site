@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="color-scheme" content="light dark" />
+  <title>胸部 CT の読み方 | ER ノート</title>
+  <link rel="stylesheet" href="../er-note.css" />
+  <style>
+    /* === 診療フロー（このページ専用） === */
+    .flow-box { position: static; user-select: none; }
+    .flow-box__title {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 0.5rem; cursor: default; padding: 2px 0;
+    }
+    .flow-canvas {
+      background: var(--surface);
+      border-radius: 10px;
+      padding: 14px 10px 18px;
+      margin-top: 0.55rem;
+      overflow-x: auto; overflow-y: hidden;
+      -webkit-overflow-scrolling: touch;
+      touch-action: pan-x pan-y pinch-zoom;
+    }
+    .flow-canvas__hint {
+      font-size: 0.72rem; color: var(--muted);
+      text-align: center; margin: 0 0 0.6rem 0;
+    }
+    .dx-flow {
+      min-width: 720px; margin: 0 auto; padding: 4px 6px 8px;
+      font-size: 14px; line-height: 1.45; color: var(--text); font-family: inherit;
+    }
+    .dx-node {
+      background: var(--surface);
+      border: 1.5px solid color-mix(in srgb, var(--text) 22%, transparent);
+      border-radius: 10px; padding: 8px 12px; text-align: center;
+      box-shadow: 0 1px 2px var(--shadow, rgba(0,0,0,0.06));
+      min-height: 38px;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 2px; text-decoration: none; color: var(--text);
+    }
+    .dx-node__title { font-weight: 700; font-size: 13.5px; }
+    .dx-node__sub   { font-size: 11.5px; color: var(--muted); font-weight: 500; }
+    .dx-node--decision {
+      background: color-mix(in srgb, var(--accent) 12%, var(--surface));
+      border-color: var(--accent); border-radius: 14px;
+    }
+    .dx-node--danger {
+      background: color-mix(in srgb, #c0392b 14%, var(--surface));
+      border-color: #c0392b;
+    }
+    .dx-node--danger .dx-node__title { color: #c0392b; }
+    .dx-node--action {
+      background: color-mix(in srgb, var(--text) 5%, var(--surface));
+      border-style: dashed;
+    }
+    .dx-node--external {
+      border-style: dashed; position: relative;
+      background: color-mix(in srgb, var(--accent) 6%, var(--surface));
+    }
+    .dx-node--external::after {
+      content: "↗"; position: absolute; top: 4px; right: 8px;
+      font-size: 12px; color: var(--accent); opacity: 0.85;
+    }
+    .dx-node--warn {
+      background: color-mix(in srgb, #d4a017 14%, var(--surface));
+      border-color: #d4a017;
+    }
+    .dx-node--warn .dx-node__title { color: #9b7508; }
+
+    .dx-layer { display: grid; gap: 14px; align-items: stretch; margin: 0; }
+    .dx-layer--root   { grid-template-columns: 1fr; justify-items: center; }
+    .dx-layer--root > * { max-width: 360px; }
+    .dx-layer--branch { grid-template-columns: 1fr 1fr; }
+    .dx-layer--tri    { grid-template-columns: repeat(3, 1fr); }
+    .dx-layer--quad   { grid-template-columns: repeat(4, 1fr); }
+    .dx-layer--quint  { grid-template-columns: repeat(5, 1fr); }
+
+    .dx-arrow {
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      position: relative; margin: 4px 0; min-height: 44px;
+      color: var(--muted); font-size: 11.5px; font-weight: 600;
+    }
+    .dx-arrow::before {
+      content: ""; width: 2px; height: 100%; min-height: 38px;
+      background: color-mix(in srgb, var(--text) 35%, transparent);
+    }
+    .dx-arrow::after {
+      content: ""; position: absolute; bottom: 0;
+      width: 0; height: 0;
+      border-left: 5px solid transparent; border-right: 5px solid transparent;
+      border-top: 7px solid color-mix(in srgb, var(--text) 35%, transparent);
+    }
+    .dx-arrow__label {
+      background: var(--surface); padding: 1px 8px; border-radius: 999px;
+      border: 1px solid color-mix(in srgb, var(--text) 18%, transparent);
+      position: absolute; left: 50%; top: 50%;
+      transform: translate(-50%, -50%); white-space: nowrap; z-index: 1;
+    }
+
+    .dx-fork {
+      display: grid; grid-template-columns: 1fr 1fr;
+      position: relative; min-height: 38px; margin: 2px 0 4px;
+    }
+    .dx-fork::before {
+      content: ""; position: absolute;
+      top: 0; left: 25%; right: 25%; height: 2px;
+      background: color-mix(in srgb, var(--text) 35%, transparent);
+    }
+    .dx-fork__leg {
+      position: relative; display: flex; flex-direction: column;
+      align-items: center; justify-content: flex-end;
+      padding-top: 4px; padding-bottom: 4px;
+      font-size: 11.5px; font-weight: 600; color: var(--muted);
+      min-height: 36px;
+    }
+    .dx-fork__leg::before {
+      content: ""; width: 2px; flex: 1;
+      background: color-mix(in srgb, var(--text) 35%, transparent);
+    }
+    .dx-fork__leg::after {
+      content: ""; position: absolute; bottom: 0;
+      width: 0; height: 0;
+      border-left: 5px solid transparent; border-right: 5px solid transparent;
+      border-top: 7px solid color-mix(in srgb, var(--text) 35%, transparent);
+    }
+    .dx-fork__label {
+      background: var(--surface); padding: 1px 8px; border-radius: 999px;
+      border: 1px solid color-mix(in srgb, var(--text) 18%, transparent);
+      margin-bottom: 2px; z-index: 1;
+    }
+
+    .section-tiles { display: none !important; }
+
+    @media (max-width: 600px) {
+      .dx-flow { min-width: 0; font-size: 11px; padding: 2px 0 6px; }
+      .flow-canvas { overflow-x: hidden; padding: 8px 6px 12px; }
+      .flow-canvas__hint { font-size: 0.62rem; margin-bottom: 0.35rem; }
+      .dx-node { padding: 4px 5px; min-height: 28px; border-radius: 7px; gap: 1px; }
+      .dx-node__title { font-size: 10px; line-height: 1.22; }
+      .dx-node__sub   { font-size: 8.5px; line-height: 1.25; }
+      .dx-node--decision { border-radius: 8px; }
+      .dx-node--external::after { top: 2px; right: 4px; font-size: 9px; }
+      .dx-layer { gap: 5px; }
+      .dx-layer--root > * { max-width: none; width: 100%; }
+      .dx-layer--tri  { grid-template-columns: repeat(3, 1fr); }
+      .dx-layer--quad { grid-template-columns: 1fr 1fr; }
+      .dx-layer--quint { grid-template-columns: repeat(3, 1fr); }
+      .dx-arrow { min-height: 22px; margin: 1px 0; }
+      .dx-arrow::before { min-height: 18px; width: 1.5px; }
+      .dx-arrow::after { border-left-width: 4px; border-right-width: 4px; border-top-width: 6px; }
+      .dx-arrow__label { font-size: 8.5px; padding: 0 4px; line-height: 1.4; }
+      .dx-fork { min-height: 22px; }
+      .dx-fork::before { height: 1.5px; }
+      .dx-fork__leg { min-height: 22px; padding-top: 2px; padding-bottom: 2px; font-size: 9px; }
+      .dx-fork__leg::before { width: 1.5px; }
+      .dx-fork__leg::after { border-left-width: 4px; border-right-width: 4px; border-top-width: 6px; }
+      .dx-fork__label { font-size: 8.5px; padding: 0 4px; margin-bottom: 0; }
+    }
+  </style>
+</head>
+<body>
+  <header class="hokuto-top">
+    <a class="hokuto-top__btn" href="../薬剤情報.html">
+      <span class="hokuto-top__icon">℞</span><span>薬剤情報</span>
+    </a>
+    <a class="hokuto-top__btn" href="../表計算.html">
+      <span class="hokuto-top__icon">⊞</span><span>表計算</span>
+    </a>
+  </header>
+
+  <main class="hokuto-main">
+    <article class="note-shell">
+      <h1 class="page-title">胸部 CT の読み方</h1>
+
+      <!-- 診療フロー -->
+      <div class="action-header flow-box" id="flowBox">
+        <div class="action-header__title flow-box__title">
+          <span>🗺 胸部 CT フロー（プロトコル → 領域並列 → パターン照合）</span>
+        </div>
+        <div class="flow-canvas">
+          <p class="flow-canvas__hint">造影/単純 → ウィンドウ＋固定順 → 4 領域並列 → 濃度×分布で 5 群に振り分け</p>
+          <div class="dx-flow" role="group" aria-label="胸部 CT 読影フロー">
+
+            <!-- L0a: 撮影プロトコル決定 -->
+            <div class="dx-layer dx-layer--root">
+              <a class="dx-node dx-node--decision" href="#s1">
+                <div class="dx-node__title">📋 撮影プロトコル決定</div>
+                <div class="dx-node__sub">造影 or 単純（どちらか一方）</div>
+              </a>
+            </div>
+
+            <div class="dx-fork">
+              <div class="dx-fork__leg"><span class="dx-fork__label">血管・縦隔疑い</span></div>
+              <div class="dx-fork__leg"><span class="dx-fork__label">肺実質・気胸疑い</span></div>
+            </div>
+
+            <div class="dx-layer dx-layer--branch">
+              <a class="dx-node" href="#s1">
+                <div class="dx-node__title">造影 CT</div>
+                <div class="dx-node__sub">PE / 大動脈解離<br>縦隔腫瘤 / 膿瘍</div>
+              </a>
+              <a class="dx-node" href="#s1">
+                <div class="dx-node__title">単純 CT（HRCT）</div>
+                <div class="dx-node__sub">ILD / 肺炎 / 気胸<br>腫瘤・経過観察</div>
+              </a>
+            </div>
+
+            <div class="dx-arrow"><span class="dx-arrow__label">↓ 撮影後（共通）</span></div>
+
+            <!-- L1: 読影準備 -->
+            <div class="dx-layer dx-layer--root">
+              <a class="dx-node dx-node--action" href="#s2">
+                <div class="dx-node__title">🔄 読影準備</div>
+                <div class="dx-node__sub">ウィンドウ切替（肺野/縦隔/骨）＋ 固定の読影順</div>
+              </a>
+            </div>
+
+            <div class="dx-arrow"><span class="dx-arrow__label">↓ 領域並列に異常を探す</span></div>
+
+            <!-- L2: 4 領域 quad -->
+            <div class="dx-layer dx-layer--quad">
+              <a class="dx-node dx-node--action" href="#s3">
+                <div class="dx-node__title">肺野</div>
+                <div class="dx-node__sub">濃度 × 分布<br>二次小葉解剖</div>
+              </a>
+              <a class="dx-node dx-node--action" href="#s4">
+                <div class="dx-node__title">縦隔・血管</div>
+                <div class="dx-node__sub">大動脈 / 肺動脈<br>リンパ節</div>
+              </a>
+              <a class="dx-node dx-node--action" href="#s4">
+                <div class="dx-node__title">心・心嚢</div>
+                <div class="dx-node__sub">心拡大 / 心嚢液</div>
+              </a>
+              <a class="dx-node dx-node--action" href="#s4">
+                <div class="dx-node__title">骨・胸膜・横隔膜下</div>
+                <div class="dx-node__sub">骨折 / 気胸線<br>free air</div>
+              </a>
+            </div>
+
+            <div class="dx-arrow"><span class="dx-arrow__label">↓ 所見が出揃ったら</span></div>
+
+            <!-- L3: 2 軸読み -->
+            <div class="dx-layer dx-layer--root">
+              <a class="dx-node dx-node--decision" href="#s5">
+                <div class="dx-node__title">🎯 濃度 × 分布で 2 軸読み</div>
+                <div class="dx-node__sub">所見 → 疾患パターンへ</div>
+              </a>
+            </div>
+
+            <div class="dx-arrow"><span class="dx-arrow__label">パターン照合</span></div>
+
+            <!-- L4: 疾患 5 群 quint -->
+            <p class="flow-canvas__hint" style="margin:6px 0 4px;font-weight:700;">呼吸困難の原因疾患・5 群</p>
+            <div class="dx-layer dx-layer--quint">
+              <a class="dx-node dx-node--danger" href="#s5">
+                <div class="dx-node__title">緊急</div>
+                <div class="dx-node__sub">PE / 解離<br>緊張性気胸<br>心嚢液貯留</div>
+              </a>
+              <a class="dx-node" href="#s5">
+                <div class="dx-node__title">肺水腫系</div>
+                <div class="dx-node__sub">心原性 / ARDS<br>肺胞出血</div>
+              </a>
+              <a class="dx-node" href="#s5">
+                <div class="dx-node__title">肺炎系</div>
+                <div class="dx-node__sub">細菌 / 誤嚥<br>PCP / ウイルス / OP</div>
+              </a>
+              <a class="dx-node" href="#s5">
+                <div class="dx-node__title">ILD 系</div>
+                <div class="dx-node__sub">UIP / NSIP<br>過敏性 / 急性増悪</div>
+              </a>
+              <a class="dx-node" href="#s5">
+                <div class="dx-node__title">COPD / 喘息</div>
+                <div class="dx-node__sub">気腫 / 過膨張<br>mucous plug</div>
+              </a>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- §タイル（CSS で非表示、ハッシュルータ用） -->
+      <nav class="section-tiles" id="sectionMenu">
+        <a class="section-tile" href="#s1"><span class="section-tile__no">📋</span><span class="section-tile__name">撮影プロトコル</span></a>
+        <a class="section-tile" href="#s2"><span class="section-tile__no">🔄</span><span class="section-tile__name">読影手順</span></a>
+        <a class="section-tile" href="#s3"><span class="section-tile__no">🫁</span><span class="section-tile__name">肺野</span></a>
+        <a class="section-tile" href="#s4"><span class="section-tile__no">❤️</span><span class="section-tile__name">縦隔・血管・心・骨</span></a>
+        <a class="section-tile" href="#s5"><span class="section-tile__no">🎯</span><span class="section-tile__name">疾患パターン</span></a>
+        <a class="section-tile" href="#s6"><span class="section-tile__no">⚠️</span><span class="section-tile__name">やりがちなミス</span></a>
+        <a class="section-tile" href="#s7"><span class="section-tile__no">📚</span><span class="section-tile__name">出典・関連リンク</span></a>
+      </nav>
+
+      <!-- 関連主訴 -->
+      <details class="sub-fold" id="related-symptoms">
+        <summary>📞 このページが該当する主訴</summary>
+        <div class="sub-fold__body">
+          <ul>
+            <li><a class="wiki-link" href="../呼吸困難.html">呼吸困難</a> — 放射線画像評価の中核</li>
+            <li><a class="wiki-link" href="../胸痛.html">胸痛</a> — PE・大動脈解離・気胸の精査</li>
+            <li><a class="wiki-link" href="胸部Xpの見方.html">胸部 Xp の見方</a> — まずこちらでスクリーニング</li>
+          </ul>
+        </div>
+      </details>
+
+      <!-- §s1 撮影プロトコル -->
+      <section class="section-page" id="s1" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>📋 撮影プロトコル決定</h2>
+
+        <div class="table-wrap"><table>
+          <thead><tr><th>プロトコル</th><th>強み</th><th>使う場面</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><strong>造影 CT（CTPA / dynamic）</strong></td>
+              <td>血管内腔の評価・組織判別</td>
+              <td>PE 疑い（CTPA）／大動脈解離・大動脈瘤／縦隔・肺門腫瘤／膿瘍／血管炎</td>
+            </tr>
+            <tr>
+              <td><strong>単純 CT（HRCT 含む）</strong></td>
+              <td>肺実質の濃度パターン・造影禁忌でも撮れる</td>
+              <td>ILD・間質性肺炎急性増悪／肺炎の精査／気胸／CXR で説明できない呼吸困難</td>
+            </tr>
+            <tr>
+              <td><strong>低線量 CT</strong></td>
+              <td>被曝低減</td>
+              <td>気胸の確認／若年／繰り返し撮影</td>
+            </tr>
+          </tbody>
+        </table></div>
+
+        <div class="callout callout-warning">
+          <div class="callout-title">造影を急ぐ場面</div>
+          <div class="callout-body"><ul>
+            <li><strong>PE 高確率群</strong>（Wells/Geneva 高、ショック合併）→ <strong>D-dimer をスキップして CTPA</strong></li>
+            <li><strong>突然発症の引き裂くような胸背部痛＋血圧左右差</strong> → <strong>大動脈解離</strong> → 造影 CT</li>
+            <li>腎機能低下・造影剤アレルギーは事前評価。eGFR ≥30 なら多くの施設で施行可、急変時は予防策（生食前負荷）併用で踏み切る</li>
+          </ul></div>
+        </div>
+
+        <h3>ウィンドウ条件（読影前に必ず切替）</h3>
+        <ul>
+          <li><strong>肺野条件</strong>（W 1500 / L -600）：肺実質の濃度・気管支・気胸線</li>
+          <li><strong>縦隔条件</strong>（W 350 / L 40）：血管・心嚢・リンパ節・腫瘤</li>
+          <li><strong>骨条件</strong>（W 1500 / L 300）：肋骨骨折・椎体・転移</li>
+        </ul>
+
+        <h3>X 線 ↔ CT 位置対応</h3>
+        <ul>
+          <li><strong>上肺野は肋骨カウントで対応</strong>：X 線で第 ○ 肋骨高さの陰影は CT で同じ肋骨レベルにある</li>
+          <li><strong>下肺野は対応が悪い</strong>：立位 X 線と仰臥位 CT で横隔膜位置がずれる</li>
+          <li>気管分岐部は 1 点しか目印にならず、骨を使った方が精度が高い</li>
+        </ul>
+      </section>
+
+      <!-- §s2 読影手順 -->
+      <section class="section-page" id="s2" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🔄 読影手順</h2>
+
+        <p>「目に飛び込んできた病変」だけ追うと <strong>2 番目の病変</strong>を見落とす。<strong>毎回同じ順番</strong>で全領域を舐めるのが鉄則。</p>
+
+        <div class="callout callout-summary">
+          <div class="callout-title">推奨順序（外 → 内 → 外）</div>
+          <div class="callout-body"><ol>
+            <li><strong>胸壁・体表</strong>（皮下気腫・乳房・腋窩）</li>
+            <li><strong>骨</strong>（肋骨・胸骨・椎体・肩甲骨）— 骨条件で必ず</li>
+            <li><strong>縦隔</strong>（大血管・心・リンパ節・食道・気管）— 縦隔条件で</li>
+            <li><strong>肺門・肺血管</strong>（PE・血管断面の急変）</li>
+            <li><strong>肺野</strong>（左右上葉 → 中葉/舌区 → 下葉）— 肺野条件で</li>
+            <li><strong>胸膜・葉間・横隔膜</strong>（気胸・胸水・葉間貯留）</li>
+            <li><strong>横隔膜下</strong>（肝上縁・脾上縁・副腎）— free air・腹腔内病変</li>
+          </ol></div>
+        </div>
+
+        <h3>毎回チェックすべき「見落としやすい部位」</h3>
+        <ul>
+          <li><strong>肺尖部</strong>（CXR で隠れる Pancoast・気胸の起点）</li>
+          <li><strong>横隔膜直上</strong>（下葉肺炎・胸水・横隔膜ヘルニア）</li>
+          <li><strong>後縦隔・椎前</strong>（神経原性腫瘍・椎体破壊）</li>
+          <li><strong>主気管支分岐部背側</strong>（リンパ節腫大・転移）</li>
+          <li><strong>心後方</strong>（食道・大動脈背側）</li>
+          <li><strong>葉間裂</strong>（葉間胸水・葉間貯留）</li>
+        </ul>
+      </section>
+
+      <!-- §s3 肺野 -->
+      <section class="section-page" id="s3" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🫁 肺野</h2>
+
+        <h3>基礎理論：CT で「見える」とは</h3>
+        <div class="callout callout-summary">
+          <div class="callout-title">分解能 0.5 mm の現実</div>
+          <div class="callout-body"><p>胸部 CT の分解能は <strong>0.5 mm</strong>。正常で見える肺内構造は <strong>血管（末梢まで）と中枢気管支のみ</strong>。それ以外の白い線・粒・面が見えたら全部「異常＝可視化した何か」。</p>
+          <p>病気で <strong>水濃度が増える → 白くなる病態</strong>（GGO・コンソリ・線状影・粒状影）／<strong>空気濃度が増える → 黒くなる病態</strong>（嚢胞・気腫・気胸）。<strong>「何が可視化したか」を問う</strong>のが読影の出発点。</p></div>
+        </div>
+
+        <h3>二次小葉の解剖（用語の基盤）</h3>
+        <ul>
+          <li><strong>二次小葉</strong>：細気管支＋肺動脈の終末が支配する <strong>一辺約 1 cm の多角形</strong>の肺胞集団。肺の構成単位</li>
+          <li><strong>小葉中心</strong>：細気管支（径 0.5 mm）＋伴走肺動脈 — <strong>tree-in-bud・小葉中心性結節</strong>の場（誤嚥・抗酸菌・細気管支炎）</li>
+          <li><strong>小葉辺縁</strong>：肺静脈（小葉間隔壁内、正常では細すぎて見えない）— <strong>カーリー B 線・小葉間隔壁肥厚</strong>の場</li>
+          <li><strong>狭義間質</strong>＝肺胞中隔（間質性肺炎の場）／<strong>広義間質</strong>＝血管・気管支・胸膜周囲結合組織（カーリー線・心不全浮腫の場）</li>
+          <li>リンパ管は <strong>小葉中心と辺縁の両方</strong>に網目状 — 癌性リンパ管症・サルコイドーシスは両方に粒状影</li>
+        </ul>
+
+        <h3>濃度パターン</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>パターン</th><th>定義</th><th>代表疾患</th></tr></thead>
+          <tbody>
+            <tr><td><strong>すりガラス（GGO）</strong></td><td>透過性低下するが血管影が透見可能</td><td>肺水腫・ARDS・ILD・PCP・ウイルス性肺炎・肺胞出血・肺胞蛋白症</td></tr>
+            <tr><td><strong>コンソリデーション</strong></td><td>血管影が透見できない実質陰影（air bronchogram±）</td><td>細菌性肺炎・誤嚥・浸潤影・肺梗塞</td></tr>
+            <tr><td><strong>網状影・線状影</strong></td><td>小葉間隔壁・気管支血管束の肥厚</td><td>ILD・癌性リンパ管症・心不全（カーリー線）</td></tr>
+            <tr><td><strong>結節・腫瘤</strong></td><td>類円形陰影（&lt;3 cm 結節 / ≥3 cm 腫瘤）</td><td>原発性肺癌・転移・感染性肉芽腫・血腫</td></tr>
+            <tr><td><strong>嚢胞・空洞</strong></td><td>壁を伴う含気腔</td><td>気腫性嚢胞（COPD）・LAM・空洞化肺癌・結核・膿瘍</td></tr>
+            <tr><td><strong>無気肺</strong></td><td>容積減少を伴う実質陰影</td><td>閉塞性（腫瘍・粘液栓）／圧排性（胸水・気胸）</td></tr>
+            <tr><td><strong>蜂巣肺（honeycomb）</strong></td><td>厚壁の小嚢胞が積み重なる</td><td>UIP（IPF）・慢性過敏性肺炎終末期</td></tr>
+          </tbody>
+        </table></div>
+
+        <h3>分布パターン</h3>
+        <ul>
+          <li><strong>上葉優位</strong>：結核・サルコイドーシス・じん肺・PCP・CPFE 気腫部</li>
+          <li><strong>下葉・末梢優位</strong>：UIP（IPF）・誤嚥性肺炎・心原性肺水腫の早期</li>
+          <li><strong>胸膜下優位</strong>：UIP・OP（器質化肺炎）</li>
+          <li><strong>胸膜下温存</strong>（subpleural sparing）：NSIP の特徴</li>
+          <li><strong>気管支血管束沿い</strong>：癌性リンパ管症・サルコイドーシス・OP</li>
+          <li><strong>びまん性両側</strong>：ARDS・肺水腫・PCP・薬剤性肺障害</li>
+          <li><strong>区域・葉に一致</strong>：細菌性肺炎・無気肺・肺梗塞</li>
+          <li><strong>重力依存性</strong>：ARDS（背側下葉）／誤嚥性肺炎（仰臥位 → 下葉背側、半坐位 → 右中葉舌区）</li>
+        </ul>
+
+        <h3>粒状影の 3 分布パターン</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>分布</th><th>解剖的位置</th><th>代表疾患</th></tr></thead>
+          <tbody>
+            <tr><td><strong>小葉中心性</strong></td><td>細気管支関連</td><td>tree-in-bud（誤嚥・抗酸菌・細気管支炎）／過敏性肺炎</td></tr>
+            <tr><td><strong>リンパ路播種</strong></td><td>小葉中心＋辺縁</td><td>癌性リンパ管症・サルコイドーシス</td></tr>
+            <tr><td><strong>ランダム</strong></td><td>小葉と無関係（毛細血管関連）</td><td>粟粒結核・血行性転移</td></tr>
+          </tbody>
+        </table></div>
+
+        <h3>CT 用語ミニ集</h3>
+        <ul>
+          <li><strong>tree-in-bud</strong>：小葉中心性の結節＋線状影（樹芽状）— 細気管支に膿・粘液が詰まったサイン</li>
+          <li><strong>crazy paving</strong>：GGO ＋小葉間隔壁肥厚の重なり — PCP・肺胞蛋白症・ARDS</li>
+          <li><strong>septal thickening</strong>：小葉間隔壁肥厚 — 心不全・癌性リンパ管症</li>
+          <li><strong>mosaic perfusion</strong>：肺野に斑状の濃度差（呼気で増強）— 細気管支病変・慢性 PE</li>
+          <li><strong>halo sign</strong>：結節を囲む GGO — 侵襲性アスペルギルス症・出血性結節</li>
+          <li><strong>reversed halo（atoll sign）</strong>：GGO を濃いコンソリが囲む — OP / COP に特徴的</li>
+          <li><strong>牽引性気管支拡張</strong>：線維化に引っ張られて気管支が拡張 — 線維化マーカー</li>
+        </ul>
+
+        <div class="callout callout-tip">
+          <div class="callout-title">「濃度 × 分布」で 2 軸読み</div>
+          <div class="callout-body"><p>例：両側びまん性 GGO ＝ 肺水腫 / ARDS / PCP / 薬剤性。下葉胸膜下の網状影＋蜂巣肺 ＝ UIP（IPF）。<strong>1 軸では絞れない</strong>から必ず 2 軸で考える。</p></div>
+        </div>
+      </section>
+
+      <!-- §s4 縦隔・血管・心・骨・胸膜・横隔膜下 -->
+      <section class="section-page" id="s4" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>❤️ 縦隔・血管・心・骨・胸膜・横隔膜下</h2>
+
+        <h3>大動脈</h3>
+        <ul>
+          <li><strong>解離フラップ</strong>（造影 CT の真腔/偽腔）→ <strong>Stanford A は緊急手術</strong>、B は降圧管理</li>
+          <li><strong>大動脈径</strong>：上行 ≥ 5.5 cm（Marfan は ≥ 5.0）／下行 ≥ 6.0 cm で手術検討</li>
+          <li><strong>壁内血腫（IMH）</strong>：内膜フラップなしの三日月状高吸収壁</li>
+          <li><strong>潰瘍様病変（PAU）</strong>：内膜潰瘍＋造影効果</li>
+        </ul>
+
+        <h3>肺動脈（CTPA）</h3>
+        <ul>
+          <li><strong>血栓</strong>：内腔の充盈欠損（中心性／壁在性）</li>
+          <li><strong>右心拡大</strong>：RV/LV 短軸比 &gt; 1 → 重症 PE 示唆</li>
+          <li><strong>肺動脈幹拡張</strong>：≥ 29 mm → 肺高血圧</li>
+          <li><strong>慢性 PE</strong>：壁在性血栓・狭窄後拡張・モザイク灌流</li>
+          <li><strong>Hampton's hump</strong>：胸膜直下の楔形コンソリ＝肺梗塞</li>
+        </ul>
+
+        <h3>心・心嚢</h3>
+        <ul>
+          <li><strong>心嚢液</strong>：心拡大に見える正体／タンポナーデ徴候は心エコー併用</li>
+          <li><strong>心拡大</strong>：左室・両室・両房など部位別評価</li>
+          <li><strong>冠動脈石灰化</strong>：高度なら ACS 既往 / リスク</li>
+        </ul>
+
+        <h3>リンパ節</h3>
+        <ul>
+          <li><strong>短径 ≥ 10 mm</strong>で異常とみなすのが一般的</li>
+          <li>分布：肺門・縦隔（4R/7/2R が頻用）</li>
+          <li>サルコイド：両側肺門対称性／結核：壊死性リング状造影／癌：単発・大型</li>
+        </ul>
+
+        <h3>食道・気管</h3>
+        <ul>
+          <li>食道拡張・液体貯留 → アカラシア・嘔吐反復</li>
+          <li>気管偏位・狭窄 → 縦隔腫瘤・甲状腺腫</li>
+          <li>気管壁肥厚 → 再発性多軟骨炎・アミロイド・GPA</li>
+        </ul>
+
+        <h3>骨（骨条件で必ず）</h3>
+        <ul>
+          <li><strong>肋骨骨折</strong>：転位・連続性／<strong>多発・フレイルチェスト</strong>を見逃さない</li>
+          <li><strong>椎体骨折・転移</strong>：圧潰・骨融解 / 造骨</li>
+          <li><strong>胸骨骨折</strong>：心臓打撲合併（トロポニン・ECG 再評価）</li>
+          <li><strong>胸鎖関節脱臼</strong>：後方脱臼は気管・血管圧迫の急変</li>
+          <li><strong>溶骨転移（上腕骨頭・椎体）</strong>：肺癌の骨転移示唆</li>
+        </ul>
+
+        <h3>胸膜</h3>
+        <ul>
+          <li><strong>気胸線</strong>：肺尖・前胸部の薄い pleural line（少量は肺野条件で）</li>
+          <li><strong>胸水</strong>：背側依存性／葉間貯留／被包化</li>
+          <li><strong>胸膜肥厚・石灰化</strong>：陳旧性炎症・結核後・アスベスト・中皮腫</li>
+        </ul>
+
+        <h3>横隔膜下</h3>
+        <ul>
+          <li><strong>free air</strong>：消化管穿孔（呼吸困難で来た腹部疾患の合併）</li>
+          <li><strong>肝・脾上縁の病変</strong>：膿瘍・腫瘤</li>
+          <li><strong>副腎</strong>：偶発腫・転移</li>
+        </ul>
+
+        <h3>無気肺の CT 所見</h3>
+        <div class="callout callout-summary">
+          <div class="callout-title">完成直後の無気肺は造影 CT で 3 層構造</div>
+          <div class="callout-body"><ul>
+            <li><strong>血管</strong>（白）／<strong>肺実質＝折りたたまれた肺胞壁</strong>（軟部濃度）／<strong>気管支</strong>（黒〜グレー、粘液充満）</li>
+            <li>時間経過で血流低下・器質化で均一化</li>
+            <li>引き伸ばされた残存肺は <strong>血管影が疎・黒っぽい</strong>（左右同高で比較）</li>
+          </ul></div>
+        </div>
+      </section>
+
+      <!-- §s5 疾患パターン -->
+      <section class="section-page" id="s5" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🎯 疾患パターン（5 群）</h2>
+
+        <h3>① 緊急（自分で拾う）</h3>
+        <div class="callout callout-danger">
+          <div class="callout-title">レポートを待たずに動く</div>
+          <div class="callout-body"><ul>
+            <li><strong>急性 PE</strong>：肺動脈内充盈欠損／RV/LV &gt; 1／末梢楔形コンソリ（Hampton's hump）</li>
+            <li><strong>大動脈解離</strong>：真腔／偽腔の二腔化＋内膜フラップ／血腫の進展範囲（Stanford A/B）</li>
+            <li><strong>緊張性気胸</strong>：胸腔内空気＋縦隔偏位＋横隔膜平坦化</li>
+            <li><strong>心嚢液貯留・タンポナーデ</strong>：心嚢内低吸収域＋心房虚脱（エコー併用）</li>
+          </ul></div>
+        </div>
+
+        <h3>② 肺水腫系（びまん性 GGO）</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>疾患</th><th>典型 CT 所見</th></tr></thead>
+          <tbody>
+            <tr><td><strong>急性肺水腫（心原性）</strong></td><td>両側びまん性 GGO（中心優位＝bat wing）／<strong>小葉間隔壁肥厚（septal thickening）</strong>／両側胸水／心拡大／気管支壁肥厚</td></tr>
+            <tr><td><strong>ARDS</strong></td><td>両側 GGO / コンソリ（背側・下葉重力依存性）／浮腫より遷延／心拡大なし・胸水少ない</td></tr>
+            <tr><td><strong>肺胞出血</strong></td><td>両側 GGO ／血管炎（ANCA）・抗 GBM・SLE などの基礎／時間で <strong>crazy paving</strong> へ</td></tr>
+          </tbody>
+        </table></div>
+
+        <h3>③ 肺炎系（コンソリ・GGO）</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>疾患</th><th>典型 CT 所見</th></tr></thead>
+          <tbody>
+            <tr><td><strong>細菌性肺炎</strong></td><td>区域・葉に一致するコンソリデーション＋ <strong>air bronchogram</strong> ／空洞化（黄ブ・嫌気性菌・結核）</td></tr>
+            <tr><td><strong>誤嚥性肺炎</strong></td><td>下葉背側（仰臥位）・右中葉舌区（半坐位）優位の浸潤／<strong>tree-in-bud</strong>／無気肺合併</td></tr>
+            <tr><td><strong>PCP（ニューモシスチス）</strong></td><td>両側びまん性 GGO（地図状）／<strong>胸水・リンパ節腫大なし</strong>／HIV・免疫抑制／時間で crazy paving</td></tr>
+            <tr><td><strong>ウイルス性肺炎（COVID-19 含む）</strong></td><td>両側末梢・胸膜下 GGO ＋ <strong>crazy paving</strong></td></tr>
+            <tr><td><strong>器質化肺炎（OP / COP）</strong></td><td>胸膜下・気管支血管束沿いの <strong>遊走性コンソリ</strong>／<strong>reversed halo（atoll sign）</strong>／抗菌薬無効＋ステロイド反応性</td></tr>
+            <tr><td><strong>過敏性肺炎</strong></td><td>小葉中心性結節＋ GGO ＋<strong>モザイク灌流</strong>（呼気で air trapping）</td></tr>
+          </tbody>
+        </table></div>
+
+        <h3>④ ILD 系（網状影・蜂巣肺）</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>疾患</th><th>典型 CT 所見</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><strong>UIP / IPF</strong></td>
+              <td>下葉胸膜下優位の網状影＋<strong>蜂巣肺</strong>＋牽引性気管支拡張／GGO は乏しい／<strong>時間的・空間的不均一性</strong>（蜂巣肺・網状・GGO 混在）<br>
+              ATS UIP 4 項目：① 胸膜下・肺底優位／② 網状病変／③ 蜂巣肺（牽引性気管支拡張±）／④ UIP でなさそう所見を 1 つも持たない<br>
+              UIP 除外項目：上中肺野優位／気道周囲優位／広範 GGO／多数微小結節／不連続嚢胞／びまん性モザイク／区域性浸潤</td>
+            </tr>
+            <tr>
+              <td><strong>NSIP</strong></td>
+              <td><strong>下葉胸膜下温存（subpleural sparing）</strong>＋ GGO 優位＋網状影／気道周囲分布／蜂巣肺は乏しい／<strong>時間的・空間的に均一</strong>／膠原病・薬剤性・過敏性肺炎で多い</td>
+            </tr>
+            <tr>
+              <td><strong>過敏性肺炎</strong></td>
+              <td>小葉中心性結節＋ GGO ＋モザイク灌流／呼気で air trapping</td>
+            </tr>
+            <tr>
+              <td><strong>間質性肺炎急性増悪</strong></td>
+              <td>既存の網状影＋蜂巣肺の上に <strong>新規 GGO/コンソリ</strong>が乗る</td>
+            </tr>
+            <tr>
+              <td><strong>CPFE（気腫＋線維化）</strong></td>
+              <td>上肺優位の気腫（黒・伸びる）＋下肺胸膜直下優位の線維化（白・縮む）が同居／薄壁・多角形・大きめの嚢胞が融合（UIP の丸く厚壁の蜂巣肺と区別）</td>
+            </tr>
+          </tbody>
+        </table></div>
+
+        <h3>⑤ COPD / 喘息系（気腫・過膨張）</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>疾患</th><th>典型 CT 所見</th></tr></thead>
+          <tbody>
+            <tr><td><strong>COPD 増悪</strong></td><td>びまん性肺気腫（小葉中心性気腫が多い）＋気管支壁肥厚＋ <strong>mucous plug</strong>／併発の肺炎・気胸を必ず探す／saber-sheath trachea</td></tr>
+            <tr><td><strong>喘息（重症）</strong></td><td>CT 所見は乏しい（過膨張・mucous plug 程度）／<strong>合併気胸・縦隔気腫の除外目的</strong>で撮ることが多い</td></tr>
+          </tbody>
+        </table></div>
+      </section>
+
+      <!-- §s6 やりがちなミス -->
+      <section class="section-page" id="s6" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>⚠️ やりがちなミス</h2>
+
+        <ul>
+          <li><strong>ウィンドウを切り替えない</strong>：縦隔条件で肺野は読めず、骨条件で骨折を見ない</li>
+          <li><strong>1 番目の所見で満足する</strong>：肺水腫＋肺癌、肺炎＋気胸など <strong>2 病変併存</strong>を見落とす</li>
+          <li><strong>過去画像と比較しない</strong>：「ILD の所見が増悪している」のか「年余前から同じ」かで方針が真逆</li>
+          <li><strong>RV/LV 比を見ない</strong>：CTPA で PE は拾えても重症度が抜ける</li>
+          <li><strong>骨条件を飛ばす</strong>：肋骨骨折＋気胸の合併、転移性骨腫瘍を見落とす</li>
+          <li><strong>横隔膜下を見ない</strong>：free air・肝膿瘍・副腎病変を主訴と切り離してしまう</li>
+          <li><strong>「正常」と判定して安心</strong>：単純 CT は <strong>PE・解離・血管病変</strong>を診断できない（造影が必要）</li>
+          <li><strong>気胸を肺野条件のみで判定</strong>：少量気胸は <strong>肺尖部・前胸部</strong>を縦走するペーパーシン pleural line を意識して探す</li>
+          <li><strong>「結節」と「血管短軸像」「石灰化」を区別しない</strong>：CT 縦隔条件で白く光れば石灰化</li>
+        </ul>
+
+        <div class="callout callout-warning">
+          <div class="callout-title">レポート待ちで治療を遅らせない</div>
+          <div class="callout-body"><p>放射線科レポートが出るまで時間がかかる。<strong>緊急疾患（PE / 解離 / 緊張性気胸 / 心嚢液貯留）は自分で拾う</strong>のが ER の役割。確証が持てない時は、画像と所見を放射線科 / 上級医にダイレクトに当てる。</p></div>
+        </div>
+      </section>
+
+      <!-- §s7 出典・関連リンク -->
+      <section class="section-page" id="s7" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>📚 出典・関連リンク</h2>
+
+        <h3>関連ページ</h3>
+        <ul>
+          <li><a class="wiki-link" href="../呼吸困難.html">呼吸困難</a> — 評価フロー全体</li>
+          <li><a class="wiki-link" href="胸部Xpの見方.html">胸部 Xp の見方</a> — まずスクリーニング</li>
+          <li><a class="wiki-link" href="急性心不全.html">急性心不全</a></li>
+          <li><a class="wiki-link" href="COPD増悪.html">COPD 増悪</a></li>
+          <li><a class="wiki-link" href="喘息増悪.html">喘息増悪</a></li>
+          <li><a class="wiki-link" href="誤嚥性肺炎.html">誤嚥性肺炎</a></li>
+          <li><a class="wiki-link" href="間質性肺炎急性増悪.html">間質性肺炎急性増悪</a></li>
+          <li><a class="wiki-link" href="肺塞栓.html">肺塞栓</a></li>
+          <li><a class="wiki-link" href="気胸.html">気胸</a></li>
+        </ul>
+
+        <h3>主な参考</h3>
+        <ul>
+          <li>長尾大志『レジデントのためのやさしイイ胸部画像教室 第 2 版』（CT 分解能・二次小葉解剖・カーリー線・UIP/NSIP/OP・CPFE）</li>
+          <li>Fleischner Society 用語集（GGO・コンソリ・蜂巣肺・牽引性気管支拡張などの定義）</li>
+          <li>ATS/ERS/JRS/ALAT IPF ガイドライン（UIP パターン）</li>
+          <li>ESC 急性肺塞栓症診療ガイドライン（CTPA / RV/LV 比）</li>
+          <li>BTS 気胸診療ガイドライン（CT 適応）</li>
+        </ul>
+
+        <p>#ER #画像 #CT #呼吸困難</p>
+      </section>
+
+    </article>
+  </main>
+
+  <nav class="hokuto-bottom">
+    <button class="hokuto-bottom__btn" type="button" id="navBack">
+      <span class="hokuto-bottom__icon">←</span><span>戻る</span>
+    </button>
+    <a class="hokuto-bottom__btn" href="../ツール.html">
+      <span class="hokuto-bottom__icon">⚙</span><span>ツール</span>
+    </a>
+    <a class="hokuto-bottom__btn" href="../index.html">
+      <span class="hokuto-bottom__icon">⌂</span><span>ホーム</span>
+    </a>
+  </nav>
+
+  <script>
+  (function(){
+    const menu = document.getElementById('sectionMenu');
+    const pages = document.querySelectorAll('.section-page');
+    const titleH1 = document.querySelector('.page-title');
+    const flowBox = document.getElementById('flowBox');
+    const relatedSymp = document.getElementById('related-symptoms');
+
+    function showSection(id) {
+      if (menu) menu.hidden = true;
+      if (titleH1) titleH1.hidden = true;
+      if (flowBox) flowBox.hidden = true;
+      if (relatedSymp) relatedSymp.hidden = true;
+      pages.forEach(p => p.hidden = (p.id !== id));
+      window.scrollTo(0, 0);
+    }
+    function showMenu(scrollTarget) {
+      if (menu) menu.hidden = false;
+      if (titleH1) titleH1.hidden = false;
+      if (flowBox) flowBox.hidden = false;
+      if (relatedSymp) relatedSymp.hidden = false;
+      pages.forEach(p => p.hidden = true);
+      if (scrollTarget) {
+        if (scrollTarget.tagName === 'DETAILS') scrollTarget.open = true;
+        scrollTarget.scrollIntoView({behavior: 'instant', block: 'start'});
+      } else {
+        window.scrollTo(0, 0);
+      }
+    }
+    function syncFromHash() {
+      const id = (location.hash || '').replace('#','');
+      const target = id ? document.getElementById(id) : null;
+      if (target && target.classList.contains('section-page')) {
+        showSection(id);
+      } else if (target) {
+        showMenu(target);
+      } else {
+        showMenu();
+      }
+    }
+
+    window.addEventListener('hashchange', syncFromHash);
+    document.querySelectorAll('.back-to-menu').forEach(b => {
+      b.addEventListener('click', () => { history.pushState(null,'',location.pathname); showMenu(); });
+    });
+    const navBack = document.getElementById('navBack');
+    if (navBack) navBack.addEventListener('click', () => {
+      if (window.history.length > 1) history.back();
+      else window.location.href = '../index.html';
+    });
+
+    syncFromHash();
+  })();
+  </script>
+</body>
+</html>

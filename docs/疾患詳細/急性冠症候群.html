@@ -1,0 +1,1054 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="color-scheme" content="light dark" />
+  <title>急性冠症候群（ACS） | ER ノート</title>
+  <link rel="stylesheet" href="../er-note.css" />
+  <style>
+    /* === 診療フロー（このページ専用） === */
+    .flow-box { position: static; user-select: none; }
+    .flow-box__title {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 0.5rem; cursor: default; padding: 2px 0;
+    }
+    .flow-canvas {
+      background: var(--surface);
+      border-radius: 10px;
+      padding: 14px 10px 18px;
+      margin-top: 0.55rem;
+      overflow-x: auto; overflow-y: hidden;
+      -webkit-overflow-scrolling: touch;
+      touch-action: pan-x pan-y pinch-zoom;
+    }
+    .flow-canvas__hint {
+      font-size: 0.72rem; color: var(--muted);
+      text-align: center; margin: 0 0 0.6rem 0;
+    }
+    .flow-canvas__divider {
+      text-align: center; font-weight: 700; font-size: 12px;
+      color: var(--accent); margin: 14px 0 8px;
+      border-top: 1px dashed color-mix(in srgb, var(--text) 25%, transparent);
+      padding-top: 10px; letter-spacing: 1px;
+    }
+    .dx-flow {
+      min-width: 720px; margin: 0 auto; padding: 4px 6px 8px;
+      font-size: 14px; line-height: 1.45; color: var(--text); font-family: inherit;
+    }
+    .dx-node {
+      background: var(--surface);
+      border: 1.5px solid color-mix(in srgb, var(--text) 22%, transparent);
+      border-radius: 10px; padding: 8px 12px; text-align: center;
+      box-shadow: 0 1px 2px var(--shadow, rgba(0,0,0,0.06));
+      min-height: 38px;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 2px; text-decoration: none; color: var(--text);
+    }
+    .dx-node__title { font-weight: 700; font-size: 13.5px; }
+    .dx-node__sub   { font-size: 11.5px; color: var(--muted); font-weight: 500; }
+    .dx-node--decision {
+      background: color-mix(in srgb, var(--accent) 12%, var(--surface));
+      border-color: var(--accent); border-radius: 14px;
+    }
+    .dx-node--danger {
+      background: color-mix(in srgb, #c0392b 14%, var(--surface));
+      border-color: #c0392b;
+    }
+    .dx-node--danger .dx-node__title { color: #c0392b; }
+    .dx-node--action {
+      background: color-mix(in srgb, var(--text) 5%, var(--surface));
+      border-style: dashed;
+    }
+    .dx-node--external {
+      border-style: dashed; position: relative;
+      background: color-mix(in srgb, var(--accent) 6%, var(--surface));
+    }
+    .dx-node--external::after {
+      content: "↗"; position: absolute; top: 4px; right: 8px;
+      font-size: 12px; color: var(--accent); opacity: 0.85;
+    }
+    .dx-node--warn {
+      background: color-mix(in srgb, #d4a017 14%, var(--surface));
+      border-color: #d4a017;
+    }
+    .dx-node--warn .dx-node__title { color: #9b7508; }
+
+    .dx-layer { display: grid; gap: 14px; align-items: stretch; margin: 0; }
+    .dx-layer--root   { grid-template-columns: 1fr; justify-items: center; }
+    .dx-layer--root > * { max-width: 360px; }
+    .dx-layer--branch { grid-template-columns: 1fr 1fr; }
+    .dx-layer--tri    { grid-template-columns: repeat(3, 1fr); }
+    .dx-layer--quad   { grid-template-columns: repeat(4, 1fr); }
+    .dx-layer--quint  { grid-template-columns: repeat(5, 1fr); }
+    .dx-layer--hex    { grid-template-columns: repeat(6, 1fr); }
+
+    .dx-arrow {
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      position: relative; margin: 4px 0; min-height: 44px;
+      color: var(--muted); font-size: 11.5px; font-weight: 600;
+    }
+    .dx-arrow::before {
+      content: ""; width: 2px; height: 100%; min-height: 38px;
+      background: color-mix(in srgb, var(--text) 35%, transparent);
+    }
+    .dx-arrow::after {
+      content: ""; position: absolute; bottom: 0;
+      width: 0; height: 0;
+      border-left: 5px solid transparent; border-right: 5px solid transparent;
+      border-top: 7px solid color-mix(in srgb, var(--text) 35%, transparent);
+    }
+    .dx-arrow__label {
+      background: var(--surface); padding: 1px 8px; border-radius: 999px;
+      border: 1px solid color-mix(in srgb, var(--text) 18%, transparent);
+      position: absolute; left: 50%; top: 50%;
+      transform: translate(-50%, -50%); white-space: nowrap; z-index: 1;
+    }
+
+    .dx-fork {
+      display: grid; grid-template-columns: 1fr 1fr;
+      position: relative; min-height: 38px; margin: 2px 0 4px;
+    }
+    .dx-fork::before {
+      content: ""; position: absolute;
+      top: 0; left: 25%; right: 25%; height: 2px;
+      background: color-mix(in srgb, var(--text) 35%, transparent);
+    }
+    .dx-fork__leg {
+      position: relative; display: flex; flex-direction: column;
+      align-items: center; justify-content: flex-end;
+      padding-top: 4px; padding-bottom: 4px;
+      font-size: 11.5px; font-weight: 600; color: var(--muted);
+      min-height: 36px;
+    }
+    .dx-fork__leg::before {
+      content: ""; width: 2px; flex: 1;
+      background: color-mix(in srgb, var(--text) 35%, transparent);
+    }
+    .dx-fork__leg::after {
+      content: ""; position: absolute; bottom: 0;
+      width: 0; height: 0;
+      border-left: 5px solid transparent; border-right: 5px solid transparent;
+      border-top: 7px solid color-mix(in srgb, var(--text) 35%, transparent);
+    }
+    .dx-fork__label {
+      background: var(--surface); padding: 1px 8px; border-radius: 999px;
+      border: 1px solid color-mix(in srgb, var(--text) 18%, transparent);
+      margin-bottom: 2px; z-index: 1;
+    }
+
+    .section-tiles { display: none !important; }
+
+    @media (max-width: 600px) {
+      .dx-flow { min-width: 0; font-size: 11px; padding: 2px 0 6px; }
+      .flow-canvas { overflow-x: hidden; padding: 8px 6px 12px; }
+      .flow-canvas__hint { font-size: 0.62rem; margin-bottom: 0.35rem; }
+      .flow-canvas__divider { font-size: 10px; margin: 8px 0 5px; padding-top: 6px; }
+      .dx-node { padding: 4px 5px; min-height: 28px; border-radius: 7px; gap: 1px; }
+      .dx-node__title { font-size: 10px; line-height: 1.22; }
+      .dx-node__sub   { font-size: 8.5px; line-height: 1.25; }
+      .dx-node--decision { border-radius: 8px; }
+      .dx-node--external::after { top: 2px; right: 4px; font-size: 9px; }
+      .dx-layer { gap: 5px; }
+      .dx-layer--root > * { max-width: none; width: 100%; }
+      .dx-layer--tri  { grid-template-columns: repeat(3, 1fr); }
+      .dx-layer--quad { grid-template-columns: 1fr 1fr; }
+      .dx-layer--quint { grid-template-columns: repeat(3, 1fr); }
+      .dx-layer--hex   { grid-template-columns: repeat(3, 1fr); }
+      .dx-arrow { min-height: 22px; margin: 1px 0; }
+      .dx-arrow::before { min-height: 18px; width: 1.5px; }
+      .dx-arrow::after { border-left-width: 4px; border-right-width: 4px; border-top-width: 6px; }
+      .dx-arrow__label { font-size: 8.5px; padding: 0 4px; line-height: 1.4; }
+      .dx-fork { min-height: 22px; }
+      .dx-fork::before { height: 1.5px; }
+      .dx-fork__leg { min-height: 22px; padding-top: 2px; padding-bottom: 2px; font-size: 9px; }
+      .dx-fork__leg::before { width: 1.5px; }
+      .dx-fork__leg::after { border-left-width: 4px; border-right-width: 4px; border-top-width: 6px; }
+      .dx-fork__label { font-size: 8.5px; padding: 0 4px; margin-bottom: 0; }
+    }
+  </style>
+</head>
+<body>
+  <header class="hokuto-top">
+    <a class="hokuto-top__btn" href="../薬剤情報.html">
+      <span class="hokuto-top__icon">℞</span><span>薬剤情報</span>
+    </a>
+    <a class="hokuto-top__btn" href="../表計算.html">
+      <span class="hokuto-top__icon">⊞</span><span>表計算</span>
+    </a>
+  </header>
+
+  <main class="hokuto-main">
+    <article class="note-shell">
+      <h1 class="page-title">急性冠症候群（ACS）</h1>
+
+      <!-- 診療フロー -->
+      <div class="action-header flow-box" id="flowBox">
+        <div class="action-header__title flow-box__title">
+          <span>🗺 ACS の診療フロー（10 分 ECG → ST 分岐 → 等価所見 → リスク → 処方 → 帰宅判定）</span>
+        </div>
+        <div class="flow-canvas">
+          <p class="flow-canvas__hint">10 分以内のセット → 同時並行（問診・身体・採血・ECG） → ST 上昇で分岐 → 等価所見も忘れず → NSTE-ACS は S・E・T → リスク層別化＋侵襲時期 → 個別最適化処方 → HEART で帰宅判定</p>
+          <div class="dx-flow" role="group" aria-label="ACS の診療フロー">
+
+            <!-- L0: 来院 10 分以内のセット -->
+            <div class="dx-layer dx-layer--root">
+              <a class="dx-node dx-node--danger" href="#s1">
+                <div class="dx-node__title">⏱ 来院 10 分以内のセット</div>
+                <div class="dx-node__sub">両上肢血圧／モニター／ルート×2／12 誘導 ECG／採血／酸素 SpO₂&lt;90%</div>
+              </a>
+            </div>
+
+            <div class="dx-arrow"><span class="dx-arrow__label">↓ 同時並行</span></div>
+
+            <!-- L1: 3 軸同時並行 -->
+            <p class="flow-canvas__hint" style="margin:6px 0 4px;font-weight:700;">問診・身体所見・検査を同時並行で進める</p>
+            <div class="dx-layer dx-layer--tri">
+              <a class="dx-node dx-node--action" href="#s2">
+                <div class="dx-node__title">問診（OPQRST）</div>
+                <div class="dx-node__sub">放散・冷汗・嘔気<br>ACS 尤度比表</div>
+              </a>
+              <a class="dx-node dx-node--action" href="#s3">
+                <div class="dx-node__title">身体所見</div>
+                <div class="dx-node__sub">両上肢血圧差<br>新規 AR / S3 / 新規 MR・VSP</div>
+              </a>
+              <a class="dx-node dx-node--action" href="#s4">
+                <div class="dx-node__title">採血・画像</div>
+                <div class="dx-node__sub">hs-cTn 0/1h・D-d・BNP<br>心エコー（壁運動）</div>
+              </a>
+            </div>
+
+            <div class="dx-arrow"><span class="dx-arrow__label">↓ ECG が出たら</span></div>
+
+            <!-- L2: ECG 評価 -->
+            <div class="dx-layer dx-layer--root">
+              <a class="dx-node dx-node--decision" href="#s5">
+                <div class="dx-node__title">📈 12 誘導 ECG を読む</div>
+                <div class="dx-node__sub">ST 上昇定義（V₂,₃ 例外）／責任血管／reciprocal／aVR／V₃R-V₅R／V₇-V₉</div>
+              </a>
+            </div>
+
+            <div class="dx-arrow"><span class="dx-arrow__label">ST 上昇あり？</span></div>
+
+            <!-- L3: ST 上昇分岐 -->
+            <div class="dx-fork">
+              <div class="dx-fork__leg"><span class="dx-fork__label">あり</span></div>
+              <div class="dx-fork__leg"><span class="dx-fork__label">なし／微妙</span></div>
+            </div>
+            <div class="dx-layer dx-layer--branch">
+              <a class="dx-node dx-node--danger" href="#s6">
+                <div class="dx-node__title">🚨 STEMI 対応</div>
+                <div class="dx-node__sub">即循環器コール／採血を待たない<br>D-to-B ≤90 分・DIDO ≤30 分</div>
+              </a>
+              <a class="dx-node dx-node--decision" href="#s7">
+                <div class="dx-node__title">NSTE-ACS の S・E・T</div>
+                <div class="dx-node__sub">2 項目で ACS／1 項目で疑い<br>cTn 0/1h プロトコル</div>
+              </a>
+            </div>
+
+            <div class="flow-canvas__divider">STEMI 等価所見 — ST 上昇がなくても再灌流対応に進めるパターン</div>
+
+            <p class="flow-canvas__hint" style="margin:6px 0 4px;">「ST 上昇なし」と言って帰せない 5 つ — 各リンクで詳細</p>
+            <div class="dx-layer dx-layer--quint">
+              <a class="dx-node dx-node--external" href="Wellens症候群.html">
+                <div class="dx-node__title">Wellens</div>
+                <div class="dx-node__sub">前胸部誘導<br>type A / B の T 波</div>
+              </a>
+              <a class="dx-node dx-node--external" href="de Winterパターン.html">
+                <div class="dx-node__title">de Winter</div>
+                <div class="dx-node__sub">V₁-V₄ ST 低下<br>＋ 高 T 波・aVR ST↑</div>
+              </a>
+              <a class="dx-node dx-node--external" href="後壁梗塞.html">
+                <div class="dx-node__title">後壁</div>
+                <div class="dx-node__sub">V₁-V₃ ST 低下＋高 R<br>V₇-V₉ で確定</div>
+              </a>
+              <a class="dx-node dx-node--warn" href="#s6e">
+                <div class="dx-node__title">aVR ST↑</div>
+                <div class="dx-node__sub">＋ 広範 ST↓<br>LMT ／ 多枝病変</div>
+              </a>
+              <a class="dx-node dx-node--warn" href="#s6e">
+                <div class="dx-node__title">新規 LBBB</div>
+                <div class="dx-node__sub">Sgarbossa 基準<br>修正 Sgarbossa</div>
+              </a>
+            </div>
+
+            <div class="dx-arrow"><span class="dx-arrow__label">NSTE-ACS と判断したら</span></div>
+
+            <!-- L5: リスク層別化 -->
+            <div class="dx-layer dx-layer--root">
+              <a class="dx-node dx-node--decision" href="#s7r">
+                <div class="dx-node__title">🧮 リスク層別化＋侵襲時期</div>
+                <div class="dx-node__sub">GRACE&gt;140 高／TIMI&gt;5 高<br>2h ／ 24h ／ 72h ／ 保存</div>
+              </a>
+            </div>
+
+            <div class="dx-arrow"><span class="dx-arrow__label">↓ ACS rule-in したら</span></div>
+
+            <!-- L6: 個別最適化処方 -->
+            <div class="dx-layer dx-layer--root">
+              <a class="dx-node dx-node--action" href="#s8">
+                <div class="dx-node__title">💊 個別最適化処方</div>
+                <div class="dx-node__sub">硝酸薬（禁忌に注意）／モルヒネ／酸素／アスピリン 162-200 mg／DAPT</div>
+              </a>
+            </div>
+
+            <div class="flow-canvas__divider">ACS rule-out 過程 — 帰宅可否は HEART で根拠を持って</div>
+
+            <!-- L7: HEART -->
+            <div class="dx-layer dx-layer--root">
+              <a class="dx-node dx-node--decision" href="#s9">
+                <div class="dx-node__title">📤 HEART スコア帰宅判定</div>
+                <div class="dx-node__sub">5 項目 0-2 点／0-3 帰宅・4-6 入院・≥7 早期治療</div>
+              </a>
+            </div>
+
+            <div class="dx-arrow"><span class="dx-arrow__label">↓</span></div>
+
+            <div class="dx-fork">
+              <div class="dx-fork__leg"><span class="dx-fork__label">0-3 点 ＋ hs-cTn 陰性</span></div>
+              <div class="dx-fork__leg"><span class="dx-fork__label">4 点以上</span></div>
+            </div>
+            <div class="dx-layer dx-layer--branch">
+              <a class="dx-node dx-node--action" href="#s9">
+                <div class="dx-node__title">🏠 帰宅</div>
+                <div class="dx-node__sub">外来フォロー設定<br>1-2% イベントを忘れない</div>
+              </a>
+              <a class="dx-node dx-node--warn" href="#s9">
+                <div class="dx-node__title">🏥 入院／早期治療</div>
+                <div class="dx-node__sub">循環器コンサルト<br>NSTE-ACS のリスク層別化へ</div>
+              </a>
+            </div>
+
+            <div class="flow-canvas__divider">帰宅後・外来フォロー</div>
+
+            <div class="dx-layer dx-layer--branch">
+              <a class="dx-node dx-node--external" href="安定狭心症.html">
+                <div class="dx-node__title">🩺 安定狭心症（CCS）</div>
+                <div class="dx-node__sub">外来精査（冠動脈 CT・負荷試験）<br>別ページで詳細</div>
+              </a>
+              <a class="dx-node dx-node--warn" href="#s10">
+                <div class="dx-node__title">⚠️ やりがちなミス</div>
+                <div class="dx-node__sub">10 分 ECG なし／aVR・V₃R・V₇-V₉ 見逃し／MONA 機械的処方</div>
+              </a>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- メニュータイル（非表示・互換用） -->
+      <nav class="section-tiles" id="sectionMenu" hidden>
+        <a class="section-tile" href="#s1"><span class="section-tile__name">10 分以内のセット</span></a>
+      </nav>
+
+      <!-- 関連主訴（双方向リンク） -->
+      <details class="sub-fold" id="related-symptoms">
+        <summary>📞 この疾患が該当する主訴</summary>
+        <div class="sub-fold__body">
+          <ul>
+            <li><a class="wiki-link" href="../胸痛.html">胸痛</a> — ACS の最頻主訴。本ページが ACS 詳細の本体</li>
+            <li><a class="wiki-link" href="../呼吸困難.html">呼吸困難</a> — 高齢者・糖尿病・女性は dyspnea-equivalent ACS が典型。胸痛なしでも初期 ECG＋トロポニン</li>
+            <li><a class="wiki-link" href="../意識消失.html">意識消失</a> — 心原性ショック・低灌流・致死性不整脈の合併として</li>
+          </ul>
+        </div>
+      </details>
+
+      <!-- §s1 来院 10 分以内のセット -->
+      <section class="section-page" id="s1" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>⏱ 来院 10 分以内のセット</h2>
+
+        <div class="callout callout-summary">
+          <div class="callout-title">ACS を疑ったら、すべて並行で動く</div>
+          <div class="callout-body"><ul>
+            <li>胸痛（および dyspnea-equivalent の高齢者）には<strong>来院から 10 分以内に 12 誘導 ECG</strong>。初回で診断できなければ <strong>5〜10 分ごとに再検</strong>。</li>
+            <li>「採血が揃ってから連絡」ではない。<strong>STEMI なら採血を待たず再灌流療法を開始</strong>。</li>
+            <li>10 分以内にすべて並行で動く意識を持つ。</li>
+          </ul></div>
+        </div>
+
+        <h3>来院 10 分以内に行うこと</h3>
+        <ul>
+          <li><strong>両上肢血圧</strong>（左右差で大動脈解離を否定／硝酸薬投与判断）</li>
+          <li><strong>モニター装着</strong>（VF / VT などの致死性不整脈に備える）</li>
+          <li><strong>静脈ルート ×2 確保</strong>（薬剤投与・採血同時）</li>
+          <li><strong>12 誘導 ECG</strong>（10 分以内、必要に応じて V₃R-V₅R・V₇-V₉ 追加）</li>
+          <li><strong>採血</strong>：hs-cTn（0/1h プロトコル）／D ダイマー／血算／生化（電解質・腎肝）／凝固／血液型／血ガス（lactate）</li>
+          <li><strong>酸素</strong>：<strong>SpO₂&lt;90%</strong> または心不全徴候があれば開始（ルーチン投与は禁）</li>
+          <li><strong>胸部 X 線</strong>（縦隔拡大で解離否定／肺うっ血の確認）</li>
+          <li><strong>POCUS（心エコー）</strong>：壁運動異常・McConnell・心嚢液貯留・新規弁膜症</li>
+        </ul>
+
+        <div class="callout callout-warning">
+          <div class="callout-title">この時点で意識する 5 killer disease</div>
+          <div class="callout-body"><p>ACS／急性大動脈解離／急性肺血栓塞栓症／緊張性気胸／食道破裂・穿孔。心タンポナーデ・致死性不整脈も常に念頭に。</p></div>
+        </div>
+      </section>
+
+      <!-- §s2 問診（OPQRST + ACS 尤度比） -->
+      <section class="section-page" id="s2" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🎯 問診（OPQRST ＋ ACS らしさ）</h2>
+
+        <h3>OPQRST</h3>
+        <ul>
+          <li><strong>O</strong>nset：突然 vs 徐々に。突然なら 5 killer（ACS／解離／PE／気胸／食道破裂）優先</li>
+          <li><strong>P</strong>rovocation／<strong>P</strong>alliation：労作で誘発・安静で軽快＝労作性狭心症らしい</li>
+          <li><strong>Q</strong>uality：絞扼感・圧迫感・「象が乗っている」</li>
+          <li><strong>R</strong>egion／<strong>R</strong>adiation：放散先（後述の尤度比）</li>
+          <li><strong>S</strong>everity：NRS／日常との差</li>
+          <li><strong>T</strong>iming：持続時間・頻度・夜間／早朝</li>
+        </ul>
+
+        <h3>ACS らしい症状の尤度比（LR+）</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>所見</th><th>LR+</th></tr></thead>
+          <tbody>
+            <tr><td>右腕／右肩への放散</td><td><strong>4.7</strong></td></tr>
+            <tr><td>両腕／両肩への放散</td><td><strong>4.1</strong></td></tr>
+            <tr><td>労作関連</td><td>2.4</td></tr>
+            <tr><td>左腕／左肩への放散</td><td>2.3</td></tr>
+            <tr><td>冷や汗</td><td>2.0</td></tr>
+            <tr><td>嘔気・嘔吐</td><td>1.9</td></tr>
+          </tbody>
+        </table></div>
+
+        <h3>ACS らしくない所見</h3>
+        <ul>
+          <li>胸膜炎様痛（深呼吸・咳で増悪）</li>
+          <li>体位変化で痛みが変わる</li>
+          <li>刺すような限局痛</li>
+          <li>胸壁圧痛で再現できる（ただし PE / 気胸も否定はできない）</li>
+        </ul>
+
+        <h3>聞き漏らさない 4 項目</h3>
+        <ul>
+          <li><strong>冠危険因子</strong>：高血圧・脂質異常症・糖尿病・喫煙・冠動脈疾患の家族歴・肥満（BMI&gt;30）</li>
+          <li><strong>既往</strong>：MI／PCI／CABG／脳卒中／PAD／CKD</li>
+          <li><strong>内服歴</strong>：抗血小板薬・抗凝固薬／<strong>シルデナフィル等 PDE5 阻害薬服用後 24 時間以内</strong>（硝酸薬禁忌）</li>
+          <li><strong>違法薬物</strong>：コカイン・覚醒剤（冠攣縮・若年 ACS）</li>
+        </ul>
+
+        <h3>検査前確率の年齢別目安（参考）</h3>
+        <ul>
+          <li>若年（&lt;40 歳）の典型的胸痛でも ACS 検査前確率は低い。一方で<strong>家族歴・コカイン・川崎病既往</strong>では油断しない。</li>
+          <li>高齢者・糖尿病・女性は<strong>胸痛なしの ACS（dyspnea-equivalent）</strong>が典型。呼吸困難・嘔気・上腹部痛・倦怠感だけで来院することがある。</li>
+        </ul>
+      </section>
+
+      <!-- §s3 身体所見 -->
+      <section class="section-page" id="s3" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>👂 身体所見</h2>
+
+        <div class="table-wrap"><table>
+          <thead><tr><th>項目</th><th>所見と意味</th></tr></thead>
+          <tbody>
+            <tr><td><strong>両上肢血圧差</strong></td><td>20 mmHg 以上の差は急性大動脈解離を示唆。<strong>解離否定が硝酸薬・抗血小板薬投与の前提</strong></td></tr>
+            <tr><td><strong>新規 AR の拡張早期雑音</strong></td><td>近位部解離（Stanford A）の合併サイン</td></tr>
+            <tr><td><strong>S3／S4</strong></td><td>S3：左室不全（拡張早期）／S4：心筋虚血・LV コンプライアンス低下（心房収縮期）</td></tr>
+            <tr><td><strong>新規 MR の収縮期雑音</strong></td><td>乳頭筋断裂・後壁梗塞合併の可能性。突然の急性肺水腫</td></tr>
+            <tr><td><strong>新規 VSP の収縮期雑音</strong></td><td>胸骨左縁下部・thrill 触れる。STEMI 数日後の機械的合併症</td></tr>
+            <tr><td><strong>頸静脈怒張</strong></td><td>右心系過負荷（右室梗塞・PE・タンポナーデ・緊張性気胸）</td></tr>
+            <tr><td><strong>下肢</strong></td><td>片側腫脹 → DVT・PE／両側浮腫 → 心不全合併</td></tr>
+            <tr><td><strong>皮膚</strong></td><td>冷汗・蒼白・mottling → ショック・低灌流</td></tr>
+          </tbody>
+        </table></div>
+
+        <div class="callout callout-warning">
+          <div class="callout-title">右室梗塞のベッドサイドサイン</div>
+          <div class="callout-body"><p>下壁 STEMI ＋ <strong>低血圧＋頸静脈怒張＋肺野清明</strong>のトライアドは右室梗塞合併を強く示唆。<strong>硝酸薬を避ける（前負荷低下で低血圧）</strong>。V₃R-V₅R を追加して確認。</p></div>
+        </div>
+      </section>
+
+      <!-- §s4 採血と画像 -->
+      <section class="section-page" id="s4" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🩸 採血と画像</h2>
+
+        <h3>血液検査</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>検査</th><th>狙いと読み方</th></tr></thead>
+          <tbody>
+            <tr><td><strong>高感度トロポニン（hs-cTn）</strong></td><td><strong>0/1h プロトコル</strong>。発症 2 時間以内でも上昇を捉えうる。陰性でも 1（〜3）時間後に再検し<strong>経時変化（動的上昇／下降）</strong>を評価</td></tr>
+            <tr><td><strong>D ダイマー</strong></td><td>急性大動脈解離・PE のスクリーニング</td></tr>
+            <tr><td><strong>BNP / NT-proBNP</strong></td><td>心不全合併（CS4）の評価</td></tr>
+            <tr><td><strong>CBC・生化・電解質</strong></td><td>K・Mg は不整脈合併に直結。腎機能は造影剤・DAPT 選択に影響</td></tr>
+            <tr><td><strong>凝固・血型</strong></td><td>PCI / CABG に向けて事前準備</td></tr>
+            <tr><td><strong>血ガス（lactate）</strong></td><td>低灌流の客観的指標</td></tr>
+          </tbody>
+        </table></div>
+
+        <div class="callout callout-warning">
+          <div class="callout-title">高感度トロポニンの偽上昇源</div>
+          <div class="callout-body"><p>心不全・心筋炎・腎不全・PE・敗血症・大動脈解離・脳卒中・横紋筋融解・電気的除細動後でも上昇する。<strong>1 発の値で判断せず、経時変化と臨床像で解釈</strong>。</p></div>
+        </div>
+
+        <h3>画像</h3>
+        <ul>
+          <li><strong>胸部 X 線</strong>：縦隔拡大（解離否定）・肺うっ血・心拡大・気胸の有無</li>
+          <li><strong>POCUS（心エコー）</strong>：
+            <ul>
+              <li><strong>壁運動異常</strong>：責任血管領域に一致するか（前壁・側壁・下壁・後壁）</li>
+              <li><strong>McConnell 徴候</strong>：RV 自由壁低下＋心尖部温存＝急性 PE 示唆</li>
+              <li><strong>心嚢液貯留</strong>：タンポナーデ／解離合併</li>
+              <li><strong>新規弁膜症</strong>：急性 MR（乳頭筋断裂）・急性 AR（解離合併）</li>
+            </ul>
+          </li>
+          <li><strong>造影 CT</strong>：解離・PE が鑑別に残ったときに行う（hs-cTn だけでは鑑別しきれない）</li>
+        </ul>
+      </section>
+
+      <!-- §s5 12 誘導 ECG -->
+      <section class="section-page" id="s5" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>📈 12 誘導 ECG の読み方</h2>
+
+        <h3>ST 上昇の正式定義</h3>
+        <div class="callout callout-summary">
+          <div class="callout-title">連続 2 誘導以上で J 点上昇</div>
+          <div class="callout-body"><ul>
+            <li><strong>V₂、V₃ 以外</strong>：1 mm 以上</li>
+            <li><strong>V₂、V₃</strong>（年齢・性別で例外あり）：
+              <ul>
+                <li>40 歳以上男性：<strong>2 mm</strong> 以上</li>
+                <li>40 歳未満男性：<strong>2.5 mm</strong> 以上</li>
+                <li>女性：<strong>1.5 mm</strong> 以上</li>
+              </ul>
+            </li>
+            <li>ST 上昇／低下は <strong>J 点（QRS-ST 接合部）</strong>の偏位で判断</li>
+          </ul></div>
+        </div>
+
+        <h3>ST 上昇部位 → 責任血管マップ</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>部位</th><th>誘導</th><th>責任血管</th></tr></thead>
+          <tbody>
+            <tr><td><strong>前壁</strong></td><td>V₁〜V₆</td><td>左前下行枝（LAD）</td></tr>
+            <tr><td><strong>側壁</strong></td><td>V₅、V₆、I、aVL</td><td>左回旋枝（LCx）</td></tr>
+            <tr><td><strong>下壁</strong></td><td>II、III、aVF</td><td>主に右冠動脈（RCA）（III &gt; II なら RCA、II &gt; III なら LCx を疑う）</td></tr>
+            <tr><td><strong>後壁</strong></td><td>V₇〜V₉</td><td>左回旋枝（LCx）</td></tr>
+            <tr><td><strong>右室</strong></td><td>V₁、V₃R〜V₅R</td><td>右冠動脈（RCA）近位部</td></tr>
+          </tbody>
+        </table></div>
+
+        <h3>Reciprocal change（対側誘導の ST 低下）</h3>
+        <ul>
+          <li>下壁 STEMI（II・III・aVF）→ I・aVL の reciprocal ST 低下</li>
+          <li>前壁・側壁 STEMI → 下壁の reciprocal ST 低下</li>
+          <li><strong>ST 低下を見たら必ず対側誘導で ST 上昇がないかを確認</strong></li>
+        </ul>
+
+        <h3>aVR の ST 上昇</h3>
+        <div class="callout callout-danger">
+          <div class="callout-title">aVR ST 上昇＋広範 ST 低下＝LMT／多枝病変</div>
+          <div class="callout-body"><p>広範囲 ST 低下に紛れて<strong>見落としやすい</strong>。aVR の ST 上昇は<strong>左主幹部（LMT）または多枝病変</strong>を示唆し、緊急再灌流相当の重症度。常に aVR を意識的にチェック。</p></div>
+        </div>
+
+        <h3>右室梗塞 — V₃R〜V₅R 追加</h3>
+        <ul>
+          <li>下壁 STEMI（特に <strong>III &gt; II</strong>）では<strong>右室梗塞合併を疑い、V₃R〜V₅R を追加</strong></li>
+          <li>右室梗塞合併時は <strong>硝酸薬を避ける</strong>（前負荷低下で低血圧）</li>
+          <li>低血圧＋頸静脈怒張＋肺野清明のトライアドが揃えば強く示唆</li>
+        </ul>
+
+        <h3>後壁梗塞 — V₇〜V₉ 追加</h3>
+        <ul>
+          <li>通常の 12 誘導では ST 上昇が出ない。<strong>背側部誘導 V₇〜V₉</strong>を記録</li>
+          <li>V₁〜V₃ で <strong>ST 低下＋高 R 波</strong>（鏡像）を見たら後壁梗塞を疑う</li>
+          <li>詳細 → <a class="wiki-link" href="後壁梗塞.html">後壁梗塞</a></li>
+        </ul>
+
+        <h3>Hyperacute T 波（超急性期）</h3>
+        <ul>
+          <li>発症超急性期は<strong>尖鋭・増高 T 波</strong>が ST 上昇に先行する</li>
+          <li>過去心電図との比較・違和感を大切に。「正常範囲」と決めつけない</li>
+          <li>de Winter パターンとも overlap する → <a class="wiki-link" href="de Winterパターン.html">de Winter パターン</a></li>
+        </ul>
+
+        <h3>NSTE-ACS の心電図変化（虚血性所見）</h3>
+        <ul>
+          <li><strong>ST 低下</strong>：J 点で V₂、V₃ 以外 0.5 mm 以上、V₂、V₃ で 1 mm 以上</li>
+          <li><strong>陰性 T 波</strong></li>
+          <li><strong>異常 Q 波</strong></li>
+          <li><strong>異常 U 波</strong></li>
+          <li><strong>QRS 幅延長</strong></li>
+        </ul>
+
+        <h3>その他の鑑別（ST 上昇に見える疾患）</h3>
+        <ul>
+          <li>早期再分極（J 波）／心膜炎（広範 ST 上昇＋PR 低下）／LVH／脚ブロック／<a class="wiki-link" href="Brugada心電図.html">Brugada</a>／<a class="wiki-link" href="高K血症心電図.html">高 K 血症</a>／たこつぼ心筋症</li>
+        </ul>
+      </section>
+
+      <!-- §s6 STEMI 対応 -->
+      <section class="section-page" id="s6" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🚨 STEMI 対応</h2>
+
+        <div class="callout callout-danger">
+          <div class="callout-title">STEMI と判断したら、結果を待たず即コール</div>
+          <div class="callout-body"><ul>
+            <li>STEMI と判断したら、<strong>結果を待たず直ちに循環器内科医にコンサルト</strong>。</li>
+            <li>自信がなくても「ST 上昇かもしれない」と思った時点で相談を。</li>
+            <li><strong>STEMI なら採血を待たず再灌流療法を開始</strong>することが多い。</li>
+          </ul></div>
+        </div>
+
+        <h3>連絡から到着までの間に並行で進める項目</h3>
+        <ul>
+          <li>問診：冠危険因子・既往・<strong>抗血小板薬／抗凝固薬の服用歴</strong></li>
+          <li>バイタル・<strong>両上肢血圧差</strong>（解離否定）</li>
+          <li>心雑音（機械的合併症の検出）</li>
+          <li>採血：トロポニン・電解質（ただし結果待ちで再灌流を遅らせない）</li>
+          <li>胸部 X 線・心エコー</li>
+        </ul>
+
+        <h3>時間目標（door-to-balloon を超えて）</h3>
+        <ul>
+          <li><strong>D-to-B（door-to-balloon）≤ 90 分</strong>：来院から PCI バルーン拡張まで</li>
+          <li><strong>DIDO（door-in-door-out）≤ 30 分</strong>：PCI 不可施設での搬送決定〜搬出まで</li>
+          <li><strong>総虚血時間</strong>：日本の観察研究では D-to-B 90 分達成より<strong>「発症から再灌流までの総虚血時間」</strong>の短さが予後と相関</li>
+          <li>線溶療法：PCI までに 120 分以上かかる施設では fibrinolysis を考慮（症状発症 12 時間以内）</li>
+        </ul>
+
+        <h3>STEMI コンサルト文（他科コンサルト実践マニュアル準拠）</h3>
+        <div class="callout callout-summary">
+          <div class="callout-title">構成</div>
+          <div class="callout-body"><ul>
+            <li>【目的】緊急 PCI のための循環器コンサルト</li>
+            <li>【疾患】〇〇歳〇性、ST 上昇 ◯ 誘導 STEMI</li>
+            <li>【既往歴】HT / DM / DL / MI（PCI 既往）／脳卒中 など</li>
+            <li>【内服薬】抗血小板薬・抗凝固薬・PDE5 阻害薬の有無</li>
+            <li>【ADL】自立／要介助</li>
+            <li>【現病歴】発症時刻 ◯時、来院 ◯時、ECG 所見、両上肢血圧差なし、解離否定的</li>
+          </ul></div>
+        </div>
+
+        <h3>STEMI のリンク</h3>
+        <p>詳細な ECG 所見・治療プロトコル → <a class="wiki-link" href="STEMI.html">STEMI</a></p>
+      </section>
+
+      <!-- §s6e STEMI 等価所見 -->
+      <section class="section-page" id="s6e" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>⚠️ STEMI 等価所見（ST 上昇がなくても再灌流対応）</h2>
+
+        <p>「ST 上昇なし」と言って帰せない 5 つのパターン。これらは <strong>NSTE-ACS の中でも最重症</strong>として STEMI 同等に対応する。</p>
+
+        <h3>1. Wellens 症候群</h3>
+        <ul>
+          <li>痛みが<strong>消失している</strong>時の心電図に出る、LAD 近位部の重症狭窄サイン</li>
+          <li><strong>type A</strong>：V₂・V₃ の T 波が二相性（biphasic）</li>
+          <li><strong>type B</strong>：V₂・V₃ の T 波が深く対称性に陰転</li>
+          <li>胸痛が再発すると ST 上昇に転じる。<strong>負荷試験は禁忌</strong></li>
+          <li>詳細 → <a class="wiki-link" href="Wellens症候群.html">Wellens 症候群</a></li>
+        </ul>
+
+        <h3>2. de Winter T 波</h3>
+        <ul>
+          <li>V₁〜V₄ で <strong>J 点 ST 低下＋高く尖った T 波</strong>＋ aVR の ST 上昇</li>
+          <li>LAD 完全閉塞のサイン。STEMI 等価として緊急 PCI</li>
+          <li>詳細 → <a class="wiki-link" href="de Winterパターン.html">de Winter パターン</a></li>
+        </ul>
+
+        <h3>3. 後壁梗塞</h3>
+        <ul>
+          <li>V₁〜V₃ で <strong>ST 低下＋高 R 波</strong>（前壁誘導からは鏡像）</li>
+          <li><strong>V₇〜V₉ を追加</strong>して ST 上昇を確認すれば確定</li>
+          <li>詳細 → <a class="wiki-link" href="後壁梗塞.html">後壁梗塞</a></li>
+        </ul>
+
+        <h3>4. aVR ST 上昇＋広範 ST 低下</h3>
+        <ul>
+          <li>aVR で 1 mm 以上の ST 上昇＋6 誘導以上での広範 ST 低下</li>
+          <li><strong>左主幹部（LMT）または多枝病変</strong>を示唆</li>
+          <li>緊急再灌流相当の重症度。広範 ST 低下に紛れて見逃さない</li>
+        </ul>
+
+        <h3>5. 新規 LBBB ＋ Sgarbossa 基準</h3>
+        <p>LBBB 自体は STEMI 診断を困難にするが、<strong>Sgarbossa 基準</strong>と<strong>修正 Sgarbossa 基準</strong>で評価可能。</p>
+        <div class="table-wrap"><table>
+          <thead><tr><th>基準</th><th>所見</th><th>点数</th></tr></thead>
+          <tbody>
+            <tr><td>Sgarbossa ①</td><td>QRS と同方向の <strong>ST 上昇 ≥1 mm</strong>（concordant ST↑）</td><td>5 点</td></tr>
+            <tr><td>Sgarbossa ②</td><td>V₁・V₂・V₃ の <strong>ST 低下 ≥1 mm</strong>（concordant ST↓）</td><td>3 点</td></tr>
+            <tr><td>Sgarbossa ③（古典版）</td><td>QRS と反対方向の <strong>ST 上昇 ≥5 mm</strong>（discordant ST↑）</td><td>2 点</td></tr>
+            <tr><td><strong>修正 Sgarbossa（Smith）</strong></td><td>discordant ST 上昇／S 波の深さ比 <strong>≤ −0.25</strong></td><td>STEMI 同等として扱う</td></tr>
+          </tbody>
+        </table></div>
+        <ul>
+          <li>合計 <strong>3 点以上</strong>で STEMI に高い特異度</li>
+          <li>修正 Sgarbossa は感度が高く、現代的にはこちらが推奨</li>
+          <li>ペースメーカー調律でも応用される</li>
+        </ul>
+
+        <div class="callout callout-warning">
+          <div class="callout-title">どれも循環器即コール</div>
+          <div class="callout-body"><p>等価所見 5 つは、NSTE-ACS の枠で「24 時間以内」と悠長に構えない。<strong>STEMI と同等の緊急再灌流対象</strong>として扱う。</p></div>
+        </div>
+      </section>
+
+      <!-- §s7 NSTE-ACS の S・E・T -->
+      <section class="section-page" id="s7" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🧩 NSTE-ACS の S・E・T（3 本柱）</h2>
+
+        <div class="callout callout-summary">
+          <div class="callout-title">2 項目で ACS、1 項目で ACS 疑い</div>
+          <div class="callout-body"><p>ST 上昇がなくても ACS は否定できない。診断の 3 本柱を確認し、<strong>2 項目満たせば ACS として対応、1 項目なら ACS 疑い</strong>として再評価ループに入る。</p></div>
+        </div>
+
+        <h3>3 本柱の中身</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th></th><th>項目</th><th>具体的な拾い方</th></tr></thead>
+          <tbody>
+            <tr><td><strong>S</strong></td><td>Symptom（胸部症状＋既往歴・冠危険因子）</td><td>ACS 尤度比 LR+ 高い症状（→ <a class="wiki-link" href="#s2">§s2</a>）／冠危険因子・既往</td></tr>
+            <tr><td><strong>E</strong></td><td>ECG（虚血性変化）</td><td>ST 低下／陰性 T／異常 Q／異常 U／QRS 幅延長（→ <a class="wiki-link" href="#s5">§s5</a>）</td></tr>
+            <tr><td><strong>T</strong></td><td>Troponin（上昇）</td><td>hs-cTn 0/1h プロトコルでの<strong>動的変化</strong>を見る</td></tr>
+          </tbody>
+        </table></div>
+
+        <h3>hs-cTn 0/1h プロトコル</h3>
+        <ul>
+          <li>0 時点と 1 時間後の値の<strong>絶対値・変化量</strong>でアルゴリズムに従い rule-in / observe / rule-out に分類</li>
+          <li>陰性でも症状再発・心電図変化があれば再検</li>
+          <li>3 時間後再検が標準アルゴリズムに残るプロトコルもある</li>
+        </ul>
+
+        <h3>偽上昇源（再掲）</h3>
+        <ul>
+          <li>心不全・心筋炎・腎不全・PE・敗血症・大動脈解離・脳卒中・横紋筋融解・電気的除細動後</li>
+          <li><strong>1 発の値ではなく経時変化＋臨床像</strong>で解釈する</li>
+        </ul>
+
+        <div class="callout callout-tip">
+          <div class="callout-title">緊急鑑別「5 killer disease」を常に並走</div>
+          <div class="callout-body"><p>ACS／急性大動脈解離／急性肺血栓塞栓症／緊張性気胸／食道破裂・穿孔。<strong>S・E・T が 1 項目しか合わないとき</strong>こそ、これら他の killer を見直す。</p></div>
+        </div>
+      </section>
+
+      <!-- §s7r リスク層別化＋侵襲時期 -->
+      <section class="section-page" id="s7r" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🧮 リスク層別化＋侵襲的治療の時期</h2>
+
+        <h3>リスクスコア</h3>
+        <ul>
+          <li><strong>GRACE スコア</strong>（最近の欧州 GL では推奨）：年齢・心拍数・収縮期血圧・Cr・Killip 分類・心停止既往・ST 偏位・トロポニン上昇から算出。<strong>&gt; 140 で高リスク</strong></li>
+          <li><strong>TIMI スコア</strong>：7 項目、<strong>&gt; 5 で高リスク</strong></li>
+          <li>GRACE と TIMI は併用してもよい。日本の実臨床では両方を見るのが一般的</li>
+        </ul>
+
+        <h3>侵襲的治療の時期</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>時期</th><th>適応</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><strong>2 時間以内（緊急）</strong></td>
+              <td>
+                ・硝酸薬・鎮痛薬でも<strong>持続／再発する胸痛</strong><br>
+                ・<strong>心不全合併</strong>（CS4 相当）<br>
+                ・<strong>血行動態不安定・致死性不整脈</strong><br>
+                ・<strong>機械的合併症</strong>（急性 MR・VSP 等）
+              </td>
+            </tr>
+            <tr>
+              <td><strong>24 時間以内</strong></td>
+              <td>
+                ・TIMI&gt;5 または <strong>GRACE&gt;140</strong> の高リスク<br>
+                ・新たな心電図変化<br>
+                ・<strong>トロポニンの動的上昇／下降</strong>
+              </td>
+            </tr>
+            <tr>
+              <td><strong>72 時間以内</strong></td>
+              <td>
+                ・糖尿病<br>
+                ・腎機能障害（GFR&lt;60）<br>
+                ・<strong>低左心機能（EF&lt;40%）</strong><br>
+                ・血行再建既往（PCI / CABG）<br>
+                ・<strong>GRACE 109〜140 の中等度リスク</strong>
+              </td>
+            </tr>
+            <tr>
+              <td><strong>保存的治療</strong></td>
+              <td>上記リスクなし／GRACE&lt;109／症状再燃なし</td>
+            </tr>
+          </tbody>
+        </table></div>
+
+        <div class="callout callout-warning">
+          <div class="callout-title">緊急コンサルトの 3 シーン</div>
+          <div class="callout-body"><ol>
+            <li>STEMI 判断時</li>
+            <li>リスク層別化で<strong>中〜高リスク</strong></li>
+            <li>初期治療開始後も症状／所見が残存・増悪</li>
+          </ol>
+          <p>一度方針を立てても、症状・心電図・トロポニンの再評価で増悪すれば<strong>即時にリスク再評価し再相談</strong>。</p></div>
+        </div>
+      </section>
+
+      <!-- §s8 個別最適化処方 -->
+      <section class="section-page" id="s8" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>💊 個別最適化処方（MONA から個別へ）</h2>
+
+        <div class="callout callout-summary">
+          <div class="callout-title">MONA は「機械的に投与」ではない</div>
+          <div class="callout-body"><p>モルヒネ・酸素・硝酸薬・アスピリンの固定運用は時代遅れ。<strong>各薬剤に明確な適応・禁忌・用量がある</strong>。患者の血行動態・併用薬・SpO₂ で個別に判断する。</p></div>
+        </div>
+
+        <h3>硝酸薬（ニトログリセリン）</h3>
+        <ul>
+          <li>第一選択の<strong>症状緩和</strong>。死亡率改善は示されないが、ルーチン使用は可</li>
+          <li><strong>用量</strong>：
+            <ul>
+              <li>舌下：<strong>0.3〜0.6 mg</strong>（数分で効果なければ追加）</li>
+              <li>持続静注：<strong>25 mg / 50 mL を 0.1〜0.2 μg/kg/min</strong>で開始し、血圧で調整</li>
+            </ul>
+          </li>
+        </ul>
+        <div class="callout callout-danger">
+          <div class="callout-title">硝酸薬の禁忌</div>
+          <div class="callout-body"><ul>
+            <li>収縮期血圧 <strong>&lt; 90 mmHg</strong> または通常より <strong>−30 mmHg</strong></li>
+            <li>徐脈 <strong>&lt; 50 bpm</strong></li>
+            <li><strong>右室梗塞合併疑い</strong>（前負荷依存性）</li>
+            <li><strong>シルデナフィル等 PDE5 阻害薬服用後 24 時間以内</strong></li>
+          </ul></div>
+        </div>
+
+        <h3>モルヒネ（鎮痛薬）</h3>
+        <ul>
+          <li>硝酸薬で改善しない胸痛にのみ：塩酸モルヒネ <strong>2〜4 mg 静注</strong>（5〜15 分ごとに 2〜8 mg 追加）</li>
+          <li>代替：ブプレノルフィン</li>
+          <li><strong>ルーチン使用は推奨されない</strong>（呼吸抑制・嘔吐・低血圧、抗血小板薬の吸収低下）</li>
+        </ul>
+
+        <h3>酸素</h3>
+        <ul>
+          <li><strong>ルーチン投与は禁</strong></li>
+          <li><strong>SpO₂ &lt; 90%</strong> または心不全徴候があれば開始</li>
+          <li>低酸素が高度なら NPPV や挿管も考慮</li>
+        </ul>
+
+        <h3>アスピリン</h3>
+        <ul>
+          <li>ACS が疑わしい時点で <strong>162〜200 mg を咀嚼内服</strong></li>
+          <li>アレルギー時はチエノピリジン系で代替</li>
+        </ul>
+
+        <h3>DAPT（dual antiplatelet therapy）</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>第 2 抗血小板薬</th><th>初回負荷用量</th><th>維持量</th><th>位置づけ</th></tr></thead>
+          <tbody>
+            <tr><td><strong>プラスグレル</strong></td><td>20 mg</td><td>3.75 mg/day</td><td>第一選択（CYP 代謝の個人差が小さい）。脳卒中既往・低体重・高齢で慎重</td></tr>
+            <tr><td><strong>クロピドグレル</strong></td><td>300 mg</td><td>75 mg/day</td><td>プラスグレル困難時。CYP2C19 多型で効果に差</td></tr>
+            <tr><td><strong>チカグレロル</strong></td><td>180 mg</td><td>90 mg × 2/day</td><td>他剤困難時。呼吸困難の副作用</td></tr>
+          </tbody>
+        </table></div>
+        <ul>
+          <li><strong>STEMI</strong>：アスピリンと同タイミングで投与可（再灌流前ローディング）</li>
+          <li><strong>NSTE-ACS</strong>：外科血行再建（CABG）可能性があるため<strong>ルーチン開始は推奨されない</strong>（欧州 GL で Class III）。<strong>PCI 決定時にカテ台で負荷投与</strong>することが多い</li>
+        </ul>
+
+        <div class="callout callout-tip">
+          <div class="callout-title">研修医の使い分け要点</div>
+          <div class="callout-body"><ul>
+            <li>疼痛緩和は<strong>硝酸薬から</strong>。右室梗塞・低血圧・徐脈・PDE5 阻害薬服用に注意</li>
+            <li>酸素はルーチンで投与しない（SpO₂ &lt; 90%）</li>
+            <li>アスピリンは疑った時点で投与、第 2 の抗血小板薬は<strong>施設のコンセンサス</strong>を確認</li>
+          </ul></div>
+        </div>
+      </section>
+
+      <!-- §s9 HEART 帰宅判定 -->
+      <section class="section-page" id="s9" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>📤 HEART スコアによる帰宅判定</h2>
+
+        <div class="callout callout-summary">
+          <div class="callout-title">「なんとなく」で帰さない</div>
+          <div class="callout-body"><p>症状消失・心電図不変・トロポニン 2 回陰性で帰宅を検討するときも、<strong>HEART スコアで根拠を持って</strong>判断する。</p></div>
+        </div>
+
+        <h3>HEART スコア（5 項目 0〜2 点）</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>項目</th><th>0 点</th><th>1 点</th><th>2 点</th></tr></thead>
+          <tbody>
+            <tr><td><strong>H</strong>istory（病歴）</td><td>非典型</td><td>中等度</td><td>典型的</td></tr>
+            <tr><td><strong>E</strong>CG</td><td>正常</td><td>非特異的変化</td><td>有意な ST 偏位</td></tr>
+            <tr><td><strong>A</strong>ge</td><td>&lt; 45</td><td>45〜64</td><td>≥ 65</td></tr>
+            <tr><td><strong>R</strong>isk factors</td><td>0</td><td>1〜2</td><td>≥ 3 または既往あり</td></tr>
+            <tr><td><strong>T</strong>roponin</td><td>正常上限以下</td><td>1〜3 倍</td><td>&gt; 3 倍</td></tr>
+          </tbody>
+        </table></div>
+
+        <h3>判定</h3>
+        <ul>
+          <li><strong>0〜3 点</strong>：帰宅可（30 日 MACE リスク低）</li>
+          <li><strong>4〜6 点</strong>：入院精査</li>
+          <li><strong>≥ 7 点</strong>：早期治療（侵襲的アプローチ）</li>
+        </ul>
+
+        <h3>危険因子（R の中身）</h3>
+        <ul>
+          <li>高コレステロール血症</li>
+          <li>高血圧</li>
+          <li>糖尿病</li>
+          <li>喫煙</li>
+          <li>冠動脈疾患の家族歴</li>
+          <li>肥満（BMI &gt; 30）</li>
+        </ul>
+
+        <h3>modified low-risk HEART（高感度トロポニン使用時）</h3>
+        <ul>
+          <li><strong>≤ 3 点 ＋ 高感度トロポニン陰性</strong>を低リスクとして帰宅判断</li>
+          <li>0/1h プロトコルと組み合わせて運用</li>
+        </ul>
+
+        <div class="callout callout-warning">
+          <div class="callout-title">低リスクでも 1〜2% でイベントが起きる</div>
+          <div class="callout-body"><ul>
+            <li>低リスク帰宅でも <strong>1〜2% の心血管イベント</strong>が報告されている。帰宅は終点ではない</li>
+            <li><strong>冠動脈 CT・負荷試験など外来精査につなぐ</strong>（→ <a class="wiki-link" href="安定狭心症.html">安定狭心症</a>）</li>
+            <li>低リスクで帰宅でも、その後のフォロー方針を循環器内科医と共有する</li>
+            <li>中等度リスク（HEART 4〜6 点）は症状改善・本人の入院希望なしでも、<strong>帰宅是非を必ず相談</strong></li>
+          </ul></div>
+        </div>
+
+        <h3>再診基準（指導文）</h3>
+        <ul>
+          <li>胸痛・冷汗・呼吸困難・失神の再発</li>
+          <li>放散痛の出現・労作で誘発される胸痛</li>
+          <li>嘔気・嘔吐＋上腹部痛（高齢者・糖尿病で dyspnea-equivalent ACS）</li>
+        </ul>
+      </section>
+
+      <!-- §s10 やりがちなミス -->
+      <section class="section-page" id="s10" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>⚠️ やりがちなミス</h2>
+
+        <ul>
+          <li><strong>10 分以内に ECG を取らない</strong> — 来院から ECG 出力までを 10 分以内に統一する</li>
+          <li><strong>aVR の ST 上昇を見逃す</strong> — 広範 ST 低下に紛れる。LMT・多枝病変</li>
+          <li><strong>下壁 STEMI で V₃R-V₅R を追加しない</strong> — 右室梗塞合併で硝酸薬投与してショック</li>
+          <li><strong>V₁-V₃ ST 低下＋高 R 波で V₇-V₉ を取らない</strong> — 後壁梗塞を見逃す</li>
+          <li><strong>新規 LBBB を「読めない」で済ませる</strong> — Sgarbossa／修正 Sgarbossa で評価</li>
+          <li><strong>右室梗塞に硝酸薬</strong> — 前負荷低下で低血圧・ショック</li>
+          <li><strong>MONA を機械的に処方</strong> — 各薬剤に適応・禁忌・用量がある</li>
+          <li><strong>HEART を取らずに「症状軽快したから」と帰す</strong> — 根拠なき帰宅</li>
+          <li><strong>高感度トロポニン 1 発で「陰性だから帰宅」</strong> — 0/1h の動的変化を見る</li>
+          <li><strong>採血が揃ってから循環器コール</strong> — STEMI なら採血を待たず再灌流療法を開始</li>
+        </ul>
+      </section>
+
+      <!-- §s11 出典・関連リンク -->
+      <section class="section-page" id="s11" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>📚 出典・関連リンク</h2>
+
+        <h3>主な出典</h3>
+        <ul>
+          <li><strong>循環器のトビラ — 第 1 章 急性冠症候群（ACS）</strong>（10 分 ECG／ST 上昇定義／責任血管／aVR／V₃R-V₅R／V₇-V₉／hyperacute T／S・E・T／TIMI / GRACE／侵襲時期／MONA から個別最適化／HEART スコア の枠組み）</li>
+          <li><strong>2021 AHA/ACC/SCAI Guideline for Coronary Artery Revascularization</strong>. Lawton JS et al. <em>Circulation</em>. 2022.</li>
+          <li><strong>2023 ESC Guidelines for the management of acute coronary syndromes</strong>. Byrne RA et al. <em>Eur Heart J</em>. 2023.</li>
+          <li><strong>HEART score</strong>：Six AJ, Backus BE, Kelder JC. <em>Neth Heart J</em>. 2008. ／ Modified HEART pathway: Mahler SA et al. <em>Crit Pathw Cardiol</em>. 2013.</li>
+          <li><strong>Sgarbossa criteria</strong>：Sgarbossa EB et al. <em>NEJM</em>. 1996. ／ <strong>Smith-modified Sgarbossa</strong>：Smith SW et al. <em>Ann Emerg Med</em>. 2012.</li>
+        </ul>
+
+        <h3>関連ページ</h3>
+        <ul>
+          <li><a class="wiki-link" href="../胸痛.html">胸痛</a> — 主訴フロー（ゲートウェイ）</li>
+          <li><a class="wiki-link" href="../呼吸困難.html">呼吸困難</a> — dyspnea-equivalent ACS</li>
+          <li><a class="wiki-link" href="../意識消失.html">意識消失</a> — 心原性失神・致死性不整脈</li>
+          <li><a class="wiki-link" href="STEMI.html">STEMI</a></li>
+          <li><a class="wiki-link" href="Wellens症候群.html">Wellens 症候群</a></li>
+          <li><a class="wiki-link" href="de Winterパターン.html">de Winter パターン</a></li>
+          <li><a class="wiki-link" href="後壁梗塞.html">後壁梗塞</a></li>
+          <li><a class="wiki-link" href="安定狭心症.html">安定狭心症（CCS）</a> — 帰宅後の外来精査</li>
+          <li><a class="wiki-link" href="急性心不全.html">急性心不全</a> — CS4（ACS 合併心不全）</li>
+          <li><a class="wiki-link" href="循環器コンサルトの判断.html">循環器コンサルトの判断</a></li>
+          <li><a class="wiki-link" href="旧心電図と内服確認.html">旧心電図と内服確認</a></li>
+        </ul>
+
+        <p>#ER #循環器 #急性冠症候群 #ACS #STEMI #NSTE-ACS #HEART #DAPT</p>
+      </section>
+
+    </article>
+  </main>
+
+  <nav class="hokuto-bottom">
+    <button class="hokuto-bottom__btn" type="button" id="navBack">
+      <span class="hokuto-bottom__icon">←</span><span>戻る</span>
+    </button>
+    <a class="hokuto-bottom__btn" href="../ツール.html">
+      <span class="hokuto-bottom__icon">⚙</span><span>ツール</span>
+    </a>
+    <a class="hokuto-bottom__btn" href="../index.html">
+      <span class="hokuto-bottom__icon">⌂</span><span>ホーム</span>
+    </a>
+  </nav>
+
+  <script>
+  (function(){
+    const menu = document.getElementById('sectionMenu');
+    const pages = document.querySelectorAll('.section-page');
+    const titleH1 = document.querySelector('.page-title');
+    const flowBoxes = document.querySelectorAll('.flow-box');
+    const actionHeaders = document.querySelectorAll('.action-header:not(.flow-box)');
+    const relatedSymp = document.getElementById('related-symptoms');
+
+    function showSection(id) {
+      if (menu) menu.hidden = true;
+      if (titleH1) titleH1.hidden = true;
+      flowBoxes.forEach(b => b.hidden = true);
+      actionHeaders.forEach(h => h.hidden = true);
+      if (relatedSymp) relatedSymp.hidden = true;
+      pages.forEach(p => p.hidden = (p.id !== id));
+      window.scrollTo(0, 0);
+    }
+    function showMenu(scrollTarget) {
+      if (menu) menu.hidden = false;
+      if (titleH1) titleH1.hidden = false;
+      flowBoxes.forEach(b => b.hidden = false);
+      actionHeaders.forEach(h => h.hidden = false);
+      if (relatedSymp) relatedSymp.hidden = false;
+      pages.forEach(p => p.hidden = true);
+      if (scrollTarget) {
+        if (scrollTarget.tagName === 'DETAILS') scrollTarget.open = true;
+        scrollTarget.scrollIntoView({behavior: 'instant', block: 'start'});
+      } else {
+        window.scrollTo(0, 0);
+      }
+    }
+    function syncFromHash() {
+      const id = (location.hash || '').replace('#','');
+      const target = id ? document.getElementById(id) : null;
+      if (target && target.classList.contains('section-page')) {
+        showSection(id);
+      } else if (target) {
+        showMenu(target);
+      } else {
+        showMenu();
+      }
+    }
+
+    window.addEventListener('hashchange', syncFromHash);
+    document.querySelectorAll('.back-to-menu').forEach(b => {
+      b.addEventListener('click', () => { history.pushState(null,'',location.pathname); showMenu(); });
+    });
+    const navBack = document.getElementById('navBack');
+    if (navBack) navBack.addEventListener('click', () => {
+      if (window.history.length > 1) history.back();
+      else window.location.href = '../index.html';
+    });
+
+    syncFromHash();
+  })();
+  </script>
+</body>
+</html>

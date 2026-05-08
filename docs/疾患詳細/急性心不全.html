@@ -6,6 +6,168 @@
   <meta name="color-scheme" content="light dark" />
   <title>急性心不全 | ER ノート</title>
   <link rel="stylesheet" href="../er-note.css" />
+  <style>
+    /* === 診療フロー（このページ専用） === */
+    .flow-box { position: static; user-select: none; }
+    .flow-box__title {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 0.5rem; cursor: default; padding: 2px 0;
+    }
+    .flow-canvas {
+      background: var(--surface);
+      border-radius: 10px;
+      padding: 14px 10px 18px;
+      margin-top: 0.55rem;
+      overflow-x: auto; overflow-y: hidden;
+      -webkit-overflow-scrolling: touch;
+      touch-action: pan-x pan-y pinch-zoom;
+    }
+    .flow-canvas__hint {
+      font-size: 0.72rem; color: var(--muted);
+      text-align: center; margin: 0 0 0.6rem 0;
+    }
+    .flow-canvas__divider {
+      text-align: center; font-weight: 700; font-size: 12px;
+      color: var(--accent); margin: 14px 0 8px;
+      border-top: 1px dashed color-mix(in srgb, var(--text) 25%, transparent);
+      padding-top: 10px; letter-spacing: 1px;
+    }
+    .dx-flow {
+      min-width: 720px; margin: 0 auto; padding: 4px 6px 8px;
+      font-size: 14px; line-height: 1.45; color: var(--text); font-family: inherit;
+    }
+    .dx-node {
+      background: var(--surface);
+      border: 1.5px solid color-mix(in srgb, var(--text) 22%, transparent);
+      border-radius: 10px; padding: 8px 12px; text-align: center;
+      box-shadow: 0 1px 2px var(--shadow, rgba(0,0,0,0.06));
+      min-height: 38px;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 2px; text-decoration: none; color: var(--text);
+    }
+    .dx-node__title { font-weight: 700; font-size: 13.5px; }
+    .dx-node__sub   { font-size: 11.5px; color: var(--muted); font-weight: 500; }
+    .dx-node--decision {
+      background: color-mix(in srgb, var(--accent) 12%, var(--surface));
+      border-color: var(--accent); border-radius: 14px;
+    }
+    .dx-node--danger {
+      background: color-mix(in srgb, #c0392b 14%, var(--surface));
+      border-color: #c0392b;
+    }
+    .dx-node--danger .dx-node__title { color: #c0392b; }
+    .dx-node--action {
+      background: color-mix(in srgb, var(--text) 5%, var(--surface));
+      border-style: dashed;
+    }
+    .dx-node--external {
+      border-style: dashed; position: relative;
+      background: color-mix(in srgb, var(--accent) 6%, var(--surface));
+    }
+    .dx-node--external::after {
+      content: "↗"; position: absolute; top: 4px; right: 8px;
+      font-size: 12px; color: var(--accent); opacity: 0.85;
+    }
+    .dx-node--warn {
+      background: color-mix(in srgb, #d4a017 14%, var(--surface));
+      border-color: #d4a017;
+    }
+    .dx-node--warn .dx-node__title { color: #9b7508; }
+
+    .dx-layer { display: grid; gap: 14px; align-items: stretch; margin: 0; }
+    .dx-layer--root   { grid-template-columns: 1fr; justify-items: center; }
+    .dx-layer--root > * { max-width: 360px; }
+    .dx-layer--branch { grid-template-columns: 1fr 1fr; }
+    .dx-layer--tri    { grid-template-columns: repeat(3, 1fr); }
+    .dx-layer--quad   { grid-template-columns: repeat(4, 1fr); }
+    .dx-layer--quint  { grid-template-columns: repeat(5, 1fr); }
+    .dx-layer--hex    { grid-template-columns: repeat(6, 1fr); }
+
+    .dx-arrow {
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      position: relative; margin: 4px 0; min-height: 44px;
+      color: var(--muted); font-size: 11.5px; font-weight: 600;
+    }
+    .dx-arrow::before {
+      content: ""; width: 2px; height: 100%; min-height: 38px;
+      background: color-mix(in srgb, var(--text) 35%, transparent);
+    }
+    .dx-arrow::after {
+      content: ""; position: absolute; bottom: 0;
+      width: 0; height: 0;
+      border-left: 5px solid transparent; border-right: 5px solid transparent;
+      border-top: 7px solid color-mix(in srgb, var(--text) 35%, transparent);
+    }
+    .dx-arrow__label {
+      background: var(--surface); padding: 1px 8px; border-radius: 999px;
+      border: 1px solid color-mix(in srgb, var(--text) 18%, transparent);
+      position: absolute; left: 50%; top: 50%;
+      transform: translate(-50%, -50%); white-space: nowrap; z-index: 1;
+    }
+
+    .dx-fork {
+      display: grid; grid-template-columns: 1fr 1fr;
+      position: relative; min-height: 38px; margin: 2px 0 4px;
+    }
+    .dx-fork::before {
+      content: ""; position: absolute;
+      top: 0; left: 25%; right: 25%; height: 2px;
+      background: color-mix(in srgb, var(--text) 35%, transparent);
+    }
+    .dx-fork__leg {
+      position: relative; display: flex; flex-direction: column;
+      align-items: center; justify-content: flex-end;
+      padding-top: 4px; padding-bottom: 4px;
+      font-size: 11.5px; font-weight: 600; color: var(--muted);
+      min-height: 36px;
+    }
+    .dx-fork__leg::before {
+      content: ""; width: 2px; flex: 1;
+      background: color-mix(in srgb, var(--text) 35%, transparent);
+    }
+    .dx-fork__leg::after {
+      content: ""; position: absolute; bottom: 0;
+      width: 0; height: 0;
+      border-left: 5px solid transparent; border-right: 5px solid transparent;
+      border-top: 7px solid color-mix(in srgb, var(--text) 35%, transparent);
+    }
+    .dx-fork__label {
+      background: var(--surface); padding: 1px 8px; border-radius: 999px;
+      border: 1px solid color-mix(in srgb, var(--text) 18%, transparent);
+      margin-bottom: 2px; z-index: 1;
+    }
+
+    .section-tiles { display: none !important; }
+
+    @media (max-width: 600px) {
+      .dx-flow { min-width: 0; font-size: 11px; padding: 2px 0 6px; }
+      .flow-canvas { overflow-x: hidden; padding: 8px 6px 12px; }
+      .flow-canvas__hint { font-size: 0.62rem; margin-bottom: 0.35rem; }
+      .flow-canvas__divider { font-size: 10px; margin: 8px 0 5px; padding-top: 6px; }
+      .dx-node { padding: 4px 5px; min-height: 28px; border-radius: 7px; gap: 1px; }
+      .dx-node__title { font-size: 10px; line-height: 1.22; }
+      .dx-node__sub   { font-size: 8.5px; line-height: 1.25; }
+      .dx-node--decision { border-radius: 8px; }
+      .dx-node--external::after { top: 2px; right: 4px; font-size: 9px; }
+      .dx-layer { gap: 5px; }
+      .dx-layer--root > * { max-width: none; width: 100%; }
+      .dx-layer--tri  { grid-template-columns: repeat(3, 1fr); }
+      .dx-layer--quad { grid-template-columns: 1fr 1fr; }
+      .dx-layer--quint { grid-template-columns: repeat(3, 1fr); }
+      .dx-layer--hex   { grid-template-columns: repeat(3, 1fr); }
+      .dx-arrow { min-height: 22px; margin: 1px 0; }
+      .dx-arrow::before { min-height: 18px; width: 1.5px; }
+      .dx-arrow::after { border-left-width: 4px; border-right-width: 4px; border-top-width: 6px; }
+      .dx-arrow__label { font-size: 8.5px; padding: 0 4px; line-height: 1.4; }
+      .dx-fork { min-height: 22px; }
+      .dx-fork::before { height: 1.5px; }
+      .dx-fork__leg { min-height: 22px; padding-top: 2px; padding-bottom: 2px; font-size: 9px; }
+      .dx-fork__leg::before { width: 1.5px; }
+      .dx-fork__leg::after { border-left-width: 4px; border-right-width: 4px; border-top-width: 6px; }
+      .dx-fork__label { font-size: 8.5px; padding: 0 4px; margin-bottom: 0; }
+    }
+  </style>
 </head>
 <body>
   <header class="hokuto-top">
@@ -21,27 +183,122 @@
     <article class="note-shell">
       <h1 class="page-title">急性心不全</h1>
 
-      <!-- 即時アクションヘッダー（常時 sticky） -->
-      <div class="action-header">
-        <div class="action-header__title">⚡ 即時アクション</div>
-        <ol class="action-header__list">
-          <li><strong>重症度プロファイル</strong>を即評価：<strong>Killip</strong>（聴診）／<strong>Forrester</strong>（CI・PCWP）／<strong>Nohria-Stevenson</strong>（Wet/Dry × Warm/Cold）</li>
-          <li><strong>NPPV 早期導入</strong>（呼吸不全あれば） + <strong>ループ利尿薬</strong>でうっ血解除 + <strong>血管拡張薬</strong>（高血圧うっ血で血圧が許容なら）</li>
-          <li><strong>心電図 + トロポニン + BNP/NT-proBNP + 心エコー</strong>を即セット — STEMI・致死性不整脈は自分で拾う</li>
-          <li><strong>HFrEF vs HFpEF</strong> で薬剤選択を分ける、<strong>Killip Ⅲ-Ⅳ / Cold-Wet</strong> は <strong>CCU/ICU 入院</strong>判断</li>
-        </ol>
+      <!-- 診療フロー -->
+      <div class="action-header flow-box" id="flowBox">
+        <div class="action-header__title flow-box__title">
+          <span>🗺 急性心不全の診療フロー（安定化 → 3 軸 → CS → 主病態別治療）</span>
+        </div>
+        <div class="flow-canvas">
+          <p class="flow-canvas__hint">血行動態・呼吸の安定化 → 3 軸の同時並行評価 → 検査セット → CS 分類で主病態 → 主病態別の治療 → 効かなければ再評価へ</p>
+          <div class="dx-flow" role="group" aria-label="急性心不全の診療フロー">
+
+            <!-- L0: 安定化 -->
+            <div class="dx-layer dx-layer--root">
+              <a class="dx-node dx-node--danger" href="#s1">
+                <div class="dx-node__title">🚨 血行動態・呼吸の安定化</div>
+                <div class="dx-node__sub">ABCD ＋ ショックならカテコラミン・補助循環</div>
+              </a>
+            </div>
+
+            <div class="dx-arrow"><span class="dx-arrow__label">↓ 安定化と並行して</span></div>
+
+            <!-- L1: 3 軸 -->
+            <p class="flow-canvas__hint" style="margin:6px 0 4px;font-weight:700;">3 軸を同時並行で評価</p>
+            <div class="dx-layer dx-layer--tri">
+              <a class="dx-node dx-node--decision" href="#s2">
+                <div class="dx-node__title">第 1 軸：血行動態</div>
+                <div class="dx-node__sub">NS 分類（Wet/Dry × Warm/Cold）</div>
+              </a>
+              <a class="dx-node dx-node--decision" href="#s3">
+                <div class="dx-node__title">第 2 軸：基礎心疾患</div>
+                <div class="dx-node__sub">CHAMPIT（まず ACS 除外）</div>
+              </a>
+              <a class="dx-node dx-node--decision" href="#s4">
+                <div class="dx-node__title">第 3 軸：増悪因子</div>
+                <div class="dx-node__sub">FAILURE（トリガーを潰す）</div>
+              </a>
+            </div>
+
+            <div class="dx-arrow"><span class="dx-arrow__label">↓ 同時に検査セット</span></div>
+
+            <!-- L2: 検査 -->
+            <div class="dx-layer dx-layer--root">
+              <a class="dx-node dx-node--action" href="#s5">
+                <div class="dx-node__title">🔬 検査セット</div>
+                <div class="dx-node__sub">ECG / CXR / 心エコー / 肺エコー / 採血（BNP・トロポニン・TSH） / 血ガス（lactate） / 培養</div>
+              </a>
+            </div>
+
+            <div class="dx-arrow"><span class="dx-arrow__label">↓ 主病態を決める</span></div>
+
+            <!-- L3: CS 分類 -->
+            <div class="dx-layer dx-layer--root">
+              <a class="dx-node dx-node--decision" href="#s6">
+                <div class="dx-node__title">📊 CS 分類で初期治療を選ぶ</div>
+                <div class="dx-node__sub">SBP で 5 群 ／ NS 分類の主病態と紐付け</div>
+              </a>
+            </div>
+
+            <div class="dx-arrow"><span class="dx-arrow__label">↓ CS 1〜5 で治療分岐</span></div>
+
+            <!-- L4: CS 1〜5 -->
+            <div class="dx-layer dx-layer--quint">
+              <a class="dx-node dx-node--action" href="#s7">
+                <div class="dx-node__title">CS1（&gt;140）</div>
+                <div class="dx-node__sub">肺うっ血<br>NPPV ＋ 血管拡張薬</div>
+              </a>
+              <a class="dx-node dx-node--action" href="#s8">
+                <div class="dx-node__title">CS2（100〜140）</div>
+                <div class="dx-node__sub">体うっ血<br>ループ利尿薬 60 分以内</div>
+              </a>
+              <a class="dx-node dx-node--warn" href="#s9">
+                <div class="dx-node__title">CS3（&lt;100）</div>
+                <div class="dx-node__sub">低灌流<br>強心薬・補助循環</div>
+              </a>
+              <a class="dx-node dx-node--danger" href="#s10">
+                <div class="dx-node__title">CS4（ACS）</div>
+                <div class="dx-node__sub">緊急再灌流<br>循環器即コール</div>
+              </a>
+              <a class="dx-node dx-node--action" href="#s11">
+                <div class="dx-node__title">CS5</div>
+                <div class="dx-node__sub">右心不全<br>PE / RV 梗塞 / 肺高血圧</div>
+              </a>
+            </div>
+
+            <div class="dx-arrow"><span class="dx-arrow__label">↓ 治療しても改善しないとき</span></div>
+
+            <!-- L5: 再評価ループ -->
+            <div class="dx-layer dx-layer--branch">
+              <a class="dx-node dx-node--warn" href="#s14">
+                <div class="dx-node__title">⚠️ やりがちなミス</div>
+                <div class="dx-node__sub">CS で止まる／AS に利尿薬大量／急性 AR に IABP 単独</div>
+              </a>
+              <a class="dx-node dx-node--decision" href="#s2">
+                <div class="dx-node__title">🔁 3 軸を再評価</div>
+                <div class="dx-node__sub">見逃し疾患・隠れた増悪因子</div>
+              </a>
+            </div>
+
+            <div class="flow-canvas__divider">入院後・退院後</div>
+
+            <div class="dx-layer dx-layer--branch">
+              <a class="dx-node dx-node--external" href="#s12">
+                <div class="dx-node__title">🏥 入院時オーダー</div>
+                <div class="dx-node__sub">モニタ／GDMT 導入／うっ血再評価</div>
+              </a>
+              <a class="dx-node dx-node--external" href="#s13">
+                <div class="dx-node__title">🚪 外来フォロー</div>
+                <div class="dx-node__sub">退院後 1〜2 週で再評価（ESC 2021 Class I）</div>
+              </a>
+            </div>
+
+          </div>
+        </div>
       </div>
 
-      <!-- メニュータイル -->
-      <nav class="section-tiles" id="sectionMenu">
-        <a class="section-tile" href="#s1"><span class="section-tile__no">📋</span><span class="section-tile__name">前提<br><small>呼吸困難から</small></span></a>
-        <a class="section-tile" href="#s2"><span class="section-tile__no">📈</span><span class="section-tile__name">心電図を読む</span></a>
-        <a class="section-tile" href="#s3"><span class="section-tile__no">🔧</span><span class="section-tile__name">循環器が来るまでに整える</span></a>
-        <a class="section-tile" href="#s4"><span class="section-tile__no">📞</span><span class="section-tile__name">循環器ホットライン</span></a>
-        <a class="section-tile" href="#s5"><span class="section-tile__no">📊</span><span class="section-tile__name">枠組み<br><small>重症度・CHAMPIT</small></span></a>
-        <a class="section-tile" href="#s6"><span class="section-tile__no">🏥</span><span class="section-tile__name">入院時オーダー<br><small>ADHF</small></span></a>
-        <a class="section-tile" href="#s7"><span class="section-tile__no">🚪</span><span class="section-tile__name">外来フォロー<br><small>退院後</small></span></a>
-        <a class="section-tile" href="#s8"><span class="section-tile__no">📚</span><span class="section-tile__name">出典・関連リンク</span></a>
+      <!-- メニュータイル（非表示・互換用） -->
+      <nav class="section-tiles" id="sectionMenu" hidden>
+        <a class="section-tile" href="#s1"><span class="section-tile__name">即時アクション・3 軸</span></a>
       </nav>
 
       <!-- 関連主訴（双方向リンク） -->
@@ -52,213 +309,484 @@
             <li><a class="wiki-link" href="../呼吸困難.html">呼吸困難</a> — 急性心不全の最頻主訴（起坐呼吸・発作性夜間呼吸困難）</li>
             <li><a class="wiki-link" href="../胸痛.html">胸痛</a> — 増悪因子としての ACS（CHAMPIT の C）合併に注意</li>
             <li><a class="wiki-link" href="../意識消失.html">意識消失</a> — 低灌流・致死性不整脈・心原性失神</li>
-            <li><a class="wiki-link" href="../意識消失.html">失神</a> — 意識消失のページに統合（心原性失神）</li>
           </ul>
         </div>
       </details>
 
-      <!-- §1 前提 -->
+      <!-- §s1 即時アクション・3 軸評価の枠組み -->
       <section class="section-page" id="s1" hidden>
         <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>📋 前提</h2>
+        <h2>🚨 安定化と 3 軸評価の枠組み</h2>
+
         <div class="callout callout-summary">
-          <div class="callout-title">このページの使い方</div>
-          <div class="callout-body"><ol>
-            <li><a class="wiki-link" href="../呼吸困難.html">呼吸困難</a> から心不全を疑ってここに来た時点で、<strong>心電図・胸部X線・血液検査は済んでいる</strong></li>
-            <li>心電図で <strong>緊急の異常がないか</strong> を自分で確認する</li>
-            <li><strong>ルート・バルーン・CT・エコー準備</strong> — 循環器が診療しやすい体制を整える</li>
-            <li><strong>循環器ホットラインに連絡</strong>して引き継ぐ</li>
-          </ol></div>
+          <div class="callout-title">急性心不全の入口</div>
+          <div class="callout-body"><ul>
+            <li><strong>血行動態と呼吸状態の安定化が常に最優先</strong>。ショックならカテコラミン・補助循環（<strong>IABP / VA-ECMO（PCPS） / IMPELLA</strong>）を検討。</li>
+            <li>安定化と<strong>同時並行</strong>で 3 軸（① 血行動態 ② 基礎心疾患 ③ 増悪因子）を評価する。</li>
+            <li><strong>CS 分類で止まらない</strong>。「主病態は何か」を必ず言語化してから薬を選ぶ。</li>
+            <li><strong>治療が効かないときは見逃しを疑う</strong>。3 軸を最初から見直す。</li>
+          </ul></div>
         </div>
-        <p><a class="wiki-link" href="../呼吸困難.html">呼吸困難</a> のフローに沿って以下が済んでいる：</p>
-        <ul>
-          <li>バイタル確認・モニター装着</li>
-          <li>血液検査（血ガス・BNP・トロポニン・CRP・血算分画・生化）提出済み</li>
-          <li>12誘導心電図 施行済み</li>
-          <li>胸部X線 施行済み</li>
-        </ul>
+
+        <h3>3 軸の役割</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>軸</th><th>問い</th><th>ツール</th><th>詳細</th></tr></thead>
+          <tbody>
+            <tr><td><strong>第 1 軸</strong></td><td>血行動態（うっ血／低灌流）はどうか</td><td>NS 分類（Nohria-Stevenson）</td><td><a class="wiki-link" href="#s2">→ §2</a></td></tr>
+            <tr><td><strong>第 2 軸</strong></td><td>背景に何の心疾患があるか</td><td>CHAMPIT（緊急 7 病態）</td><td><a class="wiki-link" href="#s3">→ §3</a></td></tr>
+            <tr><td><strong>第 3 軸</strong></td><td>何が今回のトリガーか</td><td>FAILURE</td><td><a class="wiki-link" href="#s4">→ §4</a></td></tr>
+          </tbody>
+        </table></div>
+
+        <h3>ベッドサイド NS 判定の手順</h3>
+        <ol>
+          <li><strong>うっ血の有無</strong>を聞いて触る：起坐呼吸・夜間発作性呼吸困難（肺うっ血）／体重増加・下腿浮腫・頸静脈怒張（体うっ血）あり＝ <strong>Wet</strong>、なし＝ <strong>Dry</strong>。</li>
+          <li><strong>組織低灌流の有無</strong>を見る：脈圧縮小・四肢冷感・意識レベル低下なし＝ <strong>Warm</strong>、あり＝ <strong>Cold（LOS：low output syndrome、いわゆる「ロス」）</strong>。</li>
+          <li>4 Profile（A / B / C / L）に振り分け、主病態を決める。</li>
+        </ol>
+
+        <div class="callout callout-warning">
+          <div class="callout-title">モルヒネは原則使わない</div>
+          <div class="callout-body"><p>ESC 2021 で <strong>Class III</strong>（用いない）。急性肺水腫でも原則使わない。</p></div>
+        </div>
       </section>
 
-      <!-- §2 まず心電図を読む -->
+      <!-- §s2 第 1 軸：血行動態（NS 分類） -->
       <section class="section-page" id="s2" hidden>
         <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>📈 まず心電図を読む</h2>
-        <p>循環器に電話する前に、<strong>自分で拾わないといけない緊急所見</strong>がある。</p>
-        <div class="callout callout-danger">
-          <div class="callout-title">心電図で見逃してはいけないもの</div>
-          <div class="callout-body">
-            <div class="table-wrap"><table>
-              <thead><tr><th>所見</th><th>意味</th><th>対応</th></tr></thead>
-              <tbody>
-                <tr><td><strong>ST 上昇</strong></td><td><strong>STEMI</strong> → 心筋梗塞が心不全の原因 or 増悪因子</td><td><strong>緊急カテの判断 → 即循環器コール</strong></td></tr>
-                <tr><td><strong>wide QRS + 頻脈（規則的）</strong></td><td><strong>VT（心室頻拍）</strong></td><td><strong>不安定なら電気的除細動</strong></td></tr>
-                <tr><td><strong>完全房室ブロック（3度 AVB）</strong></td><td>高度徐脈 → 低心拍出</td><td><strong>経皮ペーシング準備 → 循環器</strong></td></tr>
-                <tr><td><strong>新規の高度伝導障害（交代性脚ブロック、二枝+Ⅰ度房室ブロック等）</strong></td><td>完全ブロックに移行するリスク</td><td><strong>モニター・循環器相談</strong></td></tr>
-                <tr><td><strong>AF rapid（HR &gt;150）</strong></td><td>AF が心不全の引き金になっている</td><td><strong>循環器に伝える</strong></td></tr>
-                <tr><td><strong>著明な徐脈（HR &lt;40）</strong></td><td>低心拍出</td><td><strong>アトロピン・ペーシング準備</strong></td></tr>
-              </tbody>
-            </table></div>
-            <p>これらが<strong>ない</strong>ことを確認する → 「心電図としては緊急対応は不要」と判断できる。</p>
-          </div>
+        <h2>🩺 第 1 軸：血行動態（NS 分類）</h2>
+
+        <h3>軸の取り方</h3>
+        <ul>
+          <li><strong>横軸（うっ血）</strong>：起坐呼吸・PND（肺うっ血）／体重増加・下腿浮腫（体うっ血）あり＝ <strong>Wet</strong>、なし＝ <strong>Dry</strong>。</li>
+          <li><strong>縦軸（組織低灌流）</strong>：脈圧縮小・四肢冷感・意識レベル低下なし＝ <strong>Warm</strong>、あり＝ <strong>Cold（LOS）</strong>。</li>
+        </ul>
+
+        <h3>4 プロファイル</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Profile</th><th>うっ血 × 灌流</th><th>典型像</th><th>初期方針サマリ</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><strong>A</strong></td>
+              <td>Dry & Warm</td>
+              <td>代償化／非心不全の可能性も</td>
+              <td>増悪因子検索を優先。GDMT 継続・調整</td>
+            </tr>
+            <tr>
+              <td><strong>B</strong>（最頻）</td>
+              <td>Wet & Warm</td>
+              <td>起坐呼吸・湿性ラ音・末梢温</td>
+              <td><strong>利尿薬 + 血管拡張薬 + NPPV</strong> で多くは改善（→ <a class="wiki-link" href="#s7">CS1</a>／<a class="wiki-link" href="#s8">CS2</a>）</td>
+            </tr>
+            <tr>
+              <td><strong>C</strong></td>
+              <td>Wet & Cold</td>
+              <td>うっ血＋低灌流（最重症）</td>
+              <td>血圧と乳酸を見ながら<strong>強心薬・補助循環</strong>（→ <a class="wiki-link" href="#s9">CS3</a>）</td>
+            </tr>
+            <tr>
+              <td><strong>L</strong></td>
+              <td>Dry & Cold</td>
+              <td>低灌流のみ／脱水・出血合併も</td>
+              <td>容量負荷の許容を見極め、強心薬の前に<strong>原因検索</strong></td>
+            </tr>
+          </tbody>
+        </table></div>
+
+        <h3>ベッドサイドで参考にする所見</h3>
+        <ul>
+          <li><strong>IVC 径</strong>：絶対値で判断しない（慢性 AF / MR / TR、COPD で普段から太い人がいる）。<strong>経時変化</strong>で見る。詳細は <a class="wiki-link" href="#s5">§5 検査</a>。</li>
+          <li><strong>乳酸（lactate）</strong>：Cold の客観的指標。改善傾向を経時的に追う。</li>
+          <li><strong>脈圧</strong>（収縮期 - 拡張期）：縮小は心拍出低下のサイン。</li>
+        </ul>
+
+        <div class="callout callout-warning">
+          <div class="callout-title">効かないときは戻る</div>
+          <div class="callout-body"><p>NS 分類どおりに治療しても改善しないときは<strong>見逃し</strong>を疑い、<a class="wiki-link" href="#s3">第 2 軸（CHAMPIT）</a>と<a class="wiki-link" href="#s4">第 3 軸（FAILURE）</a>を再評価する。</p></div>
         </div>
       </section>
 
-      <!-- §3 循環器が来るまでに整えること -->
+      <!-- §s3 第 2 軸：基礎心疾患 CHAMPIT -->
       <section class="section-page" id="s3" hidden>
         <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🔧 循環器が来るまでに整えること</h2>
-        <p>薬剤投与（ラシックス・硝酸薬等）は<strong>循環器が来てから行う</strong>。 自分の仕事は<strong>循環器が来たらすぐ動ける体制を整える</strong>こと。</p>
-
-        <h3>ルート確保</h3>
-        <ul>
-          <li><strong>末梢静脈路を確保</strong>（循環器が薬剤をすぐ使えるように）</li>
-          <li>できれば<strong>太めの留置針</strong>（18G 以上が望ましい）</li>
-        </ul>
-
-        <h3>尿道バルーン留置</h3>
-        <ul>
-          <li><strong>尿量測定ができるように尿道カテーテルを留置</strong></li>
-          <li>ラシックス投与後の尿量評価は循環器にとって重要な情報になる</li>
-        </ul>
-
-        <h3>CT</h3>
-        <ul>
-          <li><strong>胸部 CT を撮っておく</strong></li>
-          <li>循環器が来てから「CT 撮ってきて」となると時間をロスする</li>
-          <li>肺塞栓の除外、大動脈解離の確認、肺野の評価にも有用</li>
-        </ul>
-
-        <h3>エコーの準備</h3>
-        <ul>
-          <li><strong>エコー機器をベッドサイドに用意しておく</strong></li>
-          <li>循環器が来たらすぐ心エコーを当てられる状態にする</li>
-        </ul>
-
-        <h3>モニタリング</h3>
-        <ul>
-          <li>バイタルモニター継続</li>
-          <li>SpO2・呼吸数・血圧を定期的に記録</li>
-          <li>呼吸仕事量の変化を観察</li>
-        </ul>
+        <h2>🚑 第 2 軸：基礎心疾患（CHAMPIT）</h2>
 
         <div class="callout callout-danger">
-          <div class="callout-title">こうなったら循環器を待たずに動く</div>
+          <div class="callout-title">急性心不全ではまず ACS を除外する</div>
+          <div class="callout-body">
+            <p>30 分前まで会話できていた症例が急変することもある。<strong>問診・繰り返しの 12 誘導心電図・採血（トロポニン）・心エコー</strong>は必須。</p>
+          </div>
+        </div>
+
+        <h3>CHAMPIT — 緊急対応の 7 病態</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th></th><th>病態</th><th>見分け方／ピットフォール</th></tr></thead>
+          <tbody>
+            <tr><td><strong>C</strong></td><td>ACS（急性冠症候群）</td><td>ST 変化・新規左脚ブロック・Q 波／繰り返し心電図／トロポニン経時</td></tr>
+            <tr><td><strong>H</strong></td><td>高血圧緊急症</td><td>SBP 高値＋臓器障害（肺うっ血・脳症・腎障害）</td></tr>
+            <tr><td><strong>A</strong></td><td>不整脈</td><td>AF rapid（HR &gt; 150）・VT・高度徐脈・完全 AVB</td></tr>
+            <tr><td><strong>M</strong></td><td>機械的合併症（急性 MR・急性 AR・<strong>重症 AS</strong>）</td><td>心エコー必須。<strong>重症 AS に利尿薬や血管拡張薬を多量投与するとショック</strong>／<strong>急性 AR に IABP 単独は禁忌</strong></td></tr>
+            <tr><td><strong>P</strong></td><td>肺塞栓（PE）</td><td>右室拡大・McConnell 徴候・D ダイマー（→ <a class="wiki-link" href="肺塞栓.html">肺塞栓</a>）</td></tr>
+            <tr><td><strong>I</strong></td><td>感染（IE 含む）</td><td>発熱・新規雑音・血液培養 2 セット</td></tr>
+            <tr><td><strong>T</strong></td><td>心タンポナーデ</td><td>奇脈・心音減弱・心エコーで右房虚脱</td></tr>
+          </tbody>
+        </table></div>
+
+        <div class="callout callout-warning">
+          <div class="callout-title">弁膜症を疑った時点で早期コンサルト</div>
+          <div class="callout-body"><p>心エコーで重症 AS・急性 AR・急性 MR を疑った時点で、<strong>循環器・心臓外科に早期コンサルト</strong>。利尿薬・血管拡張薬・IABP の使い方が病態で逆転する。</p></div>
+        </div>
+      </section>
+
+      <!-- §s4 第 3 軸：増悪因子 FAILURE -->
+      <section class="section-page" id="s4" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🔍 第 3 軸：増悪因子（FAILURE）</h2>
+
+        <p>「なぜ<strong>今</strong>悪くなったか」を必ず言語化する。トリガーを潰さないと再発する。</p>
+
+        <div class="table-wrap"><table>
+          <thead><tr><th></th><th>項目</th><th>臨床的注意</th></tr></thead>
+          <tbody>
+            <tr><td><strong>F</strong></td><td>Forgot meds（怠薬・通院・体重測定不良）</td><td>処方確認・服薬アドヒアランス・自己管理</td></tr>
+            <tr><td><strong>A</strong></td><td>Arrhythmia / After-load / Anemia</td><td>頻脈（AF rapid）・徐脈・血圧高値・貧血</td></tr>
+            <tr><td><strong>I</strong></td><td>Ischemia / Infection</td><td>ACS／肺炎・尿路感染・IE</td></tr>
+            <tr><td><strong>L</strong></td><td>Lifestyle</td><td>塩分過剰・アルコール・違法薬物（コカイン・覚醒剤）</td></tr>
+            <tr><td><strong>U</strong></td><td>Upregulations</td><td>甲状腺機能異常（亢進／低下）— TSH・FT4 を出す</td></tr>
+            <tr><td><strong>R</strong></td><td>Regurgitation</td><td>新規・増悪の AR / MR</td></tr>
+            <tr><td><strong>E</strong></td><td>Embolization</td><td>PE（→ <a class="wiki-link" href="肺塞栓.html">肺塞栓</a>）</td></tr>
+          </tbody>
+        </table></div>
+
+        <div class="callout callout-summary">
+          <div class="callout-title">研修医のチェックポイント</div>
           <div class="callout-body"><ul>
-            <li><strong>VT / VF</strong> → <strong>電気的除細動</strong></li>
-            <li><strong>完全房室ブロック + 不安定</strong> → <strong>経皮ペーシング</strong></li>
-            <li><strong>低血圧 + 冷たい + 意識障害</strong> → 心原性ショック → <strong>ICU・上級医すぐ</strong></li>
-            <li><strong>呼吸が止まりそう</strong> → <strong>挿管の準備</strong></li>
+            <li>「うっ血を取るだけ」で帰さない。<strong>F・A・I の 3 つは毎回口に出す</strong>。</li>
+            <li>頻脈性 AF が続く限り、心不全は良くなりきらない。レートコントロールを並行。</li>
+            <li>高拍出心不全（甲状腺・貧血・脚気）も忘れない。</li>
           </ul></div>
         </div>
       </section>
 
-      <!-- §4 循環器ホットラインに伝えること -->
-      <section class="section-page" id="s4" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>📞 循環器ホットラインに伝えること</h2>
-        <ul>
-          <li><strong>年齢・性別・主訴</strong></li>
-          <li><strong>バイタル（特に血圧と SpO2）</strong></li>
-          <li><strong>心電図の所見</strong>（STEMI? 不整脈? 伝導障害?）</li>
-          <li><strong>BNP・トロポニンの結果</strong>（出ていれば）</li>
-          <li><strong>胸部X線の所見</strong>（肺水腫の程度）</li>
-          <li><strong>現在の状況</strong>（酸素投与量、ルート確保済み、バルーン留置済み、CT 撮影済み、エコー準備済み）</li>
-          <li><strong>既往歴</strong>（心不全の既往、弁膜症、虚血性心疾患、ペースメーカー等）</li>
-        </ul>
-        <div class="callout callout-warning">
-          <div class="callout-title">モルヒネは使わない</div>
-          <div class="callout-body"><p>ESC 2021 で Class III（用いない）。急性肺水腫でも原則使わない。</p></div>
-        </div>
-      </section>
-
-      <!-- §5 枠組み -->
+      <!-- §s5 検査セット -->
       <section class="section-page" id="s5" hidden>
         <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>📊 知っておくと引き継ぎがスムーズな枠組み</h2>
+        <h2>🔬 検査セット</h2>
 
-        <h3>重症度 → 詳細は <a class="wiki-link" href="急性心不全の重症度評価.html">急性心不全の重症度評価</a></h3>
-        <ul>
-          <li><strong>うっ血のみ（Warm-Wet）</strong>（最も多い、約70%）→ 利尿薬で対応</li>
-          <li><strong>うっ血 + 呼吸不全</strong> → NIV が必要</li>
-          <li><strong>低灌流あり（Cold-Wet）</strong>（冷たい・尿が出ない・意識障害）→ <strong>即 ICU</strong> — 最も予後が悪い</li>
-        </ul>
-
-        <h3>増悪因子（CHAMPIT）</h3>
+        <h3>同時に出すもの</h3>
         <div class="table-wrap"><table>
-          <thead><tr><th></th><th></th></tr></thead>
+          <thead><tr><th>検査</th><th>狙い／読み方</th></tr></thead>
           <tbody>
-            <tr><td><strong>C</strong>oronary</td><td>急性冠症候群</td></tr>
-            <tr><td><strong>H</strong>ypertension</td><td>高血圧緊急症</td></tr>
-            <tr><td><strong>A</strong>rrhythmia</td><td>不整脈（AF rapid、VT 等）</td></tr>
-            <tr><td><strong>M</strong>echanical</td><td>急性弁膜症</td></tr>
-            <tr><td><strong>P</strong>E</td><td>肺塞栓</td></tr>
-            <tr><td><strong>I</strong>nfection</td><td>感染（肺炎等）</td></tr>
-            <tr><td><strong>T</strong>amponade</td><td>心タンポナーデ</td></tr>
+            <tr><td><strong>12 誘導心電図・モニター</strong></td><td>ACS（ST 変化）・致死性不整脈・ブロック。<strong>過去心電図と比較・繰り返し</strong>。</td></tr>
+            <tr><td><strong>胸部 X 線</strong></td><td>心拡大・肺うっ血（バタフライ・カーリー B・気管支壁肥厚）・浸潤・胸水。<strong>X 線正常でも PE / COPD は除外できない</strong>。</td></tr>
+            <tr><td><strong>心エコー</strong></td><td>visual EF・局所壁運動・<strong>右室拡大</strong>・<strong>弁膜症</strong>・心嚢液・<strong>IVC 径</strong></td></tr>
+            <tr><td><strong>肺エコー</strong></td><td>胸水・<strong>B ライン</strong>（胸膜から減衰せず深部まで伸びる多重アーチファクト）が複数本＝肺水腫らしい</td></tr>
+            <tr><td><strong>血液検査</strong></td><td>血算・電解質・腎肝機能・<strong>BNP / NT-proBNP</strong>。虚血疑い：トロポニン・CK-MB。頻脈や高拍出疑い：<strong>TSH・FT4</strong>。</td></tr>
+            <tr><td><strong>血液ガス</strong></td><td><strong>乳酸（lactate）</strong>で末梢灌流を評価。経時で追う。</td></tr>
+            <tr><td><strong>培養</strong></td><td>敗血症・IE 疑いで<strong>血液培養 2 セット</strong>を含めて採取。</td></tr>
           </tbody>
         </table></div>
+
+        <h3>心エコーの実践ポイント</h3>
+        <ul>
+          <li><strong>visual EF</strong>：目の訓練を反復。</li>
+          <li><strong>局所壁運動</strong>：周囲の正常心筋に引きずられて動いて見える <strong>tethering 現象</strong>に注意。「壁運動異常なし」と言い切るのは難しい。</li>
+          <li><strong>IVC 径</strong>：<strong>絶対値で評価しない</strong>。慢性 AF / MR / TR、COPD で普段から拡大している人がいる。<strong>経時的な変化</strong>で見る。</li>
+        </ul>
+
+        <div class="callout callout-summary">
+          <div class="callout-title">トビラの向こう（発展）</div>
+          <div class="callout-body"><ul>
+            <li><strong>E/A・DcT で左房圧推定</strong>：① 正常型／② 弛緩障害型／③ 偽正常型／④ 拘束型。心不全増悪で ② → ③ → ④ に進み、改善で逆方向。<strong>治療効果判定にも使える</strong>。</li>
+            <li>高齢者は弛緩障害型でも左房圧は正常のことが多い。</li>
+          </ul></div>
+        </div>
+
+        <h3>関連</h3>
+        <ul>
+          <li><a class="wiki-link" href="胸部CTの読み方.html">胸部 CT・X 線の読み方</a> — 肺水腫・PE・解離の鑑別</li>
+        </ul>
+      </section>
+
+      <!-- §s6 CS 分類と主病態 -->
+      <section class="section-page" id="s6" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>📊 CS 分類と主病態の連結</h2>
+
+        <div class="callout callout-summary">
+          <div class="callout-title">CS は「入口」、主病態が「治療」を決める</div>
+          <div class="callout-body"><ul>
+            <li>CS 分類は<strong>院前〜初期評価向けの簡易ツール</strong>。SBP で 5 群に分ける。</li>
+            <li>CS 1〜3 は NS 分類の主病態と対応する：<strong>CS1 ≒ 肺うっ血</strong>／<strong>CS2 ≒ 体うっ血</strong>／<strong>CS3 ≒ 組織低灌流</strong>。</li>
+            <li>実臨床では <strong>CS1 と CS2 が混合</strong>することが普通。CS で止めず、必ず<strong>主病態・基礎疾患・増悪因子</strong>まで進める。</li>
+          </ul></div>
+        </div>
+
+        <h3>CS 1〜5</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>CS</th><th>SBP</th><th>主病態</th><th>NS との対応</th><th>初期治療の柱</th></tr></thead>
+          <tbody>
+            <tr><td><strong>CS1</strong></td><td>&gt; 140 mmHg</td><td>肺うっ血／体液再分布</td><td>Wet & Warm（B）</td><td>NPPV ＋ 血管拡張薬（→ <a class="wiki-link" href="#s7">§7</a>）</td></tr>
+            <tr><td><strong>CS2</strong></td><td>100〜140</td><td>体うっ血／体液貯留</td><td>Wet & Warm（B）</td><td>ループ利尿薬 60 分以内（→ <a class="wiki-link" href="#s8">§8</a>）</td></tr>
+            <tr><td><strong>CS3</strong></td><td>&lt; 100</td><td>低灌流・低心拍出</td><td>Wet/Dry & Cold（C/L）</td><td>強心薬・補助循環（→ <a class="wiki-link" href="#s9">§9</a>）</td></tr>
+            <tr><td><strong>CS4</strong></td><td>—</td><td>ACS</td><td>—</td><td>緊急再灌流（→ <a class="wiki-link" href="#s10">§10</a>）</td></tr>
+            <tr><td><strong>CS5</strong></td><td>—</td><td>右心不全</td><td>—</td><td>原因（PE / RV 梗塞 / 肺高血圧）対応（→ <a class="wiki-link" href="#s11">§11</a>）</td></tr>
+          </tbody>
+        </table></div>
+
         <div class="callout callout-warning">
-          <div class="callout-title">特に心筋梗塞だけは自分で拾う</div>
-          <div class="callout-body"><p>心筋梗塞が増悪因子であるときは<strong>対応が根本的に変わる</strong>（緊急カテ）。 だから<strong>心電図で ST 上昇がないかだけは必ず自分で確認する</strong>。</p></div>
+          <div class="callout-title">混合例の対処</div>
+          <div class="callout-body"><p>CS1 ＋ CS2 が混合するときは、<strong>肺うっ血で苦しいなら血管拡張薬＋ NPPV を優先</strong>し、<strong>体うっ血の体重・浮腫にはループ利尿薬を併用</strong>。「血圧」と「浮腫」を別物として治療する。</p></div>
         </div>
       </section>
 
-      <!-- §6 入院時オーダー -->
-      <section class="section-page" id="s6" hidden>
+      <!-- §s7 CS1 治療 — 肺うっ血 -->
+      <section class="section-page" id="s7" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>💨 CS1 治療 — 肺うっ血（NPPV ＋ 血管拡張薬）</h2>
+
+        <h3>主病態</h3>
+        <ul>
+          <li>起坐呼吸・労作時呼吸困難。<strong>後負荷上昇による肺うっ血</strong>が主病態（体液再分布型）。</li>
+          <li>SBP &gt; 140 mmHg、急性発症が典型。</li>
+        </ul>
+
+        <h3>初期対応の流れ</h3>
+        <ol>
+          <li><strong>酸素投与＋ニトロ舌下スプレー</strong>（ミオコール 0.3 mg、息止めて 1〜2 回噴霧）で開始。</li>
+          <li>反応乏しければ早期に <strong>NPPV</strong>：<strong>CPAP で開始</strong>、高 CO₂ や呼吸努力残存なら <strong>BiPAP</strong> へ。NPPV は「つなぎ」、長引かせず必要なら<strong>挿管</strong>。</li>
+          <li>静脈ルート確保後に<strong>血管拡張薬を持続静注</strong>。</li>
+        </ol>
+
+        <h3>血管拡張薬（持続静注）</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>薬剤</th><th>開始量／調整</th></tr></thead>
+          <tbody>
+            <tr><td><strong>ニトログリセリン（ミリスロール）</strong></td><td><strong>0.05〜0.1 γ</strong>で開始、初期は 10 分おきに 0.1〜0.2 γ調整</td></tr>
+            <tr><td><strong>ニトロプルシド（ニトプロ）</strong></td><td>0.1〜0.2 mg/kg/hr</td></tr>
+            <tr><td><strong>カルペリチド（ハンプ）</strong></td><td>0.0125〜0.025 γで開始、血圧・尿量で調整</td></tr>
+            <tr><td><strong>ニコランジル（シグマート）</strong></td><td>0.05〜0.2 mg/kg/hr</td></tr>
+          </tbody>
+        </table></div>
+
+        <div class="callout callout-warning">
+          <div class="callout-title">血圧低下に注意するシチュエーション</div>
+          <div class="callout-body"><ul>
+            <li><strong>EF 低下例・重症 AS 併存例</strong>では血管拡張薬で容易にショックに陥る。少量から、頻回に血圧を見る。</li>
+            <li><strong>下腿浮腫や体重増加</strong>があれば<strong>利尿薬を併用</strong>（CS1 ＋ CS2 の混合）。</li>
+          </ul></div>
+        </div>
+
+        <div class="callout callout-summary">
+          <div class="callout-title">硝酸薬のエビデンス（内科専攻医）</div>
+          <div class="callout-body"><p>最近の RCT で肺水腫への有効性は確立せず、<strong>利尿薬が Class I・硝酸薬は Class IIb</strong>。ただし RCT は緩徐発症や超高齢で偏りがあり、<strong>急性発症で SBP 160〜180 台の CS1 らしい例には硝酸薬の使用は妥当</strong>と考えてよい。</p></div>
+        </div>
+      </section>
+
+      <!-- §s8 CS2 治療 — 体うっ血 -->
+      <section class="section-page" id="s8" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>💧 CS2 治療 — 体うっ血（ループ利尿薬を 60 分以内に）</h2>
+
+        <h3>主病態</h3>
+        <ul>
+          <li>主病態は<strong>水分貯留</strong>（体液貯留型）。下腿浮腫・体重増加・頸静脈怒張・腹水。</li>
+          <li>SBP 100〜140 mmHg、亜急性増悪が典型。</li>
+        </ul>
+
+        <h3>段階的治療</h3>
+        <ol>
+          <li><strong>救急搬送から 60 分以内のループ利尿薬静注</strong>：フロセミド静注で開始。</li>
+          <li><strong>1〜2 時間以内に反応尿（1〜2 mL/kg/hr）をチェック</strong>。なければ<strong>倍量で追加</strong>。</li>
+          <li>それでも乏しければ：
+            <ul>
+              <li><strong>フロセミド持続静注</strong>（ボーラス量の 1/6 時間量目処、例：80 mg ボーラス → 10 mg/hr）</li>
+              <li><strong>カルペリチド（ハンプ）追加</strong></li>
+              <li><strong>トルバプタン 3.75 mg</strong>／<strong>サイアザイド併用</strong></li>
+              <li>無効なら<strong>体外限外濾過（ECUM）</strong>を視野に、本人・家族にあらかじめ IC を入れておく</li>
+            </ul>
+          </li>
+        </ol>
+
+        <h3>電解質モニタ</h3>
+        <ul>
+          <li><strong>ループ利尿薬</strong> → 低 K・低 Mg・代謝性アルカローシス</li>
+          <li><strong>トルバプタン</strong> → 高 Na（口渇・自由飲水を確保）</li>
+          <li>採血を<strong>逐次フォロー</strong>（少なくとも 1 日 1 回、不安定例は数時間ごと）</li>
+        </ul>
+
+        <div class="callout callout-warning">
+          <div class="callout-title">ピットフォール</div>
+          <div class="callout-body"><ul>
+            <li><strong>反応尿が乏しいまま様子見</strong>＝最悪のパターン。早めに段階を進める。</li>
+            <li><strong>退院前のうっ血残存</strong>は再入院リスク。体重・頸静脈・浮腫を必ず再評価。</li>
+          </ul></div>
+        </div>
+      </section>
+
+      <!-- §s9 CS3 治療 — 低灌流 -->
+      <section class="section-page" id="s9" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🥶 CS3 治療 — 組織低灌流・低心拍出</h2>
+
+        <h3>主病態</h3>
+        <ul>
+          <li>SBP &lt; 100 mmHg、四肢冷感・脈圧縮小・意識レベル低下・<strong>乳酸上昇</strong>。</li>
+          <li>NS 分類の <strong>Cold（C / L）</strong>に対応。</li>
+        </ul>
+
+        <h3>使い分け</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>状況</th><th>方針</th></tr></thead>
+          <tbody>
+            <tr><td><strong>血圧に余裕あり</strong></td><td>血管拡張薬で後負荷を下げる</td></tr>
+            <tr><td><strong>血圧が保てない</strong></td><td><strong>強心薬</strong>（ドブタミン・ミルリノン）を追加</td></tr>
+            <tr><td><strong>ショック（心原性ショック）</strong></td><td><strong>カテコラミン＋補助循環</strong>（IABP / VA-ECMO（PCPS） / IMPELLA）— 詳細は心原性ショック章へ</td></tr>
+          </tbody>
+        </table></div>
+
+        <div class="callout callout-danger">
+          <div class="callout-title">Cold-Wet（NS C）は最も予後が悪い</div>
+          <div class="callout-body"><p><strong>低血圧＋冷たい＋意識障害</strong>を見たら ICU・上級医を即時に呼ぶ。心エコーで弁膜症（急性 MR・急性 AR）・タンポナーデを必ず除外。</p></div>
+        </div>
+
+        <h3>L（Dry & Cold）の落とし穴</h3>
+        <ul>
+          <li>うっ血がない Cold は<strong>脱水・出血・敗血症</strong>の合併も疑う。強心薬の前に<strong>原因検索</strong>。</li>
+          <li>RV 梗塞・PE・タンポナーデなど<strong>右心系</strong>の問題が混じることも（→ <a class="wiki-link" href="#s11">CS5</a>）。</li>
+        </ul>
+      </section>
+
+      <!-- §s10 CS4 治療 — ACS path -->
+      <section class="section-page" id="s10" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>❤️‍🔥 CS4 治療 — ACS パス</h2>
+
+        <div class="callout callout-danger">
+          <div class="callout-title">CS4 ＝ ACS が原因の急性心不全</div>
+          <div class="callout-body"><ul>
+            <li><strong>ST 上昇 / 新規左脚ブロック / 後壁梗塞所見</strong>を見たら、急性心不全の治療を保留してでも<strong>緊急再灌流</strong>を優先。</li>
+            <li><strong>循環器・カテラボに即コール</strong>。door-to-balloon 90 分。</li>
+            <li>IABP / IMPELLA / VA-ECMO の適応はカテラボと同時並行で判断。</li>
+          </ul></div>
+        </div>
+
+        <h3>関連</h3>
+        <ul>
+          <li><a class="wiki-link" href="../胸痛.html">胸痛</a> — ACS のフロー</li>
+        </ul>
+
+        <h3>循環器ホットラインに伝えること</h3>
+        <ul>
+          <li>年齢・性別・主訴</li>
+          <li>バイタル（特に <strong>血圧と SpO₂</strong>）</li>
+          <li><strong>心電図の所見</strong>（ST 上昇の誘導・新規 LBBB ／ 不整脈 ／ 伝導障害）</li>
+          <li><strong>トロポニン</strong>の値・時間</li>
+          <li>胸部 X 線の所見（肺水腫の程度）</li>
+          <li>現在の状況（酸素投与量、ルート確保済み、バルーン留置済み、CT 撮影済み、エコー準備済み）</li>
+          <li>既往歴（心不全・弁膜症・虚血性心疾患・ペースメーカ・抗血栓薬）</li>
+        </ul>
+      </section>
+
+      <!-- §s11 CS5 治療 — 右心不全 -->
+      <section class="section-page" id="s11" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🫁 CS5 治療 — 右心不全</h2>
+
+        <h3>原因を 3 つに絞って探す</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>原因</th><th>所見・対応</th></tr></thead>
+          <tbody>
+            <tr><td><strong>急性 PE</strong></td><td>突然発症の呼吸困難・低酸素・右室拡大／McConnell ／ D ダイマー上昇／CTPA で診断（→ <a class="wiki-link" href="肺塞栓.html">肺塞栓</a>）</td></tr>
+            <tr><td><strong>右室梗塞</strong></td><td>下壁梗塞＋右側胸部誘導 ST 上昇／<strong>硝酸薬・利尿薬で容易にショック</strong>／輸液負荷で対応</td></tr>
+            <tr><td><strong>肺高血圧（慢性増悪）</strong></td><td>既存の COPD / ILD / PAH ／心エコーで右室拡大・D-shape／専門施設へ</td></tr>
+          </tbody>
+        </table></div>
+
+        <div class="callout callout-warning">
+          <div class="callout-title">右心不全に「左心の感覚」を持ち込まない</div>
+          <div class="callout-body"><p>左心不全のつもりで<strong>利尿薬・硝酸薬を急いで使うと前負荷が抜けてショック</strong>になる。右室は前負荷依存。<strong>輸液で前負荷を確保</strong>しつつ、原因（PE なら抗凝固・血栓溶解、RV 梗塞なら再灌流）を治す。</p></div>
+        </div>
+      </section>
+
+      <!-- §s12 入院時オーダー -->
+      <section class="section-page" id="s12" hidden>
         <button class="back-to-menu" type="button">← メニューへ</button>
         <h2>🏥 入院時オーダー・病棟指示の枠（ADHF）</h2>
-        <p>救急後の<strong>入院オーダーは循環器主治医・HF チーム</strong>が主導する。ここでは ESC 2021／HFA 科学声明で繰り返される<strong>項目のチェックリスト</strong>として整理する（<strong>薬剤の具体用量は施設プロトコル</strong>）。</p>
+        <p>救急後の<strong>入院オーダーは循環器主治医・HF チーム</strong>が主導する。ESC 2021／HFA 科学声明で繰り返される<strong>項目のチェックリスト</strong>として整理する（薬剤の具体用量は施設プロトコル）。</p>
 
         <h3>モニタリング</h3>
         <ul>
-          <li><strong>バイタル・SpO2・尿量</strong>（バルーンカテで時間尿量）</li>
+          <li><strong>バイタル・SpO₂・尿量</strong>（バルーンカテで時間尿量）</li>
           <li><strong>体重・出入量</strong>（うっ血管理）</li>
           <li><strong>心電図モニター</strong>（不整脈・虚血）</li>
-          <li><strong>電解質・腎機能・BNP/NT-proBNP</strong>（日数に応じて）</li>
+          <li><strong>電解質・腎機能・BNP / NT-proBNP</strong>（日数に応じて）</li>
         </ul>
 
-        <h3>うっ血（Warm-Wet が典型）</h3>
+        <h3>うっ血（Wet & Warm が典型）</h3>
         <ul>
-          <li><strong>利尿薬</strong>（ループ利尿薬）— 電解質・腎機能・血圧とセットで調整（ESC 2021）</li>
+          <li><strong>利尿薬（ループ）</strong>— 電解質・腎機能・血圧とセットで調整（ESC 2021）</li>
           <li><strong>血管拡張薬</strong>：高血圧うっ血で血圧が許容なら検討（血圧低下に注意）</li>
         </ul>
 
         <h3>低灌流・心原性ショック寄り（Cold）</h3>
         <ul>
-          <li><strong>強心薬・血管収縮薬</strong>— ICU での使用が多い</li>
+          <li><strong>強心薬・血管収縮薬</strong>— ICU 管理が多い</li>
           <li><strong>機械的循環補助</strong>の評価は専門医（ESC 2021・ACVC 2022）</li>
         </ul>
 
         <h3>全例で意識すること</h3>
         <ul>
-          <li><strong>誘因の評価</strong>（CHAMPIT）：感染・ACS・不整脈・PE 等</li>
-          <li><strong>GDMT の再開・導入</strong>：<strong>退院前にエビデンスのある内服を可能な範囲で開始</strong>することが推奨される（ESC 2021 Class I）</li>
+          <li><strong>誘因の評価</strong>（CHAMPIT・FAILURE）：感染・ACS・不整脈・PE 等</li>
+          <li><strong>GDMT の再開・導入</strong>：<strong>退院前にエビデンスのある内服を可能な範囲で開始</strong>（ESC 2021 Class I）</li>
           <li><strong>患者教育</strong>：体重・症状悪化時の対応、塩分、服薬</li>
         </ul>
 
         <h3>退院前（病棟）</h3>
         <ul>
           <li><strong>うっ血の残存がないか</strong>再評価（残存うっ血は再入院リスク）</li>
-          <li><strong>口服薬の処方を確定</strong>（ACEI/ARB/ARNI、β遮断薬、MRA、SGLT2 阻害薬など、禁忌と血圧・腎機能で調整）</li>
+          <li><strong>口服薬の処方を確定</strong>（ACEI / ARB / ARNI、β遮断薬、MRA、SGLT2 阻害薬など、禁忌と血圧・腎機能で調整）</li>
         </ul>
       </section>
 
-      <!-- §7 外来フォロー -->
-      <section class="section-page" id="s7" hidden>
+      <!-- §s13 外来フォロー -->
+      <section class="section-page" id="s13" hidden>
         <button class="back-to-menu" type="button">← メニューへ</button>
         <h2>🚪 外来フォロー・退院後（ADHF）</h2>
         <ul>
-          <li><strong>退院後早期訪問</strong>：ESC 2021 では、ADHF 入院後<strong>退院後 1–2 週以内</strong>の早期フォローを<strong>Class I</strong>で推奨（うっ血の再評価、薬剤の漸増・不耐性の確認）</li>
+          <li><strong>退院後早期訪問</strong>：ESC 2021 では、ADHF 入院後<strong>退院後 1〜2 週以内</strong>の早期フォローを <strong>Class I</strong> で推奨（うっ血の再評価、薬剤の漸増・不耐性の確認）</li>
           <li><strong>多職種・HF クリニック</strong>：可能なら専門外来で<strong>GDMT の段階的増量</strong>（HFA 2023 科学声明でも退院前後の一貫した最適化を強調）</li>
           <li><strong>自己管理</strong>：日々の体重、症状悪化時の行動プラン</li>
         </ul>
       </section>
 
-      <!-- §8 出典・関連リンク -->
-      <section class="section-page" id="s8" hidden>
+      <!-- §s14 やりがちなミス -->
+      <section class="section-page" id="s14" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>⚠️ やりがちなミス</h2>
+
+        <ul>
+          <li><strong>CS 分類で止まる</strong>：CS は入口に過ぎない。「主病態」「基礎疾患」「増悪因子」を必ず言語化する。入院後何日も CS で止まっているプレゼンは<strong>病態把握不足のサイン</strong>。</li>
+          <li><strong>ACS を除外せずに利尿薬</strong>：CS4 を CS1/2 として治療すると致命的。心電図と心エコーを繰り返す。</li>
+          <li><strong>重症 AS に利尿薬・血管拡張薬を多量投与</strong> → 容易にショック。心エコーで AS を疑った時点でブレーキ。</li>
+          <li><strong>急性 AR に IABP 単独使用</strong>は禁忌。心臓外科コンサルト。</li>
+          <li><strong>RV 梗塞・PE に硝酸薬／利尿薬</strong>を急いで使う → 前負荷が抜けてショック（→ <a class="wiki-link" href="#s11">CS5</a>）。</li>
+          <li><strong>IVC 径を絶対値で判断</strong>：慢性 AF / MR / TR、COPD で普段から太い人がいる。経時変化で見る。</li>
+          <li><strong>tethering を見落として</strong>「壁運動異常なし」と言い切る。周囲の正常心筋に引きずられる動きを意識。</li>
+          <li><strong>反応尿が乏しいまま様子見</strong>：60 分以内のループ利尿薬と 1〜2 時間以内のチェックを徹底。</li>
+          <li><strong>増悪因子（FAILURE）を毎回問わない</strong>：怠薬・感染・不整脈は再発の引き金。</li>
+          <li><strong>モルヒネを使う</strong>：ESC 2021 で Class III。原則使わない。</li>
+          <li><strong>退院前のうっ血残存</strong>を放置：再入院リスク。体重・頸静脈・浮腫を必ず確認。</li>
+          <li><strong>GDMT 導入を退院後に先送り</strong>：ESC 2021 Class I。可能な限り<strong>退院前に開始</strong>。</li>
+        </ul>
+      </section>
+
+      <!-- §s15 出典・関連リンク -->
+      <section class="section-page" id="s15" hidden>
         <button class="back-to-menu" type="button">← メニューへ</button>
         <h2>📚 出典・関連リンク</h2>
 
-        <h3>出典</h3>
+        <h3>主な出典</h3>
         <ul>
           <li><strong>ESC 2021</strong>：McDonagh TA ほか. 2021 ESC Guidelines for the diagnosis and treatment of acute and chronic heart failure. <em>Eur Heart J.</em> 2021.
             <p><a class="wiki-link" href="https://doi.org/10.1093/eurheartj/ehab368">https://doi.org/10.1093/eurheartj/ehab368</a></p>
@@ -269,21 +797,23 @@
           <li><strong>ACVC 科学声明</strong>：Masip J ほか. <em>Eur Heart J Acute Cardiovasc Care.</em> 2022.
             <p><a class="wiki-link" href="https://doi.org/10.1093/ehjacc/zuab122">https://doi.org/10.1093/ehjacc/zuab122</a></p>
           </li>
-          <li><strong>HFA 退院前後管理（2023 科学声明）</strong>：Metra M ほか. Pre-discharge and early post-discharge management of patients hospitalized for acute heart failure. <em>Eur J Heart Fail.</em> 2023.
+          <li><strong>HFA 退院前後管理（2023 科学声明）</strong>：Metra M ほか. <em>Eur J Heart Fail.</em> 2023.
             <p><a class="wiki-link" href="https://doi.org/10.1002/ejhf.2888">https://doi.org/10.1002/ejhf.2888</a></p>
           </li>
+          <li><strong>循環器のトビラ — 第 3 章 急性心不全</strong>（3 軸／NS 分類／CHAMPIT／FAILURE／CS 分類の枠組み）</li>
         </ul>
 
-        <h3>このページから張るリンク</h3>
+        <h3>関連ページ</h3>
         <ul>
-          <li><a class="wiki-link" href="../呼吸困難.html">呼吸困難</a></li>
-          <li><a class="wiki-link" href="急性心不全の重症度評価.html">急性心不全の重症度評価</a></li>
-          <li><span class="wiki-missing">NIV</span></li>
-          <li><span class="wiki-missing">ACS</span></li>
-          <li><span class="wiki-missing">肺塞栓</span></li>
-          <li><a class="wiki-link" href="COPD増悪.html">COPD増悪</a></li>
-          <li><span class="wiki-missing">VBG/ABGの見方</span></li>
+          <li><a class="wiki-link" href="../呼吸困難.html">呼吸困難</a> — 主訴フロー</li>
+          <li><a class="wiki-link" href="../胸痛.html">胸痛</a> — ACS フロー</li>
+          <li><a class="wiki-link" href="../意識消失.html">意識消失</a> — 心原性失神</li>
+          <li><a class="wiki-link" href="肺塞栓.html">肺塞栓</a></li>
+          <li><a class="wiki-link" href="胸部CTの読み方.html">胸部 CT・X 線の読み方</a></li>
+          <li><a class="wiki-link" href="COPD増悪.html">COPD 増悪</a></li>
         </ul>
+
+        <p>#ER #循環器 #急性心不全 #NS分類 #CHAMPIT #FAILURE #CS分類</p>
       </section>
 
     </article>
@@ -306,18 +836,24 @@
     const menu = document.getElementById('sectionMenu');
     const pages = document.querySelectorAll('.section-page');
     const titleH1 = document.querySelector('.page-title');
+    const flowBoxes = document.querySelectorAll('.flow-box');
+    const actionHeaders = document.querySelectorAll('.action-header:not(.flow-box)');
     const relatedSymp = document.getElementById('related-symptoms');
 
     function showSection(id) {
-      menu.hidden = true;
+      if (menu) menu.hidden = true;
       if (titleH1) titleH1.hidden = true;
+      flowBoxes.forEach(b => b.hidden = true);
+      actionHeaders.forEach(h => h.hidden = true);
       if (relatedSymp) relatedSymp.hidden = true;
       pages.forEach(p => p.hidden = (p.id !== id));
       window.scrollTo(0, 0);
     }
     function showMenu(scrollTarget) {
-      menu.hidden = false;
+      if (menu) menu.hidden = false;
       if (titleH1) titleH1.hidden = false;
+      flowBoxes.forEach(b => b.hidden = false);
+      actionHeaders.forEach(h => h.hidden = false);
       if (relatedSymp) relatedSymp.hidden = false;
       pages.forEach(p => p.hidden = true);
       if (scrollTarget) {

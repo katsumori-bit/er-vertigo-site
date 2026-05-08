@@ -6,6 +6,172 @@
   <meta name="color-scheme" content="light dark" />
   <title>胸痛 | ER ノート</title>
   <link rel="stylesheet" href="er-note.css" />
+  <style>
+    /* === 診療フロー（このページ専用、めまい/転倒/呼吸困難方式） === */
+    .flow-box { position: static; user-select: none; }
+    .flow-box__title {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 0.5rem; cursor: default; padding: 2px 0;
+    }
+    .flow-canvas {
+      background: var(--surface);
+      border-radius: 10px;
+      padding: 14px 10px 18px;
+      margin-top: 0.55rem;
+      overflow-x: auto; overflow-y: hidden;
+      -webkit-overflow-scrolling: touch;
+      touch-action: pan-x pan-y pinch-zoom;
+    }
+    .flow-canvas__hint {
+      font-size: 0.72rem; color: var(--muted);
+      text-align: center; margin: 0 0 0.6rem 0;
+    }
+    .dx-flow {
+      min-width: 720px; margin: 0 auto; padding: 4px 6px 8px;
+      font-size: 14px; line-height: 1.45; color: var(--text); font-family: inherit;
+    }
+    .dx-node {
+      background: var(--surface);
+      border: 1.5px solid color-mix(in srgb, var(--text) 22%, transparent);
+      border-radius: 10px; padding: 8px 12px; text-align: center;
+      box-shadow: 0 1px 2px var(--shadow, rgba(0,0,0,0.06));
+      min-height: 38px;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 2px; text-decoration: none; color: var(--text);
+    }
+    .dx-node__title { font-weight: 700; font-size: 13.5px; }
+    .dx-node__sub   { font-size: 11.5px; color: var(--muted); font-weight: 500; }
+    .dx-node--decision {
+      background: color-mix(in srgb, var(--accent) 12%, var(--surface));
+      border-color: var(--accent); border-radius: 14px;
+    }
+    .dx-node--danger {
+      background: color-mix(in srgb, #c0392b 14%, var(--surface));
+      border-color: #c0392b;
+    }
+    .dx-node--danger .dx-node__title { color: #c0392b; }
+    .dx-node--action {
+      background: color-mix(in srgb, var(--text) 5%, var(--surface));
+      border-style: dashed;
+    }
+    .dx-node--external {
+      border-style: dashed; position: relative;
+      background: color-mix(in srgb, var(--accent) 6%, var(--surface));
+    }
+    .dx-node--external::after {
+      content: "↗"; position: absolute; top: 4px; right: 8px;
+      font-size: 12px; color: var(--accent); opacity: 0.85;
+    }
+    .dx-node--warn {
+      background: color-mix(in srgb, #d4a017 14%, var(--surface));
+      border-color: #d4a017;
+    }
+    .dx-node--warn .dx-node__title { color: #9b7508; }
+    .dx-node--external-danger {
+      border-style: dashed; position: relative;
+      background: color-mix(in srgb, #c0392b 14%, var(--surface));
+      border-color: #c0392b;
+    }
+    .dx-node--external-danger .dx-node__title { color: #c0392b; }
+    .dx-node--external-danger::after {
+      content: "↗"; position: absolute; top: 4px; right: 8px;
+      font-size: 12px; color: #c0392b; opacity: 0.85;
+    }
+
+    .dx-layer { display: grid; gap: 14px; align-items: stretch; margin: 0; }
+    .dx-layer--root   { grid-template-columns: 1fr; justify-items: center; }
+    .dx-layer--root > * { max-width: 360px; }
+    .dx-layer--branch { grid-template-columns: 1fr 1fr; }
+    .dx-layer--tri    { grid-template-columns: repeat(3, 1fr); }
+    .dx-layer--quad   { grid-template-columns: repeat(4, 1fr); }
+    .dx-layer--quint  { grid-template-columns: repeat(5, 1fr); }
+    .dx-layer--hex    { grid-template-columns: repeat(6, 1fr); }
+
+    .dx-arrow {
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      position: relative; margin: 4px 0; min-height: 44px;
+      color: var(--muted); font-size: 11.5px; font-weight: 600;
+    }
+    .dx-arrow::before {
+      content: ""; width: 2px; height: 100%; min-height: 38px;
+      background: color-mix(in srgb, var(--text) 35%, transparent);
+    }
+    .dx-arrow::after {
+      content: ""; position: absolute; bottom: 0;
+      width: 0; height: 0;
+      border-left: 5px solid transparent; border-right: 5px solid transparent;
+      border-top: 7px solid color-mix(in srgb, var(--text) 35%, transparent);
+    }
+    .dx-arrow__label {
+      background: var(--surface); padding: 1px 8px; border-radius: 999px;
+      border: 1px solid color-mix(in srgb, var(--text) 18%, transparent);
+      position: absolute; left: 50%; top: 50%;
+      transform: translate(-50%, -50%); white-space: nowrap; z-index: 1;
+    }
+
+    .dx-fork {
+      display: grid; grid-template-columns: 1fr 1fr;
+      position: relative; min-height: 38px; margin: 2px 0 4px;
+    }
+    .dx-fork::before {
+      content: ""; position: absolute;
+      top: 0; left: 25%; right: 25%; height: 2px;
+      background: color-mix(in srgb, var(--text) 35%, transparent);
+    }
+    .dx-fork__leg {
+      position: relative; display: flex; flex-direction: column;
+      align-items: center; justify-content: flex-end;
+      padding-top: 4px; padding-bottom: 4px;
+      font-size: 11.5px; font-weight: 600; color: var(--muted);
+      min-height: 36px;
+    }
+    .dx-fork__leg::before {
+      content: ""; width: 2px; flex: 1;
+      background: color-mix(in srgb, var(--text) 35%, transparent);
+    }
+    .dx-fork__leg::after {
+      content: ""; position: absolute; bottom: 0;
+      width: 0; height: 0;
+      border-left: 5px solid transparent; border-right: 5px solid transparent;
+      border-top: 7px solid color-mix(in srgb, var(--text) 35%, transparent);
+    }
+    .dx-fork__label {
+      background: var(--surface); padding: 1px 8px; border-radius: 999px;
+      border: 1px solid color-mix(in srgb, var(--text) 18%, transparent);
+      margin-bottom: 2px; z-index: 1;
+    }
+
+    .section-tiles { display: none !important; }
+
+    @media (max-width: 600px) {
+      .dx-flow { min-width: 0; font-size: 11px; padding: 2px 0 6px; }
+      .flow-canvas { overflow-x: hidden; padding: 8px 6px 12px; }
+      .flow-canvas__hint { font-size: 0.62rem; margin-bottom: 0.35rem; }
+      .dx-node { padding: 4px 5px; min-height: 28px; border-radius: 7px; gap: 1px; }
+      .dx-node__title { font-size: 10px; line-height: 1.22; }
+      .dx-node__sub   { font-size: 8.5px; line-height: 1.25; }
+      .dx-node--decision { border-radius: 8px; }
+      .dx-node--external::after,
+      .dx-node--external-danger::after { top: 2px; right: 4px; font-size: 9px; }
+      .dx-layer { gap: 5px; }
+      .dx-layer--root > * { max-width: none; width: 100%; }
+      .dx-layer--tri  { grid-template-columns: repeat(3, 1fr); }
+      .dx-layer--quad { grid-template-columns: 1fr 1fr; }
+      .dx-layer--quint { grid-template-columns: repeat(3, 1fr); }
+      .dx-layer--hex   { grid-template-columns: repeat(3, 1fr); }
+      .dx-arrow { min-height: 22px; margin: 1px 0; }
+      .dx-arrow::before { min-height: 18px; width: 1.5px; }
+      .dx-arrow::after { border-left-width: 4px; border-right-width: 4px; border-top-width: 6px; }
+      .dx-arrow__label { font-size: 8.5px; padding: 0 4px; line-height: 1.4; }
+      .dx-fork { min-height: 22px; }
+      .dx-fork::before { height: 1.5px; }
+      .dx-fork__leg { min-height: 22px; padding-top: 2px; padding-bottom: 2px; font-size: 9px; }
+      .dx-fork__leg::before { width: 1.5px; }
+      .dx-fork__leg::after { border-left-width: 4px; border-right-width: 4px; border-top-width: 6px; }
+      .dx-fork__label { font-size: 8.5px; padding: 0 4px; margin-bottom: 0; }
+    }
+  </style>
 </head>
 <body>
   <header class="hokuto-top">
@@ -21,180 +187,346 @@
     <article class="note-shell">
       <h1 class="page-title">胸痛</h1>
 
-      <!-- 即時アクションヘッダー（常時 sticky） -->
-      <div class="action-header">
-        <div class="action-header__title">⚡ 即時アクション</div>
-        <ol class="action-header__list">
-          <li><strong>致死的 5 つ</strong>を外す：<strong>ACS / 大動脈解離 / PE / 緊張性気胸 / 食道破裂</strong></li>
-          <li>来院 <strong>10 分以内に 12 誘導 ECG + 両上肢血圧</strong>、モニター・ルート・酸素（SpO2 &lt; 90%）</li>
-          <li><strong>hs-cTn + D-dimer</strong> + <strong>HEART / Wells・PERC</strong> で前確率を絞る</li>
-          <li><strong>解離疑いに抗血小板・抗凝固禁</strong>、<strong>右室梗塞に硝酸薬禁</strong>、<strong>STEMI は door-to-balloon ≤ 90 分</strong></li>
-        </ol>
+      <!-- 診療フロー -->
+      <div class="action-header flow-box" id="flowBox">
+        <div class="action-header__title flow-box__title">
+          <span>🗺 胸痛の診療フロー（致死 5 並列 → 10 分セット → 並走 3 軸 → 各疾患詳細へ）</span>
+        </div>
+        <div class="flow-canvas">
+          <p class="flow-canvas__hint">致死 5 を最初から並列で疑う → 10 分セット → 同時並行で情報収集 → 各疾患の詳細ページで rule in / out</p>
+          <div class="dx-flow" role="group" aria-label="胸痛の診療フロー">
+
+            <!-- L0: mindset 注意書き（テキストのみ、ボタンなし） -->
+            <p class="flow-canvas__hint" style="background:color-mix(in srgb,#c0392b 10%,var(--surface));border:1px solid #c0392b;border-radius:8px;padding:8px 12px;margin:0 0 8px;font-size:12px;line-height:1.55;color:var(--text);text-align:left;">
+              🚨 <strong>致死 5 を最初から並列に意識</strong>：ACS／大動脈解離／PE／緊張性気胸／食道破裂（＋心タンポナーデ・致死性不整脈）<br>
+              💡 <strong>ABCD 確認＋初期所見でほぼ方向性はつく</strong> — 両上肢血圧差・新規 AR・呼吸音左右差・嘔吐後／皮下気腫・突然の頻脈＋低酸素 など。<br>
+              ⚠️ <strong>解離だけ乖離難</strong> — 意識的に上肢血圧差・新規 AR・引き裂く胸背部痛・神経症状・下壁 STEMI 様（冠動脈解離合併）を拾う。
+            </p>
+
+            <p class="flow-canvas__hint" style="background:color-mix(in srgb,#1a8a4a 12%,var(--surface));border:1px solid #1a8a4a;border-radius:8px;padding:6px 10px;margin:6px 0;font-size:11px;line-height:1.45;color:var(--text);text-align:center;">
+              <strong>主訴の方向が違うなら隣の主訴へ</strong>：呼吸困難前景 → <a class="wiki-link" href="呼吸困難.html">呼吸困難</a>／動悸・失神前景 → <a class="wiki-link" href="意識消失.html">意識消失</a>／心窩部痛前景 → <a class="wiki-link" href="腹痛.html">腹痛</a>
+            </p>
+
+            <!-- L1: 来院 10 分セット -->
+            <div class="dx-layer dx-layer--root">
+              <a class="dx-node dx-node--action" href="#s1">
+                <div class="dx-node__title">⏱ 来院 10 分以内のセット</div>
+                <div class="dx-node__sub">両上肢血圧／モニター／ルート×2／12 誘導 ECG／採血／酸素 SpO₂&lt;90%</div>
+              </a>
+            </div>
+
+            <div class="dx-arrow"><span class="dx-arrow__label">↓ 同時並行で情報収集</span></div>
+
+            <!-- L2: 並走 3 軸 -->
+            <div class="dx-layer dx-layer--tri">
+              <a class="dx-node dx-node--action" href="#s3">
+                <div class="dx-node__title">問診 OPQRST</div>
+                <div class="dx-node__sub">放散・労作・突発・引き裂く・嘔吐後</div>
+              </a>
+              <a class="dx-node dx-node--action" href="#s4">
+                <div class="dx-node__title">身体所見</div>
+                <div class="dx-node__sub">両上肢血圧差・新規 AR・呼吸音左右差</div>
+              </a>
+              <a class="dx-node dx-node--action" href="#s7">
+                <div class="dx-node__title">採血・画像</div>
+                <div class="dx-node__sub">hs-cTn・D-d・CXR・POCUS・造影 CT</div>
+              </a>
+            </div>
+
+            <div class="dx-arrow"><span class="dx-arrow__label">↓ ECG を最優先で読む</span></div>
+
+            <!-- L3: ECG -->
+            <div class="dx-layer dx-layer--root">
+              <a class="dx-node dx-node--decision" href="#s5">
+                <div class="dx-node__title">📈 12 誘導 ECG</div>
+                <div class="dx-node__sub">ST 上昇あり → STEMI／なし → S・E・T</div>
+              </a>
+            </div>
+
+            <div class="dx-arrow"><span class="dx-arrow__label">↓ 所見が揃ったら鑑別を絞る</span></div>
+
+            <!-- L4: 鑑別収束 -->
+            <div class="dx-layer dx-layer--root">
+              <a class="dx-node dx-node--decision" href="#s2">
+                <div class="dx-node__title">🎯 致死 5 のどれを疑うか／否定するか</div>
+                <div class="dx-node__sub">問診＋身体＋ECG＋画像で方向性を絞り、該当疾患の詳細ページへ</div>
+              </a>
+            </div>
+
+            <div class="dx-arrow"><span class="dx-arrow__label">↓ 該当疾患の詳細ページへ</span></div>
+
+            <!-- L5: 致死 5 quint - external -->
+            <div class="dx-layer dx-layer--quint">
+              <a class="dx-node dx-node--external-danger" href="疾患詳細/急性冠症候群.html">
+                <div class="dx-node__title">ACS</div>
+                <div class="dx-node__sub">圧迫感・冷汗<br>放散・労作</div>
+              </a>
+              <a class="dx-node dx-node--external-danger" href="疾患詳細/大動脈解離.html">
+                <div class="dx-node__title">大動脈解離</div>
+                <div class="dx-node__sub">引き裂く胸背部痛<br>上肢血圧差／新規 AR</div>
+              </a>
+              <a class="dx-node dx-node--external-danger" href="疾患詳細/肺塞栓.html">
+                <div class="dx-node__title">PE</div>
+                <div class="dx-node__sub">突然＋頻脈／低酸素<br>術後・臥床・担癌</div>
+              </a>
+              <a class="dx-node dx-node--external-danger" href="疾患詳細/気胸.html">
+                <div class="dx-node__title">緊張性気胸</div>
+                <div class="dx-node__sub">片側呼吸音消失<br>頸静脈怒張・健側 shift</div>
+              </a>
+              <a class="dx-node dx-node--external-danger" href="疾患詳細/食道破裂.html">
+                <div class="dx-node__title">食道破裂</div>
+                <div class="dx-node__sub">嘔吐後の胸痛<br>Mackler 三徴・皮下気腫</div>
+              </a>
+            </div>
+
+            <div class="dx-arrow"><span class="dx-arrow__label">↓ 致死 5 全部 rule out できたら</span></div>
+
+            <!-- L6: HEART -->
+            <div class="dx-layer dx-layer--root">
+              <a class="dx-node dx-node--decision" href="#s6">
+                <div class="dx-node__title">📤 HEART で帰宅判定</div>
+                <div class="dx-node__sub">5 項目 0-2 点（H／E／A／R／T）</div>
+              </a>
+            </div>
+
+            <div class="dx-fork">
+              <div class="dx-fork__leg"><span class="dx-fork__label">0-3 点</span></div>
+              <div class="dx-fork__leg"><span class="dx-fork__label">4-6／≥7 点</span></div>
+            </div>
+
+            <!-- L7: 帰宅 / 入院 -->
+            <div class="dx-layer dx-layer--branch">
+              <a class="dx-node" href="#s6">
+                <div class="dx-node__title">帰宅＋外来精査</div>
+                <div class="dx-node__sub">30 日 MACE&lt;2%／低リスクでも 1-2% — フォロー必須</div>
+              </a>
+              <a class="dx-node dx-node--warn" href="#s6">
+                <div class="dx-node__title">入院 or 早期治療</div>
+                <div class="dx-node__sub">4-6 観察入院＋再検／≥7 早期侵襲的</div>
+              </a>
+            </div>
+
+          </div>
+        </div>
       </div>
 
-      <!-- §1〜§9 メニュータイル -->
+      <!-- §タイル（フロー直リンクで代替、CSS で非表示／hash-router の fallback として残す） -->
       <nav class="section-tiles" id="sectionMenu">
-        <a class="section-tile" href="#s1"><span class="section-tile__no">⏱</span><span class="section-tile__name">来院 10 分以内<br><small>ECG / モニター / 採血</small></span></a>
-        <a class="section-tile" href="#s2"><span class="section-tile__no">🚨</span><span class="section-tile__name">致死的胸痛 5 つ<br><small>ACS / 解離 / PE / 気胸 / 食道破裂</small></span></a>
-        <a class="section-tile" href="#s3"><span class="section-tile__no">💬</span><span class="section-tile__name">問診<br><small>OPQRST</small></span></a>
+        <a class="section-tile" href="#s1"><span class="section-tile__no">⏱</span><span class="section-tile__name">来院 10 分セット</span></a>
+        <a class="section-tile" href="#s2"><span class="section-tile__no">🚨</span><span class="section-tile__name">致死 5 — 各疾患</span></a>
+        <a class="section-tile" href="#s3"><span class="section-tile__no">💬</span><span class="section-tile__name">問診 OPQRST</span></a>
         <a class="section-tile" href="#s4"><span class="section-tile__no">🩺</span><span class="section-tile__name">身体所見</span></a>
-        <a class="section-tile" href="#s5"><span class="section-tile__no">📈</span><span class="section-tile__name">12 誘導 ECG</span></a>
-        <a class="section-tile" href="#s6"><span class="section-tile__no">🧮</span><span class="section-tile__name">リスク評価<br><small>HEART / Wells / PERC</small></span></a>
-        <a class="section-tile" href="#s7"><span class="section-tile__no">🩸</span><span class="section-tile__name">採血と画像<br><small>hs-cTn / D-dimer / CT / エコー</small></span></a>
-        <a class="section-tile" href="#s8"><span class="section-tile__no">💊</span><span class="section-tile__name">初期対応<br><small>診断がつくまで</small></span></a>
-        <a class="section-tile" href="#s9"><span class="section-tile__no">📤</span><span class="section-tile__name">disposition / ミス / 出典</span></a>
+        <a class="section-tile" href="#s5"><span class="section-tile__no">📈</span><span class="section-tile__name">12 誘導 ECG（要点）</span></a>
+        <a class="section-tile" href="#s6"><span class="section-tile__no">📤</span><span class="section-tile__name">HEART 帰宅判定</span></a>
+        <a class="section-tile" href="#s7"><span class="section-tile__no">🩸</span><span class="section-tile__name">採血と画像</span></a>
+        <a class="section-tile" href="#s8"><span class="section-tile__no">⚠️</span><span class="section-tile__name">やりがちなミス</span></a>
+        <a class="section-tile" href="#s9"><span class="section-tile__no">📚</span><span class="section-tile__name">出典・関連リンク</span></a>
       </nav>
 
-      <!-- §1 来院 10 分以内 -->
+      <!-- §s1 来院 10 分以内のセット -->
       <section class="section-page" id="s1" hidden>
         <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>⏱ 来院 10 分以内にやること</h2>
-
-        <div class="callout callout-tip">
-          <div class="callout-title">主訴が胸痛ではないとき</div>
-          <div class="callout-body"><ul>
-            <li>呼吸困難が前景 → <a class="wiki-link" href="呼吸困難.html">呼吸困難</a></li>
-            <li>動悸・失神が前景 → <a class="wiki-link" href="意識消失.html">意識消失</a></li>
-            <li>心窩部痛が前景 → <a class="wiki-link" href="腹痛.html">腹痛</a>（下壁梗塞・膵炎・胆道系も）</li>
-          </ul></div>
-        </div>
+        <h2>⏱ 来院 10 分以内のセット</h2>
 
         <div class="callout callout-danger">
           <div class="callout-title">来院 → 10 分以内</div>
           <div class="callout-body"><ol>
-            <li><strong>バイタル</strong>（血圧は両上肢で）</li>
-            <li><strong>モニター</strong>（SpO2・ECG・自動血圧）</li>
-            <li><strong>末梢ルート</strong>（できれば 18–20G 2 本）</li>
-            <li><strong>12 誘導 ECG</strong>（AHA/ACC：10 分以内）</li>
-            <li><strong>採血</strong>：hs-cTn、D-dimer、CBC、生化、凝固、血型・クロス、血ガス</li>
-            <li><strong>酸素</strong>：SpO2 &lt; 90% or 呼吸困難で投与（ルーチン高流量酸素は避ける）</li>
-            <li><strong>アスピリン 162–325 mg 咀嚼</strong>：ACS が否定できなければ早期に（禁忌・出血リスク確認）</li>
+            <li><strong>バイタル（両上肢血圧）</strong> — 差 ≥20 mmHg で解離示唆</li>
+            <li><strong>モニター</strong>（SpO₂・ECG・自動血圧）</li>
+            <li><strong>末梢ルート 18-20G ×2</strong></li>
+            <li><strong>12 誘導 ECG</strong>（AHA/ACC：来院 10 分以内、初回非診断的なら 5-10 分ごと再検）</li>
+            <li><strong>採血</strong>：hs-cTn／D-dimer／CBC／生化／凝固／血型・クロス／血ガス</li>
+            <li><strong>酸素</strong>：SpO₂&lt;90% または心不全徴候のみ（ルーチン高流量酸素は禁）</li>
+            <li><strong>アスピリン 162-200 mg 咀嚼</strong>：ACS が否定できなければ早期に（禁忌・出血リスク確認）</li>
           </ol></div>
         </div>
+
+        <p class="muted">出典：AHA/ACC/ASE/CHEST/SAEM/SCCT/SCMR 2021 Chest Pain GL／ESC 2023 ACS GL／循環器のトビラ第 1 章</p>
       </section>
 
-      <!-- §2 致死的胸痛 5 つを外す -->
+      <!-- §s2 致死 5 — 各疾患の手がかり -->
       <section class="section-page" id="s2" hidden>
         <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🚨 致死的胸痛 5 つを外す</h2>
+        <h2>🚨 致死 5 — 各疾患の手がかりと初手</h2>
 
-        <div class="table-wrap"><table>
-          <thead><tr><th>疾患</th><th>典型</th><th>初手</th><th>疾患ページ</th></tr></thead>
-          <tbody>
-            <tr><td><strong>ACS（STEMI/NSTEMI/UA）</strong></td><td>圧迫感、冷汗、放散痛、嘔気、労作誘発・休息軽快</td><td><strong>12 誘導 ECG + トロポニン</strong>、STEMI なら直ちに循環器コール</td><td><a class="wiki-link" href="疾患詳細/STEMI.html">STEMI</a> / <span class="wiki-missing">ACS</span></td></tr>
-            <tr><td><strong>大動脈解離</strong></td><td>突然の引き裂かれる胸背部痛、移動する痛み、左右上肢血圧差、新規 AR 雑音</td><td><strong>造影 CT</strong>（ADD-RS ≤1 + D-dimer 陰性で除外補助）</td><td><span class="wiki-missing">大動脈解離</span></td></tr>
-            <tr><td><strong>肺塞栓（PE）</strong></td><td>突然の呼吸困難 + 頻脈、胸膜痛、片側下肢腫脹、長期臥床・術後・OC</td><td><strong>Wells/PERC → D-dimer → CTPA</strong></td><td><span class="wiki-missing">肺塞栓</span></td></tr>
-            <tr><td><strong>緊張性気胸</strong></td><td>突然の片側胸痛 + 呼吸困難、片側呼吸音消失、頸静脈怒張、気管偏位</td><td><strong>画像を待たず針減圧 → ドレナージ</strong></td><td><span class="wiki-missing">気胸</span></td></tr>
-            <tr><td><strong>食道破裂（Boerhaave）</strong></td><td>強い嘔吐後の胸痛、皮下気腫、縦隔気腫</td><td><strong>造影 CT or 食道造影</strong>、外科コンサルト</td><td><span class="wiki-missing">食道破裂</span></td></tr>
-          </tbody>
-        </table></div>
-      </section>
-
-      <!-- §3 問診 -->
-      <section class="section-page" id="s3" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>💬 問診</h2>
-
-        <h3>OPQRST</h3>
-        <ul>
-          <li><strong>O</strong>nset：いつから、どんな状況で（労作中？安静時？嘔吐後？）</li>
-          <li><strong>P</strong>rovocation/Palliation：労作・体位・呼吸・食事</li>
-          <li><strong>Q</strong>uality：圧迫感、絞扼感、引き裂かれる、刺す、灼熱</li>
-          <li><strong>R</strong>egion/Radiation：左肩・顎・両腕・背部</li>
-          <li><strong>S</strong>everity：NRS</li>
-          <li><strong>T</strong>iming：持続時間、反復パターン</li>
-        </ul>
-
-        <h3>必ず聞く</h3>
-        <ul>
-          <li><strong>発症様式</strong>：突然 vs 徐々（突然なら解離・PE・気胸）</li>
-          <li><strong>持続時間</strong>：数秒（非心臓性多い）vs 持続（ACS・解離・PE）</li>
-          <li><strong>随伴</strong>：呼吸困難、冷汗、嘔気、失神、動悸、咳、血痰、発熱</li>
-          <li><strong>危険因子</strong>：年齢、性別、喫煙、HT、DM、脂質、家族歴、避妊薬、悪性腫瘍、長期臥床、手術、外傷、コカイン</li>
-        </ul>
+        <p>胸痛 ER は <strong>「致死 5 を外すこと」</strong>から始める。ACS を rule out してから他を考えるのは遅い — <strong>最初から並列に疑う</strong>。心タンポナーデ・致死性不整脈も常に念頭に。</p>
 
         <div class="callout callout-tip">
-          <div class="callout-title">ACS らしさの増減</div>
-          <div class="callout-body"><p><strong>らしさ UP</strong>：放散痛（両腕 / 右肩 / 顎）・冷汗・嘔気嘔吐・労作誘発 - 休息軽快・ACS/PCI 歴 <strong>らしさ DOWN</strong>：体位変換で増悪・触診で再現できる胸壁痛・数秒の刺す痛み （<strong>ただし胸壁再現性があっても PE / 解離は除外できない</strong>）</p></div>
+          <div class="callout-title">ABCD 確認＋初期所見でほぼ方向性はつく</div>
+          <div class="callout-body">
+            <p>致死 5 を mindset で持っていれば、ABCD と初期所見の段階で多くは「どの方向で考えるか」が見える：</p>
+            <ul>
+              <li><strong>ACS</strong> — 圧迫感・冷汗・放散・労作・休息軽快（cTn・ECG で確証）</li>
+              <li><strong>PE</strong> — 突然の呼吸困難＋頻脈／低酸素／片側下腿腫脹（Wells/PERC で確証）</li>
+              <li><strong>緊張性気胸</strong> — 片側呼吸音消失＋頸静脈怒張＋健側 shift（その場で減圧）</li>
+              <li><strong>食道破裂</strong> — 嘔吐後の胸痛＋皮下気腫＋縦隔気腫（Mackler 三徴）</li>
+            </ul>
+            <p><strong>解離だけ乖離難</strong>。胸痛＋意外な所見の組合せ（神経症状・対麻痺・下壁 STEMI 様＋上肢血圧差・新規 AR）に乗らないと拾えない。<strong>「全例で両上肢血圧を測る／聴診で AR を意識する／背部に放散する痛みかを聞く」</strong>のルーチン化が唯一の対策。</p>
+          </div>
+        </div>
+
+        <p><strong>各疾患の評価・治療フローは専用ページへ</strong>。このページは ER 入口の overview に絞っている。</p>
+
+        <div class="table-wrap"><table>
+          <thead><tr><th>疾患</th><th>典型</th><th>初手</th><th>詳細</th></tr></thead>
+          <tbody>
+            <tr><td><strong>ACS（STEMI/NSTEMI/UA）</strong></td><td>圧迫感・冷汗・放散痛・嘔気・労作誘発／休息軽快</td><td><strong>12 誘導 ECG＋hs-cTn</strong>、ST 上昇あれば即循環器コール</td><td><a class="wiki-link" href="疾患詳細/急性冠症候群.html">急性冠症候群</a></td></tr>
+            <tr><td><strong>大動脈解離</strong></td><td>突然の引き裂く胸背部痛・移動する痛み・上肢血圧差・新規 AR</td><td><strong>造影 CT</strong>（ADD-RS ≤1＋D-d 陰性で除外補助）／降圧 SBP 100-120・HR ≤60／<strong>抗血小板・抗凝固禁</strong></td><td><a class="wiki-link" href="疾患詳細/大動脈解離.html">大動脈解離</a></td></tr>
+            <tr><td><strong>肺塞栓（PE）</strong></td><td>突然の呼吸困難＋頻脈、胸膜痛、片側下肢腫脹、長期臥床・術後・OC・担癌</td><td><strong>Wells/PERC → D-d → CTPA</strong>（高確率群は image first）</td><td><a class="wiki-link" href="疾患詳細/肺塞栓.html">肺塞栓</a></td></tr>
+            <tr><td><strong>緊張性気胸</strong></td><td>突然の片側胸痛＋呼吸困難・片側呼吸音消失・頸静脈怒張・気管偏位</td><td><strong>画像を待たず針減圧 → ドレナージ</strong></td><td><a class="wiki-link" href="疾患詳細/気胸.html">気胸</a></td></tr>
+            <tr><td><strong>食道破裂（Boerhaave）</strong></td><td>強い嘔吐後の胸痛・皮下気腫・縦隔気腫（Mackler 三徴）</td><td><strong>造影 CT or 食道造影</strong>、外科コンサルト、<strong>経鼻胃管禁</strong></td><td><a class="wiki-link" href="疾患詳細/食道破裂.html">食道破裂</a></td></tr>
+          </tbody>
+        </table></div>
+
+        <div class="callout callout-warning">
+          <div class="callout-title">プラス α で常に念頭に</div>
+          <div class="callout-body"><ul>
+            <li><strong>心タンポナーデ</strong>：低血圧＋頸静脈怒張＋心音減弱（Beck 三徴）／電気的交互現象</li>
+            <li><strong>致死性不整脈（VT/VF/完全 AVB）</strong>：失神・冷汗・血行動態破綻</li>
+          </ul></div>
         </div>
       </section>
 
-      <!-- §4 身体所見 -->
+      <!-- §s3 問診 OPQRST -->
+      <section class="section-page" id="s3" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>💬 問診 OPQRST</h2>
+
+        <h3>OPQRST の 6 項目（致死 5 共通の手がかり）</h3>
+        <ul>
+          <li><strong>O</strong>nset：いつから／<strong>突発 → PE・解離・気胸・食道破裂</strong>／数分で漸増 → CAD 典型</li>
+          <li><strong>P</strong>rovocation/Palliation：<strong>安静・ニトロで 5 分以内に改善 → CAD らしい</strong>／10 分以上 → 食道疾患疑い／咳・深吸気で増悪 → 胸膜痛（PE・気胸）</li>
+          <li><strong>Q</strong>uality：圧迫感・締めつけ・つかえる感じが典型／「刺すような痛み」も CAD でありうる／<strong>引き裂く → 解離</strong>／<strong>嘔吐後 → 食道破裂</strong></li>
+          <li><strong>R</strong>egion/Radiation：胸骨裏側／頸・咽頭・歯・下顎・上肢・肩／<strong>背部に移動 → 解離</strong></li>
+          <li><strong>S</strong>everity／related symptoms：NRS／冷汗・嘔気・呼吸困難・失神／<strong>突然の呼吸困難＋頻脈 → PE</strong>／<strong>片側胸痛＋呼吸困難 → 気胸</strong></li>
+          <li><strong>T</strong>iming：<strong>典型 2-10 分／30 分以上 → ACS／数秒や数日 → CAD 否定的</strong></li>
+        </ul>
+
+        <h3>ACS らしさの尤度比（Likelihood Ratio +）</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>所見</th><th>LR+</th></tr></thead>
+          <tbody>
+            <tr><td>右腕／右肩への放散</td><td><strong>4.7</strong></td></tr>
+            <tr><td>両腕／両肩への放散</td><td><strong>4.1</strong></td></tr>
+            <tr><td>労作関連</td><td><strong>2.4</strong></td></tr>
+            <tr><td>左腕／左肩への放散</td><td>2.3</td></tr>
+            <tr><td>冷や汗</td><td>2.0</td></tr>
+            <tr><td>嘔気・嘔吐</td><td>1.9</td></tr>
+          </tbody>
+        </table></div>
+
+        <h3>ACS らしくない所見（rule-out 補助、ただし単独で除外しない）</h3>
+        <ul>
+          <li>胸膜炎様痛（深呼吸・咳で増悪）</li>
+          <li>体位変化痛</li>
+          <li>刺すような点状の痛み</li>
+          <li>胸壁の触診で再現できる圧痛（<strong>ただし PE・解離は除外できない</strong>）</li>
+        </ul>
+
+        <h3>冠危険因子と検査前確率</h3>
+        <ul>
+          <li>年齢／HT／DM／脂質異常／腎機能障害／肥満／喫煙／家族歴（男&lt;55・女&lt;65 発症は高リスク）</li>
+          <li><strong>70 代男性</strong>：典型症状で CAD &gt;50%、非特異症状でも約 24%</li>
+          <li><strong>30 代</strong>：典型症状でも 3-5%</li>
+          <li>高齢・DM は症状非特異・無症候もあり（<strong>dyspnea-equivalent</strong>）</li>
+          <li>不安定狭心症はトロポニン陰性のこともあり、<strong>「数日〜数週間で症状が増悪」</strong>を問診で拾う</li>
+        </ul>
+
+        <p>ACS 評価の詳細 → <a class="wiki-link" href="疾患詳細/急性冠症候群.html">急性冠症候群</a></p>
+      </section>
+
+      <!-- §s4 身体所見 -->
       <section class="section-page" id="s4" hidden>
         <button class="back-to-menu" type="button">← メニューへ</button>
         <h2>🩺 身体所見</h2>
 
-        <ul>
-          <li><strong>バイタル</strong>：両上肢血圧（差 ≥ 20 mmHg → 解離示唆）</li>
-          <li><strong>頸</strong>：頸静脈怒張（PE / タンポナーデ / 緊張性気胸）</li>
-          <li><strong>胸</strong>：呼吸音左右差・減弱、皮下気腫</li>
-          <li><strong>心音</strong>：新規雑音（AR → 解離）、S3/S4、心膜摩擦音</li>
-          <li><strong>腹部</strong>：圧痛（下壁梗塞は心窩部痛）</li>
-          <li><strong>下肢</strong>：片側腫脹（DVT）</li>
-        </ul>
-      </section>
-
-      <!-- §5 12 誘導 ECG -->
-      <section class="section-page" id="s5" hidden>
-        <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>📈 12 誘導 ECG の見方</h2>
-
         <div class="table-wrap"><table>
-          <thead><tr><th>所見</th><th>考える疾患</th></tr></thead>
+          <thead><tr><th>部位</th><th>所見 → 示唆疾患</th></tr></thead>
           <tbody>
-            <tr><td><strong>ST 上昇</strong>（隣接 2 誘導以上）</td><td>STEMI → <a class="wiki-link" href="疾患詳細/STEMI.html">STEMI</a></td></tr>
-            <tr><td><strong>ST 下降 / T 陰転</strong></td><td>NSTEMI / UA、左主幹部・三枝、後壁梗塞</td></tr>
-            <tr><td><strong>後壁梗塞パターン</strong>（V1–V3 R 増高 + ST 下降）</td><td>→ <a class="wiki-link" href="疾患詳細/後壁梗塞.html">後壁梗塞</a>（V7–V9 再評価）</td></tr>
-            <tr><td><strong>de Winter T</strong></td><td>LAD 近位部閉塞 → <a class="wiki-link" href="疾患詳細/de Winterパターン.html">de Winterパターン</a></td></tr>
-            <tr><td><strong>Wellens 征候</strong></td><td>LAD 高度狭窄 → <a class="wiki-link" href="疾患詳細/Wellens症候群.html">Wellens症候群</a></td></tr>
-            <tr><td><strong>新規 LBBB</strong></td><td>STEMI 等価（Sgarbossa）</td></tr>
-            <tr><td><strong>右心負荷</strong>（S1Q3T3、右軸、V1–V3 T 陰転）</td><td>PE</td></tr>
-            <tr><td><strong>電気的交互現象</strong></td><td>心タンポナーデ</td></tr>
-            <tr><td><strong>広範 ST 上昇 + PR 下降</strong></td><td>急性心膜炎</td></tr>
+            <tr><td><strong>バイタル</strong></td><td><strong>両上肢血圧</strong>（差 ≥20 mmHg → 解離）／頻脈＋低酸素 → PE／低血圧＋頻脈 → ショック</td></tr>
+            <tr><td><strong>頸</strong></td><td>頸静脈怒張 → タンポナーデ／緊張性気胸／PE／右室梗塞合併 STEMI</td></tr>
+            <tr><td><strong>胸壁</strong></td><td>呼吸音左右差・減弱 → 気胸／皮下気腫 → 食道破裂・気胸／触診圧痛は ACS・PE・解離を除外しない</td></tr>
+            <tr><td><strong>心音</strong></td><td><strong>新規 AR</strong> → 大動脈解離（弁尖逸脱）／S3・S4 → 心不全合併／心膜摩擦音 → 心膜炎／新規 MR・VSP 雑音 → STEMI 機械的合併症</td></tr>
+            <tr><td><strong>腹部</strong></td><td>心窩部痛 → 下壁梗塞・膵炎・胆道系（<a class="wiki-link" href="腹痛.html">腹痛</a>）</td></tr>
+            <tr><td><strong>下肢</strong></td><td>片側下腿腫脹／圧痛 → DVT・PE</td></tr>
           </tbody>
         </table></div>
-
-        <div class="callout callout-check">
-          <div class="callout-title">ECG は 1 回で終わらせない</div>
-          <div class="callout-body"><ul>
-            <li>初回非診断的・症状持続 → <strong>15–30 分後に再検</strong></li>
-            <li>右側胸部誘導（V3R, V4R）→ 右室梗塞、後壁誘導（V7–V9）→ 後壁梗塞</li>
-          </ul></div>
-        </div>
-        <p>詳細 → <a class="wiki-link" href="入院時心電図.html">入院時心電図</a></p>
       </section>
 
-      <!-- §6 リスク評価 -->
+      <!-- §s5 12 誘導 ECG（要点） -->
+      <section class="section-page" id="s5" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>📈 12 誘導 ECG（要点）</h2>
+
+        <p>ER 胸痛で必ず拾う ECG 所見の概略。<strong>ACS 詳細（責任血管マップ・aVR・後壁・hyperacute T・S・E・T・等価所見・Sgarbossa 等）は専用ページへ</strong>。</p>
+
+        <div class="callout callout-summary">
+          <div class="callout-title">ER で 30 秒で見るチェック</div>
+          <div class="callout-body"><ol>
+            <li><strong>ST 上昇あり</strong>（連続 2 誘導以上、J 点）→ STEMI と判断、即循環器コール</li>
+            <li><strong>ST 低下／陰性 T／hyperacute T</strong>がないか</li>
+            <li><strong>aVR の ST 上昇</strong>（広範 ST 低下に紛れる）→ LMT・多枝病変</li>
+            <li><strong>下壁梗塞（II・III・aVF）</strong>を見たら <strong>V₃R-V₅R 追加</strong>（右室梗塞→硝酸薬禁）</li>
+            <li><strong>V₁-V₃ で R 増高＋ST 低下</strong>→ <strong>後壁梗塞</strong>を疑い V₇-V₉ 記録</li>
+            <li><strong>新規 LBBB</strong>→ STEMI 等価（Sgarbossa 基準で評価）</li>
+            <li><strong>右心負荷（S1Q3T3）</strong>→ PE</li>
+            <li><strong>低電位／電気的交互現象</strong>→ 心嚢液貯留・タンポナーデ</li>
+          </ol></div>
+        </div>
+
+        <p>詳細 → <a class="wiki-link" href="疾患詳細/急性冠症候群.html">急性冠症候群（責任血管・aVR・等価所見・S・E・T・侵襲時期）</a> ／ <a class="wiki-link" href="入院時心電図.html">入院時心電図</a></p>
+        <p>ECG パターン専用ページ → <a class="wiki-link" href="疾患詳細/STEMI.html">STEMI</a> ／ <a class="wiki-link" href="疾患詳細/Wellens症候群.html">Wellens</a> ／ <a class="wiki-link" href="疾患詳細/de Winterパターン.html">de Winter</a> ／ <a class="wiki-link" href="疾患詳細/後壁梗塞.html">後壁梗塞</a></p>
+      </section>
+
+      <!-- §s6 HEART 帰宅判定 -->
       <section class="section-page" id="s6" hidden>
         <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🧮 リスク評価</h2>
+        <h2>📤 帰宅判定 — HEART スコア</h2>
 
-        <h3>HEART スコア（ED での ACS リスク層別化）</h3>
+        <p>致死 5 を否定でき、ACS 鑑別で S・E・T が 0-1 項目、cTn 経時陰性、症状が落ち着いた時に取る。<strong>「なんとなく」ではなく根拠を持って</strong>判断する。</p>
+
+        <h3>HEART スコア各項目</h3>
         <div class="table-wrap"><table>
           <thead><tr><th>項目</th><th>0 点</th><th>1 点</th><th>2 点</th></tr></thead>
           <tbody>
             <tr><td><strong>H</strong>istory</td><td>非典型</td><td>中程度</td><td>典型的</td></tr>
             <tr><td><strong>E</strong>CG</td><td>正常</td><td>非特異的</td><td>有意な ST 偏位</td></tr>
-            <tr><td><strong>A</strong>ge</td><td>&lt;45</td><td>45–64</td><td>≥65</td></tr>
-            <tr><td><strong>R</strong>isk factors</td><td>なし</td><td>1–2 個</td><td>≥3 個 or 動脈硬化既往</td></tr>
-            <tr><td><strong>T</strong>roponin</td><td>正常</td><td>1–3 倍</td><td>&gt;3 倍</td></tr>
+            <tr><td><strong>A</strong>ge</td><td>&lt;45</td><td>45-64</td><td>≥65</td></tr>
+            <tr><td><strong>R</strong>isk factors</td><td>なし</td><td>1-2 個</td><td>≥3 個 or 動脈硬化既往</td></tr>
+            <tr><td><strong>T</strong>roponin</td><td>正常</td><td>1-3 倍</td><td>&gt;3 倍</td></tr>
           </tbody>
         </table></div>
+        <p>※ 危険因子（HEART の R）：高コレステロール血症／高血圧／糖尿病／喫煙／冠動脈疾患の家族歴／肥満（BMI&gt;30）</p>
+
+        <h3>判定</h3>
         <ul>
-          <li><strong>0–3 点</strong>：30 日 MACE &lt; 2% → 早期帰宅検討（hs-cTn 0/3h プロトコル併用）</li>
-          <li><strong>4–6 点</strong>：観察入院 + 再検</li>
-          <li><strong>≥7 点</strong>：入院 + 早期侵襲的評価</li>
+          <li><strong>0-3 点</strong>：30 日 MACE&lt;2% → <strong>帰宅＋外来精査</strong>（hs-cTn 0/3h プロトコル併用）</li>
+          <li><strong>4-6 点</strong>：観察入院＋再検</li>
+          <li><strong>≥7 点</strong>：入院＋早期治療（侵襲的評価）</li>
         </ul>
 
-        <h3>Wells / PERC（PE）</h3>
-        <div class="callout callout-check">
-          <div class="callout-title">PERC（全項目満たせば PE 検査不要）</div>
-          <div class="callout-body"><p>年齢 &lt; 50 / 心拍 &lt; 100 / SpO2 ≥ 95% / 片側下肢腫脹なし / 喀血なし / 4 週以内手術・外傷なし / 既往 DVT・PE なし / エストロゲン使用なし</p></div>
+        <h3>高感度トロポニン使用時</h3>
+        <ul>
+          <li><strong>modified low-risk HEART</strong>：HEART ≤3 点かつ高感度 cTn 陰性</li>
+          <li><strong>低リスクでも 1-2% で心血管イベント</strong>が報告 — 帰宅は終点ではない</li>
+          <li><strong>冠動脈 CT・負荷試験などの外来精査につなぐ</strong>（→ <a class="wiki-link" href="疾患詳細/急性冠症候群.html">急性冠症候群</a> 末尾の安定狭心症リンク）</li>
+          <li>低リスクで帰宅でも、その後のフォロー方針を循環器内科医と共有する</li>
+          <li>中等度（4-6 点）は症状改善・本人の入院希望なしでも、帰宅是非を必ず相談する</li>
+        </ul>
+
+        <h3>入院／帰宅の方針</h3>
+        <ul>
+          <li><strong>入院</strong>：STEMI／NSTEMI／高リスク UA／大動脈解離（A 型は手術、B 型は ICU）／PE 中等症以上／緊張性気胸／食道破裂／HEART ≥4／持続痛／不安定</li>
+          <li><strong>帰宅検討</strong>：HEART 0-3＋hs-cTn 0/3h 陰性／PERC 全項目陰性／非心臓性原因が明確／<strong>再診基準を口頭＋書面で説明</strong></li>
+        </ul>
+
+        <div class="callout callout-warning">
+          <div class="callout-title">帰宅前に伝える再診基準</div>
+          <div class="callout-body"><p>痛み再発・悪化／呼吸困難／失神・冷汗・嘔気／背部への広がり／片側下肢腫脹</p></div>
         </div>
-        <p>PERC 満たさない or Wells 中等度以上 → <strong>D-dimer</strong>（50 歳以上は age × 10 ng/mL）→ 陽性で <strong>CTPA</strong></p>
       </section>
 
-      <!-- §7 採血と画像 -->
+      <!-- §s7 採血と画像 -->
       <section class="section-page" id="s7" hidden>
         <button class="back-to-menu" type="button">← メニューへ</button>
         <h2>🩸 採血と画像</h2>
@@ -203,116 +535,81 @@
         <div class="table-wrap"><table>
           <thead><tr><th>項目</th><th>意義</th></tr></thead>
           <tbody>
-            <tr><td><strong>hs-cTn</strong></td><td>ACS 中心。<strong>0/1h or 0/3h プロトコル</strong>で rule-out</td></tr>
-            <tr><td><strong>D-dimer</strong></td><td>PE / 解離の rule-out</td></tr>
+            <tr><td><strong>hs-cTn</strong></td><td>ACS 中心。<strong>0/1h or 0/3h プロトコル</strong>で rule-out。<strong>心不全・心筋炎・腎不全・PE・敗血症でも上昇</strong>するため解釈に注意</td></tr>
+            <tr><td><strong>D-dimer</strong></td><td>PE／解離の rule-out（50 歳以上は age × 10 ng/mL）</td></tr>
             <tr><td><strong>BNP / NT-proBNP</strong></td><td>心不全合併評価</td></tr>
-            <tr><td><strong>CBC / 生化 / 凝固</strong></td><td>腎機能、抗凝固評価</td></tr>
+            <tr><td><strong>CBC ／生化／凝固</strong></td><td>腎機能・抗凝固評価</td></tr>
             <tr><td><strong>血型・クロス</strong></td><td>解離・大量出血</td></tr>
-            <tr><td><strong>血ガス</strong></td><td>呼吸不全、A-aDO2</td></tr>
+            <tr><td><strong>血ガス</strong></td><td>呼吸不全、A-aDO₂</td></tr>
           </tbody>
         </table></div>
 
         <h3>画像</h3>
         <ul>
           <li><strong>胸部 X 線</strong>：気胸、縦隔拡大（解離）、肺水腫、肺炎、皮下気腫</li>
-          <li><strong>造影 CT（CTPA / 大動脈 CT）</strong>：PE、解離、肺梗塞</li>
-          <li><strong>心エコー</strong>：壁運動異常（ACS）、右心拡大（PE）、心嚢液（タンポナーデ）、AR（解離）</li>
+          <li><strong>造影 CT（CTPA／大動脈 CT）</strong>：PE、解離、肺梗塞、食道破裂</li>
+          <li><strong>心エコー</strong>：壁運動異常（ACS）、右心拡大／D-shape／McConnell（PE）、心嚢液（タンポナーデ）、AR（解離）</li>
           <li><strong>POCUS</strong>：ショック例で迅速評価</li>
         </ul>
+
+        <p>読影の詳細 → <a class="wiki-link" href="疾患詳細/胸部Xpの見方.html">胸部 Xp の見方</a> ／ <a class="wiki-link" href="疾患詳細/胸部CTの読み方.html">胸部 CT の読み方</a></p>
       </section>
 
-      <!-- §8 初期対応（診断がつくまで） -->
+      <!-- §s8 やりがちなミス -->
       <section class="section-page" id="s8" hidden>
         <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>💊 初期対応（診断がつくまで）</h2>
-
-        <div class="callout callout-tip">
-          <div class="callout-title">診断ごとの詳細治療は疾患ページへ</div>
-          <div class="callout-body"><p>抗血小板・抗凝固レジメン、Stanford A/B 別治療、massive PE の線溶療法などは → <strong><a class="wiki-link" href="疾患詳細/STEMI.html">STEMI</a> / <span class="wiki-missing">ACS</span> / <span class="wiki-missing">大動脈解離</span> / <span class="wiki-missing">肺塞栓</span></strong></p></div>
-        </div>
+        <h2>⚠️ やりがちなミス（胸痛 ER 全般）</h2>
 
         <ul>
-          <li><strong>アスピリン 162–325 mg 咀嚼</strong>：ACS 否定できないなら早期（禁忌・出血リスク確認）</li>
-          <li><strong>酸素</strong>：SpO2 &lt; 90% のみ</li>
-          <li><strong>硝酸薬（ニトログリセリン）</strong>：持続痛・高血圧で。<strong>右室梗塞・PDE5 阻害薬使用中は禁忌</strong></li>
-          <li><strong>鎮痛</strong>：硝酸薬で改善しない強い痛みには<strong>モルヒネ</strong>を限定使用（P2Y12 吸収遅延の懸念）</li>
-          <li><strong>解離を疑ったら降圧</strong>：<strong>SBP 100–120 / HR ≤ 60 を目標</strong>にランジオロール or エスモロール（詳細 → <span class="wiki-missing">大動脈解離</span>）</li>
-          <li><strong>緊張性気胸を疑ったら画像を待たず針減圧</strong> → <span class="wiki-missing">気胸</span></li>
-          <li><strong>STEMI → 直ちに循環器コール + 再灌流</strong>（door-to-balloon ≤ 90 分、PCI 設備なければ転送、DIDO ≤ 30 分）→ <a class="wiki-link" href="疾患詳細/STEMI.html">STEMI</a></li>
-          <li><strong>P2Y12 / ヘパリン / β 遮断薬 / スタチン</strong> の用量と選択 → <strong><a class="wiki-link" href="疾患詳細/STEMI.html">STEMI</a> / <span class="wiki-missing">ACS</span></strong> で解説</li>
+          <li>心電図を 10 分以内に取らない（AHA/ACC GL の必須要件）</li>
+          <li>致死 5 を <strong>「ACS を否定してから他」</strong>と順番に考える（並列で疑う）</li>
+          <li>胸壁圧痛があるので筋骨格痛と決めつける（PE・解離は除外できない）</li>
+          <li>解離の<strong>両上肢血圧差を測らない</strong></li>
+          <li>解離を疑わず<strong>抗血小板＋抗凝固を流す</strong>（致命的）</li>
+          <li>食道破裂で<strong>経鼻胃管を入れる</strong>（穿孔拡大）</li>
+          <li>ルーチン酸素投与（SpO₂&lt;90% のみ）</li>
+          <li>HEART を取らずに帰す／<strong>HEART 0-3 なのに入院、≥7 なのに帰宅</strong></li>
+          <li>高感度 cTn 1 発で帰す（経時動的変化で判定）</li>
+          <li>低リスク帰宅後の<strong>外来フォロー方針を決めない</strong>（1-2% でイベント — 冠 CT・負荷へつなぐ）</li>
         </ul>
 
-        <div class="callout callout-warning">
-          <div class="callout-title">初期対応での落とし穴</div>
-          <div class="callout-body"><ul>
-            <li><strong>胸壁圧痛で「筋骨格」と決めつける</strong>（ACS・PE・解離は否定できない）</li>
-            <li><strong>初回 ECG 陰性で ACS 除外</strong>（15–30 分後に再検、右側・後壁誘導）</li>
-            <li><strong>解離を疑わず抗血小板 + 抗凝固を走らせる</strong>（大動脈解離で致命的）</li>
-            <li><strong>右室梗塞に硝酸薬 / ニトロ</strong>（前負荷低下で血圧崩壊）</li>
-          </ul></div>
-        </div>
+        <p>各疾患特有のミスは詳細ページへ → <a class="wiki-link" href="疾患詳細/急性冠症候群.html">急性冠症候群</a> ／ <a class="wiki-link" href="疾患詳細/大動脈解離.html">大動脈解離</a> ／ <a class="wiki-link" href="疾患詳細/肺塞栓.html">肺塞栓</a> ／ <a class="wiki-link" href="疾患詳細/気胸.html">気胸</a> ／ <a class="wiki-link" href="疾患詳細/食道破裂.html">食道破裂</a></p>
       </section>
 
-      <!-- §9 disposition + ミス + 出典 -->
+      <!-- §s9 出典・関連リンク -->
       <section class="section-page" id="s9" hidden>
         <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>📤 disposition / やりがちなミス / 出典</h2>
+        <h2>📚 出典・関連リンク</h2>
 
-        <h3>入院</h3>
-        <ul>
-          <li>STEMI / NSTEMI / 高リスク UA</li>
-          <li>大動脈解離（A は手術、B は ICU 管理）</li>
-          <li>PE（中等症以上は入院、低リスクは外来 DOAC も可）</li>
-          <li>緊張性気胸 / 食道破裂</li>
-          <li><strong>HEART ≥ 4 / 持続痛 / 不安定</strong></li>
-        </ul>
-
-        <h3>帰宅検討</h3>
-        <ul>
-          <li><strong>HEART 0–3 + hs-cTn 0/3h 陰性</strong></li>
-          <li><strong>PERC 全項目陰性</strong></li>
-          <li>明らかな非心臓性原因が同定</li>
-          <li>再診基準を口頭 + 書面で説明</li>
-        </ul>
-
-        <div class="callout callout-warning">
-          <div class="callout-title">帰宅前に伝える再診基準</div>
-          <div class="callout-body"><p>痛み再発・悪化 / 呼吸困難 / 失神・冷汗・嘔気 / 背部への広がり / 片側下肢腫脹</p></div>
-        </div>
-
-        <h3>⚠️ やりがちなミス</h3>
-        <ul>
-          <li>初回 ECG 陰性で ACS を除外する</li>
-          <li>胸壁圧痛があるので筋骨格痛と決めつける</li>
-          <li>解離を考えず抗血小板 + 抗凝固を流す</li>
-          <li>右室梗塞に硝酸薬を使う</li>
-          <li>ルーチン高流量酸素投与</li>
-          <li>HEART 0–3 なのに入院、HEART ≥ 7 なのに帰宅</li>
-        </ul>
-
-        <h3>📚 出典（トリアージ・リスク層別化）</h3>
+        <h3>主要ガイドライン・成書</h3>
         <ul>
           <li><strong>AHA/ACC/ASE/CHEST/SAEM/SCCT/SCMR 2021</strong>：Chest Pain Guideline. <em>Circulation.</em> 2021;144.</li>
-          <li><strong>ESC 2023</strong>：Acute Coronary Syndromes.</li>
-          <li><strong>ESC 2014/2024</strong>：Aortic Diseases.</li>
-          <li><strong>ESC 2019</strong>：Acute Pulmonary Embolism.</li>
-          <li><strong>HEART score</strong>：Backus BE ほか. <em>Int J Cardiol.</em> 2013.</li>
-          <li><strong>PERC rule</strong>：Kline JA ほか. <em>J Thromb Haemost.</em> 2008.</li>
-          <li>治療・処方の一次文献（STEMI 再灌流、解離 β 遮断薬、PE 抗凝固）は疾患ページ</li>
+          <li><strong>HEART score</strong>：Backus BE ほか. <em>Int J Cardiol.</em> 2013</li>
+          <li><strong>PERC rule</strong>：Kline JA ほか. <em>J Thromb Haemost.</em> 2008</li>
+          <li><strong>循環器のトビラ</strong>第 1 章 急性冠症候群（ACS）／第 2 章 安定冠動脈疾患（CAD）</li>
         </ul>
 
-        <h3>このページから張るリンク</h3>
+        <h3>致死 5 — 疾患詳細ページ</h3>
         <ul>
-          <li><a class="wiki-link" href="疾患詳細/STEMI.html">STEMI</a> / <span class="wiki-missing">ACS</span></li>
-          <li><a class="wiki-link" href="疾患詳細/Wellens症候群.html">Wellens症候群</a> / <a class="wiki-link" href="疾患詳細/de Winterパターン.html">de Winterパターン</a> / <a class="wiki-link" href="疾患詳細/後壁梗塞.html">後壁梗塞</a></li>
-          <li><a class="wiki-link" href="入院時心電図.html">入院時心電図</a> / <a class="wiki-link" href="疾患詳細/循環器コンサルトの判断.html">循環器コンサルトの判断</a></li>
-          <li><span class="wiki-missing">肺塞栓</span> / <span class="wiki-missing">大動脈解離</span> / <span class="wiki-missing">気胸</span> / <span class="wiki-missing">食道破裂</span></li>
-          <li><a class="wiki-link" href="疾患詳細/急性心不全.html">急性心不全</a></li>
-          <li><a class="wiki-link" href="呼吸困難.html">呼吸困難</a> / <a class="wiki-link" href="意識消失.html">意識消失</a> / <a class="wiki-link" href="腹痛.html">腹痛</a></li>
-          <li><a class="wiki-link" href="アナフィラキシー疑い.html">アナフィラキシー疑い</a></li>
+          <li><a class="wiki-link" href="疾患詳細/急性冠症候群.html">急性冠症候群（ACS）</a> — STEMI／NSTE-ACS／等価所見／侵襲時期／個別最適化処方</li>
+          <li><a class="wiki-link" href="疾患詳細/大動脈解離.html">大動脈解離</a></li>
+          <li><a class="wiki-link" href="疾患詳細/肺塞栓.html">肺塞栓</a></li>
+          <li><a class="wiki-link" href="疾患詳細/気胸.html">気胸</a></li>
+          <li><a class="wiki-link" href="疾患詳細/食道破裂.html">食道破裂</a></li>
         </ul>
 
-        <p>#ER #救急 #胸痛 #ACS #心筋梗塞 #肺塞栓 #大動脈解離 #気胸</p>
+        <h3>ECG パターン専用ページ</h3>
+        <ul>
+          <li><a class="wiki-link" href="疾患詳細/STEMI.html">STEMI</a> ／ <a class="wiki-link" href="疾患詳細/Wellens症候群.html">Wellens症候群</a> ／ <a class="wiki-link" href="疾患詳細/de Winterパターン.html">de Winterパターン</a> ／ <a class="wiki-link" href="疾患詳細/後壁梗塞.html">後壁梗塞</a></li>
+          <li><a class="wiki-link" href="入院時心電図.html">入院時心電図</a> ／ <a class="wiki-link" href="疾患詳細/循環器コンサルトの判断.html">循環器コンサルトの判断</a></li>
+        </ul>
+
+        <h3>関連する主訴ページ</h3>
+        <ul>
+          <li><a class="wiki-link" href="呼吸困難.html">呼吸困難</a> ／ <a class="wiki-link" href="意識消失.html">意識消失</a> ／ <a class="wiki-link" href="腹痛.html">腹痛</a></li>
+        </ul>
+
+        <p>#ER #救急 #胸痛 #致死5 #ACS #大動脈解離 #肺塞栓 #気胸 #食道破裂 #HEART</p>
       </section>
 
     </article>
@@ -335,16 +632,22 @@
     const menu = document.getElementById('sectionMenu');
     const pages = document.querySelectorAll('.section-page');
     const titleH1 = document.querySelector('.page-title');
+    const flowBoxes = document.querySelectorAll('.flow-box');
+    const actionHeaders = document.querySelectorAll('.action-header:not(.flow-box)');
 
     function showSection(id) {
-      menu.hidden = true;
+      if (menu) menu.hidden = true;
       if (titleH1) titleH1.hidden = true;
+      flowBoxes.forEach(b => b.hidden = true);
+      actionHeaders.forEach(h => h.hidden = true);
       pages.forEach(p => p.hidden = (p.id !== id));
       window.scrollTo(0, 0);
     }
     function showMenu(scrollTarget) {
-      menu.hidden = false;
+      if (menu) menu.hidden = false;
       if (titleH1) titleH1.hidden = false;
+      flowBoxes.forEach(b => b.hidden = false);
+      actionHeaders.forEach(h => h.hidden = false);
       pages.forEach(p => p.hidden = true);
       if (scrollTarget) {
         if (scrollTarget.tagName === 'DETAILS') scrollTarget.open = true;
