@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="color-scheme" content="light dark" />
+  <title>下肢痛 | ER ノート</title>
+  <link rel="stylesheet" href="er-note.css" />
+  <style>
+    /* === 診療フロー（このページ専用、めまい/転倒/呼吸困難方式） === */
+    .flow-box { position: static; user-select: none; }
+    .flow-box__title {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 0.5rem; cursor: default; padding: 2px 0;
+    }
+    .flow-canvas {
+      background: var(--surface);
+      border-radius: 10px;
+      padding: 14px 10px 18px;
+      margin-top: 0.55rem;
+      overflow-x: auto; overflow-y: hidden;
+      -webkit-overflow-scrolling: touch;
+      touch-action: pan-x pan-y pinch-zoom;
+    }
+    .flow-canvas__hint {
+      font-size: 0.72rem; color: var(--muted);
+      text-align: center; margin: 0 0 0.6rem 0;
+    }
+    .dx-flow {
+      min-width: 720px; margin: 0 auto; padding: 4px 6px 8px;
+      font-size: 14px; line-height: 1.45; color: var(--text); font-family: inherit;
+    }
+    .dx-node {
+      background: var(--surface);
+      border: 1.5px solid color-mix(in srgb, var(--text) 22%, transparent);
+      border-radius: 10px; padding: 8px 12px; text-align: center;
+      box-shadow: 0 1px 2px var(--shadow, rgba(0,0,0,0.06));
+      min-height: 38px;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 2px; text-decoration: none; color: var(--text);
+    }
+    .dx-node__title { font-weight: 700; font-size: 13.5px; }
+    .dx-node__sub   { font-size: 11.5px; color: var(--muted); font-weight: 500; }
+    .dx-node--decision {
+      background: color-mix(in srgb, var(--accent) 12%, var(--surface));
+      border-color: var(--accent); border-radius: 14px;
+    }
+    .dx-node--danger {
+      background: color-mix(in srgb, #c0392b 14%, var(--surface));
+      border-color: #c0392b;
+    }
+    .dx-node--danger .dx-node__title { color: #c0392b; }
+    .dx-node--action {
+      background: color-mix(in srgb, var(--text) 5%, var(--surface));
+      border-style: dashed;
+    }
+    .dx-node--external {
+      border-style: dashed; position: relative;
+      background: color-mix(in srgb, var(--accent) 6%, var(--surface));
+    }
+    .dx-node--external::after {
+      content: "↗"; position: absolute; top: 4px; right: 8px;
+      font-size: 12px; color: var(--accent); opacity: 0.85;
+    }
+    .dx-node--warn {
+      background: color-mix(in srgb, #d4a017 14%, var(--surface));
+      border-color: #d4a017;
+    }
+    .dx-node--warn .dx-node__title { color: #9b7508; }
+
+    .dx-layer { display: grid; gap: 14px; align-items: stretch; margin: 0; }
+    .dx-layer--root   { grid-template-columns: 1fr; justify-items: center; }
+    .dx-layer--root > * { max-width: 360px; }
+    .dx-layer--branch { grid-template-columns: 1fr 1fr; }
+    .dx-layer--tri    { grid-template-columns: repeat(3, 1fr); }
+    .dx-layer--quad   { grid-template-columns: repeat(4, 1fr); }
+    .dx-layer--quint  { grid-template-columns: repeat(5, 1fr); }
+    .dx-layer--hex    { grid-template-columns: repeat(6, 1fr); }
+
+    .dx-arrow {
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      position: relative; margin: 4px 0; min-height: 44px;
+      color: var(--muted); font-size: 11.5px; font-weight: 600;
+    }
+    .dx-arrow::before {
+      content: ""; width: 2px; height: 100%; min-height: 38px;
+      background: color-mix(in srgb, var(--text) 35%, transparent);
+    }
+    .dx-arrow::after {
+      content: ""; position: absolute; bottom: 0;
+      width: 0; height: 0;
+      border-left: 5px solid transparent; border-right: 5px solid transparent;
+      border-top: 7px solid color-mix(in srgb, var(--text) 35%, transparent);
+    }
+    .dx-arrow__label {
+      background: var(--surface); padding: 1px 8px; border-radius: 999px;
+      border: 1px solid color-mix(in srgb, var(--text) 18%, transparent);
+      position: absolute; left: 50%; top: 50%;
+      transform: translate(-50%, -50%); white-space: nowrap; z-index: 1;
+    }
+
+    .section-tiles { display: none !important; }
+
+    @media (max-width: 600px) {
+      .dx-flow { min-width: 0; font-size: 11px; padding: 2px 0 6px; }
+      .flow-canvas { overflow-x: hidden; padding: 8px 6px 12px; }
+      .flow-canvas__hint { font-size: 0.62rem; margin-bottom: 0.35rem; }
+      .dx-node { padding: 4px 5px; min-height: 28px; border-radius: 7px; gap: 1px; }
+      .dx-node__title { font-size: 10px; line-height: 1.22; }
+      .dx-node__sub   { font-size: 8.5px; line-height: 1.25; }
+      .dx-node--decision { border-radius: 8px; }
+      .dx-node--external::after { top: 2px; right: 4px; font-size: 9px; }
+      .dx-layer { gap: 5px; }
+      .dx-layer--root > * { max-width: none; width: 100%; }
+      .dx-layer--tri  { grid-template-columns: repeat(3, 1fr); }
+      .dx-layer--quad { grid-template-columns: 1fr 1fr; }
+      .dx-layer--quint { grid-template-columns: repeat(3, 1fr); }
+      .dx-layer--hex   { grid-template-columns: repeat(3, 1fr); }
+      .dx-arrow { min-height: 22px; margin: 1px 0; }
+      .dx-arrow::before { min-height: 18px; width: 1.5px; }
+      .dx-arrow::after { border-left-width: 4px; border-right-width: 4px; border-top-width: 6px; }
+      .dx-arrow__label { font-size: 8.5px; padding: 0 4px; line-height: 1.4; }
+    }
+  </style>
+</head>
+<body>
+  <header class="hokuto-top">
+    <a class="hokuto-top__btn" href="薬剤情報.html">
+      <span class="hokuto-top__icon">℞</span><span>薬剤情報</span>
+    </a>
+    <a class="hokuto-top__btn" href="表計算.html">
+      <span class="hokuto-top__icon">⊞</span><span>表計算</span>
+    </a>
+  </header>
+
+  <main class="hokuto-main">
+    <article class="note-shell">
+      <h1 class="page-title">下肢痛</h1>
+
+      <!-- 診療フロー -->
+      <div class="action-header flow-box" id="flowBox">
+        <div class="action-header__title flow-box__title">
+          <span>🗺 下肢痛の診療フロー（5P で ALI 除外 → 同時並行 → 鑑別並列）</span>
+        </div>
+        <div class="flow-canvas">
+          <p class="flow-canvas__hint">初期評価で ALI を最優先に切り分け → 6 項目同時並行 → 高頻度 4 軸 + 並走 3 を並列に考える</p>
+          <div class="dx-flow" role="group" aria-label="下肢痛の診療フロー">
+
+            <!-- L0: 初期評価 -->
+            <div class="dx-layer dx-layer--root">
+              <a class="dx-node dx-node--danger" href="#s1">
+                <div class="dx-node__title">🚨 初期評価（5P・バイタル・外傷歴）</div>
+                <div class="dx-node__sub">Pain / Pulselessness / Pallor / Paresthesia / Paralysis</div>
+              </a>
+            </div>
+
+            <p class="flow-canvas__hint" style="background:color-mix(in srgb,#1a8a4a 12%,var(--surface));border:1px solid #1a8a4a;border-radius:8px;padding:6px 10px;margin:6px 0;font-size:11px;line-height:1.45;color:var(--text);text-align:center;">
+              💡 <strong>5P 陽性なら ALI を最優先で除外（末梢動脈の STEMI）</strong><br>
+              <span style="font-weight:500;">4–6 時間で不可逆的組織変化。診断つき次第ヘパリン静注＋循環器・心臓血管外科即コール。</span>
+            </p>
+
+            <!-- 緊急シャント: ALI -->
+            <div class="dx-layer dx-layer--root">
+              <a class="dx-node dx-node--danger" href="疾患詳細/LEAD.html#s5">
+                <div class="dx-node__title">🚨 急性下肢虚血（ALI）</div>
+                <div class="dx-node__sub">5P 揃ったら即コンサル。Af / 心原性塞栓・動脈血栓症・外傷・医原性</div>
+              </a>
+            </div>
+
+            <div class="dx-arrow"><span class="dx-arrow__label">↓ 同時並行</span></div>
+
+            <!-- L1: 6 項目同時並行 -->
+            <div class="dx-layer dx-layer--hex">
+              <a class="dx-node dx-node--action" href="#s3">
+                <div class="dx-node__title">問診</div>
+                <div class="dx-node__sub">発症様式／既往(DM/HT/喫煙/Af)／跛行距離</div>
+              </a>
+              <a class="dx-node dx-node--action" href="#s4">
+                <div class="dx-node__title">身体診察</div>
+                <div class="dx-node__sub">脈触知 4 ヶ所／左右比較／潰瘍／発赤</div>
+              </a>
+              <a class="dx-node dx-node--action" href="#s5">
+                <div class="dx-node__title">血液検査</div>
+                <div class="dx-node__sub">WBC・CK・乳酸・CRP・D-dimer</div>
+              </a>
+              <a class="dx-node dx-node--action" href="#s6">
+                <div class="dx-node__title">心電図</div>
+                <div class="dx-node__sub">Af 検索<br>（塞栓源）</div>
+              </a>
+              <a class="dx-node dx-node--action" href="#s6e">
+                <div class="dx-node__title">エコー</div>
+                <div class="dx-node__sub">ABI/SPP・CUS（DVT）<br>血流ドプラ</div>
+              </a>
+              <a class="dx-node dx-node--action" href="#s6r">
+                <div class="dx-node__title">放射線画像</div>
+                <div class="dx-node__sub">XP（骨折）<br>造影 CT</div>
+              </a>
+            </div>
+
+            <div class="dx-arrow"><span class="dx-arrow__label">鑑別を並列で考える</span></div>
+
+            <!-- L2a: 高頻度 4 軸 -->
+            <p class="flow-canvas__hint" style="margin:6px 0 4px;font-weight:700;">高頻度 4 軸 — 下肢痛の大部分をカバー</p>
+            <div class="dx-layer dx-layer--quad">
+              <a class="dx-node dx-node--external" href="#s8">
+                <div class="dx-node__title">蜂窩織炎</div>
+                <div class="dx-node__sub">発赤・熱感・腫脹<br>発熱・WBC↑</div>
+              </a>
+              <a class="dx-node dx-node--external" href="疾患詳細/LEAD.html">
+                <div class="dx-node__title">慢性 LEAD</div>
+                <div class="dx-node__sub">間欠性跛行<br>Fontaine I-IV</div>
+              </a>
+              <a class="dx-node dx-node--external" href="#s7">
+                <div class="dx-node__title">外傷／骨折</div>
+                <div class="dx-node__sub">受傷機転・荷重不可<br>圧痛局在</div>
+              </a>
+              <a class="dx-node dx-node--external" href="#s8">
+                <div class="dx-node__title">DVT</div>
+                <div class="dx-node__sub">片側腫脹・Wells<br>担癌・術後・臥床</div>
+              </a>
+            </div>
+
+            <div class="dx-arrow"><span class="dx-arrow__label">並走で常に意識</span></div>
+
+            <!-- L2b: 並走 3 -->
+            <p class="flow-canvas__hint" style="margin:6px 0 4px;font-weight:700;">並走で常に意識する 3 — 4 軸を否定してから考えるのではない</p>
+            <div class="dx-layer dx-layer--tri">
+              <a class="dx-node dx-node--danger" href="疾患詳細/LEAD.html#s5">
+                <div class="dx-node__title">急性下肢虚血 ALI</div>
+                <div class="dx-node__sub">5P・突然・Af<br>4-6h で不可逆</div>
+              </a>
+              <a class="dx-node dx-node--external" href="#s8">
+                <div class="dx-node__title">痛風／偽痛風</div>
+                <div class="dx-node__sub">第1MTP・膝<br>急性発赤・関節痛</div>
+              </a>
+              <a class="dx-node dx-node--external" href="#s8">
+                <div class="dx-node__title">腰部脊柱管狭窄症</div>
+                <div class="dx-node__sub">神経性跛行<br>shopping cart sign</div>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- §タイル（フロー直リンクで代替、CSS で非表示） -->
+      <nav class="section-tiles" id="sectionMenu">
+        <a class="section-tile" href="#s1"><span class="section-tile__no">🚨</span><span class="section-tile__name">初期評価<br><small>5P・バイタル・外傷歴</small></span></a>
+        <a class="section-tile" href="#s3"><span class="section-tile__no">🎯</span><span class="section-tile__name">問診</span></a>
+        <a class="section-tile" href="#s4"><span class="section-tile__no">👂</span><span class="section-tile__name">身体診察</span></a>
+        <a class="section-tile" href="#s5"><span class="section-tile__no">🩸</span><span class="section-tile__name">血液検査</span></a>
+        <a class="section-tile" href="#s6"><span class="section-tile__no">📈</span><span class="section-tile__name">心電図</span></a>
+        <a class="section-tile" href="#s6e"><span class="section-tile__no">🫧</span><span class="section-tile__name">エコー（POCUS・ABI）</span></a>
+        <a class="section-tile" href="#s6r"><span class="section-tile__no">📷</span><span class="section-tile__name">放射線画像（XP / CT）</span></a>
+        <a class="section-tile" href="#s7"><span class="section-tile__no">🦴</span><span class="section-tile__name">外傷の見方</span></a>
+        <a class="section-tile" href="#s8"><span class="section-tile__no">⚠️</span><span class="section-tile__name">鑑別早見表</span></a>
+        <a class="section-tile" href="#s9"><span class="section-tile__no">📚</span><span class="section-tile__name">出典・リンク</span></a>
+      </nav>
+
+      <!-- §1 初期評価 -->
+      <section class="section-page" id="s1" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🚨 初期評価（5P・バイタル・外傷歴）</h2>
+
+        <p>下肢痛で ER に来た患者の最初の数分は、<strong>急性下肢虚血（ALI）の 5P 確認</strong>と<strong>外傷歴・発熱・片側性</strong>を切り分けることに使う。ALI は <strong>4–6 時間で非可逆的組織変化</strong>に進むため、見逃すと下肢切断・致死につながる。</p>
+
+        <h3>5P（ALI の特徴的所見）</h3>
+        <ul>
+          <li><strong>Pain</strong>（疼痛）— 突然発症の強い疼痛</li>
+          <li><strong>Pulselessness</strong>（脈拍消失）— 大腿／膝窩／後脛骨／足背の触知</li>
+          <li><strong>Pallor</strong>（蒼白）— 冷感を伴う</li>
+          <li><strong>Paresthesia</strong>（知覚鈍麻）— 神経虚血の進行</li>
+          <li><strong>Paralysis</strong>（運動麻痺）— 末期サイン、不可逆寸前</li>
+        </ul>
+
+        <div class="callout callout-danger">
+          <div class="callout-title">5P 揃ったら手を止めて即コンサル</div>
+          <div class="callout-body"><ul>
+            <li><strong>診断つき次第、未分画ヘパリン静注</strong>（80 U/kg bolus → 18 U/kg/h、aPTT で調節）</li>
+            <li><strong>循環器内科・心臓血管外科に即コール</strong>（血栓吸引／Fogarty／血管内治療）</li>
+            <li>感覚／運動所見を時系列で記録（不可逆性 III 群への進行を見逃さない）</li>
+            <li>原因検索：Af（塞栓源）、最近の MI、外傷、医原性（CV 穿刺後）</li>
+          </ul></div>
+        </div>
+
+        <h3>初期バイタル・除外</h3>
+        <ul>
+          <li>バイタル（BP・HR・SpO2・体温）— 発熱があれば蜂窩織炎・敗血症</li>
+          <li><strong>外傷歴</strong>（受傷機転・転倒・打撲・荷重不可）— 該当なければ画像優先順位下げる</li>
+          <li><strong>左右差</strong>（片側か両側か）— 片側 ＝ ALI/DVT/蜂窩織炎/外傷／両側 ＝ CVI・心不全・腎不全</li>
+          <li>関節炎所見（発赤・熱感・関節腫脹・歩行不能）— 痛風／偽痛風／敗血症性関節炎</li>
+          <li>糖尿病背景の有無 — <strong>神経障害で疼痛がマスク</strong>され潰瘍進行を見落とす</li>
+        </ul>
+
+        <div class="callout callout-tip">
+          <div class="callout-title">「下肢痛 = 整形 / 神経内科」と決めつけない</div>
+          <div class="callout-body"><p>整形・神経内科に振る前に、<strong>必ず脈触知と 5P を確認</strong>。腰椎症や糖尿病性神経障害に流すと ALI を逃す。LEAD は<strong>多血管疾患（PVD）の一部</strong>で、約 60% に他の動脈硬化性疾患（CAD/CVD）を併存（REACH Registry）。</p></div>
+        </div>
+      </section>
+
+      <!-- §3 問診で方向を決める -->
+      <section class="section-page" id="s3" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🎯 問診で方向を決める</h2>
+
+        <h3>跛行・下肢痛の鑑別表</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>鑑別</th><th>痛みの特徴・誘発・軽減</th></tr></thead>
+          <tbody>
+            <tr><td><strong>虚血性（LEAD）</strong></td><td>下腿の症状が多い。<strong>一定の歩行距離で誘発、休憩で数分で軽減</strong>。末梢冷感・潰瘍を伴う。<strong>内腸骨動脈病変は勃起障害</strong>を伴う。</td></tr>
+            <tr><td><strong>神経性（腰部脊柱管狭窄症）</strong></td><td>中枢側（臀部〜下腿後面）が多い。<strong>日によって誘発距離が変わる</strong>。<strong>自転車や前屈で軽減（shopping cart sign）</strong>。立位／坐位でも疼痛持続することあり。</td></tr>
+            <tr><td><strong>慢性静脈不全症（CVI）</strong></td><td>下腿全体、<strong>立位／坐位で残存、下肢挙上で改善</strong>。色素沈着・静脈瘤。</td></tr>
+            <tr><td><strong>変形性膝関節症</strong></td><td>中年以降の女性、<strong>立位／歩行開始時にも痛む</strong>。膝関節の動作時痛。</td></tr>
+            <tr><td><strong>急性下肢虚血（ALI）</strong></td><td><strong>突然発症</strong>の強い痛み＋5P。Af・MI 後・血管炎・外傷の既往。</td></tr>
+            <tr><td><strong>DVT</strong></td><td>片側下腿のだるさ・腫脹・圧痛。<strong>術後・長期臥床・担癌・経口避妊薬</strong>。</td></tr>
+            <tr><td><strong>蜂窩織炎</strong></td><td>発赤・熱感・腫脹＋発熱。皮膚バリア破綻（外傷・浸軟）の前駆。</td></tr>
+            <tr><td><strong>痛風／偽痛風</strong></td><td>夜間の急性発症、<strong>第 1 MTP（母趾基部）／膝</strong>に発赤・腫脹・激痛。</td></tr>
+          </tbody>
+        </table></div>
+
+        <h3>聞くべき項目</h3>
+        <ul>
+          <li><strong>発症様式</strong>：突然（ALI／DVT／痛風／骨折）vs 慢性進行（LEAD／CVI／OA）</li>
+          <li><strong>既往</strong>：糖尿病・高血圧・脂質異常・喫煙（LEAD リスク）／<strong>Af・MI</strong>（塞栓源）／<strong>担癌・術後・臥床</strong>（DVT）／膠原病・血管炎</li>
+          <li><strong>跛行距離</strong>（一定 vs 変動）と<strong>休憩で軽減するまでの時間</strong></li>
+          <li>外傷歴・受傷機転・荷重可否</li>
+          <li>発熱・寒戦・皮膚バリア破綻歴（蜂窩織炎）</li>
+          <li>勃起障害（内腸骨動脈病変＝Leriche 症候群を示唆）</li>
+        </ul>
+      </section>
+
+      <!-- §4 身体診察 -->
+      <section class="section-page" id="s4" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>👂 身体診察</h2>
+
+        <p><strong>靴と靴下を必ず脱がせる</strong>。可能なら左右比較で観察。趾間まで観察して潰瘍を見落とさない。</p>
+
+        <h3>視診（左右比較）</h3>
+        <ul>
+          <li><strong>皮膚色調</strong>（蒼白・紫斑・チアノーゼ・発赤）</li>
+          <li><strong>毛量・爪形状</strong>の左右差（慢性虚血で脱毛・爪肥厚）</li>
+          <li><strong>潰瘍</strong>（趾間・踵・足底まで）— 部位で原因が分かれる
+            <ul>
+              <li>足趾／趾間 → 虚血性</li>
+              <li>足底（荷重部） → 糖尿病性神経障害</li>
+              <li>下腿内側（脛骨内側） → 静脈性</li>
+            </ul>
+          </li>
+          <li>静脈瘤・色素沈着（CVI）</li>
+        </ul>
+
+        <h3>触診</h3>
+        <ul>
+          <li><strong>冷感・発汗・熱感</strong>（左右で温度差を必ず確認）</li>
+          <li><strong>脈触知 4 ヶ所</strong>：大腿動脈・膝窩動脈・足背動脈・後脛骨動脈
+            <ul>
+              <li>触れなければ<strong>ドプラで確認</strong>（連続性・三相性／単相性）</li>
+              <li>左右非対称・近位で消失する位置から閉塞高位を推定</li>
+            </ul>
+          </li>
+          <li>感染徴候（発赤・圧痛・波動）</li>
+          <li>関節の発赤・熱感・腫脹・可動域制限（痛風／偽痛風／敗血症性関節炎）</li>
+          <li>下腿筋緊満（コンパートメント症候群）</li>
+        </ul>
+
+        <h3>注意点</h3>
+        <div class="callout callout-warning">
+          <div class="callout-title">糖尿病背景は疼痛がマスクされる</div>
+          <div class="callout-body"><p>糖尿病性神経障害により、<strong>無症候のまま潰瘍進行</strong>することがある。痛みが弱くても潰瘍／壊疽があれば LEAD・感染・骨髄炎を疑い、ABI/SPP と画像で評価。</p></div>
+        </div>
+
+        <div class="callout callout-tip">
+          <div class="callout-title">LEAD は多血管疾患の一部</div>
+          <div class="callout-body"><p>下肢の評価ついでに、<strong>胸部症状・神経学的所見も併せて確認</strong>（REACH Registry で約 60% に他の動脈硬化性疾患併存）。労作時胸部症状や心電図変化、透析例の血圧低下を再確認することで他病態の早期発見につながる。</p></div>
+        </div>
+      </section>
+
+      <!-- §5 血液検査 -->
+      <section class="section-page" id="s5" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🩸 血液検査</h2>
+
+        <h3>最初にまとめて出すもの（全例）</h3>
+        <ul>
+          <li><strong>血算 + 分画</strong>：感染・WBC↑（蜂窩織炎・敗血症性関節炎）</li>
+          <li><strong>CRP</strong>：感染／炎症評価</li>
+          <li><strong>生化（腎機能・電解質・尿酸）</strong>：造影 CT 適応の判断、痛風で UA↑</li>
+          <li><strong>凝固（PT/APTT）</strong>：抗凝固開始前の baseline</li>
+        </ul>
+
+        <h3>鑑別に応じて取捨選択</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>検査</th><th>出すべき場面</th><th>不要／注意</th></tr></thead>
+          <tbody>
+            <tr><td><strong>CK・乳酸</strong></td><td>ALI 疑い／コンパートメント症候群／長時間虚血の筋崩壊評価</td><td>横紋筋融解・腎機能合併も同時にチェック</td></tr>
+            <tr><td><strong>D-dimer</strong></td><td>DVT が鑑別／Wells score 中等度以下で除外目的</td><td>担癌・高齢・術後では偽陽性多くスコア優先／LEAD 慢性病変では意義薄い</td></tr>
+            <tr><td><strong>トロポニン・BNP</strong></td><td>LEAD 既知の患者で胸部症状あり／多血管疾患の評価</td><td>下肢痛単独では不要</td></tr>
+            <tr><td><strong>培養（血培）</strong></td><td>発熱＋蜂窩織炎／敗血症疑い／壊死性筋膜炎疑い</td><td>抗菌薬投与前に採取</td></tr>
+            <tr><td><strong>関節液検査</strong></td><td>痛風（尿酸結晶）／偽痛風（CPPD 結晶）／敗血症性関節炎（培養・グラム染色）</td><td>整形にコンサルト</td></tr>
+            <tr><td><strong>HbA1c・脂質</strong></td><td>LEAD 確定後の二次予防評価</td><td>急性期判断には不要</td></tr>
+          </tbody>
+        </table></div>
+
+        <div class="callout callout-tip">
+          <div class="callout-title">ALI では CK・乳酸を時系列で追う</div>
+          <div class="callout-body"><p>虚血時間が長くなると CK・乳酸が上昇し、横紋筋融解・腎不全・高 K 血症を合併する。血行再建後は<strong>再灌流障害＋コンパートメント症候群</strong>に備えて CK・K・Cre を追跡。</p></div>
+        </div>
+      </section>
+
+      <!-- §6 心電図 -->
+      <section class="section-page" id="s6" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>📈 心電図</h2>
+
+        <p>下肢痛主訴で ECG を回す目的は <strong>ALI の塞栓源を探す</strong>こと。Af（最頻）、最近の MI、左室内血栓のリスクを評価する。</p>
+
+        <ul>
+          <li><strong>心房細動 / 心房粗動</strong> → 心原性塞栓の最頻原因。CHADS2-VASc で抗凝固歴も確認</li>
+          <li><strong>陳旧性心筋梗塞（異常 Q 波）</strong> → 左室壁運動異常 → 左室内血栓のリスク</li>
+          <li><strong>新規 ST 変化</strong> → 多血管疾患として ACS 併存の可能性</li>
+          <li><strong>右心負荷パターン</strong>（S1Q3T3、V1-V3 陰性 T、新規右脚ブロック）→ DVT 合併の PE</li>
+        </ul>
+
+        <div class="callout callout-tip">
+          <div class="callout-title">下肢痛で ECG を取る理由</div>
+          <div class="callout-body"><p>ALI 患者の塞栓源評価と、LEAD 患者は <strong>ACS 併存リスクが高い（多血管疾患）</strong>ため。下肢の問題に集中して胸部症状を聞き忘れない。透析例では ALI に血圧低下が重なるため特に注意。</p></div>
+        </div>
+      </section>
+
+      <!-- §6e エコー（POCUS・ABI） -->
+      <section class="section-page" id="s6e" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🫧 エコー（POCUS・ABI）</h2>
+
+        <p>下肢痛の bedside 評価は <strong>動脈（ABI/SPP・血流ドプラ）と静脈（CUS）</strong>を同時に当てると鑑別が一気に絞れる。</p>
+
+        <h3>ABI（足関節上腕血圧比）</h3>
+        <ul>
+          <li><strong>正常 1.00〜1.40</strong></li>
+          <li><strong>≤0.90 で主幹動脈の狭窄／閉塞</strong>（LEAD 確定）</li>
+          <li>0.91〜0.99 はボーダー</li>
+          <li><strong>≥1.40 は中膜石灰化で偽高値</strong>（CKD・糖尿病で多い）→ <strong>SPP/TBI へ切替</strong></li>
+        </ul>
+
+        <h3>SPP（皮膚灌流圧）</h3>
+        <ul>
+          <li>レーザー反射で毛細血管循環を評価</li>
+          <li><strong>SPP ≥ 40 mmHg で治癒見込み</strong></li>
+          <li><strong>&lt; 30 mmHg は治癒可能性低</strong>（CLTI 評価）</li>
+        </ul>
+
+        <h3>下肢血管エコー（動脈）</h3>
+        <ul>
+          <li>血管径・石灰化・プラーク性状・瘤の評価</li>
+          <li>ドプラで狭窄度・血流評価（連続性・三相性／単相性／消失）</li>
+          <li>術前評価＋術後フォロー</li>
+        </ul>
+
+        <h3>下肢静脈エコー（CUS）— DVT スクリーン</h3>
+        <ul>
+          <li>大腿静脈・膝窩静脈の <strong>2 点圧迫法</strong>で簡便に DVT を検出</li>
+          <li>圧迫不能 → DVT 確定</li>
+          <li>陽性なら PE のリスクも考慮（造影 CT で確認）</li>
+        </ul>
+
+        <h3>軟部エコー（蜂窩織炎・膿瘍・壊死性筋膜炎）</h3>
+        <ul>
+          <li>蜂窩織炎は<strong>cobblestone appearance</strong>（皮下脂肪の浮腫）</li>
+          <li>低エコー域＋液体貯留 → 膿瘍／ドレナージ要</li>
+          <li>筋膜層の不整・ガス像 → 壊死性筋膜炎（外科的緊急）</li>
+        </ul>
+      </section>
+
+      <!-- §6r 放射線画像 -->
+      <section class="section-page" id="s6r" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>📷 放射線画像</h2>
+
+        <h3>単純 X 線（XP）</h3>
+        <ul>
+          <li><strong>骨折</strong>（外傷あり・荷重不可）：股関節・大腿骨・下腿・足部</li>
+          <li><strong>軟部のガス像</strong> → 壊死性筋膜炎・ガス壊疽（外科的緊急）</li>
+          <li><strong>骨膜反応・骨破壊</strong> → 骨髄炎（CLTI 合併で重要）</li>
+          <li>関節石灰化（CPPD）</li>
+        </ul>
+
+        <h3>下肢造影 CT（CTA）</h3>
+        <ul>
+          <li><strong>ALI 疑い</strong>：閉塞部位・側副血行路・血栓の性状</li>
+          <li><strong>慢性 LEAD</strong>：石灰化を含む病変の性状・範囲（VR、MIP、dual energy CT 石灰化除去画像）</li>
+          <li>動脈瘤・解離・外傷性血管損傷</li>
+          <li>腎機能・造影剤アレルギーで判断（Cre 上昇例は SPP/MRA 検討）</li>
+        </ul>
+
+        <h3>MRI / MRA</h3>
+        <ul>
+          <li>骨髄炎の精査（XP より高感度）</li>
+          <li>造影禁忌の血管評価</li>
+          <li>軟部腫瘤・血腫の鑑別</li>
+        </ul>
+
+        <h3>血管造影</h3>
+        <ul>
+          <li>通常は<strong>治療目的</strong>（血管内治療と同時）に施行</li>
+          <li>診断のみ目的の侵襲的造影は近年減少</li>
+        </ul>
+      </section>
+
+      <!-- §7 外傷の見方 -->
+      <section class="section-page" id="s7" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>🦴 外傷の見方</h2>
+
+        <h3>受傷機転と荷重可否</h3>
+        <ul>
+          <li>機転（高エネルギー vs 低エネルギー）・受傷時間・受傷後の処置</li>
+          <li><strong>荷重不可 ＝ 骨折を強く疑う</strong>（高齢者の大腿骨頸部骨折は転倒後に荷重困難で発見）</li>
+          <li>変形・短縮・回旋（大腿骨転子部・頸部骨折で外旋短縮）</li>
+        </ul>
+
+        <h3>必須の身体所見</h3>
+        <ul>
+          <li>圧痛局在・腫脹・皮下出血</li>
+          <li>関節可動域・荷重テスト</li>
+          <li>遠位の<strong>脈触知＋神経所見</strong>（血管・神経損傷の合併）</li>
+          <li>開放創の有無（開放骨折は<strong>抗菌薬＋破傷風＋整形緊急コール</strong>）</li>
+        </ul>
+
+        <div class="callout callout-danger">
+          <div class="callout-title">コンパートメント症候群を見逃さない</div>
+          <div class="callout-body">
+            <p>下腿骨折・長時間虚血・ALI の血行再建後・打撲血腫・熱傷で発生。<strong>不可逆になる前に減張切開</strong>。</p>
+            <ul>
+              <li><strong>5P に似た所見＋下腿の異常な緊満</strong></li>
+              <li><strong>passive stretch pain</strong>（受動伸展で激痛、特異度高）</li>
+              <li>腓骨神経麻痺（足背の知覚低下・足趾背屈不能）</li>
+              <li>コンパートメント内圧 ≥ 30 mmHg、または ΔP（拡張期 BP − 内圧）&lt; 30 mmHg で診断</li>
+              <li><strong>整形外科に即コール、減張切開（fasciotomy）</strong></li>
+            </ul>
+          </div>
+        </div>
+
+        <h3>高齢者の転倒</h3>
+        <ul>
+          <li>大腿骨近位部骨折（頸部・転子部）の閾値を低く XP</li>
+          <li>初診で見逃され MRI で診断されるケースあり（occult fracture）</li>
+          <li>転倒の原因検索（失神・薬剤・環境）— 詳細は <a class="wiki-link" href="転倒.html">転倒</a></li>
+        </ul>
+
+        <h3>軟部組織損傷</h3>
+        <ul>
+          <li>捻挫（足関節 Ottawa rule で XP 適応判断）</li>
+          <li>アキレス腱断裂（Thompson テスト陽性）</li>
+          <li>挫滅創・皮下血腫（広範ならコンパートメント症候群リスク）</li>
+        </ul>
+      </section>
+
+      <!-- §8 鑑別早見表 -->
+      <section class="section-page" id="s8" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>⚠️ 鑑別早見表</h2>
+
+        <div class="table-wrap"><table>
+          <thead><tr><th>疾患</th><th>キーポイント</th><th>初期対応</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><strong>蜂窩織炎</strong></td>
+              <td>発赤・熱感・腫脹・圧痛＋発熱、皮膚バリア破綻、WBC/CRP↑、軟部エコーで cobblestone</td>
+              <td>抗菌薬（セファゾリン or セフトリアキソン、MRSA リスクならバンコ）／壊死性筋膜炎を必ず除外（皮膚色調変化・捻髪音・激痛＋ショック → 外科緊急）</td>
+            </tr>
+            <tr>
+              <td><strong>DVT</strong></td>
+              <td>片側下腿腫脹・圧痛・Homans 徴候、Wells score（担癌・臥床・術後・3 日以上ベッド・全身麻酔・下肢ギプス・DVT 既往等）、CUS 圧迫不能</td>
+              <td>近位 DVT は抗凝固（DOAC or UFH/LMWH）／PE 合併の検索（造影 CT）／関連: <a class="wiki-link" href="疾患詳細/肺塞栓.html">肺塞栓</a></td>
+            </tr>
+            <tr>
+              <td><strong>痛風／偽痛風</strong></td>
+              <td>夜間急性発症、第 1 MTP（痛風）／膝（CPPD）、関節の発赤・熱感・激痛、UA↑（痛風）、X 線で軟骨石灰化（CPPD）</td>
+              <td>NSAIDs／コルヒチン／ステロイド関節注、高齢・腎機能低下では使い分け、敗血症性関節炎を関節液で必ず除外</td>
+            </tr>
+            <tr>
+              <td><strong>腰部脊柱管狭窄症</strong></td>
+              <td>神経性跛行（臀部〜下腿後面）、<strong>shopping cart sign</strong>（前屈で軽減）、立位／坐位でも持続、誘発距離が日によって変動</td>
+              <td>整形外科外来へ／NSAIDs／神経ブロック検討。LEAD と <strong>合併</strong>もあるので ABI も測る</td>
+            </tr>
+            <tr>
+              <td><strong>慢性静脈不全症（CVI）</strong></td>
+              <td>下腿全体のだるさ・腫脹、<strong>立位で増悪・挙上で改善</strong>、静脈瘤、色素沈着、内側下腿潰瘍</td>
+              <td>圧迫療法（弾性ストッキング）／生活指導、皮膚科・血管外科外来</td>
+            </tr>
+            <tr>
+              <td><strong>糖尿病性神経障害</strong></td>
+              <td>両側遠位対称性の感覚低下・しびれ、<strong>無痛のまま潰瘍</strong>、足底荷重部の潰瘍</td>
+              <td>血糖管理、フットケア教育、潰瘍があれば LEAD 合併確認（ABI/SPP）</td>
+            </tr>
+            <tr>
+              <td><strong>変形性膝関節症</strong></td>
+              <td>中年以降女性、<strong>動作時痛・歩行開始時痛</strong>、関節可動域制限、X 線で関節裂隙狭小化・骨棘</td>
+              <td>NSAIDs／ヒアルロン酸関節注／整形外来</td>
+            </tr>
+            <tr>
+              <td><strong>敗血症性関節炎</strong></td>
+              <td>発熱＋単関節の急性炎症、関節液の混濁・WBC↑、グラム染色／培養陽性</td>
+              <td>関節穿刺（必須）→ 整形外科緊急コンサルト、抗菌薬</td>
+            </tr>
+            <tr>
+              <td><strong>壊死性筋膜炎</strong></td>
+              <td>発赤領域より広い<strong>不釣り合いな激痛</strong>、皮膚色調変化（暗赤〜紫）、捻髪音、ショック傾向、LRINEC 高値</td>
+              <td>緊急外科コンサルト＋広域抗菌薬（CTRX+CLDM 等）＋蘇生</td>
+            </tr>
+          </tbody>
+        </table></div>
+
+        <div class="callout callout-warning">
+          <div class="callout-title">「下肢痛」でやりがちなミス</div>
+          <div class="callout-body"><ul>
+            <li><strong>腰椎症と決めつけて ABI を測らない</strong>（神経性と虚血性は <strong>合併</strong>もある）</li>
+            <li><strong>糖尿病だから疼痛が弱い ＝ 軽症</strong>と判断（神経障害で痛みがマスクされ潰瘍進行）</li>
+            <li><strong>ABI ≥1.40 を「正常」と読む</strong>（中膜石灰化の偽高値、SPP/TBI へ切替）</li>
+            <li><strong>ALI を「慢性 LEAD の急性増悪」と誤認</strong>して経過観察（4-6h で不可逆）</li>
+            <li><strong>蜂窩織炎の発赤範囲＞痛みの範囲</strong>を見て安心する（壊死性筋膜炎は痛みの範囲＞発赤）</li>
+            <li><strong>DVT の Wells score を取らずに D-dimer 単独で除外</strong>する</li>
+          </ul></div>
+        </div>
+      </section>
+
+      <!-- §9 出典・リンク -->
+      <section class="section-page" id="s9" hidden>
+        <button class="back-to-menu" type="button">← メニューへ</button>
+        <h2>📚 出典・リンク</h2>
+
+        <h3>このページから張るリンク</h3>
+        <ul>
+          <li><a class="wiki-link" href="疾患詳細/LEAD.html">LEAD（下肢閉塞性動脈疾患）</a></li>
+          <li><a class="wiki-link" href="疾患詳細/LEAD.html#s5">急性下肢虚血（ALI） — LEAD §5</a></li>
+          <li><a class="wiki-link" href="疾患詳細/肺塞栓.html">肺塞栓（DVT 合併時の参照）</a></li>
+          <li><a class="wiki-link" href="転倒.html">転倒（高齢者の下肢痛＋荷重不可）</a></li>
+          <li><span class="wiki-missing">蜂窩織炎</span></li>
+          <li><span class="wiki-missing">DVT</span></li>
+          <li><span class="wiki-missing">壊死性筋膜炎</span></li>
+          <li><span class="wiki-missing">痛風／偽痛風</span></li>
+          <li><span class="wiki-missing">敗血症性関節炎</span></li>
+          <li><span class="wiki-missing">腰部脊柱管狭窄症</span></li>
+          <li><span class="wiki-missing">コンパートメント症候群</span></li>
+        </ul>
+
+        <p>#ER #救急 #下肢痛 #LEAD #ASO #ALI #DVT #蜂窩織炎</p>
+      </section>
+
+    </article>
+  </main>
+
+  <nav class="hokuto-bottom">
+    <button class="hokuto-bottom__btn" type="button" id="navBack">
+      <span class="hokuto-bottom__icon">←</span><span>戻る</span>
+    </button>
+    <a class="hokuto-bottom__btn" href="ツール.html">
+      <span class="hokuto-bottom__icon">⚙</span><span>ツール</span>
+    </a>
+    <a class="hokuto-bottom__btn" href="index.html">
+      <span class="hokuto-bottom__icon">⌂</span><span>ホーム</span>
+    </a>
+  </nav>
+
+  <script>
+  (function(){
+    const menu = document.getElementById('sectionMenu');
+    const pages = document.querySelectorAll('.section-page');
+    const titleH1 = document.querySelector('.page-title');
+
+    function showSection(id) {
+      menu.hidden = true;
+      if (titleH1) titleH1.hidden = true;
+      pages.forEach(p => p.hidden = (p.id !== id));
+      window.scrollTo(0, 0);
+    }
+    function showMenu(scrollTarget) {
+      menu.hidden = false;
+      if (titleH1) titleH1.hidden = false;
+      pages.forEach(p => p.hidden = true);
+      if (scrollTarget) {
+        if (scrollTarget.tagName === 'DETAILS') scrollTarget.open = true;
+        scrollTarget.scrollIntoView({behavior: 'instant', block: 'start'});
+      } else {
+        window.scrollTo(0, 0);
+      }
+    }
+    function syncFromHash() {
+      const id = (location.hash || '').replace('#','');
+      const target = id ? document.getElementById(id) : null;
+      if (target && target.classList.contains('section-page')) {
+        showSection(id);
+      } else if (target) {
+        showMenu(target);
+      } else {
+        showMenu();
+      }
+    }
+
+    window.addEventListener('hashchange', syncFromHash);
+    document.querySelectorAll('.back-to-menu').forEach(b => {
+      b.addEventListener('click', () => { history.pushState(null,'',location.pathname); showMenu(); });
+    });
+    const navBack = document.getElementById('navBack');
+    if (navBack) navBack.addEventListener('click', () => {
+      if (window.history.length > 1) history.back();
+      else window.location.href = 'index.html';
+    });
+
+    syncFromHash();
+  })();
+  </script>
+</body>
+</html>
