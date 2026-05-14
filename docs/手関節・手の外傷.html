@@ -13,12 +13,6 @@
       display: flex; align-items: center; justify-content: space-between;
       gap: 0.5rem; cursor: pointer; padding: 2px 0;
     }
-    .flow-box__hint {
-      font-size: 0.72rem; font-weight: 600; color: var(--muted);
-      letter-spacing: 0.02em; padding: 2px 8px; border-radius: 999px;
-      border: 1px solid color-mix(in srgb, var(--text) 20%, transparent);
-    }
-
     /* ===== 診療フロー本体 ===== */
     .flow-canvas {
       background: var(--surface); border-radius: 10px;
@@ -58,10 +52,6 @@
       border-color: #c0392b;
     }
     .dx-node--danger .dx-node__title { color: #c0392b; }
-    .dx-node--action {
-      background: color-mix(in srgb, var(--text) 5%, var(--surface));
-      border-style: dashed;
-    }
     .dx-node--external {
       text-decoration: none; color: var(--text); border-style: dashed;
       position: relative;
@@ -80,7 +70,6 @@
     .dx-layer--root   { grid-template-columns: 1fr; justify-items: center; }
     .dx-layer--root > * { max-width: 360px; }
     .dx-layer--branch { grid-template-columns: 1fr 1fr; }
-    .dx-layer--quad   { grid-template-columns: repeat(4, 1fr); }
 
     /* 矢印 */
     .dx-arrow {
@@ -98,13 +87,6 @@
       border-left: 5px solid transparent; border-right: 5px solid transparent;
       border-top: 7px solid color-mix(in srgb, var(--text) 35%, transparent);
     }
-    .dx-arrow__label {
-      background: var(--surface); padding: 1px 8px; border-radius: 999px;
-      border: 1px solid color-mix(in srgb, var(--text) 18%, transparent);
-      position: absolute; left: 50%; top: 50%;
-      transform: translate(-50%, -50%); white-space: nowrap; z-index: 1;
-    }
-
     /* 分岐 Y 字 */
     .dx-fork {
       display: grid; grid-template-columns: 1fr 1fr;
@@ -201,7 +183,6 @@
       .dx-arrow { min-height: 24px; margin: 1px 0; }
       .dx-arrow::before { min-height: 20px; width: 1.5px; }
       .dx-arrow::after { border-left-width: 4px; border-right-width: 4px; border-top-width: 6px; }
-      .dx-arrow__label { font-size: 8.5px; padding: 0 4px; line-height: 1.4; }
 
       .dx-fork { min-height: 22px; }
       .dx-fork::before { height: 1.5px; }
@@ -220,14 +201,6 @@
     }
 
     /* === 来院後チェック === */
-    .dx-arrival-divider {
-      margin: 18px 0 8px; display: flex; align-items: center; gap: 10px;
-      color: var(--muted); font-size: 11.5px; font-weight: 800; letter-spacing: 0.1em;
-    }
-    .dx-arrival-divider::before, .dx-arrival-divider::after {
-      content: ""; flex: 1; height: 1px;
-      background: color-mix(in srgb, var(--text) 18%, transparent);
-    }
     .dx-checklist {
       background: var(--surface); border-radius: 10px;
       border: 1.5px solid color-mix(in srgb, var(--text) 14%, transparent);
@@ -271,6 +244,21 @@
       text-decoration-color: color-mix(in srgb, var(--muted) 50%, transparent);
     }
     .dx-checklist__sub { color: var(--muted); font-size: 11px; font-weight: 500; }
+    .dx-checklist__action {
+      display: block;
+      margin-top: 6px;
+      padding: 5px 9px;
+      background: color-mix(in srgb, #d33 10%, transparent);
+      border-left: 3px solid #d33;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--text);
+      line-height: 1.45;
+    }
+    .dx-checklist__action::before { content: "⚠ "; color: #d33; font-weight: 800; }
+    .dx-checklist__action strong { color: #d33; }
+    .dx-checklist__action a { color: #d33; text-decoration: underline; font-weight: 600; }
 
     @media (max-width: 600px) {
       .dx-checklist { padding: 8px 10px; }
@@ -278,7 +266,6 @@
       .dx-checklist__list li { font-size: 11.5px; }
       .dx-checklist__sub { font-size: 10px; }
       .dx-checklist__reset { font-size: 9.5px; padding: 1px 6px; }
-      .dx-arrival-divider { font-size: 10px; margin: 14px 0 6px; }
     }
 
     /* === トリガー連動ルール === */
@@ -379,8 +366,105 @@
       .dx-imaging__list { font-size: 11.5px; }
     }
 
-    /* §メニュータイル非表示 */
-    .section-tiles { display: none !important; }
+    /* フロー peek からのみ参照される panel は可視には非表示（DOM は peek 用に保持） */
+    #historyPanel,
+    #examPanel,
+    #imagingPanel,
+    #imagingReadPanel,
+    #rulesL2Panel,
+    #rxPanel,
+    #dispoPanel,
+    #refsPanel { display: none !important; }
+
+    /* === Peek プレビュー === */
+    .peek-modal {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.5);
+      display: none;
+      align-items: flex-end;
+      justify-content: center;
+      z-index: 9999;
+      -webkit-backdrop-filter: blur(2px);
+      backdrop-filter: blur(2px);
+    }
+    .peek-modal.is-open { display: flex; }
+    .peek-modal__sheet {
+      background: var(--surface);
+      width: 100%;
+      max-width: 720px;
+      max-height: 85vh;
+      border-radius: 14px 14px 0 0;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 -6px 28px rgba(0,0,0,0.25);
+      animation: peek-slide-up 220ms ease-out;
+      overflow: hidden;
+      position: relative;
+    }
+    @keyframes peek-slide-up {
+      from { transform: translateY(30%); opacity: 0.4; }
+      to   { transform: translateY(0);   opacity: 1; }
+    }
+    .peek-modal__handle {
+      position: absolute;
+      top: 6px; left: 50%;
+      transform: translateX(-50%);
+      width: 36px; height: 4px;
+      border-radius: 999px;
+      background: color-mix(in srgb, var(--text) 22%, transparent);
+      pointer-events: none;
+    }
+    .peek-modal__header {
+      display: flex; align-items: flex-start; gap: 8px;
+      padding: 16px 14px 10px;
+      border-bottom: 1px solid color-mix(in srgb, var(--text) 12%, transparent);
+      background: var(--surface);
+      flex-shrink: 0;
+    }
+    .peek-modal__title {
+      flex: 1;
+      font-weight: 800;
+      font-size: 14.5px;
+      color: var(--text);
+      line-height: 1.3;
+    }
+    .peek-modal__close {
+      background: transparent;
+      border: 1px solid color-mix(in srgb, var(--text) 22%, transparent);
+      border-radius: 999px;
+      width: 30px; height: 30px;
+      cursor: pointer;
+      font-size: 14px;
+      color: var(--text);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      font-family: inherit;
+    }
+    .peek-modal__close:hover { background: color-mix(in srgb, var(--text) 6%, transparent); }
+    .peek-modal__body {
+      flex: 1;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      padding: 12px 16px 10px;
+      font-size: 13.5px;
+      line-height: 1.55;
+      color: var(--text);
+    }
+    /* peek 内で details は常に開いた状態で表示（JS で open=true を付与）。トップレベルのサマリーは peek ヘッダーと重複するため非表示 */
+    .peek-modal__body > details > summary { display: none; }
+    .peek-modal__body details > summary { pointer-events: none; }
+    /* checklist 内の reset ボタンも peek では機能しないので非表示 */
+    .peek-modal__body .dx-checklist__reset { display: none; }
+    @media (min-width: 720px) {
+      .peek-modal { align-items: center; padding: 24px; }
+      .peek-modal__sheet { border-radius: 14px; max-height: 80vh; }
+      .peek-modal__handle { display: none; }
+      @keyframes peek-slide-up {
+        from { transform: scale(0.96); opacity: 0; }
+        to   { transform: scale(1);    opacity: 1; }
+      }
+    }
+    a.dx-node { -webkit-touch-callout: none; }
   </style>
 </head>
 <body>
@@ -399,36 +483,42 @@
 
       <!-- 単純化診療フロー -->
       <div class="action-header flow-box" id="flowBox">
-        <div class="action-header__title flow-box__title" id="flowBoxClose" role="button" tabindex="0" aria-label="診療フローを閉じる">
-          <span>🗺 単純化診療フロー</span>
-          <span class="flow-box__hint">タップで閉じる ✕</span>
+        <div class="action-header__title flow-box__title">
+          <span>単純化診療フロー</span>
         </div>
 
         <div class="flow-canvas">
           <div class="dx-flow" role="group" aria-label="手関節・手の外傷の単純化診療フロー">
 
-            <!-- L0: Red flags -->
+            <!-- Root -->
             <div class="dx-layer dx-layer--root">
-              <a class="dx-node dx-node--decision dx-node--danger" href="#redflags">
-                <div class="dx-node__title">🚨 Red flags 確認</div>
-                <div class="dx-node__sub">血管・神経／開放骨折／コンパートメント／整復不能</div>
-              </a>
+              <div class="dx-node dx-node--decision">手関節・手の外傷</div>
             </div>
+            <div class="dx-arrow"></div>
 
-            <div class="dx-fork">
-              <div class="dx-fork__leg"><span class="dx-fork__label">あり</span></div>
-              <div class="dx-fork__leg"><span class="dx-fork__label">なし</span></div>
-            </div>
-
+            <!-- 問診 + 身体診察（同時並行） -->
             <div class="dx-layer dx-layer--branch">
-              <a class="dx-node dx-node--danger" href="#redflags">
-                <div class="dx-node__title">緊急対応</div>
-                <div class="dx-node__sub">即整復／即時整形／血管評価</div>
+              <a class="dx-node" href="#historyPanel">
+                <div class="dx-node__title">問診</div>
               </a>
-              <div class="dx-arrow"><span class="dx-arrow__label">↓ 部位で絞る</span></div>
+              <a class="dx-node" href="#examPanel">
+                <div class="dx-node__title">身体診察</div>
+              </a>
             </div>
+            <div class="dx-arrow"></div>
 
-            <!-- L1: 痛みの主座 -->
+            <!-- X 線適応 ＋ X 線の読み方（並列） -->
+            <div class="dx-layer dx-layer--branch">
+              <a class="dx-node dx-node--judge" href="#imagingPanel">
+                <div class="dx-node__title">X 線適応＋撮影方向</div>
+              </a>
+              <a class="dx-node dx-node--judge" href="#imagingReadPanel">
+                <div class="dx-node__title">X 線の読み方</div>
+              </a>
+            </div>
+            <div class="dx-arrow"></div>
+
+            <!-- 痛みの主座 -->
             <div class="dx-layer dx-layer--root">
               <div class="dx-node dx-node--judge">痛みの主座は？</div>
             </div>
@@ -440,32 +530,37 @@
               <div class="dx-fork__leg"><span class="dx-fork__label">指（DIP/PIP）</span></div>
             </div>
 
-            <!-- L2/L3: 4列の疾患ツリー -->
+            <!-- 4 列の疾患ツリー -->
             <div class="dx-trees">
 
               <!-- 1) 手関節 -->
               <div class="dx-tree">
                 <div class="dx-tree__group">高齢者・小児</div>
-                <a class="dx-node" href="疾患詳細/上肢骨折の固定/橈骨遠位端骨折.html">
+                <a class="dx-node" href="疾患詳細/橈骨遠位端骨折.html">
                   <div class="dx-node__title">橈骨遠位端骨折</div>
-                  <div class="dx-node__sub">FOOSH 一択。dinner fork 変形</div>
+                  <div class="dx-node__sub">高齢の脆弱性骨折最多／dinner fork／小児は若木・Salter-Harris（左右比較）</div>
                 </a>
-                <div class="dx-note">高齢者は脆弱性骨折ナンバーワン。小児は若木骨折・骨端線骨折が典型</div>
 
                 <div class="dx-tree__group">成人 FOOSH</div>
                 <a class="dx-node" href="疾患詳細/舟状骨骨折.html">
                   <div class="dx-node__title">舟状骨骨折</div>
-                  <div class="dx-node__sub">嗅ぎたばこ窩圧痛。初回 X-line 陰性 10〜20%</div>
+                  <div class="dx-node__sub">snuffbox 圧痛／<strong>初回陰性 10-20%</strong>でも疑い固定</div>
                 </a>
-                <a class="dx-node" href="#triquetrum">
-                  <div class="dx-node__title">三角骨骨折（背側剥離）</div>
-                  <div class="dx-node__sub">手根骨骨折の 2 番手</div>
+                <a class="dx-node" href="疾患詳細/三角骨骨折.html">
+                  <div class="dx-node__title">三角骨骨折</div>
+                  <div class="dx-node__sub">手根骨 2 番手／背側剥離</div>
                 </a>
 
                 <div class="dx-tree__group">高エネ・正中神経症状</div>
-                <a class="dx-node dx-node--danger" href="#perilunate">
+                <a class="dx-node" href="疾患詳細/月状骨周囲脱臼.html">
                   <div class="dx-node__title">月状骨周囲脱臼／月状骨脱臼</div>
-                  <div class="dx-node__sub">側面で lunate の整列を確認</div>
+                  <div class="dx-node__sub">側面で lunate 整列</div>
+                </a>
+
+                <div class="dx-tree__group">尺側手関節痛</div>
+                <a class="dx-node" href="疾患詳細/TFCC損傷.html">
+                  <div class="dx-node__title">TFCC 損傷</div>
+                  <div class="dx-node__sub">fovea sign／DRUJ 不安定</div>
                 </a>
               </div>
 
@@ -474,14 +569,13 @@
                 <div class="dx-tree__group">拳で殴打／軸圧</div>
                 <a class="dx-node" href="疾患詳細/第1中手骨基部骨折.html">
                   <div class="dx-node__title">第1中手骨基部骨折</div>
-                  <div class="dx-node__sub">snuffbox 近傍痛＋母指可動制限</div>
+                  <div class="dx-node__sub">Bennett／Rolando vs 横骨折</div>
                 </a>
-                <div class="dx-note">関節内（Bennett / Rolando）か関節外（横骨折）かを紹介状に明記</div>
 
                 <div class="dx-tree__group">母指過橈屈</div>
                 <a class="dx-node" href="疾患詳細/ゲームキーパー母指.html">
                   <div class="dx-node__title">ゲームキーパー母指</div>
-                  <div class="dx-node__sub">母指 MP 尺側 UCL 損傷。Stener 病変は手術</div>
+                  <div class="dx-node__sub">MP 尺側 UCL／Stener は手術</div>
                 </a>
               </div>
 
@@ -490,20 +584,23 @@
                 <div class="dx-tree__group">拳で殴打</div>
                 <a class="dx-node" href="疾患詳細/中手骨頸部骨折.html">
                   <div class="dx-node__title">第5中手骨頸部骨折</div>
-                  <div class="dx-node__sub">boxer's fracture。knuckle 消失</div>
+                  <div class="dx-node__sub">boxer's／knuckle 消失</div>
                 </a>
-                <div class="dx-note">Fight bite（裂創併存）は感染リスク。洗浄・抗菌薬・整形コンサルト</div>
+                <a class="dx-node" href="疾患詳細/Fight bite.html">
+                  <div class="dx-node__title">Fight bite</div>
+                  <div class="dx-node__sub">MP 背側咬創／<strong>単純縫合禁</strong></div>
+                </a>
 
-                <div class="dx-tree__group">手背への直達外力</div>
+                <div class="dx-tree__group">直達外力</div>
                 <a class="dx-node" href="疾患詳細/上肢骨折の固定/手・指の骨折.html">
                   <div class="dx-node__title">中手骨／基節骨／中節骨 骨幹部骨折</div>
-                  <div class="dx-node__sub">必ずベッドサイドで開放骨折を評価</div>
+                  <div class="dx-node__sub">回旋変形と開放を必ず評価</div>
                 </a>
 
-                <div class="dx-tree__group">小児（小学校高学年〜中学生）</div>
+                <div class="dx-tree__group">小児</div>
                 <a class="dx-node" href="疾患詳細/上肢骨折の固定/手・指の骨折.html">
                   <div class="dx-node__title">基節骨基部骨折</div>
-                  <div class="dx-node__sub">小指最多。Salter-Harris II</div>
+                  <div class="dx-node__sub">小指最多／Salter-Harris II</div>
                 </a>
               </div>
 
@@ -511,45 +608,46 @@
               <div class="dx-tree">
                 <div class="dx-tree__group">突指 → DIP</div>
                 <a class="dx-node" href="疾患詳細/Mallet finger・Jersey finger.html">
-                  <div class="dx-node__title">Mallet finger（伸展不能）</div>
-                  <div class="dx-node__sub">指腱損傷の最頻。DIP 伸展位 6 週</div>
+                  <div class="dx-node__title">Mallet finger</div>
+                  <div class="dx-node__sub">DIP 伸展不能／伸展位 6 週固定</div>
                 </a>
-                <a class="dx-node dx-node--danger" href="疾患詳細/Mallet finger・Jersey finger.html">
-                  <div class="dx-node__title">Jersey finger（屈曲不能）</div>
-                  <div class="dx-node__sub">FDP 断裂。環指 75%。原則手術</div>
+                <a class="dx-node" href="疾患詳細/Mallet finger・Jersey finger.html">
+                  <div class="dx-node__title">Jersey finger</div>
+                  <div class="dx-node__sub">FDP 断裂／環指 75%／<strong>原則手術</strong></div>
                 </a>
 
                 <div class="dx-tree__group">PIP 過伸展</div>
                 <a class="dx-node" href="疾患詳細/PIP関節脱臼.html">
-                  <div class="dx-node__title">PIP 関節脱臼／volar plate 損傷</div>
-                  <div class="dx-node__sub">背側脱臼が多い。Wilson 骨折を確認</div>
+                  <div class="dx-node__title">PIP 関節脱臼／volar plate</div>
+                  <div class="dx-node__sub">背側脱臼が多い／Wilson 骨折確認</div>
                 </a>
-                <a class="dx-node" href="#central-slip">
+                <a class="dx-node" href="疾患詳細/中央索断裂・ボタン指変形.html">
                   <div class="dx-node__title">総指伸筋腱中央索断裂</div>
-                  <div class="dx-node__sub">最初は伸展可。1か月でボタン指変形</div>
+                  <div class="dx-node__sub">最初は伸展可／1 か月でボタン指変形</div>
                 </a>
 
                 <div class="dx-tree__group">爪外傷</div>
-                <a class="dx-node" href="#distal-phalanx">
+                <a class="dx-node" href="疾患詳細/末節骨骨折・爪外傷.html">
                   <div class="dx-node__title">末節骨骨折＋爪外傷</div>
-                  <div class="dx-node__sub">爪床裂創／爪下血腫</div>
+                  <div class="dx-node__sub">爪床裂創／50% 以上は穿刺</div>
                 </a>
               </div>
 
             </div>
+            <div class="dx-arrow"></div>
+
+            <!-- disposition -->
+            <div class="dx-layer dx-layer--root">
+              <a class="dx-node dx-node--decision" href="#dispoPanel">
+                <div class="dx-node__title">disposition</div>
+                <div class="dx-node__sub">5 択／固定後 5P／整形外来予約</div>
+              </a>
+            </div>
 
           </div>
 
-          <!-- 来院後チェック -->
-          <div class="dx-arrival-divider"><span>来院後のチェック</span></div>
-
           <details class="dx-checklist" id="historyPanel">
-            <summary>
-              <span class="dx-checklist__head" style="flex:1;">
-                <span>🗣 問診（来院後に実施）</span>
-                <button type="button" class="dx-checklist__reset" aria-label="問診チェックをすべて外す">リセット</button>
-              </span>
-            </summary>
+            <summary>問診</summary>
             <ul class="dx-checklist__list">
               <li><label><input type="checkbox" data-key="h-mech"> <span><strong>受傷機転</strong> <span class="dx-checklist__sub">FOOSH／殴打／突指／挟まれ／引っ張られ／ひねり</span></span></label></li>
               <li><label><input type="checkbox" data-key="h-foosh"> <span><strong>FOOSH か否か</strong> <span class="dx-checklist__sub">高齢=橈骨遠位端、成人=橈骨遠位端＋舟状骨、小児=橈骨遠位端</span></span></label></li>
@@ -563,57 +661,45 @@
           </details>
 
           <details class="dx-checklist" id="examPanel">
-            <summary>
-              <span class="dx-checklist__head" style="flex:1;">
-                <span>🔍 身体診察（来院後に実施）</span>
-                <button type="button" class="dx-checklist__reset" aria-label="身体診察チェックをすべて外す">リセット</button>
-              </span>
-            </summary>
+            <summary>身体診察</summary>
             <ul class="dx-checklist__list">
               <li><label><input type="checkbox" data-key="e-vital"> <span><strong>バイタル</strong> <span class="dx-checklist__sub">高エネ外傷では多発外傷も意識</span></span></label></li>
               <li><label><input type="checkbox" data-key="e-bare"> <span><strong>両手指輪・時計を外して視診</strong> <span class="dx-checklist__sub">dinner fork 変形／knuckle 消失／皮膚損傷／爪外傷</span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-deform"> <span><strong>整復不能な変形＋皮膚緊張・血流障害</strong> <span class="dx-checklist__sub">明らかな転位・色調変化・橈尺動脈触知低下<span class="dx-checklist__action"><strong>該当あれば</strong>：<strong>X 線確認前でも整復</strong>を検討、整形即コンサルト</span></span></span></label></li>
               <li><label><input type="checkbox" data-key="e-tender"> <span><strong>圧痛マッピング</strong> <span class="dx-checklist__sub">橈骨遠位端／嗅ぎたばこ窩／scaphoid tubercle／三角骨／月状骨／第1中手骨基部／中手骨頭・頸／PIP掌側／DIP</span></span></label></li>
-              <li><label><input type="checkbox" data-key="e-scaphoid"> <span><strong>舟状骨スクリーニング</strong> <span class="dx-checklist__sub">snuffbox圧痛／scaphoid tubercle／thumb compression — 1つでも陽性なら疑い</span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-scaphoid"> <span><strong>舟状骨スクリーニング</strong> <span class="dx-checklist__sub">snuffbox圧痛／scaphoid tubercle／thumb compression — 1つでも陽性なら疑い<span class="dx-checklist__action"><strong>陽性あれば</strong>：初回 X-line 陰性でも <strong>舟状骨疑いとして thumb spica 固定</strong>、10〜14 日後再撮影 or MRI／CT</span></span></span></label></li>
               <li><label><input type="checkbox" data-key="e-rad3"> <span><strong>橈骨遠位端 3 所見</strong> <span class="dx-checklist__sub">橈側圧痛・腫脹・回内外制限すべてなしで感度 99%</span></span></label></li>
-              <li><label><input type="checkbox" data-key="e-rotate"> <span><strong>指の回旋整列</strong> <span class="dx-checklist__sub">屈曲位で爪面が舟状骨を向くか — 中手骨／指骨骨折で必須</span></span></label></li>
-              <li><label><input type="checkbox" data-key="e-ucl"> <span><strong>母指 MP 尺側の動揺性</strong> <span class="dx-checklist__sub">UCL 損傷／ゲームキーパー母指</span></span></label></li>
-              <li><label><input type="checkbox" data-key="e-tendons"> <span><strong>腱の独立評価</strong> <span class="dx-checklist__sub">FDP（PIP固定でDIP屈曲）／FDS（隣接指伸展でPIP屈曲）／伸筋腱／中央索（PIP 90°でテーブルから持ち上げ）</span></span></label></li>
-              <li><label><input type="checkbox" data-key="e-nv"> <span><strong>神経・血管</strong> <span class="dx-checklist__sub">正中／尺骨／橈骨の運動・知覚／橈骨・尺骨動脈／毛細血管再充満／指先 SpO2</span></span></label></li>
-              <li><label><input type="checkbox" data-key="e-open"> <span><strong>開放骨折・fight bite の確認</strong> <span class="dx-checklist__sub">骨折部の数 mm 裂創でも開放扱い。MP 背側の咬創は人歯傷</span></span></label></li>
-              <li><label><input type="checkbox" data-key="e-comp"> <span><strong>前腕緊満／受動指伸展で激痛</strong> <span class="dx-checklist__sub">コンパートメント症候群</span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-rotate"> <span><strong>指の回旋整列</strong> <span class="dx-checklist__sub">屈曲位で爪面が舟状骨を向くか — 中手骨／指骨骨折で必須<span class="dx-checklist__action"><strong>回旋変形あれば</strong>：徒手整復＋アルミシーネ、不十分なら整形へ。レントゲンだけでマネジメントしない</span></span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-ucl"> <span><strong>母指 MP 尺側の動揺性</strong> <span class="dx-checklist__sub">UCL 損傷／ゲームキーパー母指<span class="dx-checklist__action"><strong>動揺性あれば</strong>：<strong>thumb spica 固定</strong>、Stener 病変は手術適応のため整形紹介</span></span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-tendons"> <span><strong>腱の独立評価</strong> <span class="dx-checklist__sub">FDP（PIP固定でDIP屈曲）／FDS（隣接指伸展でPIP屈曲）／伸筋腱／中央索（PIP 90°でテーブルから持ち上げ）<span class="dx-checklist__action"><strong>DIP 伸展不能 → Mallet finger（伸展位 6 週固定）／DIP 屈曲不能 → Jersey finger（原則手術）／PIP 伸展可だが背側圧痛 → 中央索断裂</strong>（1 か月後ボタン指）</span></span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-nv"> <span><strong>神経・血管</strong> <span class="dx-checklist__sub">正中／尺骨／橈骨の運動・知覚／橈骨・尺骨動脈／毛細血管再充満／指先 SpO2<span class="dx-checklist__action"><strong>高エネ＋手関節腫脹＋正中神経症状あれば</strong>：<strong>月状骨周囲脱臼／月状骨脱臼</strong>を疑い側面像で lunate 整列確認、整形即コール　<a href="疾患詳細/月状骨周囲脱臼.html">→ 月状骨周囲脱臼 詳細</a></span></span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-open"> <span><strong>開放骨折・fight bite の確認</strong> <span class="dx-checklist__sub">骨折部の数 mm 裂創でも開放扱い。MP 背側の咬創は人歯傷<span class="dx-checklist__action"><strong>該当あれば</strong>：即時整形コンサルト／創部洗浄／抗菌薬（fight bite は<strong>ユナシン®</strong>、開放骨折はセファゾリン）／破傷風　<a href="疾患詳細/Fight bite.html">→ Fight bite 詳細</a></span></span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-comp"> <span><strong>前腕緊満／受動指伸展で激痛</strong> <span class="dx-checklist__sub">緊満・passive stretch pain・鎮痛抵抗性疼痛<span class="dx-checklist__action"><strong>該当あれば</strong>：<strong>前腕／手内コンパートメント症候群</strong>を疑い、組織内圧測定／整形即コール／緊急減張（fasciotomy）</span></span></span></label></li>
             </ul>
           </details>
 
-          <!-- トリガー連動の注意 -->
+          <!-- 画像確定後の注意・見逃し回避・ピットフォール -->
           <details class="dx-rules-l2" id="rulesL2Panel">
-            <summary>⚠️ トリガー連動の注意（条件で意識）</summary>
-            <p class="dx-rules-l2__intro">特定の状況に出会ったら必ず思い出すべき注意点。フローの判断と並行して意識する。</p>
+            <summary>画像確定後の注意・見逃し回避・ピットフォール</summary>
+            <p class="dx-rules-l2__intro"><strong>診察段階の Red flag は身体診察パネルに統合済み</strong>（⚠ アクション）。ここでは<strong>画像で診断が確定してから</strong>意識すべき疾患固有の注意・鑑別の入口・ありがちな誤りをまとめる。</p>
 
-            <h4 class="dx-rules-l2__group">緊急・四肢温存トリガー</h4>
+            <h4 class="dx-rules-l2__group">① 画像確定後の注意</h4>
             <ul class="dx-rules-l2__list">
-              <li class="dx-rule is-critical" id="redflags">
-                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>整復不能な変形＋血流障害／皮膚緊張</span></div>
-                <div class="dx-rule__then"><strong>X 線確認前でも整復</strong>を検討。整形即コンサルト</div>
+              <li class="dx-rule is-critical">
+                <div class="dx-rule__if"><span class="dx-rule__tag">画像</span><span>橈骨遠位端骨折を見つけた</span></div>
+                <div class="dx-rule__then"><strong>尺骨茎状突起骨折の併発（51〜66%）</strong>を必ず確認。関節内骨折なら CT 追加</div>
               </li>
               <li class="dx-rule is-critical">
-                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>開放骨折／fight bite</span></div>
-                <div class="dx-rule__then"><strong>即時整形コンサルト</strong>。創部洗浄・抗菌薬（fight bite はユナシン®）・破傷風</div>
+                <div class="dx-rule__if"><span class="dx-rule__tag">画像</span><span>第1中手骨基部骨折を見つけた</span></div>
+                <div class="dx-rule__then">関節内（<strong>Bennett=三角骨片／Rolando=Y字</strong>）か関節外（横骨折）か<strong>紹介状に明記</strong></div>
               </li>
               <li class="dx-rule is-critical">
-                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>前腕緊満＋受動指伸展で激痛</span></div>
-                <div class="dx-rule__then"><strong>前腕／手内コンパートメント症候群</strong>を疑う。緊急減張</div>
-              </li>
-              <li class="dx-rule is-critical" id="perilunate">
-                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>高エネ外傷＋手関節腫脹＋正中神経症状</span></div>
-                <div class="dx-rule__then"><strong>月状骨周囲脱臼／月状骨脱臼</strong>を疑う。側面像で lunate の整列確認・整形即コール</div>
-              </li>
-              <li class="dx-rule is-critical">
-                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>非整形外科医がギプス（cast）でぐるぐる巻きにする誘惑</span></div>
+                <div class="dx-rule__if"><span class="dx-rule__tag">画像</span><span>非整形外科医がギプス（cast）でぐるぐる巻きにする誘惑</span></div>
                 <div class="dx-rule__then">圧迫が強くコンパートメントのリスク → <strong>シーネ（splint）</strong>で初期対応</div>
               </li>
             </ul>
 
-            <h4 class="dx-rules-l2__group">見逃し回避トリガー</h4>
+            <h4 class="dx-rules-l2__group">② 見逃し回避トリガー</h4>
             <ul class="dx-rules-l2__list">
               <li class="dx-rule">
                 <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>成人 FOOSH ＋ snuffbox 圧痛</span></div>
@@ -669,107 +755,324 @@
               </li>
             </ul>
 
-            <h4 class="dx-rules-l2__group">ピットフォール</h4>
+            <h4 class="dx-rules-l2__group">③ ピットフォール</h4>
             <ul class="dx-rules-l2__list">
               <li class="dx-rule is-pitfall">
-                <div class="dx-rule__if"><span class="dx-rule__tag">⚠</span><span>初回 X-line 陰性 → 「捻挫」で帰宅</span></div>
+                <div class="dx-rule__if"><span class="dx-rule__tag">注意</span><span>初回 X-line 陰性 → 「捻挫」で帰宅</span></div>
                 <div class="dx-rule__then">舟状骨は occult fracture が多い。<strong>身体所見 1 つでも陽性なら固定＋再評価</strong></div>
               </li>
               <li class="dx-rule is-pitfall">
-                <div class="dx-rule__if"><span class="dx-rule__tag">⚠</span><span>PIP 関節脱臼を「引っ張れば治る」で固定なし</span></div>
+                <div class="dx-rule__if"><span class="dx-rule__tag">注意</span><span>PIP 関節脱臼を「引っ張れば治る」で固定なし</span></div>
                 <div class="dx-rule__then"><strong>coach finger</strong>として変形拘縮が残る。整復後はバディ固定＋整形再診</div>
               </li>
               <li class="dx-rule is-pitfall">
-                <div class="dx-rule__if"><span class="dx-rule__tag">⚠</span><span>Mallet finger を「打撲」「突指」で経過観察</span></div>
+                <div class="dx-rule__if"><span class="dx-rule__tag">注意</span><span>Mallet finger を「打撲」「突指」で経過観察</span></div>
                 <div class="dx-rule__then">DIP 単独伸展を確認。<strong>6 週間の伸展位固定</strong>を絶対曲げないと説明</div>
               </li>
               <li class="dx-rule is-pitfall">
-                <div class="dx-rule__if"><span class="dx-rule__tag">⚠</span><span>UCL 損傷を「捻挫」で帰宅</span></div>
+                <div class="dx-rule__if"><span class="dx-rule__tag">注意</span><span>UCL 損傷を「捻挫」で帰宅</span></div>
                 <div class="dx-rule__then">Stener 病変は手術適応。病歴＋MP 尺側圧痛で<strong>暫定診断＋thumb spica</strong></div>
               </li>
               <li class="dx-rule is-pitfall">
-                <div class="dx-rule__if"><span class="dx-rule__tag">⚠</span><span>中央索断裂を見逃して放置</span></div>
+                <div class="dx-rule__if"><span class="dx-rule__tag">注意</span><span>中央索断裂を見逃して放置</span></div>
                 <div class="dx-rule__then">受傷直後は PIP 伸展可で正常に見える。<strong>1 か月後にボタン指変形</strong>として戻ってくる</div>
               </li>
               <li class="dx-rule is-pitfall">
-                <div class="dx-rule__if"><span class="dx-rule__tag">⚠</span><span>fight bite を単純な裂創として縫合のみ</span></div>
+                <div class="dx-rule__if"><span class="dx-rule__tag">注意</span><span>fight bite を単純な裂創として縫合のみ</span></div>
                 <div class="dx-rule__then">伸筋腱断裂・関節内感染のリスク。<strong>洗浄＋抗菌薬＋整形フォロー</strong>が必須</div>
               </li>
               <li class="dx-rule is-pitfall">
-                <div class="dx-rule__if"><span class="dx-rule__tag">⚠</span><span>固定後の神経血管チェックを忘れる</span></div>
+                <div class="dx-rule__if"><span class="dx-rule__tag">注意</span><span>固定後の神経血管チェックを忘れる</span></div>
                 <div class="dx-rule__then">装着前後で必ず比較。<strong>指先の色・温度・知覚・運動</strong>を本人にも教え悪化時受診</div>
               </li>
               <li class="dx-rule is-pitfall">
-                <div class="dx-rule__if"><span class="dx-rule__tag">⚠</span><span>指の回旋変形を見落とす</span></div>
+                <div class="dx-rule__if"><span class="dx-rule__tag">注意</span><span>指の回旋変形を見落とす</span></div>
                 <div class="dx-rule__then">伸展位ではわからない。<strong>屈曲位で爪面が舟状骨を向くか</strong>確認</div>
               </li>
               <li class="dx-rule is-pitfall">
-                <div class="dx-rule__if"><span class="dx-rule__tag">⚠</span><span>橈骨遠位端骨折で尺骨茎状突起骨折を見落とす</span></div>
+                <div class="dx-rule__if"><span class="dx-rule__tag">注意</span><span>橈骨遠位端骨折で尺骨茎状突起骨折を見落とす</span></div>
                 <div class="dx-rule__then">51〜66% に併発。<strong>橈骨遠位端を見つけたら尺骨茎状突起も確認</strong></div>
               </li>
             </ul>
           </details>
 
-          <!-- 撮影方向の備忘 -->
+          <!-- X 線適応・撮影方向 -->
           <details class="dx-imaging" id="imagingPanel">
-            <summary>📷 撮影方向の備忘</summary>
+            <summary>X 線適応＋撮影方向</summary>
+
+            <h4 class="dx-rules-l2__group">適応の考え方</h4>
+            <ul class="dx-imaging__list">
+              <li><strong>FOOSH／殴打／突指／挟まれ／回旋外力</strong>はいずれも原則撮影。圧痛・腫脹・変形が 1 つでもあれば閾値を下げる</li>
+              <li><strong>橈骨遠位端 3 所見</strong>（橈側圧痛・腫脹・回内外制限）すべてなしで感度 99%（撮らない判断の根拠）</li>
+              <li><strong>反対側比較</strong>を活用：左右差で骨端線・若木骨折・微細転位を拾う</li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">撮影方向</h4>
             <ul class="dx-imaging__list">
               <li><strong>手関節</strong>：AP + 側面 ± 斜位</li>
               <li><strong>舟状骨疑い</strong>：<strong>scaphoid view</strong>（尺屈位 PA）追加。陰性でも 10〜14 日後再撮影 or MRI／CT</li>
               <li><strong>手・中手骨</strong>：AP + 斜位（側面は骨が重なるため<strong>斜位を必須</strong>とする）</li>
               <li><strong>母指</strong>：AP + 側面（CMC 関節を含めて撮影）</li>
               <li><strong>指（DIP / PIP / MP）</strong>：指単独で AP + <strong>真の側面</strong>。Mallet finger は側面で骨性 mallet を探す</li>
-              <li><strong>CT 追加</strong>：橈骨遠位端の関節内骨折／月状骨周囲脱臼／第1中手骨基部の関節内骨折</li>
-              <li><strong>MRI 追加</strong>：occult な舟状骨骨折（感度 96%／特異度 98%）／UCL 損傷（感度 96%／特異度 95%）</li>
             </ul>
+
+            <h4 class="dx-rules-l2__group">追加検査の閾値</h4>
+            <ul class="dx-imaging__list">
+              <li><strong>CT 追加</strong>：橈骨遠位端の関節内骨折／月状骨周囲脱臼／第1中手骨基部の関節内骨折／中手骨頸部の許容内角を超える転位</li>
+              <li><strong>MRI 追加</strong>：occult な舟状骨骨折（感度 96%／特異度 98%）／UCL 損傷（感度 96%／特異度 95%）／TFCC 損傷</li>
+              <li><strong>scaphoid view</strong>：snuffbox 圧痛・scaphoid tubercle 圧痛・thumb compression のいずれか陽性で必須</li>
+              <li><strong>再撮影 10〜14 日後</strong>：舟状骨疑いで初回陰性 → MRI が困難なら骨吸収による骨折線顕在化を待つ</li>
+            </ul>
+          </details>
+
+          <!-- X 線の読み方（系統的アプローチ） -->
+          <details class="dx-imaging" id="imagingReadPanel">
+            <summary>X 線の読み方（系統的アプローチ）</summary>
+
+            <h4 class="dx-rules-l2__group">① 撮影セットの確認</h4>
+            <ul class="dx-imaging__list">
+              <li><strong>部位ごとの最小セット</strong>：手関節 = AP + 側面 ± 斜位／手・中手骨 = AP + 斜位（側面は重なるので斜位必須）／母指 = AP + 側面（CMC 含む）／指 = 指単独 AP + <strong>真の側面</strong></li>
+              <li><strong>舟状骨疑い</strong>：<strong>scaphoid view（尺屈位 PA）</strong>を必ず追加</li>
+              <li><strong>反対側比較</strong>：左右差で骨端線・若木骨折・微細転位を拾う（特に小児）</li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">② 手関節 AP — 系統的に</h4>
+            <ul class="dx-imaging__list">
+              <li><strong>橈骨遠位端</strong>：関節面の段差・転位・コミニュート／<strong>橈骨高（11〜12 mm）・橈骨傾斜（22°）・volar tilt（11°）</strong></li>
+              <li><strong>尺骨茎状突起</strong>：橈骨遠位端骨折の <strong>51〜66% に併発</strong>。必ず見る</li>
+              <li><strong>近位手根列</strong>：舟状骨／月状骨／三角骨／豆状骨。<strong>scapholunate gap ≥ 3 mm = Terry-Thomas sign</strong>（SL 解離）</li>
+              <li><strong>遠位手根列</strong>：大菱形・小菱形・有頭・有鉤。骨と骨の整列が均等か</li>
+              <li><strong>Gilula's lines</strong>：3 本の連続した滑らかな弧（近位手根列近位縁・近位手根列遠位縁・遠位手根列近位縁）。途切れたら脱臼／不安定性</li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">③ 手関節 側面 — lunate の整列が命</h4>
+            <ul class="dx-imaging__list">
+              <li><strong>橈骨−月状骨−有頭骨の中心線が一直線</strong>か。<strong>月状骨が掌側に傾いていれば月状骨脱臼</strong>、有頭骨が背側にずれていれば月状骨周囲脱臼</li>
+              <li><strong>"piece of pie" sign / spilled teacup sign</strong>：月状骨周囲脱臼／月状骨脱臼の側面像所見</li>
+              <li><strong>骨性 mallet</strong>：末節骨基部背側の骨片を側面で必ず確認</li>
+              <li><strong>volar tilt</strong>：橈骨遠位端骨折で重要（正常 11° volar）</li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">④ 舟状骨 — 4 view で死角を潰す</h4>
+            <ul class="dx-imaging__list">
+              <li><strong>AP / 側面 / 斜位 / scaphoid view</strong>の 4 方向で評価</li>
+              <li><strong>骨折線は腰部（waist）最多 70%</strong>。近位 1/3 は<strong>偽関節リスク高</strong>（血流が遠位→近位なので近位骨片が壊死）</li>
+              <li><strong>初回 X-line 陰性 10〜20%</strong>。snuffbox / scaphoid tubercle / thumb compression のどれかが陽性なら<strong>固定して 10〜14 日後再撮影 or MRI</strong></li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">⑤ 中手骨・指の読み方</h4>
+            <ul class="dx-imaging__list">
+              <li><strong>第 5 中手骨頸部（boxer's）</strong>：側面で頸部の<strong>掌側屈曲角度</strong>を測る。<strong>環指 30°／小指 40° 以下で許容</strong>、超えれば整復</li>
+              <li><strong>第 1 中手骨基部</strong>：<strong>Bennett（三角骨片の関節内）／Rolando（Y 字 / T 字）／関節外（横骨折）</strong>を斜位で確定。CT 追加</li>
+              <li><strong>指骨骨幹部</strong>：<strong>shortening・angulation・rotation</strong>を 2 方向で確認。回旋は画像で判断不可、ベッドサイドで爪面を見る</li>
+              <li><strong>PIP 関節脱臼</strong>：<strong>Wilson 骨折（中節骨基部掌側骨片）／V サイン（脱臼後の不整合）</strong>を真側面で確認</li>
+              <li><strong>骨性 mallet</strong>：DIP 真側面で末節骨基部背側の三角骨片</li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">⑥ 見落としやすい所見・特殊サイン</h4>
+            <ul class="dx-imaging__list">
+              <li><strong>Terry-Thomas sign</strong>（SL 解離）：scapholunate gap ≥ 3 mm</li>
+              <li><strong>spilled teacup sign</strong>：月状骨脱臼（側面で月状骨が掌側に傾く）</li>
+              <li><strong>signet ring sign</strong>：舟状骨の DISI（dorsal intercalated segment instability）</li>
+              <li><strong>fat pad sign</strong>：navicular fat stripe の消失 → 舟状骨骨折／橈骨遠位端骨折の間接所見</li>
+              <li><strong>三角骨背側剥離骨片</strong>：側面・斜位で背側に小さい骨片（AP では見えない）</li>
+              <li><strong>小児の骨端線</strong>：Salter-Harris 分類（特に基節骨基部の SH II）／若木骨折は片側皮質のみ</li>
+              <li><strong>pseudo-dislocation</strong>：小児の骨端線を脱臼と誤認しないよう左右比較</li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">⑦ CT／MRI を追加するタイミング</h4>
+            <ul class="dx-imaging__list">
+              <li><strong>CT</strong>：橈骨遠位端の関節内骨折／月状骨周囲脱臼の確定／第 1 中手骨基部の関節内骨折／中手骨頸部の許容内角を超える転位</li>
+              <li><strong>MRI</strong>：occult 舟状骨骨折（感度 96%）／UCL 損傷（Stener 病変）／TFCC 損傷</li>
+              <li><strong>scaphoid view 再撮影 10〜14 日後</strong>：MRI が困難なら骨吸収で骨折線が顕在化するのを待つ</li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">⑧ 整復・固定後の再撮影</h4>
+            <ul class="dx-imaging__list">
+              <li><strong>橈骨遠位端骨折</strong>：整復後に <strong>橈骨高・橈骨傾斜・volar tilt</strong> が許容範囲か再確認</li>
+              <li><strong>PIP 関節脱臼</strong>：整復後の側面で<strong>関節面の同心性</strong>を確認、Wilson 骨折の戻りを評価</li>
+              <li><strong>中手骨頸部</strong>：整復後の角度を測定、紹介状に添付</li>
+              <li>固定後は<strong>必ず神経血管チェック</strong>（指先の色・温度・知覚・運動）を装着前後で比較記載</li>
+            </ul>
+          </details>
+
+          <!-- 治療リファレンス -->
+          <details class="dx-imaging" id="rxPanel">
+            <summary>治療リファレンス：整復・固定・抗菌薬・処置</summary>
+
+            <h4 class="dx-rules-l2__group">徒手整復</h4>
+            <ul class="dx-imaging__list">
+              <li><strong>橈骨遠位端骨折</strong>：背側転位の Colles は<strong>牽引 + 掌屈 + 尺屈整復</strong>。整復後の透視 or 即時 X 線確認、シーネ固定。再転位例は整形へ</li>
+              <li><strong>PIP 関節脱臼（背側型）</strong>：軸方向牽引 + 背側押し戻し。整復後の側副靭帯・volar plate を再評価、軽度屈曲位バディ固定</li>
+              <li><strong>月状骨周囲脱臼／月状骨脱臼</strong>：ER で粗整復を試みるが、原則<strong>整形即コール</strong>。観血整復・経皮ピンニング適応</li>
+              <li><strong>整復不能・血流障害・皮膚緊張</strong>：X 線確認前でも整復を検討。試行は 1 〜 2 回まで</li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">固定の選択</h4>
+            <ul class="dx-imaging__list">
+              <li><strong>sugar tong splint</strong>：橈骨遠位端骨折／三角骨背側剥離（前腕回旋制限）</li>
+              <li><strong>thumb spica splint</strong>：舟状骨骨折疑い／第1中手骨基部骨折／ゲームキーパー母指</li>
+              <li><strong>ulnar/radial gutter splint</strong>：中手骨頸部骨折／指の側方安定が必要なケース</li>
+              <li><strong>buddy taping</strong>：PIP 関節脱臼整復後／靭帯損傷で骨折なし</li>
+              <li><strong>DIP 伸展位固定（stack splint / aluminum splint）</strong>：Mallet finger は 6 週間絶対曲げない</li>
+              <li><strong>PIP 伸展位固定</strong>：総指伸筋腱中央索断裂は 4 〜 6 週間</li>
+              <li><strong>非整形外科医がギプスでぐるぐる巻きの誘惑</strong>：コンパートメントのリスク。<strong>シーネ（splint）</strong>で初期対応</li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">開放骨折・fight bite・汚染創</h4>
+            <ul class="dx-imaging__list">
+              <li><strong>開放骨折</strong>：洗浄（生食 1 〜 3 L）＋抗菌薬（第 1 世代セフェム = セファゾリン）＋破傷風予防接種（既往 5 年以上で追加）＋整形即コンサルト</li>
+              <li><strong>fight bite</strong>（MP 背側咬創）：単純縫合は禁。<strong>ユナシン®（SBT/ABPC）</strong>静注、伸筋腱断裂・関節内感染を評価、整形フォロー必須</li>
+              <li><strong>汚染創</strong>：洗浄優先、デブリードマン、創縁鈍化なら整形と相談で二期的閉鎖</li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">鎮痛・処置</h4>
+            <ul class="dx-imaging__list">
+              <li><strong>NSAIDs / アセトアミノフェン</strong>：腎機能・出血リスクで選択</li>
+              <li><strong>ハマトラ（hematoma block）</strong>：橈骨遠位端骨折の整復時に有効、リドカイン 1% 5〜10 mL</li>
+              <li><strong>神経ブロック</strong>：上腕／腋窩神経ブロックは整形と相談</li>
+              <li><strong>爪下血腫ドレナージ</strong>：50% 以上の血腫は 18G 針 or 焼灼ペンで穿孔。爪甲剥離なら爪床縫合まで</li>
+            </ul>
+          </details>
+
+          <!-- disposition -->
+          <details class="dx-imaging" id="dispoPanel">
+            <summary>disposition の目安</summary>
+
+            <h4 class="dx-rules-l2__group">30 秒で決める（5 択マネジメント）</h4>
+            <ul class="dx-rules-l2__list">
+              <li class="dx-rule is-critical">
+                <div class="dx-rule__if"><span class="dx-rule__tag">即時整形</span><span>開放骨折／整復不能脱臼／血管神経損傷／月状骨周囲脱臼／コンパートメント</span></div>
+                <div class="dx-rule__then"><strong>夜間・休日でも整形コール</strong>。気道・出血の安定化 → 洗浄・抗菌薬・破傷風 → 手術室</div>
+              </li>
+              <li class="dx-rule">
+                <div class="dx-rule__if"><span class="dx-rule__tag">入院整形</span><span>反復脱臼・複合靭帯損傷／fight bite で関節炎所見／手内コンパートメント疑いで観察必要</span></div>
+                <div class="dx-rule__then">入院 + 翌朝コンサルト。抗菌薬・挙上・厳重 5P 観察</div>
+              </li>
+              <li class="dx-rule">
+                <div class="dx-rule__if"><span class="dx-rule__tag">帰宅手術</span><span>転位の強い橈骨遠位端骨折／Bennett・Rolando 骨折／Jersey finger／Stener 病変</span></div>
+                <div class="dx-rule__then">待機手術（10 日以内に整形外来）。シーネ固定 + 紹介状で帰宅</div>
+              </li>
+              <li class="dx-rule">
+                <div class="dx-rule__if"><span class="dx-rule__tag">帰宅保存</span><span>転位の少ない橈骨遠位端骨折／舟状骨遠位極・腰部転位なし／Mallet finger／中央索断裂／PIP 脱臼整復後／中手骨頸部骨折で許容内角内</span></div>
+                <div class="dx-rule__then">適切な固定 + 整形外来 1 週以内予約。固定後 5P 観察を本人に教える</div>
+              </li>
+              <li class="dx-rule">
+                <div class="dx-rule__if"><span class="dx-rule__tag">再診不要</span><span>単純な指打撲／爪下血腫ドレナージ後の改善例／単純な指尖部裂創</span></div>
+                <div class="dx-rule__then">疼痛増悪・腫脹増大・指先色調変化で再受診を指示。書面交付</div>
+              </li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">観察時間・フォロー間隔サマリー</h4>
+            <ul class="dx-imaging__list">
+              <li><strong>10〜14 日後再撮影 or MRI</strong>：舟状骨疑い（初回 X 線陰性）</li>
+              <li><strong>5P 観察 30 分毎</strong>：コンパートメント疑い・整復直後・タイトな固定</li>
+              <li><strong>6 週間 DIP 伸展位固定</strong>：Mallet finger（絶対曲げない）</li>
+              <li><strong>4〜6 週間 PIP 伸展位固定</strong>：総指伸筋腱中央索断裂</li>
+              <li><strong>3 週バディ固定</strong>：PIP 関節脱臼整復後</li>
+              <li><strong>1 週以内整形外来</strong>：保存治療例の標準フォロー</li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">社会軸・特殊状況</h4>
+            <ul class="dx-imaging__list">
+              <li><strong>利き手・職業</strong>：音楽家・職人・スポーツ選手は閾値を下げて整形紹介。橈骨遠位端骨折の手術適応に直結</li>
+              <li><strong>高齢者の橈骨遠位端骨折</strong>：脆弱性骨折の入口 → <a href="疾患詳細/骨粗鬆症治療.html">骨粗鬆症治療</a> の介入機会。骨密度・FRAX 評価を紹介状に明記</li>
+              <li><strong>小児の骨端線骨折</strong>：Salter-Harris 分類で親に予後説明、整形フォロー必須</li>
+              <li><strong>fight bite</strong>：感染管理 + 社会的事情（DV／暴力）のヒアリング</li>
+              <li><strong>反復受診・機転不釣り合い</strong>：DV／NAI（非偶発的外傷）スクリーニング</li>
+              <li><strong>独居高齢者・利き手固定</strong>：ADL 維持困難 → 入院・社会調整を検討</li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">退室前ピットフォール</h4>
+            <ul class="dx-rules-l2__list">
+              <li class="dx-rule is-pitfall">
+                <div class="dx-rule__if"><span class="dx-rule__tag">注意</span><span>初回 X 線陰性で「捻挫」帰宅</span></div>
+                <div class="dx-rule__then">舟状骨は occult fracture が多い。<strong>身体所見 1 つでも陽性なら固定 + 10〜14 日後再評価</strong></div>
+              </li>
+              <li class="dx-rule is-pitfall">
+                <div class="dx-rule__if"><span class="dx-rule__tag">注意</span><span>Mallet finger を「打撲」「突指」で経過観察</span></div>
+                <div class="dx-rule__then">DIP 単独伸展を必ず確認。<strong>6 週間絶対曲げない</strong>と家族にも口頭説明</div>
+              </li>
+              <li class="dx-rule is-pitfall">
+                <div class="dx-rule__if"><span class="dx-rule__tag">注意</span><span>中央索断裂を見逃して放置</span></div>
+                <div class="dx-rule__then">受傷直後は PIP 伸展可で正常に見える。<strong>1 か月後にボタン指変形</strong>として戻ってくる</div>
+              </li>
+              <li class="dx-rule is-pitfall">
+                <div class="dx-rule__if"><span class="dx-rule__tag">注意</span><span>固定後の神経血管チェック忘れ</span></div>
+                <div class="dx-rule__then">装着前後で比較。<strong>5P（pain/pallor/pulseless/paresthesia/paralysis）</strong>を本人にも教えて悪化時即受診</div>
+              </li>
+              <li class="dx-rule is-pitfall">
+                <div class="dx-rule__if"><span class="dx-rule__tag">注意</span><span>指の回旋変形を見落とす</span></div>
+                <div class="dx-rule__then">伸展位ではわからない。<strong>屈曲位で爪面が舟状骨を向くか</strong>確認</div>
+              </li>
+              <li class="dx-rule is-pitfall">
+                <div class="dx-rule__if"><span class="dx-rule__tag">注意</span><span>橈骨遠位端骨折で尺骨茎状突起骨折を見落とす</span></div>
+                <div class="dx-rule__then">51〜66% に併発。<strong>橈骨遠位端を見つけたら尺骨茎状突起も確認</strong></div>
+              </li>
+              <li class="dx-rule is-pitfall">
+                <div class="dx-rule__if"><span class="dx-rule__tag">注意</span><span>fight bite を単純な裂創として縫合のみ</span></div>
+                <div class="dx-rule__then">伸筋腱断裂・関節内感染のリスク。<strong>洗浄 + 抗菌薬（ユナシン®）+ 整形フォロー</strong>が必須</div>
+              </li>
+              <li class="dx-rule is-pitfall">
+                <div class="dx-rule__if"><span class="dx-rule__tag">注意</span><span>非整形外科医がギプス（cast）でぐるぐる巻き</span></div>
+                <div class="dx-rule__then">圧迫が強くコンパートメント誘発。<strong>シーネ（splint）</strong>で初期対応、整形が cast に切り替える</div>
+              </li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">退室前チェック</h4>
+            <ul class="dx-checklist__list">
+              <li><label><input type="checkbox" data-key="dispo-5p"> <span><strong>固定後の 5P（色・温・脈・知覚・運動）を本人に教えた</strong> <span class="dx-checklist__sub">悪化時は即受診と書面で説明</span></span></label></li>
+              <li><label><input type="checkbox" data-key="dispo-ortho"> <span><strong>整形外科外来の日時と紹介状を確定した</strong> <span class="dx-checklist__sub">受診先連絡先・紹介状を渡したか</span></span></label></li>
+              <li><label><input type="checkbox" data-key="dispo-abx"> <span><strong>開放骨折／fight bite の抗菌薬・破傷風予防接種を確定した</strong> <span class="dx-checklist__sub">既往 5 年以上で追加、ユナシン®継続の段取り</span></span></label></li>
+              <li><label><input type="checkbox" data-key="dispo-dominant"> <span><strong>利き手・職業・運転制限を説明した</strong> <span class="dx-checklist__sub">手関節固定後の運転は道交法違反の可能性</span></span></label></li>
+              <li><label><input type="checkbox" data-key="dispo-elevate"> <span><strong>患肢挙上・三角巾・氷罨法の指示を紙で渡した</strong> <span class="dx-checklist__sub">夜間就寝時の挙上も含む</span></span></label></li>
+              <li><label><input type="checkbox" data-key="dispo-mallet"> <span><strong>Mallet finger は DIP を 1 度も曲げないと家族にも口頭説明</strong> <span class="dx-checklist__sub">入浴・着替えでの曲げ忘れが最頻</span></span></label></li>
+            </ul>
+
+            <a class="dx-node dx-node--external" href="疾患詳細/橈骨遠位端骨折.html" style="margin-top: 14px;">
+              <div class="dx-node__title">上肢骨折の固定（参考）</div>
+              <div class="dx-node__sub">橈骨遠位端骨折・手指骨折のシーネ巻き方</div>
+            </a>
+          </details>
+
+          <!-- 出典・関連リンク -->
+          <details class="dx-imaging" id="refsPanel">
+            <summary>出典・関連リンク</summary>
+
+            <h4 class="dx-rules-l2__group">疾患詳細ページ</h4>
+            <ul class="dx-imaging__list">
+              <li><a href="疾患詳細/橈骨遠位端骨折.html">橈骨遠位端骨折</a>／<a href="疾患詳細/舟状骨骨折.html">舟状骨骨折</a>／<a href="疾患詳細/第1中手骨基部骨折.html">第1中手骨基部骨折</a>／<a href="疾患詳細/中手骨頸部骨折.html">中手骨頸部骨折</a></li>
+              <li><a href="疾患詳細/上肢骨折の固定/手・指の骨折.html">手・指の骨折（中手骨／基節骨／中節骨／末節骨）</a>／<a href="疾患詳細/Mallet finger・Jersey finger.html">Mallet finger・Jersey finger</a>／<a href="疾患詳細/PIP関節脱臼.html">PIP 関節脱臼</a>／<a href="疾患詳細/ゲームキーパー母指.html">ゲームキーパー母指</a></li>
+              <li><a href="疾患詳細/月状骨周囲脱臼.html">月状骨周囲脱臼・月状骨脱臼</a>／<a href="疾患詳細/三角骨骨折.html">三角骨骨折（背側剥離）</a>／<a href="疾患詳細/中央索断裂・ボタン指変形.html">中央索断裂・ボタン指変形</a>／<a href="疾患詳細/末節骨骨折・爪外傷.html">末節骨骨折・爪外傷</a></li>
+              <li><a href="疾患詳細/TFCC損傷.html">TFCC 損傷</a>／<a href="疾患詳細/Fight bite.html">Fight bite</a>／<a href="疾患詳細/上肢末梢神経損傷.html">上肢末梢神経損傷</a></li>
+              <li><a href="疾患詳細/開放骨折.html">開放骨折</a>／<a href="疾患詳細/コンパートメント症候群.html">コンパートメント症候群</a>／<a href="疾患詳細/小児骨端線骨折.html">小児骨端線骨折</a></li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">関連の上肢ページ</h4>
+            <ul class="dx-imaging__list">
+              <li><a href="疾患詳細/上肢骨折の固定/前腕骨折.html">前腕骨折</a>／<a href="疾患詳細/上肢骨折の固定/肘周囲骨折.html">肘周囲骨折</a>／<a href="疾患詳細/橈骨頭骨折.html">橈骨頭骨折</a>／<a href="疾患詳細/上腕骨顆上骨折.html">上腕骨顆上骨折</a></li>
+              <li><a href="転倒.html">転倒</a>／<a href="肩の外傷・痛み.html">肩の外傷・痛み</a>／<a href="疾患詳細/骨粗鬆症治療.html">骨粗鬆症治療</a></li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">未作成（リンク予約）</h4>
+            <ul class="dx-imaging__list">
+              <li>Stener 病変（ゲームキーパー母指の手術適応サブセット）</li>
+              <li>固定法詳細：sugar tong splint／thumb spica splint／gutter splint／ペーパークリップ固定／手のコンパートメント症候群</li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">主要な参考文献</h4>
+            <ul class="dx-imaging__list">
+              <li>骨折ハンター（仲田和正・林寛之 監修系）— 第 4 章 高齢者・手関節痛、第 11〜14 章 小児／成人・手関節痛・手指痛</li>
+              <li>AO 分類（橈骨遠位端骨折）／Salter-Harris 分類（小児骨端線骨折）／Wilson 骨折（PIP 剥離）</li>
+              <li>UCL 損傷の MRI 感度・特異度、舟状骨各検査の感度・特異度（骨折ハンターより）</li>
+              <li>他科コンサルト実践マニュアル — 整形外科コンサルト文の標準書式</li>
+            </ul>
+
+            <p style="font-size:11px;color:var(--muted);margin-top:8px;">#ER #救急 #手関節 #手の外傷 #橈骨遠位端骨折 #舟状骨骨折 #Mallet #Jersey #PIP脱臼 #ゲームキーパー母指 #boxer's_fracture #FOOSH #整形外科</p>
           </details>
 
         </div>
       </div>
-
-      <h2>関連リンク・出典</h2>
-
-      <h3>疾患詳細ページ</h3>
-      <ul>
-        <li><a class="wiki-link" href="疾患詳細/上肢骨折の固定/橈骨遠位端骨折.html">橈骨遠位端骨折</a></li>
-        <li><a class="wiki-link" href="疾患詳細/舟状骨骨折.html">舟状骨骨折</a></li>
-        <li><a class="wiki-link" href="疾患詳細/第1中手骨基部骨折.html">第1中手骨基部骨折</a></li>
-        <li><a class="wiki-link" href="疾患詳細/中手骨頸部骨折.html">中手骨頸部骨折</a></li>
-        <li><a class="wiki-link" href="疾患詳細/上肢骨折の固定/手・指の骨折.html">手・指の骨折（中手骨／基節骨／中節骨／末節骨）</a></li>
-        <li><a class="wiki-link" href="疾患詳細/Mallet finger・Jersey finger.html">Mallet finger・Jersey finger</a></li>
-        <li><a class="wiki-link" href="疾患詳細/PIP関節脱臼.html">PIP 関節脱臼</a></li>
-        <li><a class="wiki-link" href="疾患詳細/ゲームキーパー母指.html">ゲームキーパー母指</a></li>
-      </ul>
-
-      <h3>関連の上肢ページ</h3>
-      <ul>
-        <li><a class="wiki-link" href="疾患詳細/上肢骨折の固定/前腕骨折.html">前腕骨折</a></li>
-        <li><a class="wiki-link" href="疾患詳細/上肢骨折の固定/肘周囲骨折.html">肘周囲骨折</a></li>
-        <li><a class="wiki-link" href="疾患詳細/橈骨頭骨折.html">橈骨頭骨折</a></li>
-        <li><a class="wiki-link" href="疾患詳細/上腕骨顆上骨折.html">上腕骨顆上骨折</a></li>
-        <li><a class="wiki-link" href="疾患詳細/開放骨折.html">開放骨折</a></li>
-        <li><a class="wiki-link" href="疾患詳細/コンパートメント症候群.html">コンパートメント症候群</a></li>
-        <li><a class="wiki-link" href="転倒.html">転倒</a></li>
-      </ul>
-
-      <h3>未作成（リンク予約）</h3>
-      <ul>
-        <li><span class="wiki-missing">月状骨周囲脱臼／月状骨脱臼</span></li>
-        <li><span class="wiki-missing">三角骨骨折（背側剥離）</span></li>
-        <li><span class="wiki-missing">総指伸筋腱中央索断裂・ボタン指変形</span></li>
-        <li><span class="wiki-missing">爪床裂創・爪下血腫の処置</span></li>
-        <li><span class="wiki-missing">sugar tong splint の巻き方</span> ／ <span class="wiki-missing">thumb spica splint の巻き方</span> ／ <span class="wiki-missing">gutter splint の巻き方</span> ／ <span class="wiki-missing">ペーパークリップ固定</span></li>
-        <li><span class="wiki-missing">手のコンパートメント症候群</span> ／ <span class="wiki-missing">Stener 病変</span></li>
-      </ul>
-
-      <h3>このページの主要骨格</h3>
-      <ul>
-        <li>骨折ハンター（仲田和正・林寛之 監修系）— 第4章 高齢者・手関節痛、第11〜14章 小児/成人・手関節痛・手指痛</li>
-        <li>AO 分類（橈骨遠位端骨折）／Salter-Harris 分類（小児骨端線骨折）／Wilson 骨折（PIP 剥離）</li>
-        <li>UCL 損傷の MRI 感度・特異度、舟状骨各検査の感度・特異度（骨折ハンターより）</li>
-      </ul>
-
-      <p>#ER #救急 #手関節 #手の外傷 #橈骨遠位端骨折 #舟状骨骨折 #Mallet #Jersey #PIP脱臼 #ゲームキーパー母指 #boxer's_fracture #FOOSH #整形外科</p>
 
     </article>
   </main>
@@ -788,24 +1091,14 @@
 
   <script>
   (function(){
-    const flowBox = document.getElementById('flowBox');
-    const flowBoxClose = document.getElementById('flowBoxClose');
-
-    if (flowBox && flowBoxClose) {
-      const dismiss = () => { flowBox.hidden = true; };
-      flowBoxClose.addEventListener('click', dismiss);
-      flowBoxClose.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); dismiss(); }
-      });
-    }
-
     // 来院後チェックリスト：localStorage 永続化 + per-panel リセット
     const STORAGE_KEY = 'wrist-hand-dx-checklist-v1';
     let stored = {};
     try { stored = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); } catch (_) {}
-    const allBoxes = document.querySelectorAll('.dx-checklist__list input[type="checkbox"]');
+    const allBoxes = document.querySelectorAll('.dx-checklist__list input[type="checkbox"], input[type="checkbox"][data-key]');
     allBoxes.forEach(cb => {
       const key = cb.dataset.key;
+      if (!key) return;
       if (stored[key]) cb.checked = true;
       cb.addEventListener('change', () => {
         if (cb.checked) stored[key] = true; else delete stored[key];
@@ -827,7 +1120,7 @@
     });
 
     // パネル開閉状態を localStorage で復元
-    ['historyPanel', 'examPanel', 'rulesL2Panel', 'imagingPanel'].forEach(id => {
+    ['historyPanel', 'examPanel', 'rulesL2Panel', 'imagingPanel', 'imagingReadPanel', 'rxPanel', 'dispoPanel', 'refsPanel'].forEach(id => {
       const el = document.getElementById(id);
       if (!el) return;
       const key = `wrist-hand-${id}-open-v1`;
@@ -842,6 +1135,108 @@
     if (navBack) navBack.addEventListener('click', () => {
       if (window.history.length > 1) history.back();
       else window.location.href = 'index.html';
+    });
+
+    // === Peek プレビュー ===
+    // フローのノードで内部アンカー（#...）はモーダルで対象セクションを
+    // クローン表示。外部ページへのリンク（.html）は通常遷移。長押しの OS
+    // メニューも抑制してタップと同じ挙動に統一。
+    const PEEK_SELECTOR = 'a.dx-node[href^="#"]';
+    let peekOverlay = null;
+
+    function createPeekOverlay() {
+      const overlay = document.createElement('div');
+      overlay.className = 'peek-modal';
+      overlay.innerHTML =
+        '<div class="peek-modal__sheet" role="dialog" aria-modal="true" aria-labelledby="peekTitle">' +
+          '<div class="peek-modal__handle" aria-hidden="true"></div>' +
+          '<header class="peek-modal__header">' +
+            '<span class="peek-modal__title" id="peekTitle">プレビュー</span>' +
+            '<button type="button" class="peek-modal__close" aria-label="閉じる">✕</button>' +
+          '</header>' +
+          '<div class="peek-modal__body"></div>' +
+        '</div>';
+      document.body.appendChild(overlay);
+      return overlay;
+    }
+
+    // 対象 ID をピーク向けに解決。dx-rule__then のように内側の div を指す
+    // 場合は親 <li class="dx-rule"> を採用して if/then を一緒に見せる。
+    function resolvePeekTarget(id) {
+      const el = document.getElementById(id);
+      if (!el) return null;
+      const rule = el.closest('li.dx-rule');
+      if (rule) return rule;
+      return el;
+    }
+
+    function deriveTitle(target, id) {
+      if (target.tagName === 'DETAILS') {
+        const sum = target.querySelector('summary');
+        if (sum) return sum.textContent.trim();
+      }
+      const ifNode = target.querySelector('.dx-rule__if');
+      if (ifNode) {
+        const clone = ifNode.cloneNode(true);
+        clone.querySelectorAll('.dx-rule__tag').forEach(t => t.remove());
+        return clone.textContent.trim();
+      }
+      const ntitle = target.querySelector('.dx-node__title');
+      if (ntitle) return ntitle.textContent.trim();
+      return id;
+    }
+
+    function openPeek(id) {
+      const target = resolvePeekTarget(id);
+      if (!target) return false;
+      if (!peekOverlay) peekOverlay = createPeekOverlay();
+
+      peekOverlay.querySelector('.peek-modal__title').textContent = deriveTitle(target, id);
+
+      const bodyEl = peekOverlay.querySelector('.peek-modal__body');
+      bodyEl.innerHTML = '';
+      const clone = target.cloneNode(true);
+      clone.removeAttribute('id');
+      clone.querySelectorAll('[id]').forEach(el => el.removeAttribute('id'));
+      if (clone.tagName === 'DETAILS') clone.open = true;
+      clone.querySelectorAll('details').forEach(d => { d.open = true; });
+      bodyEl.appendChild(clone);
+      bodyEl.scrollTop = 0;
+
+      peekOverlay.classList.add('is-open');
+      document.body.style.overflow = 'hidden';
+      return true;
+    }
+
+    function closePeek() {
+      if (!peekOverlay) return;
+      peekOverlay.classList.remove('is-open');
+      document.body.style.overflow = '';
+    }
+
+    document.addEventListener('click', (e) => {
+      if (peekOverlay && peekOverlay.classList.contains('is-open')) {
+        if (e.target.classList.contains('peek-modal__close')) { e.preventDefault(); closePeek(); return; }
+        if (e.target === peekOverlay) { closePeek(); return; }
+      }
+      const link = e.target.closest(PEEK_SELECTOR);
+      if (!link) return;
+      const href = link.getAttribute('href');
+      if (!href || href.length <= 1 || href[0] !== '#') return;
+      e.preventDefault();
+      openPeek(href.substring(1));
+    });
+
+    document.addEventListener('contextmenu', (e) => {
+      const link = e.target.closest(PEEK_SELECTOR);
+      if (!link) return;
+      e.preventDefault();
+      const href = link.getAttribute('href');
+      if (href && href.length > 1 && href[0] === '#') openPeek(href.substring(1));
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && peekOverlay && peekOverlay.classList.contains('is-open')) closePeek();
     });
   })();
   </script>

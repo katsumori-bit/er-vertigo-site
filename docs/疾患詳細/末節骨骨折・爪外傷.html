@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="color-scheme" content="light dark" />
+  <title>末節骨骨折・爪外傷 | ER ノート</title>
+  <link rel="stylesheet" href="../er-note.css" />
+  <style>
+    /* ============ クイックタップ（3 つを開閉トリガー） ============ */
+    .dx-quick {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px;
+      margin: 10px 0 4px;
+    }
+    .dx-quick__btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      padding: 10px 6px;
+      border-radius: 10px;
+      background: color-mix(in srgb, var(--accent) 10%, var(--surface));
+      border: 1.5px solid var(--accent);
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 13px;
+      line-height: 1.2;
+      text-align: center;
+      cursor: pointer;
+      transition: background 120ms ease;
+    }
+    .dx-quick__btn:hover {
+      background: color-mix(in srgb, var(--accent) 18%, var(--surface));
+    }
+    .dx-quick__icon { font-size: 20px; }
+    .dx-quick__sub {
+      font-size: 10.5px;
+      font-weight: 500;
+      color: var(--muted);
+    }
+
+    /* ============ 同時評価 3 列（血管・神経・典型像） ============ */
+    .dx-tri {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+      margin: 6px 0 4px;
+      align-items: start;
+    }
+    .dx-tri__card {
+      background: var(--surface);
+      border-radius: 10px;
+      padding: 10px 12px;
+      border: 1.5px solid color-mix(in srgb, var(--text) 18%, transparent);
+    }
+    .dx-tri__card--vasc { border-color: #c0392b; background: color-mix(in srgb, #c0392b 6%, var(--surface)); }
+    .dx-tri__card--neuro { border-color: #b5651d; background: color-mix(in srgb, #b5651d 6%, var(--surface)); }
+    .dx-tri__card--typical { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 6%, var(--surface)); }
+    .dx-tri__title {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 800;
+      font-size: 13.5px;
+      margin-bottom: 4px;
+    }
+    .dx-tri__card--vasc .dx-tri__title { color: #c0392b; }
+    .dx-tri__card--neuro .dx-tri__title { color: #b5651d; }
+    .dx-tri__list {
+      margin: 0;
+      padding-left: 18px;
+      font-size: 12.5px;
+      line-height: 1.5;
+    }
+    .dx-tri__list li { margin: 2px 0; }
+
+    /* details 形式の血管/神経カード：summary にチェック印、開閉時の挙動 */
+    details.dx-tri__card { padding: 0; }
+    details.dx-tri__card > summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 10px 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 800;
+      font-size: 13.5px;
+    }
+    details.dx-tri__card > summary::-webkit-details-marker { display: none; }
+    details.dx-tri__card > summary::after {
+      content: "▸";
+      margin-left: auto;
+      font-size: 12px;
+      color: var(--muted);
+      transition: transform 120ms ease;
+    }
+    details.dx-tri__card[open] > summary::after { transform: rotate(90deg); }
+    details.dx-tri__card--vasc > summary { color: #c0392b; }
+    details.dx-tri__card--neuro > summary { color: #b5651d; }
+    details.dx-tri__card > .dx-tri__list { padding: 0 14px 12px 30px; }
+    details.dx-tri__card > .dx-tri__hint {
+      padding: 0 14px 6px 30px;
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    /* ============ 大きな details ボックス（画像/治療方針/コンサル文） ============ */
+    details.dx-box {
+      background: var(--surface);
+      border: 1.5px solid color-mix(in srgb, var(--text) 18%, transparent);
+      border-radius: 10px;
+      margin: 10px 0;
+      scroll-margin-top: 8px;
+    }
+    details.dx-box > summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 12px 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 800;
+      font-size: 14.5px;
+    }
+    details.dx-box > summary::-webkit-details-marker { display: none; }
+    details.dx-box > summary::after {
+      content: "▸";
+      margin-left: auto;
+      font-size: 13px;
+      color: var(--muted);
+      transition: transform 120ms ease;
+    }
+    details.dx-box[open] > summary::after { transform: rotate(90deg); }
+    details.dx-box[open] {
+      border-color: var(--accent);
+    }
+    details.dx-box > .dx-box__body {
+      padding: 0 14px 14px;
+    }
+
+    /* スマホで 1 列に */
+    @media (max-width: 640px) {
+      .dx-quick { gap: 6px; }
+      .dx-quick__btn { padding: 8px 4px; font-size: 11.5px; border-radius: 8px; }
+      .dx-quick__icon { font-size: 17px; }
+      .dx-quick__sub { font-size: 9.5px; }
+
+      .dx-tri { grid-template-columns: 1fr; gap: 8px; }
+      .dx-tri__card { padding: 8px 10px; }
+      details.dx-tri__card > summary { padding: 8px 10px; font-size: 12.5px; }
+      details.dx-tri__card > .dx-tri__list { padding: 0 12px 10px 26px; }
+      .dx-tri__title { font-size: 12.5px; }
+      .dx-tri__list { font-size: 12px; }
+
+      details.dx-box > summary { padding: 10px 12px; font-size: 13.5px; }
+      details.dx-box > .dx-box__body { padding: 0 12px 12px; }
+    }
+
+    /* ============ 区切り帯（最小限） ============ */
+    .dx-step {
+      margin: 18px 0 6px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 11.5px;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+    }
+    .dx-step::before, .dx-step::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: color-mix(in srgb, var(--text) 18%, transparent);
+    }
+
+    /* コピペ用テンプレ */
+    .dx-template {
+      background: color-mix(in srgb, var(--text) 4%, var(--surface));
+      border-left: 3px solid var(--accent);
+      border-radius: 6px;
+      padding: 10px 12px;
+      margin: 6px 0 0;
+      font-size: 13px;
+      line-height: 1.6;
+      white-space: pre-wrap;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+    .dx-template__hint {
+      font-size: 11px;
+      color: var(--muted);
+      margin: 0 0 4px;
+    }
+  </style>
+</head>
+<body>
+  <header class="hokuto-top">
+    <a class="hokuto-top__btn" href="../薬剤情報.html">
+      <span class="hokuto-top__icon">℞</span><span>薬剤情報</span>
+    </a>
+    <a class="hokuto-top__btn" href="../表計算.html">
+      <span class="hokuto-top__icon">⊞</span><span>表計算</span>
+    </a>
+  </header>
+
+  <main class="hokuto-main">
+    <article class="note-shell">
+      <h1 class="page-title">末節骨骨折・爪外傷</h1>
+
+      <!-- スマホですぐ開きたい 3 つ -->
+      <nav class="dx-quick" aria-label="クイックタップ">
+        <button class="dx-quick__btn" type="button" data-target="img-read">
+          <span>処置の選択</span>
+          <span class="dx-quick__sub">血腫比 / 爪床 / Seymour</span>
+        </button>
+        <button class="dx-quick__btn" type="button" data-target="plan">
+          <span>治療方針</span>
+          <span class="dx-quick__sub">保存が原則・例外を見抜く</span>
+        </button>
+        <button class="dx-quick__btn" type="button" data-target="consult">
+          <span>コンサル文</span>
+          <span class="dx-quick__sub">そのまま貼れる</span>
+        </button>
+      </nav>
+
+      <!-- 同時評価 3 列：典型像は常時、爪下血腫・爪甲剥離・Seymour を 3 軸で -->
+      <div class="dx-step"><span>同時並行で評価する 3 軸</span></div>
+      <div class="dx-tri">
+
+        <div class="dx-tri__card dx-tri__card--typical">
+          <div class="dx-tri__title">爪下血腫評価</div>
+          <ul class="dx-tri__list">
+            <li>受傷機転：ドア挟み・ハンマー打撲・重量物落下</li>
+            <li><strong>血腫の比率</strong>を爪面積で評価</li>
+            <li>50% 未満：症状で判断（疼痛強ければドレナージ）</li>
+            <li><strong>50% 以上：18 G 針で穿孔ドレナージ</strong></li>
+            <li>焼灼ペン代用可、ER ではライターより 18 G 推奨</li>
+          </ul>
+        </div>
+
+        <details class="dx-tri__card dx-tri__card--vasc">
+          <summary>爪甲剥離・爪床裂創</summary>
+          <p class="dx-tri__hint">爪・爪床・骨が密着しているため、<strong>骨折は実質的に開放骨折</strong>扱いとなりやすい。</p>
+          <ul class="dx-tri__list">
+            <li>爪甲浮上・剥離の有無を確認</li>
+            <li>爪床裂創あり：<strong>6-0 吸収糸（vicryl rapide）</strong>で縫合</li>
+            <li>処置後は爪甲をサージカルテープで還納（生体スプリント）</li>
+            <li>時間がなければ洗浄＋テープ固定で翌日整形外来でも可</li>
+            <li>指動脈触知・CRT・固有指神経感覚は左右比較</li>
+          </ul>
+        </details>
+
+        <details class="dx-tri__card dx-tri__card--neuro">
+          <summary>Seymour 骨折</summary>
+          <p class="dx-tri__hint">小児で<strong>必ず鑑別</strong>。外見は単純な末節骨骨折に見えるが、内実は開放性骨端線骨折で緊急コンサルト案件。</p>
+          <ul class="dx-tri__list">
+            <li>小児の末節骨基部 Salter-Harris I/II ＋ 爪床裂創</li>
+            <li>爪が近位皮膚の下に潜り込む／浮上する所見</li>
+            <li><strong>開放性骨端線骨折扱い</strong>で緊急洗浄</li>
+            <li>抗菌薬（第 1 世代セフェム）＋ 整形緊急コンサルト</li>
+            <li>放置で骨髄炎・成長障害のリスク</li>
+          </ul>
+        </details>
+      </div>
+
+      <!-- 処置の選択 -->
+      <details class="dx-box" id="img-read">
+        <summary><span>処置の選択（評価フロー）</span></summary>
+        <div class="dx-box__body">
+          <p style="margin: 0 0 8px; font-size: 12.5px; color: var(--muted);">末節骨骨折は<strong>手の骨折で最多</strong>（骨折ハンター p.2178）。骨・爪床・爪甲が密着しているため、爪外傷を併発すれば<strong>実質的に開放骨折</strong>として扱う。</p>
+          <ul>
+            <li><strong>1. 爪下血腫の比率判定</strong>
+              <ul>
+                <li>爪面積に対する血腫の割合を視診で評価</li>
+                <li>50% 未満：疼痛強ければドレナージ、弱ければ経過観察可</li>
+                <li><strong>50% 以上：18 G 針穿孔</strong>。穴は爪を貫くだけで爪床は刺さない（血腫でスペースあり）</li>
+                <li>4-0 ナイロン糸を 2〜3 本穴に通し、ハイドロサイト被覆で毛細管現象ドレナージ</li>
+              </ul>
+            </li>
+            <li><strong>2. 爪甲評価</strong>
+              <ul>
+                <li>爪甲浮上・剥離あり：抜爪まではせず、洗浄してサージカルテープで還納</li>
+                <li>爪床裂創（露見）あり：6-0 vicryl rapide で縫合</li>
+                <li>抜爪後に爪床裂創がなかったケースもあるため、剥離が軽度なら抜爪は避ける</li>
+              </ul>
+            </li>
+            <li><strong>3. 骨折部位の確認（指 Xp AP / lateral）</strong>
+              <ul>
+                <li><strong>tuft（房・先端）</strong>：粉砕、最多。整復不要、保存</li>
+                <li><strong>骨幹部</strong>：縦骨折は保存、横骨折＋転位は手術検討</li>
+                <li><strong>基部</strong>：Mallet 様骨片・Seymour 鑑別必須</li>
+              </ul>
+            </li>
+            <li><strong>4. Seymour 骨折鑑別（小児）</strong>
+              <ul>
+                <li>年齢：骨端線残存期（おおむね 16 歳以下）</li>
+                <li>側面像で末節骨基部に骨端線越え骨折線</li>
+                <li>近位爪郭から爪が浮上・脱出していれば<strong>強く疑う</strong></li>
+                <li>該当例は<strong>緊急洗浄 ＋ 抗菌薬 ＋ 整形緊急コンサルト</strong></li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </details>
+
+      <!-- 治療方針 -->
+      <details class="dx-box" id="plan">
+        <summary><span>治療方針（骨折型 × 爪外傷 × 年齢）</span></summary>
+        <div class="dx-box__body">
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>パターン</th><th>所見</th><th>方針</th><th>ER の動き</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>tuft 骨折＋爪下血腫 50% 未満</td>
+                  <td>圧痛・腫脹のみ、爪正常</td>
+                  <td><strong>保存（帰宅）</strong></td>
+                  <td>aluminum splint 固定、後日整形外来</td>
+                </tr>
+                <tr>
+                  <td>tuft 骨折＋爪下血腫 50% 以上</td>
+                  <td>爪下に広範な血腫</td>
+                  <td><strong>18 G 針ドレナージ ＋ 保存</strong></td>
+                  <td>穿孔・糸ドレナージ・固定</td>
+                </tr>
+                <tr>
+                  <td>爪甲剥離・爪床裂創あり</td>
+                  <td>爪甲浮上・爪床から出血</td>
+                  <td><strong>洗浄 ＋ 爪床縫合（6-0）＋ 爪甲還納</strong></td>
+                  <td>処置後 Stack/aluminum splint、翌日整形</td>
+                </tr>
+                <tr>
+                  <td>骨幹部横骨折＋転位</td>
+                  <td>段差・短縮あり</td>
+                  <td><strong>整復 → 整形相談（手術考慮）</strong></td>
+                  <td>シーネ固定、当日〜翌日整形</td>
+                </tr>
+                <tr>
+                  <td>基部骨折＋ Mallet 様骨片</td>
+                  <td>DIP 伸展不能、関節内骨片</td>
+                  <td><strong>DIP 伸展位 6 週固定 or 手術</strong></td>
+                  <td>aluminum/Stack splint 伸展位、整形相談</td>
+                </tr>
+                <tr>
+                  <td><strong>Seymour 骨折（小児）</strong></td>
+                  <td>骨端線越え＋爪床裂創、爪浮上</td>
+                  <td><strong>開放骨折扱い／緊急洗浄・抗菌薬・整形緊急コンサル</strong></td>
+                  <td>当日コンサル、手術室搬入準備</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3>ER で打つ手</h3>
+          <ul>
+            <li><strong>洗浄</strong>：生食 100〜500 mL、汚染強ければ大量洗浄</li>
+            <li><strong>爪下血腫ドレナージ</strong>：18 G 針で爪を穿孔、4-0 ナイロン糸を 2〜3 本入れる</li>
+            <li><strong>爪床縫合</strong>：6-0 吸収糸（vicryl rapide 等）、爪甲はサージカルテープで還納</li>
+            <li><strong>固定</strong>：aluminum splint or Stack splint を DIP に当てる（PIP / MP はフリー）。爪自体がシーネとなるため過度に厳密でなくて可</li>
+            <li><strong>Mallet 様変形</strong>：DIP 伸展位 6 週（途中で曲げると腱が離れる、患者教育必須。詳細は <a class="wiki-link" href="Mallet%20finger・Jersey%20finger.html">Mallet finger・Jersey finger</a>）</li>
+          </ul>
+
+          <h3>抗菌薬の使い分け（骨折ハンター p.2197）</h3>
+          <ul>
+            <li><strong>単純な末節骨骨折＋爪下血腫</strong>：洗浄可能・汚染軽度なら<strong>抗菌薬不要</strong>（投与群と非投与群で感染率に差なし）</li>
+            <li><strong>汚染強・骨露出・Seymour 骨折</strong>：第 1 世代セフェム（セファゾリン）適応</li>
+            <li><strong>破傷風トキソイド</strong>：最終接種から 5 年以上経過なら追加</li>
+          </ul>
+
+          <h3>Disposition</h3>
+          <ul>
+            <li>単純な末節骨骨折＋爪外傷処置済：帰宅保存、後日整形外来再診</li>
+            <li>Mallet 様骨片・基部骨折で転位大：帰宅手術 or 翌日整形</li>
+            <li><strong>Seymour 骨折：即時整形コンサルト（帰さない）</strong></li>
+          </ul>
+
+          <h3>ピットフォール</h3>
+          <ul>
+            <li>小児で <strong>Seymour 骨折を見逃す</strong>（外見は単純な末節骨骨折に見える → 骨髄炎・成長障害）</li>
+            <li>爪下血腫 50% 以上を放置（疼痛遷延・爪変形）</li>
+            <li>基部の Mallet 様骨片を見逃して保存治療 → 槌指変形残存</li>
+            <li>抜爪を急ぐ（軽度剥離なら抜爪不要、爪は生体スプリント）</li>
+          </ul>
+        </div>
+      </details>
+
+      <!-- コンサル文 -->
+      <details class="dx-box" id="consult">
+        <summary><span>コンサル文（カルテに貼る）</span></summary>
+        <div class="dx-box__body">
+          <p class="dx-template__hint">『他科コンサルト実践マニュアル』の院内紹介状フォーマットに準拠（【目的】【疾患】【既往歴】【内服薬】【ADL】【現病歴】）。外来フォロー型／Seymour は緊急コンサルト。</p>
+          <div class="dx-template">【目的】整形外科外来でのご加療依頼／（Seymour 骨折なら緊急コンサルト）。
+【疾患】#1 [右/左][示指/中指/環指/小指/母指]末節骨骨折（[槌指型／粉砕／基部／tuft]）、爪外傷（[爪下血腫 X%／爪甲剥離／爪床裂創]）、※小児なら Seymour 骨折の可能性
+【既往歴】[特記事項なし／○○]
+【内服薬】[なし／○○]
+【ADL（受傷前）】[自立／○○]
+【現病歴】[年齢]歳[男/女]性。[受傷機転：挟まれ／ハンマー／重量物落下／突指]で受傷し、[来院経緯]で来院。
+ ・身体所見：末節骨直上の圧痛・腫脹 [+]、爪下血腫 [X %]、爪甲浮上・剥離 [+/−]、爪床裂創 [+/−]、Mallet 様変形 [+/−]
+ ・血管：指動脈触知 [良好]、毛細血管再充満 [良好]、左右差なし
+ ・神経：固有指神経の感覚 [問題なし]
+ ・画像：指 Xp AP/lateral で末節骨 [tuft／骨幹／基部] の骨折線、転位 [なし／あり]、※小児なら骨端線越え [なし／あり]
+ ・ER 処置：洗浄（生食）、爪下血腫ドレナージ（18G 針）、Stack splint or aluminum splint 固定、爪甲はサージカルテープで還納
+よろしくお願いいたします。</div>
+        </div>
+      </details>
+
+      <!-- 関連ハブ -->
+      <details class="dx-box">
+        <summary><span>関連ハブ・隣接疾患</span></summary>
+        <div class="dx-box__body">
+          <ul>
+            <li>主訴入口：<a class="wiki-link" href="../手関節・手の外傷.html">手関節・手の外傷</a></li>
+            <li>隣接疾患：<a class="wiki-link" href="Mallet%20finger・Jersey%20finger.html">Mallet finger・Jersey finger</a> ／ <a class="wiki-link" href="小児骨端線骨折.html">小児骨端線骨折</a>（Seymour 骨折の鑑別）</li>
+            <li>処置：18 G 針による爪下血腫ドレナージ ／ 6-0 吸収糸での爪床縫合 ／ aluminum・Stack splint 固定</li>
+            <li>合併症対応：骨髄炎・爪変形・成長障害（Seymour 骨折）はフォロー必須</li>
+          </ul>
+        </div>
+      </details>
+
+      <!-- 出典 -->
+      <details class="dx-box">
+        <summary><span>出典</span></summary>
+        <div class="dx-box__body">
+          <ul>
+            <li>増井伸高. 骨折ハンター. 中外医学社. 2019.（末節骨骨折・爪外傷：p.2178〜2207、抗菌薬：p.2197）</li>
+            <li>佐藤弘明 ほか. 他科コンサルト実践マニュアル. 羊土社.</li>
+            <li>Tintinalli's Emergency Medicine（Hand Trauma, Nail Bed Injuries 章）.</li>
+          </ul>
+        </div>
+      </details>
+
+    </article>
+  </main>
+
+  <nav class="hokuto-bottom">
+    <button class="hokuto-bottom__btn" type="button" id="navBack">
+      <span class="hokuto-bottom__icon">←</span><span>戻る</span>
+    </button>
+    <a class="hokuto-bottom__btn" href="../ツール.html">
+      <span class="hokuto-bottom__icon">⚙</span><span>ツール</span>
+    </a>
+    <a class="hokuto-bottom__btn" href="../index.html">
+      <span class="hokuto-bottom__icon">⌂</span><span>ホーム</span>
+    </a>
+  </nav>
+
+  <script>
+  (function(){
+    document.querySelectorAll('.dx-quick__btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.dataset.target;
+        const target = document.getElementById(id);
+        if (!target) return;
+        target.open = true;
+        target.scrollIntoView({behavior: 'smooth', block: 'start'});
+      });
+    });
+
+    const navBack = document.getElementById('navBack');
+    if (navBack) navBack.addEventListener('click', () => {
+      if (window.history.length > 1) history.back();
+      else window.location.href = '../index.html';
+    });
+  })();
+  </script>
+</body>
+</html>

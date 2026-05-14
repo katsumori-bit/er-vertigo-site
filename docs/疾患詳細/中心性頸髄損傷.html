@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="color-scheme" content="light dark" />
+  <title>中心性頸髄損傷 | ER ノート</title>
+  <link rel="stylesheet" href="../er-note.css" />
+  <style>
+    /* ============ クイックタップ（3 つを開閉トリガー） ============ */
+    .dx-quick {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px;
+      margin: 10px 0 4px;
+    }
+    .dx-quick__btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      padding: 10px 6px;
+      border-radius: 10px;
+      background: color-mix(in srgb, var(--accent) 10%, var(--surface));
+      border: 1.5px solid var(--accent);
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 13px;
+      line-height: 1.2;
+      text-align: center;
+      cursor: pointer;
+      transition: background 120ms ease;
+    }
+    .dx-quick__btn:hover {
+      background: color-mix(in srgb, var(--accent) 18%, var(--surface));
+    }
+    .dx-quick__icon { font-size: 20px; }
+    .dx-quick__sub {
+      font-size: 10.5px;
+      font-weight: 500;
+      color: var(--muted);
+    }
+
+    /* ============ 同時評価 3 列（血管・神経・典型像） ============ */
+    .dx-tri {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+      margin: 6px 0 4px;
+      align-items: start;
+    }
+    .dx-tri__card {
+      background: var(--surface);
+      border-radius: 10px;
+      padding: 10px 12px;
+      border: 1.5px solid color-mix(in srgb, var(--text) 18%, transparent);
+    }
+    .dx-tri__card--vasc { border-color: #c0392b; background: color-mix(in srgb, #c0392b 6%, var(--surface)); }
+    .dx-tri__card--neuro { border-color: #b5651d; background: color-mix(in srgb, #b5651d 6%, var(--surface)); }
+    .dx-tri__card--typical { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 6%, var(--surface)); }
+    .dx-tri__title {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 800;
+      font-size: 13.5px;
+      margin-bottom: 4px;
+    }
+    .dx-tri__card--vasc .dx-tri__title { color: #c0392b; }
+    .dx-tri__card--neuro .dx-tri__title { color: #b5651d; }
+    .dx-tri__list {
+      margin: 0;
+      padding-left: 18px;
+      font-size: 12.5px;
+      line-height: 1.5;
+    }
+    .dx-tri__list li { margin: 2px 0; }
+
+    /* details 形式の血管/神経カード：summary にチェック印、開閉時の挙動 */
+    details.dx-tri__card { padding: 0; }
+    details.dx-tri__card > summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 10px 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 800;
+      font-size: 13.5px;
+    }
+    details.dx-tri__card > summary::-webkit-details-marker { display: none; }
+    details.dx-tri__card > summary::after {
+      content: "▸";
+      margin-left: auto;
+      font-size: 12px;
+      color: var(--muted);
+      transition: transform 120ms ease;
+    }
+    details.dx-tri__card[open] > summary::after { transform: rotate(90deg); }
+    details.dx-tri__card--vasc > summary { color: #c0392b; }
+    details.dx-tri__card--neuro > summary { color: #b5651d; }
+    details.dx-tri__card > .dx-tri__list { padding: 0 14px 12px 30px; }
+    details.dx-tri__card > .dx-tri__hint {
+      padding: 0 14px 6px 30px;
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    /* ============ 大きな details ボックス（画像/治療方針/コンサル文） ============ */
+    details.dx-box {
+      background: var(--surface);
+      border: 1.5px solid color-mix(in srgb, var(--text) 18%, transparent);
+      border-radius: 10px;
+      margin: 10px 0;
+      scroll-margin-top: 8px;
+    }
+    details.dx-box > summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 12px 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 800;
+      font-size: 14.5px;
+    }
+    details.dx-box > summary::-webkit-details-marker { display: none; }
+    details.dx-box > summary::after {
+      content: "▸";
+      margin-left: auto;
+      font-size: 13px;
+      color: var(--muted);
+      transition: transform 120ms ease;
+    }
+    details.dx-box[open] > summary::after { transform: rotate(90deg); }
+    details.dx-box[open] {
+      border-color: var(--accent);
+    }
+    details.dx-box > .dx-box__body {
+      padding: 0 14px 14px;
+    }
+
+    /* スマホで 1 列に */
+    @media (max-width: 640px) {
+      .dx-quick { gap: 6px; }
+      .dx-quick__btn { padding: 8px 4px; font-size: 11.5px; border-radius: 8px; }
+      .dx-quick__icon { font-size: 17px; }
+      .dx-quick__sub { font-size: 9.5px; }
+
+      .dx-tri { grid-template-columns: 1fr; gap: 8px; }
+      .dx-tri__card { padding: 8px 10px; }
+      details.dx-tri__card > summary { padding: 8px 10px; font-size: 12.5px; }
+      details.dx-tri__card > .dx-tri__list { padding: 0 12px 10px 26px; }
+      .dx-tri__title { font-size: 12.5px; }
+      .dx-tri__list { font-size: 12px; }
+
+      details.dx-box > summary { padding: 10px 12px; font-size: 13.5px; }
+      details.dx-box > .dx-box__body { padding: 0 12px 12px; }
+    }
+
+    /* ============ 区切り帯（最小限） ============ */
+    .dx-step {
+      margin: 18px 0 6px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 11.5px;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+    }
+    .dx-step::before, .dx-step::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: color-mix(in srgb, var(--text) 18%, transparent);
+    }
+
+    /* コピペ用テンプレ */
+    .dx-template {
+      background: color-mix(in srgb, var(--text) 4%, var(--surface));
+      border-left: 3px solid var(--accent);
+      border-radius: 6px;
+      padding: 10px 12px;
+      margin: 6px 0 0;
+      font-size: 13px;
+      line-height: 1.6;
+      white-space: pre-wrap;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+    .dx-template__hint {
+      font-size: 11px;
+      color: var(--muted);
+      margin: 0 0 4px;
+    }
+  </style>
+</head>
+<body>
+  <header class="hokuto-top">
+    <a class="hokuto-top__btn" href="../薬剤情報.html">
+      <span class="hokuto-top__icon">℞</span><span>薬剤情報</span>
+    </a>
+    <a class="hokuto-top__btn" href="../表計算.html">
+      <span class="hokuto-top__icon">⊞</span><span>表計算</span>
+    </a>
+  </header>
+
+  <main class="hokuto-main">
+    <article class="note-shell">
+      <h1 class="page-title">中心性頸髄損傷（Central Cord Syndrome）</h1>
+
+      <!-- スマホですぐ開きたい 3 つ -->
+      <nav class="dx-quick" aria-label="クイックタップ">
+        <button class="dx-quick__btn" type="button" data-target="img-read">
+          <span>画像の見方</span>
+          <span class="dx-quick__sub">CT 陰性でも MRI 必須</span>
+        </button>
+        <button class="dx-quick__btn" type="button" data-target="plan">
+          <span>治療方針</span>
+          <span class="dx-quick__sub">MAP 維持 + 早期減圧</span>
+        </button>
+        <button class="dx-quick__btn" type="button" data-target="consult">
+          <span>コンサル文</span>
+          <span class="dx-quick__sub">そのまま貼れる</span>
+        </button>
+      </nav>
+
+      <!-- 同時評価 3 列：典型像は常時、血管・神経は折りたたみ -->
+      <div class="dx-step"><span>同時並行で評価する 3 軸</span></div>
+      <div class="dx-tri">
+
+        <div class="dx-tri__card dx-tri__card--typical">
+          <div class="dx-tri__title">典型像「cape-like 上肢優位麻痺」</div>
+          <ul class="dx-tri__list">
+            <li>高齢者・頸椎症あり＋<strong>顔面打撲（過伸展機転）</strong></li>
+            <li><strong>上肢 &gt; 下肢の運動麻痺</strong>（特に手内筋）</li>
+            <li>cape-like distribution（肩〜上肢遠位）</li>
+            <li><strong>sacral sparing</strong>：肛門周囲感覚・直腸緊張保たれる</li>
+            <li>最頻の incomplete spinal cord injury</li>
+            <li>軽微外傷でも頸椎症性脊柱管狭窄で発症</li>
+          </ul>
+        </div>
+
+        <details class="dx-tri__card dx-tri__card--vasc">
+          <summary>機序</summary>
+          <p class="dx-tri__hint"><strong>過伸展機転</strong>で脊柱管狭窄部位の脊髄中心部が圧挫される。脊髄中心部・側索内側の損傷が優位となり、結果として<strong>上肢優位麻痺</strong>を呈する（古典的な皮質脊髄路の層構造説は近年再評価あり）。</p>
+          <ul class="dx-tri__list">
+            <li>高齢者の<strong>軽微な顔面打撲・転倒</strong>（古典的）</li>
+            <li>頸椎症性脊柱管狭窄＋過伸展で挟み撃ち</li>
+            <li>若年では<strong>高エネルギー外傷</strong>（交通事故・転落）</li>
+            <li>FOOSH 後の頸部過伸展でも発症</li>
+            <li>CT で骨傷なしが多い（pure soft tissue injury）</li>
+          </ul>
+        </details>
+
+        <details class="dx-tri__card dx-tri__card--neuro">
+          <summary>ASIA 評価</summary>
+          <p class="dx-tri__hint"><strong>ASIA Impairment Scale</strong>で incomplete/complete を分類。中心性頸髄損傷は通常 <strong>ASIA B/C/D</strong>（sacral sparing あり）。</p>
+          <ul class="dx-tri__list">
+            <li><strong>上肢 MMT</strong>：肩〜手指まで筋ごとに記録（特に手内筋）</li>
+            <li><strong>下肢 MMT</strong>：相対的に保たれる</li>
+            <li><strong>感覚レベル</strong>と pinprick / light touch を分けて評価</li>
+            <li><strong>肛門周囲感覚・直腸緊張</strong>（sacral sparing の確認）</li>
+            <li>球海綿体反射、Hoffmann、Babinski</li>
+            <li>神経原性ショック（徐脈＋低血圧）の有無</li>
+          </ul>
+        </details>
+      </div>
+
+      <!-- 画像の見方 -->
+      <details class="dx-box" id="img-read">
+        <summary><span>画像の見方</span></summary>
+        <div class="dx-box__body">
+          <ul>
+            <li><strong>頸椎 CT</strong>：まず骨傷の有無を評価
+              <ul>
+                <li>骨折・脱臼・棘突起骨折・椎体終板損傷</li>
+                <li>頸椎症性変化、骨棘、OPLL（後縦靱帯骨化症）</li>
+                <li><strong>骨傷なしでも中心性頸髄損傷は否定できない</strong></li>
+              </ul>
+            </li>
+            <li><strong>頸椎 MRI（必須）</strong>：神経症状があれば必ず撮像
+              <ul>
+                <li><strong>T2 高信号</strong>（脊髄内信号変化）：損傷の決定的所見</li>
+                <li>脊柱管狭窄の程度（軽度／中等度／重度）</li>
+                <li>椎間板ヘルニア、靱帯損傷（前縦靱帯・黄色靱帯）</li>
+                <li>STIR で椎前血腫・棘間靱帯損傷</li>
+                <li>脊髄浮腫の範囲（予後因子）</li>
+              </ul>
+            </li>
+            <li><strong>ピットフォール</strong>：高齢者の顔面打撲で「CT 異常なし」と帰宅させない。神経所見があれば MRI を追加</li>
+            <li>動的撮影（屈曲・伸展側面像）は急性期には行わない（症状増悪リスク）</li>
+          </ul>
+        </div>
+      </details>
+
+      <!-- 治療方針 -->
+      <details class="dx-box" id="plan">
+        <summary><span>治療方針（急性期管理 + 手術適応）</span></summary>
+        <div class="dx-box__body">
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>パターン</th><th>所見</th><th>方針</th><th>ER の動き</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>典型例（高齢・過伸展）</td>
+                  <td>上肢優位麻痺＋ MRI T2 高信号</td>
+                  <td><strong>入院・脊椎外科即コンサルト</strong></td>
+                  <td>カラー固定、MAP 85-90、MRI 手配</td>
+                </tr>
+                <tr>
+                  <td>持続性脊柱管狭窄</td>
+                  <td>重度の狭窄＋神経症状進行</td>
+                  <td><strong>早期減圧手術（24h 以内）</strong></td>
+                  <td>脊椎外科に手術タイミング相談</td>
+                </tr>
+                <tr>
+                  <td>骨折・脱臼合併</td>
+                  <td>頸椎不安定性あり</td>
+                  <td><strong>手術（固定＋減圧）</strong></td>
+                  <td>厳重カラー固定、手術準備</td>
+                </tr>
+                <tr>
+                  <td>軽症（ASIA D）</td>
+                  <td>上肢軽度麻痺のみ</td>
+                  <td>入院・保存 → 改善次第手術判断</td>
+                  <td>入院、リハ科コンサルト</td>
+                </tr>
+                <tr>
+                  <td>神経原性ショック合併</td>
+                  <td>徐脈＋低血圧</td>
+                  <td><strong>輸液＋昇圧（NA / DOA）</strong></td>
+                  <td>A-line、CVC、ICU 入室考慮</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3>ER で打つ手</h3>
+          <ul>
+            <li><strong>頸椎硬性カラー固定</strong>、in-line stabilization</li>
+            <li><strong>ベッド上 30° head-up</strong>（脊髄浮腫対策）</li>
+            <li><strong>MAP 85-90 mmHg 維持</strong>（7 日間目標、AOSpine guideline）：輸液＋昇圧</li>
+            <li>神経原性ショック対策：徐脈には<strong>アトロピン</strong>、低血圧には<strong>ノルアドレナリン</strong></li>
+            <li>導尿（尿閉対策）、DVT 予防（圧迫法から）</li>
+            <li><strong>ステロイドはルーチン非推奨</strong>（NASCIS II/III 以降、AOSpine guideline 2017 推奨せず）</li>
+            <li>呼吸管理：高位頸髄損傷（C3-5 障害）では呼吸不全に注意</li>
+            <li>体温管理（低体温に注意、神経原性ショックでは保温）</li>
+            <li><strong>脊椎外科コール</strong>（早期減圧手術 24h 以内の評価）</li>
+            <li>家族説明：約 75% が再歩行可能だが、手内筋・巧緻運動の改善は遅い</li>
+          </ul>
+        </div>
+      </details>
+
+      <!-- コンサル文 -->
+      <details class="dx-box" id="consult">
+        <summary><span>コンサル文（カルテに貼る）</span></summary>
+        <div class="dx-box__body">
+          <p class="dx-template__hint">『他科コンサルト実践マニュアル』の院内紹介状フォーマットに準拠（【目的】【疾患】【既往歴】【内服薬】【ADL】【現病歴】）。緊急コンサルト型。</p>
+          <div class="dx-template">【目的】脊椎外科への緊急コンサルト依頼／MRI と早期評価が必要。
+【疾患】#1 中心性頸髄損傷（Central Cord Syndrome）、ASIA Impairment Scale [B／C／D]、過伸展機転、頸椎症性脊柱管狭窄症 [疑い／確定／否定]
+【既往歴】頸椎症 [なし／あり]、変形性頸椎症 [なし／あり]、その他 [○○]
+【内服薬】[なし／○○]
+【ADL（受傷前）】[自立／○○]
+【現病歴】[年齢]歳[男/女]性。[受傷機転：転倒で顔面打撲（過伸展機転）／軽微外傷／FOOSH での頸部過伸展]で受傷し、[来院経緯]で来院。
+ ・身体所見：上肢優位の脱力（cape-like distribution）、手内筋萎縮 [+/−]、上肢 MMT [筋ごとに記載]、下肢 MMT [筋ごとに記載]
+ ・血管：両側橈骨動脈触知 [良好]、神経原性ショック [なし]
+ ・神経：ASIA [B/C/D]、感覚レベル、肛門周囲感覚 [問題なし／低下]、球海綿体反射 [+]、Hoffmann [+/−]、Babinski [+/−]
+ ・画像：頸椎 CT で骨傷 [なし／あり]、頸椎 MRI で脊髄内信号変化（T2 高信号）、頸椎症性脊柱管狭窄 [軽度／中等度／重度]、椎間板ヘルニア [なし／あり]
+ ・ER 処置：硬性カラー固定、in-line stabilization、ベッド上 30° head-up、MAP 85-90 mmHg 維持、脊椎外科コール、ステロイドはルーチン非推奨
+よろしくお願いいたします。</div>
+        </div>
+      </details>
+
+      <!-- 関連ハブ -->
+      <details class="dx-box">
+        <summary><span>関連ハブ・隣接疾患</span></summary>
+        <div class="dx-box__body">
+          <ul>
+            <li>主訴入口：<a class="wiki-link" href="../頸部外傷・頸部痛.html">頸部外傷・頸部痛</a> ／ <a class="wiki-link" href="../転倒.html">転倒</a></li>
+            <li>鑑別：前脊髄症候群／Brown-Séquard 症候群／後脊髄症候群／complete SCI</li>
+            <li>合併評価：頸椎骨折・脱臼、頭部外傷、顔面外傷</li>
+            <li>処置：硬性カラー固定 ／ in-line stabilization ／ MAP 維持</li>
+            <li>ピットフォール：CT 陰性で帰宅させない／顔面打撲で頸髄症状を確認しない／ステロイドルーチン投与</li>
+          </ul>
+        </div>
+      </details>
+
+      <!-- 出典 -->
+      <details class="dx-box">
+        <summary><span>出典</span></summary>
+        <div class="dx-box__body">
+          <ul>
+            <li>AOSpine Clinical Practice Guideline for the Management of Acute Spinal Cord Injury. 2017.</li>
+            <li>Fehlings MG, et al. A Clinical Practice Guideline for the Management of Patients With Acute Spinal Cord Injury: Recommendations on the Type and Timing of Surgical Decompression. Global Spine J. 2017.</li>
+            <li>Tintinalli's Emergency Medicine 9th ed. Spinal Injuries.</li>
+            <li>佐藤弘明 ほか. 他科コンサルト実践マニュアル. 羊土社.</li>
+          </ul>
+        </div>
+      </details>
+
+    </article>
+  </main>
+
+  <nav class="hokuto-bottom">
+    <button class="hokuto-bottom__btn" type="button" id="navBack">
+      <span class="hokuto-bottom__icon">←</span><span>戻る</span>
+    </button>
+    <a class="hokuto-bottom__btn" href="../ツール.html">
+      <span class="hokuto-bottom__icon">⚙</span><span>ツール</span>
+    </a>
+    <a class="hokuto-bottom__btn" href="../index.html">
+      <span class="hokuto-bottom__icon">⌂</span><span>ホーム</span>
+    </a>
+  </nav>
+
+  <script>
+  (function(){
+    document.querySelectorAll('.dx-quick__btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.dataset.target;
+        const target = document.getElementById(id);
+        if (!target) return;
+        target.open = true;
+        target.scrollIntoView({behavior: 'smooth', block: 'start'});
+      });
+    });
+
+    const navBack = document.getElementById('navBack');
+    if (navBack) navBack.addEventListener('click', () => {
+      if (window.history.length > 1) history.back();
+      else window.location.href = '../index.html';
+    });
+  })();
+  </script>
+</body>
+</html>

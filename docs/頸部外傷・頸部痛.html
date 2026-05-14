@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="color-scheme" content="light dark" />
-  <title>頸部外傷・頸部痛 | ER ノート</title>
+  <title>頸部外傷 | ER ノート</title>
   <link rel="stylesheet" href="er-note.css" />
   <style>
     /* 単純化診療フロー（このページ専用） */
@@ -13,12 +13,6 @@
       display: flex; align-items: center; justify-content: space-between;
       gap: 0.5rem; cursor: pointer; padding: 2px 0;
     }
-    .flow-box__hint {
-      font-size: 0.72rem; font-weight: 600; color: var(--muted);
-      letter-spacing: 0.02em; padding: 2px 8px; border-radius: 999px;
-      border: 1px solid color-mix(in srgb, var(--text) 20%, transparent);
-    }
-
     /* ===== 診療フロー本体 ===== */
     .flow-canvas {
       background: var(--surface); border-radius: 10px;
@@ -58,10 +52,6 @@
       border-color: #c0392b;
     }
     .dx-node--danger .dx-node__title { color: #c0392b; }
-    .dx-node--action {
-      background: color-mix(in srgb, var(--text) 5%, var(--surface));
-      border-style: dashed;
-    }
     .dx-node--external {
       text-decoration: none; color: var(--text); border-style: dashed;
       position: relative;
@@ -80,16 +70,15 @@
     .dx-layer--root   { grid-template-columns: 1fr; justify-items: center; }
     .dx-layer--root > * { max-width: 360px; }
     .dx-layer--branch { grid-template-columns: 1fr 1fr; }
-    .dx-layer--quad   { grid-template-columns: repeat(4, 1fr); }
 
     /* 矢印 */
     .dx-arrow {
       display: flex; flex-direction: column; align-items: center; justify-content: center;
-      position: relative; margin: 4px 0; min-height: 44px;
+      position: relative; margin: 2px 0; min-height: 26px;
       color: var(--muted); font-size: 11.5px; font-weight: 600;
     }
     .dx-arrow::before {
-      content: ""; width: 2px; height: 100%; min-height: 38px;
+      content: ""; width: 2px; height: 100%; min-height: 22px;
       background: color-mix(in srgb, var(--text) 35%, transparent);
     }
     .dx-arrow::after {
@@ -98,23 +87,18 @@
       border-left: 5px solid transparent; border-right: 5px solid transparent;
       border-top: 7px solid color-mix(in srgb, var(--text) 35%, transparent);
     }
-    .dx-arrow__label {
-      background: var(--surface); padding: 1px 8px; border-radius: 999px;
-      border: 1px solid color-mix(in srgb, var(--text) 18%, transparent);
-      position: absolute; left: 50%; top: 50%;
-      transform: translate(-50%, -50%); white-space: nowrap; z-index: 1;
-    }
-
     /* 分岐 Y 字 */
     .dx-fork {
       display: grid; grid-template-columns: 1fr 1fr;
       position: relative; min-height: 38px; margin: 2px 0 4px;
     }
+    .dx-fork--triple { grid-template-columns: repeat(3, 1fr); }
     .dx-fork::before {
       content: ""; position: absolute;
       top: 0; left: 25%; right: 25%; height: 2px;
       background: color-mix(in srgb, var(--text) 35%, transparent);
     }
+    .dx-fork--triple::before { left: 16.5%; right: 16.5%; }
     .dx-fork__leg {
       position: relative; display: flex; flex-direction: column;
       align-items: center; justify-content: flex-end;
@@ -136,12 +120,9 @@
       border: 1px solid color-mix(in srgb, var(--text) 18%, transparent);
       margin-bottom: 2px; z-index: 1;
     }
-    .dx-fork--quad { grid-template-columns: repeat(4, 1fr); }
-    .dx-fork--quad::before { left: 12.5%; right: 12.5%; }
-
-    /* 4列の疾患ツリー */
+    /* 疾患ツリー（3列） */
     .dx-trees {
-      display: grid; grid-template-columns: repeat(4, 1fr);
+      display: grid; grid-template-columns: repeat(3, 1fr);
       gap: 12px; align-items: start; margin-top: 4px;
     }
     .dx-tree { display: flex; flex-direction: column; gap: 6px; }
@@ -201,15 +182,14 @@
       .dx-arrow { min-height: 24px; margin: 1px 0; }
       .dx-arrow::before { min-height: 20px; width: 1.5px; }
       .dx-arrow::after { border-left-width: 4px; border-right-width: 4px; border-top-width: 6px; }
-      .dx-arrow__label { font-size: 8.5px; padding: 0 4px; line-height: 1.4; }
 
       .dx-fork { min-height: 22px; }
       .dx-fork::before { height: 1.5px; }
+      .dx-fork--triple::before { left: 16.5%; right: 16.5%; }
       .dx-fork__leg { min-height: 22px; padding-top: 2px; padding-bottom: 2px; font-size: 9px; }
       .dx-fork__leg::before { width: 1.5px; }
       .dx-fork__leg::after { border-left-width: 4px; border-right-width: 4px; border-top-width: 6px; }
       .dx-fork__label { font-size: 8.5px; padding: 0 4px; margin-bottom: 0; }
-      .dx-fork--quad::before { left: 12.5%; right: 12.5%; }
 
       .dx-trees { gap: 4px; }
       .dx-tree { gap: 3px; }
@@ -220,14 +200,6 @@
     }
 
     /* === 来院後チェック === */
-    .dx-arrival-divider {
-      margin: 18px 0 8px; display: flex; align-items: center; gap: 10px;
-      color: var(--muted); font-size: 11.5px; font-weight: 800; letter-spacing: 0.1em;
-    }
-    .dx-arrival-divider::before, .dx-arrival-divider::after {
-      content: ""; flex: 1; height: 1px;
-      background: color-mix(in srgb, var(--text) 18%, transparent);
-    }
     .dx-checklist {
       background: var(--surface); border-radius: 10px;
       border: 1.5px solid color-mix(in srgb, var(--text) 14%, transparent);
@@ -271,6 +243,21 @@
       text-decoration-color: color-mix(in srgb, var(--muted) 50%, transparent);
     }
     .dx-checklist__sub { color: var(--muted); font-size: 11px; font-weight: 500; }
+    .dx-checklist__action {
+      display: block;
+      margin-top: 6px;
+      padding: 5px 9px;
+      background: color-mix(in srgb, #d33 10%, transparent);
+      border-left: 3px solid #d33;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--text);
+      line-height: 1.45;
+    }
+    .dx-checklist__action::before { content: "⚠ "; color: #d33; font-weight: 800; }
+    .dx-checklist__action strong { color: #d33; }
+    .dx-checklist__action a { color: #d33; text-decoration: underline; font-weight: 600; }
 
     @media (max-width: 600px) {
       .dx-checklist { padding: 8px 10px; }
@@ -278,7 +265,6 @@
       .dx-checklist__list li { font-size: 11.5px; }
       .dx-checklist__sub { font-size: 10px; }
       .dx-checklist__reset { font-size: 9.5px; padding: 1px 6px; }
-      .dx-arrival-divider { font-size: 10px; margin: 14px 0 6px; }
     }
 
     /* === トリガー連動ルール === */
@@ -379,8 +365,105 @@
       .dx-imaging__list { font-size: 11.5px; }
     }
 
-    /* §メニュータイル非表示 */
-    .section-tiles { display: none !important; }
+    /* フロー peek からのみ参照される panel は可視には非表示（DOM は peek 用に保持） */
+    #historyPanel,
+    #examPanel,
+    #imagingPanel,
+    #imagingReadPanel,
+    #rulesL2Panel,
+    #rxPanel,
+    #dispoPanel,
+    #refsPanel { display: none !important; }
+
+    /* === Peek プレビュー === */
+    .peek-modal {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.5);
+      display: none;
+      align-items: flex-end;
+      justify-content: center;
+      z-index: 9999;
+      -webkit-backdrop-filter: blur(2px);
+      backdrop-filter: blur(2px);
+    }
+    .peek-modal.is-open { display: flex; }
+    .peek-modal__sheet {
+      background: var(--surface);
+      width: 100%;
+      max-width: 720px;
+      max-height: 85vh;
+      border-radius: 14px 14px 0 0;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 -6px 28px rgba(0,0,0,0.25);
+      animation: peek-slide-up 220ms ease-out;
+      overflow: hidden;
+      position: relative;
+    }
+    @keyframes peek-slide-up {
+      from { transform: translateY(30%); opacity: 0.4; }
+      to   { transform: translateY(0);   opacity: 1; }
+    }
+    .peek-modal__handle {
+      position: absolute;
+      top: 6px; left: 50%;
+      transform: translateX(-50%);
+      width: 36px; height: 4px;
+      border-radius: 999px;
+      background: color-mix(in srgb, var(--text) 22%, transparent);
+      pointer-events: none;
+    }
+    .peek-modal__header {
+      display: flex; align-items: flex-start; gap: 8px;
+      padding: 16px 14px 10px;
+      border-bottom: 1px solid color-mix(in srgb, var(--text) 12%, transparent);
+      background: var(--surface);
+      flex-shrink: 0;
+    }
+    .peek-modal__title {
+      flex: 1;
+      font-weight: 800;
+      font-size: 14.5px;
+      color: var(--text);
+      line-height: 1.3;
+    }
+    .peek-modal__close {
+      background: transparent;
+      border: 1px solid color-mix(in srgb, var(--text) 22%, transparent);
+      border-radius: 999px;
+      width: 30px; height: 30px;
+      cursor: pointer;
+      font-size: 14px;
+      color: var(--text);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      font-family: inherit;
+    }
+    .peek-modal__close:hover { background: color-mix(in srgb, var(--text) 6%, transparent); }
+    .peek-modal__body {
+      flex: 1;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      padding: 12px 16px 10px;
+      font-size: 13.5px;
+      line-height: 1.55;
+      color: var(--text);
+    }
+    /* peek 内で details は常に開いた状態で表示（JS で open=true を付与）。トップレベルのサマリーは peek ヘッダーと重複するため非表示 */
+    .peek-modal__body > details > summary { display: none; }
+    .peek-modal__body details > summary { pointer-events: none; }
+    /* checklist 内の reset ボタンも peek では機能しないので非表示 */
+    .peek-modal__body .dx-checklist__reset { display: none; }
+    @media (min-width: 720px) {
+      .peek-modal { align-items: center; padding: 24px; }
+      .peek-modal__sheet { border-radius: 14px; max-height: 80vh; }
+      .peek-modal__handle { display: none; }
+      @keyframes peek-slide-up {
+        from { transform: scale(0.96); opacity: 0; }
+        to   { transform: scale(1);    opacity: 1; }
+      }
+    }
+    a.dx-node { -webkit-touch-callout: none; }
   </style>
 </head>
 <body>
@@ -395,362 +478,649 @@
 
   <main class="hokuto-main">
     <article class="note-shell">
-      <h1 class="page-title">頸部外傷・頸部痛</h1>
+      <h1 class="page-title">頸部外傷</h1>
 
       <!-- 単純化診療フロー -->
       <div class="action-header flow-box" id="flowBox">
-        <div class="action-header__title flow-box__title" id="flowBoxClose" role="button" tabindex="0" aria-label="診療フローを閉じる">
-          <span>🗺 単純化診療フロー</span>
-          <span class="flow-box__hint">タップで閉じる ✕</span>
+        <div class="action-header__title flow-box__title">
+          <span>単純化診療フロー</span>
         </div>
 
         <div class="flow-canvas">
-          <div class="dx-flow" role="group" aria-label="頸部外傷・頸部痛の単純化診療フロー">
+          <div class="dx-flow" role="group" aria-label="頸部外傷の単純化診療フロー">
 
-            <!-- L0: Red flags -->
+            <!-- Root -->
             <div class="dx-layer dx-layer--root">
-              <a class="dx-node dx-node--decision dx-node--danger" href="#redflags">
-                <div class="dx-node__title">🚨 Red flags 確認</div>
-                <div class="dx-node__sub">呼吸不全／四肢麻痺／神経原性ショック／皮下気腫</div>
-              </a>
+              <div class="dx-node dx-node--decision">頸部外傷</div>
             </div>
+            <div class="dx-arrow"></div>
 
-            <div class="dx-fork">
-              <div class="dx-fork__leg"><span class="dx-fork__label">あり</span></div>
-              <div class="dx-fork__leg"><span class="dx-fork__label">なし</span></div>
-            </div>
-
+            <!-- 問診 + 身体診察（同時並行） -->
             <div class="dx-layer dx-layer--branch">
-              <a class="dx-node dx-node--danger" href="#redflags">
-                <div class="dx-node__title">緊急対応</div>
-                <div class="dx-node__sub">気道確保／in-line 固定／脊椎外科</div>
+              <a class="dx-node" href="#historyPanel">
+                <div class="dx-node__title">問診</div>
               </a>
-              <div class="dx-arrow"><span class="dx-arrow__label">↓ 機転で絞る</span></div>
+              <a class="dx-node" href="#examPanel">
+                <div class="dx-node__title">身体診察</div>
+              </a>
             </div>
+            <div class="dx-arrow"></div>
 
-            <!-- L1: 外傷の有無 -->
+            <!-- Canadian C-spine ＋ NEXUS（並列）/ 画像読み方 -->
+            <div class="dx-layer dx-layer--branch">
+              <a class="dx-node dx-node--judge" href="#rulesL2Panel">
+                <div class="dx-node__title">Canadian C-spine ＋ NEXUS</div>
+              </a>
+              <a class="dx-node dx-node--judge" href="#imagingReadPanel">
+                <div class="dx-node__title">頸椎 CT・MRI の読み方</div>
+              </a>
+            </div>
+            <div class="dx-arrow"></div>
+
+            <!-- 画像適応・撮影方向 -->
             <div class="dx-layer dx-layer--root">
-              <div class="dx-node dx-node--judge">外傷の有無は？</div>
+              <a class="dx-node dx-node--judge" href="#imagingPanel">
+                <div class="dx-node__title">画像適応＋撮影方向</div>
+              </a>
+            </div>
+            <div class="dx-arrow"></div>
+
+            <!-- 3 列の鑑別ツリー：骨傷 / 神経軸 / 血管・軟部 -->
+            <div class="dx-fork dx-fork--triple">
+              <div class="dx-fork__leg"><span class="dx-fork__label">骨傷</span></div>
+              <div class="dx-fork__leg"><span class="dx-fork__label">神経軸</span></div>
+              <div class="dx-fork__leg"><span class="dx-fork__label">血管・軟部</span></div>
             </div>
 
-            <div class="dx-fork dx-fork--quad">
-              <div class="dx-fork__leg"><span class="dx-fork__label">高エネ外傷</span></div>
-              <div class="dx-fork__leg"><span class="dx-fork__label">低エネ／高齢者</span></div>
-              <div class="dx-fork__leg"><span class="dx-fork__label">非外傷・致死的</span></div>
-              <div class="dx-fork__leg"><span class="dx-fork__label">非外傷・慢性</span></div>
-            </div>
-
-            <!-- L2/L3: 4列の疾患ツリー -->
             <div class="dx-trees">
 
-              <!-- 1) 高エネ外傷 -->
+              <!-- ① 骨傷（上位頸椎・下位頸椎） -->
               <div class="dx-tree">
                 <div class="dx-tree__group">上位頸椎（C1–2）</div>
-                <a class="dx-node dx-node--danger" href="疾患詳細/頸椎損傷.html">
+                <a class="dx-node dx-node--danger" href="疾患詳細/Jefferson骨折.html">
                   <div class="dx-node__title">Jefferson 骨折</div>
-                  <div class="dx-node__sub">C1 破裂・軸圧。横靱帯断裂で不安定</div>
+                  <div class="dx-node__sub">C1 破裂・軸圧／<strong>Rule of Spence ≥7 mm</strong>／横靱帯損傷で不安定</div>
                 </a>
-                <a class="dx-node dx-node--danger" href="疾患詳細/頸椎損傷.html">
+                <a class="dx-node dx-node--danger" href="疾患詳細/Hangman骨折.html">
                   <div class="dx-node__title">Hangman 骨折</div>
-                  <div class="dx-node__sub">C2 椎弓根。過伸展＋軸圧</div>
+                  <div class="dx-node__sub">C2 椎弓根（過伸展軸圧）／<strong>Type IIa は牽引禁忌</strong>／神経損傷は少</div>
+                </a>
+                <a class="dx-node dx-node--danger" href="疾患詳細/歯突起骨折.html">
+                  <div class="dx-node__title">歯突起骨折</div>
+                  <div class="dx-node__sub">高齢者で見落とし最多／<strong>Type II 不安定</strong>／Open mouth で除外不可</div>
                 </a>
 
                 <div class="dx-tree__group">下位頸椎（C3–7）</div>
                 <a class="dx-node dx-node--danger" href="疾患詳細/頸椎損傷.html">
                   <div class="dx-node__title">屈曲涙滴骨折</div>
-                  <div class="dx-node__sub">脊髄損傷の合併が多い</div>
+                  <div class="dx-node__sub">屈曲＋軸圧／<strong>脊髄損傷の合併が多い</strong>／非常に不安定</div>
                 </a>
                 <a class="dx-node dx-node--danger" href="疾患詳細/頸椎損傷.html">
                   <div class="dx-node__title">両側 facet 脱臼</div>
-                  <div class="dx-node__sub">50%以上前方転位・脊髄損傷高率</div>
+                  <div class="dx-node__sub">屈曲牽引／<strong>50% 以上前方転位</strong>・脊髄損傷高率</div>
                 </a>
-
-                <div class="dx-tree__group">血管・軟部</div>
-                <a class="dx-node dx-node--danger" href="#redflags">
-                  <div class="dx-node__title">椎骨動脈損傷（BCVI）</div>
-                  <div class="dx-node__sub">横突孔骨折／回旋外傷／後頭部痛</div>
+                <a class="dx-node" href="疾患詳細/頸椎損傷.html">
+                  <div class="dx-node__title">横突起骨折</div>
+                  <div class="dx-node__sub">単独でも<strong>椎骨動脈損傷スクリーニング</strong>を必須化</div>
                 </a>
-                <a class="dx-node dx-node--danger" href="#redflags">
-                  <div class="dx-node__title">喉頭・気管・食道損傷</div>
-                  <div class="dx-node__sub">皮下気腫・嗄声・嚥下時痛</div>
+                <a class="dx-node" href="疾患詳細/頸椎損傷.html">
+                  <div class="dx-node__title">棘突起骨折（Clay-shoveler）</div>
+                  <div class="dx-node__sub">C7 多／安定骨折／カラー固定で外来管理</div>
                 </a>
               </div>
 
-              <!-- 2) 低エネ・高齢者 -->
+              <!-- ② 神経軸（脊髄損傷・中心性頸髄損傷・SCIWORA） -->
               <div class="dx-tree">
-                <div class="dx-tree__group">高齢者の軽微外傷</div>
+                <div class="dx-tree__group">完全・不全脊髄損傷</div>
                 <a class="dx-node dx-node--danger" href="疾患詳細/頸椎損傷.html">
+                  <div class="dx-node__title">完全脊髄損傷（ASIA A）</div>
+                  <div class="dx-node__sub">運動・感覚完全消失／<strong>脊髄ショック判定は球海綿体反射</strong></div>
+                </a>
+                <a class="dx-node dx-node--danger" href="疾患詳細/中心性頸髄損傷.html">
                   <div class="dx-node__title">中心性頸髄損傷</div>
-                  <div class="dx-node__sub">過伸展。上肢＞下肢の麻痺</div>
+                  <div class="dx-node__sub">高齢の<strong>過伸展</strong>／<strong>上肢＞下肢</strong>（cape-like）／CT 陰性のことあり</div>
                 </a>
-                <a class="dx-node" href="疾患詳細/頸椎損傷.html">
-                  <div class="dx-node__title">歯突起骨折（Type II）</div>
-                  <div class="dx-node__sub">高齢者で見落としやすい</div>
+                <a class="dx-node dx-node--danger" href="疾患詳細/頸椎損傷.html">
+                  <div class="dx-node__title">前脊髄症候群</div>
+                  <div class="dx-node__sub">屈曲機転／<strong>運動・温痛覚消失・深部覚保たれる</strong>／予後不良</div>
                 </a>
-
-                <div class="dx-tree__group">むち打ち</div>
-                <a class="dx-node" href="#redflags">
-                  <div class="dx-node__title">外傷性頸部症候群</div>
-                  <div class="dx-node__sub">Quebec Grade I–IV</div>
+                <a class="dx-node dx-node--danger" href="疾患詳細/頸椎損傷.html">
+                  <div class="dx-node__title">Brown-Séquard 症候群</div>
+                  <div class="dx-node__sub">穿通外傷／同側運動・深部覚／対側温痛覚／予後比較的良</div>
                 </a>
 
                 <div class="dx-tree__group">小児</div>
-                <a class="dx-node dx-node--danger" href="#redflags">
+                <a class="dx-node dx-node--danger" href="疾患詳細/SCIWORA.html">
                   <div class="dx-node__title">SCIWORA</div>
-                  <div class="dx-node__sub">画像陰性で脊髄症状。MRI へ</div>
+                  <div class="dx-node__sub">小児／<strong>画像陰性で脊髄症状</strong>／MRI で信号変化を捉える</div>
+                </a>
+
+                <div class="dx-tree__group">外傷性神経根症</div>
+                <a class="dx-node" href="疾患詳細/頸椎損傷.html">
+                  <div class="dx-node__title">外傷性頸椎神経根症</div>
+                  <div class="dx-node__sub">椎間孔狭小化／単一神経根分布の上肢痛・しびれ</div>
                 </a>
               </div>
 
-              <!-- 3) 非外傷・致死的 -->
+              <!-- ③ 血管・軟部（BCVI・喉頭気管食道・whiplash） -->
               <div class="dx-tree">
-                <div class="dx-tree__group">中枢性</div>
-                <a class="dx-node dx-node--danger" href="#redflags">
-                  <div class="dx-node__title">髄膜炎</div>
-                  <div class="dx-node__sub">発熱＋項部硬直＋意識変容</div>
+                <div class="dx-tree__group">血管（BCVI）</div>
+                <a class="dx-node dx-node--danger" href="疾患詳細/椎骨動脈損傷BCVI.html">
+                  <div class="dx-node__title">椎骨動脈損傷</div>
+                  <div class="dx-node__sub"><strong>横突孔骨折／C1–3 損傷／頭蓋底骨折／Le Fort II/III</strong>／Modified Denver で拾う</div>
                 </a>
-                <a class="dx-node dx-node--danger" href="#redflags">
-                  <div class="dx-node__title">くも膜下出血</div>
-                  <div class="dx-node__sub">突発の頭頸部痛</div>
-                </a>
-
-                <div class="dx-tree__group">血管</div>
-                <a class="dx-node dx-node--danger" href="#redflags">
-                  <div class="dx-node__title">椎骨動脈解離</div>
-                  <div class="dx-node__sub">後頭部〜後頸部痛・回旋誘発</div>
-                </a>
-                <a class="dx-node dx-node--danger" href="#redflags">
-                  <div class="dx-node__title">頸動脈解離</div>
-                  <div class="dx-node__sub">一側性頸部痛・Horner・片麻痺</div>
+                <a class="dx-node dx-node--danger" href="疾患詳細/椎骨動脈損傷BCVI.html">
+                  <div class="dx-node__title">頸動脈損傷</div>
+                  <div class="dx-node__sub">頸部直達外力／<strong>Horner／片麻痺／頸部血管雑音</strong>／頸部 CTA</div>
                 </a>
 
-                <div class="dx-tree__group">感染</div>
-                <a class="dx-node dx-node--danger" href="#redflags">
-                  <div class="dx-node__title">咽後膿瘍</div>
-                  <div class="dx-node__sub">嚥下時痛・開口障害・発熱</div>
+                <div class="dx-tree__group">気道・消化管（頸部前面）</div>
+                <a class="dx-node dx-node--danger" href="疾患詳細/喉頭・気管・食道損傷.html">
+                  <div class="dx-node__title">喉頭・気管損傷</div>
+                  <div class="dx-node__sub">皮下気腫／嗄声／甲状軟骨触知異常／<strong>輪状軟骨圧迫禁忌</strong></div>
                 </a>
-                <a class="dx-node dx-node--danger" href="#redflags">
-                  <div class="dx-node__title">頸髄硬膜外膿瘍</div>
-                  <div class="dx-node__sub">発熱＋進行性四肢麻痺</div>
+                <a class="dx-node dx-node--danger" href="疾患詳細/喉頭・気管・食道損傷.html">
+                  <div class="dx-node__title">食道損傷</div>
+                  <div class="dx-node__sub">嚥下時痛／吐血／皮下気腫／<strong>遅発性縦隔炎</strong>に注意</div>
+                </a>
+
+                <div class="dx-tree__group">軟部（whiplash）</div>
+                <a class="dx-node" href="疾患詳細/外傷性頸部症候群.html">
+                  <div class="dx-node__title">外傷性頸部症候群（whiplash）</div>
+                  <div class="dx-node__sub"><strong>Quebec Grade I–IV</strong>／Grade III で神経所見／Grade IV は骨折</div>
+                </a>
+                <a class="dx-node" href="疾患詳細/外傷性頸部症候群.html">
+                  <div class="dx-node__title">椎間板・靱帯損傷</div>
+                  <div class="dx-node__sub">CT 陰性で疼痛遷延／<strong>MRI で椎前血腫・前縦靱帯損傷</strong></div>
                 </a>
               </div>
 
-              <!-- 4) 非外傷・慢性 -->
-              <div class="dx-tree">
-                <div class="dx-tree__group">変性疾患</div>
-                <a class="dx-node" href="#redflags">
-                  <div class="dx-node__title">頸椎症性脊髄症（CSM）</div>
-                  <div class="dx-node__sub">巧緻運動障害・Hoffmann 陽性</div>
-                </a>
-                <a class="dx-node" href="#redflags">
-                  <div class="dx-node__title">頸椎症性神経根症</div>
-                  <div class="dx-node__sub">Spurling テスト・上肢痛</div>
-                </a>
+            </div>
+            <div class="dx-arrow"></div>
 
-                <div class="dx-tree__group">関連痛・機能性</div>
-                <a class="dx-node" href="#redflags">
-                  <div class="dx-node__title">急性冠症候群（顎・頸部放散）</div>
-                  <div class="dx-node__sub">非外傷で見落とすと致命的</div>
-                </a>
-                <a class="dx-node" href="#redflags">
-                  <div class="dx-node__title">寝違え・筋筋膜性</div>
-                  <div class="dx-node__sub">他疾患を除外したあと</div>
-                </a>
-                <div class="dx-note">「外傷なし＝凝り」と決めつけない。発熱・突発・神経所見・嚥下時痛は致死的鑑別へ</div>
-              </div>
-
+            <!-- disposition -->
+            <div class="dx-layer dx-layer--root">
+              <a class="dx-node dx-node--decision" href="#dispoPanel">
+                <div class="dx-node__title">disposition</div>
+                <div class="dx-node__sub">5 択／固定継続／脊椎外科・脳血管内治療科フォロー</div>
+              </a>
             </div>
 
           </div>
 
-          <!-- 来院後チェック -->
-          <div class="dx-arrival-divider"><span>来院後のチェック</span></div>
-
           <details class="dx-checklist" id="historyPanel">
-            <summary>
-              <span class="dx-checklist__head" style="flex:1;">
-                <span>🗣 問診（来院後に実施）</span>
-                <button type="button" class="dx-checklist__reset" aria-label="問診チェックをすべて外す">リセット</button>
-              </span>
-            </summary>
+            <summary>問診</summary>
             <ul class="dx-checklist__list">
-              <li><label><input type="checkbox" data-key="h-trauma"> <span><strong>外傷の有無</strong> <span class="dx-checklist__sub">あり / なし / 機転不明（高齢者・酩酊・認知症）</span></span></label></li>
-              <li><label><input type="checkbox" data-key="h-mech"> <span><strong>受傷機転</strong> <span class="dx-checklist__sub">追突／転倒／ダイブ／絞扼／刺創／過屈曲・過伸展・軸圧・回旋</span></span></label></li>
-              <li><label><input type="checkbox" data-key="h-energy"> <span><strong>エネルギー</strong> <span class="dx-checklist__sub">高所転落 ≥1 m/5段、車外放出、転覆、自転車・自動車衝突、歩行者と車</span></span></label></li>
-              <li><label><input type="checkbox" data-key="h-age"> <span><strong>年齢</strong> <span class="dx-checklist__sub">65 歳以上は CCSR 高リスク。小児は SCIWORA</span></span></label></li>
-              <li><label><input type="checkbox" data-key="h-syncope"> <span><strong>失神先行か</strong> <span class="dx-checklist__sub">失神 → 転倒 → 頸部外傷の連鎖</span></span></label></li>
-              <li><label><input type="checkbox" data-key="h-anticoag"> <span><strong>抗凝固薬</strong> <span class="dx-checklist__sub">DOAC／ワルファリン／抗血小板。微小外傷でも血腫リスク</span></span></label></li>
-              <li><label><input type="checkbox" data-key="h-neuro"> <span><strong>神経症状</strong> <span class="dx-checklist__sub">四肢のしびれ・脱力・刺すような痛み・巧緻運動障害・排尿障害</span></span></label></li>
-              <li><label><input type="checkbox" data-key="h-swallow"> <span><strong>嚥下時痛・嗄声</strong> <span class="dx-checklist__sub">喉頭・気管・食道損傷／咽後膿瘍</span></span></label></li>
-              <li><label><input type="checkbox" data-key="h-fever"> <span><strong>発熱・頭痛持続</strong> <span class="dx-checklist__sub">髄膜炎／硬膜外膿瘍／突発時 SAH</span></span></label></li>
-              <li><label><input type="checkbox" data-key="h-vertigo"> <span><strong>めまい・後方循環症状</strong> <span class="dx-checklist__sub">椎骨動脈解離／BCVI</span></span></label></li>
+              <li><label><input type="checkbox" data-key="h-mech"> <span><strong>受傷機転</strong> <span class="dx-checklist__sub">追突／転倒／ダイブ／高所転落／絞扼／刺創／頭部打撲。過屈曲・過伸展・軸圧・回旋のどれか</span></span></label></li>
+              <li><label><input type="checkbox" data-key="h-energy"> <span><strong>エネルギー（CCSR 危険機転）</strong> <span class="dx-checklist__sub">高所転落 ≥1 m/5 段／車外放出／転覆／自転車・自動車衝突／歩行者対自動車／頭部からのダイビング</span></span></label></li>
+              <li><label><input type="checkbox" data-key="h-age"> <span><strong>年齢</strong> <span class="dx-checklist__sub"><strong>65 歳以上は CCSR 高リスク</strong>／小児（特に 8 歳未満）は SCIWORA を想起</span></span></label></li>
+              <li><label><input type="checkbox" data-key="h-syncope"> <span><strong>失神先行か</strong> <span class="dx-checklist__sub">失神 → 転倒 → 頸部外傷の連鎖。失神原因の精査も必要<span class="dx-checklist__action"><strong>失神先行あり</strong>：循環器・神経で原因精査（→ <a href="意識消失.html">意識消失</a>）。頸部外傷の評価と並行する</span></span></span></label></li>
+              <li><label><input type="checkbox" data-key="h-anticoag"> <span><strong>抗凝固薬・抗血小板薬</strong> <span class="dx-checklist__sub">DOAC／ワルファリン／アスピリン／クロピドグレル。微小外傷でも血腫・遅発性硬膜外血腫リスク<span class="dx-checklist__action"><strong>抗凝固薬例</strong>：受診時 OK でも<strong>遅発性硬膜外血腫</strong>に注意。<strong>4–6 h 後再 CT</strong>か<strong>24 h 観察</strong>を選ぶ</span></span></span></label></li>
+              <li><label><input type="checkbox" data-key="h-neuro"> <span><strong>神経症状（上肢・下肢）</strong> <span class="dx-checklist__sub">四肢のしびれ・脱力・刺すような痛み・<strong>巧緻運動障害</strong>・<strong>排尿障害</strong>。一過性でも申告必須<span class="dx-checklist__action"><strong>神経症状あり</strong>：<strong>NEXUS / CCSR 適用外</strong>。固定継続のうえ<strong>頸椎 CT＋必要に応じ MRI</strong>、脊椎外科コンサルト</span></span></span></label></li>
+              <li><label><input type="checkbox" data-key="h-swallow"> <span><strong>嚥下時痛・嗄声・喀血</strong> <span class="dx-checklist__sub">喉頭・気管・食道損傷を強く示唆<span class="dx-checklist__action"><strong>嚥下時痛＋皮下気腫</strong>：<strong>軟部 CT＋耳鼻科 or 消化器外科</strong>コンサルト。<strong>輪状軟骨圧迫禁忌</strong>　<a href="疾患詳細/喉頭・気管・食道損傷.html">→ 喉頭・気管・食道損傷 詳細</a></span></span></span></label></li>
+              <li><label><input type="checkbox" data-key="h-vertigo"> <span><strong>めまい・後方循環症状</strong> <span class="dx-checklist__sub">外傷後の回転性めまい／構音障害／視野欠損／片麻痺<span class="dx-checklist__action"><strong>後方循環症状＋外傷</strong>：<strong>椎骨動脈損傷</strong>を疑い<strong>頸部 CTA</strong>。Modified Denver / Memphis 基準に照合　<a href="疾患詳細/椎骨動脈損傷BCVI.html">→ BCVI 詳細</a></span></span></span></label></li>
+              <li><label><input type="checkbox" data-key="h-time"> <span><strong>受傷時刻・最終飲食時刻</strong> <span class="dx-checklist__sub">気道介入・手術前の絶飲食判断</span></span></label></li>
+              <li><label><input type="checkbox" data-key="h-osteo"> <span><strong>骨粗鬆症・強直性脊椎炎・関節リウマチ</strong> <span class="dx-checklist__sub">微小外傷で<strong>歯突起骨折</strong>・<strong>強直性脊椎での横断骨折</strong>が起こる</span></span></label></li>
+              <li><label><input type="checkbox" data-key="h-adl"> <span><strong>ADL・既往（DM／心疾患／呼吸器）</strong> <span class="dx-checklist__sub">紹介状・disposition 判断・気道管理に必須</span></span></label></li>
             </ul>
           </details>
 
           <details class="dx-checklist" id="examPanel">
-            <summary>
-              <span class="dx-checklist__head" style="flex:1;">
-                <span>🔍 身体診察（来院後に実施）</span>
-                <button type="button" class="dx-checklist__reset" aria-label="身体診察チェックをすべて外す">リセット</button>
-              </span>
-            </summary>
+            <summary>身体診察</summary>
             <ul class="dx-checklist__list">
-              <li><label><input type="checkbox" data-key="e-vital"> <span><strong>バイタル・呼吸パターン</strong> <span class="dx-checklist__sub">徐脈＋低血圧＋末梢温暖＝神経原性ショック。腹式呼吸消失＝高位頸髄</span></span></label></li>
-              <li><label><input type="checkbox" data-key="e-nexus-1"> <span><strong>NEXUS①：後頸部正中圧痛</strong> <span class="dx-checklist__sub">一指で棘突起触知。限局圧痛は骨傷示唆</span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-vital"> <span><strong>バイタル・呼吸パターン</strong> <span class="dx-checklist__sub"><strong>徐脈＋低血圧＋末梢温暖＝神経原性ショック</strong>。<strong>腹式呼吸消失＝高位頸髄（C3–5 横隔神経）</strong>を疑う<span class="dx-checklist__action"><strong>該当あれば</strong>：<strong>緊急挿管準備＋輸液＋ノルアド／フェニレフリン</strong>、MAP 85–90 mmHg。出血性ショックも並行除外</span></span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-immobilize"> <span><strong>固定の確認（搬入時から）</strong> <span class="dx-checklist__sub">硬性カラー＋ヘッドブロック＋全脊椎中立。ログロールで体位変換。バックボードは早期に降ろす（褥瘡予防）</span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-nexus-1"> <span><strong>NEXUS①：後頸部正中圧痛なし</strong> <span class="dx-checklist__sub">一指で棘突起を 1 椎ずつ触知。<strong>限局圧痛は骨傷示唆</strong></span></span></label></li>
               <li><label><input type="checkbox" data-key="e-nexus-2"> <span><strong>NEXUS②：意識清明・中毒なし</strong> <span class="dx-checklist__sub">GCS 15、見当識保持、酩酊・薬物なし</span></span></label></li>
-              <li><label><input type="checkbox" data-key="e-nexus-3"> <span><strong>NEXUS③：局所神経所見なし</strong> <span class="dx-checklist__sub">MMT・感覚・反射・Babinski</span></span></label></li>
-              <li><label><input type="checkbox" data-key="e-nexus-4"> <span><strong>NEXUS④：気が逸れる損傷なし</strong> <span class="dx-checklist__sub">長管骨骨折・腹部痛など distracting injury</span></span></label></li>
-              <li><label><input type="checkbox" data-key="e-ccsr"> <span><strong>CCSR Step 1–3</strong> <span class="dx-checklist__sub">高リスク（65↑/危険機転/しびれ）→ 低リスク → 能動 45° 回旋</span></span></label></li>
-              <li><label><input type="checkbox" data-key="e-asia"> <span><strong>ASIA：四肢 MMT・感覚・S4–5</strong> <span class="dx-checklist__sub">完全 vs 不完全。肛門周囲感覚と肛門括約筋緊張</span></span></label></li>
-              <li><label><input type="checkbox" data-key="e-bulbo"> <span><strong>球海綿体反射</strong> <span class="dx-checklist__sub">脊髄ショック判定（24–48 h で回復）</span></span></label></li>
-              <li><label><input type="checkbox" data-key="e-hoffmann"> <span><strong>Hoffmann 反射・Babinski</strong> <span class="dx-checklist__sub">CSM スクリーニング</span></span></label></li>
-              <li><label><input type="checkbox" data-key="e-meningeal"> <span><strong>項部硬直・Kernig</strong> <span class="dx-checklist__sub">非外傷の致死的鑑別</span></span></label></li>
-              <li><label><input type="checkbox" data-key="e-front"> <span><strong>頸部前面・側面の視診触診</strong> <span class="dx-checklist__sub">皮下気腫／甲状軟骨／血腫／絞扼痕／ハンドルマーク</span></span></label></li>
-              <li><label><input type="checkbox" data-key="e-rom"> <span><strong>能動回旋（45° 左右）</strong> <span class="dx-checklist__sub">CCSR Step 3。固定継続のまま</span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-nexus-3"> <span><strong>NEXUS③：局所神経所見なし</strong> <span class="dx-checklist__sub">MMT・感覚・反射・Babinski／Hoffmann</span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-nexus-4"> <span><strong>NEXUS④：気が逸れる損傷なし</strong> <span class="dx-checklist__sub">長管骨骨折・腹部痛・大きな裂創など distracting injury</span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-ccsr"> <span><strong>CCSR Step 1–3</strong> <span class="dx-checklist__sub">①高リスク（65 ↑／危険機転／上肢しびれ）あり → 撮影　②なければ低リスク（追突・歩行可・遅延発症痛・正中圧痛なし）　③能動 45° 左右回旋可なら撮影不要<span class="dx-checklist__action"><strong>酩酊／GCS&lt;15／神経所見／distracting injury</strong>：<strong>NEXUS／CCSR 適用外</strong>。固定継続のうえ画像評価へ</span></span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-asia"> <span><strong>ASIA：四肢 MMT・感覚・S4–5</strong> <span class="dx-checklist__sub">完全 vs 不完全。<strong>肛門周囲感覚・肛門括約筋緊張は完全/不完全の決め手</strong><span class="dx-checklist__action"><strong>四肢麻痺／感覚レベルあり</strong>：<strong>固定継続＋脊椎外科即コンサルト＋MRI</strong>。MAP 85–90 mmHg を 7 日間維持</span></span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-bulbo"> <span><strong>球海綿体反射</strong> <span class="dx-checklist__sub">脊髄ショック判定（24–48 h で回復）。<strong>初期 ASIA A は脊髄ショックでフラットに見える可能性</strong></span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-central"> <span><strong>上肢＞下肢の脱力（cape-like）</strong> <span class="dx-checklist__sub">高齢者の顔面打撲＋過伸展で<strong>中心性頸髄損傷</strong>。CT 陰性でも MRI 適応<span class="dx-checklist__action"><strong>該当あれば</strong>：<strong>頸椎 MRI</strong>を追加。脊椎外科コンサルト　<a href="疾患詳細/中心性頸髄損傷.html">→ 中心性頸髄損傷 詳細</a></span></span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-front"> <span><strong>頸部前面・側面の視診触診</strong> <span class="dx-checklist__sub">皮下気腫／甲状軟骨段差／頸部血腫進行／絞扼痕／シートベルト痕／ハンドルマーク<span class="dx-checklist__action"><strong>皮下気腫・嗄声・甲状軟骨段差</strong>：<strong>喉頭・気管損傷</strong>。早期気道確保準備＋軟部 CT＋耳鼻科コンサルト　<a href="疾患詳細/喉頭・気管・食道損傷.html">→ 詳細</a></span></span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-vessel-sign"> <span><strong>頸部血管雑音・Horner 徴候・片麻痺</strong> <span class="dx-checklist__sub">頸動脈損傷・椎骨動脈損傷の身体所見<span class="dx-checklist__action"><strong>該当あれば</strong>：<strong>頸部 CTA</strong>。脳神経外科・脳血管内治療科と並行コンサルト　<a href="疾患詳細/椎骨動脈損傷BCVI.html">→ BCVI 詳細</a></span></span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-rom"> <span><strong>能動回旋（45° 左右、CCSR Step 3）</strong> <span class="dx-checklist__sub">他動禁。<strong>自分で動かせるかを患者本人に</strong>。痛みで動かせなければ撮影へ</span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-recheck"> <span><strong>画像後・固定後の再評価</strong> <span class="dx-checklist__sub">ASIA・球海綿体反射・呼吸パターンを経時的に。前後比較をカルテに必ず記載</span></span></label></li>
             </ul>
           </details>
 
-          <!-- トリガー連動の注意 -->
+          <!-- Canadian C-spine + NEXUS + 画像確定後の注意 -->
           <details class="dx-rules-l2" id="rulesL2Panel">
-            <summary>⚠️ トリガー連動の注意（条件で意識）</summary>
-            <p class="dx-rules-l2__intro">特定の状況に出会ったら必ず思い出すべき注意点。フローの判断と並行して意識する。</p>
+            <summary>Canadian C-spine ＋ NEXUS ／ 画像確定後の注意</summary>
+            <p class="dx-rules-l2__intro"><strong>診察段階の Red flag は身体診察パネルに統合済み</strong>（⚠ アクション）。ここでは<strong>NEXUS／CCSR の判定閾値</strong>と、<strong>画像で診断が確定してから</strong>意識すべき疾患固有の注意・ピットフォールをまとめる。</p>
 
-            <h4 class="dx-rules-l2__group">緊急トリガー（命・後遺症を外す）</h4>
+            <h4 class="dx-rules-l2__group">① NEXUS Low-Risk Criteria（5 項目すべて陰性なら画像省略可）</h4>
             <ul class="dx-rules-l2__list">
-              <li class="dx-rule is-critical" id="redflags">
-                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>呼吸不全・腹式呼吸消失・SpO2 低下</span></div>
-                <div class="dx-rule__then"><strong>高位頸髄損傷（C3–5 横隔神経）</strong>。in-line で気道確保・ビデオ喉頭鏡</div>
+              <li class="dx-rule" id="rule-nexus">
+                <div class="dx-rule__if"><span class="dx-rule__tag">基準</span><span>NEXUS 5 項目</span></div>
+                <div class="dx-rule__then">① <strong>後頸部正中圧痛なし</strong>　② <strong>意識清明（中毒なし）</strong>　③ <strong>局所神経所見なし</strong>　④ <strong>distracting injury なし</strong>　⑤ <strong>意識障害（GCS&lt;15）なし</strong>。<strong>全 5 項目陰性なら撮影省略可</strong>（感度 99.0%／Hoffman 2000）。1 つでも該当すれば画像評価へ</div>
               </li>
-              <li class="dx-rule is-critical">
-                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>四肢麻痺・対麻痺・感覚レベル</span></div>
-                <div class="dx-rule__then"><strong>固定継続</strong>＋ASIA 評価＋脊椎外科即コンサルト・MRI</div>
-              </li>
-              <li class="dx-rule is-critical">
-                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>徐脈＋低血圧＋末梢温暖</span></div>
-                <div class="dx-rule__then"><strong>神経原性ショック</strong>。輸液・ノルアド／フェニレフリン、MAP 85–90 mmHg。出血性ショックも並行除外</div>
-              </li>
-              <li class="dx-rule is-critical">
-                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>後頭部・後頸部打撲＋めまい・後方循環症状</span></div>
-                <div class="dx-rule__then"><strong>椎骨動脈損傷</strong>を疑い<strong>頸部 CTA</strong>。Modified Denver / Memphis 基準</div>
-              </li>
-              <li class="dx-rule is-critical">
-                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>皮下気腫・嗄声・嚥下時痛・吐血</span></div>
-                <div class="dx-rule__then"><strong>喉頭・気管・食道損傷</strong>。軟部 CT＋耳鼻科／消化器外科。輪状軟骨圧迫は避ける</div>
-              </li>
-              <li class="dx-rule is-critical">
-                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>発熱＋項部硬直／突発の頭頸部痛／進行性四肢麻痺</span></div>
-                <div class="dx-rule__then"><strong>髄膜炎／SAH／硬膜外膿瘍</strong>を疑う。非外傷の致死的鑑別</div>
-              </li>
-              <li class="dx-rule is-critical">
-                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>絞扼・縊頸・頸部血腫の進行</span></div>
-                <div class="dx-rule__then"><strong>気道閉塞リスク</strong>。早期気道確保・ICU 管理</div>
+              <li class="dx-rule is-pitfall">
+                <div class="dx-rule__if"><span class="dx-rule__tag">注意</span><span>NEXUS 適用外条件</span></div>
+                <div class="dx-rule__then"><strong>酩酊・薬物・GCS&lt;15・distracting injury・神経所見</strong>のいずれかがあれば適用外。<strong>感度高・特異度低</strong>のため陰性確認は必ず 5 項目すべてで</div>
               </li>
             </ul>
 
-            <h4 class="dx-rules-l2__group">見逃し回避トリガー</h4>
+            <h4 class="dx-rules-l2__group">② Canadian C-spine Rule（3 ステップ）</h4>
+            <ul class="dx-rules-l2__list">
+              <li class="dx-rule" id="rule-ccsr">
+                <div class="dx-rule__if"><span class="dx-rule__tag">基準</span><span>CCSR 3 ステップ</span></div>
+                <div class="dx-rule__then"><strong>Step 1（高リスク → 撮影）</strong>：① 65 歳以上　② 危険機転（高所転落 ≥1 m/5 段、車外放出、転覆、自転車・自動車衝突、歩行者対自動車、頭部からのダイビング）　③ <strong>上肢のしびれ・刺すような痛み</strong>。<br><strong>Step 2（低リスク → 回旋評価へ）</strong>：① 単純追突　② ER で座位を取れる　③ ER で歩行可　④ 遅延発症痛　⑤ 正中圧痛なし。<br><strong>Step 3</strong>：<strong>能動 45° 左右回旋が可能なら撮影省略可</strong>。回旋不能・低リスク該当なしなら撮影</div>
+              </li>
+              <li class="dx-rule is-pitfall">
+                <div class="dx-rule__if"><span class="dx-rule__tag">注意</span><span>NEXUS vs CCSR の使い分け</span></div>
+                <div class="dx-rule__then"><strong>CCSR は感度 99.4%・特異度 45%</strong>（NEXUS より特異度が高く撮影率を下げる）。<strong>16 歳未満・受傷 48 h 以上・既知の頸椎疾患・脊椎手術歴は CCSR 適用外</strong>。両者とも酩酊・意識障害下では適用外</div>
+              </li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">③ BCVI スクリーニング（Modified Denver / Memphis）</h4>
+            <ul class="dx-rules-l2__list">
+              <li class="dx-rule is-critical" id="rule-bcvi">
+                <div class="dx-rule__if"><span class="dx-rule__tag">画像</span><span>BCVI スクリーニング適応</span></div>
+                <div class="dx-rule__then"><strong>頸椎骨折（特に C1–3／横突孔骨折／facet 脱臼／subluxation）</strong>／<strong>頭蓋底骨折</strong>／<strong>Le Fort II・III</strong>／<strong>頸部前面の直達外力（シートベルト痕）</strong>／<strong>絞扼・縊頸</strong>／<strong>GCS&lt;6＋びまん性軸索損傷</strong>のいずれかで<strong>頸部 CTA</strong>。所見または症状（Horner／片麻痺／頸部血管雑音）も適応</div>
+              </li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">④ 画像確定後の注意（疾患固有）</h4>
+            <ul class="dx-rules-l2__list">
+              <li class="dx-rule is-critical" id="rule-jefferson">
+                <div class="dx-rule__if"><span class="dx-rule__tag">画像</span><span>Jefferson 骨折で Rule of Spence ≥7 mm</span></div>
+                <div class="dx-rule__then"><strong>横靱帯損傷を強く示唆＝不安定型</strong>。<strong>halo or 手術</strong>。Open mouth 像で C1 外側塊の側方転位を計測（C2 関節面からの逸脱の合算）　<a href="疾患詳細/Jefferson骨折.html" style="font-size:11px;">→ Jefferson 骨折 詳細</a></div>
+              </li>
+              <li class="dx-rule is-critical" id="rule-hangman">
+                <div class="dx-rule__if"><span class="dx-rule__tag">画像</span><span>Hangman 骨折 Type IIa</span></div>
+                <div class="dx-rule__then"><strong>牽引禁忌</strong>（屈曲・牽引で転位拡大）。<strong>halo vest 固定が原則</strong>。Type I は外固定、Type II・III は手術相談　<a href="疾患詳細/Hangman骨折.html" style="font-size:11px;">→ Hangman 骨折 詳細</a></div>
+              </li>
+              <li class="dx-rule is-critical" id="rule-dens">
+                <div class="dx-rule__if"><span class="dx-rule__tag">画像</span><span>歯突起骨折 Type II</span></div>
+                <div class="dx-rule__then"><strong>歯突起基部の不安定型</strong>。高齢者で偽関節率高く、<strong>halo or 手術</strong>を脊椎外科と相談。Type I は安定、Type III は骨癒合期待　<a href="疾患詳細/歯突起骨折.html" style="font-size:11px;">→ 歯突起骨折 詳細</a></div>
+              </li>
+              <li class="dx-rule is-critical" id="rule-teardrop">
+                <div class="dx-rule__if"><span class="dx-rule__tag">画像</span><span>屈曲涙滴骨折／両側 facet 脱臼</span></div>
+                <div class="dx-rule__then"><strong>脊髄損傷の合併が極めて多い</strong>非常に不安定な損傷。<strong>固定継続＋ASIA 再評価＋脊椎外科即コンサルト＋MRI</strong>。<strong>50% 以上前方転位</strong>は両側 facet 脱臼を示唆</div>
+              </li>
+              <li class="dx-rule is-critical" id="rule-central-cord">
+                <div class="dx-rule__if"><span class="dx-rule__tag">画像</span><span>CT 骨傷なし＋上肢優位の脱力（中心性頸髄損傷）</span></div>
+                <div class="dx-rule__then"><strong>頸椎 MRI</strong>で脊髄信号変化を確認。<strong>MAP 85–90 mmHg 7 日間維持</strong>（AOSpine 推奨）。高齢者の顔面打撲・転倒・過伸展機転で頻発　<a href="疾患詳細/中心性頸髄損傷.html" style="font-size:11px;">→ 中心性頸髄損傷 詳細</a></div>
+              </li>
+              <li class="dx-rule is-critical" id="rule-sciwora">
+                <div class="dx-rule__if"><span class="dx-rule__tag">画像</span><span>小児で CT 陰性＋神経症状（SCIWORA）</span></div>
+                <div class="dx-rule__then"><strong>MRI で脊髄信号変化</strong>を捉える。<strong>固定継続＋脊椎外科コンサルト</strong>。一過性症状でも入院観察。機転と所見の不一致は<strong>NAI</strong>も意識　<a href="疾患詳細/SCIWORA.html" style="font-size:11px;">→ SCIWORA 詳細</a></div>
+              </li>
+              <li class="dx-rule is-critical" id="rule-transverse">
+                <div class="dx-rule__if"><span class="dx-rule__tag">画像</span><span>横突孔骨折を見つけたら</span></div>
+                <div class="dx-rule__then"><strong>椎骨動脈が走る部位＝BCVI スクリーニング陽性</strong>。単独でも<strong>頸部 CTA</strong>を追加。Biffl Grade 評価し抗血栓療法（アスピリン or ヘパリン）を脳血管内治療科と相談</div>
+              </li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">⑤ 見逃し回避トリガー</h4>
             <ul class="dx-rules-l2__list">
               <li class="dx-rule">
                 <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>高齢者の軽微な顔面打撲・転倒</span></div>
-                <div class="dx-rule__then">過伸展機転で<strong>中心性頸髄損傷</strong>。CT 骨傷なくても上肢優位の脱力で MRI</div>
+                <div class="dx-rule__then">過伸展機転で<strong>中心性頸髄損傷</strong>を想起。CT 骨傷なくても<strong>上肢優位の脱力</strong>があれば MRI</div>
               </li>
               <li class="dx-rule">
                 <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>小児・若年で外傷後に脊髄症状あり</span></div>
-                <div class="dx-rule__then"><strong>SCIWORA</strong>を疑う。CT 陰性でも MRI で脊髄信号変化</div>
-              </li>
-              <li class="dx-rule">
-                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>酩酊・意識障害下で NEXUS / CCSR 適用</span></div>
-                <div class="dx-rule__then"><strong>適用外</strong>。固定継続のうえ画像で評価する</div>
-              </li>
-              <li class="dx-rule">
-                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>頸椎横突孔骨折／C1–3 損傷／facet 脱臼</span></div>
-                <div class="dx-rule__then"><strong>BCVI スクリーニング陽性</strong>。頸部 CTA。遅発性脳梗塞を防ぐため抗血栓を相談</div>
+                <div class="dx-rule__then"><strong>SCIWORA</strong> を疑う。CT 陰性でも MRI で脊髄信号変化を捉える。一過性でも観察入院</div>
               </li>
               <li class="dx-rule">
                 <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>頭部 CT を撮る場面</span></div>
-                <div class="dx-rule__then"><strong>頸椎下端（C7–T1）まで含める</strong>。頸椎下端のフィルムアウトは頻発</div>
-              </li>
-              <li class="dx-rule">
-                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>外果骨折に相当する「外傷性頸部症候群」</span></div>
-                <div class="dx-rule__then">Quebec Grade を分けて評価。<strong>Grade III 以上は神経所見</strong>あり、再受診基準を必ず説明</div>
-              </li>
-              <li class="dx-rule">
-                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>抗凝固薬例の軽微頸部外傷</span></div>
-                <div class="dx-rule__then">受診時 OK でも<strong>遅発性硬膜外血腫</strong>に注意。観察または翌日 follow-up</div>
-              </li>
-              <li class="dx-rule">
-                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>非外傷の頸部痛で「凝り・寝違え」と判断しそうなとき</span></div>
-                <div class="dx-rule__then">発熱・突発・神経所見・嚥下時痛・後方循環症状があれば<strong>致死的鑑別</strong>へ戻す</div>
+                <div class="dx-rule__then"><strong>頸椎下端（C7–T1）まで含める</strong>。頸椎下端のフィルムアウト・スキャン範囲不足は頻発</div>
               </li>
               <li class="dx-rule">
                 <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>歯突起骨折を Open mouth 像のみで除外</span></div>
-                <div class="dx-rule__then">高齢者で読影困難。<strong>CT を低い閾値で</strong>追加する</div>
+                <div class="dx-rule__then">高齢者で読影困難。<strong>CT を低い閾値で</strong>追加。骨粗鬆症例は微小外傷でも歯突起骨折を起こす</div>
               </li>
               <li class="dx-rule">
-                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>外果（外果＝外果骨折）と読み替え：外果骨折を見つけたら他果も探すように、頸椎で 1 椎骨折を見つけたら他椎・椎骨動脈も探す</span></div>
-                <div class="dx-rule__then">単発骨折で安心しない。<strong>連続性損傷</strong>を再評価</div>
+                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>頸椎で 1 椎の骨折を見つけたとき</span></div>
+                <div class="dx-rule__then">単発骨折で安心しない。<strong>連続性損傷・椎骨動脈損傷</strong>を再評価する。横突孔骨折があれば必ず CTA</div>
+              </li>
+              <li class="dx-rule">
+                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>抗凝固薬例の軽微頸部外傷</span></div>
+                <div class="dx-rule__then">受診時 OK でも<strong>遅発性硬膜外血腫</strong>に注意。<strong>4–6 h 後再 CT</strong>か<strong>24 h 観察</strong>を選ぶ</div>
+              </li>
+              <li class="dx-rule">
+                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>強直性脊椎炎（AS）・DISH 患者の頸部外傷</span></div>
+                <div class="dx-rule__then">微小外傷でも<strong>横断骨折・偽関節型</strong>を起こす。<strong>CT 必須</strong>。X 線除外不可。Anderson type が分類</div>
               </li>
             </ul>
 
-            <h4 class="dx-rules-l2__group">ピットフォール</h4>
+            <h4 class="dx-rules-l2__group">⑥ ピットフォール</h4>
             <ul class="dx-rules-l2__list">
               <li class="dx-rule is-pitfall">
-                <div class="dx-rule__if"><span class="dx-rule__tag">⚠</span><span>むち打ちを「ただの頸部痛」と軽視</span></div>
-                <div class="dx-rule__then">Quebec Grade III は神経所見あり。<strong>再受診基準</strong>を口頭・書面で説明</div>
+                <div class="dx-rule__if"><span class="dx-rule__tag">注意</span><span>CT 正常＝頸髄損傷除外と判断</span></div>
+                <div class="dx-rule__then"><strong>SCIWORA・中心性頸髄損傷・靱帯損傷・硬膜外血腫は CT で拾えない</strong>。神経所見あれば<strong>MRI</strong>を低い閾値で</div>
               </li>
               <li class="dx-rule is-pitfall">
-                <div class="dx-rule__if"><span class="dx-rule__tag">⚠</span><span>長期の硬性カラー固定</span></div>
-                <div class="dx-rule__then">むち打ち Grade I–II は<strong>早期可動・通常活動再開</strong>が予後良好。長期固定はかえって遷延</div>
+                <div class="dx-rule__if"><span class="dx-rule__tag">注意</span><span>NEXUS 全陰性で安心</span></div>
+                <div class="dx-rule__then">感度高・特異度低。<strong>適用外条件（GCS&lt;15／酩酊／distracting injury／神経所見）</strong>を必ず除外</div>
               </li>
               <li class="dx-rule is-pitfall">
-                <div class="dx-rule__if"><span class="dx-rule__tag">⚠</span><span>急性頸髄損傷にステロイドをルーチン投与</span></div>
-                <div class="dx-rule__then">NASCIS II/III 以降<strong>ルーチン非推奨</strong>。感染・消化管出血・血糖上昇のリスク。脊椎外科と個別相談</div>
+                <div class="dx-rule__if"><span class="dx-rule__tag">注意</span><span>初期 ASIA A の完全麻痺で予後を断言</span></div>
+                <div class="dx-rule__then"><strong>脊髄ショック</strong>でフラットに見える可能性。<strong>球海綿体反射</strong>の経時評価で判定（24–48 h で回復）</div>
               </li>
               <li class="dx-rule is-pitfall">
-                <div class="dx-rule__if"><span class="dx-rule__tag">⚠</span><span>気道介入で頸部を動かす</span></div>
-                <div class="dx-rule__then"><strong>用手 in-line stabilization</strong> が原則。事前計画を立てる。ビデオ喉頭鏡を選ぶ</div>
+                <div class="dx-rule__if"><span class="dx-rule__tag">注意</span><span>気道介入で頸部を動かす／輪状軟骨圧迫</span></div>
+                <div class="dx-rule__then"><strong>用手 in-line stabilization（MILS）</strong>＋ビデオ喉頭鏡が原則。<strong>喉頭損傷例で輪状軟骨圧迫は禁忌</strong>。経鼻挿管も頭蓋底骨折疑いで禁</div>
               </li>
               <li class="dx-rule is-pitfall">
-                <div class="dx-rule__if"><span class="dx-rule__tag">⚠</span><span>CT 正常 ＝ 頸髄損傷除外</span></div>
-                <div class="dx-rule__then">SCIWORA・中心性頸髄損傷・靱帯損傷・硬膜外血腫は CT で拾えない。神経所見あれば<strong>MRI</strong></div>
+                <div class="dx-rule__if"><span class="dx-rule__tag">注意</span><span>急性頸髄損傷にステロイドをルーチン投与</span></div>
+                <div class="dx-rule__then">NASCIS II/III 以降<strong>ルーチン非推奨</strong>（AOSpine / AANS）。感染・消化管出血・血糖上昇のリスク。脊椎外科と個別相談</div>
               </li>
               <li class="dx-rule is-pitfall">
-                <div class="dx-rule__if"><span class="dx-rule__tag">⚠</span><span>NEXUS 全陰性で安心</span></div>
-                <div class="dx-rule__then">感度高・特異度低。陰性なら画像省略可だが<strong>適用外条件</strong>を必ず確認</div>
+                <div class="dx-rule__if"><span class="dx-rule__tag">注意</span><span>whiplash に長期硬性カラー固定</span></div>
+                <div class="dx-rule__then">Quebec Grade I–II は<strong>早期可動・通常活動再開</strong>が予後良好。長期固定はかえって遷延・慢性化</div>
               </li>
               <li class="dx-rule is-pitfall">
-                <div class="dx-rule__if"><span class="dx-rule__tag">⚠</span><span>初期 ASIA A の完全麻痺</span></div>
-                <div class="dx-rule__then"><strong>脊髄ショック</strong>でフラットに見える可能性。球海綿体反射・経時的再評価</div>
+                <div class="dx-rule__if"><span class="dx-rule__tag">注意</span><span>頸椎骨折例で BCVI スクリーニング忘れ</span></div>
+                <div class="dx-rule__then">C1–3 損傷／横突孔骨折／頭蓋底骨折／Le Fort II/III → <strong>頸部 CTA</strong>。遅発性脳梗塞を防ぐため抗血栓を相談</div>
               </li>
             </ul>
           </details>
 
-          <!-- 撮影方向の備忘 -->
+          <!-- 画像適応・撮影方向 -->
           <details class="dx-imaging" id="imagingPanel">
-            <summary>📷 画像の置き方・撮影方向</summary>
+            <summary>画像適応＋撮影方向</summary>
+
+            <h4 class="dx-rules-l2__group">適応の考え方</h4>
             <ul class="dx-imaging__list">
-              <li><strong>頸椎 Xp</strong>（AP / lateral / open mouth）：感度低く除外には弱い。<strong>日常的には推奨されない</strong>。CT が使えない環境の暫定</li>
-              <li><strong>頸椎 CT</strong>（C0–T1）：<strong>第一選択</strong>。NEXUS / CCSR 陽性、高エネ、意識障害例。<strong>頭部 CT 撮るときは頸椎下端まで含める</strong></li>
-              <li><strong>頸椎 MRI</strong>：神経所見あり、CT 陰性で症状未説明、<strong>中心性頸髄損傷</strong>疑い、<strong>SCIWORA</strong>疑い、CSM 評価、硬膜外血腫・膿瘍</li>
-              <li><strong>頸部 CTA</strong>：<strong>BCVI スクリーニング陽性</strong>（Modified Denver / Memphis）、頸椎横突孔骨折、後頭部痛＋神経所見、Le Fort II/III、頭蓋底骨折、頸部血管雑音・Horner</li>
-              <li><strong>頸部 CT 軟部</strong>：皮下気腫、嗄声、嚥下時痛、絞扼、咽後膿瘍疑い</li>
+              <li><strong>NEXUS／CCSR を活用</strong>して撮影／省略を判断。<strong>適用外条件（酩酊／GCS&lt;15／distracting injury／神経所見）</strong>に該当すれば判定をスキップして撮影へ</li>
+              <li><strong>頸椎 Xp（AP / lateral / open mouth）</strong>：感度低く除外には弱い。<strong>日常的には推奨されない</strong>。CT が使えない環境の暫定のみ</li>
+              <li><strong>頸椎 CT（C0–T1）</strong>：<strong>第一選択</strong>。NEXUS／CCSR 陽性、高エネ、意識障害例。<strong>頭部 CT を撮るときは頸椎下端まで必ず含める</strong></li>
+              <li><strong>頸椎 MRI</strong>：神経所見あり／CT 陰性で症状未説明／<strong>中心性頸髄損傷</strong>疑い／<strong>SCIWORA</strong>疑い／硬膜外血腫疑い／靱帯損傷疑い</li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">頸部 CTA（BCVI 評価）</h4>
+            <ul class="dx-imaging__list">
+              <li><strong>Modified Denver / Memphis 基準</strong>に該当すれば実施。<strong>頸椎骨折（C1–3／横突孔／facet 脱臼）／頭蓋底骨折／Le Fort II・III／頸部前面直達外力／絞扼・縊頸／GCS&lt;6＋びまん性軸索損傷</strong></li>
+              <li>身体所見側：<strong>Horner／片麻痺／頸部血管雑音／後方循環症状（外傷後）</strong></li>
+              <li>Biffl Grade を評価し、<strong>抗血栓療法</strong>（アスピリン or ヘパリン → ワルファリン／DOAC）を脳神経外科・脳血管内治療科と相談</li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">頸部軟部 CT</h4>
+            <ul class="dx-imaging__list">
+              <li><strong>皮下気腫／嗄声／嚥下時痛／甲状軟骨段差／絞扼・縊頸</strong>で適応。<strong>喉頭・気管・食道損傷</strong>の検出。耳鼻科・消化器外科と並行コンサルト</li>
+              <li>食道穿孔疑いは<strong>水溶性造影剤による食道造影</strong>または<strong>食道内視鏡</strong>を追加</li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">撮影体位・特殊配慮</h4>
+            <ul class="dx-imaging__list">
+              <li><strong>固定継続のまま撮影</strong>。CT 装置への移送はログロール＋頭頸部中立を保持</li>
               <li><strong>歯突起骨折疑い</strong>：高齢者は Open mouth 像のみで除外せず<strong>CT を低い閾値で</strong></li>
+              <li><strong>強直性脊椎炎・DISH</strong>：微小外傷でも横断骨折があり得る。X 線除外不可、<strong>CT 必須</strong></li>
+              <li><strong>撮影後の再評価</strong>：ASIA・球海綿体反射・呼吸パターンの経時記録。画像のみで帰宅しない</li>
             </ul>
           </details>
 
-          <!-- 出典・関連リンク -->
-          <details class="dx-imaging" id="referencePanel">
-            <summary>📚 出典・関連リンク</summary>
+          <!-- 頸椎 CT・MRI の読み方 -->
+          <details class="dx-imaging" id="imagingReadPanel">
+            <summary>頸椎 CT・MRI の読み方（系統的アプローチ）</summary>
+
+            <h4 class="dx-rules-l2__group">① CT 撮影セットの確認</h4>
+            <ul class="dx-imaging__list">
+              <li><strong>C0（後頭顆）〜 T1 まで連続的に</strong>含まれているか。<strong>頸椎下端のフィルムアウト</strong>は頻発する見逃し</li>
+              <li>骨条件＋軟部条件＋矢状・冠状再構成の 3 セットを並べる</li>
+              <li>頭部 CT と頸椎 CT を同時にオーダーした場合、<strong>頸椎下端まで範囲が下りているか</strong>必ず確認</li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">② 上位頸椎（C0–C2）の系統的読影</h4>
+            <ul class="dx-imaging__list">
+              <li><strong>環椎後頭関節（C0–C1）</strong>：Powers ratio／basion-dens interval（成人 &lt; 8.5 mm）。脱臼は致命的、即脊椎外科</li>
+              <li><strong>C1 環椎</strong>：前弓・後弓・外側塊の連続性。<strong>Jefferson 骨折 = 軸圧による破裂</strong>。<strong>Rule of Spence</strong>（C1 外側塊の側方転位の合算 ≥7 mm で横靱帯損傷）</li>
+              <li><strong>歯突起（dens）</strong>：基部（Type II）・尖端（Type I）・C2 椎体上方（Type III）。<strong>Type II は不安定で偽関節率高</strong>。冠状・矢状再構成で必ず確認</li>
+              <li><strong>C2 椎弓根</strong>：Hangman 骨折＝両側 pars 骨折。<strong>Type IIa（屈曲不安定型）は牽引禁忌</strong></li>
+              <li><strong>環軸関節（C1–C2）</strong>：歯突起と前弓の距離（成人 &lt; 3 mm／小児 &lt; 5 mm）。回旋亜脱臼にも注意</li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">③ 下位頸椎（C3–C7）の系統的読影</h4>
+            <ul class="dx-imaging__list">
+              <li><strong>4 つのライン</strong>：anterior vertebral line／posterior vertebral line／spinolaminar line／spinous process line。<strong>側面で連続性を追う</strong></li>
+              <li><strong>椎体高</strong>：前縁／後縁／中央の対称性。<strong>涙滴骨折</strong>（屈曲：椎体前下縁の小骨片＋椎体後縁の脊柱管側突出）</li>
+              <li><strong>facet 関節</strong>：かみ合わせ（hamburger sign の正常／perched facet／locked facet）。<strong>両側 facet 脱臼で 50% 以上前方転位</strong></li>
+              <li><strong>椎間板腔</strong>：開大・狭小化。前方の開大は前縦靱帯損傷を示唆</li>
+              <li><strong>椎前軟部組織</strong>：C2 レベル &lt; 7 mm／C6 レベル &lt; 22 mm（成人）。<strong>厚みは隠れた骨折・血腫を示唆</strong></li>
+              <li><strong>棘突起間距離</strong>：開大は後方靱帯複合体損傷を示唆</li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">④ 横突孔・椎骨動脈の評価</h4>
+            <ul class="dx-imaging__list">
+              <li><strong>横突孔骨折を見つけたら BCVI スクリーニング陽性</strong>。単独でも頸部 CTA を追加</li>
+              <li>横突孔は C1–C6 を貫通（椎骨動脈の通路）。<strong>骨片の transverse foramen 内への突出</strong>は要注意</li>
+              <li>CTA では V1（鎖骨下動脈分岐〜C6 横突孔）／V2（C6–C2 横突孔内）／V3（C2 上方〜大後頭孔）／V4（頭蓋内）の各セグメントを評価</li>
+              <li><strong>Biffl Grade</strong>：I（&lt;25% 狭窄）／II（≥25% 狭窄）／III（仮性動脈瘤）／IV（閉塞）／V（活動性出血）</li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">⑤ MRI 適応と読み方</h4>
+            <ul class="dx-imaging__list">
+              <li><strong>適応</strong>：神経所見あり／CT 陰性で症状未説明／中心性頸髄損傷疑い／SCIWORA 疑い／靱帯損傷疑い／硬膜外血腫疑い</li>
+              <li><strong>T2 強調像</strong>で<strong>脊髄内高信号</strong>を確認（浮腫・挫傷・出血）。範囲・長さが予後に相関</li>
+              <li><strong>STIR</strong>：椎前血腫・棘突起間靱帯損傷・後方靱帯複合体損傷を高信号で検出</li>
+              <li><strong>T1 強調像</strong>：脊髄内出血を低信号で（亜急性期は高信号）。<strong>出血合併は予後不良サイン</strong></li>
+              <li><strong>SCIWORA</strong>：CT で骨傷なくても MRI で脊髄信号変化（小児で特に注意）</li>
+              <li><strong>中心性頸髄損傷</strong>：CT で骨傷なくても脊髄中心部の T2 高信号。<strong>頸椎症の既存狭窄＋過伸展</strong>のパターン</li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">⑥ 安定性の判定（簡易）</h4>
+            <ul class="dx-imaging__list">
+              <li><strong>不安定型の代表</strong>：両側 facet 脱臼／屈曲涙滴骨折／Hangman Type II・IIa／Jefferson（横靱帯断裂）／歯突起 Type II</li>
+              <li><strong>SLIC 分類（Subaxial Cervical Spine Injury Classification）</strong>：形態（圧迫・破裂・脱臼）＋椎間板靱帯複合体（DLC）＋神経所見の点数化。<strong>≥5 点で手術考慮</strong></li>
+              <li><strong>Anderson type（強直性脊椎）</strong>：AS／DISH 患者の横断骨折は不安定。CT で必ず評価</li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">⑦ 撮影後の再評価（神経所見とセットで必須）</h4>
+            <ul class="dx-imaging__list">
+              <li><strong>固定継続のまま</strong>、ASIA・球海綿体反射・呼吸パターンを経時的に再評価</li>
+              <li>画像 + 神経血管所見を<strong>セットでカルテ記載</strong>（画像のみで帰宅・disposition 決定しない）</li>
+              <li>中心性頸髄損傷・SCIWORA・靱帯損傷・硬膜外血腫の<strong>遅発性出現</strong>に注意。一過性でも観察入院寄り</li>
+            </ul>
+          </details>
+
+          <!-- 治療リファレンス -->
+          <details class="dx-imaging" id="rxPanel">
+            <summary>治療リファレンス：気道確保／固定／血圧管理／コンサルト</summary>
+
+            <h4 class="dx-rules-l2__group">気道確保（頸髄損傷例の鉄則）</h4>
+            <ul class="dx-imaging__list">
+              <li><strong>用手 in-line stabilization（MILS）</strong>：頸部前後屈・回旋を最小限に。前方頸部圧迫（輪状軟骨圧迫）は<strong>喉頭損傷例で禁忌</strong></li>
+              <li><strong>ビデオ喉頭鏡 or ファイバー</strong>を第一選択（直視型喉頭鏡を避ける）</li>
+              <li><strong>緊急時の外科的気道</strong>：cricothyrotomy（喉頭損傷部位を回避）／気管切開（外科コンサルトで）</li>
+              <li><strong>頭蓋底骨折・髄液漏疑い</strong>：経鼻挿管・経鼻胃管・経鼻ファイバーすべて禁</li>
+              <li><strong>事前計画</strong>：困難気道予測、応援要請、薬剤準備、外科的気道のスタンバイ</li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">頸椎固定（受傷から脊椎外科コンサルトまで）</h4>
+            <ul class="dx-imaging__list">
+              <li><strong>硬性カラー（Philadelphia 等）</strong>を継続。<strong>バックボードからは早期に降ろす</strong>（褥瘡予防）</li>
+              <li><strong>ログロール</strong>で全脊椎を保持しつつ体位変換。複数人で同時に</li>
+              <li><strong>ヘッドアップ 30°</strong>でベッドアップ（脊髄灌流維持と誤嚥予防）</li>
+              <li><strong>Halo vest／SOMI brace</strong>の選択は脊椎外科と相談（Hangman II/IIa、Jefferson 不安定型、歯突起 II/III 等）</li>
+              <li><strong>whiplash（Quebec Grade I–II）</strong>：硬性カラー長期固定はかえって遷延。<strong>早期可動・通常活動再開</strong>が予後良好</li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">血圧管理（神経原性ショック・脊髄保護）</h4>
+            <ul class="dx-imaging__list">
+              <li><strong>MAP 85–90 mmHg を 7 日間維持</strong>（AOSpine 推奨。脊髄灌流維持）</li>
+              <li>輸液（最初は晶質液 1–2 L）→ 反応不十分なら<strong>ノルアドレナリン or フェニレフリン</strong></li>
+              <li>徐脈合併では<strong>アトロピン</strong>準備、必要ならドパミン or ペースメーカー</li>
+              <li><strong>出血性ショックを並行除外</strong>（FAST、CT、Hb）。神経原性と決めつけない</li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">薬剤・処置</h4>
+            <ul class="dx-imaging__list">
+              <li><strong>急性頸髄損傷のステロイドはルーチン非推奨</strong>（NASCIS 以降、AOSpine／AANS）。感染・消化管出血・血糖上昇のリスク。脊椎外科と個別判断</li>
+              <li><strong>BCVI への抗血栓療法</strong>：アスピリン or ヘパリン → ワルファリン／DOAC（Biffl Grade と脊椎損傷併発を脳神経外科・脳血管内治療科と相談）</li>
+              <li><strong>VTE 予防</strong>：脊髄損傷で発症リスク高。脊椎外科 OK 後に enoxaparin 等。<strong>機械的予防（IPC）は即時開始可</strong></li>
+              <li><strong>喉頭浮腫</strong>：ステロイド・H2 ブロッカー（喉頭損傷 Group I-II）、ICU 観察</li>
+              <li><strong>鎮痛（whiplash）</strong>：アセトアミノフェン first（1,000 mg × 4 回／日、4 g/日まで）。NSAIDs は PPI 併用・腎機能確認のうえ短期で</li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">脊椎外科コンサルト文（標準書式）</h4>
+            <ul class="dx-imaging__list">
+              <li><strong>【目的】</strong>頸椎損傷 / 頸髄損傷の治療方針相談（緊急手術 / halo / 保存）</li>
+              <li><strong>【疾患】</strong>機転・受傷時刻・診断病名（例：歯突起骨折 Type II、両側 facet 脱臼 C5/6 など）・分類</li>
+              <li><strong>【既往歴】</strong>骨粗鬆症／強直性脊椎炎／DISH／RA／既存脊椎手術歴</li>
+              <li><strong>【内服薬】</strong>抗凝固薬・抗血小板薬・ステロイド・骨粗鬆症治療薬</li>
+              <li><strong>【ADL】</strong>受傷前 ADL・利き手・職業・独居の有無</li>
+              <li><strong>【現病歴】</strong>機転 → ER 来院 → 神経所見の経時変化 → ASIA → 球海綿体反射 → 画像所見 → 現在の固定・血圧管理</li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">耳鼻科／消化器外科コンサルト文（喉頭・気管・食道損傷）</h4>
+            <ul class="dx-imaging__list">
+              <li><strong>【目的】</strong>喉頭・気管・食道損傷の評価と治療方針相談</li>
+              <li><strong>【疾患】</strong>機転・診断（喉頭損傷 Schaefer 分類、気管離断、食道穿孔疑いなど）</li>
+              <li><strong>【既往歴】</strong>気道既往（OSA、声帯麻痺）、消化管疾患</li>
+              <li><strong>【内服薬】</strong>抗凝固薬・ステロイド</li>
+              <li><strong>【ADL】</strong>受傷前 ADL・職業（音声職）</li>
+              <li><strong>【現病歴】</strong>機転 → 嚥下時痛・嗄声・皮下気腫の出現タイミング → CT 所見 → 気道の安定性</li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">脳神経外科／脳血管内治療科コンサルト文（BCVI）</h4>
+            <ul class="dx-imaging__list">
+              <li><strong>【目的】</strong>椎骨動脈／頸動脈損傷の治療方針相談（抗血栓・血管内治療の適応）</li>
+              <li><strong>【疾患】</strong>機転・診断（椎骨動脈 V2 仮性動脈瘤、Biffl Grade III 等）・脊椎損傷併発の有無</li>
+              <li><strong>【既往歴】</strong>抗血栓既往、脳卒中歴、心房細動</li>
+              <li><strong>【内服薬】</strong>現行の抗凝固・抗血小板薬</li>
+              <li><strong>【ADL】</strong>受傷前 ADL・利き手</li>
+              <li><strong>【現病歴】</strong>機転 → 神経症状（Horner／片麻痺／後方循環症状）→ CTA 所見 → 脊椎損傷の有無 → 現在の血圧管理</li>
+            </ul>
+          </details>
+
+          <!-- disposition -->
+          <details class="dx-imaging" id="dispoPanel">
+            <summary>disposition の目安</summary>
+
+            <h4 class="dx-rules-l2__group">30 秒で決める（5 択マネジメント）</h4>
+            <p class="dx-rules-l2__intro">※ 頸部外傷の即時介入適応：① 気道不安定／喉頭・気管離断、② 神経原性ショック、③ 進行性四肢麻痺、④ BCVI Grade II 以上の血管損傷。それ以外は<strong>「入院 or 帰宅」</strong>。</p>
+            <ul class="dx-rules-l2__list">
+              <li class="dx-rule is-critical">
+                <div class="dx-rule__if"><span class="dx-rule__tag">即時介入</span><span>気道不安定／神経原性ショック／進行性四肢麻痺／喉頭・気管離断</span></div>
+                <div class="dx-rule__then"><strong>緊急挿管 ＋ ICU 入室</strong>、脊椎外科・耳鼻科・脳神経外科・脳血管内治療科を並行コール。<strong>MILS＋ビデオ喉頭鏡＋輪状軟骨圧迫は喉頭損傷で禁忌</strong></div>
+              </li>
+              <li class="dx-rule is-critical">
+                <div class="dx-rule__if"><span class="dx-rule__tag">入院確定</span><span>頸椎骨折／脊髄損傷／BCVI Grade II 以上／喉頭損傷 Group III–V／食道穿孔</span></div>
+                <div class="dx-rule__then">原則<strong>ICU or HCU 入院</strong>。<strong>MAP 85–90 mmHg を 7 日間</strong>維持、再 CT 計画、脊椎外科即コンサルト</div>
+              </li>
+              <li class="dx-rule">
+                <div class="dx-rule__if"><span class="dx-rule__tag">観察入院</span><span>中心性頸髄損傷で軽症 ASIA D／SCIWORA で症状一過性／抗凝固薬例の頸部打撲</span></div>
+                <div class="dx-rule__then"><strong>24h 観察 ＋ MRI</strong>。神経所見再評価、遅発性出血の説明。家族が観察できない・独居も入院寄り判断</div>
+              </li>
+              <li class="dx-rule">
+                <div class="dx-rule__if"><span class="dx-rule__tag">帰宅</span><span>NEXUS／CCSR 陰性 ＋ 神経所見なし ＋ 嚥下時痛なし ＋ 安定したむち打ち Grade I–II</span></div>
+                <div class="dx-rule__then"><strong>書面交付 ＋ 整形外科外来予約</strong>。固定は最小限、<strong>早期可動推奨（Quebec）</strong>。再受診基準を口頭・書面で</div>
+              </li>
+              <li class="dx-rule">
+                <div class="dx-rule__if"><span class="dx-rule__tag">再診不要</span><span>NEXUS／CCSR 完全陰性 ＋ 軽微機転 ＋ 経過観察で改善</span></div>
+                <div class="dx-rule__then">疼痛増悪・しびれ後発・嚥下時痛・呼吸困難で再受診を指示。<strong>「48–72h で改善なければ再受診」を必ず書面交付</strong></div>
+              </li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">観察時間・フォロー間隔サマリー</h4>
+            <ul class="dx-imaging__list">
+              <li><strong>4–6 h ER 観察</strong>：NEXUS／CCSR 陰性 ＋ 抗凝固なし、Quebec Grade I–II</li>
+              <li><strong>24 h 観察入院</strong>：抗凝固薬例の頸部打撲／一過性 SCIWORA／中心性頸髄損傷で軽症 ASIA D</li>
+              <li><strong>4–6 h 後再 CT</strong>：抗凝固薬例で初回 CT 陰性かつ機転で頸部出血リスク高</li>
+              <li><strong>MAP 85–90 mmHg を 7 日間</strong>：脊髄損傷例（AOSpine 推奨）</li>
+              <li><strong>球海綿体反射の経時評価</strong>：脊髄ショック判定（24–48 h で回復）</li>
+              <li><strong>整形外科／脊椎外科外来 1–2 週以内</strong>：保存治療・whiplash・軽症の標準フォロー</li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">社会軸・特殊状況</h4>
+            <ul class="dx-imaging__list">
+              <li><strong>独居・認知症・観察できない</strong>：固定継続のうえ入院寄り判断</li>
+              <li><strong>絞扼・縊頸歴</strong>：DV／自殺企図のスクリーニング、精神科コンサルト</li>
+              <li><strong>NAI を疑う小児</strong>：SCIWORA で機転と所見の不一致 → 小児科・児相と連携</li>
+              <li><strong>抗凝固薬例</strong>：受診時 OK でも遅発性硬膜外血腫リスク。観察 or 翌日 follow-up</li>
+              <li><strong>失神先行の頸部打撲</strong>：循環器・神経で原因精査（→ <a href="意識消失.html">意識消失</a>）</li>
+              <li><strong>強直性脊椎炎・DISH</strong>：微小外傷でも横断骨折を起こす。CT 必須・低い閾値で入院</li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">退室前ピットフォール（退室時固有）</h4>
+            <ul class="dx-rules-l2__list">
+              <li class="dx-rule is-pitfall">
+                <div class="dx-rule__if"><span class="dx-rule__tag">注意</span><span>CT 正常で頸髄損傷を除外と判断して帰宅</span></div>
+                <div class="dx-rule__then">SCIWORA・中心性頸髄損傷・靱帯損傷・硬膜外血腫は CT で拾えない。<strong>神経所見あれば MRI を低い閾値で</strong></div>
+              </li>
+              <li class="dx-rule is-pitfall">
+                <div class="dx-rule__if"><span class="dx-rule__tag">注意</span><span>NEXUS 全陰性で安心して画像省略</span></div>
+                <div class="dx-rule__then">適用外条件（GCS&lt;15／酩酊／distracting injury／神経所見）の確認を怠らない</div>
+              </li>
+              <li class="dx-rule is-pitfall">
+                <div class="dx-rule__if"><span class="dx-rule__tag">注意</span><span>whiplash に長期硬性カラー固定</span></div>
+                <div class="dx-rule__then">Quebec Grade I–II は<strong>早期可動・通常活動再開</strong>が予後良好。長期固定はかえって遷延・慢性化</div>
+              </li>
+              <li class="dx-rule is-pitfall">
+                <div class="dx-rule__if"><span class="dx-rule__tag">注意</span><span>頸椎骨折例で BCVI スクリーニング忘れ</span></div>
+                <div class="dx-rule__then">C1–3／横突孔骨折／頭蓋底骨折／Le Fort II/III → <strong>頸部 CTA</strong>。遅発性脳梗塞を防ぐため抗血栓を相談</div>
+              </li>
+              <li class="dx-rule is-pitfall">
+                <div class="dx-rule__if"><span class="dx-rule__tag">注意</span><span>急性頸髄損傷にステロイドをルーチン投与</span></div>
+                <div class="dx-rule__then">NASCIS 以降<strong>ルーチン非推奨</strong>。感染・消化管出血・血糖上昇のリスク</div>
+              </li>
+              <li class="dx-rule is-pitfall">
+                <div class="dx-rule__if"><span class="dx-rule__tag">注意</span><span>気道介入で頸部を動かす／輪状軟骨圧迫</span></div>
+                <div class="dx-rule__then"><strong>MILS</strong> ＋ ビデオ喉頭鏡。<strong>喉頭損傷例で輪状軟骨圧迫は禁忌</strong>。経鼻系は頭蓋底骨折疑いで禁</div>
+              </li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">退室前チェック（紹介状品質＋患者教育）</h4>
+            <ul class="dx-checklist__list">
+              <li><label><input type="checkbox" data-key="dispo-collar"> <span><strong>固定の方針を確定した</strong> <span class="dx-checklist__sub">硬性カラー継続／早期可動／脊椎外科指示・halo の有無</span></span></label></li>
+              <li><label><input type="checkbox" data-key="dispo-redflag"> <span><strong>再受診基準を口頭・書面で説明した</strong> <span class="dx-checklist__sub">しびれ進行・激痛・嚥下時痛・呼吸困難・めまい嘔吐・片麻痺</span></span></label></li>
+              <li><label><input type="checkbox" data-key="dispo-imaging-plan"> <span><strong>抗凝固薬例は 4–6 h 後再 CT or 24 h 観察の方針を確定</strong> <span class="dx-checklist__sub">遅発性硬膜外血腫の説明</span></span></label></li>
+              <li><label><input type="checkbox" data-key="dispo-neuro-doc"> <span><strong>神経所見（ASIA・球海綿体反射・呼吸パターン）を紹介状に明記した</strong> <span class="dx-checklist__sub">経時的な比較を含める</span></span></label></li>
+              <li><label><input type="checkbox" data-key="dispo-bcvi"> <span><strong>BCVI スクリーニング判定を記載した</strong> <span class="dx-checklist__sub">頸椎骨折・横突孔骨折・頭蓋底骨折・Le Fort II/III で CTA 結果</span></span></label></li>
+              <li><label><input type="checkbox" data-key="dispo-ortho"> <span><strong>整形外科／脊椎外科外来の日時を確定した</strong> <span class="dx-checklist__sub">紹介状・受診先連絡先・予約</span></span></label></li>
+              <li><label><input type="checkbox" data-key="dispo-analgesic"> <span><strong>鎮痛薬を処方量と日数で指示した</strong> <span class="dx-checklist__sub">アセトアミノフェン first、whiplash は早期可動指導</span></span></label></li>
+              <li><label><input type="checkbox" data-key="dispo-driving"> <span><strong>24 h 飲酒・運転・激しい運動制限を説明した</strong> <span class="dx-checklist__sub">けいれん歴・神経所見ありで運転制限期間も</span></span></label></li>
+              <li><label><input type="checkbox" data-key="dispo-recheck-rule"> <span><strong>48–72h で疼痛増悪・しびれ後発なら再受診を書面で渡した</strong> <span class="dx-checklist__sub">遅発性血腫・後発神経症状の安全弁</span></span></label></li>
+              <li><label><input type="checkbox" data-key="dispo-social"> <span><strong>絞扼・縊頸歴の DV／自殺企図／NAI スクリーニングを実施した</strong> <span class="dx-checklist__sub">必要時は精神科・小児科・児相と連携</span></span></label></li>
+            </ul>
+
+            <a class="dx-node dx-node--external" href="疾患詳細/頸椎損傷.html" style="margin-top: 14px;">
+              <div class="dx-node__title">頸椎損傷（疾患詳細）</div>
+              <div class="dx-node__sub">骨傷・脱臼の総合ページ</div>
+            </a>
+          </details>
+
+          <!-- 参考文献 -->
+          <details class="dx-imaging" id="refsPanel">
+            <summary>参考文献</summary>
+
+            <h4 class="dx-rules-l2__group">疾患詳細ページ</h4>
+            <ul class="dx-imaging__list">
+              <li><a href="疾患詳細/Jefferson骨折.html">Jefferson 骨折</a>／<a href="疾患詳細/Hangman骨折.html">Hangman 骨折</a>／<a href="疾患詳細/歯突起骨折.html">歯突起骨折</a></li>
+              <li><a href="疾患詳細/中心性頸髄損傷.html">中心性頸髄損傷</a>／<a href="疾患詳細/SCIWORA.html">SCIWORA</a>／<a href="疾患詳細/外傷性頸部症候群.html">外傷性頸部症候群（whiplash）</a></li>
+              <li><a href="疾患詳細/椎骨動脈損傷BCVI.html">椎骨動脈損傷 BCVI</a>／<a href="疾患詳細/喉頭・気管・食道損傷.html">喉頭・気管・食道損傷</a>／<a href="疾患詳細/頸椎損傷.html">頸椎損傷（総論）</a></li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">関連ハブ</h4>
+            <ul class="dx-imaging__list">
+              <li><a href="頭部外傷評価.html">頭部外傷評価</a>／<a href="転倒.html">転倒</a>／<a href="意識消失.html">意識消失</a>／<a href="意識障害.html">意識障害</a></li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">未作成（リンク予約）</h4>
+            <ul class="dx-imaging__list">
+              <li>下位頸椎骨折・脱臼の系統的解説（SLIC 分類、両側 facet 脱臼、屈曲涙滴骨折の各論）</li>
+              <li>強直性脊椎炎・DISH の頸椎横断骨折／Anderson type／救急対応</li>
+              <li>外傷性 Brown-Séquard 症候群・前脊髄症候群の鑑別ハブ</li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">主要な根拠・参考文献</h4>
             <ul class="dx-imaging__list">
               <li><strong>NEXUS Low-Risk Criteria</strong>：Hoffman JR ほか. <em>N Engl J Med.</em> 2000;343:94–9.</li>
               <li><strong>Canadian C-Spine Rule</strong>：Stiell IG ほか. <em>JAMA.</em> 2001;286:1841–8.</li>
               <li><strong>NEXUS vs CCSR 直接比較</strong>：Stiell IG ほか. <em>N Engl J Med.</em> 2003;349:2510–8.</li>
               <li><strong>Quebec Task Force on Whiplash</strong>：Spitzer WO ほか. <em>Spine.</em> 1995;20(8 Suppl):1S–73S.</li>
-              <li><strong>Modified Denver criteria（BCVI）</strong>：Biffl WL ほか／Memphis criteria. EAST / WTA ガイドライン</li>
-              <li><strong>急性頸髄損傷ステロイド</strong>：NASCIS II/III の限界、AOSpine / AANS：ルーチン非推奨</li>
+              <li><strong>Modified Denver criteria（BCVI）</strong>：Biffl WL ほか／Memphis criteria. EAST／WTA ガイドライン</li>
+              <li><strong>急性頸髄損傷ステロイド</strong>：NASCIS II/III の限界、AOSpine／AANS：ルーチン非推奨</li>
               <li><strong>SCIWORA</strong>：Pang D ほか. 小児脊髄損傷で X 線・CT 陰性</li>
-              <li><strong>ASIA Impairment Scale</strong>：International Standards for Neurological Classification of Spinal Cord Injury（ASIA / ISCoS）</li>
-              <li>関連ページ：<a class="wiki-link" href="頭部外傷評価.html">頭部外傷評価</a> ／ <a class="wiki-link" href="転倒.html">転倒</a> ／ <a class="wiki-link" href="意識消失.html">意識消失</a> ／ <a class="wiki-link" href="意識障害.html">意識障害</a> ／ <a class="wiki-link" href="疾患詳細/頸椎損傷.html">頸椎損傷（疾患詳細）</a></li>
-              <li>#ER #救急 #頸部外傷 #頸部痛 #頸椎損傷 #頸髄損傷 #中心性頸髄損傷 #NEXUS #CCSR #椎骨動脈損傷 #BCVI #SCIWORA #むち打ち #Quebec #髄膜炎 #SAH</li>
+              <li><strong>ASIA Impairment Scale</strong>：International Standards for Neurological Classification of Spinal Cord Injury（ASIA／ISCoS）</li>
+              <li><strong>SLIC 分類</strong>：Vaccaro AR ほか. Subaxial Cervical Spine Injury Classification System. <em>Spine.</em> 2007;32:2365–74.</li>
+              <li>他科コンサルト実践マニュアル — 整形外科・脊椎外科・耳鼻科・脳神経外科コンサルト文の標準書式</li>
             </ul>
+
+            <p style="font-size:11px;color:var(--muted);margin-top:8px;">#ER #救急 #頸部外傷 #頸椎損傷 #頸髄損傷 #中心性頸髄損傷 #NEXUS #CCSR #椎骨動脈損傷 #BCVI #SCIWORA #whiplash #Quebec #Jefferson #Hangman #歯突起骨折</p>
           </details>
 
         </div>
@@ -773,24 +1143,14 @@
 
   <script>
   (function(){
-    const flowBox = document.getElementById('flowBox');
-    const flowBoxClose = document.getElementById('flowBoxClose');
-
-    if (flowBox && flowBoxClose) {
-      const dismiss = () => { flowBox.hidden = true; };
-      flowBoxClose.addEventListener('click', dismiss);
-      flowBoxClose.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); dismiss(); }
-      });
-    }
-
     // 来院後チェックリスト：localStorage 永続化 + per-panel リセット
-    const STORAGE_KEY = 'neck-trauma-dx-checklist-v1';
+    const STORAGE_KEY = 'neck-dx-checklist-v1';
     let stored = {};
     try { stored = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); } catch (_) {}
-    const allBoxes = document.querySelectorAll('.dx-checklist__list input[type="checkbox"]');
+    const allBoxes = document.querySelectorAll('.dx-checklist__list input[type="checkbox"], input[type="checkbox"][data-key]');
     allBoxes.forEach(cb => {
       const key = cb.dataset.key;
+      if (!key) return;
       if (stored[key]) cb.checked = true;
       cb.addEventListener('change', () => {
         if (cb.checked) stored[key] = true; else delete stored[key];
@@ -812,10 +1172,10 @@
     });
 
     // パネル開閉状態を localStorage で復元
-    ['historyPanel', 'examPanel', 'rulesL2Panel', 'imagingPanel', 'referencePanel'].forEach(id => {
+    ['historyPanel', 'examPanel', 'rulesL2Panel', 'imagingPanel', 'imagingReadPanel', 'rxPanel', 'dispoPanel', 'refsPanel'].forEach(id => {
       const el = document.getElementById(id);
       if (!el) return;
-      const key = `neck-trauma-${id}-open-v1`;
+      const key = `neck-${id}-open-v1`;
       const saved = localStorage.getItem(key);
       if (saved !== null) el.open = saved === '1';
       el.addEventListener('toggle', () => {
@@ -827,6 +1187,108 @@
     if (navBack) navBack.addEventListener('click', () => {
       if (window.history.length > 1) history.back();
       else window.location.href = 'index.html';
+    });
+
+    // === Peek プレビュー ===
+    // フローのノードで内部アンカー（#...）はモーダルで対象セクションを
+    // クローン表示。外部ページへのリンク（.html）は通常遷移。長押しの OS
+    // メニューも抑制してタップと同じ挙動に統一。
+    const PEEK_SELECTOR = 'a.dx-node[href^="#"]';
+    let peekOverlay = null;
+
+    function createPeekOverlay() {
+      const overlay = document.createElement('div');
+      overlay.className = 'peek-modal';
+      overlay.innerHTML =
+        '<div class="peek-modal__sheet" role="dialog" aria-modal="true" aria-labelledby="peekTitle">' +
+          '<div class="peek-modal__handle" aria-hidden="true"></div>' +
+          '<header class="peek-modal__header">' +
+            '<span class="peek-modal__title" id="peekTitle">プレビュー</span>' +
+            '<button type="button" class="peek-modal__close" aria-label="閉じる">✕</button>' +
+          '</header>' +
+          '<div class="peek-modal__body"></div>' +
+        '</div>';
+      document.body.appendChild(overlay);
+      return overlay;
+    }
+
+    // 対象 ID をピーク向けに解決。dx-rule__then のように内側の div を指す
+    // 場合は親 <li class="dx-rule"> を採用して if/then を一緒に見せる。
+    function resolvePeekTarget(id) {
+      const el = document.getElementById(id);
+      if (!el) return null;
+      const rule = el.closest('li.dx-rule');
+      if (rule) return rule;
+      return el;
+    }
+
+    function deriveTitle(target, id) {
+      if (target.tagName === 'DETAILS') {
+        const sum = target.querySelector('summary');
+        if (sum) return sum.textContent.trim();
+      }
+      const ifNode = target.querySelector('.dx-rule__if');
+      if (ifNode) {
+        const clone = ifNode.cloneNode(true);
+        clone.querySelectorAll('.dx-rule__tag').forEach(t => t.remove());
+        return clone.textContent.trim();
+      }
+      const ntitle = target.querySelector('.dx-node__title');
+      if (ntitle) return ntitle.textContent.trim();
+      return id;
+    }
+
+    function openPeek(id) {
+      const target = resolvePeekTarget(id);
+      if (!target) return false;
+      if (!peekOverlay) peekOverlay = createPeekOverlay();
+
+      peekOverlay.querySelector('.peek-modal__title').textContent = deriveTitle(target, id);
+
+      const bodyEl = peekOverlay.querySelector('.peek-modal__body');
+      bodyEl.innerHTML = '';
+      const clone = target.cloneNode(true);
+      clone.removeAttribute('id');
+      clone.querySelectorAll('[id]').forEach(el => el.removeAttribute('id'));
+      if (clone.tagName === 'DETAILS') clone.open = true;
+      clone.querySelectorAll('details').forEach(d => { d.open = true; });
+      bodyEl.appendChild(clone);
+      bodyEl.scrollTop = 0;
+
+      peekOverlay.classList.add('is-open');
+      document.body.style.overflow = 'hidden';
+      return true;
+    }
+
+    function closePeek() {
+      if (!peekOverlay) return;
+      peekOverlay.classList.remove('is-open');
+      document.body.style.overflow = '';
+    }
+
+    document.addEventListener('click', (e) => {
+      if (peekOverlay && peekOverlay.classList.contains('is-open')) {
+        if (e.target.classList.contains('peek-modal__close')) { e.preventDefault(); closePeek(); return; }
+        if (e.target === peekOverlay) { closePeek(); return; }
+      }
+      const link = e.target.closest(PEEK_SELECTOR);
+      if (!link) return;
+      const href = link.getAttribute('href');
+      if (!href || href.length <= 1 || href[0] !== '#') return;
+      e.preventDefault();
+      openPeek(href.substring(1));
+    });
+
+    document.addEventListener('contextmenu', (e) => {
+      const link = e.target.closest(PEEK_SELECTOR);
+      if (!link) return;
+      e.preventDefault();
+      const href = link.getAttribute('href');
+      if (href && href.length > 1 && href[0] === '#') openPeek(href.substring(1));
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && peekOverlay && peekOverlay.classList.contains('is-open')) closePeek();
     });
   })();
   </script>

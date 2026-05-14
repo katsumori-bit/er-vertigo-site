@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="color-scheme" content="light dark" />
+  <title>歯突起骨折 | ER ノート</title>
+  <link rel="stylesheet" href="../er-note.css" />
+  <style>
+    /* ============ クイックタップ（3 つを開閉トリガー） ============ */
+    .dx-quick {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px;
+      margin: 10px 0 4px;
+    }
+    .dx-quick__btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      padding: 10px 6px;
+      border-radius: 10px;
+      background: color-mix(in srgb, var(--accent) 10%, var(--surface));
+      border: 1.5px solid var(--accent);
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 13px;
+      line-height: 1.2;
+      text-align: center;
+      cursor: pointer;
+      transition: background 120ms ease;
+    }
+    .dx-quick__btn:hover {
+      background: color-mix(in srgb, var(--accent) 18%, var(--surface));
+    }
+    .dx-quick__icon { font-size: 20px; }
+    .dx-quick__sub {
+      font-size: 10.5px;
+      font-weight: 500;
+      color: var(--muted);
+    }
+
+    /* ============ 同時評価 3 列（血管・神経・典型像） ============ */
+    .dx-tri {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+      margin: 6px 0 4px;
+      align-items: start;
+    }
+    .dx-tri__card {
+      background: var(--surface);
+      border-radius: 10px;
+      padding: 10px 12px;
+      border: 1.5px solid color-mix(in srgb, var(--text) 18%, transparent);
+    }
+    .dx-tri__card--vasc { border-color: #c0392b; background: color-mix(in srgb, #c0392b 6%, var(--surface)); }
+    .dx-tri__card--neuro { border-color: #b5651d; background: color-mix(in srgb, #b5651d 6%, var(--surface)); }
+    .dx-tri__card--typical { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 6%, var(--surface)); }
+    .dx-tri__title {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 800;
+      font-size: 13.5px;
+      margin-bottom: 4px;
+    }
+    .dx-tri__card--vasc .dx-tri__title { color: #c0392b; }
+    .dx-tri__card--neuro .dx-tri__title { color: #b5651d; }
+    .dx-tri__list {
+      margin: 0;
+      padding-left: 18px;
+      font-size: 12.5px;
+      line-height: 1.5;
+    }
+    .dx-tri__list li { margin: 2px 0; }
+
+    /* details 形式の血管/神経カード：summary にチェック印、開閉時の挙動 */
+    details.dx-tri__card { padding: 0; }
+    details.dx-tri__card > summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 10px 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 800;
+      font-size: 13.5px;
+    }
+    details.dx-tri__card > summary::-webkit-details-marker { display: none; }
+    details.dx-tri__card > summary::after {
+      content: "▸";
+      margin-left: auto;
+      font-size: 12px;
+      color: var(--muted);
+      transition: transform 120ms ease;
+    }
+    details.dx-tri__card[open] > summary::after { transform: rotate(90deg); }
+    details.dx-tri__card--vasc > summary { color: #c0392b; }
+    details.dx-tri__card--neuro > summary { color: #b5651d; }
+    details.dx-tri__card > .dx-tri__list { padding: 0 14px 12px 30px; }
+    details.dx-tri__card > .dx-tri__hint {
+      padding: 0 14px 6px 30px;
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    /* ============ 大きな details ボックス（画像/治療方針/コンサル文） ============ */
+    details.dx-box {
+      background: var(--surface);
+      border: 1.5px solid color-mix(in srgb, var(--text) 18%, transparent);
+      border-radius: 10px;
+      margin: 10px 0;
+      scroll-margin-top: 8px;
+    }
+    details.dx-box > summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 12px 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 800;
+      font-size: 14.5px;
+    }
+    details.dx-box > summary::-webkit-details-marker { display: none; }
+    details.dx-box > summary::after {
+      content: "▸";
+      margin-left: auto;
+      font-size: 13px;
+      color: var(--muted);
+      transition: transform 120ms ease;
+    }
+    details.dx-box[open] > summary::after { transform: rotate(90deg); }
+    details.dx-box[open] {
+      border-color: var(--accent);
+    }
+    details.dx-box > .dx-box__body {
+      padding: 0 14px 14px;
+    }
+
+    /* スマホで 1 列に */
+    @media (max-width: 640px) {
+      .dx-quick { gap: 6px; }
+      .dx-quick__btn { padding: 8px 4px; font-size: 11.5px; border-radius: 8px; }
+      .dx-quick__icon { font-size: 17px; }
+      .dx-quick__sub { font-size: 9.5px; }
+
+      .dx-tri { grid-template-columns: 1fr; gap: 8px; }
+      .dx-tri__card { padding: 8px 10px; }
+      details.dx-tri__card > summary { padding: 8px 10px; font-size: 12.5px; }
+      details.dx-tri__card > .dx-tri__list { padding: 0 12px 10px 26px; }
+      .dx-tri__title { font-size: 12.5px; }
+      .dx-tri__list { font-size: 12px; }
+
+      details.dx-box > summary { padding: 10px 12px; font-size: 13.5px; }
+      details.dx-box > .dx-box__body { padding: 0 12px 12px; }
+    }
+
+    /* ============ 区切り帯（最小限） ============ */
+    .dx-step {
+      margin: 18px 0 6px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 11.5px;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+    }
+    .dx-step::before, .dx-step::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: color-mix(in srgb, var(--text) 18%, transparent);
+    }
+
+    /* コピペ用テンプレ */
+    .dx-template {
+      background: color-mix(in srgb, var(--text) 4%, var(--surface));
+      border-left: 3px solid var(--accent);
+      border-radius: 6px;
+      padding: 10px 12px;
+      margin: 6px 0 0;
+      font-size: 13px;
+      line-height: 1.6;
+      white-space: pre-wrap;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+    .dx-template__hint {
+      font-size: 11px;
+      color: var(--muted);
+      margin: 0 0 4px;
+    }
+  </style>
+</head>
+<body>
+  <header class="hokuto-top">
+    <a class="hokuto-top__btn" href="../薬剤情報.html">
+      <span class="hokuto-top__icon">℞</span><span>薬剤情報</span>
+    </a>
+    <a class="hokuto-top__btn" href="../表計算.html">
+      <span class="hokuto-top__icon">⊞</span><span>表計算</span>
+    </a>
+  </header>
+
+  <main class="hokuto-main">
+    <article class="note-shell">
+      <h1 class="page-title">歯突起骨折（Odontoid / Dens 骨折）</h1>
+
+      <!-- スマホですぐ開きたい 3 つ -->
+      <nav class="dx-quick" aria-label="クイックタップ">
+        <button class="dx-quick__btn" type="button" data-target="img-read">
+          <span>画像の見方</span>
+          <span class="dx-quick__sub">Open mouth のみで除外しない</span>
+        </button>
+        <button class="dx-quick__btn" type="button" data-target="plan">
+          <span>治療方針</span>
+          <span class="dx-quick__sub">Type で分岐</span>
+        </button>
+        <button class="dx-quick__btn" type="button" data-target="consult">
+          <span>コンサル文</span>
+          <span class="dx-quick__sub">そのまま貼れる</span>
+        </button>
+      </nav>
+
+      <!-- 同時評価 3 列：典型像は常時、血管・神経は折りたたみ -->
+      <div class="dx-step"><span>同時並行で評価する 3 軸</span></div>
+      <div class="dx-tri">
+
+        <div class="dx-tri__card dx-tri__card--typical">
+          <div class="dx-tri__title">典型像</div>
+          <ul class="dx-tri__list">
+            <li>上位頸椎損傷で<strong>最多</strong></li>
+            <li>高齢者：<strong>転倒など軽微外傷</strong>でも骨折</li>
+            <li>若年：高エネルギー外傷、過屈曲・過伸展</li>
+            <li>後頸部正中圧痛、頸部可動制限</li>
+            <li><strong>「自分で頭を支えていないと不安」</strong>という訴え</li>
+            <li>高齢者の軽微頸部痛で<strong>見落としやすい</strong></li>
+          </ul>
+        </div>
+
+        <details class="dx-tri__card dx-tri__card--vasc">
+          <summary>血管</summary>
+          <p class="dx-tri__hint">歯突起骨折単独で急性血管損傷は通常ないが、<strong>横突孔骨折合併で BCVI</strong>（椎骨動脈損傷）を考慮。</p>
+          <ul class="dx-tri__list">
+            <li>両側<strong>橈骨動脈</strong>触知</li>
+            <li>頸部血管雑音、Horner 徴候の有無</li>
+            <li>横突孔骨折合併なら<strong>頸部 CTA</strong> を低い閾値で</li>
+            <li>抗凝固薬例は遅発性出血・固定後の出血リスク</li>
+          </ul>
+        </details>
+
+        <details class="dx-tri__card dx-tri__card--neuro">
+          <summary>神経</summary>
+          <p class="dx-tri__hint">転位が大きいと延髄・上位頸髄圧迫で<strong>致命的</strong>。ASIA 評価を必ず記録。</p>
+          <ul class="dx-tri__list">
+            <li>ASIA grade（E が正常）、四肢 MMT・感覚</li>
+            <li>項部硬直、頭部支持感覚（自分で頭を支えていると訴える）</li>
+            <li>呼吸状態（高位脊髄損傷で横隔膜麻痺）</li>
+            <li>麻痺所見は時系列で記録</li>
+          </ul>
+        </details>
+      </div>
+
+      <!-- 画像の見方 -->
+      <details class="dx-box" id="img-read">
+        <summary><span>画像の見方</span></summary>
+        <div class="dx-box__body">
+          <ul>
+            <li><strong>頸椎 CT が第一選択</strong>（推奨）。Open mouth view のみで除外しない</li>
+            <li>高齢者は読影困難（重なり・骨密度低下）で<strong>CT を低い閾値で</strong></li>
+            <li>CT で必ず追うポイント：
+              <ul>
+                <li>歯突起の<strong>骨折線</strong>（先端／基部／椎体内進展）</li>
+                <li>転位（mm）・前方／後方 angulation</li>
+                <li>環椎（C1）・軸椎（C2）他の合併骨折</li>
+                <li>横突孔骨折（BCVI スクリーニング）</li>
+              </ul>
+            </li>
+            <li><strong>横靱帯損傷</strong>の評価が必要なら MRI</li>
+            <li>神経症状・脊髄圧迫評価にも MRI を考慮</li>
+            <li>Anderson-D'Alonzo 分類で部位を記述</li>
+          </ul>
+        </div>
+      </details>
+
+      <!-- 治療方針 -->
+      <details class="dx-box" id="plan">
+        <summary><span>治療方針（Anderson-D'Alonzo 分類）</span></summary>
+        <div class="dx-box__body">
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>Type</th><th>所見</th><th>方針</th><th>ER の動き</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Type I</strong></td>
+                  <td>歯突起先端の oblique 剥離（稀）</td>
+                  <td><strong>保存（硬性カラー 6-8 週）</strong>、安定</td>
+                  <td>硬性カラー固定 ＋ 脊椎外科コンサル</td>
+                </tr>
+                <tr>
+                  <td><strong>Type II</strong></td>
+                  <td>歯突起基部の骨折（<strong>不安定</strong>）</td>
+                  <td><strong>偽関節リスク高（高齢者 30-40%）</strong>。手術（odontoid screw／posterior C1-C2 fusion）vs Halo。高齢者は合併症から方針を共同決定</td>
+                  <td>硬性カラー固定 ＋ 脊椎外科即コンサル</td>
+                </tr>
+                <tr>
+                  <td><strong>Type III</strong></td>
+                  <td>椎体内に骨折線が進展</td>
+                  <td><strong>通常安定、保存で癒合良好</strong>（硬性カラー or Halo 8-12 週）</td>
+                  <td>硬性カラー固定 ＋ 脊椎外科コンサル</td>
+                </tr>
+                <tr>
+                  <td>横靱帯損傷合併</td>
+                  <td>MRI で横靱帯断裂</td>
+                  <td><strong>不安定</strong>、手術考慮</td>
+                  <td>in-line stabilization 維持 ＋ 即コンサル</td>
+                </tr>
+                <tr>
+                  <td>神経症状あり</td>
+                  <td>ASIA 低下、脊髄圧迫</td>
+                  <td>緊急手術考慮</td>
+                  <td>気道確保（in-line）＋ 即コンサル</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3>ER で打つ手</h3>
+          <ul>
+            <li><strong>硬性カラー固定</strong>、頭頸部の <strong>in-line stabilization</strong></li>
+            <li>気道操作時は in-line 維持、video laryngoscope を考慮</li>
+            <li>高齢者は<strong>骨密度・抗凝固薬</strong>を必ず確認、誤嚥対策</li>
+            <li>転倒の機序評価（失神／不整脈／脱水など）</li>
+            <li>合併損傷（頭蓋底骨折・他頸椎骨折・BCVI）を見落とさない</li>
+            <li>Type II 高齢例は<strong>偽関節リスクを家族に説明</strong>、治療方針共同決定</li>
+          </ul>
+        </div>
+      </details>
+
+      <!-- コンサル文 -->
+      <details class="dx-box" id="consult">
+        <summary><span>コンサル文（カルテに貼る）</span></summary>
+        <div class="dx-box__body">
+          <p class="dx-template__hint">『他科コンサルト実践マニュアル』の院内紹介状フォーマットに準拠（【目的】【疾患】【既往歴】【内服薬】【ADL】【現病歴】）。脊椎外科緊急コンサル型。</p>
+          <div class="dx-template">【目的】脊椎外科への緊急コンサルト依頼／（Type II 高齢例は治療方針相談）。
+【疾患】#1 歯突起骨折（Anderson-D'Alonzo [Type I／II／III]）、転位 [mm]、後方／前方 [angulation]、横靱帯損傷 [なし／あり]
+【既往歴】[特記事項なし／○○]（高齢者では骨粗鬆症の有無）
+【内服薬】[なし／○○]（抗凝固薬の有無を必ず記載）
+【ADL（受傷前）】[自立／○○]
+【現病歴】[年齢]歳[男/女]性。[受傷機転：低エネ転倒（高齢者最多）／高エネ外傷（若年）／FOOSH＋頸部過屈曲]で受傷し、[来院経緯]で来院。
+ ・身体所見：後頸部正中圧痛 [+]、頸部可動制限 [+]、頭部支持感覚（自分で頭を支えていると訴える）[+/−]、神経所見 [問題なし／低下]
+ ・血管：両側橈骨動脈触知 [良好]
+ ・神経：ASIA [E／○]、四肢 MMT・感覚、項部硬直 [+/−]
+ ・画像：頸椎 CT（open mouth 像のみでは見落とすため低い閾値で CT）、歯突起の骨折線・転位・angulation、横靱帯 MRI 評価検討
+ ・ER 処置：硬性カラー固定、in-line stabilization、高齢者は骨密度・抗凝固薬の確認、誤嚥対策
+よろしくお願いいたします。</div>
+        </div>
+      </details>
+
+      <!-- ピットフォール -->
+      <details class="dx-box">
+        <summary><span>ピットフォール</span></summary>
+        <div class="dx-box__body">
+          <ul>
+            <li><strong>高齢者の軽微頸部痛・転倒で歯突起骨折を見逃す</strong>（最頻）</li>
+            <li><strong>Open mouth view のみで除外</strong>（重なり・骨密度低下で読影困難）</li>
+            <li>高齢者 Type II の<strong>偽関節リスク</strong>説明不足</li>
+            <li>抗凝固薬例で固定後の<strong>遅発性出血</strong>を想定しない</li>
+            <li>横突孔骨折合併時の <strong>BCVI</strong>（椎骨動脈損傷）スクリーニング漏れ</li>
+            <li>気道確保時の不適切な頸部操作で神経損傷を増悪</li>
+          </ul>
+        </div>
+      </details>
+
+      <!-- 関連ハブ -->
+      <details class="dx-box">
+        <summary><span>関連ハブ・隣接疾患</span></summary>
+        <div class="dx-box__body">
+          <ul>
+            <li>主訴入口：<a class="wiki-link" href="../頸部外傷・頸部痛.html">頸部外傷・頸部痛</a> ／ <a class="wiki-link" href="../転倒.html">転倒</a></li>
+            <li>処置：硬性カラー ／ in-line stabilization</li>
+            <li>合併評価：BCVI（頸部 CTA）、横靱帯損傷（MRI）、頭蓋底骨折</li>
+          </ul>
+        </div>
+      </details>
+
+      <!-- 出典 -->
+      <details class="dx-box">
+        <summary><span>出典</span></summary>
+        <div class="dx-box__body">
+          <ul>
+            <li>Anderson LD, D'Alonzo RT. Fractures of the odontoid process of the axis. J Bone Joint Surg Am. 1974.</li>
+            <li>佐藤弘明 ほか. 他科コンサルト実践マニュアル. 羊土社.</li>
+          </ul>
+        </div>
+      </details>
+
+    </article>
+  </main>
+
+  <nav class="hokuto-bottom">
+    <button class="hokuto-bottom__btn" type="button" id="navBack">
+      <span class="hokuto-bottom__icon">←</span><span>戻る</span>
+    </button>
+    <a class="hokuto-bottom__btn" href="../ツール.html">
+      <span class="hokuto-bottom__icon">⚙</span><span>ツール</span>
+    </a>
+    <a class="hokuto-bottom__btn" href="../index.html">
+      <span class="hokuto-bottom__icon">⌂</span><span>ホーム</span>
+    </a>
+  </nav>
+
+  <script>
+  (function(){
+    document.querySelectorAll('.dx-quick__btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.dataset.target;
+        const target = document.getElementById(id);
+        if (!target) return;
+        target.open = true;
+        target.scrollIntoView({behavior: 'smooth', block: 'start'});
+      });
+    });
+
+    const navBack = document.getElementById('navBack');
+    if (navBack) navBack.addEventListener('click', () => {
+      if (window.history.length > 1) history.back();
+      else window.location.href = '../index.html';
+    });
+  })();
+  </script>
+</body>
+</html>

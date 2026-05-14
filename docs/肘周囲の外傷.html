@@ -1,0 +1,1159 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="color-scheme" content="light dark" />
+  <title>肘周囲の外傷 | ER ノート</title>
+  <link rel="stylesheet" href="er-note.css" />
+  <style>
+    /* 単純化診療フロー（このページ専用） */
+    .flow-box { position: static; user-select: none; }
+    .flow-box__title {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 0.5rem; cursor: pointer; padding: 2px 0;
+    }
+    /* ===== 診療フロー本体 ===== */
+    .flow-canvas {
+      background: var(--surface); border-radius: 10px;
+      padding: 14px 10px 18px; margin-top: 0.55rem;
+      overflow-x: auto; overflow-y: hidden;
+      -webkit-overflow-scrolling: touch; touch-action: pan-x pan-y pinch-zoom;
+    }
+    .dx-flow {
+      min-width: 720px; margin: 0 auto; padding: 4px 6px 8px;
+      font-size: 14px; line-height: 1.45; color: var(--text); font-family: inherit;
+    }
+
+    /* ノード共通 */
+    .dx-node {
+      background: var(--surface);
+      border: 1.5px solid color-mix(in srgb, var(--text) 22%, transparent);
+      border-radius: 10px; padding: 8px 12px; text-align: center;
+      box-shadow: 0 1px 2px var(--shadow, rgba(0,0,0,0.06));
+      min-height: 38px;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 2px;
+    }
+    .dx-node__title { font-weight: 700; font-size: 13.5px; }
+    .dx-node__sub   { font-size: 11.5px; color: var(--muted); font-weight: 500; }
+
+    .dx-node--decision {
+      background: color-mix(in srgb, var(--accent) 12%, var(--surface));
+      border-color: var(--accent); border-radius: 14px;
+    }
+    .dx-node--judge {
+      background: var(--accent-weak, color-mix(in srgb, var(--accent) 14%, var(--surface)));
+      border: 1.5px dashed var(--accent); border-radius: 999px;
+      padding: 6px 14px; font-weight: 700; min-height: 32px;
+    }
+    .dx-node--danger {
+      background: color-mix(in srgb, #c0392b 14%, var(--surface));
+      border-color: #c0392b;
+    }
+    .dx-node--danger .dx-node__title { color: #c0392b; }
+    .dx-node--external {
+      text-decoration: none; color: var(--text); border-style: dashed;
+      position: relative;
+      background: color-mix(in srgb, var(--accent) 6%, var(--surface));
+      transition: background-color 120ms ease;
+    }
+    .dx-node--external::after {
+      content: "↗"; position: absolute; top: 4px; right: 8px;
+      font-size: 12px; color: var(--accent); opacity: 0.85;
+    }
+
+    /* レイヤー */
+    .dx-layer {
+      display: grid; gap: 14px; align-items: stretch; margin: 0;
+    }
+    .dx-layer--root   { grid-template-columns: 1fr; justify-items: center; }
+    .dx-layer--root > * { max-width: 360px; }
+    .dx-layer--branch { grid-template-columns: 1fr 1fr; }
+
+    /* 矢印 */
+    .dx-arrow {
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      position: relative; margin: 2px 0; min-height: 26px;
+      color: var(--muted); font-size: 11.5px; font-weight: 600;
+    }
+    .dx-arrow::before {
+      content: ""; width: 2px; height: 100%; min-height: 22px;
+      background: color-mix(in srgb, var(--text) 35%, transparent);
+    }
+    .dx-arrow::after {
+      content: ""; position: absolute; bottom: 0;
+      width: 0; height: 0;
+      border-left: 5px solid transparent; border-right: 5px solid transparent;
+      border-top: 7px solid color-mix(in srgb, var(--text) 35%, transparent);
+    }
+    /* 分岐 Y 字 */
+    .dx-fork {
+      display: grid; grid-template-columns: 1fr 1fr;
+      position: relative; min-height: 38px; margin: 2px 0 4px;
+    }
+    .dx-fork::before {
+      content: ""; position: absolute;
+      top: 0; left: 25%; right: 25%; height: 2px;
+      background: color-mix(in srgb, var(--text) 35%, transparent);
+    }
+    .dx-fork__leg {
+      position: relative; display: flex; flex-direction: column;
+      align-items: center; justify-content: flex-end;
+      padding-top: 4px; padding-bottom: 4px;
+      font-size: 11.5px; font-weight: 600; color: var(--muted); min-height: 36px;
+    }
+    .dx-fork__leg::before {
+      content: ""; width: 2px; flex: 1;
+      background: color-mix(in srgb, var(--text) 35%, transparent);
+    }
+    .dx-fork__leg::after {
+      content: ""; position: absolute; bottom: 0;
+      width: 0; height: 0;
+      border-left: 5px solid transparent; border-right: 5px solid transparent;
+      border-top: 7px solid color-mix(in srgb, var(--text) 35%, transparent);
+    }
+    .dx-fork__label {
+      background: var(--surface); padding: 1px 8px; border-radius: 999px;
+      border: 1px solid color-mix(in srgb, var(--text) 18%, transparent);
+      margin-bottom: 2px; z-index: 1;
+    }
+    /* 疾患ツリー（2列） */
+    .dx-trees {
+      display: grid; grid-template-columns: repeat(2, 1fr);
+      gap: 12px; align-items: start; margin-top: 4px;
+    }
+    .dx-tree { display: flex; flex-direction: column; gap: 6px; }
+    .dx-tree__group {
+      font-size: 11px; font-weight: 700; color: var(--muted);
+      text-align: center; padding: 6px 0 2px; margin-top: 4px;
+      border-bottom: 1px dashed color-mix(in srgb, var(--text) 22%, transparent);
+      letter-spacing: 0.02em;
+    }
+    .dx-tree__group:first-child { margin-top: 0; }
+
+    /* メモ */
+    .dx-note {
+      background: color-mix(in srgb, var(--text) 4%, var(--surface));
+      border-left: 3px solid color-mix(in srgb, var(--text) 25%, transparent);
+      border-radius: 6px; padding: 6px 10px;
+      font-size: 11.5px; color: var(--muted);
+      text-align: left; margin-top: 4px;
+    }
+
+    /* タップ可能ノード */
+    a.dx-node {
+      text-decoration: none; color: inherit; cursor: pointer;
+      transition: transform 80ms ease, box-shadow 120ms ease;
+      position: relative;
+    }
+    a.dx-node:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 3px 6px var(--shadow, rgba(0,0,0,0.12));
+    }
+    a.dx-node:active { transform: translateY(0); }
+    a.dx-node:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+    a.dx-node::after {
+      content: "›"; position: absolute; top: 3px; right: 6px;
+      font-size: 12px; color: color-mix(in srgb, var(--text) 40%, transparent);
+      font-weight: 700;
+    }
+    a.dx-node--danger::after { color: #c0392b; }
+    a.dx-node--decision::after { color: var(--accent); }
+
+    /* スマホ */
+    @media (max-width: 600px) {
+      .dx-flow { min-width: 0; font-size: 11px; padding: 2px 0 6px; }
+      .flow-canvas { overflow-x: hidden; padding: 8px 6px 12px; }
+
+      .dx-node { padding: 4px 5px; min-height: 28px; border-radius: 7px; gap: 1px;
+        box-shadow: 0 1px 1px var(--shadow, rgba(0,0,0,0.05)); }
+      .dx-node__title { font-size: 10.5px; line-height: 1.22; }
+      .dx-node__sub   { font-size: 9px;    line-height: 1.25; }
+      .dx-node--decision { border-radius: 8px; }
+      .dx-node--judge { padding: 3px 7px; min-height: 22px; font-size: 10px; }
+      .dx-node--external::after { top: 2px; right: 4px; font-size: 9px; }
+
+      .dx-layer { gap: 6px; }
+      .dx-layer--root > * { max-width: none; width: 100%; }
+
+      .dx-arrow { min-height: 24px; margin: 1px 0; }
+      .dx-arrow::before { min-height: 20px; width: 1.5px; }
+      .dx-arrow::after { border-left-width: 4px; border-right-width: 4px; border-top-width: 6px; }
+
+      .dx-fork { min-height: 22px; }
+      .dx-fork::before { height: 1.5px; }
+      .dx-fork__leg { min-height: 22px; padding-top: 2px; padding-bottom: 2px; font-size: 9px; }
+      .dx-fork__leg::before { width: 1.5px; }
+      .dx-fork__leg::after { border-left-width: 4px; border-right-width: 4px; border-top-width: 6px; }
+      .dx-fork__label { font-size: 8.5px; padding: 0 4px; margin-bottom: 0; }
+
+      .dx-trees { gap: 4px; }
+      .dx-tree { gap: 3px; }
+      .dx-tree__group { font-size: 8.5px; padding: 4px 0 1px; margin-top: 2px; }
+      .dx-note { padding: 4px 7px; font-size: 9.5px; }
+
+      a.dx-node::after { top: 1px; right: 3px; font-size: 9px; }
+    }
+
+    /* === 来院後チェック === */
+    .dx-checklist {
+      background: var(--surface); border-radius: 10px;
+      border: 1.5px solid color-mix(in srgb, var(--text) 14%, transparent);
+      padding: 10px 14px;
+      box-shadow: 0 1px 2px var(--shadow, rgba(0,0,0,0.04));
+      margin-bottom: 8px;
+    }
+    .dx-checklist > summary {
+      cursor: pointer; font-weight: 800; font-size: 13.5px;
+      list-style: none; user-select: none;
+      display: flex; align-items: center; gap: 6px; color: var(--text);
+    }
+    .dx-checklist > summary::-webkit-details-marker { display: none; }
+    .dx-checklist > summary::before {
+      content: "▶"; font-size: 10px; color: var(--muted);
+      transition: transform 150ms ease; flex-shrink: 0;
+    }
+    .dx-checklist[open] > summary::before { transform: rotate(90deg); }
+    .dx-checklist__head {
+      display: flex; align-items: center; justify-content: space-between; gap: 8px;
+    }
+    .dx-checklist__reset {
+      font-size: 10.5px; color: var(--muted);
+      background: transparent;
+      border: 1px solid color-mix(in srgb, var(--text) 18%, transparent);
+      border-radius: 999px; padding: 1px 8px; cursor: pointer; font-weight: 600;
+    }
+    .dx-checklist__reset:hover { background: color-mix(in srgb, var(--text) 5%, transparent); }
+    .dx-checklist__list { list-style: none; margin: 8px 0 2px; padding: 0; }
+    .dx-checklist__list li { margin: 0; font-size: 12.5px; line-height: 1.45; }
+    .dx-checklist__list label {
+      display: flex; align-items: flex-start; gap: 8px; cursor: pointer;
+      padding: 5px 6px; border-radius: 5px;
+      transition: background-color 100ms ease;
+    }
+    .dx-checklist__list label:hover { background: color-mix(in srgb, var(--text) 4%, transparent); }
+    .dx-checklist__list input[type="checkbox"] { margin-top: 3px; flex-shrink: 0; accent-color: var(--accent); }
+    .dx-checklist__list label:has(input:checked) { color: var(--muted); }
+    .dx-checklist__list label:has(input:checked) strong {
+      color: var(--muted); text-decoration: line-through;
+      text-decoration-color: color-mix(in srgb, var(--muted) 50%, transparent);
+    }
+    .dx-checklist__sub { color: var(--muted); font-size: 11px; font-weight: 500; }
+    .dx-checklist__action {
+      display: block;
+      margin-top: 6px;
+      padding: 5px 9px;
+      background: color-mix(in srgb, #d33 10%, transparent);
+      border-left: 3px solid #d33;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--text);
+      line-height: 1.45;
+    }
+    .dx-checklist__action::before { content: "⚠ "; color: #d33; font-weight: 800; }
+    .dx-checklist__action strong { color: #d33; }
+    .dx-checklist__action a { color: #d33; text-decoration: underline; font-weight: 600; }
+
+    @media (max-width: 600px) {
+      .dx-checklist { padding: 8px 10px; }
+      .dx-checklist > summary { font-size: 12px; }
+      .dx-checklist__list li { font-size: 11.5px; }
+      .dx-checklist__sub { font-size: 10px; }
+      .dx-checklist__reset { font-size: 9.5px; padding: 1px 6px; }
+    }
+
+    /* === トリガー連動ルール === */
+    .dx-rules-l2 {
+      margin-top: 12px;
+      background: var(--surface); border-radius: 10px;
+      border: 1.5px solid color-mix(in srgb, #c0392b 35%, transparent);
+      padding: 10px 14px;
+    }
+    .dx-rules-l2 > summary {
+      cursor: pointer; font-weight: 800; font-size: 13.5px;
+      list-style: none; user-select: none;
+      display: flex; align-items: center; gap: 6px; color: #c0392b;
+    }
+    .dx-rules-l2 > summary::-webkit-details-marker { display: none; }
+    .dx-rules-l2 > summary::before {
+      content: "▶"; font-size: 10px; color: #c0392b;
+      transition: transform 150ms ease; flex-shrink: 0;
+    }
+    .dx-rules-l2[open] > summary::before { transform: rotate(90deg); }
+    .dx-rules-l2__intro { font-size: 11px; color: var(--muted); margin: 8px 0 4px; line-height: 1.5; }
+    .dx-rules-l2__group {
+      font-size: 11px; font-weight: 800; color: var(--muted);
+      margin: 12px 0 5px; padding: 0; letter-spacing: 0.06em;
+    }
+    .dx-rules-l2__list {
+      list-style: none; margin: 0 0 4px; padding: 0;
+      display: flex; flex-direction: column; gap: 5px;
+    }
+    .dx-rule {
+      background: color-mix(in srgb, var(--text) 4%, var(--surface));
+      border-left: 3px solid color-mix(in srgb, var(--text) 28%, transparent);
+      border-radius: 6px; padding: 7px 10px;
+      font-size: 12px; line-height: 1.45;
+    }
+    .dx-rule.is-critical {
+      background: color-mix(in srgb, #c0392b 6%, var(--surface));
+      border-left-color: #c0392b;
+    }
+    .dx-rule.is-pitfall {
+      background: color-mix(in srgb, #d68910 7%, var(--surface));
+      border-left-color: #d68910;
+    }
+    .dx-rule__if {
+      font-weight: 700; color: var(--text);
+      display: flex; align-items: baseline; gap: 6px; flex-wrap: wrap;
+    }
+    .dx-rule__tag {
+      display: inline-block; font-size: 9.5px; font-weight: 800;
+      padding: 1px 7px; border-radius: 999px;
+      background: color-mix(in srgb, var(--text) 12%, var(--surface));
+      color: var(--muted); letter-spacing: 0.08em; flex-shrink: 0;
+    }
+    .dx-rule.is-critical .dx-rule__tag {
+      background: color-mix(in srgb, #c0392b 18%, var(--surface)); color: #c0392b;
+    }
+    .dx-rule.is-pitfall .dx-rule__tag {
+      background: color-mix(in srgb, #d68910 20%, var(--surface)); color: #b87900;
+    }
+    .dx-rule__then { margin-top: 3px; color: var(--text); }
+    .dx-rule__then strong { color: var(--accent); }
+    .dx-rule.is-critical .dx-rule__then strong { color: #c0392b; }
+
+    @media (max-width: 600px) {
+      .dx-rules-l2 { padding: 8px 10px; }
+      .dx-rules-l2 > summary { font-size: 12px; }
+      .dx-rules-l2__intro { font-size: 10px; }
+      .dx-rules-l2__group { font-size: 10px; margin-top: 10px; }
+      .dx-rule { font-size: 11px; padding: 6px 8px; line-height: 1.4; }
+      .dx-rule__tag { font-size: 9px; padding: 0 5px; }
+    }
+
+    /* 撮影方向の備忘 */
+    .dx-imaging {
+      margin-top: 12px;
+      background: var(--surface); border-radius: 10px;
+      border: 1.5px solid color-mix(in srgb, var(--text) 14%, transparent);
+      padding: 10px 14px;
+    }
+    .dx-imaging > summary {
+      cursor: pointer; font-weight: 800; font-size: 13.5px;
+      list-style: none; user-select: none;
+      display: flex; align-items: center; gap: 6px; color: var(--text);
+    }
+    .dx-imaging > summary::-webkit-details-marker { display: none; }
+    .dx-imaging > summary::before {
+      content: "▶"; font-size: 10px; color: var(--muted);
+      transition: transform 150ms ease; flex-shrink: 0;
+    }
+    .dx-imaging[open] > summary::before { transform: rotate(90deg); }
+    .dx-imaging__list {
+      margin: 8px 0 0; padding-left: 1.2em; font-size: 12.5px; line-height: 1.55;
+    }
+    .dx-imaging__list li { margin: 2px 0; }
+    @media (max-width: 600px) {
+      .dx-imaging { padding: 8px 10px; }
+      .dx-imaging > summary { font-size: 12px; }
+      .dx-imaging__list { font-size: 11.5px; }
+    }
+
+    /* フロー peek からのみ参照される panel は可視には非表示（DOM は peek 用に保持） */
+    #historyPanel,
+    #examPanel,
+    #imagingPanel,
+    #imagingReadPanel,
+    #rulesL2Panel,
+    #rxPanel,
+    #dispoPanel,
+    #refsPanel { display: none !important; }
+
+    /* === Peek プレビュー === */
+    .peek-modal {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.5);
+      display: none;
+      align-items: flex-end;
+      justify-content: center;
+      z-index: 9999;
+      -webkit-backdrop-filter: blur(2px);
+      backdrop-filter: blur(2px);
+    }
+    .peek-modal.is-open { display: flex; }
+    .peek-modal__sheet {
+      background: var(--surface);
+      width: 100%;
+      max-width: 720px;
+      max-height: 85vh;
+      border-radius: 14px 14px 0 0;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 -6px 28px rgba(0,0,0,0.25);
+      animation: peek-slide-up 220ms ease-out;
+      overflow: hidden;
+      position: relative;
+    }
+    @keyframes peek-slide-up {
+      from { transform: translateY(30%); opacity: 0.4; }
+      to   { transform: translateY(0);   opacity: 1; }
+    }
+    .peek-modal__handle {
+      position: absolute;
+      top: 6px; left: 50%;
+      transform: translateX(-50%);
+      width: 36px; height: 4px;
+      border-radius: 999px;
+      background: color-mix(in srgb, var(--text) 22%, transparent);
+      pointer-events: none;
+    }
+    .peek-modal__header {
+      display: flex; align-items: flex-start; gap: 8px;
+      padding: 16px 14px 10px;
+      border-bottom: 1px solid color-mix(in srgb, var(--text) 12%, transparent);
+      background: var(--surface);
+      flex-shrink: 0;
+    }
+    .peek-modal__title {
+      flex: 1;
+      font-weight: 800;
+      font-size: 14.5px;
+      color: var(--text);
+      line-height: 1.3;
+    }
+    .peek-modal__close {
+      background: transparent;
+      border: 1px solid color-mix(in srgb, var(--text) 22%, transparent);
+      border-radius: 999px;
+      width: 30px; height: 30px;
+      cursor: pointer;
+      font-size: 14px;
+      color: var(--text);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      font-family: inherit;
+    }
+    .peek-modal__close:hover { background: color-mix(in srgb, var(--text) 6%, transparent); }
+    .peek-modal__body {
+      flex: 1;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      padding: 12px 16px 10px;
+      font-size: 13.5px;
+      line-height: 1.55;
+      color: var(--text);
+    }
+    /* peek 内で details は常に開いた状態で表示（JS で open=true を付与）。トップレベルのサマリーは peek ヘッダーと重複するため非表示 */
+    .peek-modal__body > details > summary { display: none; }
+    .peek-modal__body details > summary { pointer-events: none; }
+    /* checklist 内の reset ボタンも peek では機能しないので非表示 */
+    .peek-modal__body .dx-checklist__reset { display: none; }
+    @media (min-width: 720px) {
+      .peek-modal { align-items: center; padding: 24px; }
+      .peek-modal__sheet { border-radius: 14px; max-height: 80vh; }
+      .peek-modal__handle { display: none; }
+      @keyframes peek-slide-up {
+        from { transform: scale(0.96); opacity: 0; }
+        to   { transform: scale(1);    opacity: 1; }
+      }
+    }
+    a.dx-node { -webkit-touch-callout: none; }
+  </style>
+</head>
+<body>
+  <header class="hokuto-top">
+    <a class="hokuto-top__btn" href="薬剤情報.html">
+      <span class="hokuto-top__icon">℞</span><span>薬剤情報</span>
+    </a>
+    <a class="hokuto-top__btn" href="表計算.html">
+      <span class="hokuto-top__icon">⊞</span><span>表計算</span>
+    </a>
+  </header>
+
+  <main class="hokuto-main">
+    <article class="note-shell">
+      <h1 class="page-title">肘周囲の外傷</h1>
+
+      <!-- 単純化診療フロー -->
+      <div class="action-header flow-box" id="flowBox">
+        <div class="action-header__title flow-box__title">
+          <span>単純化診療フロー</span>
+        </div>
+
+        <div class="flow-canvas">
+          <div class="dx-flow" role="group" aria-label="肘周囲の外傷の単純化診療フロー">
+
+            <!-- Root -->
+            <div class="dx-layer dx-layer--root">
+              <div class="dx-node dx-node--decision">肘周囲の外傷</div>
+            </div>
+            <div class="dx-arrow"></div>
+
+            <!-- 問診 + 身体診察（同時並行） -->
+            <div class="dx-layer dx-layer--branch">
+              <a class="dx-node" href="#historyPanel">
+                <div class="dx-node__title">問診</div>
+              </a>
+              <a class="dx-node" href="#examPanel">
+                <div class="dx-node__title">身体診察</div>
+              </a>
+            </div>
+            <div class="dx-arrow"></div>
+
+            <!-- X 線適応 ＋ X 線の読み方（並列） -->
+            <div class="dx-layer dx-layer--branch">
+              <a class="dx-node dx-node--judge" href="#imagingPanel">
+                <div class="dx-node__title">X 線適応＋撮影方向</div>
+              </a>
+              <a class="dx-node dx-node--judge" href="#imagingReadPanel">
+                <div class="dx-node__title">X 線の読み方</div>
+              </a>
+            </div>
+            <div class="dx-arrow"></div>
+
+            <!-- 鑑別リスト（頻度順：橈骨頭 → 脱臼 → 肘頭 → 顆上 → 外顆 → Monteggia → 肘内障） -->
+            <div class="dx-layer dx-layer--root">
+              <div class="dx-tree">
+                <div class="dx-tree__group">疾患（鑑別 → 詳細ページ）</div>
+                <a class="dx-node" href="疾患詳細/橈骨頭骨折.html">
+                  <div class="dx-node__title">橈骨頭骨折</div>
+                  <div class="dx-node__sub">成人 肘外傷 最多／<strong>fat pad sign＋肘伸展試験</strong>／2mm 以上で手術</div>
+                </a>
+                <a class="dx-node" href="疾患詳細/肘関節脱臼.html">
+                  <div class="dx-node__title">肘関節脱臼</div>
+                  <div class="dx-node__sub">脱臼 2 位／後方脱臼が大半／<strong>ketofol 整復</strong>／鉤状突起 10-15%</div>
+                </a>
+                <a class="dx-node" href="疾患詳細/肘頭骨折.html">
+                  <div class="dx-node__title">肘頭骨折</div>
+                  <div class="dx-node__sub">直達外力／<strong>尺骨神経 10%</strong>／2mm 未満保存・以上手術</div>
+                </a>
+                <a class="dx-node" href="疾患詳細/上腕骨顆上骨折.html">
+                  <div class="dx-node__title">上腕骨顆上骨折</div>
+                  <div class="dx-node__sub">小学生 FOOSH 最多／<strong>AIN 麻痺・teardrop</strong>／Gartland II/III 即整形</div>
+                </a>
+                <a class="dx-node" href="疾患詳細/上腕骨外顆骨折.html">
+                  <div class="dx-node__title">上腕骨外顆骨折</div>
+                  <div class="dx-node__sub">小児 2 番手／<strong>Salter-Harris IV</strong>／2mm 以上で手術／保存でも 10% 手術</div>
+                </a>
+                <a class="dx-node" href="疾患詳細/Monteggia骨折.html">
+                  <div class="dx-node__title">Monteggia 骨折</div>
+                  <div class="dx-node__sub">尺骨骨折＋橈骨頭脱臼／<strong>radiocapitellar line</strong>／PIN 麻痺・下垂指</div>
+                </a>
+                <a class="dx-node" href="疾患詳細/肘内障.html">
+                  <div class="dx-node__title">肘内障</div>
+                  <div class="dx-node__sub">1-4 歳／<strong>エコー J サイン</strong>／回内整復／再発 20%</div>
+                </a>
+              </div>
+            </div>
+            <div class="dx-arrow"></div>
+
+            <!-- disposition -->
+            <div class="dx-layer dx-layer--root">
+              <a class="dx-node dx-node--decision" href="#dispoPanel">
+                <div class="dx-node__title">disposition</div>
+                <div class="dx-node__sub">5 択／整復後 5P／整形外来予約</div>
+              </a>
+            </div>
+
+          </div>
+
+          <details class="dx-checklist" id="historyPanel">
+            <summary>問診</summary>
+            <ul class="dx-checklist__list">
+              <li><label><input type="checkbox" data-key="h-age"> <span><strong>年齢</strong> <span class="dx-checklist__sub">1-4 歳=肘内障／5-10 歳=顆上・外顆／成人=橈骨頭・脱臼／高齢=肘頭</span></span></label></li>
+              <li><label><input type="checkbox" data-key="h-time"> <span><strong>受傷時刻・最終飲食時刻</strong> <span class="dx-checklist__sub">経静脈麻酔/整復前の絶飲食判断</span></span></label></li>
+              <li><label><input type="checkbox" data-key="h-mech"> <span><strong>受傷機転</strong> <span class="dx-checklist__sub">FOOSH／直達外力（肘ぶつけ）／手を引かれた／不明</span></span></label></li>
+              <li><label><input type="checkbox" data-key="h-foosh"> <span><strong>FOOSH か否か</strong> <span class="dx-checklist__sub">FOOSH なら脱臼/橈骨頭/顆上/外顆/Monteggia を想起</span></span></label></li>
+              <li><label><input type="checkbox" data-key="h-direct"> <span><strong>直達外力（肘を直接ぶつけた）</strong> <span class="dx-checklist__sub">肘頭骨折を強く示唆</span></span></label></li>
+              <li><label><input type="checkbox" data-key="h-pull"> <span><strong>手を引かれた／受傷不明（4 歳以下）</strong> <span class="dx-checklist__sub">肘内障の典型病歴は 50% のみ</span></span></label></li>
+              <li><label><input type="checkbox" data-key="h-pain"> <span><strong>強い痛みか独歩か</strong> <span class="dx-checklist__sub">激痛 → 脱臼/肘頭骨折／独歩 → 橈骨頭骨折</span></span></label></li>
+              <li><label><input type="checkbox" data-key="h-neuro"> <span><strong>しびれ・指の動かしにくさ</strong> <span class="dx-checklist__sub">小指/薬指=尺骨神経／teardrop=AIN（顆上）／下垂指=PIN（Monteggia）</span></span></label></li>
+              <li><label><input type="checkbox" data-key="h-history"> <span><strong>過去の同様エピソード</strong> <span class="dx-checklist__sub">肘内障は再発率 20%</span></span></label></li>
+              <li><label><input type="checkbox" data-key="h-med"> <span><strong>抗凝固薬・骨粗鬆症・DM</strong> <span class="dx-checklist__sub">高齢者の手術判断・骨癒合に影響</span></span></label></li>
+              <li><label><input type="checkbox" data-key="h-adl"> <span><strong>ADL・利き手・職業／スポーツ</strong> <span class="dx-checklist__sub">紹介状に必須</span></span></label></li>
+            </ul>
+          </details>
+
+          <details class="dx-checklist" id="examPanel">
+            <summary>身体診察</summary>
+            <ul class="dx-checklist__list">
+              <li><label><input type="checkbox" data-key="e-vital"> <span><strong>バイタル</strong> <span class="dx-checklist__sub">高エネ外傷では多発外傷も意識</span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-inspect"> <span><strong>視診（変形・腫脹・開放創・皮膚緊張）</strong> <span class="dx-checklist__sub">肘 90° 屈曲位固定／squared off 変形／開放創／皮膚緊張<span class="dx-checklist__action"><strong>開放骨折ありなら</strong>：<strong>即整形コンサルト</strong>・洗浄・<strong>セファゾリン 2 g IV</strong>・破傷風トキソイド・創部写真撮影・生食ガーゼ被覆　<a href="疾患詳細/開放骨折.html">→ 開放骨折 詳細</a></span></span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-deform"> <span><strong>整復不能な変形＋血流障害／皮膚緊張</strong> <span class="dx-checklist__sub">明らかな転位／皮膚が骨に押し上げられる<span class="dx-checklist__action"><strong>該当あれば</strong>：X 線確認前でも<strong>整復検討</strong>、整形即コンサルト。皮膚壊死を防ぐため迅速対応</span></span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-tender"> <span><strong>圧痛マッピング</strong> <span class="dx-checklist__sub">肘頭／橈骨頭／上腕骨遠位顆上／内側上顆／外側上顆／尺骨近位部（部位で鑑別を絞る）</span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-radial"> <span><strong>橈骨頭の圧痛・回内外時痛</strong> <span class="dx-checklist__sub">回内外で疼痛 = 橈骨頭骨折として扱う（成人肘外傷の半分以上）<span class="dx-checklist__action"><strong>陽性なら</strong>：画像微妙でも<strong>橈骨頭骨折として外固定＋三角巾</strong>。fat pad sign 陽性も併発確認　<a href="疾患詳細/橈骨頭骨折.html">→ 橈骨頭骨折 詳細</a></span></span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-extension"> <span><strong>肘伸展試験</strong> <span class="dx-checklist__sub">回外で肘伸展可能なら骨折除外に強い／<strong>成人感度 98.4%／小児 94.6%</strong>／陰性尤度比 0.03〜0.11</span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-vessel"> <span><strong>橈骨動脈・尺骨動脈・末梢血流</strong> <span class="dx-checklist__sub">触知・左右差・毛細血管再充満／<strong>pink pulseless hand</strong>（拍動なし＋ピンク色）<span class="dx-checklist__action"><strong>顆上骨折で pink pulseless hand あれば</strong>：上腕動脈損傷を強く疑い、<strong>整形即コール／血管外科併診</strong>。整復後も再評価必須</span></span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-median"> <span><strong>正中神経・前骨間神経（AIN）</strong> <span class="dx-checklist__sub">示指 DIP／母指 IP 屈曲 → <strong>OK サイン</strong>／teardrop sign（IP/DIP が過伸展し "しずく状"）／感覚障害なし<span class="dx-checklist__action"><strong>teardrop あれば</strong>：<strong>AIN 損傷＝上腕骨顆上骨折</strong>に随伴。即整形コンサルト。来院時に所見なくても数日後後発あり　<a href="疾患詳細/上腕骨顆上骨折.html">→ 上腕骨顆上骨折 詳細</a></span></span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-ulnar"> <span><strong>尺骨神経</strong> <span class="dx-checklist__sub">小指・薬指のしびれ・知覚／第 1 背側骨間筋／肘頭近位を尺骨神経が通過<span class="dx-checklist__action"><strong>異常あれば</strong>：<strong>肘頭骨折で骨転位が大きい可能性</strong>（約 10% に尺骨神経障害）。緊急手術リスクで整形即コンサルト　<a href="疾患詳細/肘頭骨折.html">→ 肘頭骨折 詳細</a></span></span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-pin"> <span><strong>後骨間神経（PIN）</strong> <span class="dx-checklist__sub">MP 関節（中手指節関節）の伸展障害／手関節伸展は可／感覚障害なし<span class="dx-checklist__action"><strong>下垂指あれば</strong>：<strong>Monteggia 骨折で PIN 麻痺</strong>（10〜20% で合併）。尺骨骨折を見たら radiocapitellar line で橈骨頭脱臼を確認。即整形コンサルト</span></span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-comp"> <span><strong>前腕緊満／受動指伸展で激痛</strong> <span class="dx-checklist__sub">緊満／<strong>passive stretch pain</strong>／鎮痛抵抗性疼痛<span class="dx-checklist__action"><strong>該当あれば</strong>：<strong>コンパートメント症候群</strong>を疑い、<strong>組織内圧測定／整形即コール／fasciotomy 検討</strong></span></span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-rom"> <span><strong>可動域評価（脱臼疑いでは無理に動かさない）</strong> <span class="dx-checklist__sub">屈曲/伸展/回内/回外を健側比較。激痛での無理は禁物</span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-recheck"> <span><strong>整復・固定後の再評価</strong> <span class="dx-checklist__sub">正中・尺骨・橈骨神経／橈骨動脈／X 線（前後比較）。前後比較をカルテに必ず記載</span></span></label></li>
+            </ul>
+          </details>
+
+          <!-- 画像確定後の注意・見逃し回避・ピットフォール -->
+          <details class="dx-rules-l2" id="rulesL2Panel">
+            <summary>画像確定後の注意・見逃し回避・ピットフォール</summary>
+            <p class="dx-rules-l2__intro"><strong>診察段階の Red flag は身体診察パネルに統合済み</strong>（⚠ アクション）。ここでは<strong>画像で診断が確定してから</strong>意識すべき疾患固有の注意・鑑別の入口・ありがちな誤りをまとめる。</p>
+
+            <h4 class="dx-rules-l2__group">① 画像確定後の注意（疾患固有）</h4>
+            <ul class="dx-rules-l2__list">
+              <li class="dx-rule is-critical" id="rule-disloc-irreducible">
+                <div class="dx-rule__if"><span class="dx-rule__tag">画像</span><span>肘関節脱臼骨折で整復不能</span></div>
+                <div class="dx-rule__then"><strong>手術室での観血的整復</strong>が必要。<strong>1 回ワントライ後、戻らなければ即整形</strong>。「脱臼骨折は緊急で整復してただの骨折にする」が全関節脱臼の大原則　<a href="疾患詳細/肘関節脱臼.html" style="font-size:11px;">→ 肘関節脱臼 詳細</a></div>
+              </li>
+              <li class="dx-rule is-critical" id="rule-coronoid-fx">
+                <div class="dx-rule__if"><span class="dx-rule__tag">画像</span><span>鉤状突起骨折（脱臼の 10-15% に合併）</span></div>
+                <div class="dx-rule__then">"カギヅメ" 前の小さな骨片で、<strong>整復前は気づかれにくく整復後の前後比較で初めてわかる</strong>。剥離骨折なら整復に影響しないので非整形外科医も整復可。紹介状に記載</div>
+              </li>
+              <li class="dx-rule is-critical" id="rule-radial-head-typeIII">
+                <div class="dx-rule__if"><span class="dx-rule__tag">画像</span><span>橈骨頭骨折 2 mm 以上 / Hotchkiss Type III 以上</span></div>
+                <div class="dx-rule__then"><strong>手術考慮</strong>。2 mm 未満は保存。<strong>骨折線は 2 mm 以内が 62%</strong>（微妙骨折タイプが標準）。fat pad sign 陽性のみでも橈骨頭骨折として対応　<a href="疾患詳細/橈骨頭骨折.html" style="font-size:11px;">→ 橈骨頭骨折 詳細</a></div>
+              </li>
+              <li class="dx-rule is-critical" id="rule-supracondylar-gartland">
+                <div class="dx-rule__if"><span class="dx-rule__tag">画像</span><span>上腕骨顆上骨折 Gartland Type II/III</span></div>
+                <div class="dx-rule__then"><strong>即時整形コンサルト</strong>（整復・観血的整復・ピンニング）。<strong>Type I と II で迷ったら骨折線ありとして Type II 扱い</strong>。神経合併症 19〜49%、AIN 損傷が最多　<a href="疾患詳細/上腕骨顆上骨折.html" style="font-size:11px;">→ 上腕骨顆上骨折 詳細</a></div>
+              </li>
+              <li class="dx-rule is-critical" id="rule-monteggia-radial">
+                <div class="dx-rule__if"><span class="dx-rule__tag">画像</span><span>小児で尺骨骨折を見たら</span></div>
+                <div class="dx-rule__then"><strong>全例で Monteggia 骨折を疑い橈骨頭脱臼を必ず探す</strong>。<strong>radiocapitellar line</strong> で小頭中央通過を確認（Bado Type I 70%／III 25%）。<strong>必ず正面・側面 2 方向で確認</strong>。PIN 損傷 10〜20%、即整形</div>
+              </li>
+              <li class="dx-rule is-critical" id="rule-lateral-condyle">
+                <div class="dx-rule__if"><span class="dx-rule__tag">画像</span><span>上腕骨外顆骨折 Jakob Type II/III、2 mm 以上</span></div>
+                <div class="dx-rule__then"><strong>即整形</strong>（多くは Salter-Harris Type IV、関節面〜成長板〜骨幹端まで達する）。紹介状は「右上腕骨外顆骨折 (Salter-Harris Type IV)」表記。迷ったらオーバートリアージ</div>
+              </li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">② 見逃し回避トリガー</h4>
+            <ul class="dx-rules-l2__list">
+              <li class="dx-rule">
+                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>外傷後肘痛の全例</span></div>
+                <div class="dx-rule__then"><strong>橈骨頭骨折を必ず鑑別に挙げる</strong>。成人肘外傷の半分以上を占めるのに最も見逃されやすい。画像で迷ったら橈骨頭を触れて回内外で疼痛があれば骨折扱い</div>
+              </li>
+              <li class="dx-rule">
+                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>Fat pad sign 陽性（成人）</span></div>
+                <div class="dx-rule__then"><strong>75% に occult fracture、86.6% が橈骨頭骨折</strong>。骨折線が見えなくても橈骨頭骨折として対応、外固定＋三角巾＋紹介状に「橈骨頭骨折疑い」と記載</div>
+              </li>
+              <li class="dx-rule">
+                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>Fat pad sign 陽性（小児）</span></div>
+                <div class="dx-rule__then"><strong>76% に骨折、53% が上腕骨顆上骨折</strong>。Anterior fat pad sign の感度 96.4%／陰性的中率 98.2%。fat pad だけでも顆上骨折として対応</div>
+              </li>
+              <li class="dx-rule">
+                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>上腕骨顆上骨折で神経症状が来院時にない</span></div>
+                <div class="dx-rule__then"><strong>数日後に後発することが多い</strong>。「最初は神経所見なし → 翌日整形外科で発覚」のパターンに注意。神経症状の後発を両親へていねいに説明。<strong>断言できないなら即時整形にコンサルト</strong>（訴訟リスクも）</div>
+              </li>
+              <li class="dx-rule">
+                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>4 歳以下の上肢痛で受傷不明</span></div>
+                <div class="dx-rule__then"><strong>肘内障を疑う</strong>。典型病歴（手を引っ張った）は<strong>50% のみ</strong>。残り半分は「転んで腕を痛める」「よくわからないが腕を痛めた」。最初にエコーで J サイン・PFPS を評価</div>
+              </li>
+              <li class="dx-rule">
+                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>成人激痛＝レントゲン直行、独歩＝身体所見ベース</span></div>
+                <div class="dx-rule__then">激痛なら<strong>肘関節脱臼／肘頭骨折</strong>を最初に疑いレントゲン直行。独歩なら<strong>橈骨頭骨折</strong>として身体所見＋fat pad sign＋肘伸展試験で総合判断</div>
+              </li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">③ ピットフォール</h4>
+            <ul class="dx-rules-l2__list">
+              <li class="dx-rule is-pitfall">
+                <div class="dx-rule__if"><span class="dx-rule__tag">注意</span><span>橈骨頭骨折を「捻挫」で帰宅</span></div>
+                <div class="dx-rule__then">骨折線が微妙で fat pad sign のみ陽性ということが珍しくない。<strong>外傷後肘痛は全例で橈骨頭骨折を鑑別</strong>＋身体所見＋fat pad sign＋肘伸展試験を組み合わせる</div>
+              </li>
+              <li class="dx-rule is-pitfall">
+                <div class="dx-rule__if"><span class="dx-rule__tag">注意</span><span>肘内障をレントゲン室で整復してしまう</span></div>
+                <div class="dx-rule__then">レントゲン側面の撮影姿勢（肘 90° 屈曲＋前腕回旋）が整復法そのもの。<strong>クリック音が確認できないと診断が迷宮入り</strong>。肘内障疑いは最初にエコーで J サイン評価</div>
+              </li>
+              <li class="dx-rule is-pitfall">
+                <div class="dx-rule__if"><span class="dx-rule__tag">注意</span><span>上腕骨顆上骨折で「神経所見今は無し」と帰宅</span></div>
+                <div class="dx-rule__then">神経症状は<strong>数日後に後発することが多い</strong>。神経症状の継続は約 1 カ月、後遺症化すれば訴訟リスク。<strong>神経症状を断言できない上腕骨顆上骨折は即時整形</strong>。骨折線が明瞭な顆上骨折も即整形</div>
+              </li>
+              <li class="dx-rule is-pitfall">
+                <div class="dx-rule__if"><span class="dx-rule__tag">注意</span><span>Monteggia 骨折の橈骨頭脱臼を見落とす（尺骨だけ見て満足）</span></div>
+                <div class="dx-rule__then">尺骨骨折を見たら<strong>全例で橈骨頭脱臼を探す</strong>。<strong>radiocapitellar line を引いて小頭中央通過を確認</strong>。<strong>正常な小児でも 15.6% が中央通らない</strong>ので、尺骨骨折時に限って引くのがコツ。<strong>正面・側面 2 方向で確認</strong></div>
+              </li>
+              <li class="dx-rule is-pitfall">
+                <div class="dx-rule__if"><span class="dx-rule__tag">注意</span><span>上腕骨外顆骨折を保存予定にして再診なく転位拡大</span></div>
+                <div class="dx-rule__then">保存とした Jakob Type I・転位 2 mm 未満でも<strong>8.5〜10% が後に手術</strong>、介入後も<strong>約 10% に肘の屈曲・伸展障害</strong>。整形外科医のシーネ内でも外顆がずれる。「最軽症でも後日手術が 10%、合併症が 10%」と両親に誠意を込めて説明＋必ず再診</div>
+              </li>
+            </ul>
+          </details>
+
+          <!-- X 線適応・撮影方向 -->
+          <details class="dx-imaging" id="imagingPanel">
+            <summary>X 線適応＋撮影方向</summary>
+
+            <h4 class="dx-rules-l2__group">適応の考え方</h4>
+            <ul class="dx-imaging__list">
+              <li>明らかな外力＋肘痛・腫脹・変形・自動運動制限のいずれかがあれば撮影。<strong>成人激痛なら身体所見をとろうとせず最初からレントゲン直行</strong>（肘関節脱臼・肘頭骨折は明確骨折タイプ）</li>
+              <li>独歩 walk in 受診なら<strong>橈骨頭骨折を想起</strong>して画像微妙前提で身体所見＋fat pad sign＋肘伸展試験を組み合わせる</li>
+              <li><strong>4 歳以下の牽引後 or 受傷不明の上肢痛は最初にエコー</strong>。レントゲンは後回し（撮影姿勢自体が整復になってしまう）</li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">撮影方向</h4>
+            <ul class="dx-imaging__list">
+              <li><strong>成人</strong>：肘関節 2 方向（正面・側面）。<strong>側面像が決定的</strong>（脱臼・肘頭骨折・橈骨頭骨折・fat pad sign すべて側面で）</li>
+              <li><strong>小児</strong>：左右両側を撮ると比較しやすい。<strong>最初から健側もオーダー</strong>することを推奨</li>
+              <li><strong>肘内障疑い</strong>：レントゲン姿勢が整復法と同じ → <strong>まずエコー</strong>。J サイン（橈骨頭−上腕骨小頭間に輪状靱帯が J 字状に挟まる、感度 64.9%／<strong>特異度 100%</strong>）と PFPS（感度 98%／特異度 70%）</li>
+              <li><strong>Monteggia 骨折疑い</strong>：尺骨骨折を見たら<strong>正面・側面 2 方向</strong>で radiocapitellar line を必ず引く（片方しか異常が出ないことがある）</li>
+              <li><strong>外顆骨折疑い</strong>：<strong>小頭の外側転位は正面像が最も分かりやすい</strong>。Type I/II の微妙タイプは radiocapitellar line で評価</li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">追加検査の閾値</h4>
+            <ul class="dx-imaging__list">
+              <li><strong>CT 追加</strong>：橈骨頭骨折で<strong>Hotchkiss / 改訂 Mason 分類確定</strong>のため／terrible triad（脱臼＋橈骨頭骨折＋鉤状突起骨折）疑い／顆上骨折の転位確定／脱臼骨折で観血的整復前評価</li>
+              <li><strong>エコー</strong>：肘内障の初期評価（J サイン）＋整復後の再評価。橈骨頭骨折の描出にも報告あり（熟練要）</li>
+              <li><strong>MRI</strong>：靱帯損傷・筋挫傷（橈骨頭骨折で約 30% に合併）は整形外来で評価。ER で必須ではない</li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">整復後 X 線（神経血管再評価とセットで必須）</h4>
+            <ul class="dx-imaging__list">
+              <li><strong>必ず整復前後 2 枚を撮り紹介状に添付</strong>。脱臼整復後／顆上整復後／前後比較</li>
+              <li>整復後に<strong>鉤状突起骨折の有無を再評価</strong>（脱臼の 10-15% に合併、整復後の前後比較で初めてわかる）</li>
+              <li><strong>整復前後で正中・尺骨・橈骨神経＋橈骨動脈触知を比較し、カルテに必ず記載</strong>（画像のみで帰宅しない）</li>
+              <li>肘内障では<strong>整復後にエコーで J サイン消失を再確認</strong>。両親に客観的に証明可能</li>
+            </ul>
+          </details>
+
+          <!-- X 線の読み方（系統的アプローチ） -->
+          <details class="dx-imaging" id="imagingReadPanel">
+            <summary>X 線の読み方（系統的アプローチ）</summary>
+
+            <h4 class="dx-rules-l2__group">① 撮影セットの確認</h4>
+            <ul class="dx-imaging__list">
+              <li><strong>成人は 2 方向（正面・側面）</strong>が揃っているか。側面像が決定的（脱臼・肘頭骨折・橈骨頭骨折・fat pad sign すべて側面で）</li>
+              <li><strong>小児は健側を含めた両側</strong>を並べる（左右比較が必須）。撮影してなければ追加オーダー</li>
+              <li>撮影体位の妥当性：回旋不良で関節間隙が不明瞭なら撮り直しを依頼</li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">② 側面像 — fat pad sign を必ず確認</h4>
+            <ul class="dx-imaging__list">
+              <li><strong>Posterior fat pad</strong>：上腕骨後面はもともと脂肪と骨が密接 → <strong>わずかでも盛り上がりがあれば陽性 = 異常</strong></li>
+              <li><strong>Anterior fat pad</strong>：もともと前面はわずかなスペースあり → <strong>強く張り出していれば陽性</strong></li>
+              <li><strong>Sail sign</strong>：両方陽性で 2 つの pad がヨットの帆のように見える</li>
+              <li><strong>成人で fat pad 陽性</strong> = 75% に occult fracture、<strong>86.6% が橈骨頭骨折</strong>。骨折線が見えなくても橈骨頭骨折として対応</li>
+              <li><strong>小児で fat pad 陽性</strong> = 76% に骨折、<strong>53% が上腕骨顆上骨折</strong>。Anterior fat pad sign の感度 96.4%／陰性的中率 98.2%</li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">③ Anterior humeral line — 小児上腕骨顆上骨折の検出</h4>
+            <ul class="dx-imaging__list">
+              <li><strong>側面像で左右比較</strong>。上腕骨前縁の延長線を引く</li>
+              <li><strong>正常：上腕骨小頭の中央 1/3 を通過</strong></li>
+              <li><strong>異常：線が小頭の前方を通る</strong>＝小頭が後方転位（顆上骨折の 98% は伸展骨折）</li>
+              <li>上腕骨顆上骨折で<strong>これが唯一の異常所見</strong>ということもある（必須評価）</li>
+              <li>暗記必須の 3 ポイントの 1 つ：① 前方成分の若木骨折線、② anterior humeral line、③ fat pad sign</li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">④ Radiocapitellar line — Monteggia 骨折・上腕骨外顆骨折</h4>
+            <ul class="dx-imaging__list">
+              <li>橈骨の中心線を引いた延長線。<strong>正常：小頭の中央を通過</strong></li>
+              <li><strong>異常：小頭の上・外側を通過 → 橈骨頭脱臼あり = Monteggia 骨折</strong></li>
+              <li><strong>Bado Type I（70%、最多）</strong>：側面像で radiocapitellar line が<strong>小頭の上</strong>を通過</li>
+              <li><strong>Bado Type III（25%）</strong>：正面像で radiocapitellar line が<strong>小頭の外側</strong>を通過</li>
+              <li><strong>必ず正面・側面 2 方向で確認</strong>（片方しか異常が出ないことがある）</li>
+              <li><strong>正常な小児の肘でも 15.6% で小頭中央を通らない</strong> → ルーチンで引くと迷う。<strong>小児尺骨骨折を見たときに限って引く</strong></li>
+              <li><strong>上腕骨外顆骨折</strong>でも radiocapitellar line を活用：<strong>延長線が小頭から外側に外れる → 骨折</strong>。迷ったら左右比較</li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">⑤ 肘伸展試験（成人・小児共通）</h4>
+            <ul class="dx-imaging__list">
+              <li>回外したまま肘を伸展できるかをみる</li>
+              <li><strong>成人</strong>：感度 98.4%、陰性尤度比 0.03 → 除外に強い</li>
+              <li><strong>小児</strong>：感度 94.6%、陰性尤度比 0.11 → 除外に強い</li>
+              <li><strong>画像で骨折線なし＋fat pad sign 陰性＋肘伸展可能 → 固定なし・再診不要</strong></li>
+              <li>逆に肘伸展不可なら「骨折がないと整形外科医にお墨つきをもらうまで固定」</li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">⑥ 見落としやすい所見・特殊サイン</h4>
+            <ul class="dx-imaging__list">
+              <li><strong>前方成分の若木骨折線</strong>：上腕骨顆上骨折の 98% は伸展骨折 → まず前面に亀裂、後方は保たれる。小児骨は柔らかく片側だけ亀裂・反対側はしなり</li>
+              <li><strong>小頭の外側転位</strong>：上腕骨外顆骨折。外顆の付着筋が骨片を引っ張り回転転位（正面像が最も分かりやすい）</li>
+              <li><strong>橈骨頭の微妙な骨折線</strong>：くびれや頭部に骨折線。<strong>2 mm 以内が 62%</strong>。写真を拡大して一所懸命探す</li>
+              <li><strong>エコー J サイン</strong>：肘内障の確定診断（特異度 100%）</li>
+              <li><strong>エコー PFPS</strong>：肘骨折除外（感度 98%）。J サインが見えないときの骨折除外に使用</li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">⑦ CT を追加するタイミング</h4>
+            <ul class="dx-imaging__list">
+              <li><strong>橈骨頭骨折で Hotchkiss / 改訂 Mason 分類確定</strong>（2 mm 以上 / Type III 以上の手術判定）</li>
+              <li><strong>Terrible triad 疑い</strong>（脱臼＋橈骨頭骨折＋鉤状突起骨折）</li>
+              <li><strong>上腕骨顆上骨折の転位確定</strong>（Gartland Type 確定）</li>
+              <li>脱臼骨折で観血的整復前評価</li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">⑧ 整復後の再読影（必須）</h4>
+            <ul class="dx-imaging__list">
+              <li><strong>脱臼整復後</strong>：必ず前後 2 枚を撮影。<strong>整復後の前後比較で鉤状突起骨折（10-15%）が初めてわかる</strong></li>
+              <li><strong>顆上整復後</strong>：anterior humeral line が小頭中央に戻ったか、Type I 扱いで保存可能か再評価</li>
+              <li><strong>前後比較</strong>を並べて紹介状に添付（紹介状の "決め手"）</li>
+              <li>同時に正中・尺骨・橈骨神経＋橈骨動脈触知を再評価し、画像 + 神経血管所見をセットで記載（画像のみで帰宅しない）</li>
+              <li>肘内障では<strong>整復後にエコーで J サイン消失</strong>を確認</li>
+            </ul>
+          </details>
+
+          <!-- 治療リファレンス -->
+          <details class="dx-imaging" id="rxPanel">
+            <summary>治療リファレンス：整復・固定・抗菌薬・処置</summary>
+
+            <h4 class="dx-rules-l2__group">経静脈麻酔（ketofol）</h4>
+            <ul class="dx-imaging__list">
+              <li><strong>肘関節脱臼の整復はほぼ全例 ketofol（ケタミン＋プロポフォール）下で実施</strong>。他の経静脈麻酔と比べて合併症が少なく鎮静も十分</li>
+              <li>若い筋肉質の患者が多く力技は困難。<strong>十分な筋弛緩と鎮静</strong>（顔をしかめていれば投薬不足）</li>
+              <li>気道管理体制を整えてから開始。最終飲食時刻を必ず確認</li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">肘関節脱臼整復術</h4>
+            <ul class="dx-imaging__list">
+              <li>① レントゲンで肘関節脱臼を確認 → 経静脈麻酔の準備</li>
+              <li>② Ketofol で十分に鎮静・脱力</li>
+              <li>③ <strong>術者は前腕を遠位へ牽引</strong>しつつ、整復できなければ徐々に<strong>腕を屈曲</strong>させる。あるいは<strong>肘 90° 屈曲位のまま前腕牽引</strong></li>
+              <li>④ <strong>助手は術者と同じ力で上腕にカウンタートラクション</strong>（麻酔担当者と兼任で OK）</li>
+              <li>⑤ 整復後、覚醒したら<strong>正中神経・尺骨神経・橈骨神経の損傷</strong>を評価。所見があれば紹介状に記載</li>
+              <li>⑥ <strong>肘関節外固定＋三角巾</strong>で固定し後日整形外科再診へ</li>
+              <li><strong>整復の本質</strong>：腕力ではなく「十分な筋弛緩 + 適切なカウンタートラクション」がすべて。失敗時は<strong>力を強めるのではなく、鎮静追加・カウンタートラクション補強</strong></li>
+              <li><strong>1 回ワントライしてダメなら整形へ</strong>。脱臼骨折は緊急で整復してただの骨折にするのが大原則</li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">肘内障整復（回内法 → 回外法）</h4>
+            <ul class="dx-imaging__list">
+              <li>術者は患児の前に立ち、<strong>親指で橈骨頭をしっかりホールド</strong></li>
+              <li>肘 90° 屈曲位 → 愛護的に<strong>回内</strong>（患児の掌が術者の方を向く方向）</li>
+              <li><strong>回内法のほうが回外法より痛みが少なく、整復率も高い（回内 80〜95% vs 回外 69〜77%）</strong></li>
+              <li>回内でダメなら<strong>回外法</strong>（掌を上に向ける）でリトライ</li>
+              <li><strong>クリック音（橈骨頭ホールドの親指で感じる）が成功サイン</strong></li>
+              <li>整復後にエコーで<strong>J サイン消失</strong>を再確認 → 両親に客観的に証明可能</li>
+              <li><strong>手羽先法</strong>：J サインがハッキリしない／クリック音が術者しかわからない場合、両親や研修医に橈骨頭近くを触ってもらってクリック音を共有。「手羽先を捻って骨が外れる感覚があれば成功」</li>
+              <li>整復確認できれば<strong>腕を動かすまで ER に残す必要なし</strong> → 帰宅 OK</li>
+              <li>「痛みの記憶」で腕を動かさない患児もいる → 事前に両親へ説明。<strong>再発率 20%</strong> を必ず説明</li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">肘関節外固定（全肘外傷に共通）</h4>
+            <ul class="dx-imaging__list">
+              <li><strong>適応</strong>：成人＝肘関節脱臼整復後／橈骨頭骨折／肘頭骨折　小児＝上腕骨顆上骨折／上腕骨外顆骨折／Monteggia 骨折（応急処置）</li>
+              <li>① <strong>採寸</strong>：小指の付け根 → 肘 → 腋窩の約 10 cm 手前までの長さ (A cm)</li>
+              <li>② <strong>切断</strong>：A cm の長さにカット（追加カットなし）</li>
+              <li>③ <strong>固定</strong>：手部尺側 → 肘頭 → 上腕まで一連で固定（<strong>ulnar gutter 〜 long arm posterior splint</strong>）</li>
+              <li>④ <strong>完成肢位</strong>：<strong>肘関節 90° 屈曲、前腕は正中位</strong>（小さく前にならえの姿勢）</li>
+              <li>外固定後は必ず<strong>三角巾を併用</strong>。バストバンドは肘外傷では通常不要</li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">三角巾の実技ポイント</h4>
+            <ul class="dx-imaging__list">
+              <li>① <strong>固定が完了するまで肘 90°・前腕水平をキープ</strong>（重要）。三角巾の中心の線を前腕に重ねる</li>
+              <li>② 垂れ下がりを折り返し首の後ろで結ぶ。結んだ後、<strong>肘 90°・前腕水平を再チェック</strong>。三角巾の肘側の余りは一つ結びで折り込む</li>
+              <li>③ 三角巾だけで完成。バストバンドは肘外傷では通常不要（必要なら Y 字の間から手を出せる位置で）</li>
+              <li><strong>独居高齢者</strong>：装着不能になりやすい。本人＋家族で実技確認、書面でも交付</li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">開放骨折・抗菌薬／鎮痛</h4>
+            <ul class="dx-imaging__list">
+              <li><strong>開放骨折</strong>：<strong>セファゾリン 2 g IV</strong>（Gustilo III なら + ゲンタマイシン）／<strong>破傷風トキソイド</strong>／創部写真撮影／生食ガーゼ被覆して OR まで dressing を外さない／整形即コール</li>
+              <li><strong>鎮痛 第一選択：アセトアミノフェン</strong> 1,000 mg × 4 回／日（4 g/日まで）。高齢者・小児にも安全</li>
+              <li><strong>NSAIDs（第二選択）</strong>：ロキソプロフェン 60 mg × 3 回／日。<strong>PPI 併用</strong>／腎機能 eGFR ≥ 60／消化管出血歴・心血管疾患なし／脱水なし</li>
+              <li><strong>処方日数</strong>：整形外来日まで（通常 5-7 日分）</li>
+              <li><strong>小児</strong>：アセトアミノフェン 10-15 mg/kg/回（最大 4 回/日）。NSAIDs は要注意</li>
+            </ul>
+          </details>
+
+          <!-- disposition -->
+          <details class="dx-imaging" id="dispoPanel">
+            <summary>disposition の目安</summary>
+
+            <h4 class="dx-rules-l2__group">30 秒で決める（5 択マネジメント）</h4>
+            <p class="dx-rules-l2__intro">※ 上肢外傷の即時整形コンサルト適応はわずか 3 つ + 小児肘の追加 1 つ：① 開放骨折、② 整復不能な脱臼、③ 血管・神経症状の合併、④ 小児肘では上腕骨顆上骨折 Type II/III／Monteggia／転位 2 mm 以上の外顆骨折。それ以外は<strong>「帰宅手術 or 帰宅保存」</strong>。</p>
+            <ul class="dx-rules-l2__list">
+              <li class="dx-rule is-critical">
+                <div class="dx-rule__if"><span class="dx-rule__tag">即時整形</span><span>整復不能脱臼／開放骨折／神経血管症状／上腕骨顆上骨折 Gartland II/III／Monteggia 骨折／外顆 2 mm 以上</span></div>
+                <div class="dx-rule__then"><strong>夜間・休日でも整形コール</strong>。気道・出血の安定化 → 洗浄・抗菌薬・破傷風 → 手術室。<strong>「断言できないなら呼ぶ」</strong>。整形外科医側も事前連絡を歓迎</div>
+              </li>
+              <li class="dx-rule">
+                <div class="dx-rule__if"><span class="dx-rule__tag">入院整形</span><span>多発外傷／ADL 困難な高齢者／脱臼骨折で手術待機／コンパートメント疑い</span></div>
+                <div class="dx-rule__then">入院 + 翌朝コンサルト。挙上・厳重 5P 観察、ADL 支援と社会調整</div>
+              </li>
+              <li class="dx-rule">
+                <div class="dx-rule__if"><span class="dx-rule__tag">帰宅手術</span><span>橈骨頭骨折 2 mm 以上 / Hotchkiss Type III 以上／肘頭骨折 2 mm 以上／成人 Monteggia（稀）</span></div>
+                <div class="dx-rule__then">待機手術（10 日以内に整形外来）。<strong>肘関節外固定 + 三角巾</strong>で帰宅、紹介状に分類・神経所見・転位の程度を明記</div>
+              </li>
+              <li class="dx-rule">
+                <div class="dx-rule__if"><span class="dx-rule__tag">帰宅保存</span><span>橈骨頭骨折 2 mm 未満／肘頭骨折 2 mm 未満／肘内障整復後／顆上 Type I で神経所見なし／外顆 2 mm 未満</span></div>
+                <div class="dx-rule__then"><strong>肘関節外固定 + 三角巾</strong>、整形外来 1〜2 週以内予約。整復後 5P 観察・神経再評価を本人／家族に教える</div>
+              </li>
+              <li class="dx-rule">
+                <div class="dx-rule__if"><span class="dx-rule__tag">再診不要</span><span>肘伸展試験陽性＋fat pad 陰性で骨折除外／肘内障整復確認後で症状なし</span></div>
+                <div class="dx-rule__then">疼痛増悪・腫脹増大・しびれ増悪で再受診を指示。<strong>「48-72h で改善なければ再受診」を必ず書面交付</strong>（occult fracture・後発神経症状の安全弁）</div>
+              </li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">観察時間・フォロー間隔サマリー</h4>
+            <ul class="dx-imaging__list">
+              <li><strong>整復後 30 分 5P 観察</strong>：脱臼整復・固定直後</li>
+              <li><strong>整復前後の神経評価（正中・尺骨・橈骨）</strong>：脱臼例で必須。経過記録に明記</li>
+              <li><strong>上腕骨顆上骨折で帰宅した場合</strong>：神経症状の<strong>後発（数日後）</strong>に注意。両親に両指の OK サインを毎日確認するよう指導</li>
+              <li><strong>上腕骨外顆骨折 保存例</strong>：<strong>8.5〜10% が後に手術、10% が機能障害</strong>。短期再診を必ず</li>
+              <li><strong>肘内障</strong>：再発率 20%。再発時は同じ手技で整復可能</li>
+              <li><strong>整形外来 1〜2 週以内</strong>：保存治療例の標準フォロー</li>
+              <li><strong>外固定期間</strong>：橈骨頭・肘頭骨折 3〜4 週／脱臼整復後 2〜3 週／顆上・外顆は整形外科の判断</li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">社会軸・特殊状況</h4>
+            <ul class="dx-imaging__list">
+              <li><strong>利き手・職業</strong>：投手・大工・音楽家は閾値を下げて整形紹介。手術 vs 保存の判断材料</li>
+              <li><strong>独居高齢者</strong>：三角巾装着困難。ADL（食事・更衣・排泄）に支障 → 入院・社会調整の検討</li>
+              <li><strong>小児・両親への説明</strong>：occult fracture・後発神経症状・10% 手術リスクなど「目に見えないもの」を<strong>心に届く言葉</strong>で。「割り箸が 2 つに折れるイメージかもしれないが、亀裂だけの場合もある」</li>
+              <li><strong>反復受診・機転不釣り合い</strong>：小児虐待のスクリーニング（不明機転の上肢外傷）</li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">退室前ピットフォール（退室時固有）</h4>
+            <ul class="dx-rules-l2__list">
+              <li class="dx-rule is-pitfall">
+                <div class="dx-rule__if"><span class="dx-rule__tag">注意</span><span>上腕骨顆上骨折 Type I で「神経所見なし」と帰宅して両親への説明が不十分</span></div>
+                <div class="dx-rule__then"><strong>神経症状の後発（数日後）</strong>を必ず両親に説明。<strong>断言できないなら即時整形</strong>。OK サインの確認方法を指導</div>
+              </li>
+              <li class="dx-rule is-pitfall">
+                <div class="dx-rule__if"><span class="dx-rule__tag">注意</span><span>上腕骨外顆骨折を「軽症」で帰宅・再診なし</span></div>
+                <div class="dx-rule__then">保存予定でも<strong>10% が手術、10% が機能障害</strong>。整形外科医のシーネ内でも外顆がずれる。短期再診を必ず</div>
+              </li>
+              <li class="dx-rule is-pitfall">
+                <div class="dx-rule__if"><span class="dx-rule__tag">注意</span><span>肘内障で「整復したので終わり」と説明</span></div>
+                <div class="dx-rule__then"><strong>再発率 20%</strong> を必ず説明。「痛みの記憶」で腕を動かさない患児がいることも事前説明</div>
+              </li>
+              <li class="dx-rule is-pitfall">
+                <div class="dx-rule__if"><span class="dx-rule__tag">注意</span><span>三角巾の着脱方法を口頭だけで説明</span></div>
+                <div class="dx-rule__then">独居高齢者・小児では装着不能になる。<strong>本人 + 家族で実技確認</strong>、書面でも交付</div>
+              </li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">退室前チェック（紹介状品質＋患者教育）</h4>
+            <ul class="dx-checklist__list">
+              <li><label><input type="checkbox" data-key="dispo-xray-attach"> <span><strong>整復前後 X 線を紹介状に添付した</strong> <span class="dx-checklist__sub">脱臼整復後の鉤状突起骨折（10-15%）も評価</span></span></label></li>
+              <li><label><input type="checkbox" data-key="dispo-neuro-doc"> <span><strong>神経所見（正中・尺骨・橈骨）を紹介状に明記した</strong> <span class="dx-checklist__sub">整復前後の比較、teardrop sign や下垂指の有無</span></span></label></li>
+              <li><label><input type="checkbox" data-key="dispo-classify"> <span><strong>分類（Hotchkiss／Gartland／Bado／Salter-Harris）を明記した</strong> <span class="dx-checklist__sub">外顆骨折は「Salter-Harris Type IV」表記で統一</span></span></label></li>
+              <li><label><input type="checkbox" data-key="dispo-disp-mm"> <span><strong>転位の程度（2 mm 未満／以上）を明記した</strong> <span class="dx-checklist__sub">橈骨頭・肘頭・外顆の手術判定基準</span></span></label></li>
+              <li><label><input type="checkbox" data-key="dispo-adl-doc"> <span><strong>ADL・利き手・職業／スポーツを紹介状に明記した</strong> <span class="dx-checklist__sub">投手・大工・音楽家は閾値を下げて手術相談</span></span></label></li>
+              <li><label><input type="checkbox" data-key="dispo-ortho"> <span><strong>整形外科外来の日時を確定した</strong> <span class="dx-checklist__sub">保存例は 1-2 週以内、外顆保存例は短期再診</span></span></label></li>
+              <li><label><input type="checkbox" data-key="dispo-analgesic"> <span><strong>鎮痛薬を処方量と日数で指示した</strong> <span class="dx-checklist__sub">アセトアミノフェン first、小児は体重別</span></span></label></li>
+              <li><label><input type="checkbox" data-key="dispo-5p"> <span><strong>整復後 5P（色・温・脈・知覚・運動）・神経再評価を本人／家族に教えた</strong> <span class="dx-checklist__sub">悪化時は即受診と書面で説明</span></span></label></li>
+              <li><label><input type="checkbox" data-key="dispo-sling"> <span><strong>肘関節外固定 + 三角巾の着用方法を本人・家族と実技確認した</strong> <span class="dx-checklist__sub">90° 屈曲・前腕正中位を保持、装着・外し方を指導</span></span></label></li>
+              <li><label><input type="checkbox" data-key="dispo-ain"> <span><strong>小児顆上骨折で AIN 後発の説明をした（OK サイン確認方法）</strong> <span class="dx-checklist__sub">teardrop sign を両親に教える、毎日確認</span></span></label></li>
+              <li><label><input type="checkbox" data-key="dispo-pulled-elbow"> <span><strong>肘内障で再発率 20% と「痛みの記憶」を両親に説明した</strong> <span class="dx-checklist__sub">整復後にエコー J サイン消失を見せると説得力アップ</span></span></label></li>
+              <li><label><input type="checkbox" data-key="dispo-recheck-rule"> <span><strong>48-72h で疼痛増悪・しびれ後発なら再受診を書面で渡した</strong> <span class="dx-checklist__sub">occult fracture・後発神経症状の安全弁</span></span></label></li>
+              <li><label><input type="checkbox" data-key="dispo-social"> <span><strong>小児虐待スクリーニング（不明機転）／高齢者虐待を意識した</strong> <span class="dx-checklist__sub">機転不釣り合い・反復受診で要警戒</span></span></label></li>
+            </ul>
+
+            <a class="dx-node dx-node--external" href="疾患詳細/上肢骨折の固定/肘周囲骨折.html" style="margin-top: 14px;">
+              <div class="dx-node__title">肘周囲骨折の固定法（疾患詳細）</div>
+              <div class="dx-node__sub">肘関節 90° 屈曲位の外固定＋三角巾／全肘外傷共通</div>
+            </a>
+          </details>
+
+          <!-- 参考文献 -->
+          <details class="dx-imaging" id="refsPanel">
+            <summary>参考文献</summary>
+
+            <h4 class="dx-rules-l2__group">疾患詳細ページ</h4>
+            <ul class="dx-imaging__list">
+              <li><a href="疾患詳細/橈骨頭骨折.html">橈骨頭骨折</a>／<a href="疾患詳細/肘関節脱臼.html">肘関節脱臼</a>／<a href="疾患詳細/肘頭骨折.html">肘頭骨折</a></li>
+              <li><a href="疾患詳細/上腕骨顆上骨折.html">上腕骨顆上骨折</a>／<a href="疾患詳細/上腕骨外顆骨折.html">上腕骨外顆骨折</a>／<a href="疾患詳細/Monteggia骨折.html">Monteggia 骨折</a>／<a href="疾患詳細/肘内障.html">肘内障</a></li>
+              <li><a href="疾患詳細/開放骨折.html">開放骨折</a></li>
+              <li>固定法詳細：<a href="疾患詳細/上肢骨折の固定/肘周囲骨折.html">肘周囲骨折の固定</a></li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">関連ハブ</h4>
+            <ul class="dx-imaging__list">
+              <li><a href="肩の外傷・痛み.html">肩の外傷・痛み</a>／<a href="手関節・手の外傷.html">手関節・手の外傷</a>／<a href="転倒.html">転倒</a></li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">未作成（リンク予約）</h4>
+            <ul class="dx-imaging__list">
+              <li>小児骨端線骨折の系統的解説（Salter-Harris 全 5 タイプ）</li>
+              <li>terrible triad（脱臼＋橈骨頭骨折＋鉤状突起骨折）／成人 Monteggia 骨折／成人上腕骨顆上骨折</li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">主要な根拠・参考文献</h4>
+            <ul class="dx-imaging__list">
+              <li><strong>骨折ハンター（中外医学社）</strong>— 第 7 章「成人・肘関節痛ハンター」（肘関節脱臼・肘頭骨折・橈骨頭骨折）<br>　ER の "hidden tip"：①外傷後肘痛は全例で橈骨頭骨折を鑑別 ②fat pad sign 陽性なら 75% に occult fracture、86.6% が橈骨頭骨折 ③肘伸展試験は感度 98.4%（成人）／94.6%（小児） ④画像微妙でも回内外時痛があれば橈骨頭骨折として扱う ⑤激痛＝レントゲン直行、独歩＝身体所見ベース</li>
+              <li><strong>骨折ハンター</strong>— 第 8 章「小児・肘関節痛ハンター①（上腕骨顆上骨折）」<br>　暗記必須 3 ポイント：①前方成分の若木骨折線、②anterior humeral line（小頭中央 1/3 通過）、③fat pad sign（小児 76% に骨折、53% が顆上骨折）。Gartland Type II/III は即整形。AIN 損傷で teardrop sign、神経症状は後発あり</li>
+              <li><strong>骨折ハンター</strong>— 第 9 章「小児・肘関節痛ハンター②（肘内障）」<br>　1-4 歳の牽引後／受傷不明 → 最初にエコー。J サイン（感度 64.9%／特異度 100%）と PFPS（感度 98%／特異度 70%）。整復は回内法（80-95%）→ 回外法（69-77%）。手羽先法でクリック音を共有。再発率 20%</li>
+              <li><strong>骨折ハンター</strong>— 第 10 章「小児・肘関節痛ハンター③（Monteggia 骨折・上腕骨外顆骨折・小児骨端線骨折）」<br>　Monteggia：尺骨骨折＋橈骨頭脱臼、Bado Type I 70%／III 25%、radiocapitellar line で評価、PIN 損傷 10-20%（下垂指）。外顆骨折：小児肘骨折の 15%、多くは Salter-Harris Type IV、2 mm 以上で手術、保存でも 10% 手術・10% 機能障害</li>
+              <li><strong>骨折ハンター</strong>— Part II「肘関節脱臼整復術」「肘関節外固定」「三角巾±バストバンド固定」<br>　全肘外傷の固定は<strong>肘関節 90° 屈曲位の外固定（シーネ）＋三角巾</strong>に集約。ketofol で十分な筋弛緩、術者前腕牽引＋助手カウンタートラクション、1 回ワントライで戻らなければ整形</li>
+              <li>他科コンサルト実践マニュアル — 整形外科コンサルト文の標準書式</li>
+              <li>AIN vs PIN 整理表：AIN = 顆上骨折＋正中神経の枝＋DIP/IP 屈曲障害（teardrop sign）／PIN = Monteggia 骨折＋橈骨神経の枝＋MP 伸展障害（下垂指）。両方とも感覚障害なし</li>
+            </ul>
+
+            <p style="font-size:11px;color:var(--muted);margin-top:8px;">#ER #救急 #肘 #橈骨頭骨折 #肘関節脱臼 #肘頭骨折 #上腕骨顆上骨折 #肘内障 #Monteggia骨折 #上腕骨外顆骨折 #整形外科</p>
+          </details>
+
+        </div>
+      </div>
+
+    </article>
+  </main>
+
+  <nav class="hokuto-bottom">
+    <button class="hokuto-bottom__btn" type="button" id="navBack">
+      <span class="hokuto-bottom__icon">←</span><span>戻る</span>
+    </button>
+    <a class="hokuto-bottom__btn" href="ツール.html">
+      <span class="hokuto-bottom__icon">⚙</span><span>ツール</span>
+    </a>
+    <a class="hokuto-bottom__btn" href="index.html">
+      <span class="hokuto-bottom__icon">⌂</span><span>ホーム</span>
+    </a>
+  </nav>
+
+  <script>
+  (function(){
+    // 来院後チェックリスト：localStorage 永続化 + per-panel リセット
+    const STORAGE_KEY = 'elbow-dx-checklist-v1';
+    let stored = {};
+    try { stored = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); } catch (_) {}
+    const allBoxes = document.querySelectorAll('.dx-checklist__list input[type="checkbox"], input[type="checkbox"][data-key]');
+    allBoxes.forEach(cb => {
+      const key = cb.dataset.key;
+      if (!key) return;
+      if (stored[key]) cb.checked = true;
+      cb.addEventListener('change', () => {
+        if (cb.checked) stored[key] = true; else delete stored[key];
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(stored));
+      });
+    });
+    document.querySelectorAll('.dx-checklist__reset').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const details = btn.closest('details');
+        if (!details) return;
+        details.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+          cb.checked = false;
+          delete stored[cb.dataset.key];
+        });
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(stored));
+      });
+    });
+
+    // パネル開閉状態を localStorage で復元
+    ['historyPanel', 'examPanel', 'rulesL2Panel', 'imagingPanel', 'imagingReadPanel', 'rxPanel', 'dispoPanel', 'refsPanel'].forEach(id => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      const key = `elbow-${id}-open-v1`;
+      const saved = localStorage.getItem(key);
+      if (saved !== null) el.open = saved === '1';
+      el.addEventListener('toggle', () => {
+        localStorage.setItem(key, el.open ? '1' : '0');
+      });
+    });
+
+    const navBack = document.getElementById('navBack');
+    if (navBack) navBack.addEventListener('click', () => {
+      if (window.history.length > 1) history.back();
+      else window.location.href = 'index.html';
+    });
+
+    // === Peek プレビュー ===
+    // フローのノードで内部アンカー（#...）はモーダルで対象セクションを
+    // クローン表示。外部ページへのリンク（.html）は通常遷移。長押しの OS
+    // メニューも抑制してタップと同じ挙動に統一。
+    const PEEK_SELECTOR = 'a.dx-node[href^="#"]';
+    let peekOverlay = null;
+
+    function createPeekOverlay() {
+      const overlay = document.createElement('div');
+      overlay.className = 'peek-modal';
+      overlay.innerHTML =
+        '<div class="peek-modal__sheet" role="dialog" aria-modal="true" aria-labelledby="peekTitle">' +
+          '<div class="peek-modal__handle" aria-hidden="true"></div>' +
+          '<header class="peek-modal__header">' +
+            '<span class="peek-modal__title" id="peekTitle">プレビュー</span>' +
+            '<button type="button" class="peek-modal__close" aria-label="閉じる">✕</button>' +
+          '</header>' +
+          '<div class="peek-modal__body"></div>' +
+        '</div>';
+      document.body.appendChild(overlay);
+      return overlay;
+    }
+
+    // 対象 ID をピーク向けに解決。dx-rule__then のように内側の div を指す
+    // 場合は親 <li class="dx-rule"> を採用して if/then を一緒に見せる。
+    function resolvePeekTarget(id) {
+      const el = document.getElementById(id);
+      if (!el) return null;
+      const rule = el.closest('li.dx-rule');
+      if (rule) return rule;
+      return el;
+    }
+
+    function deriveTitle(target, id) {
+      if (target.tagName === 'DETAILS') {
+        const sum = target.querySelector('summary');
+        if (sum) return sum.textContent.trim();
+      }
+      const ifNode = target.querySelector('.dx-rule__if');
+      if (ifNode) {
+        const clone = ifNode.cloneNode(true);
+        clone.querySelectorAll('.dx-rule__tag').forEach(t => t.remove());
+        return clone.textContent.trim();
+      }
+      const ntitle = target.querySelector('.dx-node__title');
+      if (ntitle) return ntitle.textContent.trim();
+      return id;
+    }
+
+    function openPeek(id) {
+      const target = resolvePeekTarget(id);
+      if (!target) return false;
+      if (!peekOverlay) peekOverlay = createPeekOverlay();
+
+      peekOverlay.querySelector('.peek-modal__title').textContent = deriveTitle(target, id);
+
+      const bodyEl = peekOverlay.querySelector('.peek-modal__body');
+      bodyEl.innerHTML = '';
+      const clone = target.cloneNode(true);
+      clone.removeAttribute('id');
+      clone.querySelectorAll('[id]').forEach(el => el.removeAttribute('id'));
+      if (clone.tagName === 'DETAILS') clone.open = true;
+      clone.querySelectorAll('details').forEach(d => { d.open = true; });
+      bodyEl.appendChild(clone);
+      bodyEl.scrollTop = 0;
+
+      peekOverlay.classList.add('is-open');
+      document.body.style.overflow = 'hidden';
+      return true;
+    }
+
+    function closePeek() {
+      if (!peekOverlay) return;
+      peekOverlay.classList.remove('is-open');
+      document.body.style.overflow = '';
+    }
+
+    document.addEventListener('click', (e) => {
+      if (peekOverlay && peekOverlay.classList.contains('is-open')) {
+        if (e.target.classList.contains('peek-modal__close')) { e.preventDefault(); closePeek(); return; }
+        if (e.target === peekOverlay) { closePeek(); return; }
+      }
+      const link = e.target.closest(PEEK_SELECTOR);
+      if (!link) return;
+      const href = link.getAttribute('href');
+      if (!href || href.length <= 1 || href[0] !== '#') return;
+      e.preventDefault();
+      openPeek(href.substring(1));
+    });
+
+    document.addEventListener('contextmenu', (e) => {
+      const link = e.target.closest(PEEK_SELECTOR);
+      if (!link) return;
+      e.preventDefault();
+      const href = link.getAttribute('href');
+      if (href && href.length > 1 && href[0] === '#') openPeek(href.substring(1));
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && peekOverlay && peekOverlay.classList.contains('is-open')) closePeek();
+    });
+  })();
+  </script>
+</body>
+</html>

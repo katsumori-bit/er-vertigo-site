@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="color-scheme" content="light dark" />
+  <title>上肢末梢神経損傷（正中・尺骨・橈骨・AIN・PIN） | ER ノート</title>
+  <link rel="stylesheet" href="../er-note.css" />
+  <style>
+    /* ============ クイックタップ（3 つを開閉トリガー） ============ */
+    .dx-quick {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px;
+      margin: 10px 0 4px;
+    }
+    .dx-quick__btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      padding: 10px 6px;
+      border-radius: 10px;
+      background: color-mix(in srgb, var(--accent) 10%, var(--surface));
+      border: 1.5px solid var(--accent);
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 13px;
+      line-height: 1.2;
+      text-align: center;
+      cursor: pointer;
+      transition: background 120ms ease;
+    }
+    .dx-quick__btn:hover {
+      background: color-mix(in srgb, var(--accent) 18%, var(--surface));
+    }
+    .dx-quick__icon { font-size: 20px; }
+    .dx-quick__sub {
+      font-size: 10.5px;
+      font-weight: 500;
+      color: var(--muted);
+    }
+
+    /* ============ 同時評価 3 列（血管・神経・典型像） ============ */
+    .dx-tri {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+      margin: 6px 0 4px;
+      align-items: start;
+    }
+    .dx-tri__card {
+      background: var(--surface);
+      border-radius: 10px;
+      padding: 10px 12px;
+      border: 1.5px solid color-mix(in srgb, var(--text) 18%, transparent);
+    }
+    .dx-tri__card--vasc { border-color: #c0392b; background: color-mix(in srgb, #c0392b 6%, var(--surface)); }
+    .dx-tri__card--neuro { border-color: #b5651d; background: color-mix(in srgb, #b5651d 6%, var(--surface)); }
+    .dx-tri__card--typical { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 6%, var(--surface)); }
+    .dx-tri__title {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 800;
+      font-size: 13.5px;
+      margin-bottom: 4px;
+    }
+    .dx-tri__card--vasc .dx-tri__title { color: #c0392b; }
+    .dx-tri__card--neuro .dx-tri__title { color: #b5651d; }
+    .dx-tri__list {
+      margin: 0;
+      padding-left: 18px;
+      font-size: 12.5px;
+      line-height: 1.5;
+    }
+    .dx-tri__list li { margin: 2px 0; }
+
+    /* details 形式の血管/神経カード：summary にチェック印、開閉時の挙動 */
+    details.dx-tri__card { padding: 0; }
+    details.dx-tri__card > summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 10px 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 800;
+      font-size: 13.5px;
+    }
+    details.dx-tri__card > summary::-webkit-details-marker { display: none; }
+    details.dx-tri__card > summary::after {
+      content: "▸";
+      margin-left: auto;
+      font-size: 12px;
+      color: var(--muted);
+      transition: transform 120ms ease;
+    }
+    details.dx-tri__card[open] > summary::after { transform: rotate(90deg); }
+    details.dx-tri__card--vasc > summary { color: #c0392b; }
+    details.dx-tri__card--neuro > summary { color: #b5651d; }
+    details.dx-tri__card > .dx-tri__list { padding: 0 14px 12px 30px; }
+    details.dx-tri__card > .dx-tri__hint {
+      padding: 0 14px 6px 30px;
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    /* ============ 大きな details ボックス（画像/治療方針/コンサル文） ============ */
+    details.dx-box {
+      background: var(--surface);
+      border: 1.5px solid color-mix(in srgb, var(--text) 18%, transparent);
+      border-radius: 10px;
+      margin: 10px 0;
+      scroll-margin-top: 8px;
+    }
+    details.dx-box > summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 12px 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 800;
+      font-size: 14.5px;
+    }
+    details.dx-box > summary::-webkit-details-marker { display: none; }
+    details.dx-box > summary::after {
+      content: "▸";
+      margin-left: auto;
+      font-size: 13px;
+      color: var(--muted);
+      transition: transform 120ms ease;
+    }
+    details.dx-box[open] > summary::after { transform: rotate(90deg); }
+    details.dx-box[open] {
+      border-color: var(--accent);
+    }
+    details.dx-box > .dx-box__body {
+      padding: 0 14px 14px;
+    }
+
+    /* スマホで 1 列に */
+    @media (max-width: 640px) {
+      .dx-quick { gap: 6px; }
+      .dx-quick__btn { padding: 8px 4px; font-size: 11.5px; border-radius: 8px; }
+      .dx-quick__icon { font-size: 17px; }
+      .dx-quick__sub { font-size: 9.5px; }
+
+      .dx-tri { grid-template-columns: 1fr; gap: 8px; }
+      .dx-tri__card { padding: 8px 10px; }
+      details.dx-tri__card > summary { padding: 8px 10px; font-size: 12.5px; }
+      details.dx-tri__card > .dx-tri__list { padding: 0 12px 10px 26px; }
+      .dx-tri__title { font-size: 12.5px; }
+      .dx-tri__list { font-size: 12px; }
+
+      details.dx-box > summary { padding: 10px 12px; font-size: 13.5px; }
+      details.dx-box > .dx-box__body { padding: 0 12px 12px; }
+    }
+
+    /* ============ 区切り帯（最小限） ============ */
+    .dx-step {
+      margin: 18px 0 6px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 11.5px;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+    }
+    .dx-step::before, .dx-step::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: color-mix(in srgb, var(--text) 18%, transparent);
+    }
+
+    /* コピペ用テンプレ */
+    .dx-template {
+      background: color-mix(in srgb, var(--text) 4%, var(--surface));
+      border-left: 3px solid var(--accent);
+      border-radius: 6px;
+      padding: 10px 12px;
+      margin: 6px 0 0;
+      font-size: 13px;
+      line-height: 1.6;
+      white-space: pre-wrap;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+    .dx-template__hint {
+      font-size: 11px;
+      color: var(--muted);
+      margin: 0 0 4px;
+    }
+  </style>
+</head>
+<body>
+  <header class="hokuto-top">
+    <a class="hokuto-top__btn" href="../薬剤情報.html">
+      <span class="hokuto-top__icon">℞</span><span>薬剤情報</span>
+    </a>
+    <a class="hokuto-top__btn" href="../表計算.html">
+      <span class="hokuto-top__icon">⊞</span><span>表計算</span>
+    </a>
+  </header>
+
+  <main class="hokuto-main">
+    <article class="note-shell">
+      <h1 class="page-title">上肢末梢神経損傷（正中・尺骨・橈骨・AIN・PIN）</h1>
+
+      <!-- スマホですぐ開きたい 3 つ -->
+      <nav class="dx-quick" aria-label="クイックタップ">
+        <button class="dx-quick__btn" type="button" data-target="img-read">
+          <span>神経マップ</span>
+          <span class="dx-quick__sub">5 神経の運動・感覚</span>
+        </button>
+        <button class="dx-quick__btn" type="button" data-target="plan">
+          <span>治療方針</span>
+          <span class="dx-quick__sub">開放/閉鎖で分岐</span>
+        </button>
+        <button class="dx-quick__btn" type="button" data-target="consult">
+          <span>コンサル文</span>
+          <span class="dx-quick__sub">そのまま貼れる</span>
+        </button>
+      </nav>
+
+      <!-- 同時評価 3 列：典型像は常時、運動・感覚は折りたたみ -->
+      <div class="dx-step"><span>同時並行で評価する 3 軸</span></div>
+      <div class="dx-tri">
+
+        <div class="dx-tri__card dx-tri__card--typical">
+          <div class="dx-tri__title">典型像</div>
+          <ul class="dx-tri__list">
+            <li>切創・刺創（ガラス・刃物）</li>
+            <li>骨折・脱臼に伴う神経牽引／圧迫</li>
+            <li><strong>長時間圧迫</strong>（saturday night palsy）</li>
+            <li>橈骨遠位端骨折 → AIN／正中</li>
+            <li>橈骨頭骨折・Monteggia → PIN</li>
+            <li>「捻挫」「打撲」で麻痺を見落としやすい</li>
+          </ul>
+        </div>
+
+        <details class="dx-tri__card dx-tri__card--vasc">
+          <summary>運動評価</summary>
+          <p class="dx-tri__hint">5 神経すべてを系統的に MMT で評価し、左右差を記録。「橈骨神経麻痺」とだけ書かず、具体的な筋名と MMT を残す。</p>
+          <ul class="dx-tri__list">
+            <li><strong>正中</strong>：母指外転（APB）、対立</li>
+            <li><strong>AIN</strong>：OK サイン（FPL / FDP 示指）</li>
+            <li><strong>尺骨</strong>：指外転内転（第 1 背側骨間筋）、Froment 徴候</li>
+            <li><strong>橈骨</strong>：手関節背屈</li>
+            <li><strong>PIN</strong>：MP 伸展（EDC）、母指伸展（EPL）</li>
+          </ul>
+        </details>
+
+        <details class="dx-tri__card dx-tri__card--neuro">
+          <summary>感覚評価</summary>
+          <p class="dx-tri__hint">触覚・痛覚・2 点識別覚を区域ごとに評価。AIN／PIN は運動枝のみで感覚なし（鑑別ポイント）。</p>
+          <ul class="dx-tri__list">
+            <li><strong>正中</strong>：母指〜環指橈側半分の掌側</li>
+            <li><strong>尺骨</strong>：小指全域、環指尺側半分</li>
+            <li><strong>橈骨</strong>：第 1 背側 web area（典型）</li>
+            <li><strong>AIN / PIN</strong>：感覚なし（運動のみ）</li>
+            <li>Tinel 徴候：損傷部位を叩打 → 末梢方向への放散</li>
+          </ul>
+        </details>
+      </div>
+
+      <!-- 神経マップ -->
+      <details class="dx-box" id="img-read">
+        <summary><span>神経マップ（5 神経の運動・感覚）</span></summary>
+        <div class="dx-box__body">
+
+          <h3>正中神経</h3>
+          <ul>
+            <li><strong>運動</strong>：母指外転（APB）、母指対立（OP）、示指・中指 FDS、橈側 2 lumbricals。AIN を介して FPL（母指 IP 屈曲）、FDP 示指（DIP 屈曲）、PQ</li>
+            <li><strong>感覚</strong>：母指〜環指橈側半分の掌側、示指〜環指橈側半分の指尖背側</li>
+            <li><strong>損傷部位</strong>：手関節（carpal tunnel／切創）／肘以遠（AIN 単独）／上腕（高位正中）</li>
+            <li><strong>評価</strong>：母指外転 MMT、母指対立、OK サイン（AIN）</li>
+            <li>高位損傷では「<strong>祈祷の手（hand of benediction）</strong>」（屈曲しようとすると示指・中指が伸展位）</li>
+          </ul>
+
+          <h3>尺骨神経</h3>
+          <ul>
+            <li><strong>運動</strong>：内在筋（指外転内転、骨間筋、4-5 lumbricals、母指内転筋）、FDP の小指・環指、FCU</li>
+            <li><strong>感覚</strong>：小指全域、環指尺側半分（掌・背とも）</li>
+            <li><strong>損傷部位</strong>：肘（cubital tunnel／肘部管症候群）／Guyon 管（手関節）／上腕</li>
+            <li><strong>評価</strong>：指外転内転（特に第 1 背側骨間筋）、<strong>Froment 徴候</strong>（紙を母指−示指間で挟むと母指内転筋麻痺で IP 屈曲代償）、Wartenberg 徴候（小指外転位）</li>
+            <li>慢性低位損傷では「<strong>鉤爪手（claw hand）</strong>」（環指・小指 MP 過伸展＋ PIP 屈曲）</li>
+          </ul>
+
+          <h3>橈骨神経</h3>
+          <ul>
+            <li><strong>運動</strong>：上腕三頭筋（高位）、手関節背屈（ECRL／ECRB）、PIN を介して指 MP 伸展（EDC）、母指伸展（EPL）、母指外転（APL）、ECU</li>
+            <li><strong>感覚</strong>：上腕後面、前腕背面、手背母指〜中指橈側（<strong>第 1 背側 web area が典型</strong>）</li>
+            <li><strong>損傷部位</strong>：上腕（<strong>saturday night palsy</strong>、上腕骨骨幹部骨折）／肘以遠（PIN 単独）／橈骨頭骨折</li>
+            <li><strong>評価</strong>：手関節背屈、母指伸展、第 1 背側 web 感覚</li>
+            <li>高位損傷では「<strong>下垂手（wrist drop）</strong>」</li>
+          </ul>
+
+          <h3>前骨間神経（AIN、正中神経分枝）</h3>
+          <ul>
+            <li><strong>運動のみ（感覚なし）</strong>：FPL（母指 IP 屈曲）、FDP 示指・中指（DIP 屈曲）、PQ（円回内筋ではなく方形回内筋）</li>
+            <li><strong>評価</strong>：<strong>OK サイン（pinch test）</strong> — 母指と示指で OK を作れない、ピンチが涙状（tear drop sign）になる</li>
+            <li><strong>損傷</strong>：橈骨遠位端骨折・前腕骨折・打撲・絞扼（Kiloh-Nevin 症候群）</li>
+            <li>感覚障害がないため「腱断裂」と誤診されやすい</li>
+          </ul>
+
+          <h3>後骨間神経（PIN、橈骨神経分枝）</h3>
+          <ul>
+            <li><strong>運動のみ（感覚なし）</strong>：MP 伸展（EDC）、母指伸展（EPL）、母指外転（APL）、ECU</li>
+            <li><strong>評価</strong>：<strong>手関節背屈は保たれる</strong>（ECRL／ECRB が橈骨神経本幹から分岐）／<strong>指 MP 伸展不可、母指伸展不可</strong></li>
+            <li><strong>損傷</strong>：橈骨頭骨折・Monteggia 骨折・回外筋症候群（supinator syndrome）</li>
+            <li>手関節背屈の橈側偏位（ECU 麻痺）も特徴</li>
+          </ul>
+
+          <h3>分類（Seddon / Sunderland）</h3>
+          <ul>
+            <li><strong>neurapraxia（Sunderland I）</strong>：一時的伝導障害、軸索保たれる、数日〜数週で回復</li>
+            <li><strong>axonotmesis（Sunderland II-IV）</strong>：軸索断裂、Wallerian 変性後 <strong>1 mm／日</strong>で再生</li>
+            <li><strong>neurotmesis（Sunderland V）</strong>：神経完全断裂、自然回復なし、<strong>手術一次修復必要</strong></li>
+          </ul>
+        </div>
+      </details>
+
+      <!-- 治療方針 -->
+      <details class="dx-box" id="plan">
+        <summary><span>治療方針（開放/閉鎖 × 損傷タイプ）</span></summary>
+        <div class="dx-box__body">
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>パターン</th><th>所見</th><th>方針</th><th>ER の動き</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>開放創 + 神経損傷</strong></td>
+                  <td>切創・刺創部に対応する麻痺</td>
+                  <td><strong>緊急一次修復（24h 以内）</strong></td>
+                  <td>即整形・形成（手の外科）コール、洗浄・抗菌薬・破傷風</td>
+                </tr>
+                <tr>
+                  <td>骨折・脱臼整復後の麻痺</td>
+                  <td>整復前から麻痺、または整復後出現</td>
+                  <td><strong>6 週経過観察 → 改善なしで MRI/EMG/NCS</strong></td>
+                  <td>シーネ・神経保護姿位、整形外来予約</td>
+                </tr>
+                <tr>
+                  <td>長時間圧迫（saturday night palsy）</td>
+                  <td>上腕骨幹部圧迫後の下垂手</td>
+                  <td><strong>保存（多くは neurapraxia）</strong></td>
+                  <td>cock-up シーネ、整形外来</td>
+                </tr>
+                <tr>
+                  <td>AIN／PIN 単独損傷（閉鎖性）</td>
+                  <td>骨折・打撲後の OK サイン不可／指伸展不可</td>
+                  <td><strong>3〜6 ヶ月経過観察</strong>（自然回復多い）</td>
+                  <td>シーネ・整形外来</td>
+                </tr>
+                <tr>
+                  <td>骨折／脱臼合併</td>
+                  <td>橈骨遠位端・上腕骨・橈骨頭・Monteggia</td>
+                  <td>骨折整復 ＋ 神経評価継続</td>
+                  <td>整形コンサル・固定</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3>ER で打つ手</h3>
+          <ul>
+            <li><strong>5 神経すべて系統的に評価</strong>（運動・感覚・Tinel）して MMT 付きでカルテ記載</li>
+            <li>開放創 → 洗浄・止血・抗菌薬・破傷風 → <strong>即整形 or 形成（手の外科）コール</strong></li>
+            <li>骨折・脱臼 → 整復前後で必ず神経評価し記録（責任分界点）</li>
+            <li><strong>神経保護姿位の副木</strong>：
+              <ul>
+                <li>橈骨神経麻痺 → <strong>cock-up シーネ</strong>（手関節背屈位）</li>
+                <li>尺骨神経麻痺 → MP 屈曲位（claw 予防）</li>
+                <li>正中神経麻痺 → 母指外転位を保持</li>
+              </ul>
+            </li>
+            <li>鎮痛は NSAIDs／アセトアミノフェン（神経障害性疼痛にはプレガバリンも検討、外来で）</li>
+            <li>「整復後の改善期待」は神経牽引性（軸索ストレッチ）が多いことを説明、6 週がメルクマール</li>
+          </ul>
+
+          <h3>ピットフォール</h3>
+          <ul>
+            <li>5 神経を系統的に評価しない（特に <strong>AIN／PIN</strong> を忘れる）</li>
+            <li>「橈骨神経麻痺」とだけ書いて運動・感覚・MMT を具体的に記載しない</li>
+            <li>開放創を「縫合だけ」して神経評価を怠る → 後日「断裂を見逃した」事案に</li>
+            <li>骨折整復後の感覚障害を全部「圧迫だろう」で経過観察にする</li>
+            <li>AIN／PIN は<strong>感覚障害がない</strong>ため「腱断裂」と誤診</li>
+            <li>整復前の神経所見を記載しないと、整復後の麻痺が「医原性」扱いになる</li>
+          </ul>
+        </div>
+      </details>
+
+      <!-- コンサル文 -->
+      <details class="dx-box" id="consult">
+        <summary><span>コンサル文（カルテに貼る）</span></summary>
+        <div class="dx-box__body">
+          <p class="dx-template__hint">『他科コンサルト実践マニュアル』の院内紹介状フォーマットに準拠（【目的】【疾患】【既往歴】【内服薬】【ADL】【現病歴】）。開放創伴うなら緊急コンサルト。</p>
+          <div class="dx-template">【目的】整形外科（手の外科 or 形成外科）でのご加療依頼／開放創伴うなら緊急コンサルト。
+【疾患】#1 [右/左][正中／尺骨／橈骨／前骨間（AIN）／後骨間（PIN）]神経損傷（Seddon [neurapraxia／axonotmesis／neurotmesis]）、原因：[外傷／骨折・脱臼に伴う／圧迫]
+【既往歴】[特記事項なし／○○]
+【内服薬】[なし／○○]
+【ADL（受傷前）】[自立／○○]
+【現病歴】[年齢]歳[男/女]性。[受傷機転：切創・刺創／骨折・脱臼／長時間圧迫]で受傷し、[来院経緯]で来院。
+ ・身体所見：
+   運動：[該当する神経支配筋の MMT を具体的に記載。例：母指外転 MMT 0／5、示指 DIP 屈曲 MMT 5／5]
+   感覚：[該当する皮膚分布の触覚・痛覚・2 点識別覚を記載]
+   Tinel 徴候：[陽性／陰性、部位]
+ ・血管：橈骨動脈触知 [良好]、毛細血管再充満 [良好]、左右差なし
+ ・開放創：[なし／あり（部位・サイズ・汚染度）]
+ ・画像：[該当部位 Xp で骨折・脱臼の有無]
+ ・ER 処置：[創部洗浄／シーネ固定／神経保護姿位の維持／（開放創なら）抗菌薬・破傷風]
+よろしくお願いいたします。</div>
+        </div>
+      </details>
+
+      <!-- 関連ハブ -->
+      <details class="dx-box">
+        <summary><span>関連ハブ・隣接疾患</span></summary>
+        <div class="dx-box__body">
+          <ul>
+            <li>主訴入口：<a class="wiki-link" href="../手関節・手の外傷.html">手関節・手の外傷</a></li>
+            <li>隣接疾患：<a class="wiki-link" href="月状骨周囲脱臼.html">月状骨周囲脱臼</a> ／ <a class="wiki-link" href="コンパートメント症候群.html">コンパートメント症候群</a> ／ <a class="wiki-link" href="開放骨折.html">開放骨折</a></li>
+            <li>処置：シーネ固定（神経保護姿位） ／ 創部洗浄 ／ 抗菌薬・破傷風</li>
+            <li>合併症対応：開放創伴う神経損傷は <strong>24h 以内の一次修復</strong>が原則</li>
+          </ul>
+        </div>
+      </details>
+
+      <!-- 出典 -->
+      <details class="dx-box">
+        <summary><span>出典</span></summary>
+        <div class="dx-box__body">
+          <ul>
+            <li>津下健哉. 手の外科の実際 改訂第7版. 南江堂. 2011.</li>
+            <li>増井伸高. 骨折ハンター. 中外医学社. 2019.</li>
+            <li>佐藤弘明 ほか. 他科コンサルト実践マニュアル. 羊土社.</li>
+            <li>Seddon HJ. Three types of nerve injury. Brain. 1943.</li>
+            <li>Sunderland S. A classification of peripheral nerve injuries producing loss of function. Brain. 1951.</li>
+          </ul>
+        </div>
+      </details>
+
+    </article>
+  </main>
+
+  <nav class="hokuto-bottom">
+    <button class="hokuto-bottom__btn" type="button" id="navBack">
+      <span class="hokuto-bottom__icon">←</span><span>戻る</span>
+    </button>
+    <a class="hokuto-bottom__btn" href="../ツール.html">
+      <span class="hokuto-bottom__icon">⚙</span><span>ツール</span>
+    </a>
+    <a class="hokuto-bottom__btn" href="../index.html">
+      <span class="hokuto-bottom__icon">⌂</span><span>ホーム</span>
+    </a>
+  </nav>
+
+  <script>
+  (function(){
+    document.querySelectorAll('.dx-quick__btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.dataset.target;
+        const target = document.getElementById(id);
+        if (!target) return;
+        target.open = true;
+        target.scrollIntoView({behavior: 'smooth', block: 'start'});
+      });
+    });
+
+    const navBack = document.getElementById('navBack');
+    if (navBack) navBack.addEventListener('click', () => {
+      if (window.history.length > 1) history.back();
+      else window.location.href = '../index.html';
+    });
+  })();
+  </script>
+</body>
+</html>

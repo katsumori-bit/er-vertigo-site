@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="color-scheme" content="light dark" />
+  <title>鼻骨骨折 | ER ノート</title>
+  <link rel="stylesheet" href="../er-note.css" />
+  <style>
+    .dx-quick { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 10px 0 4px; }
+    @media (max-width: 640px) { .dx-quick { grid-template-columns: 1fr 1fr; } }
+    .dx-quick__btn {
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 2px; padding: 10px 6px; border-radius: 10px;
+      background: color-mix(in srgb, var(--accent) 10%, var(--surface));
+      border: 1.5px solid var(--accent); color: var(--text); text-decoration: none;
+      font-weight: 700; font-size: 13px; line-height: 1.2; text-align: center; cursor: pointer;
+      transition: background 120ms ease;
+    }
+    .dx-quick__btn:hover { background: color-mix(in srgb, var(--accent) 18%, var(--surface)); }
+    .dx-quick__sub { font-size: 10.5px; font-weight: 500; color: var(--muted); }
+
+    .dx-tri { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 6px 0 4px; align-items: start; }
+    .dx-tri__card {
+      background: var(--surface); border-radius: 10px; padding: 10px 12px;
+      border: 1.5px solid color-mix(in srgb, var(--text) 18%, transparent);
+    }
+    .dx-tri__card--vasc { border-color: #c0392b; background: color-mix(in srgb, #c0392b 6%, var(--surface)); }
+    .dx-tri__card--neuro { border-color: #b5651d; background: color-mix(in srgb, #b5651d 6%, var(--surface)); }
+    .dx-tri__title { display: flex; align-items: center; gap: 6px; font-weight: 800; font-size: 13.5px; margin-bottom: 4px; }
+    .dx-tri__card--vasc .dx-tri__title { color: #c0392b; }
+    .dx-tri__card--neuro .dx-tri__title { color: #b5651d; }
+    .dx-tri__list { margin: 0; padding-left: 18px; font-size: 12.5px; line-height: 1.5; }
+    .dx-tri__list li { margin: 2px 0; }
+
+    details.dx-tri__card { padding: 0; }
+    details.dx-tri__card > summary {
+      list-style: none; cursor: pointer; padding: 10px 12px;
+      display: flex; align-items: center; gap: 6px; font-weight: 800; font-size: 13.5px;
+    }
+    details.dx-tri__card > summary::-webkit-details-marker { display: none; }
+    details.dx-tri__card > summary::after { content: "▸"; margin-left: auto; font-size: 12px; color: var(--muted); transition: transform 120ms ease; }
+    details.dx-tri__card[open] > summary::after { transform: rotate(90deg); }
+    details.dx-tri__card--vasc > summary { color: #c0392b; }
+    details.dx-tri__card--neuro > summary { color: #b5651d; }
+    details.dx-tri__card > .dx-tri__list { padding: 0 14px 12px 30px; }
+    details.dx-tri__card > .dx-tri__hint { padding: 0 14px 6px 30px; font-size: 11px; color: var(--muted); }
+
+    details.dx-box {
+      background: var(--surface); border: 1.5px solid color-mix(in srgb, var(--text) 18%, transparent);
+      border-radius: 10px; margin: 10px 0; scroll-margin-top: 8px;
+    }
+    details.dx-box > summary {
+      list-style: none; cursor: pointer; padding: 12px 14px;
+      display: flex; align-items: center; gap: 8px; font-weight: 800; font-size: 14.5px;
+    }
+    details.dx-box > summary::-webkit-details-marker { display: none; }
+    details.dx-box > summary::after { content: "▸"; margin-left: auto; font-size: 13px; color: var(--muted); transition: transform 120ms ease; }
+    details.dx-box[open] > summary::after { transform: rotate(90deg); }
+    details.dx-box[open] { border-color: var(--accent); }
+    details.dx-box > .dx-box__body { padding: 0 14px 14px; }
+
+    @media (max-width: 640px) {
+      .dx-quick { gap: 6px; }
+      .dx-quick__btn { padding: 8px 4px; font-size: 11.5px; border-radius: 8px; }
+      .dx-quick__sub { font-size: 9.5px; }
+      .dx-tri { grid-template-columns: 1fr; gap: 8px; }
+      .dx-tri__card { padding: 8px 10px; }
+      details.dx-tri__card > summary { padding: 8px 10px; font-size: 12.5px; }
+      details.dx-tri__card > .dx-tri__list { padding: 0 12px 10px 26px; }
+      .dx-tri__title { font-size: 12.5px; }
+      .dx-tri__list { font-size: 12px; }
+      details.dx-box > summary { padding: 10px 12px; font-size: 13.5px; }
+      details.dx-box > .dx-box__body { padding: 0 12px 12px; }
+    }
+
+    .dx-step {
+      margin: 18px 0 6px; display: flex; align-items: center; gap: 10px;
+      color: var(--muted); font-size: 11.5px; font-weight: 800; letter-spacing: 0.1em;
+    }
+    .dx-step::before, .dx-step::after { content: ""; flex: 1; height: 1px; background: color-mix(in srgb, var(--text) 18%, transparent); }
+
+    .dx-template {
+      background: color-mix(in srgb, var(--text) 4%, var(--surface));
+      border-left: 3px solid var(--accent); border-radius: 6px;
+      padding: 10px 12px; margin: 6px 0 0; font-size: 13px; line-height: 1.6;
+      white-space: pre-wrap; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+    .dx-template__hint { font-size: 11px; color: var(--muted); margin: 0 0 4px; }
+
+    .dx-alert {
+      background: color-mix(in srgb, #c0392b 8%, var(--surface));
+      border: 1.5px solid #c0392b; border-radius: 10px;
+      padding: 10px 12px; margin: 10px 0; color: var(--text); font-size: 13px;
+    }
+    .dx-alert strong { color: #c0392b; }
+    .dx-info {
+      background: color-mix(in srgb, #2e8b57 8%, var(--surface));
+      border: 1.5px solid #2e8b57; border-radius: 10px;
+      padding: 10px 12px; margin: 10px 0; color: var(--text); font-size: 13px;
+    }
+    .dx-info strong { color: #1f6b3d; }
+
+    .dx-typical {
+      background: color-mix(in srgb, var(--accent) 5%, var(--surface));
+      border: 1.5px solid color-mix(in srgb, var(--accent) 50%, transparent);
+      border-radius: 10px; padding: 10px 14px; margin: 10px 0 4px;
+    }
+    .dx-typical__title { font-weight: 800; font-size: 13.5px; color: var(--accent); margin-bottom: 4px; }
+    .dx-typical__list { margin: 0; padding-left: 18px; font-size: 12.5px; line-height: 1.55; }
+    .dx-typical__list li { margin: 2px 0; }
+    @media (max-width: 640px) {
+      .dx-typical { padding: 8px 10px; }
+      .dx-typical__title { font-size: 12.5px; }
+      .dx-typical__list { font-size: 12px; }
+    }
+    .dx-box__body h3 {
+      font-size: 14px; font-weight: 800;
+      margin: 14px 0 6px;
+      color: var(--accent);
+      padding-bottom: 4px;
+      border-bottom: 1px dashed color-mix(in srgb, var(--text) 22%, transparent);
+    }
+    .dx-box__body h3:first-child { margin-top: 4px; }
+    @media (max-width: 640px) { .dx-box__body h3 { font-size: 12.5px; margin: 10px 0 4px; } }
+  </style>
+</head>
+<body>
+  <header class="hokuto-top">
+    <a class="hokuto-top__btn" href="../薬剤情報.html"><span class="hokuto-top__icon">℞</span><span>薬剤情報</span></a>
+    <a class="hokuto-top__btn" href="../表計算.html"><span class="hokuto-top__icon">⊞</span><span>表計算</span></a>
+  </header>
+
+  <main class="hokuto-main">
+    <article class="note-shell">
+      <h1 class="page-title">鼻骨骨折（nasal bone fracture）</h1>
+
+      <div class="dx-info">
+        <strong>ほとんどの鼻骨骨折は救急疾患ではない</strong>。ER で対応するのは <strong>「鼻中隔血腫」「大量出血」</strong> の 2 つだけ。それ以外は <strong>翌日耳鼻科コンサルトで OK</strong>。整復も受傷後 2 週間以内に予定すればよい。
+      </div>
+
+      <div class="dx-alert">
+        <strong>鼻出血 + 鼻中隔の左右どちらかが腫脹</strong>＝ <strong>鼻中隔血腫</strong>を疑え。<br>
+        <strong>数時間以内に切開排液</strong>しないと <strong>24〜72h で軟骨壊死 → 鞍鼻・鼻中隔膿瘍</strong> となる。前鼻鏡で必ず確認。
+      </div>
+
+      <nav class="dx-quick" aria-label="クイックタップ">
+        <button class="dx-quick__btn" type="button" data-target="er-actions">
+          <span>ER で打つ手</span><span class="dx-quick__sub">初期処置</span>
+        </button>
+        <button class="dx-quick__btn" type="button" data-target="consult-check">
+          <span>コンサル前確認</span><span class="dx-quick__sub">耳鼻科を呼ぶ前に</span>
+        </button>
+        <button class="dx-quick__btn" type="button" data-target="img-plan">
+          <span>画像と治療方針</span><span class="dx-quick__sub">分類 / 整復</span>
+        </button>
+        <button class="dx-quick__btn" type="button" data-target="consult">
+          <span>コンサル文</span><span class="dx-quick__sub">そのまま貼れる</span>
+        </button>
+      </nav>
+
+      <section class="dx-typical">
+        <div class="dx-typical__title">典型像(疑うきっかけ)</div>
+        <ul class="dx-typical__list">
+          <li>機転：殴打・ボール・転倒・交通外傷・スポーツ</li>
+          <li><strong>顔面骨折で最多</strong>。多くは単独骨折で、他顔面骨折合併はしばしばあり（高エネ機転で頻度上昇）</li>
+          <li>視診：<strong>鼻背変形</strong>（lateral／dorsal）、腫脹、鼻出血、皮下血腫</li>
+          <li>触診：<strong>段差・捻髪音・動揺感</strong>、鼻骨上部の圧痛</li>
+        </ul>
+        <p style="margin: 6px 0 0; font-size: 11.5px; color: var(--muted);">→ 詳細所見は <strong>同時並行 2 軸</strong> と <strong>コンサル前確認</strong> へ</p>
+      </section>
+
+      <div class="dx-step"><span>同時並行で評価する 2 軸（治療方針を分ける所見）</span></div>
+      <div class="dx-tri">
+
+        <details class="dx-tri__card dx-tri__card--vasc" open>
+          <summary>鼻中隔血腫（最重要・ER 唯一の緊急処置）</summary>
+          <p class="dx-tri__hint"><strong>来院時に必ず前鼻鏡で確認</strong>。見逃しは鞍鼻・膿瘍を作る。</p>
+          <ul class="dx-tri__list">
+            <li>所見：鼻中隔の片側／両側が<strong>青紫色〜暗赤色に腫大</strong>、綿棒で押すと弾力性</li>
+            <li>処置：<strong>数時間以内に局所麻酔下で切開排液</strong>、その後 24h ガーゼ圧迫＋<strong>抗生剤（アモキシシリン/クラブラン酸 or セファレキシン、MSSA・嫌気性カバー）</strong></li>
+            <li>放置 → 軟骨壊死（24〜72h） → <strong>鞍鼻</strong>、<strong>鼻中隔膿瘍</strong>（敗血症もあり）</li>
+            <li>耳鼻科即時コンサルト</li>
+          </ul>
+        </details>
+
+        <details class="dx-tri__card dx-tri__card--vasc" open>
+          <summary>合併損傷（治療方針を変える）</summary>
+          <p class="dx-tri__hint">高エネ機転では頭蓋底・周辺顔面骨折を必ず除外。</p>
+          <ul class="dx-tri__list">
+            <li><strong>髄液鼻漏</strong>＝<strong>前頭蓋底骨折／NOE 損傷</strong>。halo sign、糖陽性 → <strong>脳外コンサルト</strong>（経鼻挿管・経鼻胃管禁）</li>
+            <li><strong>NOE（naso-orbital-ethmoid）骨折</strong>：内眼角間距離（intercanthal line）拡大、telecanthus → <strong>観血的整復</strong>必要</li>
+            <li><strong>open book fracture</strong>（鼻骨が両側に開く）：高エネで顔面中央部骨折と一体 → <strong>観血的整復</strong></li>
+            <li><strong>眼窩内側壁骨折</strong>合併（→ <a href="眼窩吹き抜け骨折.html">眼窩吹き抜け骨折</a>）</li>
+            <li><strong>Le Fort II/III 進展</strong>の評価（→ <a href="Le%20Fort骨折.html">Le Fort 骨折</a>）</li>
+            <li>頭蓋内病変（→ <a href="../頭部外傷評価.html">頭部外傷評価</a>）</li>
+          </ul>
+        </details>
+      </div>
+
+      <details class="dx-box" id="er-actions">
+        <summary><span>ER で打つ手（やることは 3 つだけ）</span></summary>
+        <div class="dx-box__body">
+          <ol>
+            <li><strong>前鼻鏡で鼻中隔血腫を必ず除外</strong>。あれば耳鼻科に即連絡し<strong>数時間以内の切開排液</strong>を依頼</li>
+            <li><strong>大量出血のコントロール</strong>。前方圧迫で止まらなければ Bellocq タンポン（耳鼻科）</li>
+            <li><strong>それ以外は翌日耳鼻科コンサルトで OK</strong>。鼻かみ禁・冷却・鎮痛で帰宅</li>
+          </ol>
+
+          <h3>並行で除外すべき合併</h3>
+          <ul>
+            <li><strong>髄液鼻漏</strong>（halo sign・糖陽性）→ 顔面 CT で前頭蓋底評価、<strong>脳外コンサルト</strong>。経鼻挿管・経鼻胃管禁</li>
+            <li><strong>NOE 骨折</strong>（内眼角間距離拡大、telecanthus）→ 形成外科で観血的整復</li>
+            <li><strong>顔面中央部骨折合併</strong>（Le Fort II/III、open book）→ 形成外科</li>
+            <li>高エネ機転 → 頭部 CT・頸椎評価（→ <a href="../頭部外傷評価.html">頭部外傷評価</a>）</li>
+            <li><strong>抗凝固薬内服中の持続出血</strong> → 観察入院も検討</li>
+            <li>開放創あれば<strong>破傷風予防</strong>（既往ワクチン歴で判断、TIG は通常不要）</li>
+          </ul>
+
+          <h3>帰宅時の指示</h3>
+          <ul>
+            <li>鼻かみ禁、冷却、頭部挙上、鎮痛</li>
+            <li>再受診基準（書面で）：<strong>鼻中隔の腫れ・激痛・発熱（血腫の遅発）／持続出血／視力低下／髄液様鼻漏</strong></li>
+            <li>翌日耳鼻科で整復タイミングを判断（受傷後 2 週間以内）</li>
+          </ul>
+        </div>
+      </details>
+
+      <details class="dx-box" id="consult-check">
+        <summary><span>耳鼻科コンサルト前に確認すべきこと</span></summary>
+        <div class="dx-box__body">
+          <p>鼻骨骨折と診断したら、コンサル前に以下を整理しておく（電話・紹介状で必ず聞かれる）。</p>
+          <ul>
+            <li><strong>鼻中隔血腫の有無</strong>（前鼻鏡所見）。<strong>切開排液済みか</strong></li>
+            <li><strong>鼻出血</strong>：持続／止血、Bellocq の要否</li>
+            <li><strong>鼻背変形</strong>：lateral／frontal／open book／NOE の別</li>
+            <li><strong>触診所見</strong>：段差・捻髪音の部位</li>
+            <li><strong>髄液鼻漏</strong>：halo sign、糖陽性、量</li>
+            <li><strong>内眼角間距離（intercanthal line）</strong>：拡大の有無（NOE 骨折の指標）</li>
+            <li><strong>視覚・眼球運動所見</strong>：合併する眼窩内側壁骨折・視神経管骨折の除外</li>
+            <li><strong>咬合の異常</strong>：Le Fort 進展を疑う指標</li>
+            <li><strong>画像所見</strong>：顔面 CT・3D-CT で lateral／frontal／open book／NOE 分類、眼窩底・上顎骨・前頭蓋底の合併損傷</li>
+            <li><strong>頭部 CT</strong>：頭蓋内病変の有無</li>
+            <li><strong>背景情報</strong>：抗凝固薬・抗血小板薬・既往歴・受傷前 ADL</li>
+            <li><strong>ER 処置の記録</strong>：切開排液時刻、止血、抗生剤投与時刻、鼻かみ禁の指示</li>
+          </ul>
+        </div>
+      </details>
+
+      <details class="dx-box" id="img-plan">
+        <summary><span>画像所見と治療方針</span></summary>
+        <div class="dx-box__body">
+
+          <h3>① 画像で見る項目</h3>
+          <p><strong>単純鼻骨骨折で身体所見に合併疑い所見がなければ画像は不要</strong>が現代の主流（NICE 等）。<strong>高エネ機転・他顔面骨折疑い・髄液漏疑い時に CT 骨条件</strong>をオーダー。X 線（Waters 法／Caldwell 法）でも骨折確認は可能だが、合併損傷の評価には CT が有利。</p>
+          <ul>
+            <li>鼻骨の<strong>転位方向</strong>と<strong>骨折線</strong>を確認</li>
+            <li><strong>鼻中隔骨折・血腫</strong>：軸位 CT で鼻中隔軟骨周囲の血腫所見、左右非対称</li>
+            <li>同時に評価：眼窩底・内側壁・前頭蓋底・上顎洞・Le Fort 線・NOE</li>
+          </ul>
+
+          <h3>② 骨折のタイプ分類（Stranc-Robertson）</h3>
+          <ul>
+            <li><strong>lateral injury</strong>：鼻骨の片側転位。最多型（plane 1〜3）</li>
+            <li><strong>frontal injury</strong>：鼻骨遠位 + 上顎骨前頭突起 + 篩骨に至る。<strong>open book fracture</strong>（鼻骨が両側に開く）に発展しうる</li>
+            <li><strong>NOE 骨折</strong>：篩骨蜂巣浸潤・内眼角間距離拡大。整復難度高</li>
+          </ul>
+
+          <h3>③ disposition の判断</h3>
+          <div class="dx-info" style="margin: 6px 0 10px;">
+            <strong>翌日耳鼻科コンサルトで OK</strong> な条件（全て満たせば帰宅可）：
+            <ul style="margin: 4px 0 0; padding-left: 1.4em;">
+              <li>鼻中隔血腫 <strong>なし</strong>（前鼻鏡で確認）</li>
+              <li>大量出血 <strong>なし</strong>（前方圧迫で止血可）</li>
+              <li>髄液鼻漏 <strong>なし</strong></li>
+              <li>NOE／open book／Le Fort 合併 <strong>なし</strong></li>
+              <li>頭蓋内病変・頸椎損傷 <strong>なし</strong></li>
+            </ul>
+          </div>
+          <p>1 つでも該当があれば ER で即対応（鼻中隔血腫＝耳鼻科即時切開／髄液鼻漏＝脳外／NOE・Le Fort＝形成外科）。</p>
+
+          <h3>④ 治療方針（整復）</h3>
+          <div class="table-wrap"><table>
+            <thead><tr><th>所見</th><th>マネジメント</th><th>タイミング</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><strong>鼻中隔血腫</strong></td>
+                <td><strong>即時切開排液 + ガーゼ圧迫 + 抗生剤</strong></td>
+                <td><strong>来院から数時間以内</strong></td>
+              </tr>
+              <tr>
+                <td>転位のある単純鼻骨骨折（成人）</td>
+                <td>用手整復（± Walsham 鉗子）</td>
+                <td><strong>受傷後 2 週間以内</strong>（浮腫軽快後、骨化前）</td>
+              </tr>
+              <tr>
+                <td>小児</td>
+                <td>用手整復（成長への配慮）</td>
+                <td>受傷後 5〜10 日</td>
+              </tr>
+              <tr>
+                <td>転位なし／軽度</td>
+                <td>保存療法（冷却・鎮痛）</td>
+                <td>外来フォロー、変形残れば後日 rhinoplasty</td>
+              </tr>
+              <tr>
+                <td>open book fracture／NOE／Le Fort 合併</td>
+                <td><strong>観血的整復</strong></td>
+                <td>顔面中央部骨折として手術計画</td>
+              </tr>
+              <tr>
+                <td>開放創あり</td>
+                <td>洗浄 + 抗生剤 + 創閉鎖、整復は計画的に</td>
+                <td>創部状況で判断</td>
+              </tr>
+            </tbody>
+          </table></div>
+        </div>
+      </details>
+
+      <details class="dx-box" id="consult">
+        <summary><span>コンサル文（カルテに貼る）</span></summary>
+        <div class="dx-box__body">
+          <p class="dx-template__hint">耳鼻咽喉科宛て。【目的】【疾患】【既往歴】【内服薬】【ADL】【現病歴】の順。</p>
+          <div class="dx-template">【目的】[ご加療依頼／鼻中隔血腫の緊急切開ご相談]
+【疾患】#1 鼻骨骨折（[lateral／frontal／open book／NOE]）
+　　　 [#2 鼻中隔血腫／#2 髄液鼻漏疑い／#2 顔面中央部骨折合併 など]
+【既往歴】[特記事項なし／○○]
+【内服薬】[なし／ワーファリン／DOAC ○○／抗血小板薬 ○○]
+【ADL（受傷前）】[独歩／杖／介助／車椅子]
+【現病歴】[年齢]歳[男/女]性。[受傷機転：転倒で鼻部打撲／殴打／交通／スポーツ]で受傷し、[来院経緯]で来院。
+ ・視診：鼻背変形 [あり：右/左変位、open book／なし]、皮下血腫、鼻出血 [止血／持続]
+ ・触診：段差・捻髪音 [あり／なし]
+ ・前鼻鏡：鼻中隔腫脹 [あり（青紫色、弾性）／なし]、活動性出血 [あり／なし]
+ ・髄液鼻漏：[なし／halo sign 陽性／糖検査結果]
+ ・他顔面所見：眼球運動・複視 [なし／あり]、咬合 [正常／異常]、内眼角間距離 [正常／拡大]
+ ・画像：顔面 CT で[lateral／frontal／open book／NOE]骨折、合併損傷 [なし／○○]
+ ・頭部 CT：[頭蓋内病変なし／○○]
+ ・ER 処置：[鼻中隔血腫切開排液済／未／適応なし]、止血、抗生剤 [投与済／未]、鼻かみ禁の指示
+よろしくお願いいたします。</div>
+        </div>
+      </details>
+
+      <details class="dx-box">
+        <summary><span>出典</span></summary>
+        <div class="dx-box__body">
+          <ul>
+            <li>頭頸部外科教科書 第13章「頭蓋顔面・頸部外傷」A. 頭蓋顔面骨折／鼻骨骨折（p.834-841）。</li>
+            <li>Stranc MF, Robertson GA. A classification of injuries of the nasal skeleton. <em>Ann Plast Surg.</em> 1979;2:468.</li>
+          </ul>
+        </div>
+      </details>
+
+    </article>
+  </main>
+
+  <nav class="hokuto-bottom">
+    <button class="hokuto-bottom__btn" type="button" id="navBack"><span class="hokuto-bottom__icon">←</span><span>戻る</span></button>
+    <a class="hokuto-bottom__btn" href="../ツール.html"><span class="hokuto-bottom__icon">⚙</span><span>ツール</span></a>
+    <a class="hokuto-bottom__btn" href="../index.html"><span class="hokuto-bottom__icon">⌂</span><span>ホーム</span></a>
+  </nav>
+
+  <script>
+  (function(){
+    document.querySelectorAll('.dx-quick__btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.dataset.target;
+        const target = document.getElementById(id);
+        if (!target) return;
+        target.open = true;
+        target.scrollIntoView({behavior: 'smooth', block: 'start'});
+      });
+    });
+    const navBack = document.getElementById('navBack');
+    if (navBack) navBack.addEventListener('click', () => {
+      if (window.history.length > 1) history.back();
+      else window.location.href = '../index.html';
+    });
+  })();
+  </script>
+</body>
+</html>

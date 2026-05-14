@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="color-scheme" content="light dark" />
+  <title>頬骨上顎複合体骨折 | ER ノート</title>
+  <link rel="stylesheet" href="../er-note.css" />
+  <style>
+    .dx-quick { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 10px 0 4px; }
+    @media (max-width: 640px) { .dx-quick { grid-template-columns: 1fr 1fr; } }
+    .dx-quick__btn {
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 2px; padding: 10px 6px; border-radius: 10px;
+      background: color-mix(in srgb, var(--accent) 10%, var(--surface));
+      border: 1.5px solid var(--accent); color: var(--text); text-decoration: none;
+      font-weight: 700; font-size: 13px; line-height: 1.2; text-align: center; cursor: pointer;
+      transition: background 120ms ease;
+    }
+    .dx-quick__btn:hover { background: color-mix(in srgb, var(--accent) 18%, var(--surface)); }
+    .dx-quick__sub { font-size: 10.5px; font-weight: 500; color: var(--muted); }
+
+    .dx-tri { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 6px 0 4px; align-items: start; }
+    .dx-tri__card {
+      background: var(--surface); border-radius: 10px; padding: 10px 12px;
+      border: 1.5px solid color-mix(in srgb, var(--text) 18%, transparent);
+    }
+    .dx-tri__card--vasc { border-color: #c0392b; background: color-mix(in srgb, #c0392b 6%, var(--surface)); }
+    .dx-tri__card--neuro { border-color: #b5651d; background: color-mix(in srgb, #b5651d 6%, var(--surface)); }
+    .dx-tri__title { display: flex; align-items: center; gap: 6px; font-weight: 800; font-size: 13.5px; margin-bottom: 4px; }
+    .dx-tri__card--vasc .dx-tri__title { color: #c0392b; }
+    .dx-tri__card--neuro .dx-tri__title { color: #b5651d; }
+    .dx-tri__list { margin: 0; padding-left: 18px; font-size: 12.5px; line-height: 1.5; }
+    .dx-tri__list li { margin: 2px 0; }
+
+    details.dx-tri__card { padding: 0; }
+    details.dx-tri__card > summary {
+      list-style: none; cursor: pointer; padding: 10px 12px;
+      display: flex; align-items: center; gap: 6px; font-weight: 800; font-size: 13.5px;
+    }
+    details.dx-tri__card > summary::-webkit-details-marker { display: none; }
+    details.dx-tri__card > summary::after { content: "▸"; margin-left: auto; font-size: 12px; color: var(--muted); transition: transform 120ms ease; }
+    details.dx-tri__card[open] > summary::after { transform: rotate(90deg); }
+    details.dx-tri__card--vasc > summary { color: #c0392b; }
+    details.dx-tri__card--neuro > summary { color: #b5651d; }
+    details.dx-tri__card > .dx-tri__list { padding: 0 14px 12px 30px; }
+    details.dx-tri__card > .dx-tri__hint { padding: 0 14px 6px 30px; font-size: 11px; color: var(--muted); }
+
+    details.dx-box {
+      background: var(--surface); border: 1.5px solid color-mix(in srgb, var(--text) 18%, transparent);
+      border-radius: 10px; margin: 10px 0; scroll-margin-top: 8px;
+    }
+    details.dx-box > summary {
+      list-style: none; cursor: pointer; padding: 12px 14px;
+      display: flex; align-items: center; gap: 8px; font-weight: 800; font-size: 14.5px;
+    }
+    details.dx-box > summary::-webkit-details-marker { display: none; }
+    details.dx-box > summary::after { content: "▸"; margin-left: auto; font-size: 13px; color: var(--muted); transition: transform 120ms ease; }
+    details.dx-box[open] > summary::after { transform: rotate(90deg); }
+    details.dx-box[open] { border-color: var(--accent); }
+    details.dx-box > .dx-box__body { padding: 0 14px 14px; }
+
+    @media (max-width: 640px) {
+      .dx-quick { gap: 6px; }
+      .dx-quick__btn { padding: 8px 4px; font-size: 11.5px; border-radius: 8px; }
+      .dx-quick__sub { font-size: 9.5px; }
+      .dx-tri { grid-template-columns: 1fr; gap: 8px; }
+      .dx-tri__card { padding: 8px 10px; }
+      details.dx-tri__card > summary { padding: 8px 10px; font-size: 12.5px; }
+      details.dx-tri__card > .dx-tri__list { padding: 0 12px 10px 26px; }
+      .dx-tri__title { font-size: 12.5px; }
+      .dx-tri__list { font-size: 12px; }
+      details.dx-box > summary { padding: 10px 12px; font-size: 13.5px; }
+      details.dx-box > .dx-box__body { padding: 0 12px 12px; }
+    }
+
+    .dx-step {
+      margin: 18px 0 6px; display: flex; align-items: center; gap: 10px;
+      color: var(--muted); font-size: 11.5px; font-weight: 800; letter-spacing: 0.1em;
+    }
+    .dx-step::before, .dx-step::after { content: ""; flex: 1; height: 1px; background: color-mix(in srgb, var(--text) 18%, transparent); }
+
+    .dx-template {
+      background: color-mix(in srgb, var(--text) 4%, var(--surface));
+      border-left: 3px solid var(--accent); border-radius: 6px;
+      padding: 10px 12px; margin: 6px 0 0; font-size: 13px; line-height: 1.6;
+      white-space: pre-wrap; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+    .dx-template__hint { font-size: 11px; color: var(--muted); margin: 0 0 4px; }
+
+    .dx-typical {
+      background: color-mix(in srgb, var(--accent) 5%, var(--surface));
+      border: 1.5px solid color-mix(in srgb, var(--accent) 50%, transparent);
+      border-radius: 10px; padding: 10px 14px; margin: 10px 0 4px;
+    }
+    .dx-typical__title { font-weight: 800; font-size: 13.5px; color: var(--accent); margin-bottom: 4px; }
+    .dx-typical__list { margin: 0; padding-left: 18px; font-size: 12.5px; line-height: 1.55; }
+    .dx-typical__list li { margin: 2px 0; }
+    @media (max-width: 640px) {
+      .dx-typical { padding: 8px 10px; }
+      .dx-typical__title { font-size: 12.5px; }
+      .dx-typical__list { font-size: 12px; }
+    }
+    .dx-box__body h3 {
+      font-size: 14px; font-weight: 800;
+      margin: 14px 0 6px;
+      color: var(--accent);
+      padding-bottom: 4px;
+      border-bottom: 1px dashed color-mix(in srgb, var(--text) 22%, transparent);
+    }
+    .dx-box__body h3:first-child { margin-top: 4px; }
+    @media (max-width: 640px) { .dx-box__body h3 { font-size: 12.5px; margin: 10px 0 4px; } }
+  </style>
+</head>
+<body>
+  <header class="hokuto-top">
+    <a class="hokuto-top__btn" href="../薬剤情報.html"><span class="hokuto-top__icon">℞</span><span>薬剤情報</span></a>
+    <a class="hokuto-top__btn" href="../表計算.html"><span class="hokuto-top__icon">⊞</span><span>表計算</span></a>
+  </header>
+
+  <main class="hokuto-main">
+    <article class="note-shell">
+      <h1 class="page-title">頬骨上顎複合体骨折（ZMC fracture）</h1>
+
+      <nav class="dx-quick" aria-label="クイックタップ">
+        <button class="dx-quick__btn" type="button" data-target="er-actions">
+          <span>ER で打つ手</span><span class="dx-quick__sub">初期処置</span>
+        </button>
+        <button class="dx-quick__btn" type="button" data-target="consult-check">
+          <span>コンサル前確認</span><span class="dx-quick__sub">形成外科を呼ぶ前に</span>
+        </button>
+        <button class="dx-quick__btn" type="button" data-target="img-plan">
+          <span>画像と治療方針</span><span class="dx-quick__sub">tripod / Gillies</span>
+        </button>
+        <button class="dx-quick__btn" type="button" data-target="consult">
+          <span>コンサル文</span><span class="dx-quick__sub">そのまま貼れる</span>
+        </button>
+      </nav>
+
+      <section class="dx-typical">
+        <div class="dx-typical__title">典型像（疑うきっかけ）</div>
+        <ul class="dx-typical__list">
+          <li>機転：殴打・スポーツ・交通外傷・転倒（側面打撲）</li>
+          <li><strong>頬部の陥凹・平坦化</strong>（浮腫が引いてから明瞭化）、結膜下出血、皮下血腫</li>
+          <li>触診：眼窩外側縁・下縁・頬骨弓の<strong>段差・圧痛</strong></li>
+          <li><strong>開口障害</strong>（陥凹した頬骨弓が下顎筋突起と impingement）</li>
+          <li><strong>頬部しびれ</strong>（眼窩下神経 V2）が高頻度</li>
+          <li>頬骨弓孤立骨折は他面骨折を合併することがある（頻度は文献により幅広く一概に言えない）</li>
+        </ul>
+        <p style="margin: 6px 0 0; font-size: 11.5px; color: var(--muted);">→ 詳細所見は <strong>同時並行 2 軸</strong> と <strong>コンサル前確認</strong> へ</p>
+      </section>
+
+      <div class="dx-step"><span>同時並行で評価する 2 軸（治療方針を分ける所見）</span></div>
+      <div class="dx-tri">
+
+        <details class="dx-tri__card dx-tri__card--vasc" open>
+          <summary>視神経管骨折の合併（眼科＋脳外即時）</summary>
+          <p class="dx-tri__hint">ZMC は眼窩外側壁・眼窩底を含み、視神経管骨折を伴うことがある。<strong>急性視力低下＋RAPD</strong>は即時対応。</p>
+          <ul class="dx-tri__list">
+            <li><strong>視力</strong>（Snellen / 指数弁 / 光覚弁）を必ず記録</li>
+            <li><strong>対光反射・RAPD</strong>：陽性なら視神経管骨折を疑う</li>
+            <li>進行性顔面浮腫による<strong>遅発性視神経損傷</strong>あり、経時で再評価</li>
+            <li>陽性 → <a href="視神経管骨折.html">視神経管骨折</a> ルート（眼科＋脳外即時、薄スライス CT）</li>
+          </ul>
+        </details>
+
+        <details class="dx-tri__card dx-tri__card--vasc" open>
+          <summary>眼窩底骨折の合併（外眼筋嵌頓）</summary>
+          <p class="dx-tri__hint">ZMC 骨折線が眼窩底に及ぶことが多い。<strong>小児 trap door は 6〜24h 以内</strong>の緊急手術、成人嵌頓は数日〜1〜2 週で許容。</p>
+          <ul class="dx-tri__list">
+            <li><strong>下方視・上方視で複視・眼球運動制限</strong></li>
+            <li><strong>oculocardiac reflex</strong>（徐脈・嘔気）＝嵌頓の強い示唆</li>
+            <li>小児の trap door type は外見正常でも嵌頓あり（white-eyed）</li>
+            <li>陽性 → <a href="眼窩吹き抜け骨折.html">眼窩吹き抜け骨折</a> ルート（眼科・形成外科即コール）</li>
+          </ul>
+        </details>
+      </div>
+
+      <details class="dx-box" id="er-actions">
+        <summary><span>ER で打つ手（初期処置）</span></summary>
+        <div class="dx-box__body">
+          <ul>
+            <li><strong>視力・対光反射・RAPD・眼球運動を必ず記録</strong>（合併の有無で動きが変わる）</li>
+            <li>頬部しびれ（V2）・開口障害の程度を記録</li>
+            <li><strong>鼻かみ禁止</strong>（眼窩気腫・上顎洞交通）を患者・家族に説明</li>
+            <li>抗生剤投与（副鼻腔と交通する開放骨折扱い）</li>
+            <li>鎮痛・冷却・頭部挙上 30°</li>
+            <li>頭部 CT を同時オーダー（合併損傷確認 → <a href="../頭部外傷評価.html">頭部外傷評価</a>）</li>
+            <li>視神経管合併 → 眼科＋脳外即時</li>
+            <li>眼窩底嵌頓合併 → 眼科・形成外科即時</li>
+            <li>合併なし → 形成外科コンサルト（コンサル前確認 → コンサル文 の順で）</li>
+          </ul>
+        </div>
+      </details>
+
+      <details class="dx-box" id="consult-check">
+        <summary><span>形成外科コンサルト前に確認すべきこと</span></summary>
+        <div class="dx-box__body">
+          <p>ZMC 骨折と診断したら、コンサル前に以下を整理しておく（電話・紹介状で必ず聞かれる）。</p>
+          <ul>
+            <li><strong>視機能</strong>：視力、対光反射、RAPD、眼球運動（複視の方向）</li>
+            <li><strong>外眼筋嵌頓徴候</strong>：oculocardiac reflex の有無</li>
+            <li><strong>頬部陥凹</strong>：あり／浮腫で判定困難、健側との比較</li>
+            <li><strong>下眼瞼下垂</strong>の有無</li>
+            <li><strong>開口障害</strong>：開口距離（cm）、頬骨弓陥凹由来か</li>
+            <li><strong>顔面感覚</strong>（治療方針は変えないが記録必須）：眼窩下神経 V2 領域（頬部・上口唇）しびれ</li>
+            <li><strong>触診所見</strong>：眼窩外側縁・下縁・頬骨弓の段差の部位</li>
+            <li><strong>画像所見</strong>：顔面 CT・3D-CT で骨折の型（tripod／tetrapod／頬骨弓孤立）、4 縫合の評価、眼窩底・内側壁合併</li>
+            <li><strong>Le Fort 進展</strong>の評価：複合型の有無</li>
+            <li><strong>頭部 CT</strong>：頭蓋内病変、視神経管</li>
+            <li><strong>背景情報</strong>：抗凝固薬・抗血小板薬・既往歴・受傷前 ADL</li>
+            <li><strong>ER 処置の記録</strong>：抗生剤投与時刻、鼻かみ禁の指示、鎮痛</li>
+          </ul>
+        </div>
+      </details>
+
+      <details class="dx-box" id="img-plan">
+        <summary><span>画像所見と治療方針</span></summary>
+        <div class="dx-box__body">
+
+          <h3>① 画像で見る項目</h3>
+          <p><strong>顔面 CT（軸位 + 冠状位 + 3D-CT）</strong>が基本。骨折線・転位・合併損傷を一度に評価。</p>
+          <p><strong>頬骨は 4 つの付着部</strong>で構成され、これらの離開を評価する：</p>
+          <ul>
+            <li>前頭頬骨縫合（zygomaticofrontal）</li>
+            <li>頬骨上顎縫合（zygomaticomaxillary、眼窩下縁周辺）</li>
+            <li>頬骨側頭縫合（頬骨弓部）</li>
+            <li>蝶形骨頬骨縫合（眼窩外側壁奥）</li>
+          </ul>
+          <p>"clear sinus sign"（上顎洞内液体貯留なし）は ZMC 単独・少転位の指標。</p>
+
+          <h3>② 骨折のタイプ</h3>
+          <ul>
+            <li><strong>三脚骨折（tripod / trimalar fracture）</strong>＝ZMC の主要 3 縫合骨折として広く使われる名称</li>
+            <li><strong>tetrapod fracture</strong>（完全 ZMC）：実際は 4 縫合すべてが骨折</li>
+            <li><strong>頬骨弓孤立骨折（in-fracture）</strong>：頬骨弓が V 字状に内方陥凹。3D-CT で明瞭</li>
+            <li>Le Fort I/II との<strong>複合型</strong>もある（→ <a href="Le%20Fort骨折.html">Le Fort 骨折</a>）</li>
+          </ul>
+
+          <h3>③ 治療方針</h3>
+          <div class="table-wrap"><table>
+            <thead><tr><th>所見</th><th>マネジメント</th><th>タイミング</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><strong>視神経管合併</strong>（急性視力低下＋RAPD）</td>
+                <td>視神経管骨折として対応（ステロイド・減圧術はエビデンス限定、専門医判断）</td>
+                <td>早期介入が望ましいが「8h」を絶対視せず</td>
+              </tr>
+              <tr>
+                <td><strong>眼窩底 trap door 合併</strong>（嵌頓・oculocardiac reflex）</td>
+                <td>緊急手術（嵌頓解除）</td>
+                <td><strong>小児 6〜24h</strong>／成人は数日〜1〜2 週</td>
+              </tr>
+              <tr>
+                <td>頬骨弓孤立骨折／軽度陥凹のみ</td>
+                <td><strong>Gillies approach</strong>（側頭部小切開 → エレベーターで頬骨弓を挙上）</td>
+                <td>浮腫軽快後（5〜10 日）</td>
+              </tr>
+              <tr>
+                <td>転位のある ZMC 骨折</td>
+                <td><strong>観血的整復＋ミニプレート固定</strong>。前頭頬骨縫合・頬骨上顎縫合に 2 点固定が基本</td>
+                <td>浮腫軽快後（5〜10 日）</td>
+              </tr>
+              <tr>
+                <td>眼窩底欠損合併</td>
+                <td>眼窩底再建（人工骨・自家骨）併用</td>
+                <td>同時手術</td>
+              </tr>
+              <tr>
+                <td>非転位・症状軽微</td>
+                <td>保存（経過観察、軟食、開口訓練）</td>
+                <td>外来フォロー</td>
+              </tr>
+            </tbody>
+          </table></div>
+        </div>
+      </details>
+
+      <details class="dx-box" id="consult">
+        <summary><span>コンサル文（カルテに貼る）</span></summary>
+        <div class="dx-box__body">
+          <p class="dx-template__hint">形成外科宛て。【目的】【疾患】【既往歴】【内服薬】【ADL】【現病歴】の順。</p>
+          <div class="dx-template">【目的】[ご加療依頼／観血的整復のご相談]
+【疾患】#1 頬骨上顎複合体骨折（ZMC、[右/左]、[tripod／4 縫合 tetrapod／頬骨弓孤立]）
+　　　 [#2 眼窩底骨折合併／#2 Le Fort I/II 複合／#2 視神経管骨折合併 など]
+【既往歴】[特記事項なし／○○]
+【内服薬】[なし／ワーファリン／DOAC ○○／抗血小板薬 ○○]
+【ADL（受傷前）】[独歩／杖／介助／車椅子]
+【現病歴】[年齢]歳[男/女]性。[受傷機転：殴打／転倒で側面打撲／交通／スポーツ]で受傷し、[来院経緯]で来院。
+ ・視診：[右/左]頬部腫脹・皮下血腫、結膜下出血、頬部陥凹 [あり／浮腫で判定困難]、下眼瞼下垂 [あり／なし]
+ ・触診：眼窩外側縁・下縁・頬骨弓の段差 [あり／なし]、圧痛
+ ・神経：眼窩下神経領域（頬部・上口唇）しびれ [あり／なし]
+ ・眼科：視力 [良好／○.○]、対光反射 [正常／RAPD あり]、眼球運動 [全方向可／下方視で複視]、enophthalmos [なし／あり]
+ ・開口障害：[○ cm／なし]
+ ・画像：顔面 CT・3D-CT で[tripod／tetrapod／頬骨弓孤立]、眼窩底 [損なし／合併]、Le Fort 線 [なし／I/II 合併]、視神経管 [問題なし／○○]
+ ・頭部 CT：[頭蓋内病変なし／○○]
+ ・ER 処置：鎮痛、冷却、頭部挙上、鼻かみ禁の指示、抗生剤 [投与済／未]
+よろしくお願いいたします。</div>
+        </div>
+      </details>
+
+      <details class="dx-box">
+        <summary><span>出典</span></summary>
+        <div class="dx-box__body">
+          <ul>
+            <li>頭頸部外科教科書 第13章「頭蓋顔面・頸部外傷」A. 頭蓋顔面骨折／ZMC 骨折（p.852-857）。</li>
+            <li>Ellis E III, el-Attar A, Moos KF. An analysis of 2,067 cases of zygomatico-orbital fracture. <em>J Oral Maxillofac Surg.</em> 1985;43:417-428.</li>
+            <li>Zingg M ほか. Classification and treatment of zygomatic fractures: a review of 1,025 cases. <em>J Oral Maxillofac Surg.</em> 1992;50:778-790.</li>
+          </ul>
+        </div>
+      </details>
+
+    </article>
+  </main>
+
+  <nav class="hokuto-bottom">
+    <button class="hokuto-bottom__btn" type="button" id="navBack"><span class="hokuto-bottom__icon">←</span><span>戻る</span></button>
+    <a class="hokuto-bottom__btn" href="../ツール.html"><span class="hokuto-bottom__icon">⚙</span><span>ツール</span></a>
+    <a class="hokuto-bottom__btn" href="../index.html"><span class="hokuto-bottom__icon">⌂</span><span>ホーム</span></a>
+  </nav>
+
+  <script>
+  (function(){
+    document.querySelectorAll('.dx-quick__btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.dataset.target;
+        const target = document.getElementById(id);
+        if (!target) return;
+        target.open = true;
+        target.scrollIntoView({behavior: 'smooth', block: 'start'});
+      });
+    });
+    const navBack = document.getElementById('navBack');
+    if (navBack) navBack.addEventListener('click', () => {
+      if (window.history.length > 1) history.back();
+      else window.location.href = '../index.html';
+    });
+  })();
+  </script>
+</body>
+</html>

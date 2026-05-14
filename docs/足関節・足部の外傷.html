@@ -13,12 +13,6 @@
       display: flex; align-items: center; justify-content: space-between;
       gap: 0.5rem; cursor: pointer; padding: 2px 0;
     }
-    .flow-box__hint {
-      font-size: 0.72rem; font-weight: 600; color: var(--muted);
-      letter-spacing: 0.02em; padding: 2px 8px; border-radius: 999px;
-      border: 1px solid color-mix(in srgb, var(--text) 20%, transparent);
-    }
-
     /* ===== 診療フロー本体 ===== */
     .flow-canvas {
       background: var(--surface); border-radius: 10px;
@@ -58,10 +52,6 @@
       border-color: #c0392b;
     }
     .dx-node--danger .dx-node__title { color: #c0392b; }
-    .dx-node--action {
-      background: color-mix(in srgb, var(--text) 5%, var(--surface));
-      border-style: dashed;
-    }
     .dx-node--external {
       text-decoration: none; color: var(--text); border-style: dashed;
       position: relative;
@@ -85,11 +75,11 @@
     /* 矢印 */
     .dx-arrow {
       display: flex; flex-direction: column; align-items: center; justify-content: center;
-      position: relative; margin: 4px 0; min-height: 44px;
+      position: relative; margin: 2px 0; min-height: 26px;
       color: var(--muted); font-size: 11.5px; font-weight: 600;
     }
     .dx-arrow::before {
-      content: ""; width: 2px; height: 100%; min-height: 38px;
+      content: ""; width: 2px; height: 100%; min-height: 22px;
       background: color-mix(in srgb, var(--text) 35%, transparent);
     }
     .dx-arrow::after {
@@ -98,13 +88,6 @@
       border-left: 5px solid transparent; border-right: 5px solid transparent;
       border-top: 7px solid color-mix(in srgb, var(--text) 35%, transparent);
     }
-    .dx-arrow__label {
-      background: var(--surface); padding: 1px 8px; border-radius: 999px;
-      border: 1px solid color-mix(in srgb, var(--text) 18%, transparent);
-      position: absolute; left: 50%; top: 50%;
-      transform: translate(-50%, -50%); white-space: nowrap; z-index: 1;
-    }
-
     /* 分岐 Y 字 */
     .dx-fork {
       display: grid; grid-template-columns: 1fr 1fr;
@@ -139,7 +122,7 @@
     .dx-fork--quad { grid-template-columns: repeat(4, 1fr); }
     .dx-fork--quad::before { left: 12.5%; right: 12.5%; }
 
-    /* 4列の疾患ツリー */
+    /* 疾患ツリー（4列） */
     .dx-trees {
       display: grid; grid-template-columns: repeat(4, 1fr);
       gap: 12px; align-items: start; margin-top: 4px;
@@ -201,7 +184,6 @@
       .dx-arrow { min-height: 24px; margin: 1px 0; }
       .dx-arrow::before { min-height: 20px; width: 1.5px; }
       .dx-arrow::after { border-left-width: 4px; border-right-width: 4px; border-top-width: 6px; }
-      .dx-arrow__label { font-size: 8.5px; padding: 0 4px; line-height: 1.4; }
 
       .dx-fork { min-height: 22px; }
       .dx-fork::before { height: 1.5px; }
@@ -220,14 +202,6 @@
     }
 
     /* === 来院後チェック === */
-    .dx-arrival-divider {
-      margin: 18px 0 8px; display: flex; align-items: center; gap: 10px;
-      color: var(--muted); font-size: 11.5px; font-weight: 800; letter-spacing: 0.1em;
-    }
-    .dx-arrival-divider::before, .dx-arrival-divider::after {
-      content: ""; flex: 1; height: 1px;
-      background: color-mix(in srgb, var(--text) 18%, transparent);
-    }
     .dx-checklist {
       background: var(--surface); border-radius: 10px;
       border: 1.5px solid color-mix(in srgb, var(--text) 14%, transparent);
@@ -271,6 +245,21 @@
       text-decoration-color: color-mix(in srgb, var(--muted) 50%, transparent);
     }
     .dx-checklist__sub { color: var(--muted); font-size: 11px; font-weight: 500; }
+    .dx-checklist__action {
+      display: block;
+      margin-top: 6px;
+      padding: 5px 9px;
+      background: color-mix(in srgb, #d33 10%, transparent);
+      border-left: 3px solid #d33;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--text);
+      line-height: 1.45;
+    }
+    .dx-checklist__action::before { content: "⚠ "; color: #d33; font-weight: 800; }
+    .dx-checklist__action strong { color: #d33; }
+    .dx-checklist__action a { color: #d33; text-decoration: underline; font-weight: 600; }
 
     @media (max-width: 600px) {
       .dx-checklist { padding: 8px 10px; }
@@ -278,7 +267,6 @@
       .dx-checklist__list li { font-size: 11.5px; }
       .dx-checklist__sub { font-size: 10px; }
       .dx-checklist__reset { font-size: 9.5px; padding: 1px 6px; }
-      .dx-arrival-divider { font-size: 10px; margin: 14px 0 6px; }
     }
 
     /* === トリガー連動ルール === */
@@ -379,6 +367,106 @@
       .dx-imaging__list { font-size: 11.5px; }
     }
 
+    /* フロー peek からのみ参照される panel は可視には非表示（DOM は peek 用に保持） */
+    #historyPanel,
+    #examPanel,
+    #imagingPanel,
+    #imagingReadPanel,
+    #rulesL2Panel,
+    #rxPanel,
+    #dispoPanel,
+    #refsPanel { display: none !important; }
+
+    /* === Peek プレビュー === */
+    .peek-modal {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.5);
+      display: none;
+      align-items: flex-end;
+      justify-content: center;
+      z-index: 9999;
+      -webkit-backdrop-filter: blur(2px);
+      backdrop-filter: blur(2px);
+    }
+    .peek-modal.is-open { display: flex; }
+    .peek-modal__sheet {
+      background: var(--surface);
+      width: 100%;
+      max-width: 720px;
+      max-height: 85vh;
+      border-radius: 14px 14px 0 0;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 -6px 28px rgba(0,0,0,0.25);
+      animation: peek-slide-up 220ms ease-out;
+      overflow: hidden;
+      position: relative;
+    }
+    @keyframes peek-slide-up {
+      from { transform: translateY(30%); opacity: 0.4; }
+      to   { transform: translateY(0);   opacity: 1; }
+    }
+    .peek-modal__handle {
+      position: absolute;
+      top: 6px; left: 50%;
+      transform: translateX(-50%);
+      width: 36px; height: 4px;
+      border-radius: 999px;
+      background: color-mix(in srgb, var(--text) 22%, transparent);
+      pointer-events: none;
+    }
+    .peek-modal__header {
+      display: flex; align-items: flex-start; gap: 8px;
+      padding: 16px 14px 10px;
+      border-bottom: 1px solid color-mix(in srgb, var(--text) 12%, transparent);
+      background: var(--surface);
+      flex-shrink: 0;
+    }
+    .peek-modal__title {
+      flex: 1;
+      font-weight: 800;
+      font-size: 14.5px;
+      color: var(--text);
+      line-height: 1.3;
+    }
+    .peek-modal__close {
+      background: transparent;
+      border: 1px solid color-mix(in srgb, var(--text) 22%, transparent);
+      border-radius: 999px;
+      width: 30px; height: 30px;
+      cursor: pointer;
+      font-size: 14px;
+      color: var(--text);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      font-family: inherit;
+    }
+    .peek-modal__close:hover { background: color-mix(in srgb, var(--text) 6%, transparent); }
+    .peek-modal__body {
+      flex: 1;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      padding: 12px 16px 10px;
+      font-size: 13.5px;
+      line-height: 1.55;
+      color: var(--text);
+    }
+    /* peek 内で details は常に開いた状態で表示（JS で open=true を付与）。トップレベルのサマリーは peek ヘッダーと重複するため非表示 */
+    .peek-modal__body > details > summary { display: none; }
+    .peek-modal__body details > summary { pointer-events: none; }
+    /* checklist 内の reset ボタンも peek では機能しないので非表示 */
+    .peek-modal__body .dx-checklist__reset { display: none; }
+    @media (min-width: 720px) {
+      .peek-modal { align-items: center; padding: 24px; }
+      .peek-modal__sheet { border-radius: 14px; max-height: 80vh; }
+      .peek-modal__handle { display: none; }
+      @keyframes peek-slide-up {
+        from { transform: scale(0.96); opacity: 0; }
+        to   { transform: scale(1);    opacity: 1; }
+      }
+    }
+    a.dx-node { -webkit-touch-callout: none; }
+
     /* §メニュータイル非表示 */
     .section-tiles { display: none !important; }
   </style>
@@ -399,290 +487,688 @@
 
       <!-- 単純化診療フロー -->
       <div class="action-header flow-box" id="flowBox">
-        <div class="action-header__title flow-box__title" id="flowBoxClose" role="button" tabindex="0" aria-label="診療フローを閉じる">
-          <span>🗺 単純化診療フロー</span>
-          <span class="flow-box__hint">タップで閉じる ✕</span>
+        <div class="action-header__title flow-box__title">
+          <span>単純化診療フロー</span>
         </div>
 
         <div class="flow-canvas">
-          <div class="dx-flow" role="group" aria-label="足関節・足部外傷の単純化診療フロー">
+          <div class="dx-flow" role="group" aria-label="足関節・足部の外傷の単純化診療フロー">
 
-            <!-- L0: Red flags -->
+            <!-- Root -->
             <div class="dx-layer dx-layer--root">
-              <a class="dx-node dx-node--decision dx-node--danger" href="#redflags">
-                <div class="dx-node__title">🚨 Red flags 確認</div>
-                <div class="dx-node__sub">脱臼骨折／血流障害／開放創／コンパートメント</div>
-              </a>
+              <div class="dx-node dx-node--decision">足関節・足部の外傷</div>
             </div>
+            <div class="dx-arrow"></div>
 
-            <div class="dx-fork">
-              <div class="dx-fork__leg"><span class="dx-fork__label">あり</span></div>
-              <div class="dx-fork__leg"><span class="dx-fork__label">なし</span></div>
-            </div>
-
+            <!-- 問診 + 身体診察（同時並行） -->
             <div class="dx-layer dx-layer--branch">
-              <a class="dx-node dx-node--danger" href="#redflags">
-                <div class="dx-node__title">緊急対応</div>
-                <div class="dx-node__sub">即整復／即時整形／血管評価</div>
+              <a class="dx-node" href="#historyPanel">
+                <div class="dx-node__title">問診</div>
               </a>
-              <div class="dx-arrow"><span class="dx-arrow__label">↓ 部位で絞る</span></div>
+              <a class="dx-node" href="#examPanel">
+                <div class="dx-node__title">身体診察</div>
+              </a>
             </div>
+            <div class="dx-arrow"></div>
 
-            <!-- L1: 痛みの主座 -->
-            <div class="dx-layer dx-layer--root">
-              <div class="dx-node dx-node--judge">痛みの主座は？</div>
+            <!-- X 線適応 ＋ X 線の読み方（並列） -->
+            <div class="dx-layer dx-layer--branch">
+              <a class="dx-node dx-node--judge" href="#imagingPanel">
+                <div class="dx-node__title">X 線適応＋撮影方向</div>
+                <div class="dx-node__sub">Ottawa Ankle/Foot Rule</div>
+              </a>
+              <a class="dx-node dx-node--judge" href="#imagingReadPanel">
+                <div class="dx-node__title">X 線の読み方</div>
+                <div class="dx-node__sub">mortise・Weber・Böhler 角</div>
+              </a>
             </div>
+            <div class="dx-arrow"><span>痛みの主座で 4 分岐</span></div>
 
+            <!-- 4 分岐：解剖部位 -->
             <div class="dx-fork dx-fork--quad">
-              <div class="dx-fork__leg"><span class="dx-fork__label">足首・くるぶし</span></div>
-              <div class="dx-fork__leg"><span class="dx-fork__label">足の甲〜中足部</span></div>
-              <div class="dx-fork__leg"><span class="dx-fork__label">踵</span></div>
-              <div class="dx-fork__leg"><span class="dx-fork__label">アキレス腱</span></div>
+              <div class="dx-fork__leg"><span class="dx-fork__label">足関節</span></div>
+              <div class="dx-fork__leg"><span class="dx-fork__label">後足部</span></div>
+              <div class="dx-fork__leg"><span class="dx-fork__label">中足部</span></div>
+              <div class="dx-fork__leg"><span class="dx-fork__label">前足部</span></div>
             </div>
 
-            <!-- L2/L3: 4列の疾患ツリー -->
+            <!-- 4 列の疾患ツリー -->
             <div class="dx-trees">
 
-              <!-- 1) 足首・くるぶし -->
+              <!-- 1) 足関節（内・外・後果・遠位脛腓・靱帯） -->
               <div class="dx-tree">
-                <div class="dx-tree__group">内反捻挫</div>
-                <a class="dx-node" href="疾患詳細/ATFL損傷.html">
-                  <div class="dx-node__title">ATFL損傷</div>
-                  <div class="dx-node__sub">最多。圧痛が ATFL のみ</div>
-                </a>
+                <div class="dx-tree__group">骨折（果部）</div>
                 <a class="dx-node" href="疾患詳細/足関節果部骨折.html">
-                  <div class="dx-node__title">外果骨折</div>
-                  <div class="dx-node__sub">腓骨に直接圧痛・叩打痛</div>
-                </a>
-                <a class="dx-node" href="疾患詳細/距骨骨折.html">
-                  <div class="dx-node__title">距骨骨折（外側突起 ほか）</div>
-                  <div class="dx-node__sub">スノーボード型 / 荷重で痛い</div>
-                </a>
-
-                <div class="dx-tree__group">外反・回旋</div>
-                <a class="dx-node" href="疾患詳細/足関節果部骨折.html">
-                  <div class="dx-node__title">内果・二果・三果骨折</div>
-                  <div class="dx-node__sub">外果見つけたら他果も探す</div>
+                  <div class="dx-node__title">足関節果部骨折</div>
+                  <div class="dx-node__sub">外果／内果／後果／二果／三果<br>Weber A/B/C で安定性評価</div>
                 </a>
                 <a class="dx-node dx-node--danger" href="疾患詳細/Maisonneuve骨折.html">
-                  <div class="dx-node__title">Maisonneuve骨折</div>
-                  <div class="dx-node__sub">内果＋腓骨近位を必ず触診</div>
+                  <div class="dx-node__title">Maisonneuve 骨折</div>
+                  <div class="dx-node__sub">内果痛＋腓骨近位を必ず触診<br>足関節 X 線では写らない（5%）</div>
                 </a>
-
-                <div class="dx-tree__group">高エネ・軸圧</div>
                 <a class="dx-node dx-node--danger" href="疾患詳細/Pilon骨折.html">
-                  <div class="dx-node__title">Pilon骨折</div>
-                  <div class="dx-node__sub">脛骨天蓋・関節内骨折</div>
+                  <div class="dx-node__title">Pilon 骨折</div>
+                  <div class="dx-node__sub">脛骨天蓋・関節内／高エネ軸圧<br>即整形・CT 追加</div>
                 </a>
-                <a class="dx-node dx-node--danger" href="疾患詳細/距骨骨折.html">
-                  <div class="dx-node__title">距骨頸部骨折</div>
-                  <div class="dx-node__sub">準緊急手術。即時整形</div>
-                </a>
-
-                <div class="dx-tree__group">小児（10〜14歳）</div>
                 <a class="dx-node" href="疾患詳細/Tillaux骨折.html">
-                  <div class="dx-node__title">Tillaux／triplane骨折</div>
-                  <div class="dx-node__sub">骨端線骨折・関節内</div>
+                  <div class="dx-node__title">Tillaux／triplane 骨折</div>
+                  <div class="dx-node__sub">小児（10〜14 歳）骨端線・関節内</div>
                 </a>
 
-                <div class="dx-tree__group">捻挫＋疼痛遷延</div>
+                <div class="dx-tree__group">靱帯損傷</div>
+                <a class="dx-node" href="疾患詳細/ATFL損傷.html">
+                  <div class="dx-node__title">ATFL／CFL／PTFL 損傷</div>
+                  <div class="dx-node__sub">内反捻挫最多／anterior drawer・<br>talar tilt／圧痛が ATFL のみ</div>
+                </a>
                 <a class="dx-node" href="疾患詳細/遠位脛腓靱帯損傷.html">
                   <div class="dx-node__title">遠位脛腓靱帯損傷</div>
-                  <div class="dx-node__sub">スクイージングテスト</div>
+                  <div class="dx-node__sub">high ankle sprain／squeeze・<br>external rotation テスト</div>
                 </a>
               </div>
 
-              <!-- 2) 足の甲〜中足部 -->
+              <!-- 2) 後足部（距骨・踵骨） -->
               <div class="dx-tree">
-                <div class="dx-tree__group">直達外力・つま先着地</div>
-                <a class="dx-node" href="疾患詳細/中足骨骨折.html">
-                  <div class="dx-node__title">中足骨骨折</div>
-                  <div class="dx-node__sub">第2〜4。多くは保存</div>
+                <div class="dx-tree__group">距骨</div>
+                <a class="dx-node dx-node--danger" href="疾患詳細/距骨骨折.html">
+                  <div class="dx-node__title">距骨頸部骨折</div>
+                  <div class="dx-node__sub">高エネ／Hawkins 分類<br>準緊急手術・即整形</div>
                 </a>
-                <a class="dx-node dx-node--danger" href="疾患詳細/リスフラン関節脱臼骨折.html">
-                  <div class="dx-node__title">リスフラン関節脱臼骨折</div>
-                  <div class="dx-node__sub">第2中足骨側方転位を確認</div>
+                <a class="dx-node" href="疾患詳細/距骨骨折.html">
+                  <div class="dx-node__title">距骨 minor 骨折</div>
+                  <div class="dx-node__sub">外側突起（スノーボード）／<br>後方突起／滑車<br>X 線感度 24〜33% → CT 追加</div>
                 </a>
 
-                <div class="dx-tree__group">内反 + 第5中足骨基部</div>
+                <div class="dx-tree__group">踵骨</div>
+                <a class="dx-node dx-node--danger" href="疾患詳細/踵骨骨折.html">
+                  <div class="dx-node__title">踵骨骨折</div>
+                  <div class="dx-node__sub">転落・軸圧／<strong>Böhler 角&lt;20°</strong><br>感度 99%・特異度 99%</div>
+                </a>
+                <div class="dx-note">高所転落では<strong>反対側踵骨</strong>＋<strong>腰椎</strong>を必ず評価（両側 10%・脊椎合併 10%）。<strong>足底血腫（Mondor sign）</strong>は踵骨骨折に特徴的 — 必ず靴下を脱がせて視診</div>
+
+                <div class="dx-tree__group">アキレス腱</div>
+                <a class="dx-node" href="疾患詳細/アキレス腱損傷.html">
+                  <div class="dx-node__title">アキレス腱断裂</div>
+                  <div class="dx-node__sub">ポップ音／底屈力低下／<br>Thompson 陽性／非典型 25%</div>
+                </a>
+              </div>
+
+              <!-- 3) 中足部（リスフラン・舟状骨・立方骨） -->
+              <div class="dx-tree">
+                <div class="dx-tree__group">リスフラン関節</div>
+                <a class="dx-node dx-node--danger" href="疾患詳細/リスフラン関節脱臼骨折.html">
+                  <div class="dx-node__title">リスフラン関節脱臼骨折</div>
+                  <div class="dx-node__sub">第 2 中足骨側方転位／<br>fleck sign／斜位像で評価<br>見逃し 20%</div>
+                </a>
+                <div class="dx-note">中足骨骨折を見たら<strong>必ず斜位像でリスフラン</strong>を確認。前足部腫脹／<strong>足底皮下出血（plantar ecchymosis sign）</strong>を見落とさない</div>
+
+                <div class="dx-tree__group">舟状骨・立方骨</div>
+                <a class="dx-node" href="#rulesL2Panel">
+                  <div class="dx-node__title">舟状骨／立方骨骨折</div>
+                  <div class="dx-node__sub">中足部腫脹・荷重不能<br>CT で評価</div>
+                </a>
+              </div>
+
+              <!-- 4) 前足部（中足骨・第5中足骨・足趾） -->
+              <div class="dx-tree">
+                <div class="dx-tree__group">中足骨</div>
+                <a class="dx-node" href="疾患詳細/中足骨骨折.html">
+                  <div class="dx-node__title">中足骨骨折（第 2〜4）</div>
+                  <div class="dx-node__sub">直達外力／多くは保存<br>転位 4 mm 以上・10°以上で手術</div>
+                </a>
                 <a class="dx-node" href="疾患詳細/第5中足骨近位端骨折.html">
-                  <div class="dx-node__title">第5中足骨近位端骨折</div>
-                  <div class="dx-node__sub">裸足視診で気づく</div>
+                  <div class="dx-node__title">第 5 中足骨近位端骨折</div>
+                  <div class="dx-node__sub">avulsion（zone 1）保存／<br><strong>Jones（zone 2）偽関節 30%</strong><br>裸足視診で気づく</div>
                 </a>
 
                 <div class="dx-tree__group">足趾</div>
                 <a class="dx-node" href="疾患詳細/足趾骨骨折.html">
                   <div class="dx-node__title">足趾骨骨折</div>
-                  <div class="dx-node__sub">爪外傷・開放骨折に注意</div>
+                  <div class="dx-node__sub">爪外傷・開放骨折<br>buddy taping で帰宅保存</div>
                 </a>
               </div>
 
-              <!-- 3) 踵 -->
-              <div class="dx-tree">
-                <div class="dx-tree__group">転落・軸圧</div>
-                <a class="dx-node dx-node--danger" href="疾患詳細/踵骨骨折.html">
-                  <div class="dx-node__title">踵骨骨折</div>
-                  <div class="dx-node__sub">Böhler角 &lt; 20°</div>
-                </a>
-                <div class="dx-note">高所転落では<strong>反対側踵骨</strong>と<strong>腰椎</strong>を必ず評価（両側10%／脊椎合併10%）</div>
-              </div>
+            </div>
+            <div class="dx-arrow"></div>
 
-              <!-- 4) アキレス腱 -->
-              <div class="dx-tree">
-                <div class="dx-tree__group">底屈力低下／ポップ音</div>
-                <a class="dx-node" href="疾患詳細/アキレス腱損傷.html">
-                  <div class="dx-node__title">アキレス腱損傷</div>
-                  <div class="dx-node__sub">Thompson テスト陽性</div>
-                </a>
-                <div class="dx-note">非典型例（ポップ音なし・脱力のみ）が25%。腓腹筋挫傷も同ページに併記</div>
-              </div>
+            <!-- 治療・固定リファレンス -->
+            <div class="dx-layer dx-layer--root">
+              <a class="dx-node dx-node--judge" href="#rxPanel">
+                <div class="dx-node__title">治療リファレンス</div>
+                <div class="dx-node__sub">後方固定／整復／開放骨折／鎮痛</div>
+              </a>
+            </div>
+            <div class="dx-arrow"></div>
 
+            <!-- disposition -->
+            <div class="dx-layer dx-layer--root">
+              <a class="dx-node dx-node--decision" href="#dispoPanel">
+                <div class="dx-node__title">disposition</div>
+                <div class="dx-node__sub">5 択／後方固定後 5P／整形外来予約</div>
+              </a>
             </div>
 
           </div>
 
-          <!-- 来院後チェック -->
-          <div class="dx-arrival-divider"><span>来院後のチェック</span></div>
-
+          <!-- ====== 問診 ====== -->
           <details class="dx-checklist" id="historyPanel">
-            <summary>
-              <span class="dx-checklist__head" style="flex:1;">
-                <span>🗣 問診（来院後に実施）</span>
-                <button type="button" class="dx-checklist__reset" aria-label="問診チェックをすべて外す">リセット</button>
-              </span>
-            </summary>
+            <summary>問診</summary>
             <ul class="dx-checklist__list">
-              <li><label><input type="checkbox" data-key="h-mech"> <span><strong>受傷機転</strong> <span class="dx-checklist__sub">捻った／踏んだ／ぶつけた／落ちた／伸ばした</span></span></label></li>
-              <li><label><input type="checkbox" data-key="h-direction"> <span><strong>力の方向</strong> <span class="dx-checklist__sub">内反 / 外反 / 軸圧 / 直達外力</span></span></label></li>
-              <li><label><input type="checkbox" data-key="h-pop"> <span><strong>ポップ音・突然の脱力</strong> <span class="dx-checklist__sub">アキレス腱断裂を強く示唆</span></span></label></li>
-              <li><label><input type="checkbox" data-key="h-fall"> <span><strong>高所転落の高さ</strong> <span class="dx-checklist__sub">踵骨骨折→脊椎・反対側踵骨を連動評価</span></span></label></li>
-              <li><label><input type="checkbox" data-key="h-sport"> <span><strong>スポーツ種目</strong> <span class="dx-checklist__sub">ボード=外側突起、サッカー/空手=後方突起</span></span></label></li>
-              <li><label><input type="checkbox" data-key="h-age"> <span><strong>年齢・成長期か</strong> <span class="dx-checklist__sub">小学校高学年〜中学生は骨端線骨折を想起</span></span></label></li>
-              <li><label><input type="checkbox" data-key="h-walk"> <span><strong>受傷直後の歩行可否</strong> <span class="dx-checklist__sub">4歩歩行可/不可（Ottawa の補助）</span></span></label></li>
+              <li><label><input type="checkbox" data-key="h-age"> <span><strong>年齢・成長期か</strong> <span class="dx-checklist__sub">小学校高学年〜中学生（10〜14 歳）は骨端線骨折（Tillaux・triplane）を想起／高齢者は脆弱骨折</span></span></label></li>
+              <li><label><input type="checkbox" data-key="h-time"> <span><strong>受傷時刻・最終飲食時刻</strong> <span class="dx-checklist__sub">経静脈麻酔／整復前の絶飲食判断（脱臼骨折）</span></span></label></li>
+              <li><label><input type="checkbox" data-key="h-mech"> <span><strong>受傷機転</strong> <span class="dx-checklist__sub">捻った／踏んだ／ぶつけた／落ちた／伸ばした／つま先着地</span></span></label></li>
+              <li><label><input type="checkbox" data-key="h-direction"> <span><strong>力の方向</strong> <span class="dx-checklist__sub">内反 → ATFL／外果／第 5 中足骨基部／距骨外側突起／外反・回旋 → 内果・両果・三果・Maisonneuve／軸圧 → Pilon・踵骨・距骨頸部／直達外力 → 中足骨・足趾</span></span></label></li>
+              <li><label><input type="checkbox" data-key="h-energy"> <span><strong>受傷エネルギー</strong> <span class="dx-checklist__sub">高エネ（転落・交通外傷）→ Pilon／距骨頸部／踵骨／リスフラン／多発外傷も意識</span></span></label></li>
+              <li><label><input type="checkbox" data-key="h-fall"> <span><strong>高所転落の高さ</strong> <span class="dx-checklist__sub">踵骨骨折 → 脊椎・反対側踵骨を連動評価（両側 10%／脊椎合併 10%）</span></span></label></li>
+              <li><label><input type="checkbox" data-key="h-pop"> <span><strong>ポップ音・突然の脱力</strong> <span class="dx-checklist__sub">アキレス腱断裂を強く示唆／「ふくらはぎを蹴られた感覚」</span></span></label></li>
+              <li><label><input type="checkbox" data-key="h-walk"> <span><strong>受傷直後の歩行可否</strong> <span class="dx-checklist__sub">4 歩歩行可／不可（Ottawa Ankle Rule の判定軸）</span></span></label></li>
+              <li><label><input type="checkbox" data-key="h-sport"> <span><strong>スポーツ種目</strong> <span class="dx-checklist__sub">スノーボード → 距骨外側突起／サッカー・空手 → 後方突起／ランニング → Jones 骨折・疲労骨折／バスケ → 距骨外側突起・Jones</span></span></label></li>
+              <li><label><input type="checkbox" data-key="h-shoe"> <span><strong>履物・路面状況</strong> <span class="dx-checklist__sub">ハイヒール → 内反捻挫／雪道・凍結路 → 果部骨折／裸足での踏み込み → 中足骨</span></span></label></li>
+              <li><label><input type="checkbox" data-key="h-med"> <span><strong>抗凝固薬・骨粗鬆症・DM・神経障害</strong> <span class="dx-checklist__sub">手術判断・骨癒合に影響／DM 神経障害患者の Charcot 関節も意識</span></span></label></li>
+              <li><label><input type="checkbox" data-key="h-adl"> <span><strong>ADL・職業／スポーツ・利き足</strong> <span class="dx-checklist__sub">紹介状に必須／立ち仕事・スポーツ選手は閾値を下げて整形紹介</span></span></label></li>
+              <li><label><input type="checkbox" data-key="h-history"> <span><strong>過去の同様エピソード</strong> <span class="dx-checklist__sub">慢性足関節不安定症／繰り返す捻挫は ATFL の慢性損傷</span></span></label></li>
             </ul>
           </details>
 
+          <!-- ====== 身体診察 ====== -->
           <details class="dx-checklist" id="examPanel">
-            <summary>
-              <span class="dx-checklist__head" style="flex:1;">
-                <span>🔍 身体診察（来院後に実施）</span>
-                <button type="button" class="dx-checklist__reset" aria-label="身体診察チェックをすべて外す">リセット</button>
-              </span>
-            </summary>
+            <summary>身体診察</summary>
             <ul class="dx-checklist__list">
-              <li><label><input type="checkbox" data-key="e-vital"> <span><strong>バイタル</strong> <span class="dx-checklist__sub">高エネ外傷では多発外傷を意識</span></span></label></li>
-              <li><label><input type="checkbox" data-key="e-bare"> <span><strong>両側裸足にして視診</strong> <span class="dx-checklist__sub">第5中足骨腫脹／Mondor sign／開放創／爪外傷</span></span></label></li>
-              <li><label><input type="checkbox" data-key="e-tender"> <span><strong>圧痛マッピング</strong> <span class="dx-checklist__sub">外果＋後縁6cm／内果／舟状骨／第5中足骨基部／中足部／踵／アキレス腱</span></span></label></li>
-              <li><label><input type="checkbox" data-key="e-prox-fib"> <span><strong>腓骨近位の圧痛</strong> <span class="dx-checklist__sub">Maisonneuve 除外。所見あれば下腿全長 X 線</span></span></label></li>
-              <li><label><input type="checkbox" data-key="e-contra-heel"> <span><strong>反対側踵骨の圧痛</strong> <span class="dx-checklist__sub">両側骨折 10%</span></span></label></li>
-              <li><label><input type="checkbox" data-key="e-spine"> <span><strong>腰部圧痛</strong> <span class="dx-checklist__sub">踵骨骨折→脊椎合併 10%</span></span></label></li>
-              <li><label><input type="checkbox" data-key="e-thompson"> <span><strong>Thompson テスト</strong> <span class="dx-checklist__sub">非典型アキレス腱損傷の見逃し防止</span></span></label></li>
-              <li><label><input type="checkbox" data-key="e-squeeze"> <span><strong>スクイージングテスト</strong> <span class="dx-checklist__sub">遠位脛腓靱帯損傷の示唆</span></span></label></li>
-              <li><label><input type="checkbox" data-key="e-load"> <span><strong>荷重試験（4歩歩行）</strong> <span class="dx-checklist__sub">不能なら見逃し再点検</span></span></label></li>
-              <li><label><input type="checkbox" data-key="e-pulse"> <span><strong>血流・神経</strong> <span class="dx-checklist__sub">足背・後脛骨動脈、足趾感覚運動</span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-vital"> <span><strong>バイタル</strong> <span class="dx-checklist__sub">高エネ外傷では多発外傷も意識（脊椎・骨盤・他肢）</span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-bare"> <span><strong>両側裸足にして視診</strong> <span class="dx-checklist__sub">第 5 中足骨腫脹／足底皮下出血（Mondor sign＝リスフラン）／開放創／爪外傷／変形／皮膚緊張<span class="dx-checklist__action"><strong>開放骨折ありなら</strong>：<strong>即整形コンサルト</strong>・洗浄・<strong>セファゾリン 2 g IV</strong>・破傷風トキソイド・創部写真撮影・生食ガーゼ被覆　<a href="疾患詳細/開放骨折.html">→ 開放骨折 詳細</a></span></span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-deform"> <span><strong>明らかな変形＋皮膚緊張</strong> <span class="dx-checklist__sub">脱臼骨折／果部の皮膚が骨に押し上げられる<span class="dx-checklist__action"><strong>該当あれば</strong>：X 線確認前でも<strong>整復検討</strong>、整形即コンサルト。皮膚壊死を防ぐため迅速対応</span></span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-ottawa"> <span><strong>Ottawa Ankle/Foot Rule の圧痛点</strong> <span class="dx-checklist__sub">外果後縁 6 cm／内果後縁 6 cm／舟状骨／第 5 中足骨基部＋4 歩歩行可否。<strong>感度 96〜99%・除外補助</strong>として活用</span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-tender"> <span><strong>圧痛マッピング</strong> <span class="dx-checklist__sub">外果＋後縁 6 cm／内果／後果／ATFL／CFL／PTFL／舟状骨／第 5 中足骨基部／中足部／距骨外側突起・後方突起／踵／アキレス腱／個々の中足骨・足趾</span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-prox-fib"> <span><strong>腓骨近位の圧痛・下腿全長触診</strong> <span class="dx-checklist__sub">Maisonneuve 除外。<strong>所見あれば下腿全長 X 線追加</strong>（足関節 X 線では腓骨近位がフィルムアウト）<span class="dx-checklist__action"><strong>陽性なら</strong>：<strong>Maisonneuve 骨折を強く疑い</strong>下腿全長 AP/lat オーダー＋整形コンサルト　<a href="疾患詳細/Maisonneuve骨折.html">→ Maisonneuve 詳細</a></span></span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-squeeze"> <span><strong>スクイージング（squeeze）テスト</strong> <span class="dx-checklist__sub">下腿中央を腓骨・脛骨側からつまむ → 足関節遠位に放散痛<span class="dx-checklist__action"><strong>陽性なら</strong>：<strong>遠位脛腓靱帯損傷</strong>（high ankle sprain）。mortise の medial clear space を評価＋整形紹介　<a href="疾患詳細/遠位脛腓靱帯損傷.html">→ 遠位脛腓靱帯損傷 詳細</a></span></span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-drawer"> <span><strong>Anterior drawer・talar tilt テスト</strong> <span class="dx-checklist__sub">ATFL（前方引き出し）／CFL（内反ストレス）。急性期は疼痛で判定困難・健側比較／5〜7 日後の再診で確実</span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-thompson"> <span><strong>Thompson テスト</strong> <span class="dx-checklist__sub">腹臥位で腓腹筋つまむ → 足底屈低下／消失<span class="dx-checklist__action"><strong>陽性なら</strong>：<strong>アキレス腱断裂</strong>。equinus 位後方固定＋帰宅手術（or 保存）　<a href="疾患詳細/アキレス腱損傷.html">→ アキレス腱損傷 詳細</a></span></span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-gap"> <span><strong>アキレス腱の触診（gap palpation）</strong> <span class="dx-checklist__sub">踵骨付着部 2〜6 cm 近位の陥凹／断裂部の triangle sign。Thompson と併用</span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-fifth"> <span><strong>第 5 中足骨基部の圧痛（全例）</strong> <span class="dx-checklist__sub">内反捻挫の全例で必須。avulsion（zone 1）と Jones（zone 2）の鑑別を意識</span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-contra-heel"> <span><strong>反対側踵骨の圧痛</strong> <span class="dx-checklist__sub">高所転落後の踵骨骨折は<strong>両側 10%</strong>。健側もルーチン触診</span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-spine"> <span><strong>腰椎・骨盤の圧痛</strong> <span class="dx-checklist__sub">踵骨骨折 → 脊椎合併 10%／骨盤も連動評価</span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-load"> <span><strong>荷重試験（4 歩歩行）</strong> <span class="dx-checklist__sub">Ottawa の補助／不能なら見逃し再点検</span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-pulse"> <span><strong>血流・神経</strong> <span class="dx-checklist__sub">足背・後脛骨動脈触知／毛細血管再充満／足趾感覚運動／腓骨神経麻痺（足背・第 1 趾間）</span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-comp"> <span><strong>下腿・足部緊満／受動指伸展で激痛</strong> <span class="dx-checklist__sub">高エネ外傷・Pilon・踵骨では要評価<span class="dx-checklist__action"><strong>該当あれば</strong>：<strong>コンパートメント症候群</strong>を疑い、組織内圧測定／整形即コール／fasciotomy 検討</span></span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-recheck"> <span><strong>整復・固定後の再評価</strong> <span class="dx-checklist__sub">5P（color・cap refill・pulse・paresthesia・motion）／神経・血流／X 線前後比較。カルテに必ず記載</span></span></label></li>
             </ul>
           </details>
 
-          <!-- トリガー連動の注意 -->
+          <!-- ====== 画像確定後の注意・見逃し回避・ピットフォール ====== -->
           <details class="dx-rules-l2" id="rulesL2Panel">
-            <summary>⚠️ トリガー連動の注意（条件で意識）</summary>
-            <p class="dx-rules-l2__intro">特定の状況に出会ったら必ず思い出すべき注意点。フローの判断と並行して意識する。</p>
+            <summary>画像確定後の注意・見逃し回避・ピットフォール</summary>
+            <p class="dx-rules-l2__intro"><strong>診察段階の Red flag は身体診察パネルに統合済み</strong>（⚠ アクション）。ここでは<strong>画像で診断が確定してから</strong>意識すべき疾患固有の注意・鑑別の入口・ありがちな誤りをまとめる。</p>
 
-            <h4 class="dx-rules-l2__group">緊急・四肢温存トリガー</h4>
+            <h4 class="dx-rules-l2__group">① 画像確定後の注意（疾患固有）</h4>
             <ul class="dx-rules-l2__list">
-              <li class="dx-rule is-critical" id="redflags">
-                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>脱臼骨折・皮膚緊張・血流障害</span></div>
-                <div class="dx-rule__then"><strong>X 線確認前でも整復</strong>を検討。整形と相談</div>
+              <li class="dx-rule is-critical" id="rule-pilon">
+                <div class="dx-rule__if"><span class="dx-rule__tag">画像</span><span>Pilon 骨折（脛骨天蓋・関節内・高エネ）</span></div>
+                <div class="dx-rule__then"><strong>即時整形コンサルト</strong>。皮膚条件次第で外固定 → 二期的手術。<strong>CT 追加</strong>で骨片・関節面評価。コンパートメント症候群を念頭に置く　<a href="疾患詳細/Pilon骨折.html" style="font-size:11px;">→ Pilon 骨折 詳細</a></div>
               </li>
-              <li class="dx-rule is-critical">
-                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>開放創</span></div>
-                <div class="dx-rule__then"><strong>即時整形コンサルト</strong>。創部洗浄・抗菌薬・破傷風</div>
+              <li class="dx-rule is-critical" id="rule-trimal">
+                <div class="dx-rule__if"><span class="dx-rule__tag">画像</span><span>三果骨折／脱臼骨折／Weber C・不安定 Weber B</span></div>
+                <div class="dx-rule__then"><strong>不安定型は手術適応</strong>。後果の関節面占有率 25% 以上で固定検討。脱臼骨折は<strong>X 線確認前でも整復</strong>＋即整形　<a href="疾患詳細/足関節果部骨折.html" style="font-size:11px;">→ 足関節果部骨折 詳細</a></div>
               </li>
-              <li class="dx-rule is-critical">
-                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>高エネ + 下腿緊満・受動伸展痛</span></div>
-                <div class="dx-rule__then"><strong>コンパートメント症候群</strong>を疑う。緊急減張</div>
+              <li class="dx-rule is-critical" id="rule-talar-neck">
+                <div class="dx-rule__if"><span class="dx-rule__tag">画像</span><span>距骨頸部骨折（Hawkins 分類）</span></div>
+                <div class="dx-rule__then"><strong>準緊急手術＝即時整形</strong>。距骨は血流が脆弱で<strong>無腐性壊死リスク高い</strong>（Hawkins II 20-50%・III 90% 以上）。CT 必須　<a href="疾患詳細/距骨骨折.html" style="font-size:11px;">→ 距骨骨折 詳細</a></div>
               </li>
-              <li class="dx-rule is-critical">
-                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>高所転落</span></div>
-                <div class="dx-rule__then"><strong>両側踵骨 + 腰椎</strong>を必ず評価。脊椎骨折 10% 合併</div>
+              <li class="dx-rule is-critical" id="rule-maisonneuve">
+                <div class="dx-rule__if"><span class="dx-rule__tag">画像</span><span>Maisonneuve 骨折（足関節骨折の 5%）</span></div>
+                <div class="dx-rule__then">遠位脛腓靱帯・骨間膜断裂＋腓骨近位骨折。<strong>多くは内果骨折を伴う</strong>。<strong>必ず手術</strong>。足関節 X 線では写らないので<strong>下腿全長 X 線</strong>で確定　<a href="疾患詳細/Maisonneuve骨折.html" style="font-size:11px;">→ Maisonneuve 詳細</a></div>
+              </li>
+              <li class="dx-rule is-critical" id="rule-lisfranc">
+                <div class="dx-rule__if"><span class="dx-rule__tag">画像</span><span>リスフラン関節脱臼骨折／fleck sign</span></div>
+                <div class="dx-rule__then"><strong>手術適応</strong>（観血整復＋固定）。<strong>見逃し 20%</strong>（中足骨骨折を見たら必ず斜位像でリスフランを確認）。CT 追加で骨片評価　<a href="疾患詳細/リスフラン関節脱臼骨折.html" style="font-size:11px;">→ リスフラン 詳細</a></div>
+              </li>
+              <li class="dx-rule is-critical" id="rule-calcaneus">
+                <div class="dx-rule__if"><span class="dx-rule__tag">画像</span><span>踵骨関節内骨折（Sanders II 以上／Böhler 角 &lt; 20°）</span></div>
+                <div class="dx-rule__then"><strong>整形コンサルト＋CT 追加</strong>。多くは手術。<strong>両側踵骨 10%・脊椎合併 10%</strong> を必ず評価。皮膚条件次第で待機手術　<a href="疾患詳細/踵骨骨折.html" style="font-size:11px;">→ 踵骨骨折 詳細</a></div>
+              </li>
+              <li class="dx-rule is-critical" id="rule-jones">
+                <div class="dx-rule__if"><span class="dx-rule__tag">画像</span><span>第 5 中足骨 zone 2（Jones 骨折／真の Jones）</span></div>
+                <div class="dx-rule__then">骨幹・骨幹端移行部の骨折。<strong>偽関節率 30%</strong>でアスリート・転位例は手術。<strong>avulsion（zone 1）と区別</strong>。X 線で骨折線の位置を確認　<a href="疾患詳細/第5中足骨近位端骨折.html" style="font-size:11px;">→ 第 5 中足骨 詳細</a></div>
+              </li>
+              <li class="dx-rule is-critical" id="rule-achilles">
+                <div class="dx-rule__if"><span class="dx-rule__tag">画像</span><span>アキレス腱断裂（Thompson 陽性・gap 触知）</span></div>
+                <div class="dx-rule__then">画像は補助（エコー or MRI）。<strong>equinus 位後方固定＋帰宅手術</strong>。保存 vs 手術は患者背景・断裂位置で決定（再断裂率：保存 9-12%・手術 2-3%）　<a href="疾患詳細/アキレス腱損傷.html" style="font-size:11px;">→ アキレス腱損傷 詳細</a></div>
+              </li>
+              <li class="dx-rule is-critical" id="rule-tillaux">
+                <div class="dx-rule__if"><span class="dx-rule__tag">画像</span><span>Tillaux／triplane 骨折（10〜14 歳）</span></div>
+                <div class="dx-rule__then">骨端線残存期の<strong>関節内骨折</strong>。Salter-Harris III/IV。<strong>転位 2 mm 以上で手術</strong>。CT 必須。即整形　<a href="疾患詳細/Tillaux骨折.html" style="font-size:11px;">→ Tillaux 詳細</a></div>
               </li>
             </ul>
 
-            <h4 class="dx-rules-l2__group">見逃し回避トリガー</h4>
+            <h4 class="dx-rules-l2__group">② 見逃し回避トリガー</h4>
             <ul class="dx-rules-l2__list">
               <li class="dx-rule">
                 <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>内反捻挫 + 内果のみ痛い</span></div>
-                <div class="dx-rule__then"><strong>腓骨近位を触診</strong>。Maisonneuve 骨折を除外（足関節 X 線では写らない）</div>
-              </li>
-              <li class="dx-rule">
-                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>中足骨骨折を見つけた</span></div>
-                <div class="dx-rule__then"><strong>斜位像でリスフラン関節</strong>の側方転位を確認（見逃し 20%）</div>
-              </li>
-              <li class="dx-rule">
-                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>内反捻挫の全例</span></div>
-                <div class="dx-rule__then"><strong>第5中足骨基部の圧痛</strong>を裸足視診とセットで全例確認</div>
+                <div class="dx-rule__then"><strong>腓骨近位を触診</strong>。Maisonneuve 骨折を除外（足関節 X 線では写らない）。下腿全長 X 線を追加</div>
               </li>
               <li class="dx-rule">
                 <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>外果骨折を見つけた</span></div>
-                <div class="dx-rule__then"><strong>内果・後果の圧痛</strong>を再評価（二果・三果に格上げで方針変更）</div>
+                <div class="dx-rule__then"><strong>内果・後果の圧痛</strong>を再評価（二果・三果に格上げで方針変更）。果部は<strong>3 ヵ所くまなく</strong>骨折を探す</div>
+              </li>
+              <li class="dx-rule">
+                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>中足骨骨折を見つけた</span></div>
+                <div class="dx-rule__then"><strong>斜位像でリスフラン関節</strong>の側方転位・fleck sign を確認（見逃し 20%）。前足部腫脹・<strong>足底皮下出血（plantar ecchymosis sign）</strong>を見落とさない</div>
+              </li>
+              <li class="dx-rule">
+                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>内反捻挫の全例</span></div>
+                <div class="dx-rule__then"><strong>第 5 中足骨基部の圧痛</strong>を裸足視診とセットで全例確認。avulsion／Jones の鑑別</div>
               </li>
               <li class="dx-rule">
                 <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>足を捻って外果痛</span></div>
-                <div class="dx-rule__then">ATFL損傷 vs 腓骨遠位端骨折は<strong>圧痛部位</strong>で鑑別（腓骨直接 = 骨折寄り）</div>
+                <div class="dx-rule__then">ATFL 損傷 vs 腓骨遠位端骨折は<strong>圧痛部位</strong>で鑑別（腓骨直接 = 骨折寄り／ATFL 単独 = 靱帯寄り）</div>
               </li>
               <li class="dx-rule">
                 <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>小学校高学年〜中学生の足関節外傷</span></div>
-                <div class="dx-rule__then">靱帯損傷より<strong>骨端線骨折</strong>を先に疑う（Tillaux／triplane）</div>
+                <div class="dx-rule__then">靱帯損傷より<strong>骨端線骨折（Tillaux・triplane・Salter-Harris II）</strong>を先に疑う。CT 閾値低く</div>
               </li>
               <li class="dx-rule">
-                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>突然のポップ音／底屈力低下</span></div>
-                <div class="dx-rule__then"><strong>Thompson テスト</strong>を必ず実施（非典型例 25% 見逃し）</div>
+                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>突然のポップ音／底屈力低下／「蹴られた感覚」</span></div>
+                <div class="dx-rule__then"><strong>Thompson テスト＋gap 触診</strong>を必ず実施（非典型例 25% 見逃し）。歩行可能でも断裂はあり得る</div>
               </li>
               <li class="dx-rule">
-                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>距骨 minor 骨折を疑う（外側突起／滑車／後方突起）</span></div>
-                <div class="dx-rule__then">レントゲン感度 24〜33%。<strong>CT を追加</strong>して評価</div>
+                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>距骨 minor 骨折を疑う（外側突起・後方突起・滑車）</span></div>
+                <div class="dx-rule__then">レントゲン感度 24〜33%。<strong>CT を追加</strong>して評価。スノーボード型外傷は外側突起・サッカー／空手は後方突起</div>
               </li>
               <li class="dx-rule">
-                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>捻挫だが疼痛・機能障害が遷延</span></div>
-                <div class="dx-rule__then"><strong>遠位脛腓靱帯損傷</strong>を疑う。スクイージングテスト・mortise の medial clear space</div>
+                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>捻挫だが疼痛・機能障害が遷延（&gt;2 週）</span></div>
+                <div class="dx-rule__then"><strong>遠位脛腓靱帯損傷</strong>（high ankle sprain）を疑う。スクイージングテスト・mortise の medial clear space &gt; 4 mm</div>
+              </li>
+              <li class="dx-rule">
+                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>高所転落</span></div>
+                <div class="dx-rule__then"><strong>両側踵骨＋腰椎</strong>を必ず評価。脊椎骨折 10% 合併・反対側踵骨 10%・骨盤も連動評価</div>
+              </li>
+              <li class="dx-rule">
+                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>足背腫脹／中足部荷重不能</span></div>
+                <div class="dx-rule__then">リスフラン・舟状骨・立方骨を疑う。X 線で異常なくても<strong>CT・MRI 閾値低く</strong>（中足部骨折は X 線でわかりにくい）</div>
               </li>
             </ul>
 
-            <h4 class="dx-rules-l2__group">ピットフォール</h4>
+            <h4 class="dx-rules-l2__group">③ ピットフォール</h4>
             <ul class="dx-rules-l2__list">
               <li class="dx-rule is-pitfall">
-                <div class="dx-rule__if"><span class="dx-rule__tag">⚠</span><span>Ottawa Ankle Rule で撮影省略</span></div>
-                <div class="dx-rule__then">日本では<strong>除外補助</strong>として使う。歩行可否で安心せず、所見があれば撮る</div>
+                <div class="dx-rule__if"><span class="dx-rule__tag">注意</span><span>Ottawa Ankle Rule で撮影省略</span></div>
+                <div class="dx-rule__then">日本では<strong>除外補助</strong>として使う。歩行可否で安心せず、所見があれば撮る。<strong>Tillaux・Maisonneuve・舟状骨</strong>は Ottawa では捉えにくいケースあり</div>
               </li>
               <li class="dx-rule is-pitfall">
-                <div class="dx-rule__if"><span class="dx-rule__tag">⚠</span><span>足関節 X 線で「異常なし」</span></div>
-                <div class="dx-rule__then">Maisonneuve は腓骨近位が<strong>フィルムアウト</strong>。下腿全長を追加</div>
+                <div class="dx-rule__if"><span class="dx-rule__tag">注意</span><span>足関節 X 線で「異常なし」と帰宅</span></div>
+                <div class="dx-rule__then">Maisonneuve は腓骨近位が<strong>フィルムアウト</strong>。距骨 minor 骨折・舟状骨は感度低い。所見があれば<strong>下腿全長 X 線・CT</strong> を追加</div>
               </li>
               <li class="dx-rule is-pitfall">
-                <div class="dx-rule__if"><span class="dx-rule__tag">⚠</span><span>第5中足骨近位端の骨折線</span></div>
-                <div class="dx-rule__then">楔状骨関節面と<strong>連続して見えやすい</strong>。骨折線イメージを持って読影</div>
+                <div class="dx-rule__if"><span class="dx-rule__tag">注意</span><span>第 5 中足骨近位端の骨折線</span></div>
+                <div class="dx-rule__then">楔状骨関節面と<strong>連続して見えやすい</strong>。骨折線イメージを持って読影。<strong>avulsion（zone 1）vs Jones（zone 2）</strong> で治療方針が変わる（保存／手術）</div>
               </li>
               <li class="dx-rule is-pitfall">
-                <div class="dx-rule__if"><span class="dx-rule__tag">⚠</span><span>微妙骨折タイプの踵骨骨折</span></div>
-                <div class="dx-rule__then"><strong>Böhler 角 &lt; 20°</strong> で示唆。軸位像も必ず読む</div>
+                <div class="dx-rule__if"><span class="dx-rule__tag">注意</span><span>微妙骨折タイプの踵骨骨折</span></div>
+                <div class="dx-rule__then"><strong>Böhler 角 &lt; 20°</strong> で示唆（感度 99%・特異度 99%）。軸位像も必ず読む。Sanders 分類は CT で確定</div>
               </li>
               <li class="dx-rule is-pitfall">
-                <div class="dx-rule__if"><span class="dx-rule__tag">⚠</span><span>「単独 ATFL 損傷」と診断確定</span></div>
-                <div class="dx-rule__then">遠位脛腓靱帯損傷の併発が多い。スクイージング陽性なら同時想起</div>
+                <div class="dx-rule__if"><span class="dx-rule__tag">注意</span><span>「単独 ATFL 損傷」と診断確定</span></div>
+                <div class="dx-rule__then">遠位脛腓靱帯損傷の併発が多い。スクイージング陽性なら同時想起。腓骨遠位端の不顕性骨折も鑑別</div>
+              </li>
+              <li class="dx-rule is-pitfall">
+                <div class="dx-rule__if"><span class="dx-rule__tag">注意</span><span>アキレス腱断裂で「歩行できるから違う」</span></div>
+                <div class="dx-rule__then">非典型例 25%（足趾屈筋で代償歩行可）。<strong>Thompson テスト＋gap 触診を全例で</strong>。歩行可否で除外しない</div>
+              </li>
+              <li class="dx-rule is-pitfall">
+                <div class="dx-rule__if"><span class="dx-rule__tag">注意</span><span>リスフラン関節脱臼骨折を「単純な中足骨骨折」と帰宅</span></div>
+                <div class="dx-rule__then">中足骨骨折を見たら<strong>必ず斜位像</strong>＋第 2 中足骨基部の側方転位・fleck sign を確認。<strong>見逃し 20%・後遺障害大</strong></div>
+              </li>
+              <li class="dx-rule is-pitfall">
+                <div class="dx-rule__if"><span class="dx-rule__tag">注意</span><span>距骨頸部骨折を「足関節捻挫」と帰宅</span></div>
+                <div class="dx-rule__then">高エネ機転 + 後足部痛で疑う。距骨は<strong>血流が脆弱</strong>で<strong>無腐性壊死リスク</strong>。CT 必須・即整形</div>
               </li>
             </ul>
           </details>
 
-          <!-- 撮影方向の備忘 -->
+          <!-- ====== X 線適応・撮影方向 ====== -->
           <details class="dx-imaging" id="imagingPanel">
-            <summary>📷 撮影方向の備忘</summary>
+            <summary>X 線適応＋撮影方向</summary>
+
+            <h4 class="dx-rules-l2__group">適応の考え方（Ottawa Ankle/Foot Rule）</h4>
             <ul class="dx-imaging__list">
-              <li><strong>足関節</strong>：AP + lateral + <strong>mortise</strong>（内旋15〜20°）</li>
-              <li><strong>足部</strong>：AP + lateral + <strong>斜位</strong>（中足骨・リスフラン評価）</li>
-              <li><strong>踵骨</strong>：側面 + <strong>軸位</strong>（Böhler 角測定）</li>
-              <li><strong>Maisonneuve 疑い</strong>：<strong>下腿全長</strong>を追加</li>
-              <li><strong>CT 追加</strong>：Pilon／距骨 minor 骨折／踵骨／リスフラン関節脱臼骨折</li>
+              <li><strong>Ottawa Ankle Rule</strong>：足関節領域に疼痛 + 以下のいずれか → 足関節 X 線
+                <ul>
+                  <li>① <strong>外果後縁または先端 6 cm の骨圧痛</strong></li>
+                  <li>② <strong>内果後縁または先端 6 cm の骨圧痛</strong></li>
+                  <li>③ <strong>受傷直後 + ER で 4 歩歩行不能</strong>（体重をかけて 4 歩）</li>
+                </ul>
+              </li>
+              <li><strong>Ottawa Foot Rule</strong>：中足部痛 + 以下のいずれか → 足部 X 線
+                <ul>
+                  <li>① <strong>第 5 中足骨基部の骨圧痛</strong></li>
+                  <li>② <strong>舟状骨の骨圧痛</strong></li>
+                  <li>③ <strong>受傷直後 + ER で 4 歩歩行不能</strong></li>
+                </ul>
+              </li>
+              <li>感度 96〜99%。<strong>日本では除外補助</strong>として使い、所見があれば撮影。除外目的でも安心せず疼痛遷延例は再評価</li>
+              <li><strong>明らかな変形・激痛・脱臼骨折</strong>はルール適用前にレントゲン直行＋整復準備</li>
             </ul>
+
+            <h4 class="dx-rules-l2__group">撮影方向（基本セット）</h4>
+            <ul class="dx-imaging__list">
+              <li><strong>足関節</strong>：AP + lateral + <strong>mortise（内旋 15〜20°）</strong>。Weber 分類・medial clear space は mortise が決定的</li>
+              <li><strong>足部</strong>：AP + lateral + <strong>斜位（oblique）</strong>。<strong>斜位像が中足骨・リスフラン・第 5 中足骨・舟状骨の評価に必須</strong></li>
+              <li><strong>踵骨</strong>：側面 + <strong>軸位（Harris view）</strong>。Böhler 角は側面で測定</li>
+              <li><strong>Maisonneuve 疑い</strong>：<strong>下腿全長 AP/lat</strong> を追加（足関節 X 線では腓骨近位がフィルムアウト）</li>
+              <li><strong>小児</strong>：左右両側を撮ると比較しやすい。Salter-Harris II（最多）・III（Tillaux）・IV（triplane）の評価</li>
+              <li><strong>距骨頸部</strong>：Canale view（前足部 15° 内転・X 線管球 75° 頭側傾斜）が有用だが ER では通常 AP/lat/mortise で十分</li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">CT 追加の閾値</h4>
+            <ul class="dx-imaging__list">
+              <li><strong>Pilon 骨折</strong>：関節面・骨片評価（手術計画必須）</li>
+              <li><strong>距骨頸部骨折・距骨 minor 骨折</strong>：X 線感度 24〜33% → 外側突起・後方突起・滑車は<strong>CT で確定</strong></li>
+              <li><strong>踵骨関節内骨折</strong>：Sanders 分類確定（CT 軸位・冠状断・矢状断）</li>
+              <li><strong>リスフラン関節脱臼骨折</strong>：X 線で異常微妙でも疑えば CT。骨片・関節面評価</li>
+              <li><strong>Tillaux・triplane 骨折</strong>：転位・骨端線評価・手術計画</li>
+              <li><strong>三果骨折</strong>：後果の関節面占有率（25% 以上で手術検討）</li>
+              <li><strong>非整形外科医が画像診断に迷った時・重症度が高い時</strong>は積極的に CT を活用</li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">エコー・MRI</h4>
+            <ul class="dx-imaging__list">
+              <li><strong>エコー</strong>：アキレス腱断裂の確定（gap・断端評価）／ATFL 損傷の評価／第 5 中足骨基部の骨折描出も可（熟練要）</li>
+              <li><strong>MRI</strong>：靱帯損傷の精査／距骨骨軟骨損傷（OCD）／隠れた疲労骨折／ER で必須ではないが整形外来でフォロー</li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">整復後 X 線（神経血管再評価とセットで必須）</h4>
+            <ul class="dx-imaging__list">
+              <li><strong>必ず整復前後 2 枚を撮り紹介状に添付</strong>。脱臼骨折整復後／果部整復後／前後比較</li>
+              <li>整復後に<strong>不顕性骨折の追加</strong>（後果・距骨骨片）がないか再評価</li>
+              <li><strong>整復前後で足背・後脛骨動脈触知・腓骨神経・脛骨神経を比較し、カルテに必ず記載</strong>（画像のみで帰宅しない）</li>
+            </ul>
+          </details>
+
+          <!-- ====== X 線の読み方（系統的アプローチ） ====== -->
+          <details class="dx-imaging" id="imagingReadPanel">
+            <summary>X 線の読み方（系統的アプローチ）</summary>
+
+            <h4 class="dx-rules-l2__group">① 撮影セットの確認</h4>
+            <ul class="dx-imaging__list">
+              <li><strong>足関節 3 方向（AP + lateral + mortise）</strong>が揃っているか。Weber 分類・medial clear space は mortise 必須</li>
+              <li><strong>足部疑い時は斜位を必ず追加</strong>（リスフラン・第 5 中足骨・舟状骨は斜位が決定的）</li>
+              <li><strong>Maisonneuve 疑いは下腿全長</strong>（膝関節を含む）を追加オーダー</li>
+              <li><strong>小児は健側も含めて両側</strong>を撮ると比較しやすい</li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">② 足関節 mortise — Weber 分類と medial clear space</h4>
+            <ul class="dx-imaging__list">
+              <li><strong>Weber A</strong>：腓骨骨折線が<strong>遠位脛腓靱帯結合より遠位</strong>（足関節面より下）。安定型・多くは保存</li>
+              <li><strong>Weber B</strong>：骨折線が<strong>遠位脛腓靱帯結合の高さ</strong>（足関節面の高さ）。安定 / 不安定の境界。medial clear space を必ず評価</li>
+              <li><strong>Weber C</strong>：骨折線が<strong>遠位脛腓靱帯結合より近位</strong>。<strong>遠位脛腓靱帯断裂を伴う不安定型・手術</strong></li>
+              <li><strong>Medial clear space &gt; 4 mm</strong>：内側支持機構（内側三角靱帯 or 内果）損傷を示唆 → 不安定・手術</li>
+              <li><strong>Talar tilt &gt; 5°</strong>：不安定の補助所見</li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">③ 果部の "3 ヵ所くまなく" 確認</h4>
+            <ul class="dx-imaging__list">
+              <li>果部骨折は<strong>3 ヵ所（外果・内果・後果）</strong>を必ずチェック。1 ヵ所見つけたら他 2 ヵ所も探す</li>
+              <li><strong>外果骨折を見つけたら</strong>：内果・後果＋反対側内果（Maisonneuve）＋距骨外側突起＋第 5 中足骨基部</li>
+              <li><strong>内果骨折を見つけたら</strong>：腓骨近位（Maisonneuve）＋後果＋距骨内側</li>
+              <li><strong>後果骨折</strong>：lateral view が決定的。<strong>関節面占有率 25% 以上で固定</strong>検討</li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">④ Pilon 骨折と果部骨折の違い</h4>
+            <ul class="dx-imaging__list">
+              <li><strong>Pilon</strong>：<strong>脛骨天蓋（関節面）の粉砕</strong>＝軸圧型・高エネ・関節面破壊が主体</li>
+              <li><strong>果部</strong>：脛骨遠位端の<strong>内側部分（内果）</strong>＋外側部分（外果）＝回旋型・関節面は保たれる</li>
+              <li>Pilon は<strong>関節面の粉砕・陥没</strong>が特徴。即整形＋CT 必須</li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">⑤ 距骨骨折 — minor 骨折の見落とし回避</h4>
+            <ul class="dx-imaging__list">
+              <li><strong>距骨頸部骨折（Hawkins）</strong>：lateral view で距骨頸部に骨折線。明確骨折タイプ。即整形＋CT</li>
+              <li><strong>距骨外側突起骨折</strong>：mortise・AP で外側突起に骨片。<strong>スノーボード型</strong>外傷で多い</li>
+              <li><strong>距骨後方突起骨折</strong>：lateral view で後方突起に骨片。<strong>サッカー・空手（強い底屈）</strong>で多い。三角骨と鑑別</li>
+              <li><strong>距骨滑車骨軟骨損傷（OCD）</strong>：X 線で見えにくい。疼痛遷延例で MRI</li>
+              <li><strong>X 線感度 24〜33%</strong> → 疑えば<strong>CT 必須</strong></li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">⑥ 踵骨骨折 — Böhler 角</h4>
+            <ul class="dx-imaging__list">
+              <li><strong>Böhler 角</strong>：踵骨後上方の関節面〜踵骨後縁〜踵骨前方の関節面の 3 点で作る角。<strong>正常 20〜40°</strong></li>
+              <li><strong>&lt; 20° で踵骨骨折に対する感度 99%・特異度 99%</strong>。明確骨折タイプでは測定不要、微妙骨折タイプで使う</li>
+              <li><strong>軸位像（Harris view）</strong>も必ず読む。踵骨体部・関節内・舌状骨片を評価</li>
+              <li><strong>Sanders 分類は CT で確定</strong>（II 以上で多くは手術）</li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">⑦ 第 5 中足骨 — avulsion vs Jones</h4>
+            <ul class="dx-imaging__list">
+              <li><strong>Zone 1（avulsion / 結節部）</strong>：骨折線が<strong>近位・関節外</strong>。腓骨筋短腱付着部の剥離骨折。<strong>保存治療（buddy taping・荷重可）</strong>。癒合良好</li>
+              <li><strong>Zone 2（true Jones / 骨幹端〜骨幹移行部）</strong>：骨折線が<strong>第 4-5 中足骨間関節の高さ</strong>。<strong>偽関節率 30%</strong>。アスリート・転位例は手術</li>
+              <li><strong>Zone 3（骨幹部疲労骨折）</strong>：慢性／繰り返す stress。手術閾値低い</li>
+              <li>骨折線の<strong>位置で zone を判定</strong>。AP・斜位像で確認</li>
+              <li><strong>楔状骨関節面と連続して見えやすい</strong>ので骨折線イメージを持って読影</li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">⑧ リスフラン関節 — fleck sign と斜位像</h4>
+            <ul class="dx-imaging__list">
+              <li><strong>正常</strong>：AP 像で<strong>第 2 中足骨内側縁と第 2 楔状骨内側縁</strong>が直線上／斜位像で<strong>第 4 中足骨内側縁と立方骨内側縁</strong>が直線上</li>
+              <li><strong>異常</strong>：第 2 中足骨基部の側方転位（lateral shift）／第 1-2 中足骨間の開大（diastasis &gt; 2 mm）</li>
+              <li><strong>Fleck sign</strong>：第 1-2 中足骨間に小骨片（Lisfranc 靱帯断裂を示唆）</li>
+              <li>X 線で異常微妙でも疑えば<strong>荷重位 X 線</strong>または<strong>CT</strong> 追加</li>
+              <li><strong>中足骨骨折を見たら必ず斜位像でリスフラン</strong>（見逃し 20%）</li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">⑨ アキレス腱 — エコー所見</h4>
+            <ul class="dx-imaging__list">
+              <li><strong>断裂部の gap</strong>：踵骨付着部 2〜6 cm 近位／hyper-echoic な断端・hypo-echoic な hematoma</li>
+              <li>動的検査（足関節背屈）で断端の動きを評価</li>
+              <li>不完全断裂・部分断裂も評価可能。MRI は ER で必須ではないが整形外来で精査</li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">⑩ 整復後の再読影（必須）</h4>
+            <ul class="dx-imaging__list">
+              <li><strong>脱臼骨折整復後</strong>：必ず前後 2 枚を撮影。整復前後比較で隠れた骨片（後果・距骨）を再評価</li>
+              <li><strong>果部整復後</strong>：medial clear space が正常化したか確認。残存転位は手術適応</li>
+              <li><strong>前後比較</strong>を並べて紹介状に添付（紹介状の "決め手"）</li>
+              <li>同時に足背・後脛骨動脈触知・腓骨神経・脛骨神経を再評価し、画像 + 神経血管所見をセットで記載（画像のみで帰宅しない）</li>
+            </ul>
+          </details>
+
+          <!-- ====== 治療リファレンス ====== -->
+          <details class="dx-imaging" id="rxPanel">
+            <summary>治療リファレンス：固定・整復・抗菌薬・処置</summary>
+
+            <h4 class="dx-rules-l2__group">脱臼骨折の整復（X 線確認前でも検討）</h4>
+            <ul class="dx-imaging__list">
+              <li><strong>適応</strong>：明らかな変形＋皮膚緊張／血流障害／開放創</li>
+              <li>① 血管・神経評価（整復前 5P）</li>
+              <li>② 鎮静・鎮痛（fentanyl + midazolam、or ketofol）</li>
+              <li>③ <strong>術者は前足部・踵部を把持し牽引</strong>しつつ、変形と<strong>逆方向へ整復</strong>。足関節 90° 位を目標</li>
+              <li>④ 整復後 5P を再評価＋整復後 X 線</li>
+              <li>⑤ <strong>後方シーネ（U シーネ）で外固定</strong>＋整形コンサルト</li>
+              <li><strong>1 回ワントライで戻らなければ即整形</strong>。脱臼骨折は緊急で整復してただの骨折にするのが大原則</li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">足関節後方固定（U シーネ）</h4>
+            <ul class="dx-imaging__list">
+              <li><strong>適応</strong>：果部骨折／Pilon／距骨骨折／踵骨骨折／リスフラン／遠位脛腓靱帯損傷／重度 ATFL／中足部・後足部の外傷ほぼ全例</li>
+              <li>① <strong>採寸</strong>：足趾 → 踵 → 下腿後面 → 膝裏直下までの長さ</li>
+              <li>② <strong>切断</strong>：その長さ＋下腿外側を巻き上げる U 字型に成形（後方 + 外側）</li>
+              <li>③ <strong>固定</strong>：足関節 90°（直角）＋subtalar 中立位。<strong>equinus 位は禁忌</strong>（アキレス腱断裂を除く）</li>
+              <li>④ 弾性包帯で巻き、踵がしっかり当たることを確認。<strong>足底接地できない高さ</strong>に</li>
+              <li>⑤ 5P・腓骨神経麻痺（足背・第 1 趾間しびれ）を必ず再評価</li>
+              <li>例外：<strong>アキレス腱断裂 → equinus 位（足底屈最大）で固定</strong>。足趾骨折は buddy taping のみ可</li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">アキレス腱断裂の固定（equinus 位）</h4>
+            <ul class="dx-imaging__list">
+              <li>① 腹臥位 or 側臥位で <strong>足底屈最大（equinus 位）</strong> を保持</li>
+              <li>② <strong>後方シーネ＋足底屈位</strong>で固定。歩行用なら<strong>踵高めの装具（functional brace）</strong>へ移行</li>
+              <li>③ 保存 vs 手術は患者背景・断裂位置で決定（高齢・低活動度 → 保存／若年・アスリート → 手術検討）</li>
+              <li>④ 早期可動域訓練（functional rehab）が標準化し、保存と手術の再断裂率差は縮小傾向</li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">第 5 中足骨基部 zone 1（avulsion）の固定</h4>
+            <ul class="dx-imaging__list">
+              <li><strong>保存治療</strong>（多くは癒合良好）。<strong>walking boot or hard-soled shoe</strong> で 4-6 週</li>
+              <li><strong>転位 2 mm 未満は荷重可</strong>。疼痛に応じて松葉杖併用</li>
+              <li>整形外科 1-2 週以内再診</li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">第 5 中足骨 zone 2（Jones 骨折）の方針</h4>
+            <ul class="dx-imaging__list">
+              <li>偽関節率 30%。<strong>アスリート・転位例は手術</strong>。一般は非荷重ギプス 6-8 週で保存も可</li>
+              <li>後方シーネ＋松葉杖で帰宅、整形外科外来で方針決定</li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">中足骨骨折・足趾骨折</h4>
+            <ul class="dx-imaging__list">
+              <li><strong>中足骨（第 2〜4）</strong>：転位 4 mm 未満 / 10°未満は<strong>保存</strong>（walking boot or short leg cast 4-6 週）／転位大は手術</li>
+              <li><strong>足趾骨折</strong>：<strong>buddy taping</strong>（隣の趾と一緒にテーピング）＋hard-soled shoe／開放骨折・爪外傷あれば洗浄・抗菌薬／第 1 趾の関節内骨折・転位例は整形</li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">開放骨折・抗菌薬／鎮痛</h4>
+            <ul class="dx-imaging__list">
+              <li><strong>開放骨折</strong>：<strong>セファゾリン 2 g IV</strong>（Gustilo III なら + ゲンタマイシン）／<strong>破傷風トキソイド</strong>／創部写真撮影／生食ガーゼ被覆して OR まで dressing を外さない／整形即コール</li>
+              <li><strong>鎮痛 第一選択：アセトアミノフェン</strong> 1,000 mg × 4 回／日（4 g/日まで）。高齢者にも安全</li>
+              <li><strong>NSAIDs（第二選択）</strong>：ロキソプロフェン 60 mg × 3 回／日。<strong>PPI 併用</strong>／腎機能 eGFR ≥ 60／消化管出血歴・心血管疾患なし／脱水なし</li>
+              <li><strong>処方日数</strong>：整形外来日まで（通常 5-7 日分）</li>
+              <li><strong>小児</strong>：アセトアミノフェン 10-15 mg/kg/回（最大 4 回/日）。NSAIDs は要注意</li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">ATFL 単独損傷（帰宅保存の標準）</h4>
+            <ul class="dx-imaging__list">
+              <li>RICE（rest・ice・compression・elevation）＋<strong>Pott bandage（弾性包帯）or aircast</strong>／<strong>軽症は早期可動域・荷重</strong>が標準</li>
+              <li>松葉杖は疼痛に応じて。完全免荷は推奨しない（機能予後悪化）</li>
+              <li>5-7 日後の整形外来再診で anterior drawer・talar tilt を再評価（急性期は疼痛で評価困難）</li>
+            </ul>
+          </details>
+
+          <!-- ====== disposition ====== -->
+          <details class="dx-imaging" id="dispoPanel">
+            <summary>disposition の目安</summary>
+
+            <h4 class="dx-rules-l2__group">30 秒で決める（5 択マネジメント）</h4>
+            <p class="dx-rules-l2__intro">※ 下肢外傷の即時整形コンサルト適応：① 開放骨折、② 整復不能な脱臼骨折／皮膚緊張、③ 血管・神経症状の合併、④ <strong>Pilon・三果・距骨頸部・踵骨関節内・リスフラン・Maisonneuve・Tillaux</strong>。それ以外は<strong>「帰宅手術 or 帰宅保存」</strong>。</p>
+            <ul class="dx-rules-l2__list">
+              <li class="dx-rule is-critical">
+                <div class="dx-rule__if"><span class="dx-rule__tag">即時整形</span><span>Pilon／三果／脱臼骨折／開放骨折／神経血管症状／距骨頸部／コンパートメント疑い</span></div>
+                <div class="dx-rule__then"><strong>夜間・休日でも整形コール</strong>。気道・出血の安定化 → 洗浄・抗菌薬・破傷風 → 手術室。<strong>「断言できないなら呼ぶ」</strong>。整形外科医側も事前連絡を歓迎</div>
+              </li>
+              <li class="dx-rule">
+                <div class="dx-rule__if"><span class="dx-rule__tag">入院整形</span><span>多発外傷／ADL 困難な高齢者／不安定 Weber B/C・脱臼骨折で手術待機／踵骨関節内／リスフラン</span></div>
+                <div class="dx-rule__then">入院 + 翌朝コンサルト。挙上・厳重 5P 観察、ADL 支援と社会調整。皮膚条件次第で外固定 → 二期的手術</div>
+              </li>
+              <li class="dx-rule">
+                <div class="dx-rule__if"><span class="dx-rule__tag">帰宅手術</span><span>Weber B 安定型・C／Maisonneuve（皮膚 OK）／Jones 骨折／アキレス腱断裂／Tillaux 転位／距骨 minor 転位</span></div>
+                <div class="dx-rule__then">待機手術（5-10 日以内に整形外来）。<strong>後方シーネ＋松葉杖</strong>で帰宅、紹介状に分類・神経所見・転位の程度を明記。アキレス腱断裂は<strong>equinus 位</strong>で固定</div>
+              </li>
+              <li class="dx-rule">
+                <div class="dx-rule__if"><span class="dx-rule__tag">帰宅保存</span><span>Weber A／外果単独非転位／第 5 中足骨 avulsion／中足骨転位小／足趾骨折／距骨 minor 非転位／遠位脛腓靱帯損傷（軽症）</span></div>
+                <div class="dx-rule__then"><strong>後方シーネ＋松葉杖</strong>、整形外来 1〜2 週以内予約。中足骨・足趾は walking boot ／buddy taping。整復後 5P 観察・神経再評価を本人／家族に教える</div>
+              </li>
+              <li class="dx-rule">
+                <div class="dx-rule__if"><span class="dx-rule__tag">帰宅・保存（自宅）</span><span>単独 ATFL 損傷／軽症捻挫／Ottawa 陰性で骨折除外</span></div>
+                <div class="dx-rule__then"><strong>RICE ＋ Pott bandage（弾性包帯）or aircast</strong>＋早期可動域。松葉杖は疼痛に応じて。整形外来 5-7 日後で再評価（急性期は anterior drawer 困難）。<strong>「48-72h で改善なければ再受診」を必ず書面交付</strong></div>
+              </li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">観察時間・フォロー間隔サマリー</h4>
+            <ul class="dx-imaging__list">
+              <li><strong>整復後 30 分 5P 観察</strong>：脱臼骨折整復・固定直後</li>
+              <li><strong>整復前後の神経評価（足背動脈・後脛骨動脈・腓骨神経・脛骨神経）</strong>：脱臼骨折で必須。経過記録に明記</li>
+              <li><strong>非荷重指示</strong>：果部骨折・距骨・踵骨・リスフラン・Jones は<strong>非荷重</strong>（松葉杖）／第 5 中足骨 avulsion・足趾は荷重可</li>
+              <li><strong>外固定期間</strong>：果部骨折 4-6 週／第 5 中足骨 avulsion 4-6 週／Jones 6-8 週／距骨頸部 8-12 週（整形管理）</li>
+              <li><strong>整形外来再診</strong>：手術例は 5-10 日以内／保存例は 1-2 週／ATFL 単独は 5-7 日</li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">社会軸・特殊状況</h4>
+            <ul class="dx-imaging__list">
+              <li><strong>立ち仕事・スポーツ選手</strong>：閾値を下げて整形紹介。Jones 骨折アスリートは手術相談</li>
+              <li><strong>独居高齢者</strong>：松葉杖・後方シーネで ADL 困難。入院・社会調整の検討</li>
+              <li><strong>DM 神経障害</strong>：Charcot 関節を意識／皮膚条件で外固定の感染リスク</li>
+              <li><strong>抗凝固薬服用中</strong>：出血リスク／手術前のヘパリン置換</li>
+              <li><strong>多発外傷・高エネ</strong>：脊椎・骨盤・他肢の連動評価／反対側踵骨も忘れない</li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">退室前ピットフォール（退室時固有）</h4>
+            <ul class="dx-rules-l2__list">
+              <li class="dx-rule is-pitfall">
+                <div class="dx-rule__if"><span class="dx-rule__tag">注意</span><span>後方シーネを足底接地できる長さで作って帰宅</span></div>
+                <div class="dx-rule__then">荷重制限の意味がなくなる。<strong>非荷重指示は松葉杖＋シーネ長を踵で当たるよう</strong>。退室前に立位確認</div>
+              </li>
+              <li class="dx-rule is-pitfall">
+                <div class="dx-rule__if"><span class="dx-rule__tag">注意</span><span>「単純な内反捻挫」と帰宅して再診で Maisonneuve 発覚</span></div>
+                <div class="dx-rule__then">内反捻挫の全例で<strong>腓骨近位の触診</strong>＋第 5 中足骨基部の触診。所見あれば下腿全長 X 線</div>
+              </li>
+              <li class="dx-rule is-pitfall">
+                <div class="dx-rule__if"><span class="dx-rule__tag">注意</span><span>アキレス腱断裂を「腓腹筋挫傷」と帰宅</span></div>
+                <div class="dx-rule__then">非典型例 25%（足趾屈筋で代償歩行可）。<strong>Thompson テスト＋gap 触診を全例で</strong>。歩行可否で除外しない</div>
+              </li>
+              <li class="dx-rule is-pitfall">
+                <div class="dx-rule__if"><span class="dx-rule__tag">注意</span><span>松葉杖の使い方を口頭だけで説明</span></div>
+                <div class="dx-rule__then">独居高齢者・小児は実技困難。<strong>本人＋家族で実技確認</strong>、書面でも交付。階段の上り下りも必須</div>
+              </li>
+              <li class="dx-rule is-pitfall">
+                <div class="dx-rule__if"><span class="dx-rule__tag">注意</span><span>中足骨骨折で斜位像を撮らず帰宅</span></div>
+                <div class="dx-rule__then">リスフラン関節脱臼骨折の見逃し 20%・後遺障害大。<strong>必ず斜位像</strong>＋fleck sign 確認</div>
+              </li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">退室前チェック（紹介状品質＋患者教育）</h4>
+            <ul class="dx-checklist__list">
+              <li><label><input type="checkbox" data-key="dispo-xray-attach"> <span><strong>整復前後 X 線を紹介状に添付した</strong> <span class="dx-checklist__sub">脱臼骨折整復後の隠れた骨片（後果・距骨）も評価</span></span></label></li>
+              <li><label><input type="checkbox" data-key="dispo-neuro-doc"> <span><strong>神経所見（腓骨神経・脛骨神経・足背動脈・後脛骨動脈）を紹介状に明記した</strong> <span class="dx-checklist__sub">整復前後の比較、5P を記載</span></span></label></li>
+              <li><label><input type="checkbox" data-key="dispo-classify"> <span><strong>分類（Weber／Hawkins／Sanders／Salter-Harris／zone）を明記した</strong> <span class="dx-checklist__sub">第 5 中足骨は「avulsion／zone 1」「Jones／zone 2」表記で統一</span></span></label></li>
+              <li><label><input type="checkbox" data-key="dispo-disp-mm"> <span><strong>転位の程度（2 mm 未満／以上、角度）を明記した</strong> <span class="dx-checklist__sub">果部・後果関節面占有率・中足骨転位（4 mm／10°）の手術判定基準</span></span></label></li>
+              <li><label><input type="checkbox" data-key="dispo-adl-doc"> <span><strong>ADL・職業／スポーツ・利き足を紹介状に明記した</strong> <span class="dx-checklist__sub">立ち仕事・アスリートは閾値を下げて手術相談</span></span></label></li>
+              <li><label><input type="checkbox" data-key="dispo-ortho"> <span><strong>整形外科外来の日時を確定した</strong> <span class="dx-checklist__sub">手術例は 5-10 日以内、保存例は 1-2 週、ATFL 単独は 5-7 日</span></span></label></li>
+              <li><label><input type="checkbox" data-key="dispo-analgesic"> <span><strong>鎮痛薬を処方量と日数で指示した</strong> <span class="dx-checklist__sub">アセトアミノフェン first、小児は体重別</span></span></label></li>
+              <li><label><input type="checkbox" data-key="dispo-5p"> <span><strong>後方固定後 5P（色・温・脈・知覚・運動）・神経再評価を本人／家族に教えた</strong> <span class="dx-checklist__sub">悪化時は即受診と書面で説明</span></span></label></li>
+              <li><label><input type="checkbox" data-key="dispo-splint"> <span><strong>後方シーネ／松葉杖／buddy taping の使い方を本人・家族と実技確認した</strong> <span class="dx-checklist__sub">非荷重指示・足関節 90° 位（アキレス腱は equinus 位）</span></span></label></li>
+              <li><label><input type="checkbox" data-key="dispo-fall"> <span><strong>高所転落例で脊椎・反対側踵骨を評価したか紹介状に記載した</strong> <span class="dx-checklist__sub">両側踵骨 10%・脊椎合併 10%</span></span></label></li>
+              <li><label><input type="checkbox" data-key="dispo-recheck-rule"> <span><strong>48-72h で疼痛増悪・しびれ後発なら再受診を書面で渡した</strong> <span class="dx-checklist__sub">occult fracture（距骨 minor・舟状骨）・遠位脛腓靱帯損傷の安全弁</span></span></label></li>
+              <li><label><input type="checkbox" data-key="dispo-social"> <span><strong>独居高齢者の ADL・小児虐待スクリーニング（不明機転）を意識した</strong> <span class="dx-checklist__sub">機転不釣り合い・反復受診で要警戒</span></span></label></li>
+            </ul>
+
+            <a class="dx-node dx-node--external" href="疾患詳細/足関節痛.html" style="margin-top: 14px;">
+              <div class="dx-node__title">足関節痛（外傷以外）の鑑別</div>
+              <div class="dx-node__sub">痛風・関節炎・蜂窩織炎・脆弱性骨折ほか</div>
+            </a>
+          </details>
+
+          <!-- ====== 参考文献 ====== -->
+          <details class="dx-imaging" id="refsPanel">
+            <summary>参考文献</summary>
+
+            <h4 class="dx-rules-l2__group">疾患詳細ページ</h4>
+            <ul class="dx-imaging__list">
+              <li><a href="疾患詳細/足関節果部骨折.html">足関節果部骨折</a>／<a href="疾患詳細/Maisonneuve骨折.html">Maisonneuve 骨折</a>／<a href="疾患詳細/Pilon骨折.html">Pilon 骨折</a>／<a href="疾患詳細/Tillaux骨折.html">Tillaux 骨折</a></li>
+              <li><a href="疾患詳細/ATFL損傷.html">ATFL 損傷</a>／<a href="疾患詳細/遠位脛腓靱帯損傷.html">遠位脛腓靱帯損傷</a></li>
+              <li><a href="疾患詳細/距骨骨折.html">距骨骨折</a>／<a href="疾患詳細/踵骨骨折.html">踵骨骨折</a>／<a href="疾患詳細/アキレス腱損傷.html">アキレス腱損傷</a></li>
+              <li><a href="疾患詳細/リスフラン関節脱臼骨折.html">リスフラン関節脱臼骨折</a>／<a href="疾患詳細/中足骨骨折.html">中足骨骨折</a>／<a href="疾患詳細/第5中足骨近位端骨折.html">第 5 中足骨近位端骨折</a>／<a href="疾患詳細/足趾骨骨折.html">足趾骨骨折</a></li>
+              <li><a href="疾患詳細/開放骨折.html">開放骨折</a>／<a href="疾患詳細/小児骨端線骨折.html">小児骨端線骨折</a>／<a href="疾患詳細/コンパートメント症候群.html">コンパートメント症候群</a></li>
+              <li>外傷以外の足関節痛：<a href="疾患詳細/足関節痛.html">足関節痛</a></li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">関連ハブ</h4>
+            <ul class="dx-imaging__list">
+              <li><a href="膝関節の外傷.html">膝関節の外傷</a>／<a href="下肢痛.html">下肢痛</a>／<a href="転倒.html">転倒</a></li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">主要な根拠・参考文献</h4>
+            <ul class="dx-imaging__list">
+              <li><strong>骨折ハンター（中外医学社）</strong>— 第 18 章「足関節痛ハンター①」（足関節果部骨折・Pilon 骨折・Maisonneuve 骨折）<br>　ER の "hidden tip"：① 果部骨折は<strong>3 ヵ所くまなく</strong>骨折を探す（外果・内果・後果）、② Denis-Weber 分類で安定性評価、③ Maisonneuve は<strong>足関節 X 線では写らない</strong>（5%）、④ 内反捻挫の全例で<strong>腓骨近位の触診＋第 5 中足骨基部の圧痛</strong>、⑤ 足関節〜足部外傷はほぼ全例で<strong>後方固定</strong>（例外：アキレス腱と足趾）</li>
+              <li><strong>骨折ハンター</strong>— 第 19 章「足関節痛ハンター②」（ATFL 損傷・遠位脛腓靱帯損傷・距骨骨折・第 5 中足骨/Jones・小児脛骨遠位端骨折・中足骨/リスフラン・踵骨）<br>　Böhler 角 &lt; 20° で踵骨骨折感度 99%・特異度 99%。距骨 minor 骨折は X 線感度 24〜33% → CT 必須。Jones 骨折は偽関節率 30%、avulsion との区別が必須</li>
+              <li><strong>Ottawa Ankle Rule（Stiell IG, 1992）</strong>: 感度 96〜99%。日本では除外補助として使用。所見があれば撮影</li>
+              <li><strong>Dowling S, et al. Acad Emerg Med. 2009</strong>: 小児における Ottawa Ankle Rule の精度（メタアナリシス）</li>
+              <li><strong>Isaacs JD, et al. J Emerg Med. 2013</strong>: Böhler 角の踵骨骨折に対する精度</li>
+              <li>他科コンサルト実践マニュアル — 整形外科コンサルト文の標準書式（【目的】【疾患】【既往歴】【内服薬】【ADL】【現病歴】）</li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">未作成（リンク予約）</h4>
+            <ul class="dx-imaging__list">
+              <li>舟状骨骨折／立方骨骨折／足部疲労骨折</li>
+              <li>Charcot 関節（DM 神経障害下肢）</li>
+              <li>足関節後方固定の手技解説（写真付き）</li>
+            </ul>
+
+            <p style="font-size:11px;color:var(--muted);margin-top:8px;">#ER #救急 #足関節 #足部 #果部骨折 #Maisonneuve #Pilon #Weber #ATFL #遠位脛腓靱帯損傷 #距骨骨折 #踵骨骨折 #リスフラン #第5中足骨 #Jones骨折 #Tillaux #アキレス腱断裂 #整形外科</p>
           </details>
 
         </div>
@@ -705,24 +1191,14 @@
 
   <script>
   (function(){
-    const flowBox = document.getElementById('flowBox');
-    const flowBoxClose = document.getElementById('flowBoxClose');
-
-    if (flowBox && flowBoxClose) {
-      const dismiss = () => { flowBox.hidden = true; };
-      flowBoxClose.addEventListener('click', dismiss);
-      flowBoxClose.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); dismiss(); }
-      });
-    }
-
     // 来院後チェックリスト：localStorage 永続化 + per-panel リセット
-    const STORAGE_KEY = 'ankle-foot-dx-checklist-v1';
+    const STORAGE_KEY = 'ankle-dx-checklist-v1';
     let stored = {};
     try { stored = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); } catch (_) {}
-    const allBoxes = document.querySelectorAll('.dx-checklist__list input[type="checkbox"]');
+    const allBoxes = document.querySelectorAll('.dx-checklist__list input[type="checkbox"], input[type="checkbox"][data-key]');
     allBoxes.forEach(cb => {
       const key = cb.dataset.key;
+      if (!key) return;
       if (stored[key]) cb.checked = true;
       cb.addEventListener('change', () => {
         if (cb.checked) stored[key] = true; else delete stored[key];
@@ -744,10 +1220,10 @@
     });
 
     // パネル開閉状態を localStorage で復元
-    ['historyPanel', 'examPanel', 'rulesL2Panel', 'imagingPanel'].forEach(id => {
+    ['historyPanel', 'examPanel', 'rulesL2Panel', 'imagingPanel', 'imagingReadPanel', 'rxPanel', 'dispoPanel', 'refsPanel'].forEach(id => {
       const el = document.getElementById(id);
       if (!el) return;
-      const key = `ankle-foot-${id}-open-v1`;
+      const key = `ankle-${id}-open-v1`;
       const saved = localStorage.getItem(key);
       if (saved !== null) el.open = saved === '1';
       el.addEventListener('toggle', () => {
@@ -759,6 +1235,108 @@
     if (navBack) navBack.addEventListener('click', () => {
       if (window.history.length > 1) history.back();
       else window.location.href = 'index.html';
+    });
+
+    // === Peek プレビュー ===
+    // フローのノードで内部アンカー（#...）はモーダルで対象セクションを
+    // クローン表示。外部ページへのリンク（.html）は通常遷移。長押しの OS
+    // メニューも抑制してタップと同じ挙動に統一。
+    const PEEK_SELECTOR = 'a.dx-node[href^="#"]';
+    let peekOverlay = null;
+
+    function createPeekOverlay() {
+      const overlay = document.createElement('div');
+      overlay.className = 'peek-modal';
+      overlay.innerHTML =
+        '<div class="peek-modal__sheet" role="dialog" aria-modal="true" aria-labelledby="peekTitle">' +
+          '<div class="peek-modal__handle" aria-hidden="true"></div>' +
+          '<header class="peek-modal__header">' +
+            '<span class="peek-modal__title" id="peekTitle">プレビュー</span>' +
+            '<button type="button" class="peek-modal__close" aria-label="閉じる">✕</button>' +
+          '</header>' +
+          '<div class="peek-modal__body"></div>' +
+        '</div>';
+      document.body.appendChild(overlay);
+      return overlay;
+    }
+
+    // 対象 ID をピーク向けに解決。dx-rule__then のように内側の div を指す
+    // 場合は親 <li class="dx-rule"> を採用して if/then を一緒に見せる。
+    function resolvePeekTarget(id) {
+      const el = document.getElementById(id);
+      if (!el) return null;
+      const rule = el.closest('li.dx-rule');
+      if (rule) return rule;
+      return el;
+    }
+
+    function deriveTitle(target, id) {
+      if (target.tagName === 'DETAILS') {
+        const sum = target.querySelector('summary');
+        if (sum) return sum.textContent.trim();
+      }
+      const ifNode = target.querySelector('.dx-rule__if');
+      if (ifNode) {
+        const clone = ifNode.cloneNode(true);
+        clone.querySelectorAll('.dx-rule__tag').forEach(t => t.remove());
+        return clone.textContent.trim();
+      }
+      const ntitle = target.querySelector('.dx-node__title');
+      if (ntitle) return ntitle.textContent.trim();
+      return id;
+    }
+
+    function openPeek(id) {
+      const target = resolvePeekTarget(id);
+      if (!target) return false;
+      if (!peekOverlay) peekOverlay = createPeekOverlay();
+
+      peekOverlay.querySelector('.peek-modal__title').textContent = deriveTitle(target, id);
+
+      const bodyEl = peekOverlay.querySelector('.peek-modal__body');
+      bodyEl.innerHTML = '';
+      const clone = target.cloneNode(true);
+      clone.removeAttribute('id');
+      clone.querySelectorAll('[id]').forEach(el => el.removeAttribute('id'));
+      if (clone.tagName === 'DETAILS') clone.open = true;
+      clone.querySelectorAll('details').forEach(d => { d.open = true; });
+      bodyEl.appendChild(clone);
+      bodyEl.scrollTop = 0;
+
+      peekOverlay.classList.add('is-open');
+      document.body.style.overflow = 'hidden';
+      return true;
+    }
+
+    function closePeek() {
+      if (!peekOverlay) return;
+      peekOverlay.classList.remove('is-open');
+      document.body.style.overflow = '';
+    }
+
+    document.addEventListener('click', (e) => {
+      if (peekOverlay && peekOverlay.classList.contains('is-open')) {
+        if (e.target.classList.contains('peek-modal__close')) { e.preventDefault(); closePeek(); return; }
+        if (e.target === peekOverlay) { closePeek(); return; }
+      }
+      const link = e.target.closest(PEEK_SELECTOR);
+      if (!link) return;
+      const href = link.getAttribute('href');
+      if (!href || href.length <= 1 || href[0] !== '#') return;
+      e.preventDefault();
+      openPeek(href.substring(1));
+    });
+
+    document.addEventListener('contextmenu', (e) => {
+      const link = e.target.closest(PEEK_SELECTOR);
+      if (!link) return;
+      e.preventDefault();
+      const href = link.getAttribute('href');
+      if (href && href.length > 1 && href[0] === '#') openPeek(href.substring(1));
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && peekOverlay && peekOverlay.classList.contains('is-open')) closePeek();
     });
   })();
   </script>

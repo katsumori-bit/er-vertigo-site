@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="color-scheme" content="light dark" />
+  <title>TFCC 損傷（三角線維軟骨複合体損傷） | ER ノート</title>
+  <link rel="stylesheet" href="../er-note.css" />
+  <style>
+    /* ============ クイックタップ（3 つを開閉トリガー） ============ */
+    .dx-quick {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px;
+      margin: 10px 0 4px;
+    }
+    .dx-quick__btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      padding: 10px 6px;
+      border-radius: 10px;
+      background: color-mix(in srgb, var(--accent) 10%, var(--surface));
+      border: 1.5px solid var(--accent);
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 13px;
+      line-height: 1.2;
+      text-align: center;
+      cursor: pointer;
+      transition: background 120ms ease;
+    }
+    .dx-quick__btn:hover {
+      background: color-mix(in srgb, var(--accent) 18%, var(--surface));
+    }
+    .dx-quick__icon { font-size: 20px; }
+    .dx-quick__sub {
+      font-size: 10.5px;
+      font-weight: 500;
+      color: var(--muted);
+    }
+
+    /* ============ 同時評価 3 列（血管・神経・典型像） ============ */
+    .dx-tri {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+      margin: 6px 0 4px;
+      align-items: start;
+    }
+    .dx-tri__card {
+      background: var(--surface);
+      border-radius: 10px;
+      padding: 10px 12px;
+      border: 1.5px solid color-mix(in srgb, var(--text) 18%, transparent);
+    }
+    .dx-tri__card--vasc { border-color: #c0392b; background: color-mix(in srgb, #c0392b 6%, var(--surface)); }
+    .dx-tri__card--neuro { border-color: #b5651d; background: color-mix(in srgb, #b5651d 6%, var(--surface)); }
+    .dx-tri__card--typical { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 6%, var(--surface)); }
+    .dx-tri__title {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 800;
+      font-size: 13.5px;
+      margin-bottom: 4px;
+    }
+    .dx-tri__card--vasc .dx-tri__title { color: #c0392b; }
+    .dx-tri__card--neuro .dx-tri__title { color: #b5651d; }
+    .dx-tri__list {
+      margin: 0;
+      padding-left: 18px;
+      font-size: 12.5px;
+      line-height: 1.5;
+    }
+    .dx-tri__list li { margin: 2px 0; }
+
+    /* details 形式の血管/神経カード：summary にチェック印、開閉時の挙動 */
+    details.dx-tri__card { padding: 0; }
+    details.dx-tri__card > summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 10px 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 800;
+      font-size: 13.5px;
+    }
+    details.dx-tri__card > summary::-webkit-details-marker { display: none; }
+    details.dx-tri__card > summary::after {
+      content: "▸";
+      margin-left: auto;
+      font-size: 12px;
+      color: var(--muted);
+      transition: transform 120ms ease;
+    }
+    details.dx-tri__card[open] > summary::after { transform: rotate(90deg); }
+    details.dx-tri__card--vasc > summary { color: #c0392b; }
+    details.dx-tri__card--neuro > summary { color: #b5651d; }
+    details.dx-tri__card > .dx-tri__list { padding: 0 14px 12px 30px; }
+    details.dx-tri__card > .dx-tri__hint {
+      padding: 0 14px 6px 30px;
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    /* ============ 大きな details ボックス（画像/治療方針/コンサル文） ============ */
+    details.dx-box {
+      background: var(--surface);
+      border: 1.5px solid color-mix(in srgb, var(--text) 18%, transparent);
+      border-radius: 10px;
+      margin: 10px 0;
+      scroll-margin-top: 8px;
+    }
+    details.dx-box > summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 12px 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 800;
+      font-size: 14.5px;
+    }
+    details.dx-box > summary::-webkit-details-marker { display: none; }
+    details.dx-box > summary::after {
+      content: "▸";
+      margin-left: auto;
+      font-size: 13px;
+      color: var(--muted);
+      transition: transform 120ms ease;
+    }
+    details.dx-box[open] > summary::after { transform: rotate(90deg); }
+    details.dx-box[open] {
+      border-color: var(--accent);
+    }
+    details.dx-box > .dx-box__body {
+      padding: 0 14px 14px;
+    }
+
+    /* スマホで 1 列に */
+    @media (max-width: 640px) {
+      .dx-quick { gap: 6px; }
+      .dx-quick__btn { padding: 8px 4px; font-size: 11.5px; border-radius: 8px; }
+      .dx-quick__icon { font-size: 17px; }
+      .dx-quick__sub { font-size: 9.5px; }
+
+      .dx-tri { grid-template-columns: 1fr; gap: 8px; }
+      .dx-tri__card { padding: 8px 10px; }
+      details.dx-tri__card > summary { padding: 8px 10px; font-size: 12.5px; }
+      details.dx-tri__card > .dx-tri__list { padding: 0 12px 10px 26px; }
+      .dx-tri__title { font-size: 12.5px; }
+      .dx-tri__list { font-size: 12px; }
+
+      details.dx-box > summary { padding: 10px 12px; font-size: 13.5px; }
+      details.dx-box > .dx-box__body { padding: 0 12px 12px; }
+    }
+
+    /* ============ 区切り帯（最小限） ============ */
+    .dx-step {
+      margin: 18px 0 6px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 11.5px;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+    }
+    .dx-step::before, .dx-step::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: color-mix(in srgb, var(--text) 18%, transparent);
+    }
+
+    /* コピペ用テンプレ */
+    .dx-template {
+      background: color-mix(in srgb, var(--text) 4%, var(--surface));
+      border-left: 3px solid var(--accent);
+      border-radius: 6px;
+      padding: 10px 12px;
+      margin: 6px 0 0;
+      font-size: 13px;
+      line-height: 1.6;
+      white-space: pre-wrap;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+    .dx-template__hint {
+      font-size: 11px;
+      color: var(--muted);
+      margin: 0 0 4px;
+    }
+  </style>
+</head>
+<body>
+  <header class="hokuto-top">
+    <a class="hokuto-top__btn" href="../薬剤情報.html">
+      <span class="hokuto-top__icon">℞</span><span>薬剤情報</span>
+    </a>
+    <a class="hokuto-top__btn" href="../表計算.html">
+      <span class="hokuto-top__icon">⊞</span><span>表計算</span>
+    </a>
+  </header>
+
+  <main class="hokuto-main">
+    <article class="note-shell">
+      <h1 class="page-title">TFCC 損傷（三角線維軟骨複合体損傷）</h1>
+
+      <!-- スマホですぐ開きたい 3 つ -->
+      <nav class="dx-quick" aria-label="クイックタップ">
+        <button class="dx-quick__btn" type="button" data-target="img-read">
+          <span>誘発テスト</span>
+          <span class="dx-quick__sub">fovea sign / grind / piano key</span>
+        </button>
+        <button class="dx-quick__btn" type="button" data-target="plan">
+          <span>治療方針</span>
+          <span class="dx-quick__sub">Palmer 分類で分岐</span>
+        </button>
+        <button class="dx-quick__btn" type="button" data-target="consult">
+          <span>コンサル文</span>
+          <span class="dx-quick__sub">そのまま貼れる</span>
+        </button>
+      </nav>
+
+      <!-- 同時評価 3 列：典型像は常時、誘発テスト・Palmer 分類は折りたたみ -->
+      <div class="dx-step"><span>同時並行で押さえる 3 軸</span></div>
+      <div class="dx-tri">
+
+        <div class="dx-tri__card dx-tri__card--typical">
+          <div class="dx-tri__title">典型像</div>
+          <ul class="dx-tri__list">
+            <li>急性外傷：<strong>FOOSH</strong>／回外回旋外力／DRUJ 脱臼に併発</li>
+            <li>慢性／変性：<strong>反復回旋動作</strong>（ゴルフ・テニス・バット）</li>
+            <li><strong>尺側手関節痛</strong>（特に回旋・尺屈時）</li>
+            <li>クリック感、握力低下</li>
+            <li>X 線陰性で「捻挫」と誤診されやすい</li>
+          </ul>
+        </div>
+
+        <details class="dx-tri__card dx-tri__card--vasc">
+          <summary>誘発テスト</summary>
+          <p class="dx-tri__hint">TFCC は disk + 背側/掌側橈尺靱帯 + meniscus homologue + ECU 腱鞘 + lunotriquetral 靱帯で構成。<strong>DRUJ 安定化</strong>と尺側荷重伝達を担う。</p>
+          <ul class="dx-tri__list">
+            <li><strong>fovea sign</strong>：尺骨頭と TFCC 間（fovea）の直接圧痛</li>
+            <li><strong>grind test</strong>：尺屈位 ＋ 軸圧 ＋ 回旋で疼痛誘発</li>
+            <li><strong>piano key sign</strong>：ulnar styloid の異常可動（DRUJ 不安定）</li>
+            <li><strong>DRUJ ballottement</strong>：尺骨遠位端の前後動揺</li>
+          </ul>
+        </details>
+
+        <details class="dx-tri__card dx-tri__card--neuro">
+          <summary>Palmer 分類</summary>
+          <p class="dx-tri__hint">Class 1 = 外傷性、Class 2 = 変性。<strong>1B（尺骨付着部断裂）</strong>は DRUJ 不安定を伴い手術適応になりやすい。</p>
+          <ul class="dx-tri__list">
+            <li><strong>1A</strong>：disk 中央穿孔</li>
+            <li><strong>1B</strong>：尺骨付着部断裂（DRUJ 不安定）</li>
+            <li><strong>1C</strong>：遠位（ulnocarpal）付着部断裂</li>
+            <li><strong>1D</strong>：橈骨付着部断裂</li>
+            <li><strong>2A〜2E</strong>：変性（thinning → 穿孔 → 軟骨損傷 → LT 損傷 → 関節炎）</li>
+          </ul>
+        </details>
+      </div>
+
+      <!-- 誘発テスト・画像 -->
+      <details class="dx-box" id="img-read">
+        <summary><span>誘発テスト・画像の見方</span></summary>
+        <div class="dx-box__body">
+          <h3>身体診察（4 つ全部やる）</h3>
+          <ul>
+            <li><strong>fovea sign</strong>：尺骨頭遠位 ・尺側手根屈筋（FCU）腱と ECU 腱の間の窩を圧迫 → 圧痛で陽性（感度・特異度高い）</li>
+            <li><strong>grind test（TFCC stress test）</strong>：手関節尺屈 ＋ 軸圧 ＋ 回内外で疼痛誘発</li>
+            <li><strong>piano key sign</strong>：前腕回内位で ulnar styloid を背側から押すと容易に沈み込む → DRUJ 不安定</li>
+            <li><strong>DRUJ ballottement test</strong>：橈骨遠位端を固定し尺骨遠位を背掌側に動かす → 左右差で不安定性評価</li>
+            <li>握力低下、回旋時クリック感</li>
+          </ul>
+
+          <h3>画像</h3>
+          <ul>
+            <li><strong>手関節 Xp PA／lateral</strong>：
+              <ul>
+                <li><strong>ulnar variance</strong> の評価（plus variance は 1B／Class 2 のリスク因子）</li>
+                <li>DRUJ alignment、尺骨茎状突起骨折の有無</li>
+                <li>三角骨・月状骨周囲脱臼の合併確認</li>
+              </ul>
+            </li>
+            <li><strong>MRI 関節造影（MR arthrography）が標準</strong>：disk 損傷の感度・特異度が最も高い</li>
+            <li>単純 MRI は感度劣るが外来で第一選択になることが多い</li>
+            <li>関節鏡が最終的な diagnostic gold standard</li>
+            <li>ER では X 線陰性でも臨床所見陽性なら<strong>TFCC 損傷疑いとして固定 ＋ 専門外来送り</strong></li>
+          </ul>
+        </div>
+      </details>
+
+      <!-- 治療方針 -->
+      <details class="dx-box" id="plan">
+        <summary><span>治療方針（Palmer 分類 × 不安定性）</span></summary>
+        <div class="dx-box__body">
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>パターン</th><th>所見</th><th>方針</th><th>ER の動き</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>急性外傷・DRUJ 安定</td>
+                  <td>fovea sign ＋、piano key −、X 線陰性</td>
+                  <td><strong>保存（sugar tong ／ TFCC brace 4-6 週）</strong></td>
+                  <td>シーネ ＋ 手の外科外来（1-2 週以内）＋ MRI 予約</td>
+                </tr>
+                <tr>
+                  <td>急性外傷・<strong>DRUJ 不安定</strong></td>
+                  <td>piano key ＋、ballottement で動揺</td>
+                  <td><strong>手術適応（1B repair）</strong></td>
+                  <td>整形即コール、長腕シーネで回外位固定</td>
+                </tr>
+                <tr>
+                  <td>慢性・反復動作歴</td>
+                  <td>尺側痛、握力低下、ulnar plus variance</td>
+                  <td><strong>保存 → 無効なら debridement ＋ 尺骨短縮術</strong></td>
+                  <td>装具 ＋ 手の外科紹介</td>
+                </tr>
+                <tr>
+                  <td>X 線で骨折合併</td>
+                  <td>尺骨茎状突起 ・三角骨骨折等</td>
+                  <td><strong>骨折に準じて固定、整形コンサル</strong></td>
+                  <td>同日コンサル ／ 翌日外来</td>
+                </tr>
+                <tr>
+                  <td>若年運動選手</td>
+                  <td>競技復帰を急ぐ</td>
+                  <td><strong>早期 arthroscopic repair 検討</strong></td>
+                  <td>整形相談、競技休止指示</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3>Palmer 分類別の標準治療</h3>
+          <ul>
+            <li><strong>1A</strong>（中央穿孔）：arthroscopic debridement</li>
+            <li><strong>1B</strong>（尺骨付着部）：arthroscopic／open repair（DRUJ 不安定なら必須）</li>
+            <li><strong>1C／1D</strong>：repair または reconstruction</li>
+            <li><strong>Class 2 系</strong>：debridement ＋ <strong>ulnar shortening osteotomy</strong>（ulnar plus variance ある時）</li>
+          </ul>
+
+          <h3>ER で打つ手</h3>
+          <ul>
+            <li><strong>sugar tong シーネ</strong>または<strong>TFCC brace</strong>（前腕回旋制限）で固定</li>
+            <li>三角巾装着、患肢挙上指導</li>
+            <li>鎮痛は NSAIDs／アセトアミノフェン</li>
+            <li>DRUJ 不安定例は<strong>回外位</strong>で長腕シーネ固定（橈尺靱帯を緩めない）</li>
+            <li>「X 線陰性でも捻挫ではなく TFCC 損傷の可能性」を本人に明確に説明</li>
+            <li>1-2 週以内の手の外科外来受診を必ず指示</li>
+          </ul>
+        </div>
+      </details>
+
+      <!-- コンサル文 -->
+      <details class="dx-box" id="consult">
+        <summary><span>コンサル文（カルテに貼る）</span></summary>
+        <div class="dx-box__body">
+          <p class="dx-template__hint">『他科コンサルト実践マニュアル』の院内紹介状フォーマットに準拠（【目的】【疾患】【既往歴】【内服薬】【ADL】【現病歴】）。外来フォロー型。</p>
+          <div class="dx-template">【目的】整形外科（手の外科）外来でのご加療依頼。
+【疾患】#1 [右/左]TFCC 損傷疑い（Palmer [1A／1B／1C／1D／2A-2E]）、※確定診断は MRI 関節造影
+【既往歴】[特記事項なし／○○]
+【内服薬】[なし／○○]
+【ADL（受傷前）】[自立／○○]
+【現病歴】[年齢]歳[男/女]性。[受傷機転：FOOSH／回外回旋外力／反復動作（テニス・ゴルフ）]で[急性／慢性経過で]発症し、[来院経緯]で来院。
+ ・身体所見：尺側手関節痛 [+]、fovea sign（尺骨頭と TFCC 間の圧痛）[+]、grind test [+/−]、piano key sign（ulnar styloid 異常可動）[+/−]、DRUJ 不安定性 [+/−]、握力低下 [+/−]
+ ・血管：橈骨動脈触知 [良好]、左右差なし
+ ・神経：尺骨神経領域 [問題なし]
+ ・画像：手関節 Xp PA/lateral で ulnar variance [中性／プラス／マイナス]、骨折線 [なし／あり]
+ ・ER 処置：sugar tong splint or TFCC brace、NSAIDs、患肢挙上
+よろしくお願いいたします。</div>
+        </div>
+      </details>
+
+      <!-- 関連ハブ -->
+      <details class="dx-box">
+        <summary><span>関連ハブ・隣接疾患</span></summary>
+        <div class="dx-box__body">
+          <ul>
+            <li>主訴入口：<a class="wiki-link" href="../手関節・手の外傷.html">手関節・手の外傷</a> ／ <a class="wiki-link" href="../転倒.html">転倒</a></li>
+            <li>隣接疾患：<a class="wiki-link" href="三角骨骨折.html">三角骨骨折</a> ／ <a class="wiki-link" href="月状骨周囲脱臼.html">月状骨周囲脱臼</a> ／ <a class="wiki-link" href="舟状骨骨折.html">舟状骨骨折</a> ／ <a class="wiki-link" href="橈骨遠位端骨折.html">橈骨遠位端骨折</a></li>
+            <li>処置：sugar tong シーネ ／ TFCC brace ／ 三角巾</li>
+            <li>ピットフォール：X 線陰性で「捻挫」帰宅 ／ DRUJ 不安定見落とし ／ ulnar plus variance 未評価 ／ 尺骨茎状突起骨折併発の見逃し</li>
+          </ul>
+        </div>
+      </details>
+
+      <!-- 出典 -->
+      <details class="dx-box">
+        <summary><span>出典</span></summary>
+        <div class="dx-box__body">
+          <ul>
+            <li>Palmer AK. Triangular fibrocartilage complex lesions: a classification. J Hand Surg Am. 1989;14(4):594-606.</li>
+            <li>津下健哉. 手の外科の実際 改訂第7版. 南江堂. 2011.</li>
+            <li>増井伸高. 骨折ハンター. 中外医学社. 2019.</li>
+            <li>佐藤弘明 ほか. 他科コンサルト実践マニュアル. 羊土社.</li>
+          </ul>
+        </div>
+      </details>
+
+    </article>
+  </main>
+
+  <nav class="hokuto-bottom">
+    <button class="hokuto-bottom__btn" type="button" id="navBack">
+      <span class="hokuto-bottom__icon">←</span><span>戻る</span>
+    </button>
+    <a class="hokuto-bottom__btn" href="../ツール.html">
+      <span class="hokuto-bottom__icon">⚙</span><span>ツール</span>
+    </a>
+    <a class="hokuto-bottom__btn" href="../index.html">
+      <span class="hokuto-bottom__icon">⌂</span><span>ホーム</span>
+    </a>
+  </nav>
+
+  <script>
+  (function(){
+    document.querySelectorAll('.dx-quick__btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.dataset.target;
+        const target = document.getElementById(id);
+        if (!target) return;
+        target.open = true;
+        target.scrollIntoView({behavior: 'smooth', block: 'start'});
+      });
+    });
+
+    const navBack = document.getElementById('navBack');
+    if (navBack) navBack.addEventListener('click', () => {
+      if (window.history.length > 1) history.back();
+      else window.location.href = '../index.html';
+    });
+  })();
+  </script>
+</body>
+</html>
