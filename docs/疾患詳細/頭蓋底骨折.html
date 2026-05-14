@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="color-scheme" content="light dark" />
+  <title>頭蓋底骨折 | ER ノート</title>
+  <link rel="stylesheet" href="../er-note.css" />
+  <style>
+    .dx-quick { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 10px 0 4px; }
+    @media (max-width: 640px) { .dx-quick { grid-template-columns: 1fr 1fr; } }
+    .dx-quick__btn {
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 2px; padding: 10px 6px; border-radius: 10px;
+      background: color-mix(in srgb, var(--accent) 10%, var(--surface));
+      border: 1.5px solid var(--accent); color: var(--text); text-decoration: none;
+      font-weight: 700; font-size: 13px; line-height: 1.2; text-align: center; cursor: pointer;
+      transition: background 120ms ease;
+    }
+    .dx-quick__btn:hover { background: color-mix(in srgb, var(--accent) 18%, var(--surface)); }
+    .dx-quick__sub { font-size: 10.5px; font-weight: 500; color: var(--muted); }
+
+    .dx-tri { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 6px 0 4px; align-items: start; }
+    .dx-tri__card {
+      background: var(--surface); border-radius: 10px; padding: 10px 12px;
+      border: 1.5px solid color-mix(in srgb, var(--text) 18%, transparent);
+    }
+    .dx-tri__card--vasc { border-color: #c0392b; background: color-mix(in srgb, #c0392b 6%, var(--surface)); }
+    .dx-tri__card--neuro { border-color: #b5651d; background: color-mix(in srgb, #b5651d 6%, var(--surface)); }
+    .dx-tri__title { display: flex; align-items: center; gap: 6px; font-weight: 800; font-size: 13.5px; margin-bottom: 4px; }
+    .dx-tri__card--vasc .dx-tri__title { color: #c0392b; }
+    .dx-tri__card--neuro .dx-tri__title { color: #b5651d; }
+    .dx-tri__list { margin: 0; padding-left: 18px; font-size: 12.5px; line-height: 1.5; }
+    .dx-tri__list li { margin: 2px 0; }
+
+    details.dx-tri__card { padding: 0; }
+    details.dx-tri__card > summary {
+      list-style: none; cursor: pointer; padding: 10px 12px;
+      display: flex; align-items: center; gap: 6px; font-weight: 800; font-size: 13.5px;
+    }
+    details.dx-tri__card > summary::-webkit-details-marker { display: none; }
+    details.dx-tri__card > summary::after { content: "▸"; margin-left: auto; font-size: 12px; color: var(--muted); transition: transform 120ms ease; }
+    details.dx-tri__card[open] > summary::after { transform: rotate(90deg); }
+    details.dx-tri__card--vasc > summary { color: #c0392b; }
+    details.dx-tri__card--neuro > summary { color: #b5651d; }
+    details.dx-tri__card > .dx-tri__list { padding: 0 14px 12px 30px; }
+    details.dx-tri__card > .dx-tri__hint { padding: 0 14px 6px 30px; font-size: 11px; color: var(--muted); }
+
+    details.dx-box {
+      background: var(--surface); border: 1.5px solid color-mix(in srgb, var(--text) 18%, transparent);
+      border-radius: 10px; margin: 10px 0; scroll-margin-top: 8px;
+    }
+    details.dx-box > summary {
+      list-style: none; cursor: pointer; padding: 12px 14px;
+      display: flex; align-items: center; gap: 8px; font-weight: 800; font-size: 14.5px;
+    }
+    details.dx-box > summary::-webkit-details-marker { display: none; }
+    details.dx-box > summary::after { content: "▸"; margin-left: auto; font-size: 13px; color: var(--muted); transition: transform 120ms ease; }
+    details.dx-box[open] > summary::after { transform: rotate(90deg); }
+    details.dx-box[open] { border-color: var(--accent); }
+    details.dx-box > .dx-box__body { padding: 0 14px 14px; }
+
+    @media (max-width: 640px) {
+      .dx-quick { gap: 6px; }
+      .dx-quick__btn { padding: 8px 4px; font-size: 11.5px; border-radius: 8px; }
+      .dx-quick__sub { font-size: 9.5px; }
+      .dx-tri { grid-template-columns: 1fr; gap: 8px; }
+      .dx-tri__card { padding: 8px 10px; }
+      details.dx-tri__card > summary { padding: 8px 10px; font-size: 12.5px; }
+      details.dx-tri__card > .dx-tri__list { padding: 0 12px 10px 26px; }
+      .dx-tri__title { font-size: 12.5px; }
+      .dx-tri__list { font-size: 12px; }
+      details.dx-box > summary { padding: 10px 12px; font-size: 13.5px; }
+      details.dx-box > .dx-box__body { padding: 0 12px 12px; }
+    }
+
+    .dx-step {
+      margin: 18px 0 6px; display: flex; align-items: center; gap: 10px;
+      color: var(--muted); font-size: 11.5px; font-weight: 800; letter-spacing: 0.1em;
+    }
+    .dx-step::before, .dx-step::after { content: ""; flex: 1; height: 1px; background: color-mix(in srgb, var(--text) 18%, transparent); }
+
+    .dx-template {
+      background: color-mix(in srgb, var(--text) 4%, var(--surface));
+      border-left: 3px solid var(--accent); border-radius: 6px;
+      padding: 10px 12px; margin: 6px 0 0; font-size: 13px; line-height: 1.6;
+      white-space: pre-wrap; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+    .dx-template__hint { font-size: 11px; color: var(--muted); margin: 0 0 4px; }
+
+    .dx-alert {
+      background: color-mix(in srgb, #c0392b 8%, var(--surface));
+      border: 1.5px solid #c0392b; border-radius: 10px;
+      padding: 10px 12px; margin: 10px 0; color: var(--text); font-size: 13px;
+    }
+    .dx-alert strong { color: #c0392b; }
+
+    .dx-typical {
+      background: color-mix(in srgb, var(--accent) 5%, var(--surface));
+      border: 1.5px solid color-mix(in srgb, var(--accent) 50%, transparent);
+      border-radius: 10px; padding: 10px 14px; margin: 10px 0 4px;
+    }
+    .dx-typical__title { font-weight: 800; font-size: 13.5px; color: var(--accent); margin-bottom: 4px; }
+    .dx-typical__list { margin: 0; padding-left: 18px; font-size: 12.5px; line-height: 1.55; }
+    .dx-typical__list li { margin: 2px 0; }
+    @media (max-width: 640px) {
+      .dx-typical { padding: 8px 10px; }
+      .dx-typical__title { font-size: 12.5px; }
+      .dx-typical__list { font-size: 12px; }
+    }
+    .dx-box__body h3 {
+      font-size: 14px; font-weight: 800;
+      margin: 14px 0 6px;
+      color: var(--accent);
+      padding-bottom: 4px;
+      border-bottom: 1px dashed color-mix(in srgb, var(--text) 22%, transparent);
+    }
+    .dx-box__body h3:first-child { margin-top: 4px; }
+    @media (max-width: 640px) { .dx-box__body h3 { font-size: 12.5px; margin: 10px 0 4px; } }
+  </style>
+</head>
+<body>
+  <header class="hokuto-top">
+    <a class="hokuto-top__btn" href="../薬剤情報.html"><span class="hokuto-top__icon">℞</span><span>薬剤情報</span></a>
+    <a class="hokuto-top__btn" href="../表計算.html"><span class="hokuto-top__icon">⊞</span><span>表計算</span></a>
+  </header>
+
+  <main class="hokuto-main">
+    <article class="note-shell">
+      <h1 class="page-title">頭蓋底骨折（skull base fracture）</h1>
+
+      <div class="dx-alert">
+        <strong>経鼻挿管・経鼻胃管は絶対禁忌</strong>（前頭蓋底骨折経由で脳内に誤挿入のリスク）。Battle 徴候・Raccoon eyes・髄液漏・鼓室血腫のいずれかがあれば疑え。気道管理は<strong>経口挿管が原則</strong>。
+      </div>
+
+      <nav class="dx-quick" aria-label="クイックタップ">
+        <button class="dx-quick__btn" type="button" data-target="er-actions">
+          <span>ER で打つ手</span><span class="dx-quick__sub">初期処置</span>
+        </button>
+        <button class="dx-quick__btn" type="button" data-target="consult-check">
+          <span>コンサル前確認</span><span class="dx-quick__sub">脳外を呼ぶ前に</span>
+        </button>
+        <button class="dx-quick__btn" type="button" data-target="img-plan">
+          <span>画像と治療方針</span><span class="dx-quick__sub">部位 / 合併</span>
+        </button>
+        <button class="dx-quick__btn" type="button" data-target="consult">
+          <span>コンサル文</span><span class="dx-quick__sub">そのまま貼れる</span>
+        </button>
+      </nav>
+
+      <section class="dx-typical">
+        <div class="dx-typical__title">典型像（疑うきっかけ）</div>
+        <ul class="dx-typical__list">
+          <li>機転：<strong>高エネ外傷</strong>（交通／高所転落）、顔面・側頭部の強い打撲</li>
+          <li>身体所見（いずれか 1 つでも陽性で疑え）：
+            <ul>
+              <li><strong>Battle 徴候</strong>：耳介後部の皮下出血（側頭骨／後頭蓋底骨折）</li>
+              <li><strong>Raccoon eyes</strong>：両眼周囲の皮下出血（前頭蓋底骨折）</li>
+              <li><strong>髄液鼻漏／耳漏</strong>：halo sign（ティッシュで二重リング）、糖陽性 — いずれも<strong>スクリーニング所見</strong>で感度／特異度は不十分。<strong>確診は β2-トランスフェリン</strong>（ベータ 2 トランスフェリン）</li>
+              <li><strong>鼓室血腫／外耳道出血</strong>（側頭骨骨折）</li>
+            </ul>
+          </li>
+          <li>脳神経麻痺：嗅覚（I）、視神経（II）、動眼（III）、顔面（VII）、聴覚（VIII）など</li>
+          <li>CT：頭蓋底骨折線（前頭蓋窩・中頭蓋窩・後頭蓋窩）、副鼻腔・乳突洞の液体貯留</li>
+        </ul>
+        <p style="margin: 6px 0 0; font-size: 11.5px; color: var(--muted);">→ 詳細所見は <strong>同時並行 2 軸</strong> と <strong>コンサル前確認</strong> へ</p>
+      </section>
+
+      <div class="dx-step"><span>同時並行で評価する 2 軸（治療方針を分ける所見）</span></div>
+      <div class="dx-tri">
+
+        <details class="dx-tri__card dx-tri__card--vasc" open>
+          <summary>気道管理（経鼻禁の徹底）</summary>
+          <p class="dx-tri__hint">頭蓋底骨折を疑えば<strong>経鼻挿管・経鼻胃管・経鼻ファイバー全て禁</strong>。</p>
+          <ul class="dx-tri__list">
+            <li><strong>経口挿管</strong>が原則。困難気道予測時は外科的気道（輪状甲状靱帯切開）の準備</li>
+            <li><strong>経鼻胃管は絶対禁</strong>。栄養は経口または経静脈で</li>
+            <li><strong>経鼻ファイバー</strong>も禁忌（脳内迷入リスク）</li>
+            <li>カルテ・ベッドサイドに「経鼻禁」を大書、申し送りで強調</li>
+            <li>顔面骨折合併（Le Fort II/III）でも同様</li>
+          </ul>
+        </details>
+
+        <details class="dx-tri__card dx-tri__card--vasc" open>
+          <summary>髄液漏・脳神経評価（合併損傷）</summary>
+          <p class="dx-tri__hint">髄液漏は<strong>髄膜炎リスク</strong>。脳神経麻痺は治療方針に影響。</p>
+          <ul class="dx-tri__list">
+            <li><strong>髄液漏</strong>（halo sign・糖陽性）→ 多くは保存療法で 1〜2 週で停止。<strong>持続例は手術修復</strong></li>
+            <li><strong>予防的抗生剤は推奨されない</strong>（メタアナリシスで有効性なし）。<strong>髄膜炎症状（発熱・項部硬直）出現時に抗生剤開始</strong></li>
+            <li>脳神経麻痺の有無：嗅覚（I）／視神経（II → 視神経管骨折）／顔面神経（VII → 側頭骨折）／聴覚（VIII）</li>
+            <li>耳出血・聴力低下 → 側頭骨骨折、耳鼻科</li>
+            <li>頚動脈・椎骨動脈損傷（BCVI: blunt cerebrovascular injury）：<strong>Modified Denver Criteria</strong>（頚椎骨折／頭蓋底骨折／LeFort II/III／不釣合な神経症状／Horner 症候群／頚部血腫／頭蓋底血腫 など）を満たせば <strong>CTA</strong> オーダー</li>
+          </ul>
+        </details>
+      </div>
+
+      <details class="dx-box" id="er-actions">
+        <summary><span>ER で打つ手（初期処置）</span></summary>
+        <div class="dx-box__body">
+          <ol>
+            <li>身体所見で<strong>頭蓋底骨折を疑った瞬間に「経鼻禁」を申し送り</strong>、カルテ・ベッドサイドに明記</li>
+            <li>バイタル・GCS・瞳孔・四肢麻痺を記録</li>
+            <li>頭部 CT を即時オーダー（脳実質条件 + <strong>骨条件</strong>必須、側頭骨薄スライス検討）</li>
+            <li>GCS ≤ 8 → <strong>経口挿管</strong>（経鼻禁）、頸椎保護</li>
+            <li><strong>脳外科コンサルト</strong>、耳鼻科コンサルト（側頭骨折・髄液漏）</li>
+            <li>髄液鼻漏／耳漏：自然停止を待つ（1〜2 週）。抗生剤予防投与は推奨されない。<strong>髄膜炎症状出現時に開始</strong></li>
+            <li>脳神経評価：嗅覚・視覚・聴覚・顔面神経</li>
+            <li>視神経管骨折合併（急性視力低下＋RAPD）→ <a href="視神経管骨折.html">視神経管骨折</a> 参照、眼科即時</li>
+            <li>頸椎評価（→ <a href="../頸部外傷・頸部痛.html">頸部外傷・頸部痛</a>）</li>
+            <li>絶飲食、ライン確保</li>
+          </ol>
+        </div>
+      </details>
+
+      <details class="dx-box" id="consult-check">
+        <summary><span>脳外科コンサルト前に確認すべきこと</span></summary>
+        <div class="dx-box__body">
+          <p>頭蓋底骨折と診断したら、コンサル前に以下を整理しておく。</p>
+          <ul>
+            <li><strong>受傷機転・時刻</strong></li>
+            <li><strong>身体所見</strong>：Battle 徴候・Raccoon eyes・髄液漏（鼻／耳）・鼓室血腫の有無</li>
+            <li><strong>意識・GCS・瞳孔</strong>：経時推移</li>
+            <li><strong>気道</strong>：自発呼吸／挿管管理中、<strong>経鼻禁の指示済み</strong>か</li>
+            <li><strong>脳神経評価</strong>：嗅覚・視力・対光反射・顔面神経・聴覚</li>
+            <li><strong>画像所見</strong>：骨折線の部位（前頭蓋窩／中頭蓋窩／後頭蓋窩）、副鼻腔・乳突洞液体貯留、骨内 air</li>
+            <li><strong>合併損傷</strong>：頭蓋内出血（EDH／SDH／SAH／挫傷）、視神経管骨折、頸椎、顔面骨折</li>
+            <li><strong>髄液漏</strong>：あり／なし、持続時間</li>
+            <li><strong>抗凝固薬・抗血小板薬</strong>：薬剤名、最終内服時刻、リバース済みか</li>
+            <li><strong>背景情報</strong>：年齢・既往歴・受傷前 ADL</li>
+            <li><strong>ER 処置の記録</strong>：気道確保、経鼻禁の申し送り、抗生剤（投与済か未か、適応の有無）</li>
+          </ul>
+        </div>
+      </details>
+
+      <details class="dx-box" id="img-plan">
+        <summary><span>画像所見と治療方針</span></summary>
+        <div class="dx-box__body">
+
+          <h3>① 画像で見る項目</h3>
+          <ul>
+            <li><strong>頭部 CT（骨条件、1 mm 以下薄スライス＋3D 再構成）</strong>：頭蓋底骨折線の確認</li>
+            <li><strong>側頭骨薄スライス</strong>：側頭骨骨折・耳小骨損傷の評価</li>
+            <li>副鼻腔（前頭洞・蝶形骨洞）・乳突洞の<strong>液体貯留／air-fluid level</strong>は間接所見</li>
+            <li><strong>頭蓋内 air</strong>（pneumocephalus）：硬膜損傷の指標</li>
+            <li>合併する EDH／SDH／SAH／脳挫傷・視神経管骨折・顔面骨折</li>
+            <li>頚動脈損傷疑い → <strong>CTA</strong>（外傷性内頚動脈解離）</li>
+          </ul>
+
+          <h3>② 部位別の特徴</h3>
+          <div class="table-wrap"><table>
+            <thead><tr><th>部位</th><th>主な合併症</th><th>身体所見</th></tr></thead>
+            <tbody>
+              <tr>
+                <td>前頭蓋窩</td>
+                <td>髄液鼻漏、嗅覚障害、視神経管損傷</td>
+                <td>Raccoon eyes、髄液鼻漏</td>
+              </tr>
+              <tr>
+                <td>中頭蓋窩（側頭骨）</td>
+                <td>髄液耳漏、顔面神経麻痺、聴力低下、頚動脈損傷</td>
+                <td>Battle 徴候、鼓室血腫、外耳道出血</td>
+              </tr>
+              <tr>
+                <td>後頭蓋窩</td>
+                <td>外転神経麻痺、椎骨動脈損傷</td>
+                <td>後頭部皮下血腫、Battle 徴候</td>
+              </tr>
+            </tbody>
+          </table></div>
+
+          <h3>③ 治療方針</h3>
+          <ul>
+            <li><strong>多くは保存療法</strong>。骨折線そのものに対する手術は通常不要</li>
+            <li><strong>髄液漏</strong>：1〜2 週で自然停止することが多い。持続例は内視鏡的・観血的修復</li>
+            <li><strong>抗生剤予防は推奨されない</strong>（Cochrane レビュー）。髄膜炎症状出現時に開始</li>
+            <li>顔面神経麻痺：<strong>即時完全麻痺＝外科判断（神経減圧／吻合）</strong>、<strong>遅発性・不全麻痺＝ステロイド療法</strong>と方針を区別</li>
+            <li>視神経管骨折（急性視力低下＋RAPD）：眼科＋脳外即時、ステロイド／減圧術判断</li>
+            <li>頚動脈損傷：抗血栓療法 vs 血管内治療を血管外科と相談</li>
+            <li>合併する頭蓋内出血の治療が予後を決める</li>
+          </ul>
+
+          <h3>④ 経鼻禁の徹底</h3>
+          <ul>
+            <li>気道確保：<strong>経口挿管</strong>のみ</li>
+            <li>胃管：<strong>経口胃管</strong>または経静脈栄養</li>
+            <li>経鼻ファイバー・経鼻吸引も<strong>禁</strong></li>
+            <li>カルテ・ベッドサイド・申し送りで強調、看護チームとも共有</li>
+          </ul>
+        </div>
+      </details>
+
+      <details class="dx-box" id="consult">
+        <summary><span>コンサル文（カルテに貼る）</span></summary>
+        <div class="dx-box__body">
+          <p class="dx-template__hint">脳神経外科宛て（側頭骨骨折・髄液耳漏は耳鼻科も）。【目的】【疾患】【既往歴】【内服薬】【ADL】【現病歴】の順。</p>
+          <div class="dx-template">【目的】ご加療依頼／管理方針のご相談
+【疾患】#1 頭蓋底骨折（[前頭蓋窩／中頭蓋窩／後頭蓋窩]、[右/左]）
+　　　 [#2 髄液鼻漏／#2 髄液耳漏／#2 視神経管骨折／#2 EDH/SDH 合併／#2 顔面骨折合併 など]
+【既往歴】[特記事項なし／○○]
+【内服薬】[なし／ワーファリン／DOAC ○○／抗血小板薬 ○○]（リバース [製剤・用量・時刻／未]）
+【ADL（受傷前）】[独歩／杖／介助／車椅子]
+【現病歴】[年齢]歳[男/女]性。[受傷機転：高エネ／交通／高所転落／殴打]で受傷し、[来院経緯]で来院。
+ ・身体所見：Battle 徴候 [なし／あり：右/左]、Raccoon eyes [なし／あり]、髄液鼻漏 [なし／あり：halo sign 陽性]、鼓室血腫 [なし／あり]
+ ・意識経過：[受傷時 LOC、現在の GCS と推移]
+ ・バイタル：SBP ○、HR ○、SpO₂ ○%
+ ・GCS：E○V○M○、瞳孔：○/○ mm、対光反射 [良好／不良]
+ ・脳神経：嗅覚 [評価可／不能]、視力・対光反射、顔面神経 [問題なし／○○]、聴力 [良好／低下]
+ ・気道：[自発呼吸／<strong>経口挿管</strong>管理中（経鼻禁の指示済み）]
+ ・画像：頭部 CT（骨条件）で[骨折部位]、副鼻腔／乳突洞液体貯留 [あり／なし]、合併 [EDH／SDH／SAH／挫傷／視神経管骨折／顔面骨折]
+ ・頸椎：[問題なし／○○]
+ ・ER 処置：[経鼻禁の申し送り済]、抗生剤 [投与なし／髄膜炎症状時開始予定]
+よろしくお願いいたします。</div>
+        </div>
+      </details>
+
+      <details class="dx-box">
+        <summary><span>出典</span></summary>
+        <div class="dx-box__body">
+          <ul>
+            <li>Brain Trauma Foundation: Guidelines for the Management of Severe Traumatic Brain Injury.</li>
+            <li>Ratilal BO ほか. Antibiotic prophylaxis for preventing meningitis in patients with basilar skull fractures. <em>Cochrane Database Syst Rev.</em> 2015.</li>
+          </ul>
+        </div>
+      </details>
+
+    </article>
+  </main>
+
+  <nav class="hokuto-bottom">
+    <button class="hokuto-bottom__btn" type="button" id="navBack"><span class="hokuto-bottom__icon">←</span><span>戻る</span></button>
+    <a class="hokuto-bottom__btn" href="../ツール.html"><span class="hokuto-bottom__icon">⚙</span><span>ツール</span></a>
+    <a class="hokuto-bottom__btn" href="../index.html"><span class="hokuto-bottom__icon">⌂</span><span>ホーム</span></a>
+  </nav>
+
+  <script>
+  (function(){
+    document.querySelectorAll('.dx-quick__btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.dataset.target;
+        const target = document.getElementById(id);
+        if (!target) return;
+        target.open = true;
+        target.scrollIntoView({behavior: 'smooth', block: 'start'});
+      });
+    });
+    const navBack = document.getElementById('navBack');
+    if (navBack) navBack.addEventListener('click', () => {
+      if (window.history.length > 1) history.back();
+      else window.location.href = '../index.html';
+    });
+  })();
+  </script>
+</body>
+</html>

@@ -13,12 +13,6 @@
       display: flex; align-items: center; justify-content: space-between;
       gap: 0.5rem; cursor: pointer; padding: 2px 0;
     }
-    .flow-box__hint {
-      font-size: 0.72rem; font-weight: 600; color: var(--muted);
-      letter-spacing: 0.02em; padding: 2px 8px; border-radius: 999px;
-      border: 1px solid color-mix(in srgb, var(--text) 20%, transparent);
-    }
-
     /* ===== 診療フロー本体 ===== */
     .flow-canvas {
       background: var(--surface); border-radius: 10px;
@@ -58,10 +52,6 @@
       border-color: #c0392b;
     }
     .dx-node--danger .dx-node__title { color: #c0392b; }
-    .dx-node--action {
-      background: color-mix(in srgb, var(--text) 5%, var(--surface));
-      border-style: dashed;
-    }
     .dx-node--external {
       text-decoration: none; color: var(--text); border-style: dashed;
       position: relative;
@@ -80,16 +70,15 @@
     .dx-layer--root   { grid-template-columns: 1fr; justify-items: center; }
     .dx-layer--root > * { max-width: 360px; }
     .dx-layer--branch { grid-template-columns: 1fr 1fr; }
-    .dx-layer--quad   { grid-template-columns: repeat(4, 1fr); }
 
     /* 矢印 */
     .dx-arrow {
       display: flex; flex-direction: column; align-items: center; justify-content: center;
-      position: relative; margin: 4px 0; min-height: 44px;
+      position: relative; margin: 2px 0; min-height: 26px;
       color: var(--muted); font-size: 11.5px; font-weight: 600;
     }
     .dx-arrow::before {
-      content: ""; width: 2px; height: 100%; min-height: 38px;
+      content: ""; width: 2px; height: 100%; min-height: 22px;
       background: color-mix(in srgb, var(--text) 35%, transparent);
     }
     .dx-arrow::after {
@@ -98,13 +87,6 @@
       border-left: 5px solid transparent; border-right: 5px solid transparent;
       border-top: 7px solid color-mix(in srgb, var(--text) 35%, transparent);
     }
-    .dx-arrow__label {
-      background: var(--surface); padding: 1px 8px; border-radius: 999px;
-      border: 1px solid color-mix(in srgb, var(--text) 18%, transparent);
-      position: absolute; left: 50%; top: 50%;
-      transform: translate(-50%, -50%); white-space: nowrap; z-index: 1;
-    }
-
     /* 分岐 Y 字 */
     .dx-fork {
       display: grid; grid-template-columns: 1fr 1fr;
@@ -136,10 +118,12 @@
       border: 1px solid color-mix(in srgb, var(--text) 18%, transparent);
       margin-bottom: 2px; z-index: 1;
     }
+    .dx-fork--triple { grid-template-columns: repeat(3, 1fr); }
+    .dx-fork--triple::before { left: 16.5%; right: 16.5%; }
     .dx-fork--quad { grid-template-columns: repeat(4, 1fr); }
     .dx-fork--quad::before { left: 12.5%; right: 12.5%; }
 
-    /* 4列の疾患ツリー */
+    /* 疾患ツリー（4列） */
     .dx-trees {
       display: grid; grid-template-columns: repeat(4, 1fr);
       gap: 12px; align-items: start; margin-top: 4px;
@@ -201,7 +185,6 @@
       .dx-arrow { min-height: 24px; margin: 1px 0; }
       .dx-arrow::before { min-height: 20px; width: 1.5px; }
       .dx-arrow::after { border-left-width: 4px; border-right-width: 4px; border-top-width: 6px; }
-      .dx-arrow__label { font-size: 8.5px; padding: 0 4px; line-height: 1.4; }
 
       .dx-fork { min-height: 22px; }
       .dx-fork::before { height: 1.5px; }
@@ -209,6 +192,7 @@
       .dx-fork__leg::before { width: 1.5px; }
       .dx-fork__leg::after { border-left-width: 4px; border-right-width: 4px; border-top-width: 6px; }
       .dx-fork__label { font-size: 8.5px; padding: 0 4px; margin-bottom: 0; }
+      .dx-fork--triple::before { left: 16.5%; right: 16.5%; }
       .dx-fork--quad::before { left: 12.5%; right: 12.5%; }
 
       .dx-trees { gap: 4px; }
@@ -220,14 +204,6 @@
     }
 
     /* === 来院後チェック === */
-    .dx-arrival-divider {
-      margin: 18px 0 8px; display: flex; align-items: center; gap: 10px;
-      color: var(--muted); font-size: 11.5px; font-weight: 800; letter-spacing: 0.1em;
-    }
-    .dx-arrival-divider::before, .dx-arrival-divider::after {
-      content: ""; flex: 1; height: 1px;
-      background: color-mix(in srgb, var(--text) 18%, transparent);
-    }
     .dx-checklist {
       background: var(--surface); border-radius: 10px;
       border: 1.5px solid color-mix(in srgb, var(--text) 14%, transparent);
@@ -271,6 +247,21 @@
       text-decoration-color: color-mix(in srgb, var(--muted) 50%, transparent);
     }
     .dx-checklist__sub { color: var(--muted); font-size: 11px; font-weight: 500; }
+    .dx-checklist__action {
+      display: block;
+      margin-top: 6px;
+      padding: 5px 9px;
+      background: color-mix(in srgb, #d33 10%, transparent);
+      border-left: 3px solid #d33;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--text);
+      line-height: 1.45;
+    }
+    .dx-checklist__action::before { content: "⚠ "; color: #d33; font-weight: 800; }
+    .dx-checklist__action strong { color: #d33; }
+    .dx-checklist__action a { color: #d33; text-decoration: underline; font-weight: 600; }
 
     @media (max-width: 600px) {
       .dx-checklist { padding: 8px 10px; }
@@ -278,7 +269,6 @@
       .dx-checklist__list li { font-size: 11.5px; }
       .dx-checklist__sub { font-size: 10px; }
       .dx-checklist__reset { font-size: 9.5px; padding: 1px 6px; }
-      .dx-arrival-divider { font-size: 10px; margin: 14px 0 6px; }
     }
 
     /* === トリガー連動ルール === */
@@ -379,8 +369,105 @@
       .dx-imaging__list { font-size: 11.5px; }
     }
 
-    /* §メニュータイル非表示 */
-    .section-tiles { display: none !important; }
+    /* フロー peek からのみ参照される panel は可視には非表示（DOM は peek 用に保持） */
+    #historyPanel,
+    #examPanel,
+    #imagingPanel,
+    #imagingReadPanel,
+    #rulesL2Panel,
+    #rxPanel,
+    #dispoPanel,
+    #refsPanel { display: none !important; }
+
+    /* === Peek プレビュー === */
+    .peek-modal {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.5);
+      display: none;
+      align-items: flex-end;
+      justify-content: center;
+      z-index: 9999;
+      -webkit-backdrop-filter: blur(2px);
+      backdrop-filter: blur(2px);
+    }
+    .peek-modal.is-open { display: flex; }
+    .peek-modal__sheet {
+      background: var(--surface);
+      width: 100%;
+      max-width: 720px;
+      max-height: 85vh;
+      border-radius: 14px 14px 0 0;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 -6px 28px rgba(0,0,0,0.25);
+      animation: peek-slide-up 220ms ease-out;
+      overflow: hidden;
+      position: relative;
+    }
+    @keyframes peek-slide-up {
+      from { transform: translateY(30%); opacity: 0.4; }
+      to   { transform: translateY(0);   opacity: 1; }
+    }
+    .peek-modal__handle {
+      position: absolute;
+      top: 6px; left: 50%;
+      transform: translateX(-50%);
+      width: 36px; height: 4px;
+      border-radius: 999px;
+      background: color-mix(in srgb, var(--text) 22%, transparent);
+      pointer-events: none;
+    }
+    .peek-modal__header {
+      display: flex; align-items: flex-start; gap: 8px;
+      padding: 16px 14px 10px;
+      border-bottom: 1px solid color-mix(in srgb, var(--text) 12%, transparent);
+      background: var(--surface);
+      flex-shrink: 0;
+    }
+    .peek-modal__title {
+      flex: 1;
+      font-weight: 800;
+      font-size: 14.5px;
+      color: var(--text);
+      line-height: 1.3;
+    }
+    .peek-modal__close {
+      background: transparent;
+      border: 1px solid color-mix(in srgb, var(--text) 22%, transparent);
+      border-radius: 999px;
+      width: 30px; height: 30px;
+      cursor: pointer;
+      font-size: 14px;
+      color: var(--text);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      font-family: inherit;
+    }
+    .peek-modal__close:hover { background: color-mix(in srgb, var(--text) 6%, transparent); }
+    .peek-modal__body {
+      flex: 1;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      padding: 12px 16px 10px;
+      font-size: 13.5px;
+      line-height: 1.55;
+      color: var(--text);
+    }
+    /* peek 内で details は常に開いた状態で表示（JS で open=true を付与）。トップレベルのサマリーは peek ヘッダーと重複するため非表示 */
+    .peek-modal__body > details > summary { display: none; }
+    .peek-modal__body details > summary { pointer-events: none; }
+    /* checklist 内の reset ボタンも peek では機能しないので非表示 */
+    .peek-modal__body .dx-checklist__reset { display: none; }
+    @media (min-width: 720px) {
+      .peek-modal { align-items: center; padding: 24px; }
+      .peek-modal__sheet { border-radius: 14px; max-height: 80vh; }
+      .peek-modal__handle { display: none; }
+      @keyframes peek-slide-up {
+        from { transform: scale(0.96); opacity: 0; }
+        to   { transform: scale(1);    opacity: 1; }
+      }
+    }
+    a.dx-node { -webkit-touch-callout: none; }
   </style>
 </head>
 <body>
@@ -399,316 +486,702 @@
 
       <!-- 単純化診療フロー -->
       <div class="action-header flow-box" id="flowBox">
-        <div class="action-header__title flow-box__title" id="flowBoxClose" role="button" tabindex="0" aria-label="診療フローを閉じる">
-          <span>🗺 単純化診療フロー</span>
-          <span class="flow-box__hint">タップで閉じる ✕</span>
+        <div class="action-header__title flow-box__title">
+          <span>単純化診療フロー</span>
         </div>
 
         <div class="flow-canvas">
-          <div class="dx-flow" role="group" aria-label="体幹・背部外傷の単純化診療フロー">
+          <div class="dx-flow" role="group" aria-label="体幹・背部の外傷の単純化診療フロー">
 
-            <!-- L0: Red flags -->
+            <!-- Root -->
             <div class="dx-layer dx-layer--root">
-              <a class="dx-node dx-node--decision dx-node--danger" href="#redflags">
-                <div class="dx-node__title">🚨 Red flags 確認</div>
-                <div class="dx-node__sub">馬尾／フレイルチェスト／緊張性気胸／大動脈損傷</div>
-              </a>
+              <div class="dx-node dx-node--decision">体幹・背部の外傷</div>
             </div>
+            <div class="dx-arrow"></div>
 
-            <div class="dx-fork">
-              <div class="dx-fork__leg"><span class="dx-fork__label">あり</span></div>
-              <div class="dx-fork__leg"><span class="dx-fork__label">なし</span></div>
-            </div>
-
+            <!-- 問診 + 身体診察（同時並行） -->
             <div class="dx-layer dx-layer--branch">
-              <a class="dx-node dx-node--danger" href="#redflags">
-                <div class="dx-node__title">緊急対応</div>
-                <div class="dx-node__sub">緊急 MRI／胸腔ドレナージ／造影 CT</div>
+              <a class="dx-node" href="#historyPanel">
+                <div class="dx-node__title">問診</div>
               </a>
-              <div class="dx-arrow"><span class="dx-arrow__label">↓ 痛みの主座で絞る</span></div>
+              <a class="dx-node" href="#examPanel">
+                <div class="dx-node__title">身体診察</div>
+              </a>
             </div>
+            <div class="dx-arrow"></div>
 
-            <!-- L1: 痛みの主座 -->
+            <!-- 画像適応 ＋ 画像の読み方（並列） -->
+            <div class="dx-layer dx-layer--branch">
+              <a class="dx-node dx-node--judge" href="#imagingPanel">
+                <div class="dx-node__title">画像適応＋撮影方向</div>
+              </a>
+              <a class="dx-node dx-node--judge" href="#imagingReadPanel">
+                <div class="dx-node__title">画像の読み方（FAST/Xp/CT）</div>
+              </a>
+            </div>
+            <div class="dx-arrow"></div>
+
+            <!-- 部位ジャッジ -->
             <div class="dx-layer dx-layer--root">
-              <div class="dx-node dx-node--judge">痛みの主座は？</div>
+              <div class="dx-node dx-node--judge">痛みの主座・損傷部位は？</div>
             </div>
 
+            <!-- 4 列分岐：胸郭 / 腹部 / 脊椎 / 骨盤 -->
             <div class="dx-fork dx-fork--quad">
-              <div class="dx-fork__leg"><span class="dx-fork__label">背部・腰背部</span></div>
-              <div class="dx-fork__leg"><span class="dx-fork__label">胸部・側胸部</span></div>
-              <div class="dx-fork__leg"><span class="dx-fork__label">骨盤・鼠径部</span></div>
-              <div class="dx-fork__leg"><span class="dx-fork__label">下肢神経症状</span></div>
+              <div class="dx-fork__leg"><span class="dx-fork__label">胸郭</span></div>
+              <div class="dx-fork__leg"><span class="dx-fork__label">腹部</span></div>
+              <div class="dx-fork__leg"><span class="dx-fork__label">脊椎</span></div>
+              <div class="dx-fork__leg"><span class="dx-fork__label">骨盤</span></div>
             </div>
 
-            <!-- L2/L3: 4列の疾患ツリー -->
+            <!-- 4 列の疾患ツリー -->
             <div class="dx-trees">
 
-              <!-- 1) 背部・腰背部 -->
+              <!-- 1) 胸郭 -->
               <div class="dx-tree">
+                <div class="dx-tree__group">即時対応（生命危機）</div>
+                <a class="dx-node dx-node--danger" href="#rule-tension-pneumo">
+                  <div class="dx-node__title">緊張性気胸</div>
+                  <div class="dx-node__sub">頸静脈怒張＋気管偏位／<strong>針減圧 → ドレナージ</strong></div>
+                </a>
+                <a class="dx-node dx-node--danger" href="#rule-flail">
+                  <div class="dx-node__title">フレイルチェスト</div>
+                  <div class="dx-node__sub">3 本以上 × 2 か所／<strong>奇異呼吸</strong>／陽圧換気</div>
+                </a>
+                <a class="dx-node dx-node--danger" href="#rule-aorta">
+                  <div class="dx-node__title">外傷性大動脈損傷</div>
+                  <div class="dx-node__sub">高エネ＋縦隔拡大／<strong>造影 CT・心血管外科</strong></div>
+                </a>
+
+                <div class="dx-tree__group">高エネ示唆骨折</div>
+                <a class="dx-node" href="疾患詳細/胸骨骨折.html">
+                  <div class="dx-node__title">胸骨骨折</div>
+                  <div class="dx-node__sub">心臓打撲・縦隔損傷を必ず鑑別／<strong>ECG＋トロポニン</strong></div>
+                </a>
+                <a class="dx-node" href="疾患詳細/肋骨骨折.html">
+                  <div class="dx-node__title">第1-3 肋骨／肩甲骨</div>
+                  <div class="dx-node__sub">高エネ示唆／<strong>大動脈・縦隔評価</strong></div>
+                </a>
+
+                <div class="dx-tree__group">直達外力</div>
+                <a class="dx-node" href="疾患詳細/肋骨骨折.html">
+                  <div class="dx-node__title">肋骨骨折</div>
+                  <div class="dx-node__sub">第10-12＝<strong>肝（右）/脾（左）/腎</strong>／X 線は写りにくい</div>
+                </a>
+                <a class="dx-node" href="疾患詳細/気胸.html">
+                  <div class="dx-node__title">気胸／血胸／血気胸</div>
+                  <div class="dx-node__sub">eFAST＋胸部 X 線／<strong>大量血胸＝1.5 L 以上で開胸</strong></div>
+                </a>
+                <div class="dx-note">第1-3 肋骨／胸骨／肩甲骨は<strong>高エネ示唆</strong>。造影 CT で大動脈・縦隔・心臓を確認。</div>
+              </div>
+
+              <!-- 2) 腹部 -->
+              <div class="dx-tree">
+                <div class="dx-tree__group">FAST 陽性／血行動態不安定</div>
+                <a class="dx-node dx-node--danger" href="#rule-fast-pos">
+                  <div class="dx-node__title">腹腔内出血</div>
+                  <div class="dx-node__sub">FAST 陽性＋ショック → <strong>緊急開腹／TAE</strong></div>
+                </a>
+
+                <div class="dx-tree__group">実質臓器損傷</div>
+                <div class="dx-node">
+                  <div class="dx-node__title">肝損傷</div>
+                  <div class="dx-node__sub">右側胸部・右下肋骨骨折に合併／AAST 分類</div>
+                </div>
+                <div class="dx-node">
+                  <div class="dx-node__title">脾損傷</div>
+                  <div class="dx-node__sub">左下肋骨骨折＋左肩痛（Kehr 徴候）／高エネ最多</div>
+                </div>
+                <div class="dx-node">
+                  <div class="dx-node__title">腎損傷</div>
+                  <div class="dx-node__sub"><strong>血尿＋側腹部痛</strong>／第10-12 肋骨／L2 横突起骨折に合併</div>
+                </div>
+
+                <div class="dx-tree__group">管腔・後腹膜</div>
+                <div class="dx-node">
+                  <div class="dx-node__title">小腸・腸間膜損傷</div>
+                  <div class="dx-node__sub"><strong>シートベルトサイン</strong>／遅発性腹膜炎／CT で遊離ガス・腸間膜血腫</div>
+                </div>
+                <div class="dx-node">
+                  <div class="dx-node__title">後腹膜出血</div>
+                  <div class="dx-node__sub">抗凝固薬内服＋側腹部痛／L 横突起骨折／<strong>遷延性</strong></div>
+                </div>
+              </div>
+
+              <!-- 3) 脊椎 -->
+              <div class="dx-tree">
+                <div class="dx-tree__group">即時対応（神経）</div>
+                <a class="dx-node dx-node--danger" href="#rule-cauda">
+                  <div class="dx-node__title">馬尾症候群</div>
+                  <div class="dx-node__sub">鞍状感覚低下／尿閉／両下肢麻痺／<strong>緊急 MRI</strong></div>
+                </a>
+                <a class="dx-node dx-node--danger" href="疾患詳細/中心性頸髄損傷.html">
+                  <div class="dx-node__title">脊髄損傷／中心性頸髄損傷</div>
+                  <div class="dx-node__sub">高齢者の軽微外傷でも発症／<strong>上肢優位の麻痺</strong></div>
+                </a>
+
                 <div class="dx-tree__group">高齢者・軽微外傷</div>
                 <a class="dx-node" href="疾患詳細/脊椎圧迫骨折.html">
                   <div class="dx-node__title">脊椎圧迫骨折</div>
-                  <div class="dx-node__sub">しりもち／椎体楔形／MRI で新鮮判定</div>
-                </a>
-                <a class="dx-node" href="疾患詳細/脆弱性骨盤骨折.html">
-                  <div class="dx-node__title">脆弱性骨盤骨折</div>
-                  <div class="dx-node__sub">恥骨・坐骨・仙骨。骨盤痛もあり</div>
+                  <div class="dx-node__sub">2/3 は無症候性／楔形は陳旧性多／<strong>MRI（STIR/T1）で新鮮判定</strong></div>
                 </a>
 
                 <div class="dx-tree__group">高エネ外傷</div>
                 <a class="dx-node dx-node--danger" href="疾患詳細/脊椎破裂骨折.html">
                   <div class="dx-node__title">脊椎破裂骨折</div>
-                  <div class="dx-node__sub">後方成分破綻／神経症状で即整形</div>
+                  <div class="dx-node__sub">後方成分破綻／椎体後壁ライン乱れ／<strong>即整形</strong></div>
                 </a>
                 <a class="dx-node" href="疾患詳細/腰椎横突起骨折.html">
                   <div class="dx-node__title">腰椎横突起骨折</div>
-                  <div class="dx-node__sub">腎損傷併発を必ず鑑別</div>
+                  <div class="dx-node__sub">傍脊柱筋（椎体外側 1-2 cm）圧痛／<strong>腎損傷併発</strong>を必ず鑑別</div>
                 </a>
-                <a class="dx-node dx-node--danger" href="疾患詳細/頸椎損傷.html">
-                  <div class="dx-node__title">頸椎損傷</div>
-                  <div class="dx-node__sub">受傷直後から固定・脱臼骨折</div>
-                </a>
-
-                <div class="dx-tree__group">軽症（除外診断）</div>
                 <div class="dx-node">
-                  <div class="dx-node__title">腰部筋挫傷・椎間関節捻挫</div>
-                  <div class="dx-node__sub">骨折・神経症状を除外して診断</div>
+                  <div class="dx-node__title">棘突起骨折</div>
+                  <div class="dx-node__sub">直達外力／clay-shoveler / 単独なら保存</div>
                 </div>
+                <div class="dx-node dx-node--danger">
+                  <div class="dx-node__title">Chance 骨折（屈曲–伸延）</div>
+                  <div class="dx-node__sub">シートベルト外傷／<strong>50% に腹腔内臓器損傷</strong>合併</div>
+                </div>
+                <a class="dx-node dx-node--danger" href="疾患詳細/頸椎損傷.html">
+                  <div class="dx-node__title">頸椎損傷（脱臼骨折）</div>
+                  <div class="dx-node__sub">受傷直後から<strong>頸椎固定</strong>／NEXUS・CCR で適応評価</div>
+                </a>
               </div>
 
-              <!-- 2) 胸部・側胸部 -->
+              <!-- 4) 骨盤 -->
               <div class="dx-tree">
-                <div class="dx-tree__group">直達外力・転倒</div>
-                <a class="dx-node" href="疾患詳細/肋骨骨折.html">
-                  <div class="dx-node__title">肋骨骨折</div>
-                  <div class="dx-node__sub">第1-3＝高エネ示唆／第10-12＝肝脾腎</div>
+                <div class="dx-tree__group">即時対応（生命危機）</div>
+                <a class="dx-node dx-node--danger" href="#rule-pmc">
+                  <div class="dx-node__title">不安定型骨盤骨折＋ショック</div>
+                  <div class="dx-node__sub">PMC（preperitoneal pelvic packing）／<strong>骨盤バンド → TAE/REBOA</strong></div>
+                </a>
+                <a class="dx-node dx-node--danger" href="疾患詳細/開放骨折.html">
+                  <div class="dx-node__title">開放性骨盤骨折</div>
+                  <div class="dx-node__sub">直腸・膣損傷を必ず確認／<strong>セファゾリン・破傷風</strong>・即手術</div>
                 </a>
 
                 <div class="dx-tree__group">高エネ外傷</div>
-                <a class="dx-node dx-node--danger" href="疾患詳細/胸骨骨折.html">
-                  <div class="dx-node__title">胸骨骨折</div>
-                  <div class="dx-node__sub">心臓打撲・大動脈損傷を必ず鑑別</div>
-                </a>
-                <a class="dx-node dx-node--danger" href="疾患詳細/肋骨骨折.html">
-                  <div class="dx-node__title">フレイルチェスト</div>
-                  <div class="dx-node__sub">3 本以上 × 2 か所／奇異呼吸</div>
-                </a>
-
-                <div class="dx-tree__group">合併損傷</div>
-                <div class="dx-node">
-                  <div class="dx-node__title">気胸・血胸・肺挫傷</div>
-                  <div class="dx-node__sub">胸部 X 線＋エコーで初期評価</div>
+                <div class="dx-node dx-node--danger">
+                  <div class="dx-node__title">不安定型骨盤骨折（APC/LC/VS）</div>
+                  <div class="dx-node__sub">Young-Burgess 分類／<strong>創外固定／IVR</strong></div>
                 </div>
-              </div>
+                <div class="dx-note">尿道・膀胱損傷（血尿・尿道口出血・会陰血腫）を骨盤輪損傷で必ず確認。</div>
 
-              <!-- 3) 骨盤・鼠径部 -->
-              <div class="dx-tree">
                 <div class="dx-tree__group">高齢者軽微外傷</div>
                 <a class="dx-node" href="疾患詳細/脆弱性骨盤骨折.html">
                   <div class="dx-node__title">脆弱性骨盤骨折</div>
-                  <div class="dx-node__sub">恥骨・坐骨・仙骨。歩行困難</div>
+                  <div class="dx-node__sub">恥骨・坐骨・仙骨／<strong>X 線陽性は 46-50%</strong>／CT 追加躊躇しない</div>
                 </a>
-
-                <div class="dx-tree__group">高エネ外傷</div>
-                <a class="dx-node dx-node--danger" href="疾患詳細/脆弱性骨盤骨折.html">
-                  <div class="dx-node__title">不安定型骨盤骨折</div>
-                  <div class="dx-node__sub">出血源／骨盤バンド／TAE 検討</div>
-                </a>
-
-                <div class="dx-tree__group">鑑別</div>
-                <a class="dx-node" href="疾患詳細/大腿骨近位部骨折.html">
-                  <div class="dx-node__title">大腿骨近位部骨折</div>
-                  <div class="dx-node__sub">鼠径部痛＋外旋短縮位で疑う</div>
-                </a>
-                <div class="dx-note">高齢者の鼠径部痛は<strong>仙骨不全骨折</strong>と<strong>大腿骨頸部骨折</strong>を必ずペアで考える</div>
+                <div class="dx-note">高齢者の鼠径部痛は<strong>脆弱性骨盤骨折</strong>と<strong>大腿骨頸部骨折</strong>を必ずペアで考える。</div>
               </div>
 
-              <!-- 4) 下肢神経症状 -->
-              <div class="dx-tree">
-                <div class="dx-tree__group">緊急対応</div>
-                <a class="dx-node dx-node--danger" href="#redflags">
-                  <div class="dx-node__title">馬尾症候群</div>
-                  <div class="dx-node__sub">鞍状感覚低下／尿閉／両下肢麻痺</div>
-                </a>
+            </div>
+            <div class="dx-arrow"></div>
 
-                <div class="dx-tree__group">頸部過伸展機転</div>
-                <a class="dx-node dx-node--danger" href="疾患詳細/頸椎損傷.html">
-                  <div class="dx-node__title">中心性脊髄損傷</div>
-                  <div class="dx-node__sub">高齢者の軽微外傷でも発症</div>
-                </a>
-                <div class="dx-note">上肢優位の麻痺・しびれ。<strong>頸髄症の既往</strong>に転倒で発症が典型</div>
-              </div>
+            <!-- 治療リファレンス -->
+            <div class="dx-layer dx-layer--root">
+              <a class="dx-node dx-node--judge" href="#rxPanel">
+                <div class="dx-node__title">治療リファレンス</div>
+                <div class="dx-node__sub">ATLS／胸腔ドレナージ／骨盤バンド／TAE／コンサル文</div>
+              </a>
+            </div>
+            <div class="dx-arrow"></div>
 
+            <!-- ルール（赤い注意） -->
+            <div class="dx-layer dx-layer--root">
+              <a class="dx-node dx-node--danger" href="#rulesL2Panel">
+                <div class="dx-node__title">画像確定後の注意・見逃し回避・ピットフォール</div>
+                <div class="dx-node__sub">トリガー連動の注意点</div>
+              </a>
+            </div>
+            <div class="dx-arrow"></div>
+
+            <!-- disposition -->
+            <div class="dx-layer dx-layer--root">
+              <a class="dx-node dx-node--decision" href="#dispoPanel">
+                <div class="dx-node__title">disposition</div>
+                <div class="dx-node__sub">即時手術／ICU／整形入院／帰宅保存</div>
+              </a>
             </div>
 
           </div>
 
-          <!-- 来院後チェック -->
-          <div class="dx-arrival-divider"><span>来院後のチェック</span></div>
-
+          <!-- ===== 問診パネル ===== -->
           <details class="dx-checklist" id="historyPanel">
-            <summary>
-              <span class="dx-checklist__head" style="flex:1;">
-                <span>🗣 問診（来院後に実施）</span>
-                <button type="button" class="dx-checklist__reset" aria-label="問診チェックをすべて外す">リセット</button>
-              </span>
-            </summary>
+            <summary>問診</summary>
             <ul class="dx-checklist__list">
-              <li><label><input type="checkbox" data-key="h-energy"> <span><strong>受傷エネルギー</strong> <span class="dx-checklist__sub">転落の高さ／速度／直接打撲か</span></span></label></li>
-              <li><label><input type="checkbox" data-key="h-mech"> <span><strong>受傷機転の方向</strong> <span class="dx-checklist__sub">軸圧／屈曲／回旋／側胸部直撃</span></span></label></li>
-              <li><label><input type="checkbox" data-key="h-osteo"> <span><strong>骨粗鬆症・ステロイド使用歴</strong> <span class="dx-checklist__sub">脊椎圧迫骨折・脆弱性骨盤骨折の検査前確率を上げる</span></span></label></li>
-              <li><label><input type="checkbox" data-key="h-anticoag"> <span><strong>抗凝固薬・抗血小板薬</strong> <span class="dx-checklist__sub">後腹膜・胸腔内出血の遷延進行に直結</span></span></label></li>
-              <li><label><input type="checkbox" data-key="h-bowel"> <span><strong>排尿・排便障害／鞍状感覚</strong> <span class="dx-checklist__sub">馬尾症候群を疑う</span></span></label></li>
-              <li><label><input type="checkbox" data-key="h-breath"> <span><strong>呼吸困難・咳嗽時の痛み</strong> <span class="dx-checklist__sub">気胸・フレイルチェスト・無気肺</span></span></label></li>
-              <li><label><input type="checkbox" data-key="h-walk"> <span><strong>受傷前 ADL／受傷後の歩行可否</strong> <span class="dx-checklist__sub">入院適応の決定因子</span></span></label></li>
-              <li><label><input type="checkbox" data-key="h-hema"> <span><strong>血尿・腹部膨満</strong> <span class="dx-checklist__sub">腎損傷／後腹膜出血を疑う</span></span></label></li>
+              <li><label><input type="checkbox" data-key="h-energy"> <span><strong>受傷エネルギー（高所転落・速度・直接打撲）</strong> <span class="dx-checklist__sub">6 m 以上の転落／時速 60 km 以上／車外放出は高エネ。多発外傷を意識</span></span></label></li>
+              <li><label><input type="checkbox" data-key="h-mech"> <span><strong>受傷機転の方向</strong> <span class="dx-checklist__sub">軸圧→脊椎圧迫／屈曲–伸延→Chance／側方→骨盤 LC／前後→APC／回旋→VS</span></span></label></li>
+              <li><label><input type="checkbox" data-key="h-seatbelt"> <span><strong>シートベルト着用・受傷状況</strong> <span class="dx-checklist__sub">シートベルトサイン→<strong>Chance 骨折＋腸間膜・小腸損傷</strong>（合併 50%）<span class="dx-checklist__action"><strong>該当あれば</strong>：腹部触診・腹膜炎所見・腰椎 CT・腹部造影 CT を追加。遅発性に注意</span></span></span></label></li>
+              <li><label><input type="checkbox" data-key="h-osteo"> <span><strong>骨粗鬆症・ステロイド使用歴・既往骨折</strong> <span class="dx-checklist__sub">脊椎圧迫骨折・脆弱性骨盤骨折の検査前確率を上げる。70 代 30%／80 代 44%</span></span></label></li>
+              <li><label><input type="checkbox" data-key="h-anticoag"> <span><strong>抗凝固薬・抗血小板薬・DOAC</strong> <span class="dx-checklist__sub">後腹膜・腹腔・胸腔内出血の遷延進行に直結<span class="dx-checklist__action"><strong>該当あれば</strong>：初期 CT 陰性でも<strong>経過観察入院</strong>を考慮。逆転製剤の準備</span></span></span></label></li>
+              <li><label><input type="checkbox" data-key="h-bowel"> <span><strong>排尿・排便障害／鞍状感覚／血尿</strong> <span class="dx-checklist__sub">馬尾／脊髄損傷／尿道・膀胱・腎損傷を疑う<span class="dx-checklist__action"><strong>鞍状感覚低下・尿閉あれば</strong>：<strong>緊急 MRI＋整形・脳外コール</strong>。血尿あれば腎・尿道造影 CT</span></span></span></label></li>
+              <li><label><input type="checkbox" data-key="h-breath"> <span><strong>呼吸困難・咳嗽時の痛み・血痰</strong> <span class="dx-checklist__sub">気胸・血気胸・フレイルチェスト・肺挫傷・気管支損傷</span></span></label></li>
+              <li><label><input type="checkbox" data-key="h-chestpain"> <span><strong>胸背部痛（裂くような）／意識消失歴</strong> <span class="dx-checklist__sub">外傷性大動脈損傷／心臓打撲</span></span></label></li>
+              <li><label><input type="checkbox" data-key="h-flank"> <span><strong>側腹部痛・腹部膨満</strong> <span class="dx-checklist__sub">肝/脾/腎損傷・後腹膜出血を疑う</span></span></label></li>
+              <li><label><input type="checkbox" data-key="h-walk"> <span><strong>受傷前 ADL／受傷後の歩行可否</strong> <span class="dx-checklist__sub">入院適応の決定因子（特に脆弱性骨盤骨折・圧迫骨折）</span></span></label></li>
+              <li><label><input type="checkbox" data-key="h-history"> <span><strong>過去の同様エピソード（脊椎・骨盤）</strong> <span class="dx-checklist__sub">既存骨折があれば新規骨折の判定が難しい→MRI で新鮮判定</span></span></label></li>
+              <li><label><input type="checkbox" data-key="h-adl"> <span><strong>住居・独居・介護状況</strong> <span class="dx-checklist__sub">退院後の社会調整。圧迫骨折・脆弱性骨盤骨折は ADL ベースで入院判断</span></span></label></li>
             </ul>
           </details>
 
+          <!-- ===== 身体診察パネル ===== -->
           <details class="dx-checklist" id="examPanel">
-            <summary>
-              <span class="dx-checklist__head" style="flex:1;">
-                <span>🔍 身体診察（来院後に実施）</span>
-                <button type="button" class="dx-checklist__reset" aria-label="身体診察チェックをすべて外す">リセット</button>
-              </span>
-            </summary>
+            <summary>身体診察</summary>
             <ul class="dx-checklist__list">
-              <li><label><input type="checkbox" data-key="e-vital"> <span><strong>バイタル・呼吸数・SpO2</strong> <span class="dx-checklist__sub">高エネ外傷では多発外傷を意識</span></span></label></li>
-              <li><label><input type="checkbox" data-key="e-cfps"> <span><strong>叩打痛（CFPS）</strong> <span class="dx-checklist__sub">脊椎圧迫骨折の感度 87%／特異度 90%</span></span></label></li>
-              <li><label><input type="checkbox" data-key="e-paraspinal"> <span><strong>傍脊柱筋（椎体から 1-2 cm 外側）の圧痛</strong> <span class="dx-checklist__sub">腰椎横突起骨折を示唆</span></span></label></li>
-              <li><label><input type="checkbox" data-key="e-rib"> <span><strong>肋骨各レベルの圧痛・叩打痛</strong> <span class="dx-checklist__sub">深呼吸・咳嗽で増悪。骨片可動性</span></span></label></li>
-              <li><label><input type="checkbox" data-key="e-paradox"> <span><strong>奇異呼吸の有無</strong> <span class="dx-checklist__sub">フレイルチェストの除外</span></span></label></li>
-              <li><label><input type="checkbox" data-key="e-sternum"> <span><strong>胸骨正中の圧痛・段差</strong> <span class="dx-checklist__sub">胸骨骨折＋心臓打撲を意識</span></span></label></li>
-              <li><label><input type="checkbox" data-key="e-pelvis"> <span><strong>骨盤コンプレッション</strong> <span class="dx-checklist__sub">恥骨・坐骨の圧痛</span></span></label></li>
-              <li><label><input type="checkbox" data-key="e-flank"> <span><strong>側腹部・腎部の打診痛</strong> <span class="dx-checklist__sub">第10-12 肋骨骨折＋腎損傷</span></span></label></li>
-              <li><label><input type="checkbox" data-key="e-saddle"> <span><strong>鞍状感覚・肛門括約筋トーヌス</strong> <span class="dx-checklist__sub">馬尾症候群</span></span></label></li>
-              <li><label><input type="checkbox" data-key="e-neuro"> <span><strong>四肢の MMT・感覚・反射</strong> <span class="dx-checklist__sub">脊髄圧迫・中心性脊髄損傷</span></span></label></li>
-              <li><label><input type="checkbox" data-key="e-skin"> <span><strong>皮下血腫・タイヤ痕・シートベルトサイン</strong> <span class="dx-checklist__sub">深部臓器損傷を示唆</span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-vital"> <span><strong>バイタル・呼吸数・SpO2・意識</strong> <span class="dx-checklist__sub">SBP &lt; 90／HR &gt; 120／RR &gt; 24 でショック。多発外傷を意識</span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-airway"> <span><strong>気道・呼吸（左右差・呼吸音・気管偏位）</strong> <span class="dx-checklist__sub">気管偏位＋頸静脈怒張＋呼吸音消失＝<strong>緊張性気胸</strong><span class="dx-checklist__action"><strong>該当あれば</strong>：<strong>胸腔穿刺（針減圧）→ 胸腔ドレナージ</strong>。X 線を待たない</span></span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-paradox"> <span><strong>奇異呼吸／胸壁の浮動</strong> <span class="dx-checklist__sub">3 本以上 × 2 か所＝フレイルチェスト<span class="dx-checklist__action"><strong>該当あれば</strong>：<strong>酸素・鎮痛・必要に応じ陽圧換気</strong>。整形・呼吸器外科併診</span></span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-rib"> <span><strong>肋骨各レベルの圧痛・叩打痛・骨片可動性</strong> <span class="dx-checklist__sub">深呼吸・咳嗽で増悪。第1-3＝高エネ／第10-12＝肝脾腎</span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-sternum"> <span><strong>胸骨正中の圧痛・段差</strong> <span class="dx-checklist__sub">胸骨骨折→心臓打撲・大動脈損傷<span class="dx-checklist__action"><strong>該当あれば</strong>：<strong>12 誘導 ECG＋トロポニン＋心エコー</strong>。モニター入院・循環器コンサル</span></span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-fast"> <span><strong>eFAST（腹腔・心嚢・胸腔）</strong> <span class="dx-checklist__sub">血行動態不安定＋FAST 陽性＝即手術判断<span class="dx-checklist__action"><strong>FAST 陽性＋ショックあれば</strong>：<strong>緊急開腹／IVR-TAE</strong>を即決。CT を待たない</span></span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-abdomen"> <span><strong>腹部触診（圧痛・反跳痛・筋性防御・腹膜炎）</strong> <span class="dx-checklist__sub">シートベルトサイン皮下出血／時間で増悪→腸管・腸間膜損傷</span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-flank"> <span><strong>側腹部・腎部の打診痛・血腫（Grey-Turner）</strong> <span class="dx-checklist__sub">第10-12 肋骨骨折＋腎損傷・後腹膜出血</span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-cfps"> <span><strong>脊椎叩打痛（CFPS：Closed Fist Percussion Sign）</strong> <span class="dx-checklist__sub">脊椎圧迫骨折で<strong>感度 87%／特異度 90%</strong>。閉じた拳で叩く</span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-paraspinal"> <span><strong>傍脊柱筋（椎体から 1-2 cm 外側）の圧痛</strong> <span class="dx-checklist__sub">腰椎横突起骨折を強く示唆（CT 適応）</span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-spinous"> <span><strong>棘突起の段差・ギャップ・腫脹</strong> <span class="dx-checklist__sub">破裂骨折・脱臼骨折・後方成分破綻のサイン</span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-pelvis"> <span><strong>骨盤コンプレッション（恥骨結合・腸骨稜・大転子）</strong> <span class="dx-checklist__sub">1 回のみ。陽性なら<strong>反復禁止</strong>（クロットを壊す）</span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-urethra"> <span><strong>会陰・尿道口出血・前立腺位置・直腸診</strong> <span class="dx-checklist__sub">尿道損傷・直腸損傷・脊髄損傷時の括約筋トーヌス<span class="dx-checklist__action"><strong>尿道口出血あれば</strong>：<strong>カテーテル挿入禁止→泌尿器コール／逆行性尿道造影</strong></span></span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-saddle"> <span><strong>鞍状感覚・肛門括約筋トーヌス</strong> <span class="dx-checklist__sub">馬尾症候群／脊髄損傷の必須評価<span class="dx-checklist__action"><strong>低下／消失あれば</strong>：<strong>緊急 MRI＋整形・脳外コール</strong></span></span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-neuro"> <span><strong>四肢の MMT・感覚・反射（ASIA で）</strong> <span class="dx-checklist__sub">高齢者軽微外傷＋上肢優位の麻痺＝中心性頸髄損傷<span class="dx-checklist__action"><strong>上肢優位の麻痺あれば</strong>：<strong>頸椎 MRI</strong>を検討　<a href="疾患詳細/中心性頸髄損傷.html">→ 中心性頸髄損傷 詳細</a></span></span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-skin"> <span><strong>皮下血腫・タイヤ痕・シートベルトサイン・開放創</strong> <span class="dx-checklist__sub">深部臓器損傷を示唆／開放骨盤骨折は即手術<span class="dx-checklist__action"><strong>開放骨盤あれば</strong>：<strong>セファゾリン 2 g IV・破傷風・整形即コンサルト</strong>　<a href="疾患詳細/開放骨折.html">→ 開放骨折 詳細</a></span></span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-cspine"> <span><strong>頸椎の評価（NEXUS／CCR の適応判定）</strong> <span class="dx-checklist__sub">体幹外傷でも頸椎固定継続。NEXUS 全クリアまでカラー解除しない</span></span></label></li>
             </ul>
           </details>
 
-          <!-- トリガー連動の注意 -->
+          <!-- ===== 画像確定後の注意・見逃し回避・ピットフォール ===== -->
           <details class="dx-rules-l2" id="rulesL2Panel">
-            <summary>⚠️ トリガー連動の注意（条件で意識）</summary>
-            <p class="dx-rules-l2__intro">特定の状況に出会ったら必ず思い出すべき注意点。フローの判断と並行して意識する。</p>
+            <summary>画像確定後の注意・見逃し回避・ピットフォール</summary>
+            <p class="dx-rules-l2__intro"><strong>診察段階の Red flag は身体診察パネルに統合済み</strong>（⚠ アクション）。ここでは<strong>画像で診断が確定してから</strong>意識すべき疾患固有の注意・鑑別の入口・ありがちな誤りをまとめる。</p>
 
-            <h4 class="dx-rules-l2__group">緊急トリガー</h4>
+            <h4 class="dx-rules-l2__group">① 即時対応・緊急トリガー</h4>
             <ul class="dx-rules-l2__list">
-              <li class="dx-rule is-critical" id="redflags">
-                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>鞍状感覚低下／尿閉／両下肢麻痺</span></div>
-                <div class="dx-rule__then"><strong>馬尾症候群</strong>を疑う。緊急 MRI と整形・脳外コンサル</div>
+              <li class="dx-rule is-critical" id="rule-tension-pneumo">
+                <div class="dx-rule__if"><span class="dx-rule__tag">緊急</span><span>呼吸不全＋頸静脈怒張＋気管偏位＋呼吸音消失</span></div>
+                <div class="dx-rule__then"><strong>緊張性気胸</strong>。X 線を待たず<strong>第 2 肋間鎖骨中線で針減圧</strong>→ 胸腔ドレナージ（第 4-5 肋間中腋窩線）　<a href="疾患詳細/気胸.html" style="font-size:11px;">→ 気胸 詳細</a></div>
+              </li>
+              <li class="dx-rule is-critical" id="rule-flail">
+                <div class="dx-rule__if"><span class="dx-rule__tag">緊急</span><span>連続 3 本以上の肋骨が 2 か所で骨折＋奇異呼吸</span></div>
+                <div class="dx-rule__then"><strong>フレイルチェスト</strong>。気道・呼吸管理（酸素／鎮痛／PEEP）、整形・呼吸器外科コンサル　<a href="疾患詳細/肋骨骨折.html" style="font-size:11px;">→ 肋骨骨折 詳細</a></div>
+              </li>
+              <li class="dx-rule is-critical" id="rule-aorta">
+                <div class="dx-rule__if"><span class="dx-rule__tag">緊急</span><span>高エネ＋胸背部痛＋胸部 X 線で縦隔拡大／第1-3 肋骨／胸骨骨折</span></div>
+                <div class="dx-rule__then"><strong>外傷性大動脈損傷（峡部が好発）</strong>。造影 CT→ 心血管外科。<strong>SBP 100-120 にコントロール</strong>（過剰昇圧禁止）</div>
+              </li>
+              <li class="dx-rule is-critical" id="rule-cardiac">
+                <div class="dx-rule__if"><span class="dx-rule__tag">緊急</span><span>胸骨骨折＋ECG 異常／トロポニン陽性</span></div>
+                <div class="dx-rule__then"><strong>心臓打撲（blunt cardiac injury）</strong>。心電図モニター入院、心エコー、循環器コンサル。VF・心タンポナーデに注意　<a href="疾患詳細/胸骨骨折.html" style="font-size:11px;">→ 胸骨骨折 詳細</a></div>
+              </li>
+              <li class="dx-rule is-critical" id="rule-cauda">
+                <div class="dx-rule__if"><span class="dx-rule__tag">緊急</span><span>鞍状感覚低下／尿閉／両下肢麻痺</span></div>
+                <div class="dx-rule__then"><strong>馬尾症候群</strong>。緊急 MRI＋整形・脳外コール。<strong>48 h 以内の除圧</strong>が機能予後の鍵</div>
+              </li>
+              <li class="dx-rule is-critical" id="rule-fast-pos">
+                <div class="dx-rule__if"><span class="dx-rule__tag">緊急</span><span>FAST 陽性＋血行動態不安定（SBP &lt; 90／反応性低い）</span></div>
+                <div class="dx-rule__then"><strong>緊急開腹（damage control）または IVR-TAE</strong>。CT を待たない。<strong>大量輸血プロトコル発動</strong>（FFP:PC:RBC = 1:1:1）</div>
+              </li>
+              <li class="dx-rule is-critical" id="rule-pmc">
+                <div class="dx-rule__if"><span class="dx-rule__tag">緊急</span><span>不安定型骨盤骨折＋ショック</span></div>
+                <div class="dx-rule__then">即<strong>骨盤バンド（大転子レベル）</strong>→ 不応なら<strong>preperitoneal pelvic packing（PMC）→ TAE／REBOA</strong>。整形・外科・IVR 同時コール</div>
               </li>
               <li class="dx-rule is-critical">
-                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>連続 3 本以上の肋骨が 2 か所で骨折＋奇異呼吸</span></div>
-                <div class="dx-rule__then"><strong>フレイルチェスト</strong>。気道・呼吸管理、整形・呼吸器外科</div>
+                <div class="dx-rule__if"><span class="dx-rule__tag">緊急</span><span>開放性骨盤骨折</span></div>
+                <div class="dx-rule__then">即時手術。創処置・<strong>セファゾリン 2 g IV＋破傷風</strong>・直腸／膣損傷確認、整形・外科同時コール</div>
               </li>
               <li class="dx-rule is-critical">
-                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>呼吸不全＋頸静脈怒張＋気管偏位</span></div>
-                <div class="dx-rule__then"><strong>緊張性気胸</strong>。即座に胸腔穿刺（針減圧）→ ドレナージ</div>
-              </li>
-              <li class="dx-rule is-critical">
-                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>胸骨骨折＋ECG 異常／トロポニン陽性</span></div>
-                <div class="dx-rule__then"><strong>心臓打撲</strong>。心電図モニター入院、循環器コンサル</div>
-              </li>
-              <li class="dx-rule is-critical">
-                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>高エネ＋胸部痛＋縦隔拡大</span></div>
-                <div class="dx-rule__then"><strong>大動脈損傷</strong>を疑う。造影 CT・心臓血管外科コンサル</div>
-              </li>
-              <li class="dx-rule is-critical">
-                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>腰椎横突起骨折＋ショック</span></div>
-                <div class="dx-rule__then"><strong>後腹膜出血・腎損傷</strong>。緊急造影 CT、IVR 待機</div>
-              </li>
-              <li class="dx-rule is-critical">
-                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>開放性骨盤骨折</span></div>
-                <div class="dx-rule__then">即時手術。創処置・抗菌薬・破傷風予防、整形・外科同時コール</div>
+                <div class="dx-rule__if"><span class="dx-rule__tag">緊急</span><span>大量血胸（初回ドレナージで &gt; 1.5 L または &gt; 200 mL/h × 4 h）</span></div>
+                <div class="dx-rule__then"><strong>開胸適応</strong>。呼吸器外科即コール。大量輸血プロトコル準備</div>
               </li>
             </ul>
 
-            <h4 class="dx-rules-l2__group">画像の閾値を下げる</h4>
+            <h4 class="dx-rules-l2__group">② 画像確定後の注意（疾患固有）</h4>
             <ul class="dx-rules-l2__list">
-              <li class="dx-rule">
-                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>高齢者の腰背部痛＋骨粗鬆症</span></div>
-                <div class="dx-rule__then">レントゲン陰性でも<strong>脊椎圧迫骨折疑い</strong>。MRI で新鮮判定（STIR 高信号／T1 低信号）</div>
+              <li class="dx-rule is-critical">
+                <div class="dx-rule__if"><span class="dx-rule__tag">画像</span><span>脊椎破裂骨折（後方成分破綻／椎体後壁ライン乱れ）</span></div>
+                <div class="dx-rule__then"><strong>即時整形コンサルト</strong>。神経症状の有無に関わらず手術検討。圧迫骨折との違いを必ず明示　<a href="疾患詳細/脊椎破裂骨折.html" style="font-size:11px;">→ 脊椎破裂骨折 詳細</a></div>
               </li>
-              <li class="dx-rule">
-                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>高エネ受傷機転＋傍脊柱筋圧痛</span></div>
-                <div class="dx-rule__then">レントゲンでは見えない。<strong>CT を実施</strong>して横突起骨折・破裂骨折を評価</div>
+              <li class="dx-rule is-critical">
+                <div class="dx-rule__if"><span class="dx-rule__tag">画像</span><span>L 横突起骨折＋ショック／血尿</span></div>
+                <div class="dx-rule__then"><strong>後腹膜出血・腎損傷</strong>。緊急造影 CT、IVR 待機。横突起骨折は腎損傷併発を必ず鑑別　<a href="疾患詳細/腰椎横突起骨折.html" style="font-size:11px;">→ 腰椎横突起骨折 詳細</a></div>
               </li>
-              <li class="dx-rule">
-                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>第1-3 肋骨骨折／胸骨骨折</span></div>
-                <div class="dx-rule__then">高エネ示唆。<strong>造影 CT</strong>で大動脈・縦隔・心臓を評価</div>
+              <li class="dx-rule is-critical">
+                <div class="dx-rule__if"><span class="dx-rule__tag">画像</span><span>Chance 骨折（屈曲–伸延損傷）</span></div>
+                <div class="dx-rule__then"><strong>50% に腹腔内臓器損傷（小腸・腸間膜・膵）</strong>を合併。腹部造影 CT を必ず追加。シートベルトサイン皮下出血を再確認</div>
               </li>
-              <li class="dx-rule">
-                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>第10-12 肋骨骨折</span></div>
-                <div class="dx-rule__then"><strong>肝（右）／脾（左）／腎</strong>損傷を必ず造影 CT で確認</div>
+              <li class="dx-rule is-critical">
+                <div class="dx-rule__if"><span class="dx-rule__tag">画像</span><span>脊椎圧迫骨折（X 線で楔形）＋外傷歴あり</span></div>
+                <div class="dx-rule__then"><strong>楔形は陳旧性が多い（半年で 60%）</strong>。新鮮判定には<strong>MRI（STIR 高信号／T1 低信号）</strong>。「楔形＝新鮮」は誤り　<a href="疾患詳細/脊椎圧迫骨折.html" style="font-size:11px;">→ 脊椎圧迫骨折 詳細</a></div>
               </li>
-              <li class="dx-rule">
-                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>高齢者の鼠径部痛＋歩行困難</span></div>
-                <div class="dx-rule__then">レントゲン正常でも<strong>仙骨不全骨折／大腿骨頸部潜在骨折</strong>を疑い、CT・MRI 検討</div>
+              <li class="dx-rule is-critical">
+                <div class="dx-rule__if"><span class="dx-rule__tag">画像</span><span>第1-3 肋骨／胸骨骨折</span></div>
+                <div class="dx-rule__then">高エネ示唆。<strong>造影 CT で大動脈・縦隔・心臓・気管支</strong>を評価。胸骨は ECG・トロポニン・心エコーをセット　<a href="疾患詳細/胸骨骨折.html" style="font-size:11px;">→ 胸骨骨折 詳細</a></div>
+              </li>
+              <li class="dx-rule is-critical">
+                <div class="dx-rule__if"><span class="dx-rule__tag">画像</span><span>第10-12 肋骨骨折</span></div>
+                <div class="dx-rule__then"><strong>肝（右）／脾（左）／腎</strong>損傷を必ず造影 CT で確認。右下＝肝、左下＝脾、後方＝腎</div>
+              </li>
+              <li class="dx-rule is-critical">
+                <div class="dx-rule__if"><span class="dx-rule__tag">画像</span><span>骨盤輪損傷（Young-Burgess APC II/III、LC II/III、VS）</span></div>
+                <div class="dx-rule__then"><strong>不安定型として扱う</strong>。骨盤バンド継続、輸血準備、整形・IVR コール。尿道・膀胱・直腸損傷を必ず除外</div>
               </li>
             </ul>
 
-            <h4 class="dx-rules-l2__group">入院・帰宅判断</h4>
+            <h4 class="dx-rules-l2__group">③ 見逃し回避トリガー</h4>
             <ul class="dx-rules-l2__list">
               <li class="dx-rule">
-                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>肋骨骨折 4 本以上／高齢者／呼吸合併症</span></div>
-                <div class="dx-rule__then"><strong>入院</strong>（鎮痛・呼吸理学療法・酸素管理）</div>
+                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>高齢者の腰背部痛＋骨粗鬆症＋外傷歴（しりもち含む）</span></div>
+                <div class="dx-rule__then">レントゲン陰性でも<strong>脊椎圧迫骨折疑い</strong>。<strong>2/3 は無症候性、90% が見逃される</strong>。MRI で新鮮判定が標準</div>
               </li>
               <li class="dx-rule">
-                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>脊椎圧迫骨折で日常生活困難</span></div>
-                <div class="dx-rule__then">疾患の確定診断より<strong>ADL を基準に入院判断</strong>。整形・PVP も選択肢</div>
+                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>高エネ受傷機転＋傍脊柱筋圧痛（椎体外側 1-2 cm）</span></div>
+                <div class="dx-rule__then">レントゲンでは腸管に重なり見えない。<strong>CT を実施</strong>して横突起骨折・破裂骨折を評価</div>
               </li>
               <li class="dx-rule">
-                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>抗凝固／抗血小板薬内服中の体幹外傷</span></div>
-                <div class="dx-rule__then">遷延性出血のリスク高。<strong>初期 CT 陰性でも経過観察入院</strong>を考慮</div>
+                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>高齢者の鼠径部痛＋歩行困難（X 線正常）</span></div>
+                <div class="dx-rule__then">レントゲン正常でも<strong>脆弱性骨盤骨折（ER の X 線で 46-50% しか検出されない）／大腿骨頸部潜在骨折</strong>を疑い、CT・MRI 検討　<a href="疾患詳細/脆弱性骨盤骨折.html" style="font-size:11px;">→ 脆弱性骨盤骨折 詳細</a></div>
               </li>
               <li class="dx-rule">
-                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>腰椎横突起骨折で疼痛強度高</span></div>
-                <div class="dx-rule__then">原則保存だが<strong>入院整形か帰宅か患者と相談</strong>。治療効果は同等</div>
+                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>高齢者の頸部痛＋上肢優位のしびれ・脱力（軽微外傷）</span></div>
+                <div class="dx-rule__then"><strong>中心性頸髄損傷</strong>を疑う。頸髄症の急性増悪も含め頸椎 MRI を検討　<a href="疾患詳細/中心性頸髄損傷.html" style="font-size:11px;">→ 中心性頸髄損傷 詳細</a></div>
+              </li>
+              <li class="dx-rule">
+                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>シートベルトサイン皮下出血</span></div>
+                <div class="dx-rule__then"><strong>Chance 骨折＋小腸・腸間膜損傷</strong>を併発し得る。腰椎 CT＋腹部造影 CT、腹膜炎所見の遅発化に注意（数時間後）</div>
+              </li>
+              <li class="dx-rule">
+                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>抗凝固薬／抗血小板薬内服中の体幹外傷</span></div>
+                <div class="dx-rule__then">遷延性出血のリスク高。<strong>初期 CT 陰性でも経過観察入院</strong>を考慮、逆転製剤の準備</div>
               </li>
             </ul>
 
-            <h4 class="dx-rules-l2__group">ピットフォール</h4>
+            <h4 class="dx-rules-l2__group">④ ピットフォール</h4>
             <ul class="dx-rules-l2__list">
               <li class="dx-rule is-pitfall">
-                <div class="dx-rule__if"><span class="dx-rule__tag">⚠</span><span>胸部 X 線で「肋骨骨折なし」</span></div>
-                <div class="dx-rule__then">X 線では<strong>肋骨骨折は写りにくい</strong>。臨床所見があれば臨床診断で先に進める</div>
+                <div class="dx-rule__if"><span class="dx-rule__tag">注意</span><span>胸部 X 線で「肋骨骨折なし」と判断</span></div>
+                <div class="dx-rule__then">X 線では<strong>肋骨骨折は写りにくい</strong>。臨床所見（圧痛＋深呼吸痛）があれば臨床診断で先に進める</div>
               </li>
               <li class="dx-rule is-pitfall">
-                <div class="dx-rule__if"><span class="dx-rule__tag">⚠</span><span>レントゲンで楔形＝新鮮骨折と即決</span></div>
-                <div class="dx-rule__then">脊椎圧迫骨折の楔形は<strong>陳旧性が多い</strong>。MRI が新鮮判定のゴールド</div>
+                <div class="dx-rule__if"><span class="dx-rule__tag">注意</span><span>レントゲンで楔形＝新鮮骨折と即決</span></div>
+                <div class="dx-rule__then">脊椎圧迫骨折の楔形は<strong>陳旧性が多い（半年で 60%）</strong>。MRI（STIR 高信号／T1 低信号）が新鮮判定のゴールド</div>
               </li>
               <li class="dx-rule is-pitfall">
-                <div class="dx-rule__if"><span class="dx-rule__tag">⚠</span><span>全身 CT で他部位の重篤損傷あり</span></div>
-                <div class="dx-rule__then"><strong>横突起骨折・小肋骨骨折</strong>は隠れて見逃されがち。後で読み返す</div>
+                <div class="dx-rule__if"><span class="dx-rule__tag">注意</span><span>全身 CT で他部位の重篤損傷あり</span></div>
+                <div class="dx-rule__then"><strong>横突起骨折・小肋骨骨折・棘突起骨折</strong>は隠れて見逃されがち。後で読み返す癖をつける</div>
               </li>
               <li class="dx-rule is-pitfall">
-                <div class="dx-rule__if"><span class="dx-rule__tag">⚠</span><span>胸骨骨折を「単独」と確定</span></div>
-                <div class="dx-rule__then">高エネ示唆。<strong>心電図・トロポニン・心エコー</strong>を必ず追加</div>
+                <div class="dx-rule__if"><span class="dx-rule__tag">注意</span><span>胸骨骨折を「単独」と確定</span></div>
+                <div class="dx-rule__then">高エネ示唆。<strong>心電図・トロポニン・心エコー</strong>を必ず追加。大動脈損傷も必ず除外</div>
               </li>
               <li class="dx-rule is-pitfall">
-                <div class="dx-rule__if"><span class="dx-rule__tag">⚠</span><span>高齢者の軽微外傷後の頸部痛</span></div>
-                <div class="dx-rule__then">中心性脊髄損傷／頸髄症の急性増悪を見逃さない。<strong>頸椎 MRI</strong>を検討</div>
+                <div class="dx-rule__if"><span class="dx-rule__tag">注意</span><span>「肋骨バンド」をルーチン処方</span></div>
+                <div class="dx-rule__then">無気肺・肺炎を誘発。<strong>鎮痛＋深呼吸促し・呼吸理学療法</strong>を優先（多くのガイドラインでバンド非推奨）</div>
               </li>
               <li class="dx-rule is-pitfall">
-                <div class="dx-rule__if"><span class="dx-rule__tag">⚠</span><span>「肋骨バンド」をルーチン処方</span></div>
-                <div class="dx-rule__then">無気肺・肺炎を誘発。<strong>鎮痛＋深呼吸促し</strong>を優先</div>
+                <div class="dx-rule__if"><span class="dx-rule__tag">注意</span><span>骨盤コンプレッションを何度も繰り返す</span></div>
+                <div class="dx-rule__then">クロットを壊して<strong>再出血</strong>を誘発。<strong>1 回のみ</strong>で評価し、陽性なら反復しない</div>
+              </li>
+              <li class="dx-rule is-pitfall">
+                <div class="dx-rule__if"><span class="dx-rule__tag">注意</span><span>骨盤骨折で尿道口出血なくカテーテル挿入</span></div>
+                <div class="dx-rule__then">尿道損傷を悪化させる。<strong>会陰・前立腺高位・直腸診で尿道損傷を必ず評価</strong>。疑えば逆行性尿道造影／泌尿器コール</div>
+              </li>
+              <li class="dx-rule is-pitfall">
+                <div class="dx-rule__if"><span class="dx-rule__tag">注意</span><span>圧迫骨折を「保存」で帰宅、ADL 評価を省略</span></div>
+                <div class="dx-rule__then">疾患の確定診断より<strong>ADL を基準に入院判断</strong>。整形入院・PVP（経皮的椎体形成術）も選択肢として相談</div>
               </li>
             </ul>
           </details>
 
-          <!-- 撮影方向の備忘 -->
+          <!-- ===== 画像適応＋撮影方向 ===== -->
           <details class="dx-imaging" id="imagingPanel">
-            <summary>📷 撮影方向の備忘</summary>
+            <summary>画像適応＋撮影方向</summary>
+
+            <h4 class="dx-rules-l2__group">適応の考え方</h4>
             <ul class="dx-imaging__list">
-              <li><strong>胸部 X 線</strong>：PA + 側面（肋骨骨折／気胸／血胸／縦隔拡大）</li>
-              <li><strong>胸椎・腰椎</strong>：正面＋側面 2 方向（圧迫・破裂で椎体高 / 後壁ライン）</li>
-              <li><strong>骨盤</strong>：AP（恥坐骨）＋必要に応じて inlet / outlet 像</li>
-              <li><strong>胸骨</strong>：胸骨側面像＋胸部側面 X 線</li>
-              <li><strong>CT 推奨閾値</strong>：高エネ受傷／神経症状あり／高齢者で痛み遷延／第1-3 肋骨骨折／胸骨骨折／側腹部痛＋血尿</li>
-              <li><strong>MRI</strong>：脊椎圧迫骨折の新鮮判定（STIR・T1）／馬尾症候群／脊髄圧迫</li>
-              <li><strong>FAST／eFAST</strong>：体幹高エネ外傷の初期スクリーニング（腹腔内出血・気胸）</li>
+              <li><strong>高エネ外傷の初期評価</strong>：ATLS の primary survey と並行して<strong>eFAST＋胸部・骨盤 X 線</strong>をベッドサイドで実施（trauma series）</li>
+              <li><strong>FAST 陽性＋血行動態不安定</strong>：CT 室に行かず<strong>緊急開腹／IVR-TAE</strong>を即決断</li>
+              <li><strong>血行動態安定＋高エネ</strong>：<strong>全身造影 CT（pan-scan）</strong>。頭・頸椎・胸・腹・骨盤を一度に評価</li>
+              <li><strong>低エネ・高齢者の腰背部痛</strong>：X 線陰性でも<strong>脊椎圧迫骨折／脆弱性骨盤骨折を疑えば MRI／CT を追加</strong>（X 線の検出率は 46-50%）</li>
+              <li><strong>抗凝固薬内服中</strong>：閾値を下げて CT。初期陰性でも経過観察入院を考慮</li>
             </ul>
+
+            <h4 class="dx-rules-l2__group">撮影方向（部位別）</h4>
+            <ul class="dx-imaging__list">
+              <li><strong>胸部 X 線</strong>：PA + 側面（肋骨骨折／気胸／血胸／縦隔拡大／皮下気腫）。仰臥位なら AP のみで OK だが感度低下に注意</li>
+              <li><strong>胸椎・腰椎</strong>：正面＋側面 2 方向（椎体高 / 後壁ライン）。圧迫・破裂・棘突起・横突起評価</li>
+              <li><strong>骨盤</strong>：AP（恥坐骨）＋必要に応じて inlet/outlet（仙骨・骨盤輪後方評価）。trauma series の必須項目</li>
+              <li><strong>胸骨</strong>：胸骨側面像＋胸部側面 X 線（正面では写りにくい）</li>
+              <li><strong>頸椎</strong>：3 方向（正面・側面・開口位）。NEXUS／CCR の適応で CT 第一選択</li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">CT の閾値</h4>
+            <ul class="dx-imaging__list">
+              <li><strong>高エネ受傷</strong>：原則 pan-scan（頭・頸・胸・腹・骨盤、造影）</li>
+              <li><strong>第1-3 肋骨／胸骨骨折</strong>：造影 CT で大動脈・縦隔・心臓・気管支</li>
+              <li><strong>第10-12 肋骨骨折</strong>：造影 CT で肝（右）／脾（左）／腎</li>
+              <li><strong>側腹部痛＋血尿</strong>：腎損傷を疑い造影 CT（urography phase 含む）</li>
+              <li><strong>シートベルトサイン</strong>：Chance 骨折＋腸間膜損傷を疑い腰椎＋腹部造影 CT</li>
+              <li><strong>傍脊柱筋圧痛・神経症状あり</strong>：脊椎 CT（X 線で見えない横突起・破裂骨折）</li>
+              <li><strong>高齢者で X 線陰性＋歩行困難</strong>：脆弱性骨盤骨折／大腿骨頸部潜在骨折を疑い CT</li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">MRI の適応</h4>
+            <ul class="dx-imaging__list">
+              <li><strong>脊椎圧迫骨折の新鮮判定</strong>：STIR 高信号／T1 低信号で新鮮を判定（楔形だけでは陳旧と区別不能）</li>
+              <li><strong>馬尾症候群／脊髄圧迫</strong>：緊急 MRI で 48 h 以内の除圧判断</li>
+              <li><strong>中心性頸髄損傷</strong>：高齢者の軽微外傷＋上肢優位の麻痺で頸椎 MRI</li>
+              <li><strong>大腿骨頸部潜在骨折</strong>：X 線・CT で骨折線が見えなくても MRI で検出可能</li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">FAST／eFAST</h4>
+            <ul class="dx-imaging__list">
+              <li><strong>体幹高エネ外傷の初期スクリーニング</strong>。腹腔内出血（Morison 窩・脾周囲・骨盤底）＋心嚢液＋気胸（lung sliding）＋血胸を 5 分以内に評価</li>
+              <li><strong>陽性＝出血源あり</strong>だが、陰性でも実質臓器損傷は除外できない（造影 CT が標準）</li>
+              <li><strong>気胸の感度</strong>はエコー（lung sliding 消失）が X 線より高い</li>
+            </ul>
+          </details>
+
+          <!-- ===== 画像の読み方 ===== -->
+          <details class="dx-imaging" id="imagingReadPanel">
+            <summary>画像の読み方（系統的アプローチ）</summary>
+
+            <h4 class="dx-rules-l2__group">① eFAST</h4>
+            <ul class="dx-imaging__list">
+              <li><strong>Morison 窩（右上腹部）</strong>：肝–腎間の黒線＝腹腔内出血</li>
+              <li><strong>脾–腎間（左上腹部）</strong>：脾損傷を最も検出。脾周囲液＝陽性</li>
+              <li><strong>骨盤底（恥骨上）</strong>：膀胱周囲の液貯留。女性は Douglas 窩、男性は直腸膀胱窩</li>
+              <li><strong>心嚢（剣状突起下）</strong>：心嚢液＝心タンポナーデの可能性</li>
+              <li><strong>胸腔（肋間）</strong>：lung sliding 消失＝気胸／B ライン消失＋胸水＝血胸</li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">② 胸部 X 線（trauma series）</h4>
+            <ul class="dx-imaging__list">
+              <li><strong>縦隔拡大（&gt; 8 cm AP 像）</strong>：外傷性大動脈損傷を強く示唆</li>
+              <li><strong>気管偏位・apical cap・大動脈瘤輪郭消失</strong>：大動脈損傷</li>
+              <li><strong>肋骨骨折</strong>：X 線では写りにくいが、皮下気腫・気胸の所見で示唆</li>
+              <li><strong>気胸</strong>：仰臥位なら deep sulcus sign（横隔膜の落ち込み）</li>
+              <li><strong>血胸</strong>：300 mL 以上で X 線描出可能。それ以下はエコー</li>
+              <li><strong>肺挫傷</strong>：受傷側のスリガラス影（受傷後 4-6 h で顕在化）</li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">③ 脊椎の読み方</h4>
+            <ul class="dx-imaging__list">
+              <li><strong>椎体前縁・後縁・椎弓ライン</strong>（側面像で 3 つのラインを確認）：後縁の不連続＝後方成分破綻＝破裂骨折</li>
+              <li><strong>椎体高の比較</strong>：前縁／後縁の比 &lt; 50% で楔形圧迫骨折。<strong>楔形≠新鮮</strong>。MRI で確認</li>
+              <li><strong>横突起骨折</strong>：CT axial／coronal で椎体外側に骨折線。腎周囲血腫の合併を必ずチェック</li>
+              <li><strong>棘突起骨折</strong>：側面 X 線で棘突起の不連続。clay-shoveler 骨折は C6-T1 に好発</li>
+              <li><strong>Chance 骨折</strong>：椎体・椎弓の三柱破壊。側面で椎体高低下＋後方要素開大（fanning）</li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">④ 脊椎圧迫骨折 vs 破裂骨折</h4>
+            <ul class="dx-imaging__list">
+              <li><strong>圧迫骨折</strong>：前柱のみ破壊。椎体前縁の高さ低下、後縁・椎弓は保たれる。神経症状なし</li>
+              <li><strong>破裂骨折</strong>：前柱＋中柱破壊。<strong>椎体後縁ラインが破綻</strong>し脊柱管に骨片が突出。神経症状あり得る</li>
+              <li><strong>新鮮判定（MRI）</strong>：STIR 高信号／T1 低信号＝新鮮。STIR・T1 とも椎体と同程度＝陳旧性</li>
+              <li><strong>多発脊椎圧迫骨折</strong>：他椎体に既存骨折があれば今回のレベルを症状部位と一致させる</li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">⑤ 骨盤 X 線・CT</h4>
+            <ul class="dx-imaging__list">
+              <li><strong>骨盤 AP</strong>：恥骨結合・仙腸関節・閉鎖孔の対称性／恥骨上下枝・坐骨・腸骨・仙骨・寛骨臼の連続性</li>
+              <li><strong>Young-Burgess 分類</strong>：APC（前後圧縮）／LC（側方圧縮）／VS（垂直剪断）／CM（複合）。<strong>不安定型＝APC II/III, LC II/III, VS</strong></li>
+              <li><strong>仙骨骨折</strong>：Denis 分類。alar (zone 1)／foraminal (zone 2)／central (zone 3)。zone 3 は馬尾損傷あり</li>
+              <li><strong>脆弱性骨盤骨折</strong>：恥骨・坐骨・仙骨が好発。X 線で 46-50% しか描出されない。CT を躊躇しない</li>
+              <li><strong>寛骨臼骨折</strong>：iliopectineal line / ilioischial line で前柱／後柱を評価</li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">⑥ 腹部造影 CT</h4>
+            <ul class="dx-imaging__list">
+              <li><strong>肝損傷（AAST 分類）</strong>：grade I-VI。grade IV 以上は手術／IVR 考慮</li>
+              <li><strong>脾損傷</strong>：grade I-V。脾は再出血リスク高、grade III 以上は IVR/手術</li>
+              <li><strong>腎損傷</strong>：urography phase で尿路造影漏出を評価。AAST grade III 以上＋血行動態不安定で IVR</li>
+              <li><strong>腸間膜損傷</strong>：腸間膜血腫・遊離ガス・腸管壁肥厚・mesenteric stranding。シートベルトサインと合わせる</li>
+              <li><strong>後腹膜出血</strong>：腎周囲・腰筋周囲の血腫。L 横突起骨折・抗凝固薬と合わせる</li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">⑦ 撮影後の再読影</h4>
+            <ul class="dx-imaging__list">
+              <li>全身 CT は<strong>初回読影で見逃された横突起・棘突起・小肋骨骨折</strong>がしばしばある。後で読み返す癖</li>
+              <li>整形・呼吸器・消化器・泌尿器の<strong>系統的読影リスト</strong>でチェック</li>
+              <li>気管・気管支損傷は CT で評価可能だが見逃しやすい。皮下気腫・縦隔気腫を疑えば気管支鏡</li>
+            </ul>
+          </details>
+
+          <!-- ===== 治療リファレンス ===== -->
+          <details class="dx-imaging" id="rxPanel">
+            <summary>治療リファレンス：ATLS／処置／コンサル文</summary>
+
+            <h4 class="dx-rules-l2__group">ATLS の原則</h4>
+            <ul class="dx-imaging__list">
+              <li><strong>Primary survey（ABCDE）</strong>：A 気道（頸椎固定）／B 呼吸（緊張性気胸・フレイル）／C 循環（出血・FAST）／D 神経（GCS・瞳孔）／E 全身観察（背面・体温管理）</li>
+              <li><strong>Trauma series</strong>：胸部 X 線・骨盤 X 線・eFAST をベッドサイドで</li>
+              <li><strong>大量輸血プロトコル</strong>：FFP:PC:RBC = 1:1:1 を早期発動。SBP 90 mmHg を目標に permissive hypotension（外傷性大動脈損傷では 100-120）</li>
+              <li><strong>Tranexamic acid（TXA）</strong>：受傷後 3 h 以内に 1 g IV → 1 g 8 h 持続。出血リスク高で適応</li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">緊張性気胸の針減圧／胸腔ドレナージ</h4>
+            <ul class="dx-imaging__list">
+              <li><strong>針減圧</strong>：<strong>第 2 肋間鎖骨中線</strong>（成人）または<strong>第 4-5 肋間前腋窩線</strong>（小柄／小児）に 14G で穿刺</li>
+              <li><strong>胸腔ドレナージ</strong>：<strong>第 4-5 肋間中腋窩線</strong>（前腋窩線〜中腋窩線、乳頭レベル）に 28-32 Fr</li>
+              <li>挿入後は water seal で陰圧 -20 cmH2O。<strong>初回排液 1.5 L 以上または 200 mL/h × 4 h で開胸</strong></li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">骨盤バンド／PMC／TAE</h4>
+            <ul class="dx-imaging__list">
+              <li><strong>骨盤バンド</strong>：<strong>大転子レベル</strong>（腸骨稜ではない）に圧縮力で巻く。市販品なければシーツで代用可</li>
+              <li><strong>preperitoneal pelvic packing（PMC）</strong>：骨盤バンドで不応なショックに対し OR で実施。腹膜外スペースに gauze packing</li>
+              <li><strong>TAE</strong>：内腸骨動脈分枝の出血で IVR-TAE。動脈相 CT で extravasation 確認</li>
+              <li><strong>REBOA</strong>：大量出血で zone III（骨盤）を選択的に閉塞。施設で導入されていれば検討</li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">鎮痛（肋骨骨折／圧迫骨折）</h4>
+            <ul class="dx-imaging__list">
+              <li><strong>第一選択：アセトアミノフェン</strong> 1,000 mg × 4 回／日（4 g/日まで）。高齢者・小児にも安全</li>
+              <li><strong>NSAIDs（第二選択）</strong>：ロキソプロフェン 60 mg × 3 回／日。<strong>PPI 併用</strong>／腎機能 eGFR ≥ 60／消化管出血歴・心血管疾患なし／脱水なし</li>
+              <li><strong>多発肋骨骨折</strong>：肋間神経ブロック／硬膜外麻酔／serratus plane block を整形・麻酔と相談</li>
+              <li><strong>鎮痛＋深呼吸促し</strong>（インセンティブスパイロメトリー）で無気肺・肺炎を予防。<strong>肋骨バンドはルーチン非推奨</strong></li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">開放骨折・抗菌薬</h4>
+            <ul class="dx-imaging__list">
+              <li><strong>開放骨折</strong>：<strong>セファゾリン 2 g IV</strong>（Gustilo III なら + ゲンタマイシン）／<strong>破傷風トキソイド</strong>／創部写真撮影／生食ガーゼ被覆して OR まで dressing を外さない／整形即コール</li>
+              <li><strong>開放性骨盤骨折</strong>：直腸・膣損傷の有無を必ず確認。腸管損傷併発で広域抗菌薬</li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">他科コンサルト文（マニュアル準拠）</h4>
+            <p class="dx-rules-l2__intro">【目的】→【疾患】→【既往歴】→【内服薬】→【ADL】→【現病歴】の順で簡潔に。</p>
+            <ul class="dx-imaging__list">
+              <li><strong>例（整形外科：脆弱性骨盤骨折）</strong>：「【目的】保存加療目的の入院依頼／【疾患】右恥坐骨骨折（脆弱性骨盤骨折、安定型）／【既往歴】高血圧、骨粗鬆症／【内服薬】アムロジピン、エルデカルシトール／【ADL】受傷前自立、独歩可／【現病歴】本日朝、自宅でしりもち。骨盤痛のみで歩行困難。X 線陰性、CT で右恥坐骨に骨折線」</li>
+              <li><strong>例（脳外科・整形：脊椎破裂骨折）</strong>：「【目的】緊急手術検討／【疾患】L1 破裂骨折（後方成分破綻、脊柱管狭窄あり）／【既往歴】特記なし／【内服薬】なし／【ADL】自立／【現病歴】3 m 転落、腰背部痛＋両下肢のしびれあり。CT で L1 椎体後壁突出、MRI で同部位の馬尾圧迫」</li>
+              <li><strong>例（呼吸器外科：フレイルチェスト）</strong>：「【目的】陽圧換気・手術検討／【疾患】右第 4-7 肋骨多発骨折、フレイルチェスト、血気胸／【既往歴】COPD／【内服薬】LAMA／【ADL】自立／【現病歴】交通外傷、奇異呼吸あり、SpO2 88%、胸部 CT で連続 4 本 × 2 か所」</li>
+            </ul>
+          </details>
+
+          <!-- ===== disposition ===== -->
+          <details class="dx-imaging" id="dispoPanel">
+            <summary>disposition の目安</summary>
+
+            <h4 class="dx-rules-l2__group">30 秒で決める（5 択マネジメント）</h4>
+            <p class="dx-rules-l2__intro">体幹外傷の disposition は<strong>① 即時手術／② ICU 入室／③ 入院（整形・外科）／④ 帰宅手術／⑤ 帰宅保存</strong>の 5 択。判断軸は「血行動態」「呼吸状態」「ADL」「合併損傷」「社会軸」。</p>
+            <ul class="dx-rules-l2__list">
+              <li class="dx-rule is-critical">
+                <div class="dx-rule__if"><span class="dx-rule__tag">即時手術</span><span>FAST 陽性＋ショック／開放骨盤骨折／大量血胸（&gt; 1.5 L）／PMC 適応骨盤骨折／脊椎破裂骨折＋神経症状／整復不能脱臼骨折</span></div>
+                <div class="dx-rule__then"><strong>夜間・休日でも該当科コール</strong>。気道・出血の安定化 → 大量輸血プロトコル → OR or IVR。<strong>「断言できないなら呼ぶ」</strong>。整形・外科・呼吸器外科・心血管外科を該当部位ごとに同時にコール</div>
+              </li>
+              <li class="dx-rule is-critical">
+                <div class="dx-rule__if"><span class="dx-rule__tag">ICU</span><span>多発外傷／フレイルチェスト／心臓打撲＋ECG 異常／外傷性大動脈損傷（IIa 以下保存）／脊髄損傷／FAST 陰性だが反応性低い</span></div>
+                <div class="dx-rule__then">気道・呼吸・循環モニタリング、鎮痛・呼吸管理（PEEP）、血圧管理（大動脈 SBP 100-120）、神経再評価。<strong>受傷後 24-48 h は再評価頻回に</strong></div>
+              </li>
+              <li class="dx-rule">
+                <div class="dx-rule__if"><span class="dx-rule__tag">入院整形・外科</span><span>脊椎圧迫骨折で ADL 困難／肋骨 4 本以上＋高齢者／血行動態安定の実質臓器損傷（保存）／脆弱性骨盤骨折で歩行不能／横突起骨折で疼痛強</span></div>
+                <div class="dx-rule__then">入院 + 翌朝コンサルト。鎮痛・呼吸理学療法（インセンティブスパイロメトリー）・酸素管理・社会調整。<strong>ADL を基準に判断</strong>（疾患重症度ではない）</div>
+              </li>
+              <li class="dx-rule">
+                <div class="dx-rule__if"><span class="dx-rule__tag">帰宅手術</span><span>脊椎圧迫骨折で歩行可・疼痛コントロール可（PVP 待機）／安定型脆弱性骨盤骨折で歩行可</span></div>
+                <div class="dx-rule__then">待機手術（1-2 週以内に整形外来）。<strong>鎮痛＋装具（コルセット）</strong>で帰宅、紹介状に AAST／Young-Burgess 分類・神経所見・ADL を明記</div>
+              </li>
+              <li class="dx-rule">
+                <div class="dx-rule__if"><span class="dx-rule__tag">帰宅保存</span><span>肋骨骨折 1-3 本＋呼吸状態良好／棘突起骨折単独／横突起骨折で疼痛軽度／圧迫骨折で ADL 維持／頸椎 NEXUS 全クリア</span></div>
+                <div class="dx-rule__then"><strong>鎮痛＋深呼吸促し＋整形外来 1-2 週以内予約</strong>。<strong>「48-72 h で改善なければ再受診」を必ず書面交付</strong>（遷延性出血・遅発性血気胸・神経症状後発の安全弁）</div>
+              </li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">観察時間・フォロー間隔サマリー</h4>
+            <ul class="dx-imaging__list">
+              <li><strong>受傷直後 4-6 h</strong>：肺挫傷顕在化・腹腔内出血の遷延・神経症状後発を再評価</li>
+              <li><strong>抗凝固薬内服の頭・体幹外傷</strong>：初期 CT 陰性でも<strong>24 h 経過観察入院</strong>を考慮</li>
+              <li><strong>胸骨骨折＋ECG 正常・トロポニン陰性</strong>：6-12 h 後に再検（後発性異常を除外）</li>
+              <li><strong>シートベルトサイン</strong>：腹膜炎所見の<strong>遅発化（数時間後）</strong>に注意、再診閾値を下げる</li>
+              <li><strong>圧迫骨折保存例</strong>：1-2 週以内に整形外来、ADL 再評価＋骨粗鬆症治療開始（<a href="疾患詳細/骨粗鬆症治療.html">→ 骨粗鬆症治療</a>）</li>
+              <li><strong>脆弱性骨盤骨折保存例</strong>：1-2 週以内に整形再診、転倒予防・ADL 評価</li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">社会軸・特殊状況</h4>
+            <ul class="dx-imaging__list">
+              <li><strong>高齢独居</strong>：圧迫骨折・脆弱性骨盤骨折で「歩けるが介護なし」→ 入院＋社会調整が標準</li>
+              <li><strong>抗凝固薬内服</strong>：閾値を下げて入院。在宅復帰前に逆転製剤の必要性を整形・血液内科と相談</li>
+              <li><strong>骨粗鬆症治療歴なし</strong>：脆弱性骨折を機に治療開始（ビスホスホネート／デノスマブ／ロモソズマブ）。退院時処方</li>
+              <li><strong>転倒の連鎖</strong>：高齢者の脆弱性骨盤骨折は<strong>1 年以内に二次骨折リスク高</strong>。家屋環境・服薬・視覚評価を組み合わせる</li>
+              <li><strong>虐待のスクリーニング</strong>：機転不釣り合いの外傷（高齢者・小児）／反復受診で要警戒</li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">退室前ピットフォール（退室時固有）</h4>
+            <ul class="dx-rules-l2__list">
+              <li class="dx-rule is-pitfall">
+                <div class="dx-rule__if"><span class="dx-rule__tag">注意</span><span>肋骨 1-2 本骨折で「軽症」と帰宅、高齢者なのに教育不十分</span></div>
+                <div class="dx-rule__then">高齢者は<strong>1-2 本でも肺炎・無気肺リスク高</strong>。深呼吸促し・鎮痛・<strong>48-72 h で発熱・呼吸困難なら再受診</strong>を書面で</div>
+              </li>
+              <li class="dx-rule is-pitfall">
+                <div class="dx-rule__if"><span class="dx-rule__tag">注意</span><span>圧迫骨折で「ADL 評価せず帰宅」</span></div>
+                <div class="dx-rule__then">疾患の重症度より<strong>ADL を基準に入院判断</strong>。独居・トイレ歩行不能なら入院＋社会調整。骨粗鬆症治療も開始</div>
+              </li>
+              <li class="dx-rule is-pitfall">
+                <div class="dx-rule__if"><span class="dx-rule__tag">注意</span><span>胸骨骨折で「骨折のみ」と帰宅、ECG 正常で安心</span></div>
+                <div class="dx-rule__then">心臓打撲は<strong>後発性に VF・心タンポナーデ</strong>あり。最低 6-12 h モニター入院／トロポニン再検</div>
+              </li>
+              <li class="dx-rule is-pitfall">
+                <div class="dx-rule__if"><span class="dx-rule__tag">注意</span><span>脆弱性骨盤骨折を「歩行可なら帰宅」と即決</span></div>
+                <div class="dx-rule__then">ER の X 線で<strong>50% は描出されない</strong>。CT 追加閾値を下げ、独居・転倒環境なら入院</div>
+              </li>
+              <li class="dx-rule is-pitfall">
+                <div class="dx-rule__if"><span class="dx-rule__tag">注意</span><span>シートベルトサインありで「腹部所見軽微」と帰宅</span></div>
+                <div class="dx-rule__then">小腸・腸間膜損傷は<strong>遅発性に腹膜炎</strong>を呈する。<strong>6-12 h 経過観察＋再診閾値を下げる</strong></div>
+              </li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">退室前チェック（紹介状品質＋患者教育）</h4>
+            <ul class="dx-checklist__list">
+              <li><label><input type="checkbox" data-key="dispo-imaging-attach"> <span><strong>胸・腹・骨盤・脊椎の画像を紹介状に添付した</strong> <span class="dx-checklist__sub">画像所見・rad. レポートのコピーも</span></span></label></li>
+              <li><label><input type="checkbox" data-key="dispo-classify"> <span><strong>分類（AAST／Young-Burgess／Denis／AO）を明記した</strong> <span class="dx-checklist__sub">専門医とのコミュニケーション統一</span></span></label></li>
+              <li><label><input type="checkbox" data-key="dispo-neuro-doc"> <span><strong>神経所見（ASIA／鞍状感覚／括約筋）を紹介状に明記した</strong> <span class="dx-checklist__sub">経時変化も記載</span></span></label></li>
+              <li><label><input type="checkbox" data-key="dispo-vital-doc"> <span><strong>バイタル経過（受傷時／ER 到着時／処置後）を記載した</strong> <span class="dx-checklist__sub">血行動態の判断材料</span></span></label></li>
+              <li><label><input type="checkbox" data-key="dispo-adl-doc"> <span><strong>受傷前 ADL／受傷後の歩行可否を紹介状に明記した</strong> <span class="dx-checklist__sub">入院・帰宅・社会調整の判断材料</span></span></label></li>
+              <li><label><input type="checkbox" data-key="dispo-analgesic"> <span><strong>鎮痛薬を処方量と日数で指示した</strong> <span class="dx-checklist__sub">アセトアミノフェン first、NSAIDs は適応評価</span></span></label></li>
+              <li><label><input type="checkbox" data-key="dispo-breathing"> <span><strong>深呼吸促し（インセンティブスパイロメトリー）の指導をした</strong> <span class="dx-checklist__sub">肋骨骨折は無気肺・肺炎予防が最重要</span></span></label></li>
+              <li><label><input type="checkbox" data-key="dispo-osteo"> <span><strong>骨粗鬆症治療の必要性を評価し処方した</strong> <span class="dx-checklist__sub">脆弱性骨折を機に治療開始（<a href="疾患詳細/骨粗鬆症治療.html">→ 骨粗鬆症治療</a>）</span></span></label></li>
+              <li><label><input type="checkbox" data-key="dispo-followup"> <span><strong>整形・外科・呼吸器の外来予約を確定した</strong> <span class="dx-checklist__sub">1-2 週以内、急性期は 48-72 h で再診も検討</span></span></label></li>
+              <li><label><input type="checkbox" data-key="dispo-recheck-rule"> <span><strong>48-72 h で疼痛増悪・呼吸困難・腹膜炎所見・しびれ後発なら再受診を書面で渡した</strong> <span class="dx-checklist__sub">遷延性出血・遅発性血気胸・遅発性腹膜炎の安全弁</span></span></label></li>
+              <li><label><input type="checkbox" data-key="dispo-social"> <span><strong>独居・介護状況・転倒環境の評価をした</strong> <span class="dx-checklist__sub">脆弱性骨折は再骨折リスク高。家屋・服薬・視覚評価</span></span></label></li>
+              <li><label><input type="checkbox" data-key="dispo-abuse"> <span><strong>虐待スクリーニング（機転不釣り合い・反復受診）を意識した</strong> <span class="dx-checklist__sub">高齢者虐待・小児虐待ともに念頭に</span></span></label></li>
+            </ul>
+          </details>
+
+          <!-- ===== 参考文献 ===== -->
+          <details class="dx-imaging" id="refsPanel">
+            <summary>参考文献</summary>
+
+            <h4 class="dx-rules-l2__group">疾患詳細ページ</h4>
+            <ul class="dx-imaging__list">
+              <li><a href="疾患詳細/脊椎圧迫骨折.html">脊椎圧迫骨折</a>／<a href="疾患詳細/脊椎破裂骨折.html">脊椎破裂骨折</a>／<a href="疾患詳細/腰椎横突起骨折.html">腰椎横突起骨折</a></li>
+              <li><a href="疾患詳細/頸椎損傷.html">頸椎損傷</a>／<a href="疾患詳細/中心性頸髄損傷.html">中心性頸髄損傷</a></li>
+              <li><a href="疾患詳細/肋骨骨折.html">肋骨骨折</a>／<a href="疾患詳細/胸骨骨折.html">胸骨骨折</a>／<a href="疾患詳細/気胸.html">気胸</a></li>
+              <li><a href="疾患詳細/脆弱性骨盤骨折.html">脆弱性骨盤骨折</a>／<a href="疾患詳細/開放骨折.html">開放骨折</a></li>
+              <li><a href="疾患詳細/骨粗鬆症治療.html">骨粗鬆症治療</a>（退院時処方）</li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">関連ハブ</h4>
+            <ul class="dx-imaging__list">
+              <li><a href="頭部外傷評価.html">頭部外傷評価</a>／<a href="転倒.html">転倒</a>／<a href="肩の外傷・痛み.html">肩の外傷・痛み</a></li>
+              <li><a href="頭部外傷後の注意点.html">頭部外傷後の注意点</a></li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">未作成（リンク予約）</h4>
+            <ul class="dx-imaging__list">
+              <li>肝損傷／脾損傷／腎損傷／腸間膜損傷／後腹膜出血／心臓打撲／肺挫傷／外傷性大動脈損傷／棘突起骨折／Chance 骨折／不安定型骨盤骨折／仙骨骨折／寛骨臼骨折</li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">主要な根拠・参考文献</h4>
+            <ul class="dx-imaging__list">
+              <li><strong>ATLS（Advanced Trauma Life Support）第 10 版</strong>— Primary survey ABCDE、trauma series、大量輸血プロトコル、permissive hypotension、Tranexamic acid（CRASH-2）。緊張性気胸の針減圧、骨盤バンドの位置（大転子レベル）など標準処置の根拠</li>
+              <li><strong>骨折ハンター（中外医学社）</strong>— 高齢者・腰痛ハンター：脊椎圧迫骨折は<strong>2/3 無症候性、楔形は半年で 60% が陳旧化</strong>、ハイリスク 31% で見逃し、プライマリケアで 90% 見逃し。新鮮判定は<strong>MRI（STIR 高信号／T1 低信号）</strong>。CFPS（叩打痛）感度 87%／特異度 90%</li>
+              <li><strong>骨折ハンター</strong>— 高エネ腰背部痛：脊椎破裂骨折は神経症状に関わらず<strong>即時整形</strong>。横突起骨折は傍脊柱筋圧痛で疑う、CT で診断、腎損傷併発を必ず鑑別。全身 CT で他臓器に隠れて見逃されがち</li>
+              <li><strong>骨折ハンター</strong>— 脆弱性骨盤骨折：高齢者の鼠径部・骨盤痛で恥坐骨・仙骨を確認、<strong>ER の X 線で 46-50% しか検出されない</strong>、循環動態安定で<strong>単純 CT で十分</strong>、保存加療で整形入院、ADL 困難なら入院判断</li>
+              <li><strong>WSES／EAST ガイドライン</strong>— 鈍的腹部外傷の管理：FAST 陽性＋血行動態不安定で緊急開腹、安定なら造影 CT。実質臓器損傷の保存的管理（AAST grade I-III は条件付きで保存可）</li>
+              <li><strong>WSES 骨盤骨折ガイドライン</strong>— Young-Burgess 分類、不安定型での骨盤バンド・PMC・TAE/REBOA の使い分け、開放性骨盤骨折での抗菌薬・直腸/膣損傷の評価</li>
+              <li>他科コンサルト実践マニュアル — 整形・外科・呼吸器外科・心血管外科・脳外科コンサルト文の標準書式（【目的】【疾患】【既往歴】【内服薬】【ADL】【現病歴】）</li>
+            </ul>
+
+            <p style="font-size:11px;color:var(--muted);margin-top:8px;">#ER #救急 #外傷 #体幹 #背部 #ATLS #肋骨骨折 #胸骨骨折 #フレイルチェスト #気胸 #血気胸 #脊椎圧迫骨折 #脊椎破裂骨折 #横突起骨折 #Chance骨折 #骨盤骨折 #脆弱性骨盤骨折 #FAST #整形外科</p>
           </details>
 
         </div>
@@ -731,24 +1204,14 @@
 
   <script>
   (function(){
-    const flowBox = document.getElementById('flowBox');
-    const flowBoxClose = document.getElementById('flowBoxClose');
-
-    if (flowBox && flowBoxClose) {
-      const dismiss = () => { flowBox.hidden = true; };
-      flowBoxClose.addEventListener('click', dismiss);
-      flowBoxClose.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); dismiss(); }
-      });
-    }
-
     // 来院後チェックリスト：localStorage 永続化 + per-panel リセット
-    const STORAGE_KEY = 'trunk-back-dx-checklist-v1';
+    const STORAGE_KEY = 'trunk-dx-checklist-v1';
     let stored = {};
     try { stored = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); } catch (_) {}
-    const allBoxes = document.querySelectorAll('.dx-checklist__list input[type="checkbox"]');
+    const allBoxes = document.querySelectorAll('.dx-checklist__list input[type="checkbox"], input[type="checkbox"][data-key]');
     allBoxes.forEach(cb => {
       const key = cb.dataset.key;
+      if (!key) return;
       if (stored[key]) cb.checked = true;
       cb.addEventListener('change', () => {
         if (cb.checked) stored[key] = true; else delete stored[key];
@@ -770,10 +1233,10 @@
     });
 
     // パネル開閉状態を localStorage で復元
-    ['historyPanel', 'examPanel', 'rulesL2Panel', 'imagingPanel'].forEach(id => {
+    ['historyPanel', 'examPanel', 'rulesL2Panel', 'imagingPanel', 'imagingReadPanel', 'rxPanel', 'dispoPanel', 'refsPanel'].forEach(id => {
       const el = document.getElementById(id);
       if (!el) return;
-      const key = `trunk-back-${id}-open-v1`;
+      const key = `trunk-${id}-open-v1`;
       const saved = localStorage.getItem(key);
       if (saved !== null) el.open = saved === '1';
       el.addEventListener('toggle', () => {
@@ -785,6 +1248,108 @@
     if (navBack) navBack.addEventListener('click', () => {
       if (window.history.length > 1) history.back();
       else window.location.href = 'index.html';
+    });
+
+    // === Peek プレビュー ===
+    // フローのノードで内部アンカー（#...）はモーダルで対象セクションを
+    // クローン表示。外部ページへのリンク（.html）は通常遷移。長押しの OS
+    // メニューも抑制してタップと同じ挙動に統一。
+    const PEEK_SELECTOR = 'a.dx-node[href^="#"]';
+    let peekOverlay = null;
+
+    function createPeekOverlay() {
+      const overlay = document.createElement('div');
+      overlay.className = 'peek-modal';
+      overlay.innerHTML =
+        '<div class="peek-modal__sheet" role="dialog" aria-modal="true" aria-labelledby="peekTitle">' +
+          '<div class="peek-modal__handle" aria-hidden="true"></div>' +
+          '<header class="peek-modal__header">' +
+            '<span class="peek-modal__title" id="peekTitle">プレビュー</span>' +
+            '<button type="button" class="peek-modal__close" aria-label="閉じる">✕</button>' +
+          '</header>' +
+          '<div class="peek-modal__body"></div>' +
+        '</div>';
+      document.body.appendChild(overlay);
+      return overlay;
+    }
+
+    // 対象 ID をピーク向けに解決。dx-rule__then のように内側の div を指す
+    // 場合は親 <li class="dx-rule"> を採用して if/then を一緒に見せる。
+    function resolvePeekTarget(id) {
+      const el = document.getElementById(id);
+      if (!el) return null;
+      const rule = el.closest('li.dx-rule');
+      if (rule) return rule;
+      return el;
+    }
+
+    function deriveTitle(target, id) {
+      if (target.tagName === 'DETAILS') {
+        const sum = target.querySelector('summary');
+        if (sum) return sum.textContent.trim();
+      }
+      const ifNode = target.querySelector('.dx-rule__if');
+      if (ifNode) {
+        const clone = ifNode.cloneNode(true);
+        clone.querySelectorAll('.dx-rule__tag').forEach(t => t.remove());
+        return clone.textContent.trim();
+      }
+      const ntitle = target.querySelector('.dx-node__title');
+      if (ntitle) return ntitle.textContent.trim();
+      return id;
+    }
+
+    function openPeek(id) {
+      const target = resolvePeekTarget(id);
+      if (!target) return false;
+      if (!peekOverlay) peekOverlay = createPeekOverlay();
+
+      peekOverlay.querySelector('.peek-modal__title').textContent = deriveTitle(target, id);
+
+      const bodyEl = peekOverlay.querySelector('.peek-modal__body');
+      bodyEl.innerHTML = '';
+      const clone = target.cloneNode(true);
+      clone.removeAttribute('id');
+      clone.querySelectorAll('[id]').forEach(el => el.removeAttribute('id'));
+      if (clone.tagName === 'DETAILS') clone.open = true;
+      clone.querySelectorAll('details').forEach(d => { d.open = true; });
+      bodyEl.appendChild(clone);
+      bodyEl.scrollTop = 0;
+
+      peekOverlay.classList.add('is-open');
+      document.body.style.overflow = 'hidden';
+      return true;
+    }
+
+    function closePeek() {
+      if (!peekOverlay) return;
+      peekOverlay.classList.remove('is-open');
+      document.body.style.overflow = '';
+    }
+
+    document.addEventListener('click', (e) => {
+      if (peekOverlay && peekOverlay.classList.contains('is-open')) {
+        if (e.target.classList.contains('peek-modal__close')) { e.preventDefault(); closePeek(); return; }
+        if (e.target === peekOverlay) { closePeek(); return; }
+      }
+      const link = e.target.closest(PEEK_SELECTOR);
+      if (!link) return;
+      const href = link.getAttribute('href');
+      if (!href || href.length <= 1 || href[0] !== '#') return;
+      e.preventDefault();
+      openPeek(href.substring(1));
+    });
+
+    document.addEventListener('contextmenu', (e) => {
+      const link = e.target.closest(PEEK_SELECTOR);
+      if (!link) return;
+      e.preventDefault();
+      const href = link.getAttribute('href');
+      if (href && href.length > 1 && href[0] === '#') openPeek(href.substring(1));
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && peekOverlay && peekOverlay.classList.contains('is-open')) closePeek();
     });
   })();
   </script>

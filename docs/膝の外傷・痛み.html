@@ -13,12 +13,6 @@
       display: flex; align-items: center; justify-content: space-between;
       gap: 0.5rem; cursor: pointer; padding: 2px 0;
     }
-    .flow-box__hint {
-      font-size: 0.72rem; font-weight: 600; color: var(--muted);
-      letter-spacing: 0.02em; padding: 2px 8px; border-radius: 999px;
-      border: 1px solid color-mix(in srgb, var(--text) 20%, transparent);
-    }
-
     /* ===== 診療フロー本体 ===== */
     .flow-canvas {
       background: var(--surface); border-radius: 10px;
@@ -58,10 +52,6 @@
       border-color: #c0392b;
     }
     .dx-node--danger .dx-node__title { color: #c0392b; }
-    .dx-node--action {
-      background: color-mix(in srgb, var(--text) 5%, var(--surface));
-      border-style: dashed;
-    }
     .dx-node--external {
       text-decoration: none; color: var(--text); border-style: dashed;
       position: relative;
@@ -80,16 +70,16 @@
     .dx-layer--root   { grid-template-columns: 1fr; justify-items: center; }
     .dx-layer--root > * { max-width: 360px; }
     .dx-layer--branch { grid-template-columns: 1fr 1fr; }
-    .dx-layer--quad   { grid-template-columns: repeat(4, 1fr); }
+    .dx-layer--triple { grid-template-columns: repeat(3, 1fr); }
 
     /* 矢印 */
     .dx-arrow {
       display: flex; flex-direction: column; align-items: center; justify-content: center;
-      position: relative; margin: 4px 0; min-height: 44px;
+      position: relative; margin: 2px 0; min-height: 26px;
       color: var(--muted); font-size: 11.5px; font-weight: 600;
     }
     .dx-arrow::before {
-      content: ""; width: 2px; height: 100%; min-height: 38px;
+      content: ""; width: 2px; height: 100%; min-height: 22px;
       background: color-mix(in srgb, var(--text) 35%, transparent);
     }
     .dx-arrow::after {
@@ -98,13 +88,6 @@
       border-left: 5px solid transparent; border-right: 5px solid transparent;
       border-top: 7px solid color-mix(in srgb, var(--text) 35%, transparent);
     }
-    .dx-arrow__label {
-      background: var(--surface); padding: 1px 8px; border-radius: 999px;
-      border: 1px solid color-mix(in srgb, var(--text) 18%, transparent);
-      position: absolute; left: 50%; top: 50%;
-      transform: translate(-50%, -50%); white-space: nowrap; z-index: 1;
-    }
-
     /* 分岐 Y 字 */
     .dx-fork {
       display: grid; grid-template-columns: 1fr 1fr;
@@ -136,12 +119,12 @@
       border: 1px solid color-mix(in srgb, var(--text) 18%, transparent);
       margin-bottom: 2px; z-index: 1;
     }
-    .dx-fork--quad { grid-template-columns: repeat(4, 1fr); }
-    .dx-fork--quad::before { left: 12.5%; right: 12.5%; }
+    .dx-fork--triple { grid-template-columns: repeat(3, 1fr); }
+    .dx-fork--triple::before { left: 16.66%; right: 16.66%; }
 
-    /* 4列の疾患ツリー */
+    /* 疾患ツリー（3列） */
     .dx-trees {
-      display: grid; grid-template-columns: repeat(4, 1fr);
+      display: grid; grid-template-columns: repeat(3, 1fr);
       gap: 12px; align-items: start; margin-top: 4px;
     }
     .dx-tree { display: flex; flex-direction: column; gap: 6px; }
@@ -201,7 +184,6 @@
       .dx-arrow { min-height: 24px; margin: 1px 0; }
       .dx-arrow::before { min-height: 20px; width: 1.5px; }
       .dx-arrow::after { border-left-width: 4px; border-right-width: 4px; border-top-width: 6px; }
-      .dx-arrow__label { font-size: 8.5px; padding: 0 4px; line-height: 1.4; }
 
       .dx-fork { min-height: 22px; }
       .dx-fork::before { height: 1.5px; }
@@ -209,7 +191,7 @@
       .dx-fork__leg::before { width: 1.5px; }
       .dx-fork__leg::after { border-left-width: 4px; border-right-width: 4px; border-top-width: 6px; }
       .dx-fork__label { font-size: 8.5px; padding: 0 4px; margin-bottom: 0; }
-      .dx-fork--quad::before { left: 12.5%; right: 12.5%; }
+      .dx-fork--triple::before { left: 16.66%; right: 16.66%; }
 
       .dx-trees { gap: 4px; }
       .dx-tree { gap: 3px; }
@@ -220,14 +202,6 @@
     }
 
     /* === 来院後チェック === */
-    .dx-arrival-divider {
-      margin: 18px 0 8px; display: flex; align-items: center; gap: 10px;
-      color: var(--muted); font-size: 11.5px; font-weight: 800; letter-spacing: 0.1em;
-    }
-    .dx-arrival-divider::before, .dx-arrival-divider::after {
-      content: ""; flex: 1; height: 1px;
-      background: color-mix(in srgb, var(--text) 18%, transparent);
-    }
     .dx-checklist {
       background: var(--surface); border-radius: 10px;
       border: 1.5px solid color-mix(in srgb, var(--text) 14%, transparent);
@@ -271,6 +245,21 @@
       text-decoration-color: color-mix(in srgb, var(--muted) 50%, transparent);
     }
     .dx-checklist__sub { color: var(--muted); font-size: 11px; font-weight: 500; }
+    .dx-checklist__action {
+      display: block;
+      margin-top: 6px;
+      padding: 5px 9px;
+      background: color-mix(in srgb, #d33 10%, transparent);
+      border-left: 3px solid #d33;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--text);
+      line-height: 1.45;
+    }
+    .dx-checklist__action::before { content: "⚠ "; color: #d33; font-weight: 800; }
+    .dx-checklist__action strong { color: #d33; }
+    .dx-checklist__action a { color: #d33; text-decoration: underline; font-weight: 600; }
 
     @media (max-width: 600px) {
       .dx-checklist { padding: 8px 10px; }
@@ -278,7 +267,6 @@
       .dx-checklist__list li { font-size: 11.5px; }
       .dx-checklist__sub { font-size: 10px; }
       .dx-checklist__reset { font-size: 9.5px; padding: 1px 6px; }
-      .dx-arrival-divider { font-size: 10px; margin: 14px 0 6px; }
     }
 
     /* === トリガー連動ルール === */
@@ -379,8 +367,104 @@
       .dx-imaging__list { font-size: 11.5px; }
     }
 
-    /* §メニュータイル非表示 */
-    .section-tiles { display: none !important; }
+    /* フロー peek からのみ参照される panel は可視には非表示（DOM は peek 用に保持） */
+    #historyPanel,
+    #examPanel,
+    #imagingPanel,
+    #imagingReadPanel,
+    #rulesL2Panel,
+    #rxPanel,
+    #dispoPanel,
+    #refsPanel { display: none !important; }
+
+    /* === Peek プレビュー === */
+    .peek-modal {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.5);
+      display: none;
+      align-items: flex-end;
+      justify-content: center;
+      z-index: 9999;
+      -webkit-backdrop-filter: blur(2px);
+      backdrop-filter: blur(2px);
+    }
+    .peek-modal.is-open { display: flex; }
+    .peek-modal__sheet {
+      background: var(--surface);
+      width: 100%;
+      max-width: 720px;
+      max-height: 85vh;
+      border-radius: 14px 14px 0 0;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 -6px 28px rgba(0,0,0,0.25);
+      animation: peek-slide-up 220ms ease-out;
+      overflow: hidden;
+      position: relative;
+    }
+    @keyframes peek-slide-up {
+      from { transform: translateY(30%); opacity: 0.4; }
+      to   { transform: translateY(0);   opacity: 1; }
+    }
+    .peek-modal__handle {
+      position: absolute;
+      top: 6px; left: 50%;
+      transform: translateX(-50%);
+      width: 36px; height: 4px;
+      border-radius: 999px;
+      background: color-mix(in srgb, var(--text) 22%, transparent);
+      pointer-events: none;
+    }
+    .peek-modal__header {
+      display: flex; align-items: flex-start; gap: 8px;
+      padding: 16px 14px 10px;
+      border-bottom: 1px solid color-mix(in srgb, var(--text) 12%, transparent);
+      background: var(--surface);
+      flex-shrink: 0;
+    }
+    .peek-modal__title {
+      flex: 1;
+      font-weight: 800;
+      font-size: 14.5px;
+      color: var(--text);
+      line-height: 1.3;
+    }
+    .peek-modal__close {
+      background: transparent;
+      border: 1px solid color-mix(in srgb, var(--text) 22%, transparent);
+      border-radius: 999px;
+      width: 30px; height: 30px;
+      cursor: pointer;
+      font-size: 14px;
+      color: var(--text);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      font-family: inherit;
+    }
+    .peek-modal__close:hover { background: color-mix(in srgb, var(--text) 6%, transparent); }
+    .peek-modal__body {
+      flex: 1;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      padding: 12px 16px 10px;
+      font-size: 13.5px;
+      line-height: 1.55;
+      color: var(--text);
+    }
+    /* peek 内で details は常に開いた状態で表示。トップレベルのサマリーは peek ヘッダーと重複するため非表示 */
+    .peek-modal__body > details > summary { display: none; }
+    .peek-modal__body details > summary { pointer-events: none; }
+    .peek-modal__body .dx-checklist__reset { display: none; }
+    @media (min-width: 720px) {
+      .peek-modal { align-items: center; padding: 24px; }
+      .peek-modal__sheet { border-radius: 14px; max-height: 80vh; }
+      .peek-modal__handle { display: none; }
+      @keyframes peek-slide-up {
+        from { transform: scale(0.96); opacity: 0; }
+        to   { transform: scale(1);    opacity: 1; }
+      }
+    }
+    a.dx-node { -webkit-touch-callout: none; }
   </style>
 </head>
 <body>
@@ -399,324 +483,596 @@
 
       <!-- 単純化診療フロー -->
       <div class="action-header flow-box" id="flowBox">
-        <div class="action-header__title flow-box__title" id="flowBoxClose" role="button" tabindex="0" aria-label="診療フローを閉じる">
-          <span>🗺 単純化診療フロー</span>
-          <span class="flow-box__hint">タップで閉じる ✕</span>
+        <div class="action-header__title flow-box__title">
+          <span>単純化診療フロー</span>
         </div>
 
         <div class="flow-canvas">
-          <div class="dx-flow" role="group" aria-label="膝外傷の単純化診療フロー">
+          <div class="dx-flow" role="group" aria-label="膝の外傷・痛みの単純化診療フロー">
 
-            <!-- L0: Red flags -->
+            <!-- Root -->
             <div class="dx-layer dx-layer--root">
-              <a class="dx-node dx-node--decision dx-node--danger" href="#redflags">
-                <div class="dx-node__title">🚨 Red flags 確認</div>
-                <div class="dx-node__sub">膝関節脱臼／血流障害／開放創／コンパートメント／伸展不能</div>
+              <div class="dx-node dx-node--decision">膝の外傷・痛み</div>
+            </div>
+            <div class="dx-arrow"></div>
+
+            <!-- 問診 + 身体診察（同時並行） -->
+            <div class="dx-layer dx-layer--branch">
+              <a class="dx-node" href="#historyPanel">
+                <div class="dx-node__title">問診</div>
+              </a>
+              <a class="dx-node" href="#examPanel">
+                <div class="dx-node__title">身体診察</div>
               </a>
             </div>
+            <div class="dx-arrow"></div>
 
-            <div class="dx-fork">
-              <div class="dx-fork__leg"><span class="dx-fork__label">あり</span></div>
-              <div class="dx-fork__leg"><span class="dx-fork__label">なし</span></div>
-            </div>
-
+            <!-- X 線適応（Ottawa knee）＋ X 線の読み方 -->
             <div class="dx-layer dx-layer--branch">
-              <a class="dx-node dx-node--danger" href="#redflags">
-                <div class="dx-node__title">緊急対応</div>
-                <div class="dx-node__sub">即整復／即時整形／血管評価（ABI・CTA）</div>
+              <a class="dx-node dx-node--judge" href="#imagingPanel">
+                <div class="dx-node__title">X 線適応（Ottawa knee）＋撮影方向</div>
               </a>
-              <div class="dx-arrow"><span class="dx-arrow__label">↓ エネルギーで絞る</span></div>
+              <a class="dx-node dx-node--judge" href="#imagingReadPanel">
+                <div class="dx-node__title">X 線の読み方</div>
+              </a>
             </div>
+            <div class="dx-arrow"></div>
 
-            <!-- L1: エネルギー -->
+            <!-- Triple fork: 骨傷 / 靱帯・半月板 / 関節液軸 -->
             <div class="dx-layer dx-layer--root">
-              <div class="dx-node dx-node--judge">受傷エネルギー／機転は？</div>
+              <div class="dx-node dx-node--judge">3 軸で絞る</div>
+            </div>
+            <div class="dx-fork dx-fork--triple">
+              <div class="dx-fork__leg"><span class="dx-fork__label">骨傷軸</span></div>
+              <div class="dx-fork__leg"><span class="dx-fork__label">靱帯・半月板軸</span></div>
+              <div class="dx-fork__leg"><span class="dx-fork__label">関節液軸</span></div>
             </div>
 
-            <div class="dx-fork">
-              <div class="dx-fork__leg"><span class="dx-fork__label">高エネ・高齢者転倒</span></div>
-              <div class="dx-fork__leg"><span class="dx-fork__label">膝前面強打／捻り・ピボット</span></div>
-            </div>
-
-            <div class="dx-layer dx-layer--branch">
-              <div class="dx-node dx-node--judge">骨性外傷（3 骨）</div>
-              <div class="dx-node dx-node--judge">骨性 or 軟部組織</div>
-            </div>
-
-            <!-- L2/L3: 4列の疾患ツリー -->
+            <!-- 3列の疾患ツリー -->
             <div class="dx-trees">
 
-              <!-- 1) 大腿骨遠位端・脛骨高原・脛骨骨幹部 -->
+              <!-- 1) 骨傷軸 -->
               <div class="dx-tree">
-                <div class="dx-tree__group">高エネ・高齢者転倒</div>
+                <div class="dx-tree__group">骨傷軸（高エネ・高齢者転倒・直達）</div>
                 <a class="dx-node dx-node--danger" href="疾患詳細/大腿骨遠位端骨折.html">
                   <div class="dx-node__title">大腿骨遠位端骨折</div>
-                  <div class="dx-node__sub">80% 高齢者・10% 開放</div>
+                  <div class="dx-node__sub">80% 高齢者／高エネと低エネの 2 峰性／<strong>即時整形</strong>・手術主体</div>
                 </a>
                 <a class="dx-node dx-node--danger" href="疾患詳細/脛骨高原骨折.html">
                   <div class="dx-node__title">脛骨高原骨折</div>
-                  <div class="dx-node__sub">外側陥没・縦割れ／Schatzker</div>
+                  <div class="dx-node__sub">Schatzker 分類／関節面陥没／<strong>CT 必須</strong>・半月板 80-91% 合併</div>
                 </a>
                 <a class="dx-node dx-node--danger" href="疾患詳細/脛骨骨幹部骨折.html">
                   <div class="dx-node__title">脛骨骨幹部骨折</div>
-                  <div class="dx-node__sub">開放多／コンパートメント</div>
+                  <div class="dx-node__sub">開放多／<strong>コンパートメント症候群</strong>に注意</div>
                 </a>
-                <div class="dx-note">レントゲンで迷えば<strong>CT</strong>。occult なら <strong>MRI</strong>（T1 低・脂肪抑制 T2 高）</div>
-              </div>
-
-              <!-- 2) 膝蓋骨 -->
-              <div class="dx-tree">
-                <div class="dx-tree__group">膝前面強打</div>
                 <a class="dx-node" href="疾患詳細/膝蓋骨骨折・脱臼.html">
                   <div class="dx-node__title">膝蓋骨骨折</div>
-                  <div class="dx-node__sub">横 50〜80% / 縦 12〜17%</div>
+                  <div class="dx-node__sub">膝前面強打／横 50-80%・縦 12-17%／<strong>skyline view</strong>追加</div>
                 </a>
-                <div class="dx-note"><strong>skyline 追加</strong>で縦骨折を拾う</div>
-
-                <div class="dx-tree__group">伸展位 + 外反</div>
                 <a class="dx-node" href="疾患詳細/膝蓋骨骨折・脱臼.html">
                   <div class="dx-node__title">膝蓋骨脱臼</div>
-                  <div class="dx-node__sub">80% 外側／整復は容易</div>
+                  <div class="dx-node__sub">伸展+外反／80% 外側／<strong>整復は容易</strong>・骨軟骨骨折 5% 合併</div>
                 </a>
               </div>
 
-              <!-- 3) 軟部組織 -->
+              <!-- 2) 靱帯・半月板軸 -->
               <div class="dx-tree">
-                <div class="dx-tree__group">非接触ジャンプ・切り返し</div>
+                <div class="dx-tree__group">靱帯・半月板軸（捻り・ピボット・外反）</div>
                 <a class="dx-node" href="疾患詳細/膝靱帯・半月板損傷.html">
                   <div class="dx-node__title">ACL 損傷</div>
-                  <div class="dx-node__sub">ポップ音 90%・Lachman / lever</div>
+                  <div class="dx-node__sub">非接触ピボット／ポップ音 90%／<strong>Lachman・lever</strong>／非骨折性血腫の 72% は ACL</div>
                 </a>
-                <div class="dx-tree__group">外側からのタックル</div>
                 <a class="dx-node" href="疾患詳細/膝靱帯・半月板損傷.html">
                   <div class="dx-node__title">MCL 損傷</div>
-                  <div class="dx-node__sub">外反ストレス陽性</div>
+                  <div class="dx-node__sub">外反ストレス／<strong>ACL 合併（Ⅰ20-Ⅲ78%）</strong>を必ず評価</div>
                 </a>
-                <div class="dx-tree__group">捻り・キャッチング</div>
+                <a class="dx-node" href="疾患詳細/膝靱帯・半月板損傷.html">
+                  <div class="dx-node__title">PCL・LCL 損傷（少）</div>
+                  <div class="dx-node__sub">PCL 7%／単独 LCL 稀／整形外科判断に委ねる</div>
+                </a>
                 <a class="dx-node" href="疾患詳細/膝靱帯・半月板損傷.html">
                   <div class="dx-node__title">半月板損傷</div>
-                  <div class="dx-node__sub">McMurray 感度 53%</div>
+                  <div class="dx-node__sub">キャッチング・ロッキング／McMurray 感度 53%／<strong>身体所見では除外不可</strong></div>
+                </a>
+                <a class="dx-node dx-node--danger" href="#rule-knee-dislocation">
+                  <div class="dx-node__title">膝関節脱臼</div>
+                  <div class="dx-node__sub">多発靱帯損傷（≥3）／<strong>膝窩動脈損傷 25%</strong>／ABI・CTA・即時整形</div>
                 </a>
               </div>
 
-              <!-- 4) 緊急鑑別 -->
+              <!-- 3) 関節液軸 -->
               <div class="dx-tree">
-                <div class="dx-tree__group">高エネ・自然整復あり</div>
-                <a class="dx-node dx-node--danger" href="#redflags">
-                  <div class="dx-node__title">膝関節脱臼</div>
-                  <div class="dx-node__sub">膝窩動脈損傷・ABI / CTA</div>
+                <div class="dx-tree__group">関節液軸（化膿・結晶・血腫）</div>
+                <a class="dx-node dx-node--danger" href="#rule-septic-knee">
+                  <div class="dx-node__title">急性化膿性膝関節炎</div>
+                  <div class="dx-node__sub">発熱・荷重不能・熱感／<strong>即穿刺・即時整形</strong>／WBC ≥ 50,000/mm³</div>
                 </a>
-                <div class="dx-tree__group">下腿緊満</div>
+                <a class="dx-node" href="#rule-crystal">
+                  <div class="dx-node__title">痛風・偽痛風（CPPD）</div>
+                  <div class="dx-node__sub">突発単関節炎／<strong>関節液で結晶確認</strong>／NSAIDs・コルヒチン</div>
+                </a>
+                <a class="dx-node" href="#rule-hemarthrosis">
+                  <div class="dx-node__title">関節血腫（脂肪滴 ±）</div>
+                  <div class="dx-node__sub">脂肪滴 + → 関節内骨折／≥10cc → ACL／&lt;10cc → MCL・半月板</div>
+                </a>
                 <a class="dx-node dx-node--danger" href="疾患詳細/コンパートメント症候群.html">
                   <div class="dx-node__title">コンパートメント症候群</div>
-                  <div class="dx-node__sub">受動伸展痛・遅発性増悪</div>
+                  <div class="dx-node__sub">下腿緊満・受動伸展痛／鎮痛抵抗性／<strong>緊急筋膜切開</strong></div>
                 </a>
-                <div class="dx-tree__group">伸展不能（active SLR 不能）</div>
-                <a class="dx-node dx-node--danger" href="#redflags">
-                  <div class="dx-node__title">伸筋装置断裂</div>
-                  <div class="dx-node__sub">膝蓋骨高位（膝蓋腱）／低位（大腿四頭筋腱）</div>
-                </a>
-                <div class="dx-tree__group">開放創</div>
                 <a class="dx-node dx-node--danger" href="疾患詳細/開放骨折.html">
                   <div class="dx-node__title">開放骨折</div>
-                  <div class="dx-node__sub">1 時間以内抗菌薬・破傷風</div>
+                  <div class="dx-node__sub">1 時間以内抗菌薬・破傷風・即時整形</div>
                 </a>
               </div>
 
+            </div>
+            <div class="dx-arrow"></div>
+
+            <!-- disposition -->
+            <div class="dx-layer dx-layer--root">
+              <a class="dx-node dx-node--decision" href="#dispoPanel">
+                <div class="dx-node__title">disposition</div>
+                <div class="dx-node__sub">5 択／整復後 5P／整形外来予約</div>
+              </a>
             </div>
 
           </div>
 
-          <!-- 来院後チェック -->
-          <div class="dx-arrival-divider"><span>来院後のチェック</span></div>
-
           <details class="dx-checklist" id="historyPanel">
-            <summary>
-              <span class="dx-checklist__head" style="flex:1;">
-                <span>🗣 問診（来院後に実施）</span>
-                <button type="button" class="dx-checklist__reset" aria-label="問診チェックをすべて外す">リセット</button>
-              </span>
-            </summary>
+            <summary>問診</summary>
             <ul class="dx-checklist__list">
-              <li><label><input type="checkbox" data-key="h-mech"> <span><strong>受傷機転</strong> <span class="dx-checklist__sub">膝前面打撲／捻り・ピボット／外反タックル／軸圧／高所転落／交通外傷</span></span></label></li>
-              <li><label><input type="checkbox" data-key="h-energy"> <span><strong>エネルギー</strong> <span class="dx-checklist__sub">高エネ → 大腿骨遠位端・脛骨高原・脱臼／低エネでも高齢者は骨折想起</span></span></label></li>
-              <li><label><input type="checkbox" data-key="h-pop"> <span><strong>ポップ音</strong> <span class="dx-checklist__sub">ACL 損傷で 90%。非接触ジャンプ着地で示唆強い</span></span></label></li>
-              <li><label><input type="checkbox" data-key="h-walk"> <span><strong>受傷直後の歩行可否</strong> <span class="dx-checklist__sub">4 歩歩行不能は Ottawa 陽性項目</span></span></label></li>
-              <li><label><input type="checkbox" data-key="h-lock"> <span><strong>ロッキング・キャッチング・違和感</strong> <span class="dx-checklist__sub">半月板損傷を示唆</span></span></label></li>
-              <li><label><input type="checkbox" data-key="h-extend"> <span><strong>伸展可否（自分で膝を伸ばせるか）</strong> <span class="dx-checklist__sub">不能 → 伸筋装置断裂・膝蓋骨横骨折</span></span></label></li>
-              <li><label><input type="checkbox" data-key="h-blood"> <span><strong>関節血症の急速貯留</strong> <span class="dx-checklist__sub">受傷直後の急性腫脹は ACL／関節内骨折を示唆</span></span></label></li>
-              <li><label><input type="checkbox" data-key="h-age"> <span><strong>年齢・既往</strong> <span class="dx-checklist__sub">55 歳以上は Ottawa 陽性／人工膝・抗凝固薬・骨粗鬆症</span></span></label></li>
+              <li><label><input type="checkbox" data-key="h-mech"> <span><strong>受傷機転</strong> <span class="dx-checklist__sub">膝前面打撲／捻り・ピボット／外反タックル／軸圧・伸展位着地／高所転落／交通外傷</span></span></label></li>
+              <li><label><input type="checkbox" data-key="h-energy"> <span><strong>エネルギー</strong> <span class="dx-checklist__sub">高エネ → 大腿骨遠位端・脛骨高原・膝関節脱臼／高齢者は低エネでも骨折想起</span></span></label></li>
+              <li><label><input type="checkbox" data-key="h-pop"> <span><strong>ポップ音</strong> <span class="dx-checklist__sub">ACL 損傷で 90% に聴取。非接触ジャンプ着地で示唆強い</span></span></label></li>
+              <li><label><input type="checkbox" data-key="h-walk"> <span><strong>受傷直後の歩行可否</strong> <span class="dx-checklist__sub">4 歩歩行不能は Ottawa knee 陽性項目／激痛＝レントゲン直行</span></span></label></li>
+              <li><label><input type="checkbox" data-key="h-lock"> <span><strong>ロッキング・キャッチング・違和感</strong> <span class="dx-checklist__sub">半月板損傷を示唆。身体所見だけでは除外不可</span></span></label></li>
+              <li><label><input type="checkbox" data-key="h-extend"> <span><strong>伸展可否（自分で膝を伸ばせるか）</strong> <span class="dx-checklist__sub">不能 → 伸筋装置断裂・膝蓋骨横骨折／active SLR で評価<span class="dx-checklist__action"><strong>active SLR 不能なら</strong>：<strong>ニーブレース伸展位固定＋整形コンサルト</strong>。膝蓋骨高位＝膝蓋腱断裂、低位＝大腿四頭筋腱断裂、または膝蓋骨横骨折離開</span></span></span></label></li>
+              <li><label><input type="checkbox" data-key="h-blood"> <span><strong>関節血症の急速貯留</strong> <span class="dx-checklist__sub">受傷直後の急性腫脹は ACL／関節内骨折を示唆（出血量で軸絞り）</span></span></label></li>
+              <li><label><input type="checkbox" data-key="h-fever"> <span><strong>発熱・全身倦怠・荷重不能（非外傷も）</strong> <span class="dx-checklist__sub">化膿性膝関節炎を示唆／免疫不全・人工膝・糖尿病でリスク高い<span class="dx-checklist__action"><strong>あれば</strong>：<strong>即関節穿刺（WBC・グラム染色・培養・結晶）／即時整形コンサルト</strong>。WBC ≥ 50,000/mm³ で化膿性、結晶あれば痛風／偽痛風（鑑別非排他、合併あり）</span></span></span></label></li>
+              <li><label><input type="checkbox" data-key="h-crystal"> <span><strong>突発単関節炎・夜間増悪・既往の発作</strong> <span class="dx-checklist__sub">痛風（高尿酸血症）／偽痛風 CPPD（高齢・OA・血色素症）。化膿性除外が先</span></span></label></li>
+              <li><label><input type="checkbox" data-key="h-age"> <span><strong>年齢・既往</strong> <span class="dx-checklist__sub">55 歳以上は Ottawa 陽性項目／人工膝・抗凝固薬・骨粗鬆症・DM／インプラント既往</span></span></label></li>
+              <li><label><input type="checkbox" data-key="h-med"> <span><strong>内服薬</strong> <span class="dx-checklist__sub">抗凝固薬（DOAC・ワーファリン）／ステロイド／免疫抑制薬／高尿酸血症治療薬</span></span></label></li>
+              <li><label><input type="checkbox" data-key="h-adl"> <span><strong>ADL・利き足・職業／スポーツ</strong> <span class="dx-checklist__sub">紹介状に必須。アスリート・大工は手術閾値を下げる</span></span></label></li>
             </ul>
           </details>
 
           <details class="dx-checklist" id="examPanel">
-            <summary>
-              <span class="dx-checklist__head" style="flex:1;">
-                <span>🔍 身体診察（来院後に実施）</span>
-                <button type="button" class="dx-checklist__reset" aria-label="身体診察チェックをすべて外す">リセット</button>
-              </span>
-            </summary>
+            <summary>身体診察</summary>
             <ul class="dx-checklist__list">
-              <li><label><input type="checkbox" data-key="e-vital"> <span><strong>バイタル</strong> <span class="dx-checklist__sub">高エネは多発外傷を意識（腰椎・対側下肢も）</span></span></label></li>
-              <li><label><input type="checkbox" data-key="e-bare"> <span><strong>両側脱衣・裸足で視診</strong> <span class="dx-checklist__sub">打撲痕・変形・開放創・膝蓋骨外側シフト</span></span></label></li>
-              <li><label><input type="checkbox" data-key="e-tender"> <span><strong>圧痛マッピング</strong> <span class="dx-checklist__sub">膝蓋骨／関節裂隙（内・外）／腓骨頭／大腿骨遠位／脛骨近位</span></span></label></li>
-              <li><label><input type="checkbox" data-key="e-effusion"> <span><strong>関節血症（patellar tap / ballottement）</strong> <span class="dx-checklist__sub">脂肪滴 + → 関節内骨折／≧10cc → ACL／&lt;10cc → MCL・半月板</span></span></label></li>
-              <li><label><input type="checkbox" data-key="e-slr"> <span><strong>active SLR</strong> <span class="dx-checklist__sub">不能 → 伸筋装置断裂・膝蓋骨横骨折離開</span></span></label></li>
-              <li><label><input type="checkbox" data-key="e-okr"> <span><strong>Ottawa Knee Rule 5 項目</strong> <span class="dx-checklist__sub">55歳以上／腓骨頭圧痛／膝蓋骨単独圧痛／90°屈曲不能／4 歩歩行不能</span></span></label></li>
-              <li><label><input type="checkbox" data-key="e-lachman"> <span><strong>Lachman / lever テスト</strong> <span class="dx-checklist__sub">ACL 損傷（Lachman 感度 84% / lever 98%）。健側比較</span></span></label></li>
-              <li><label><input type="checkbox" data-key="e-valgus"> <span><strong>外反 / 内反ストレステスト</strong> <span class="dx-checklist__sub">膝 30° 屈曲。MCL／LCL の動揺性</span></span></label></li>
-              <li><label><input type="checkbox" data-key="e-mcmurray"> <span><strong>McMurray テスト</strong> <span class="dx-checklist__sub">半月板損傷（感度 53%）</span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-vital"> <span><strong>バイタル</strong> <span class="dx-checklist__sub">高エネは多発外傷を意識（腰椎・対側下肢・骨盤も評価）／敗血症兆候</span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-bare"> <span><strong>両側脱衣・裸足で視診</strong> <span class="dx-checklist__sub">打撲痕・変形・開放創・膝蓋骨外側シフト・発赤・熱感<span class="dx-checklist__action"><strong>開放創ありなら</strong>：<strong>即整形コンサルト・洗浄・セファゾリン 2 g IV（Gustilo III は + ゲンタマイシン）・破傷風トキソイド・創部写真撮影・生食ガーゼ被覆</strong>　<a href="疾患詳細/開放骨折.html">→ 開放骨折 詳細</a></span></span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-tender"> <span><strong>圧痛マッピング</strong> <span class="dx-checklist__sub">膝蓋骨／関節裂隙（内・外）／腓骨頭／大腿骨遠位／脛骨近位（部位で鑑別を絞る）</span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-effusion"> <span><strong>関節血症（patellar tap / ballottement）</strong> <span class="dx-checklist__sub">急速貯留 = ACL／関節内骨折を示唆。慢性膨隆 = OA・滑液包炎</span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-slr"> <span><strong>active SLR（自動下肢挙上）</strong> <span class="dx-checklist__sub">不能 → 伸筋装置断裂・膝蓋骨横骨折離開</span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-okr"> <span><strong>Ottawa Knee Rule 5 項目</strong> <span class="dx-checklist__sub">①55 歳以上 ②腓骨頭圧痛 ③膝蓋骨単独圧痛 ④90° 屈曲不能 ⑤4 歩歩行不能。1 つでも陽性で X 線（感度 98.5%）</span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-lachman"> <span><strong>Lachman / lever テスト</strong> <span class="dx-checklist__sub">ACL 損傷（Lachman 感度 84% / lever 98%）。健側比較・前後引出し</span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-valgus"> <span><strong>外反 / 内反ストレステスト</strong> <span class="dx-checklist__sub">膝 30° 屈曲位。MCL（外反陽性）／LCL（内反陽性）の動揺性<span class="dx-checklist__action"><strong>多方向に不安定（≥3 靱帯）なら</strong>：<strong>膝関節脱臼（自然整復含む）として扱い、ABI 測定・即時整形・血管外科併診</strong></span></span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-pivot"> <span><strong>pivot shift テスト</strong> <span class="dx-checklist__sub">ACL 損傷の特異度高い（覚醒下では困難・整形外科で）</span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-mcmurray"> <span><strong>McMurray テスト</strong> <span class="dx-checklist__sub">半月板損傷（感度 53%）。陽性で示唆、陰性でも除外不可</span></span></label></li>
               <li><label><input type="checkbox" data-key="e-apprehension"> <span><strong>patellar apprehension</strong> <span class="dx-checklist__sub">膝蓋骨脱臼・不安定症</span></span></label></li>
-              <li><label><input type="checkbox" data-key="e-tight"> <span><strong>下腿緊満・受動伸展痛</strong> <span class="dx-checklist__sub">コンパートメント症候群を疑う</span></span></label></li>
-              <li><label><input type="checkbox" data-key="e-pulse"> <span><strong>血流（足背・後脛骨・CRT・ABI）</strong> <span class="dx-checklist__sub">膝関節脱臼／自然整復後で必須</span></span></label></li>
-              <li><label><input type="checkbox" data-key="e-nerve"> <span><strong>神経（腓骨＝背屈／脛骨＝底屈・感覚）</strong> <span class="dx-checklist__sub">腓骨頭近傍骨折で腓骨神経麻痺</span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-tight"> <span><strong>下腿緊満・受動伸展痛・激痛</strong> <span class="dx-checklist__sub">コンパートメント症候群／鎮痛抵抗性疼痛<span class="dx-checklist__action"><strong>該当あれば</strong>：<strong>組織内圧測定／整形即コール／fasciotomy 検討</strong>。固定後の急増痛は外して再評価　<a href="疾患詳細/コンパートメント症候群.html">→ コンパートメント症候群 詳細</a></span></span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-pulse"> <span><strong>血流（足背・後脛骨・CRT・ABI）</strong> <span class="dx-checklist__sub">膝関節脱臼／自然整復後で必須。<strong>pink pulseless</strong>（拍動なしでピンク色）は血管損傷示唆<span class="dx-checklist__action"><strong>ABI &lt; 0.9 or 左右差 or 脈触知不良なら</strong>：<strong>CTA・血管外科</strong>。脈触知良好でも 24 時間血管モニタリング（遅発性内膜損傷あり）</span></span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-nerve"> <span><strong>神経（腓骨＝背屈／脛骨＝底屈・感覚）</strong> <span class="dx-checklist__sub">腓骨頭近傍骨折・脛骨高原で腓骨神経麻痺リスク</span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-hot"> <span><strong>発赤・熱感・触れない強い圧痛（外傷なしの突発膝痛）</strong> <span class="dx-checklist__sub">化膿性膝関節炎・結晶誘発関節炎の鑑別。発熱と荷重不能の合併は要警戒<span class="dx-checklist__action"><strong>該当あれば</strong>：<strong>関節穿刺優先</strong>（WBC・グラム染色・培養・結晶）。化膿性疑いなら培養前に血培2セット、抗菌薬は穿刺後</span></span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-recheck"> <span><strong>整復・固定後の再評価</strong> <span class="dx-checklist__sub">脈・5P・神経／X 線（前後比較）。前後比較をカルテに必ず記載</span></span></label></li>
             </ul>
           </details>
 
-          <!-- トリガー連動の注意 -->
+          <!-- 画像確定後の注意・見逃し回避・ピットフォール -->
           <details class="dx-rules-l2" id="rulesL2Panel">
-            <summary>⚠️ トリガー連動の注意（条件で意識）</summary>
-            <p class="dx-rules-l2__intro">特定の状況に出会ったら必ず思い出すべき注意点。フローの判断と並行して意識する。</p>
+            <summary>画像確定後の注意・見逃し回避・ピットフォール</summary>
+            <p class="dx-rules-l2__intro"><strong>診察段階の Red flag は身体診察パネルに統合済み</strong>（⚠ アクション）。ここでは<strong>画像で診断が確定してから</strong>意識すべき疾患固有の注意・鑑別の入口・ありがちな誤りをまとめる。</p>
 
-            <h4 class="dx-rules-l2__group">緊急・四肢温存トリガー</h4>
+            <h4 class="dx-rules-l2__group">① 画像確定後の注意（疾患固有）</h4>
             <ul class="dx-rules-l2__list">
-              <li class="dx-rule is-critical" id="redflags">
-                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>高エネ + 大量関節血症 + 多方向不安定性</span></div>
-                <div class="dx-rule__then"><strong>膝関節脱臼</strong>（自然整復含む）として血管評価。ABI &lt; 0.9 / 左右差 → CTA・血管外科</div>
+              <li class="dx-rule is-critical" id="rule-knee-dislocation">
+                <div class="dx-rule__if"><span class="dx-rule__tag">緊急</span><span>膝関節脱臼（自然整復含む）／多方向不安定（≥3 靱帯）＋大量関節血症</span></div>
+                <div class="dx-rule__then"><strong>膝窩動脈損傷の合併 18-25%</strong>。脈触知不良・ABI &lt; 0.9・左右差で<strong>即 CTA・血管外科併診・即時整形</strong>。整復後脈触知良好でも<strong>遅発性内膜損傷あり、24 時間血管モニタリング</strong>。整復は牽引＋押し戻し、整復不能・開放・血管神経合併は即手術室</div>
               </li>
-              <li class="dx-rule is-critical">
-                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>膝関節脱臼整復後・脈触知良好</span></div>
-                <div class="dx-rule__then">遅発性内膜損傷あり。<strong>24 時間血管モニタリング</strong>を計画</div>
+              <li class="dx-rule is-critical" id="rule-septic-knee">
+                <div class="dx-rule__if"><span class="dx-rule__tag">緊急</span><span>急性化膿性膝関節炎（発熱＋荷重不能＋熱感）</span></div>
+                <div class="dx-rule__then"><strong>関節穿刺で WBC ≥ 50,000/mm³（PMN ≥ 75%）／グラム染色・培養／結晶（合併あり）</strong>。即時整形コンサルト＋関節洗浄ドレナージ。抗菌薬は<strong>培養前血培 2 セット → 穿刺後にエンピリック</strong>（ブドウ球菌カバーが主／院内では MRSA カバー追加）</div>
               </li>
-              <li class="dx-rule is-critical">
-                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>下腿緊満・受動伸展痛・激痛</span></div>
-                <div class="dx-rule__then"><strong>コンパートメント症候群</strong>を疑う。固定後の急増痛は外して再評価。緊急筋膜切開</div>
+              <li class="dx-rule is-critical" id="rule-distal-femur-tibial-plateau">
+                <div class="dx-rule__if"><span class="dx-rule__tag">画像</span><span>大腿骨遠位端骨折 / 脛骨高原骨折（転位 or 関節面陥没）</span></div>
+                <div class="dx-rule__then"><strong>原則入院・手術プランニング</strong>。脛骨高原は<strong>CT で Schatzker 分類確定</strong>（Type IV-VI は高エネ）。閉鎖骨折でも多くが手術。即時整形コンサルト　<a href="疾患詳細/大腿骨遠位端骨折.html" style="font-size:11px;">→ 大腿骨遠位端骨折 詳細</a>　<a href="疾患詳細/脛骨高原骨折.html" style="font-size:11px;">→ 脛骨高原骨折 詳細</a></div>
               </li>
-              <li class="dx-rule is-critical">
-                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>裂創 + 骨折／骨突出</span></div>
-                <div class="dx-rule__then"><strong>開放骨折</strong>。1 時間以内抗菌薬・破傷風・即時整形</div>
+              <li class="dx-rule is-critical" id="rule-tibial-shaft">
+                <div class="dx-rule__if"><span class="dx-rule__tag">画像</span><span>脛骨骨幹部骨折</span></div>
+                <div class="dx-rule__then"><strong>開放骨折頻度高い・コンパートメント症候群リスク高い</strong>。皮下脂肪が薄く皮膚直下に骨。<strong>下腿緊満・受動伸展痛・鎮痛抵抗性疼痛で組織内圧測定</strong>　<a href="疾患詳細/脛骨骨幹部骨折.html" style="font-size:11px;">→ 脛骨骨幹部骨折 詳細</a></div>
               </li>
-              <li class="dx-rule is-critical">
-                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>active SLR 不能</span></div>
-                <div class="dx-rule__then"><strong>伸筋装置断裂</strong>（膝蓋骨高位＝膝蓋腱／低位＝大腿四頭筋腱）または膝蓋骨横骨折離開。ニーブレース伸展位 + 整形コンサルト</div>
+              <li class="dx-rule is-critical" id="rule-patellar-dislocation">
+                <div class="dx-rule__if"><span class="dx-rule__tag">画像</span><span>膝蓋骨脱臼整復後</span></div>
+                <div class="dx-rule__then"><strong>骨軟骨骨折 5%・靱帯/半月板損傷 12%</strong> を整復後に再評価。sunrise view（軸位像）± MRI。ニーブレース伸展位＋松葉杖、整形外来へ　<a href="疾患詳細/膝蓋骨骨折・脱臼.html" style="font-size:11px;">→ 膝蓋骨骨折・脱臼 詳細</a></div>
               </li>
-              <li class="dx-rule is-critical">
-                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>下腿感覚脱失・足趾運動障害</span></div>
-                <div class="dx-rule__then"><strong>腓骨神経損傷</strong>（脛骨高原・腓骨頭近傍骨折）を疑う</div>
+              <li class="dx-rule is-critical" id="rule-hemarthrosis">
+                <div class="dx-rule__if"><span class="dx-rule__tag">画像</span><span>レントゲン・CT 陰性＋大量関節血症で行先が決まらない</span></div>
+                <div class="dx-rule__then"><strong>関節穿刺で 3 群に分ける</strong>（仲田流）：<br>① 脂肪滴 + → 大腿骨遠位端 / 脛骨高原 occult fracture を疑い<strong>入院整形</strong>（要 MRI）<br>② 脂肪滴 − / 出血 ≥ 10cc → <strong>ACL 損傷</strong>を疑い<strong>帰宅手術 or 帰宅保存</strong>（ニーブレース＋松葉杖）<br>③ 脂肪滴 − / 出血 &lt; 10cc → <strong>MCL 損傷 / 半月板損傷</strong>を疑い<strong>帰宅手術 or 帰宅保存</strong>　<a href="疾患詳細/膝靱帯・半月板損傷.html" style="font-size:11px;">→ 膝靱帯・半月板損傷 詳細</a></div>
               </li>
             </ul>
 
-            <h4 class="dx-rules-l2__group">見逃し回避トリガー</h4>
+            <h4 class="dx-rules-l2__group">② 見逃し回避トリガー</h4>
             <ul class="dx-rules-l2__list">
               <li class="dx-rule">
                 <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>高齢者の単純転倒・荷重不能 + 関節血症</span></div>
-                <div class="dx-rule__then"><strong>脛骨高原の関節面陥没・大腿骨遠位端 occult</strong>を疑う。Xp で迷えば CT。CT 陰性でも MRI で出ることあり</div>
+                <div class="dx-rule__then"><strong>大腿骨遠位端・脛骨高原の occult fracture</strong>を疑う。レントゲンで迷えば<strong>CT</strong>、CT 陰性でも<strong>MRI</strong>で出ることあり（T1 低・脂肪抑制 T2 高）。占有率高い見逃し</div>
               </li>
               <li class="dx-rule">
                 <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>膝前面強打／膝蓋骨圧痛</span></div>
-                <div class="dx-rule__then"><strong>skyline view（軸位像）</strong>を必ず追加。縦骨折は AP・側面で見えない</div>
-              </li>
-              <li class="dx-rule">
-                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>膝蓋骨脱臼を整復した</span></div>
-                <div class="dx-rule__then">骨軟骨骨折 5%・半月板/靱帯損傷 12% を整復後に再評価。<strong>sunrise view ± MRI</strong></div>
+                <div class="dx-rule__then"><strong>skyline view（軸位像）を必ず追加</strong>。縦骨折は AP・側面で見えない（縦 12-17%）。横骨折は側面像で評価</div>
               </li>
               <li class="dx-rule">
                 <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>非骨折性の急性大量関節血症</span></div>
-                <div class="dx-rule__then"><strong>ACL 損傷を 72%</strong> で示唆。Lachman / lever テストで暫定診断</div>
+                <div class="dx-rule__then"><strong>非骨折性なら ACL 損傷を 72%</strong>（急性関節血腫全体では ACL 45-52% / 半月板 21-27% / occult fx 13%）で示唆。Lachman / lever テスト＋関節穿刺で暫定診断。整形外来へ</div>
               </li>
               <li class="dx-rule">
                 <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>MCL 損傷を診断した</span></div>
-                <div class="dx-rule__then"><strong>ACL 合併</strong>を必ず評価（Ⅰ度 20% / Ⅱ度 52% / Ⅲ度 78%）</div>
+                <div class="dx-rule__then"><strong>ACL 合併を必ず評価</strong>（Ⅰ度 20% / Ⅱ度 52% / Ⅲ度 78%）。Lachman も合わせて施行</div>
               </li>
               <li class="dx-rule">
-                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>膝蓋骨に骨折線様の所見</span></div>
-                <div class="dx-rule__then"><strong>二分膝蓋骨</strong>と鑑別：圧痛なし・仮骨あり・両側性 40〜45%。反対側膝で比較</div>
+                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>キャッチング・ロッキング・違和感の病歴</span></div>
+                <div class="dx-rule__then"><strong>半月板損傷を暫定診断＋整形外来</strong>。McMurray 感度 53% で身体所見だけでは除外不可。MRI 評価は整形に委ねる</div>
               </li>
               <li class="dx-rule">
-                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>大腿骨インプラント周囲骨折</span></div>
-                <div class="dx-rule__then">「インプラント入れた病院で治療」が原則。<strong>転院前提</strong>でマネジメント</div>
+                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>Segond 骨折（脛骨外側顆の小骨片）</span></div>
+                <div class="dx-rule__then"><strong>ACL 損傷の 95% に合併</strong>する撕脱骨折。レントゲン正面で見つかれば ACL 損傷として対応</div>
               </li>
               <li class="dx-rule">
-                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>画像で行先が決まらない</span></div>
-                <div class="dx-rule__then"><strong>関節穿刺</strong>。脂肪滴 + → 関節内骨折／≧10cc → ACL／&lt;10cc → MCL・半月板</div>
+                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>fat pad sign（膝の脂肪パッド変化）</span></div>
+                <div class="dx-rule__then">側面像で suprapatellar bursa が膨満（lipohemarthrosis）→ <strong>関節内骨折</strong>を疑う。脂肪と血の境界線 = 脂肪/液体レベル</div>
+              </li>
+              <li class="dx-rule" id="rule-crystal">
+                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>結晶誘発関節炎（痛風・偽痛風 CPPD）</span></div>
+                <div class="dx-rule__then"><strong>関節穿刺で結晶確認</strong>（尿酸 = 針状・負複屈折／CPPD = 棒状・弱正複屈折）。化膿性除外が最優先（合併あり）。鎮痛は NSAIDs・コルヒチン・関節内ステロイド（化膿性除外後）。腎機能・既往で薬剤選択</div>
               </li>
             </ul>
 
-            <h4 class="dx-rules-l2__group">ピットフォール</h4>
+            <h4 class="dx-rules-l2__group">③ ピットフォール</h4>
             <ul class="dx-rules-l2__list">
               <li class="dx-rule is-pitfall">
-                <div class="dx-rule__if"><span class="dx-rule__tag">⚠</span><span>Ottawa Knee Rule 全陰性で安心</span></div>
-                <div class="dx-rule__then">急性外傷・55 歳未満で<strong>「骨折を下げる」補助</strong>。occult fracture や慢性痛・55 歳以上には適用外</div>
+                <div class="dx-rule__if"><span class="dx-rule__tag">注意</span><span>Ottawa Knee Rule 全陰性で安心</span></div>
+                <div class="dx-rule__then">急性外傷・55 歳未満で<strong>「骨折確率を下げる」補助</strong>。慢性痛・55 歳以上・受傷後 7 日以上経過には適用外。occult fracture は別ルートで拾う</div>
               </li>
               <li class="dx-rule is-pitfall">
-                <div class="dx-rule__if"><span class="dx-rule__tag">⚠</span><span>半月板損傷を「ただの捻挫」</span></div>
-                <div class="dx-rule__then">McMurray 感度 53%。違和感・キャッチング・ロッキングの病歴で<strong>暫定診断 + 整形外来</strong>を必ず手配</div>
+                <div class="dx-rule__if"><span class="dx-rule__tag">注意</span><span>半月板損傷を「ただの捻挫」で帰宅</span></div>
+                <div class="dx-rule__then">McMurray 感度 53%。違和感・キャッチング・ロッキングの病歴で<strong>暫定診断 + 整形外来手配</strong>。「軟部組織損傷の疑い」は紹介状必須</div>
               </li>
               <li class="dx-rule is-pitfall">
-                <div class="dx-rule__if"><span class="dx-rule__tag">⚠</span><span>足背動脈触れるから血管 OK</span></div>
-                <div class="dx-rule__then">膝関節脱臼後の<strong>遅発性閉塞</strong>あり。整復後も 24 時間モニター</div>
+                <div class="dx-rule__if"><span class="dx-rule__tag">注意</span><span>足背動脈触れるから血管 OK と判断</span></div>
+                <div class="dx-rule__then">膝関節脱臼後の<strong>遅発性閉塞</strong>あり。整復後も 24 時間モニター。ABI 測定をルーチン化</div>
               </li>
               <li class="dx-rule is-pitfall">
-                <div class="dx-rule__if"><span class="dx-rule__tag">⚠</span><span>MRI 陽性所見だけで確定診断</span></div>
-                <div class="dx-rule__then">部分断裂・偽陽性多い（70歳以上 56%、変形性膝関節症 68〜90%）。<strong>整形外科の総合判断</strong>に委ねる</div>
+                <div class="dx-rule__if"><span class="dx-rule__tag">注意</span><span>MRI 陽性所見だけで確定診断</span></div>
+                <div class="dx-rule__then">部分断裂・偽陽性多い（70 歳以上 56%、変形性膝関節症 68-90%）。<strong>整形外科の総合判断</strong>に委ねる。ER で MRI 即時診断は不要</div>
               </li>
               <li class="dx-rule is-pitfall">
-                <div class="dx-rule__if"><span class="dx-rule__tag">⚠</span><span>転位の強い大腿骨・脛骨骨折で skyline 撮影</span></div>
-                <div class="dx-rule__then">疼痛・転位悪化のリスク。<strong>無理に撮らない</strong></div>
+                <div class="dx-rule__if"><span class="dx-rule__tag">注意</span><span>転位の強い大腿骨・脛骨骨折で skyline 撮影</span></div>
+                <div class="dx-rule__then">疼痛・転位悪化のリスク。<strong>skyline は膝蓋骨骨折を疑った場合のみ</strong>。膝外傷でルーチン化しない</div>
               </li>
               <li class="dx-rule is-pitfall">
-                <div class="dx-rule__if"><span class="dx-rule__tag">⚠</span><span>裂創を「単なる擦過傷」扱い</span></div>
-                <div class="dx-rule__then">衣類・血液で隠れる。<strong>必ず脱衣して全周性に視診</strong>。CT で骨折周囲 air は開放</div>
+                <div class="dx-rule__if"><span class="dx-rule__tag">注意</span><span>裂創を「単なる擦過傷」扱い</span></div>
+                <div class="dx-rule__then">衣類・血液で隠れる。<strong>必ず脱衣して全周性に視診</strong>。CT で骨折周囲 air は開放骨折</div>
+              </li>
+              <li class="dx-rule is-pitfall">
+                <div class="dx-rule__if"><span class="dx-rule__tag">注意</span><span>二分膝蓋骨を膝蓋骨骨折と誤診</span></div>
+                <div class="dx-rule__then">圧痛なし・仮骨あり・<strong>両側性 40-45%</strong>。反対側膝で比較。新鮮骨折は圧痛＋仮骨なし</div>
+              </li>
+              <li class="dx-rule is-pitfall">
+                <div class="dx-rule__if"><span class="dx-rule__tag">注意</span><span>結晶確認したから化膿性ではないと判断</span></div>
+                <div class="dx-rule__then">結晶誘発関節炎と化膿性は<strong>合併する</strong>。グラム染色・培養・WBC は必ず提出。発熱・敗血症兆候があれば化膿性を捨てない</div>
+              </li>
+              <li class="dx-rule is-pitfall">
+                <div class="dx-rule__if"><span class="dx-rule__tag">注意</span><span>大腿骨インプラント周囲骨折を一般病院で対応</span></div>
+                <div class="dx-rule__then">「インプラント入れた病院で治療」が原則。<strong>転院前提</strong>でマネジメント（CT で骨折線・インプラント情報を整える）</div>
               </li>
             </ul>
           </details>
 
-          <!-- 撮影方向の備忘 -->
+          <!-- X 線適応・撮影方向 -->
           <details class="dx-imaging" id="imagingPanel">
-            <summary>📷 撮影方向・追加検査の備忘</summary>
+            <summary>X 線適応（Ottawa knee）＋撮影方向</summary>
+
+            <h4 class="dx-rules-l2__group">Ottawa Knee Rule（撮影適応）</h4>
             <ul class="dx-imaging__list">
-              <li><strong>第一選択</strong>：膝関節 AP + 側面</li>
-              <li><strong>膝前面強打 / 膝蓋骨圧痛</strong>：<strong>skyline（軸位）</strong>追加（縦骨折・骨軟骨骨折・脱臼整復後）</li>
-              <li><strong>脛骨高原疑い</strong>：oblique 追加 → 評価不十分なら CT</li>
-              <li><strong>大腿骨遠位端疑い</strong>：大腿骨側を含めて撮影</li>
-              <li><strong>CT</strong>：レントゲン読影困難／関節面評価／高エネ／手術プランニング</li>
-              <li><strong>MRI</strong>：CT 陰性で荷重不能・関節血症遷延／軟部組織暫定（occult fracture：T1 低・脂肪抑制 T2 高）</li>
-              <li><strong>ABI / CTA</strong>：膝関節脱臼／自然整復後／脈の左右差</li>
-              <li><strong>エコー</strong>：関節血腫・MCL・膝蓋腱・大腿四頭筋腱（ACL は見えない）</li>
-              <li><strong>関節穿刺</strong>：画像で行先が決まらない時。脂肪滴 + 出血量で 3 群に分ける</li>
-              <li><strong>Ottawa Knee Rule</strong>：①55 歳以上 ②腓骨頭圧痛 ③膝蓋骨単独圧痛 ④90° 屈曲不能 ⑤4 歩歩行不能 — 1 つでも陽性で X 線</li>
+              <li><strong>急性膝外傷で以下のいずれかに該当すれば X 線</strong>（系統的レビュー 感度 98.5%）：
+                <br>① 55 歳以上　② 腓骨頭の単独圧痛　③ 膝蓋骨の単独圧痛　④ 90° 屈曲不能　⑤ 受傷直後＋ER で 4 歩歩行不能</li>
+              <li><strong>適用外</strong>：18 歳未満（小児）／受傷後 7 日以上経過／意識障害・酩酊／知覚障害／多発外傷</li>
+              <li><strong>激痛・変形・開放創</strong>：ルール無視で直行 X 線。脱臼／高エネ／開放骨折は明確診断目的</li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">撮影方向（標準・追加）</h4>
+            <ul class="dx-imaging__list">
+              <li><strong>第一選択：膝関節 AP + 側面</strong>。側面像で fat pad / lipohemarthrosis を必ず確認</li>
+              <li><strong>膝前面強打 / 膝蓋骨圧痛</strong>：<strong>skyline（軸位）</strong>追加（縦骨折・骨軟骨骨折・脱臼整復後の評価）。<strong>転位の強い大腿骨・脛骨骨折ではルーチン化しない</strong></li>
+              <li><strong>脛骨高原疑い</strong>：oblique 追加。評価不十分なら<strong>CT</strong>（Schatzker 分類確定・手術プランニング）</li>
+              <li><strong>大腿骨遠位端疑い</strong>：大腿骨側を含めて撮影。Y 字骨折線をイメージ</li>
+              <li><strong>膝関節脱臼整復後</strong>：必ず整復前後 2 枚を撮影し紹介状添付</li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">追加検査の閾値</h4>
+            <ul class="dx-imaging__list">
+              <li><strong>CT</strong>：レントゲン読影困難／関節面評価（脛骨高原・膝蓋骨）／高エネ／手術プランニング／terrible triad 様疑い</li>
+              <li><strong>MRI</strong>：CT 陰性で荷重不能・関節血症遷延 / 軟部組織暫定（occult fracture：T1 低・脂肪抑制 T2 高）。<strong>ER で必須ではない</strong>、靱帯・半月板評価は整形外来</li>
+              <li><strong>ABI / CTA</strong>：膝関節脱臼／自然整復後／脈の左右差／ABI &lt; 0.9</li>
+              <li><strong>エコー</strong>：関節血腫・膝蓋腱・大腿四頭筋腱・MCL（ACL は見えない）。膝関節穿刺ガイド</li>
+              <li><strong>関節穿刺</strong>：①画像で行先が決まらない急性血腫（脂肪滴＋出血量で 3 群化）、②化膿性 / 結晶誘発関節炎の確定診断</li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">小児・特殊状況</h4>
+            <ul class="dx-imaging__list">
+              <li><strong>小児</strong>：Ottawa knee 18 歳未満は適応外（成長板評価が前提）。健側も撮ると比較しやすい</li>
+              <li><strong>人工膝置換後</strong>：インプラント周囲骨折を意識。元の病院での対応が原則</li>
+              <li><strong>抗凝固薬内服</strong>：低エネ転倒でも閾値下げて撮影</li>
             </ul>
           </details>
 
-          <!-- 出典・関連リンク -->
-          <div class="dx-arrival-divider"><span>出典・関連リンク</span></div>
+          <!-- X 線の読み方（系統的アプローチ） -->
+          <details class="dx-imaging" id="imagingReadPanel">
+            <summary>X 線の読み方（系統的アプローチ）</summary>
 
-          <details class="dx-imaging" id="refsPanel">
-            <summary>📚 出典・関連ページ</summary>
+            <h4 class="dx-rules-l2__group">① 撮影セットの確認</h4>
             <ul class="dx-imaging__list">
-              <li><strong>Ottawa Knee Rule</strong>：Stiell IG, et al. <em>JAMA</em>. 1996;275:611-5. ／系統的レビューで平均感度 98.5%</li>
-              <li><strong>Pittsburgh Knee Rule</strong>：Bauer SJ, et al. <em>Acad Emerg Med</em>. 1995. 感度 86〜100%</li>
-              <li><strong>Schatzker 分類</strong>（脛骨高原骨折）／<strong>AO 分類</strong>（大腿骨遠位端骨折）</li>
-              <li><strong>骨折ハンター</strong>（仲田和正 監修）— 第 15 章 膝関節痛ハンター①、第 16 章 膝関節痛ハンター②</li>
-              <li>関連疾患：
-                <a class="wiki-link" href="疾患詳細/大腿骨遠位端骨折.html">大腿骨遠位端骨折</a> ／
-                <a class="wiki-link" href="疾患詳細/脛骨高原骨折.html">脛骨高原骨折</a> ／
-                <a class="wiki-link" href="疾患詳細/脛骨骨幹部骨折.html">脛骨骨幹部骨折</a> ／
-                <a class="wiki-link" href="疾患詳細/膝蓋骨骨折・脱臼.html">膝蓋骨骨折・脱臼</a> ／
-                <a class="wiki-link" href="疾患詳細/膝靱帯・半月板損傷.html">膝靱帯・半月板損傷</a>
+              <li>AP + 側面が揃っているか。撮影体位の妥当性（回旋・関節面が見えるか）</li>
+              <li>膝前面強打 / 膝蓋骨圧痛例で skyline を追加したか</li>
+              <li>脛骨高原疑いで oblique を追加したか</li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">② 側面像 — lipohemarthrosis / fat pad を必ず確認</h4>
+            <ul class="dx-imaging__list">
+              <li><strong>lipohemarthrosis（脂肪/液体 fluid level）</strong>：水平像で suprapatellar bursa に 2 層（上＝脂肪、下＝血）→ <strong>関節内骨折を強く示唆</strong>。X 線が陰性でも occult fracture を疑う</li>
+              <li><strong>suprapatellar bursa の膨満</strong>：関節血症・滑液貯留。慢性なら OA・滑液包炎、急性なら関節内骨折 / ACL</li>
+              <li><strong>fat pad sign</strong>：膝蓋骨下脂肪体（Hoffa）の偏位・腫脹。微妙な関節内出血の指標</li>
+              <li><strong>大腿骨膝蓋骨間（patellofemoral joint）</strong>：膝蓋骨高位（patella alta）＝膝蓋腱断裂、低位＝大腿四頭筋腱断裂を意識</li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">③ 膝蓋骨評価（AP・側面・skyline）</h4>
+            <ul class="dx-imaging__list">
+              <li><strong>横骨折（50-80%）</strong>：側面像で透亮帯。離開していれば伸筋装置断裂</li>
+              <li><strong>縦骨折（12-17%）</strong>：<strong>AP・側面で見えない</strong>。skyline で初めて見つかる</li>
+              <li><strong>二分膝蓋骨</strong>：仮骨あり・両側性 40-45%。圧痛なしで反対側比較</li>
+              <li><strong>膝蓋骨脱臼後</strong>：内側膝蓋上稜の骨軟骨骨折（5%）を skyline で評価</li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">④ 大腿骨遠位端評価（AP・側面・CT）</h4>
+            <ul class="dx-imaging__list">
+              <li><strong>Y 字骨折線をイメージ</strong>：AO 分類で関節外（A）／部分関節内（B）／完全関節内（C, Y / T 字）を意識</li>
+              <li><strong>occult fracture</strong>：高齢者の単純転倒・荷重不能で骨折線が見えない場合あり。CT・MRI で診断</li>
+              <li><strong>インプラント周囲骨折</strong>：元の病院での対応原則。CT で骨折線・インプラント情報を整理</li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">⑤ 脛骨高原評価（AP・側面・oblique・CT）</h4>
+            <ul class="dx-imaging__list">
+              <li><strong>Schatzker 分類イメージ</strong>：I 外側縦割れ／II 外側縦割れ＋陥没／III 外側純陥没／IV 内側／V 両側／VI 関節外延長</li>
+              <li><strong>外側陥没</strong>：高齢者の低エネ転倒で多い。AP で関節面の段差を確認</li>
+              <li><strong>CT 必須</strong>：レントゲンで迷えば躊躇しない。手術プランニングにも必須</li>
+              <li><strong>半月板損傷 80-91%・靱帯損傷 40-77% 合併</strong>。整形外科に必ず情報共有</li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">⑥ 関節脱臼・靱帯損傷の所見</h4>
+            <ul class="dx-imaging__list">
+              <li><strong>膝関節脱臼</strong>：脛骨と大腿骨の重なりが完全に外れる。前方／後方／内側／外側／回旋脱臼の 5 型。自然整復例は変形なく見落とし注意</li>
+              <li><strong>Segond 骨折</strong>：脛骨外側顆の小撕脱骨片（AP で確認）→ <strong>ACL 損傷の 95% に合併</strong></li>
+              <li><strong>reverse Segond</strong>：内側顆の撕脱 → PCL 損傷の指標</li>
+              <li><strong>arcuate sign</strong>：腓骨頭の撕脱骨片 → posterolateral corner 損傷の指標</li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">⑦ 整復後の再読影（必須）</h4>
+            <ul class="dx-imaging__list">
+              <li><strong>膝関節脱臼整復後</strong>：必ず前後 2 枚を撮影。関節面の再対合・残存骨折・関節内 air（開放骨折）を確認</li>
+              <li><strong>膝蓋骨脱臼整復後</strong>：sunrise view ± MRI で骨軟骨骨折・MPFL 損傷を評価</li>
+              <li><strong>同時に脈・神経・5P を再評価</strong>し画像 + 所見をセットで紹介状に記載</li>
+            </ul>
+          </details>
+
+          <!-- 治療リファレンス -->
+          <details class="dx-imaging" id="rxPanel">
+            <summary>治療リファレンス：整復・固定・関節穿刺・抗菌薬・処置</summary>
+
+            <h4 class="dx-rules-l2__group">膝関節脱臼の初期対応</h4>
+            <ul class="dx-imaging__list">
+              <li>① <strong>脈触知・ABI・神経（腓骨・脛骨）をまず評価</strong>。レントゲンで脱臼確認</li>
+              <li>② 鎮静下に<strong>長軸牽引＋押し戻し整復</strong>（鎮静は ketofol 等）。1 ワントライで戻らなければ即整形・手術室</li>
+              <li>③ <strong>整復後すぐに脈・5P・ABI 再評価</strong>。ニーブレース 0° 伸展位で固定</li>
+              <li>④ <strong>整復後脈良好でも CTA</strong>（遅発性内膜損傷あり）。24 時間血管モニタリング</li>
+              <li>⑤ 開放／血管神経合併／整復不能は<strong>即時整形・手術室</strong></li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">膝蓋骨脱臼の整復</h4>
+            <ul class="dx-imaging__list">
+              <li>80% 外側脱臼。患者を仰臥位・膝伸展位でリラックスさせ、内側へ押し戻すと容易に整復</li>
+              <li>整復後に sunrise view（軸位像）／関節穿刺で骨軟骨骨折・血腫を評価</li>
+              <li><strong>ニーブレース 0° 伸展位 + 松葉杖</strong>で帰宅、整形外来 1-2 週以内</li>
+              <li>骨軟骨骨折 5%・MPFL 損傷・再脱臼率 15-44% を説明</li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">膝関節穿刺の方法</h4>
+            <ul class="dx-imaging__list">
+              <li><strong>体位</strong>：仰臥位、膝下に丸めたタオルで軽度屈曲（15-20°）</li>
+              <li><strong>穿刺部位</strong>：膝蓋骨外側上縁から 1 cm 上方・1 cm 外側（superolateral approach、最も成功率高い）</li>
+              <li><strong>消毒・局所麻酔・18-20G 針</strong>で suprapatellar bursa に向けて刺入</li>
+              <li><strong>採取液の評価</strong>：色調（黄／血性／白濁）／脂肪滴（油膜・lipid layer）／量（cc）／粘度<br>提出：<strong>WBC・グラム染色・培養・結晶（偏光顕微鏡）</strong>。血培 2 セットも併行</li>
+              <li><strong>骨折の脂肪滴判定（仲田流）</strong>：①脂肪滴 + → occult fracture、②脂肪滴 − / 出血 ≥10cc → ACL、③脂肪滴 − / 出血 &lt;10cc → MCL・半月板</li>
+              <li><strong>化膿性判定</strong>：WBC ≥ 50,000/mm³（PMN ≥ 75%）・グラム染色陽性で化膿性を強く示唆</li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">化膿性膝関節炎の抗菌薬</h4>
+            <ul class="dx-imaging__list">
+              <li><strong>培養前に血培 2 セット → 関節穿刺で関節液培養 → 抗菌薬</strong>。<strong>原則は穿刺・培養を取ってから</strong></li>
+              <li><strong>エンピリック</strong>：市中＝<strong>セファゾリン 2 g IV q8h</strong>。MRSA リスク（医療曝露・人工膝・透析・MRSA 既往）＝<strong>バンコマイシン</strong>追加</li>
+              <li><strong>Gram 陰性菌リスク</strong>（高齢・免疫不全・尿路感染既往）＝<strong>セフトリアキソン 2 g IV q24h</strong>を考慮</li>
+              <li><strong>淋菌疑い</strong>（若年・性活動）＝<strong>セフトリアキソン 1 g IV q24h</strong></li>
+              <li>即時整形コンサルト＋関節洗浄ドレナージ（保存では治癒困難）</li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">痛風・偽痛風の鎮痛</h4>
+            <ul class="dx-imaging__list">
+              <li><strong>化膿性除外が先</strong>（関節穿刺で結晶＋WBC・培養）</li>
+              <li><strong>第一選択 NSAIDs</strong>：ナプロキセン 500 mg × 2 / ロキソプロフェン 60 mg × 3。腎機能・消化管出血歴・心血管疾患で禁忌チェック</li>
+              <li><strong>コルヒチン</strong>：発症 24 時間以内なら 1 mg → 1 時間後 0.5 mg → 12 時間後から 0.5 mg × 2/日。腎・肝で減量</li>
+              <li><strong>関節内ステロイド</strong>（化膿性除外後）：トリアムシノロン 20-40 mg / メチルプレドニゾロン 40 mg</li>
+              <li><strong>経口プレドニゾロン</strong>：30-40 mg × 5 日（NSAIDs・コルヒチン禁忌例）</li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">開放骨折・抗菌薬</h4>
+            <ul class="dx-imaging__list">
+              <li><strong>セファゾリン 2 g IV</strong>（受傷 1 時間以内）。Gustilo III ＝ + ゲンタマイシン</li>
+              <li><strong>破傷風トキソイド</strong>（10 年以上未接種で）／創部写真撮影／生食ガーゼ被覆して OR まで dressing を外さない</li>
+              <li>即整形コール</li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">ニーブレース・松葉杖の指示</h4>
+            <ul class="dx-imaging__list">
+              <li><strong>適応</strong>：膝蓋骨骨折／膝蓋骨脱臼整復後／ACL・MCL・半月板損傷／脛骨高原 occult fracture／active SLR 不能例</li>
+              <li><strong>角度</strong>：原則 0°（完全伸展位）。膝蓋骨は伸展位で荷重がかからない</li>
+              <li><strong>松葉杖</strong>：膝への荷重を避ける必要がある場合。歩行訓練を ER で実施</li>
+              <li>骨折タイプ・角度・荷重可否を紹介状に明記</li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">鎮痛</h4>
+            <ul class="dx-imaging__list">
+              <li><strong>第一選択：アセトアミノフェン</strong> 1,000 mg × 4 / 日（4 g/日まで）。高齢者・小児にも安全</li>
+              <li><strong>NSAIDs（第二選択）</strong>：ロキソプロフェン 60 mg × 3 / 日。PPI 併用／eGFR ≥ 60／消化管出血歴・心血管疾患なし／脱水なし</li>
+              <li><strong>大腿神経ブロック</strong>：大腿骨遠位端・膝蓋骨骨折の強い痛みに考慮　<a href="疾患詳細/大腿神経ブロック.html">→ 大腿神経ブロック 詳細</a></li>
+              <li><strong>処方日数</strong>：整形外来日まで（通常 5-7 日分）</li>
+            </ul>
+          </details>
+
+          <!-- disposition -->
+          <details class="dx-imaging" id="dispoPanel">
+            <summary>disposition の目安</summary>
+
+            <h4 class="dx-rules-l2__group">30 秒で決める（5 択マネジメント）</h4>
+            <p class="dx-rules-l2__intro">※ 膝外傷の即時整形コンサルト適応は<strong>① 膝関節脱臼（自然整復含む）／② 開放骨折／③ 血管・神経合併／④ 化膿性膝関節炎／⑤ 整復不能な脱臼／⑥ 大腿骨遠位端・脛骨高原（手術プランニング）</strong>。それ以外は<strong>「入院手術 / 帰宅手術 / 帰宅保存」</strong>。</p>
+            <ul class="dx-rules-l2__list">
+              <li class="dx-rule is-critical">
+                <div class="dx-rule__if"><span class="dx-rule__tag">即時整形</span><span>膝関節脱臼（自然整復含む）／整復不能脱臼／開放骨折／血管神経症状／化膿性膝関節炎</span></div>
+                <div class="dx-rule__then"><strong>夜間・休日でも整形コール</strong>。膝関節脱臼は ABI・CTA・血管外科併診。化膿性は穿刺後即洗浄ドレナージ。<strong>「断言できないなら呼ぶ」</strong>。整形外科医も事前連絡を歓迎</div>
               </li>
-              <li>合併鑑別：
-                <a class="wiki-link" href="疾患詳細/コンパートメント症候群.html">コンパートメント症候群</a> ／
-                <a class="wiki-link" href="疾患詳細/開放骨折.html">開放骨折</a> ／
-                <a class="wiki-link" href="疾患詳細/大腿神経ブロック.html">大腿神経ブロック</a> ／
-                <a class="wiki-link" href="疾患詳細/大腿骨近位部骨折.html">大腿骨近位部骨折</a> ／
-                <a class="wiki-link" href="疾患詳細/大腿骨骨幹部骨折.html">大腿骨骨幹部骨折</a>
+              <li class="dx-rule">
+                <div class="dx-rule__if"><span class="dx-rule__tag">入院手術</span><span>大腿骨遠位端骨折／脛骨高原骨折（偏位・関節面陥没）／脛骨骨幹部骨折／多発外傷／ADL 困難な高齢者</span></div>
+                <div class="dx-rule__then">入院 + 即日 or 翌朝コンサルト。挙上・厳重 5P 観察、社会調整。脛骨高原は CT 完備で整形に喜ばれる。直達牽引で手術待機もあり</div>
               </li>
-              <li>関連トピック：
-                <a class="wiki-link" href="転倒.html">転倒</a> ／
-                <a class="wiki-link" href="足関節・足部の外傷.html">足関節・足部の外傷</a>
+              <li class="dx-rule">
+                <div class="dx-rule__if"><span class="dx-rule__tag">帰宅手術</span><span>膝蓋骨骨折 / 脱臼整復後／ACL 損傷（脂肪滴 − / 出血 ≥10cc）／半月板損傷（手術適応）</span></div>
+                <div class="dx-rule__then">待機手術（10 日以内に整形外来）。<strong>ニーブレース 0° 伸展位 + 松葉杖</strong>で帰宅、紹介状に分類・関節穿刺所見・神経血流を明記</div>
+              </li>
+              <li class="dx-rule">
+                <div class="dx-rule__if"><span class="dx-rule__tag">帰宅保存</span><span>Ottawa 陰性で骨折除外可・安定／MCL 損傷／半月板損傷（保存）／結晶誘発関節炎</span></div>
+                <div class="dx-rule__then"><strong>ニーブレース + 松葉杖</strong>、整形外来 1-2 週以内予約。痛風 / 偽痛風は NSAIDs・コルヒチン処方＋リウマチ / 整形外来へ</div>
+              </li>
+              <li class="dx-rule">
+                <div class="dx-rule__if"><span class="dx-rule__tag">再診不要</span><span>Ottawa 陰性＋身体所見陰性＋荷重可能＋関節血症なし</span></div>
+                <div class="dx-rule__then">疼痛増悪・腫脹増大・しびれ・発熱で再受診を指示。<strong>「48-72h で改善なければ再受診」を必ず書面交付</strong>（occult fracture・遅発性血管障害の安全弁）</div>
               </li>
             </ul>
+
+            <h4 class="dx-rules-l2__group">観察時間・フォロー間隔サマリー</h4>
+            <ul class="dx-imaging__list">
+              <li><strong>膝関節脱臼整復後</strong>：24 時間血管モニタリング（遅発性内膜損傷）。ABI 経時記録</li>
+              <li><strong>整復後 30 分 5P 観察</strong>：膝蓋骨脱臼・膝関節脱臼・固定直後すべて</li>
+              <li><strong>化膿性膝関節炎</strong>：洗浄後 24-48 時間で再評価。培養同定で抗菌薬 de-escalation</li>
+              <li><strong>大腿骨遠位端・脛骨高原</strong>：入院・荷重制限。occult fracture も同様の対応</li>
+              <li><strong>整形外来 1-2 週以内</strong>：保存治療例・関節穿刺で軸絞り済み例の標準フォロー</li>
+              <li><strong>外固定期間</strong>：膝蓋骨骨折・脱臼整復後 3-6 週 / 整形判断</li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">他科コンサルト文の標準書式</h4>
+            <ul class="dx-imaging__list">
+              <li>「他科コンサルト実践マニュアル」順：<strong>【目的】【疾患】【既往歴】【内服薬】【ADL】【現病歴】</strong></li>
+              <li><strong>【目的】</strong>：膝関節脱臼整復後の血管評価／脛骨高原骨折の入院加療／化膿性膝関節炎の関節洗浄ドレナージ など、目的を 1 行で</li>
+              <li><strong>【疾患】</strong>：診断名＋分類（Schatzker / AO / Gustilo）＋転位の程度（mm）</li>
+              <li><strong>【既往歴】</strong>【内服薬】【ADL】：抗凝固薬・骨粗鬆症・人工膝・利き足・職業・スポーツを必ず</li>
+              <li><strong>【現病歴】</strong>：受傷機転＋エネルギー＋ER 初療＋関節穿刺所見＋整復前後の神経血流＋画像所見を時系列で</li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">社会軸・特殊状況</h4>
+            <ul class="dx-imaging__list">
+              <li><strong>利き足・職業</strong>：アスリート・大工・農作業は閾値を下げて整形紹介。手術 vs 保存の判断材料</li>
+              <li><strong>独居高齢者</strong>：松葉杖歩行困難・ADL（食事・更衣・排泄）に支障 → 入院・社会調整の検討</li>
+              <li><strong>抗凝固薬内服</strong>：低エネ転倒でも閾値下げて撮影。血腫リスクを紹介状に</li>
+              <li><strong>人工膝</strong>：インプラント周囲骨折は元の病院での対応原則</li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">退室前ピットフォール（退室時固有）</h4>
+            <ul class="dx-rules-l2__list">
+              <li class="dx-rule is-pitfall">
+                <div class="dx-rule__if"><span class="dx-rule__tag">注意</span><span>膝関節脱臼整復後に脈触知良好で帰宅</span></div>
+                <div class="dx-rule__then"><strong>遅発性内膜損傷あり、24 時間モニター必須</strong>。ABI 経時測定・CTA を計画</div>
+              </li>
+              <li class="dx-rule is-pitfall">
+                <div class="dx-rule__if"><span class="dx-rule__tag">注意</span><span>化膿性膝関節炎を「結晶誘発」だけで帰宅</span></div>
+                <div class="dx-rule__then">結晶 + WBC 高値は<strong>合併</strong>あり。培養・グラム染色を必ず提出、発熱・敗血症兆候があれば化膿性扱い</div>
+              </li>
+              <li class="dx-rule is-pitfall">
+                <div class="dx-rule__if"><span class="dx-rule__tag">注意</span><span>occult fracture を「捻挫」で帰宅</span></div>
+                <div class="dx-rule__then">高齢者の荷重不能 + 関節血症は<strong>CT / MRI で大腿骨遠位端・脛骨高原を否定</strong>。脂肪滴 + は入院</div>
+              </li>
+              <li class="dx-rule is-pitfall">
+                <div class="dx-rule__if"><span class="dx-rule__tag">注意</span><span>ニーブレース・松葉杖の使い方を口頭だけで説明</span></div>
+                <div class="dx-rule__then">独居高齢者では装着・歩行困難。<strong>本人 + 家族で実技確認</strong>、書面でも交付</div>
+              </li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">退室前チェック（紹介状品質＋患者教育）</h4>
+            <ul class="dx-checklist__list">
+              <li><label><input type="checkbox" data-key="dispo-xray-attach"> <span><strong>整復前後 X 線・CT を紹介状に添付した</strong> <span class="dx-checklist__sub">脱臼整復後の残存骨折・関節面評価も</span></span></label></li>
+              <li><label><input type="checkbox" data-key="dispo-neuro-doc"> <span><strong>神経・血流所見（脈・ABI・5P）を紹介状に明記した</strong> <span class="dx-checklist__sub">整復前後の比較、腓骨神経（背屈）を必ず</span></span></label></li>
+              <li><label><input type="checkbox" data-key="dispo-classify"> <span><strong>分類（Schatzker／AO／Gustilo）を明記した</strong> <span class="dx-checklist__sub">脛骨高原 Schatzker Type、大腿骨遠位端 AO Type</span></span></label></li>
+              <li><label><input type="checkbox" data-key="dispo-disp-mm"> <span><strong>転位の程度（mm / 関節面陥没）を明記した</strong> <span class="dx-checklist__sub">脛骨高原は関節面段差を明記</span></span></label></li>
+              <li><label><input type="checkbox" data-key="dispo-aspirate"> <span><strong>関節穿刺所見（脂肪滴・出血量・WBC・結晶・培養）を明記した</strong> <span class="dx-checklist__sub">3 群化（脂肪滴 + / ≥10cc / &lt;10cc）と化膿性判定</span></span></label></li>
+              <li><label><input type="checkbox" data-key="dispo-adl-doc"> <span><strong>ADL・利き足・職業／スポーツを紹介状に明記した</strong> <span class="dx-checklist__sub">アスリート・大工は閾値を下げて手術相談</span></span></label></li>
+              <li><label><input type="checkbox" data-key="dispo-ortho"> <span><strong>整形外科外来の日時を確定した</strong> <span class="dx-checklist__sub">保存例は 1-2 週以内、膝関節脱臼は翌日</span></span></label></li>
+              <li><label><input type="checkbox" data-key="dispo-analgesic"> <span><strong>鎮痛薬を処方量と日数で指示した</strong> <span class="dx-checklist__sub">アセトアミノフェン first、痛風は NSAIDs・コルヒチン</span></span></label></li>
+              <li><label><input type="checkbox" data-key="dispo-5p"> <span><strong>5P・神経再評価を本人／家族に教えた</strong> <span class="dx-checklist__sub">悪化時は即受診と書面で説明</span></span></label></li>
+              <li><label><input type="checkbox" data-key="dispo-brace"> <span><strong>ニーブレース＋松葉杖の使用法を本人・家族と実技確認した</strong> <span class="dx-checklist__sub">0° 伸展位を保持、装着・歩行訓練</span></span></label></li>
+              <li><label><input type="checkbox" data-key="dispo-vasc-monitor"> <span><strong>膝関節脱臼で 24 時間血管モニタリングの説明をした</strong> <span class="dx-checklist__sub">遅発性内膜損傷、ABI 経時記録</span></span></label></li>
+              <li><label><input type="checkbox" data-key="dispo-recheck-rule"> <span><strong>48-72h で疼痛増悪・腫脹・しびれ・発熱で再受診を書面で渡した</strong> <span class="dx-checklist__sub">occult fracture・後発神経症状・遅発性血管障害の安全弁</span></span></label></li>
+              <li><label><input type="checkbox" data-key="dispo-implant"> <span><strong>人工膝周囲骨折は元の病院での対応を確認した</strong> <span class="dx-checklist__sub">転院前提でマネジメント</span></span></label></li>
+            </ul>
+
+            <a class="dx-node dx-node--external" href="疾患詳細/大腿神経ブロック.html" style="margin-top: 14px;">
+              <div class="dx-node__title">大腿神経ブロック（疾患詳細）</div>
+              <div class="dx-node__sub">大腿骨遠位端・膝蓋骨骨折の強い痛みに</div>
+            </a>
+          </details>
+
+          <!-- 参考文献 -->
+          <details class="dx-imaging" id="refsPanel">
+            <summary>参考文献</summary>
+
+            <h4 class="dx-rules-l2__group">疾患詳細ページ</h4>
+            <ul class="dx-imaging__list">
+              <li><a href="疾患詳細/大腿骨遠位端骨折.html">大腿骨遠位端骨折</a>／<a href="疾患詳細/脛骨高原骨折.html">脛骨高原骨折</a>／<a href="疾患詳細/脛骨骨幹部骨折.html">脛骨骨幹部骨折</a></li>
+              <li><a href="疾患詳細/膝蓋骨骨折・脱臼.html">膝蓋骨骨折・脱臼</a>／<a href="疾患詳細/膝靱帯・半月板損傷.html">膝靱帯・半月板損傷</a></li>
+              <li><a href="疾患詳細/コンパートメント症候群.html">コンパートメント症候群</a>／<a href="疾患詳細/開放骨折.html">開放骨折</a>／<a href="疾患詳細/大腿神経ブロック.html">大腿神経ブロック</a></li>
+              <li>関連：<a href="疾患詳細/大腿骨近位部骨折.html">大腿骨近位部骨折</a>／<a href="疾患詳細/大腿骨骨幹部骨折.html">大腿骨骨幹部骨折</a>／<a href="疾患詳細/アキレス腱損傷.html">アキレス腱損傷</a></li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">関連ハブ</h4>
+            <ul class="dx-imaging__list">
+              <li><a href="転倒.html">転倒</a>／<a href="足関節・足部の外傷.html">足関節・足部の外傷</a>／<a href="LEAD.html">下肢痛（LEAD）</a></li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">未作成（リンク予約）</h4>
+            <ul class="dx-imaging__list">
+              <li>急性化膿性膝関節炎（疾患詳細）／痛風・偽痛風 CPPD（疾患詳細）</li>
+              <li>膝関節脱臼（疾患詳細）／伸筋装置断裂（疾患詳細）</li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">主要な根拠・参考文献</h4>
+            <ul class="dx-imaging__list">
+              <li><strong>骨折ハンター（中外医学社）</strong>— 第 15 章「膝関節痛ハンター①（大腿骨遠位端骨折・脛骨高原骨折・膝蓋骨骨折）」<br>　ER の "hidden tip"：①骨折線をイメージしてレントゲンを読む、②膝前面強打／膝蓋骨圧痛で skyline view を追加、③高エネ・高齢者は CT を躊躇しない、④大腿骨遠位端・脛骨高原は即時整形・入院・手術主体</li>
+              <li><strong>骨折ハンター</strong>— 第 16 章「膝関節痛ハンター②（ACL・MCL・半月板・関節穿刺）」<br>　関節穿刺で 3 群化：①脂肪滴 + → occult fracture（入院整形）、②脂肪滴 − / 出血 ≥10cc → ACL（帰宅手術 / 帰宅保存）、③脂肪滴 − / 出血 &lt;10cc → MCL・半月板（帰宅手術 / 帰宅保存）。MCL ＋ ACL 合併 Ⅰ20-Ⅲ78%。McMurray 感度 53%（除外不可）</li>
+              <li><strong>Ottawa Knee Rule</strong>：Stiell IG, et al. <em>JAMA</em>. 1996;275:611-5. 系統的レビュー（Bachmann LM, <em>Ann Intern Med</em>. 2004）で平均感度 98.5%</li>
+              <li><strong>Pittsburgh Knee Rule</strong>：Bauer SJ, et al. <em>Acad Emerg Med</em>. 1995. 感度 86-100%</li>
+              <li><strong>Schatzker 分類</strong>（脛骨高原骨折）／<strong>AO 分類</strong>（大腿骨遠位端骨折）／<strong>Gustilo 分類</strong>（開放骨折）</li>
+              <li><strong>Schenck 分類</strong>（膝関節脱臼）：KD-I〜V。膝窩動脈損傷 18-25%（特に KD-III/IV）</li>
+              <li><strong>急性化膿性膝関節炎</strong>：関節液 WBC ≥ 50,000/mm³ + PMN ≥ 75%／グラム染色・培養／頻度 ブドウ球菌＞連鎖球菌＞淋菌（若年）＞GNR（高齢）</li>
+              <li>他科コンサルト実践マニュアル — 整形外科コンサルト文の標準書式（【目的】【疾患】【既往歴】【内服薬】【ADL】【現病歴】）</li>
+            </ul>
+
+            <p style="font-size:11px;color:var(--muted);margin-top:8px;">#ER #救急 #膝 #大腿骨遠位端骨折 #脛骨高原骨折 #脛骨骨幹部骨折 #膝蓋骨骨折 #膝蓋骨脱臼 #ACL #MCL #半月板損傷 #膝関節脱臼 #化膿性膝関節炎 #痛風 #偽痛風 #整形外科</p>
           </details>
 
         </div>
@@ -739,24 +1095,14 @@
 
   <script>
   (function(){
-    const flowBox = document.getElementById('flowBox');
-    const flowBoxClose = document.getElementById('flowBoxClose');
-
-    if (flowBox && flowBoxClose) {
-      const dismiss = () => { flowBox.hidden = true; };
-      flowBoxClose.addEventListener('click', dismiss);
-      flowBoxClose.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); dismiss(); }
-      });
-    }
-
     // 来院後チェックリスト：localStorage 永続化 + per-panel リセット
     const STORAGE_KEY = 'knee-dx-checklist-v1';
     let stored = {};
     try { stored = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); } catch (_) {}
-    const allBoxes = document.querySelectorAll('.dx-checklist__list input[type="checkbox"]');
+    const allBoxes = document.querySelectorAll('.dx-checklist__list input[type="checkbox"], input[type="checkbox"][data-key]');
     allBoxes.forEach(cb => {
       const key = cb.dataset.key;
+      if (!key) return;
       if (stored[key]) cb.checked = true;
       cb.addEventListener('change', () => {
         if (cb.checked) stored[key] = true; else delete stored[key];
@@ -778,7 +1124,7 @@
     });
 
     // パネル開閉状態を localStorage で復元
-    ['historyPanel', 'examPanel', 'rulesL2Panel', 'imagingPanel', 'refsPanel'].forEach(id => {
+    ['historyPanel', 'examPanel', 'rulesL2Panel', 'imagingPanel', 'imagingReadPanel', 'rxPanel', 'dispoPanel', 'refsPanel'].forEach(id => {
       const el = document.getElementById(id);
       if (!el) return;
       const key = `knee-${id}-open-v1`;
@@ -793,6 +1139,103 @@
     if (navBack) navBack.addEventListener('click', () => {
       if (window.history.length > 1) history.back();
       else window.location.href = 'index.html';
+    });
+
+    // === Peek プレビュー ===
+    const PEEK_SELECTOR = 'a.dx-node[href^="#"]';
+    let peekOverlay = null;
+
+    function createPeekOverlay() {
+      const overlay = document.createElement('div');
+      overlay.className = 'peek-modal';
+      overlay.innerHTML =
+        '<div class="peek-modal__sheet" role="dialog" aria-modal="true" aria-labelledby="peekTitle">' +
+          '<div class="peek-modal__handle" aria-hidden="true"></div>' +
+          '<header class="peek-modal__header">' +
+            '<span class="peek-modal__title" id="peekTitle">プレビュー</span>' +
+            '<button type="button" class="peek-modal__close" aria-label="閉じる">✕</button>' +
+          '</header>' +
+          '<div class="peek-modal__body"></div>' +
+        '</div>';
+      document.body.appendChild(overlay);
+      return overlay;
+    }
+
+    function resolvePeekTarget(id) {
+      const el = document.getElementById(id);
+      if (!el) return null;
+      const rule = el.closest('li.dx-rule');
+      if (rule) return rule;
+      return el;
+    }
+
+    function deriveTitle(target, id) {
+      if (target.tagName === 'DETAILS') {
+        const sum = target.querySelector('summary');
+        if (sum) return sum.textContent.trim();
+      }
+      const ifNode = target.querySelector('.dx-rule__if');
+      if (ifNode) {
+        const clone = ifNode.cloneNode(true);
+        clone.querySelectorAll('.dx-rule__tag').forEach(t => t.remove());
+        return clone.textContent.trim();
+      }
+      const ntitle = target.querySelector('.dx-node__title');
+      if (ntitle) return ntitle.textContent.trim();
+      return id;
+    }
+
+    function openPeek(id) {
+      const target = resolvePeekTarget(id);
+      if (!target) return false;
+      if (!peekOverlay) peekOverlay = createPeekOverlay();
+
+      peekOverlay.querySelector('.peek-modal__title').textContent = deriveTitle(target, id);
+
+      const bodyEl = peekOverlay.querySelector('.peek-modal__body');
+      bodyEl.innerHTML = '';
+      const clone = target.cloneNode(true);
+      clone.removeAttribute('id');
+      clone.querySelectorAll('[id]').forEach(el => el.removeAttribute('id'));
+      if (clone.tagName === 'DETAILS') clone.open = true;
+      clone.querySelectorAll('details').forEach(d => { d.open = true; });
+      bodyEl.appendChild(clone);
+      bodyEl.scrollTop = 0;
+
+      peekOverlay.classList.add('is-open');
+      document.body.style.overflow = 'hidden';
+      return true;
+    }
+
+    function closePeek() {
+      if (!peekOverlay) return;
+      peekOverlay.classList.remove('is-open');
+      document.body.style.overflow = '';
+    }
+
+    document.addEventListener('click', (e) => {
+      if (peekOverlay && peekOverlay.classList.contains('is-open')) {
+        if (e.target.classList.contains('peek-modal__close')) { e.preventDefault(); closePeek(); return; }
+        if (e.target === peekOverlay) { closePeek(); return; }
+      }
+      const link = e.target.closest(PEEK_SELECTOR);
+      if (!link) return;
+      const href = link.getAttribute('href');
+      if (!href || href.length <= 1 || href[0] !== '#') return;
+      e.preventDefault();
+      openPeek(href.substring(1));
+    });
+
+    document.addEventListener('contextmenu', (e) => {
+      const link = e.target.closest(PEEK_SELECTOR);
+      if (!link) return;
+      e.preventDefault();
+      const href = link.getAttribute('href');
+      if (href && href.length > 1 && href[0] === '#') openPeek(href.substring(1));
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && peekOverlay && peekOverlay.classList.contains('is-open')) closePeek();
     });
   })();
   </script>

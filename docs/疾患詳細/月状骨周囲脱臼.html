@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="color-scheme" content="light dark" />
+  <title>月状骨周囲脱臼・月状骨脱臼 | ER ノート</title>
+  <link rel="stylesheet" href="../er-note.css" />
+  <style>
+    /* ============ クイックタップ（3 つを開閉トリガー） ============ */
+    .dx-quick {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px;
+      margin: 10px 0 4px;
+    }
+    .dx-quick__btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      padding: 10px 6px;
+      border-radius: 10px;
+      background: color-mix(in srgb, var(--accent) 10%, var(--surface));
+      border: 1.5px solid var(--accent);
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 13px;
+      line-height: 1.2;
+      text-align: center;
+      cursor: pointer;
+      transition: background 120ms ease;
+    }
+    .dx-quick__btn:hover {
+      background: color-mix(in srgb, var(--accent) 18%, var(--surface));
+    }
+    .dx-quick__icon { font-size: 20px; }
+    .dx-quick__sub {
+      font-size: 10.5px;
+      font-weight: 500;
+      color: var(--muted);
+    }
+
+    /* ============ 同時評価 3 列（血管・神経・典型像） ============ */
+    .dx-tri {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+      margin: 6px 0 4px;
+      align-items: start;
+    }
+    .dx-tri__card {
+      background: var(--surface);
+      border-radius: 10px;
+      padding: 10px 12px;
+      border: 1.5px solid color-mix(in srgb, var(--text) 18%, transparent);
+    }
+    .dx-tri__card--vasc { border-color: #c0392b; background: color-mix(in srgb, #c0392b 6%, var(--surface)); }
+    .dx-tri__card--neuro { border-color: #b5651d; background: color-mix(in srgb, #b5651d 6%, var(--surface)); }
+    .dx-tri__card--typical { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 6%, var(--surface)); }
+    .dx-tri__title {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 800;
+      font-size: 13.5px;
+      margin-bottom: 4px;
+    }
+    .dx-tri__card--vasc .dx-tri__title { color: #c0392b; }
+    .dx-tri__card--neuro .dx-tri__title { color: #b5651d; }
+    .dx-tri__list {
+      margin: 0;
+      padding-left: 18px;
+      font-size: 12.5px;
+      line-height: 1.5;
+    }
+    .dx-tri__list li { margin: 2px 0; }
+
+    /* details 形式の血管/神経カード：summary にチェック印、開閉時の挙動 */
+    details.dx-tri__card { padding: 0; }
+    details.dx-tri__card > summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 10px 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 800;
+      font-size: 13.5px;
+    }
+    details.dx-tri__card > summary::-webkit-details-marker { display: none; }
+    details.dx-tri__card > summary::after {
+      content: "▸";
+      margin-left: auto;
+      font-size: 12px;
+      color: var(--muted);
+      transition: transform 120ms ease;
+    }
+    details.dx-tri__card[open] > summary::after { transform: rotate(90deg); }
+    details.dx-tri__card--vasc > summary { color: #c0392b; }
+    details.dx-tri__card--neuro > summary { color: #b5651d; }
+    details.dx-tri__card > .dx-tri__list { padding: 0 14px 12px 30px; }
+    details.dx-tri__card > .dx-tri__hint {
+      padding: 0 14px 6px 30px;
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    /* ============ 大きな details ボックス（画像/治療方針/コンサル文） ============ */
+    details.dx-box {
+      background: var(--surface);
+      border: 1.5px solid color-mix(in srgb, var(--text) 18%, transparent);
+      border-radius: 10px;
+      margin: 10px 0;
+      scroll-margin-top: 8px;
+    }
+    details.dx-box > summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 12px 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 800;
+      font-size: 14.5px;
+    }
+    details.dx-box > summary::-webkit-details-marker { display: none; }
+    details.dx-box > summary::after {
+      content: "▸";
+      margin-left: auto;
+      font-size: 13px;
+      color: var(--muted);
+      transition: transform 120ms ease;
+    }
+    details.dx-box[open] > summary::after { transform: rotate(90deg); }
+    details.dx-box[open] {
+      border-color: var(--accent);
+    }
+    details.dx-box > .dx-box__body {
+      padding: 0 14px 14px;
+    }
+
+    /* スマホで 1 列に */
+    @media (max-width: 640px) {
+      .dx-quick { gap: 6px; }
+      .dx-quick__btn { padding: 8px 4px; font-size: 11.5px; border-radius: 8px; }
+      .dx-quick__icon { font-size: 17px; }
+      .dx-quick__sub { font-size: 9.5px; }
+
+      .dx-tri { grid-template-columns: 1fr; gap: 8px; }
+      .dx-tri__card { padding: 8px 10px; }
+      details.dx-tri__card > summary { padding: 8px 10px; font-size: 12.5px; }
+      details.dx-tri__card > .dx-tri__list { padding: 0 12px 10px 26px; }
+      .dx-tri__title { font-size: 12.5px; }
+      .dx-tri__list { font-size: 12px; }
+
+      details.dx-box > summary { padding: 10px 12px; font-size: 13.5px; }
+      details.dx-box > .dx-box__body { padding: 0 12px 12px; }
+    }
+
+    /* ============ 区切り帯（最小限） ============ */
+    .dx-step {
+      margin: 18px 0 6px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 11.5px;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+    }
+    .dx-step::before, .dx-step::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: color-mix(in srgb, var(--text) 18%, transparent);
+    }
+
+    /* コピペ用テンプレ */
+    .dx-template {
+      background: color-mix(in srgb, var(--text) 4%, var(--surface));
+      border-left: 3px solid var(--accent);
+      border-radius: 6px;
+      padding: 10px 12px;
+      margin: 6px 0 0;
+      font-size: 13px;
+      line-height: 1.6;
+      white-space: pre-wrap;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+    .dx-template__hint {
+      font-size: 11px;
+      color: var(--muted);
+      margin: 0 0 4px;
+    }
+  </style>
+</head>
+<body>
+  <header class="hokuto-top">
+    <a class="hokuto-top__btn" href="../薬剤情報.html">
+      <span class="hokuto-top__icon"></span><span>薬剤情報</span>
+    </a>
+    <a class="hokuto-top__btn" href="../表計算.html">
+      <span class="hokuto-top__icon"></span><span>表計算</span>
+    </a>
+  </header>
+
+  <main class="hokuto-main">
+    <article class="note-shell">
+      <h1 class="page-title">月状骨周囲脱臼・月状骨脱臼</h1>
+
+      <!-- スマホですぐ開きたい 3 つ -->
+      <nav class="dx-quick" aria-label="クイックタップ">
+        <button class="dx-quick__btn" type="button" data-target="img-read">
+          <span>画像の見方</span>
+          <span class="dx-quick__sub">Gilula's arc / spilled teacup</span>
+        </button>
+        <button class="dx-quick__btn" type="button" data-target="plan">
+          <span>治療方針</span>
+          <span class="dx-quick__sub">徒手整復 → 全例手術</span>
+        </button>
+        <button class="dx-quick__btn" type="button" data-target="consult">
+          <span>コンサル文</span>
+          <span class="dx-quick__sub">そのまま貼れる</span>
+        </button>
+      </nav>
+
+      <!-- 同時評価 3 列：典型像は常時、血管・神経は折りたたみ -->
+      <div class="dx-step"><span>同時並行で評価する 3 軸</span></div>
+      <div class="dx-tri">
+
+        <div class="dx-tri__card dx-tri__card--typical">
+          <div class="dx-tri__title">典型像</div>
+          <ul class="dx-tri__list">
+            <li>若年男性：<strong>高エネルギー FOOSH</strong></li>
+            <li>バイク事故・高所墜落・スポーツ</li>
+            <li>手関節背側の強い<strong>腫脹・可動制限</strong></li>
+            <li>月状骨直上の圧痛、Watson 試験陽性</li>
+            <li><strong>「手関節捻挫」と誤診</strong>される代表格</li>
+            <li>PA だけでなく必ず lateral を読む</li>
+          </ul>
+        </div>
+
+        <details class="dx-tri__card dx-tri__card--vasc">
+          <summary>血管</summary>
+          <p class="dx-tri__hint">純粋な動脈損傷は稀。橈骨動脈・尺骨動脈の触知と毛細血管再充満を必ず確認し、コンパートメント症候群を見逃さない。</p>
+          <ul class="dx-tri__list">
+            <li><strong>橈骨動脈・尺骨動脈</strong>触知（手首掌側）</li>
+            <li>指先 capillary refill、皮膚色・冷感</li>
+            <li>前腕の強い緊満・受動伸展痛 → コンパートメント疑い</li>
+            <li>月状骨自体の血流障害 → 長期 Kienböck 病リスク</li>
+          </ul>
+        </details>
+
+        <details class="dx-tri__card dx-tri__card--neuro">
+          <summary>神経</summary>
+          <p class="dx-tri__hint">月状骨が掌側に転位すると<strong>正中神経</strong>を圧迫する。<strong>急性手根管症候群</strong>は約 25% で合併し、緊急 release の適応。</p>
+          <ul class="dx-tri__list">
+            <li><strong>母指〜環指橈側</strong>の感覚（正中神経）</li>
+            <li>母指対立・外転（短母指外転筋）</li>
+            <li>夜間痛・しびれ・知覚低下は急性手根管</li>
+            <li>尺骨神経・橈骨神経領域も左右比較で確認</li>
+            <li>神経症状は経時的に進行 → 反復評価と記録</li>
+          </ul>
+        </details>
+      </div>
+
+      <!-- 画像の見方 -->
+      <details class="dx-box" id="img-read">
+        <summary><span>画像の見方</span></summary>
+        <div class="dx-box__body">
+          <ul>
+            <li><strong>手関節 Xp PA・lateral 必須</strong>。PA だけだと見逃す。</li>
+            <li>PA で必ず追うポイント：
+              <ul>
+                <li><strong>Gilula's arc</strong>（手根骨配列の3本のなめらかな弧）の<strong>break</strong></li>
+                <li>scapholunate gap <strong>&gt; 3 mm</strong>（<strong>Terry Thomas sign</strong>）</li>
+                <li>scaphoid ring sign（舟状骨の短縮・回旋）</li>
+                <li>月状骨が三角形に見える（正常は四角）</li>
+              </ul>
+            </li>
+            <li>Lateral で病型を区別：
+              <ul>
+                <li><strong>月状骨周囲脱臼</strong>：月状骨は橈骨と整列、有頭骨が<strong>背側</strong>に脱臼</li>
+                <li><strong>月状骨脱臼</strong>：月状骨自体が<strong>掌側</strong>に転位し回転（<strong>spilled teacup sign</strong>）、有頭骨は橈骨側へ落ち込む</li>
+                <li>橈骨・月状骨・有頭骨が一直線に並ぶ「co-linear」が崩れていないか</li>
+              </ul>
+            </li>
+            <li>合併骨折を必ずチェック：
+              <ul>
+                <li>舟状骨骨折（trans-scaphoid perilunate dislocation）</li>
+                <li>橈骨茎状突起、有頭骨、三角骨骨折</li>
+              </ul>
+            </li>
+            <li>判断困難なら早期 <strong>CT</strong>。靱帯損傷評価には MRI。</li>
+          </ul>
+        </div>
+      </details>
+
+      <!-- 治療方針 -->
+      <details class="dx-box" id="plan">
+        <summary><span>治療方針（Mayfield stage × 病型）</span></summary>
+        <div class="dx-box__body">
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>Mayfield</th><th>病態</th><th>方針</th><th>ER の動き</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>stage I</td>
+                  <td>舟状月状骨間（SL）解離</td>
+                  <td><strong>手術（靱帯修復）</strong></td>
+                  <td>シーネ ＋ 整形コンサル</td>
+                </tr>
+                <tr>
+                  <td>stage II</td>
+                  <td>SL 解離 + 有頭月状骨間（CL）破綻</td>
+                  <td><strong>手術</strong></td>
+                  <td>シーネ ＋ 整形コンサル</td>
+                </tr>
+                <tr>
+                  <td>stage III</td>
+                  <td>SL + CL + 月状三角骨間（LT）破綻＝<strong>月状骨周囲脱臼</strong></td>
+                  <td><strong>緊急徒手整復 → 手術</strong></td>
+                  <td>Tavernier 法 ＋ 整形即コール</td>
+                </tr>
+                <tr>
+                  <td>stage IV</td>
+                  <td>月状骨が掌側に転位＝<strong>月状骨脱臼</strong></td>
+                  <td><strong>緊急徒手整復 → 手術</strong>（急性手根管 release 併施）</td>
+                  <td>Tavernier 法 ＋ 整形即コール</td>
+                </tr>
+                <tr>
+                  <td>trans-scaphoid 型</td>
+                  <td>舟状骨骨折を伴う月状骨周囲脱臼</td>
+                  <td><strong>手術（ORIF + 靱帯修復）</strong></td>
+                  <td>シーネ ＋ 整形コンサル</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3>ER で打つ手</h3>
+          <ul>
+            <li><strong>Tavernier 法による徒手整復</strong>：十分な鎮静下で、まず手関節を背屈位で長軸牽引 → 続いて掌屈し、術者の母指で月状骨を背側へ押し込んで整復</li>
+            <li>整復後も<strong>不安定で再脱臼しやすい</strong> → 必ずシーネ固定</li>
+            <li>整復成功 / 不成功にかかわらず<strong>全例手術適応</strong>。「整復できたから帰宅」は禁忌</li>
+            <li>シーネは sugar tong または手関節背側シーネ（軽度掌屈位）、患肢挙上</li>
+            <li>急性手根管症候群（正中神経症状）あれば<strong>緊急 release 適応</strong> → 整形即コール</li>
+            <li>鎮痛は NSAIDs / アセトアミノフェン、必要に応じて静注オピオイド</li>
+            <li>原則<strong>同日入院</strong>。夜間でも整形外科に即コール</li>
+          </ul>
+
+          <h3>ピットフォール</h3>
+          <ul>
+            <li>PA だけ見て見逃す（lateral を必ず読む）</li>
+            <li>「手関節捻挫」と誤診して帰宅させる</li>
+            <li>正中神経症状を初診時に評価せず見落とす</li>
+            <li>徒手整復成功で「治った」と判断し外来扱いにする</li>
+            <li>舟状骨骨折合併（trans-scaphoid）を見逃す</li>
+          </ul>
+        </div>
+      </details>
+
+      <!-- コンサル文 -->
+      <details class="dx-box" id="consult">
+        <summary><span>コンサル文（カルテに貼る）</span></summary>
+        <div class="dx-box__body">
+          <p class="dx-template__hint">『他科コンサルト実践マニュアル』の院内紹介状フォーマットに準拠（【目的】【疾患】【既往歴】【内服薬】【ADL】【現病歴】）。緊急コンサルト型。</p>
+          <div class="dx-template">【目的】整形外科（手の外科）への緊急コンサルト依頼。
+【疾患】#1 [右/左]月状骨周囲脱臼（Mayfield stage [I-IV]）／月状骨脱臼
+【既往歴】[特記事項なし／○○]
+【内服薬】[なし／○○]
+【ADL（受傷前）】[自立／○○]
+【現病歴】[年齢]歳[男/女]性。[高エネ受傷機転：バイク事故／高所墜落／スポーツでの FOOSH]で受傷し、[来院経緯]で来院。
+ ・身体所見：手関節背側〜橈側腫脹 [+]、可動制限 [+]、月状骨直上圧痛 [+]、Watson 試験 [+/−]
+ ・血管：橈骨動脈触知 [良好]、毛細血管再充満 [良好]、左右差なし
+ ・神経：正中神経領域（母指〜環指橈側）の感覚低下・夜間痛 [+/−]、急性手根管症候群を併発のリスク
+ ・画像：手関節 Xp PA/lateral で Gilula's arc 1〜3 の break、Terry Thomas sign（SL gap &gt;3mm）、側面で月状骨周囲脱臼＝月状骨は橈骨と整列・有頭骨が背側脱臼／月状骨脱臼＝月状骨が掌側へ転位（spilled teacup sign）
+ ・ER 処置：シーネ固定、患肢挙上、（試行した場合）Tavernier 法による徒手整復、整形即コール
+よろしくお願いいたします。</div>
+        </div>
+      </details>
+
+      <!-- 関連ハブ -->
+      <details class="dx-box">
+        <summary><span>関連ハブ・隣接疾患</span></summary>
+        <div class="dx-box__body">
+          <ul>
+            <li>主訴入口：<a class="wiki-link" href="../手関節・手の外傷.html">手関節・手の外傷</a> ／ <a class="wiki-link" href="../転倒.html">転倒</a></li>
+            <li>隣接疾患：<a class="wiki-link" href="舟状骨骨折.html">舟状骨骨折</a>（trans-scaphoid 型で合併） ／ <a class="wiki-link" href="橈骨遠位端骨折.html">橈骨遠位端骨折</a> ／ <a class="wiki-link" href="三角骨骨折.html">三角骨骨折</a> ／ <a class="wiki-link" href="上肢末梢神経損傷.html">上肢末梢神経損傷</a>（急性手根管症候群）</li>
+            <li>合併症対応：急性手根管症候群 → 緊急 release ／ Kienböck 病（月状骨無腐性壊死）は長期合併症</li>
+            <li>処置：Tavernier 法による徒手整復 ／ シーネ固定 ／ 三角巾</li>
+          </ul>
+        </div>
+      </details>
+
+      <!-- 出典 -->
+      <details class="dx-box">
+        <summary><span>出典</span></summary>
+        <div class="dx-box__body">
+          <ul>
+            <li>増井伸高. 骨折ハンター. 中外医学社. 2019.</li>
+            <li>津下健哉. 手の外科の実際 改訂第7版. 南江堂. 2011.</li>
+            <li>Mayfield JK, et al. Carpal dislocations: pathomechanics and progressive perilunar instability. J Hand Surg Am. 1980;5(3):226-241.</li>
+            <li>佐藤弘明 ほか. 他科コンサルト実践マニュアル. 羊土社.</li>
+          </ul>
+        </div>
+      </details>
+
+    </article>
+  </main>
+
+  <nav class="hokuto-bottom">
+    <button class="hokuto-bottom__btn" type="button" id="navBack">
+      <span class="hokuto-bottom__icon"></span><span>戻る</span>
+    </button>
+    <a class="hokuto-bottom__btn" href="../ツール.html">
+      <span class="hokuto-bottom__icon"></span><span>ツール</span>
+    </a>
+    <a class="hokuto-bottom__btn" href="../index.html">
+      <span class="hokuto-bottom__icon"></span><span>ホーム</span>
+    </a>
+  </nav>
+
+  <script>
+  (function(){
+    document.querySelectorAll('.dx-quick__btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.dataset.target;
+        const target = document.getElementById(id);
+        if (!target) return;
+        target.open = true;
+        target.scrollIntoView({behavior: 'smooth', block: 'start'});
+      });
+    });
+
+    const navBack = document.getElementById('navBack');
+    if (navBack) navBack.addEventListener('click', () => {
+      if (window.history.length > 1) history.back();
+      else window.location.href = '../index.html';
+    });
+  })();
+  </script>
+</body>
+</html>

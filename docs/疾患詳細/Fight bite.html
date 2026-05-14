@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="color-scheme" content="light dark" />
+  <title>Fight bite（clenched-fist injuries） | ER ノート</title>
+  <link rel="stylesheet" href="../er-note.css" />
+  <style>
+    /* ============ クイックタップ（3 つを開閉トリガー） ============ */
+    .dx-quick {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px;
+      margin: 10px 0 4px;
+    }
+    .dx-quick__btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      padding: 10px 6px;
+      border-radius: 10px;
+      background: color-mix(in srgb, var(--accent) 10%, var(--surface));
+      border: 1.5px solid var(--accent);
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 13px;
+      line-height: 1.2;
+      text-align: center;
+      cursor: pointer;
+      transition: background 120ms ease;
+    }
+    .dx-quick__btn:hover {
+      background: color-mix(in srgb, var(--accent) 18%, var(--surface));
+    }
+    .dx-quick__icon { font-size: 20px; }
+    .dx-quick__sub {
+      font-size: 10.5px;
+      font-weight: 500;
+      color: var(--muted);
+    }
+
+    /* ============ 同時評価 3 列（血管・神経・典型像） ============ */
+    .dx-tri {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+      margin: 6px 0 4px;
+      align-items: start;
+    }
+    .dx-tri__card {
+      background: var(--surface);
+      border-radius: 10px;
+      padding: 10px 12px;
+      border: 1.5px solid color-mix(in srgb, var(--text) 18%, transparent);
+    }
+    .dx-tri__card--vasc { border-color: #c0392b; background: color-mix(in srgb, #c0392b 6%, var(--surface)); }
+    .dx-tri__card--neuro { border-color: #b5651d; background: color-mix(in srgb, #b5651d 6%, var(--surface)); }
+    .dx-tri__card--typical { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 6%, var(--surface)); }
+    .dx-tri__title {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 800;
+      font-size: 13.5px;
+      margin-bottom: 4px;
+    }
+    .dx-tri__card--vasc .dx-tri__title { color: #c0392b; }
+    .dx-tri__card--neuro .dx-tri__title { color: #b5651d; }
+    .dx-tri__list {
+      margin: 0;
+      padding-left: 18px;
+      font-size: 12.5px;
+      line-height: 1.5;
+    }
+    .dx-tri__list li { margin: 2px 0; }
+
+    /* details 形式の血管/神経カード：summary にチェック印、開閉時の挙動 */
+    details.dx-tri__card { padding: 0; }
+    details.dx-tri__card > summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 10px 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 800;
+      font-size: 13.5px;
+    }
+    details.dx-tri__card > summary::-webkit-details-marker { display: none; }
+    details.dx-tri__card > summary::after {
+      content: "▸";
+      margin-left: auto;
+      font-size: 12px;
+      color: var(--muted);
+      transition: transform 120ms ease;
+    }
+    details.dx-tri__card[open] > summary::after { transform: rotate(90deg); }
+    details.dx-tri__card--vasc > summary { color: #c0392b; }
+    details.dx-tri__card--neuro > summary { color: #b5651d; }
+    details.dx-tri__card > .dx-tri__list { padding: 0 14px 12px 30px; }
+    details.dx-tri__card > .dx-tri__hint {
+      padding: 0 14px 6px 30px;
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    /* ============ 大きな details ボックス（画像/治療方針/コンサル文） ============ */
+    details.dx-box {
+      background: var(--surface);
+      border: 1.5px solid color-mix(in srgb, var(--text) 18%, transparent);
+      border-radius: 10px;
+      margin: 10px 0;
+      scroll-margin-top: 8px;
+    }
+    details.dx-box > summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 12px 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 800;
+      font-size: 14.5px;
+    }
+    details.dx-box > summary::-webkit-details-marker { display: none; }
+    details.dx-box > summary::after {
+      content: "▸";
+      margin-left: auto;
+      font-size: 13px;
+      color: var(--muted);
+      transition: transform 120ms ease;
+    }
+    details.dx-box[open] > summary::after { transform: rotate(90deg); }
+    details.dx-box[open] {
+      border-color: var(--accent);
+    }
+    details.dx-box > .dx-box__body {
+      padding: 0 14px 14px;
+    }
+
+    /* スマホで 1 列に */
+    @media (max-width: 640px) {
+      .dx-quick { gap: 6px; }
+      .dx-quick__btn { padding: 8px 4px; font-size: 11.5px; border-radius: 8px; }
+      .dx-quick__icon { font-size: 17px; }
+      .dx-quick__sub { font-size: 9.5px; }
+
+      .dx-tri { grid-template-columns: 1fr; gap: 8px; }
+      .dx-tri__card { padding: 8px 10px; }
+      details.dx-tri__card > summary { padding: 8px 10px; font-size: 12.5px; }
+      details.dx-tri__card > .dx-tri__list { padding: 0 12px 10px 26px; }
+      .dx-tri__title { font-size: 12.5px; }
+      .dx-tri__list { font-size: 12px; }
+
+      details.dx-box > summary { padding: 10px 12px; font-size: 13.5px; }
+      details.dx-box > .dx-box__body { padding: 0 12px 12px; }
+    }
+
+    /* ============ 区切り帯（最小限） ============ */
+    .dx-step {
+      margin: 18px 0 6px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 11.5px;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+    }
+    .dx-step::before, .dx-step::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: color-mix(in srgb, var(--text) 18%, transparent);
+    }
+
+    /* コピペ用テンプレ */
+    .dx-template {
+      background: color-mix(in srgb, var(--text) 4%, var(--surface));
+      border-left: 3px solid var(--accent);
+      border-radius: 6px;
+      padding: 10px 12px;
+      margin: 6px 0 0;
+      font-size: 13px;
+      line-height: 1.6;
+      white-space: pre-wrap;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+    .dx-template__hint {
+      font-size: 11px;
+      color: var(--muted);
+      margin: 0 0 4px;
+    }
+  </style>
+</head>
+<body>
+  <header class="hokuto-top">
+    <a class="hokuto-top__btn" href="../薬剤情報.html">
+      <span class="hokuto-top__icon"></span><span>薬剤情報</span>
+    </a>
+    <a class="hokuto-top__btn" href="../表計算.html">
+      <span class="hokuto-top__icon"></span><span>表計算</span>
+    </a>
+  </header>
+
+  <main class="hokuto-main">
+    <article class="note-shell">
+      <h1 class="page-title">Fight bite（clenched-fist injuries）</h1>
+
+      <!-- スマホですぐ開きたい 3 つ -->
+      <nav class="dx-quick" aria-label="クイックタップ">
+        <button class="dx-quick__btn" type="button" data-target="img-read">
+          <span>評価のコツ</span>
+          <span class="dx-quick__sub">屈曲位で関節包貫通評価</span>
+        </button>
+        <button class="dx-quick__btn" type="button" data-target="plan">
+          <span>治療方針</span>
+          <span class="dx-quick__sub">開放管理 ＋ 抗菌薬</span>
+        </button>
+        <button class="dx-quick__btn" type="button" data-target="consult">
+          <span>コンサル文</span>
+          <span class="dx-quick__sub">そのまま貼れる</span>
+        </button>
+      </nav>
+
+      <!-- 同時評価 3 列：典型像は常時、病原体・合併症は折りたたみ -->
+      <div class="dx-step"><span>同時並行で評価する 3 軸</span></div>
+      <div class="dx-tri">
+
+        <div class="dx-tri__card dx-tri__card--typical">
+          <div class="dx-tri__title">典型像</div>
+          <ul class="dx-tri__list">
+            <li>若年男性：素手で殴打／喧嘩</li>
+            <li><strong>第 3〜5 中手骨頭（MP 背側）の小裂創</strong></li>
+            <li>「ドアにぶつけた」と<strong>嘘の機転</strong>を語る</li>
+            <li>ボクサー骨折（中手骨頸部骨折）と合併</li>
+            <li>受診遅れ → 既に蜂窩織炎・関節炎で来院</li>
+          </ul>
+        </div>
+
+        <details class="dx-tri__card dx-tri__card--vasc">
+          <summary>病原体</summary>
+          <p class="dx-tri__hint">ヒト口腔内の好気性・嫌気性菌の混合感染。<strong>Eikenella corrodens</strong> がヒト咬創の特徴。</p>
+          <ul class="dx-tri__list">
+            <li><strong>Eikenella corrodens</strong>（嫌気性桿菌）</li>
+            <li>Streptococcus（α/β-hemolytic）</li>
+            <li>Staphylococcus aureus</li>
+            <li>嫌気性菌（Prevotella, Fusobacterium）</li>
+            <li>混合感染前提で広域カバーが必須</li>
+          </ul>
+        </details>
+
+        <details class="dx-tri__card dx-tri__card--neuro">
+          <summary>合併症</summary>
+          <p class="dx-tri__hint">小さな裂創でも MP 関節腔・伸筋腱・骨に達しうる。<strong>関節包貫通</strong>＝化膿性関節炎リスク。</p>
+          <ul class="dx-tri__list">
+            <li><strong>伸筋腱断裂</strong>（屈曲位で tendon defect）</li>
+            <li><strong>関節包貫通</strong>（関節液漏出・関節内空気像）</li>
+            <li>化膿性関節炎・腱鞘炎</li>
+            <li>骨髄炎（中手骨頭）</li>
+            <li>中手骨頸部骨折（ボクサー骨折）併発</li>
+          </ul>
+        </details>
+      </div>
+
+      <!-- 評価のコツ -->
+      <details class="dx-box" id="img-read">
+        <summary><span>評価のコツ（屈曲位診察が鉄則）</span></summary>
+        <div class="dx-box__body">
+          <ul>
+            <li><strong>受傷機転の確認が最優先</strong>：MP 背側の裂創は <strong>fight bite を疑うまで疑う</strong>。患者は「ドアにぶつけた」「転んだ」と<strong>嘘をつく</strong>のが定型。
+              <ul>
+                <li>機転（殴打・喧嘩）と部位（第 3〜5 中手骨頭背側の小裂創）の組み合わせで疑う</li>
+                <li>付き添い・警察・受傷時刻のずれも参考に</li>
+              </ul>
+            </li>
+            <li><strong>診察は屈曲位（拳を握った位置）で行う</strong>：
+              <ul>
+                <li>伸展位だと皮膚と腱・関節の位置がずれて <strong>tendon defect / 関節包貫通が分かりにくい</strong></li>
+                <li>受傷時の肢位（屈曲位）で創を観察すると、腱断裂と関節腔の連続が見える</li>
+              </ul>
+            </li>
+            <li>身体所見で必ず取る項目：
+              <ul>
+                <li>創の長径・深さ・汚染の程度</li>
+                <li>伸筋腱断裂の有無（屈曲位で腱欠損／指伸展テスト）</li>
+                <li>関節包貫通の有無（関節液漏出・気泡・プローブで関節腔と交通）</li>
+                <li>発赤・腫脹・熱感（受診時にあれば<strong>すでに感染</strong>）</li>
+                <li>橈骨動脈・指動脈触知、正中・尺骨・橈骨神経領域</li>
+              </ul>
+            </li>
+            <li><strong>手 Xp 2 方向</strong>を全例で：
+              <ul>
+                <li>第 3／4／5 中手骨頭・頸部の骨折線（ボクサー骨折合併）</li>
+                <li><strong>関節内空気像</strong>（関節包貫通を示唆）</li>
+                <li>異物（折れた歯片）の有無</li>
+              </ul>
+            </li>
+            <li>採血：CBC・CRP・血糖（糖尿病で重症化リスク）、受診遅延例は血液培養も考慮</li>
+          </ul>
+        </div>
+      </details>
+
+      <!-- 治療方針 -->
+      <details class="dx-box" id="plan">
+        <summary><span>治療方針（開放管理が原則・単純縫合は禁忌）</span></summary>
+        <div class="dx-box__body">
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>パターン</th><th>所見</th><th>方針</th><th>ER の動き</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>表層咬創のみ・早期受診</td>
+                  <td>受傷 24 時間以内／関節包貫通なし／腱断裂なし／感染所見なし</td>
+                  <td><strong>洗浄 ＋ 開放管理 ＋ 経口抗菌薬</strong></td>
+                  <td>整形（手の外科）外来 翌日／毎日処置指示</td>
+                </tr>
+                <tr>
+                  <td>関節包貫通・伸筋腱断裂</td>
+                  <td>関節液漏出／関節内空気像／tendon defect</td>
+                  <td><strong>入院＋手術室での洗浄・デブリードマン</strong></td>
+                  <td>同日整形コンサル ＋ IV 抗菌薬開始</td>
+                </tr>
+                <tr>
+                  <td>来院時すでに感染</td>
+                  <td>発赤・腫脹・熱感・発熱・膿性分泌</td>
+                  <td><strong>化膿性関節炎／蜂窩織炎として入院</strong></td>
+                  <td>培養採取 ＋ IV 抗菌薬 ＋ 整形コンサル</td>
+                </tr>
+                <tr>
+                  <td>中手骨頸部骨折合併</td>
+                  <td>Xp でボクサー骨折</td>
+                  <td>骨折対応 ＋ 上記のいずれか</td>
+                  <td>整形コンサル必須</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3>ER で打つ手</h3>
+          <ul>
+            <li><strong>絶対に単純縫合しない</strong>：感染を閉じ込めると蜂窩織炎・化膿性関節炎に直結。<strong>開放管理</strong>が原則
+              <ul>
+                <li>汚染がひどければ手術室での十分な洗浄・デブリードマンを整形へ依頼</li>
+              </ul>
+            </li>
+            <li><strong>洗浄</strong>：生食 500〜1000 mL で機械的洗浄（低圧で十分）。異物（歯片）除去</li>
+            <li><strong>抗菌薬（初期 IV）</strong>：<strong>ユナシン®（SBT/ABPC）1.5〜3 g を 6 時間ごと点滴静注</strong>
+              <ul>
+                <li>退院／外来：オーグメンチン®（amoxicillin/clavulanate）875/125 mg q12h × 7 日</li>
+                <li>院内では「サワシリン® 250 mg 4 錠分 4 ＋ オーグメンチン® 375 mg 4 錠分 4」併用処方も可</li>
+                <li>ペニシリンアレルギー：<strong>clindamycin ＋ ciprofloxacin</strong></li>
+              </ul>
+            </li>
+            <li><strong>破傷風予防</strong>：最終接種から <strong>5 年以上</strong>経過なら追加。不明・未接種は破傷風トキソイド＋（汚染高度なら）抗破傷風ヒト免疫グロブリン</li>
+            <li>シーネ固定（手内在筋位・MP 屈曲 70〜90°）／患肢挙上指導</li>
+            <li><strong>全例で整形（手の外科）フォローを確保</strong>。外来通院でも毎日処置を指示</li>
+            <li>背景（暴力・人格障害）のスクリーニングも忘れない</li>
+          </ul>
+        </div>
+      </details>
+
+      <!-- コンサル文 -->
+      <details class="dx-box" id="consult">
+        <summary><span>コンサル文（カルテに貼る）</span></summary>
+        <div class="dx-box__body">
+          <p class="dx-template__hint">『他科コンサルト実践マニュアル』の院内紹介状フォーマットに準拠（【目的】【疾患】【既往歴】【内服薬】【ADL】【現病歴】）。整形外科（手の外科）加療依頼型。</p>
+          <div class="dx-template">【目的】整形外科（手の外科）での加療依頼。
+【疾患】#1 [右/左]Fight bite（clenched-fist injuries）／第 [3/4/5] 中手骨頭背側咬創、伸筋腱損傷 [疑い／確定]、関節包貫通 [疑い／否定]
+【既往歴】[特記事項なし／○○]
+【内服薬】[なし／○○]
+【ADL（受傷前）】[自立／○○]
+【現病歴】[年齢]歳[男/女]性。[受傷機転：殴打／喧嘩で他者の歯に拳をぶつけた]で受傷し、[来院経緯]で来院。
+ ・身体所見（屈曲位で診察）：第 [3/4/5] 中手骨頭背側に [長径mm×深さmm] の咬創、伸筋腱断裂 [+/−]、関節液漏出 [+/−]、発赤腫脹 [+/−]、発熱 [+/−]
+ ・血管：橈骨動脈触知 [良好]、指動脈触知 [良好]、左右差なし
+ ・神経：正中・尺骨・橈骨神経領域 [問題なし]
+ ・画像：手 Xp 2 方向で骨折線 [なし／あり]、関節内空気像 [なし／あり]
+ ・ER 処置：洗浄（生食 [量] mL）、ユナシン®(SBT/ABPC) 3 g 静注、破傷風 [追加／不要]、単純縫合は施行せず開放管理
+よろしくお願いいたします。</div>
+        </div>
+      </details>
+
+      <!-- 関連ハブ -->
+      <details class="dx-box">
+        <summary><span>関連ハブ・隣接疾患</span></summary>
+        <div class="dx-box__body">
+          <ul>
+            <li>主訴入口：<a class="wiki-link" href="../手関節・手の外傷.html">手関節・手の外傷</a></li>
+            <li>隣接疾患：<a class="wiki-link" href="ボクサー骨折.html">ボクサー骨折（中手骨頸部骨折）</a> ／ <a class="wiki-link" href="化膿性関節炎.html">化膿性関節炎</a> ／ <a class="wiki-link" href="蜂窩織炎.html">蜂窩織炎</a></li>
+            <li>処置：創洗浄 ／ 開放管理 ／ シーネ固定 ／ 破傷風予防</li>
+            <li>ピットフォール：単純な裂創として縫合してしまう／受傷機転を確認しない／伸展位だけで診察し腱・関節損傷を見落とす</li>
+          </ul>
+        </div>
+      </details>
+
+      <!-- 出典 -->
+      <details class="dx-box">
+        <summary><span>出典</span></summary>
+        <div class="dx-box__body">
+          <ul>
+            <li>増井伸高. 骨折ハンター. 中外医学社. 2019.（第 12 章「ボクサー骨折では合併症の評価・対応を忘れない」）</li>
+            <li>Patzakis M, et al. Surgical findings in clenched-fist injuries. Clin Orthop Relat Res. 1987; 220: 237-40.</li>
+            <li>Andrade A, et al. Traumatic hand injuries: the emergency clinician's evidence-based approach. Emerg Med Pract. 2011; 13: 1-23.</li>
+            <li>佐藤弘明 ほか. 他科コンサルト実践マニュアル. 羊土社.</li>
+          </ul>
+        </div>
+      </details>
+
+    </article>
+  </main>
+
+  <nav class="hokuto-bottom">
+    <button class="hokuto-bottom__btn" type="button" id="navBack">
+      <span class="hokuto-bottom__icon"></span><span>戻る</span>
+    </button>
+    <a class="hokuto-bottom__btn" href="../ツール.html">
+      <span class="hokuto-bottom__icon"></span><span>ツール</span>
+    </a>
+    <a class="hokuto-bottom__btn" href="../index.html">
+      <span class="hokuto-bottom__icon"></span><span>ホーム</span>
+    </a>
+  </nav>
+
+  <script>
+  (function(){
+    document.querySelectorAll('.dx-quick__btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.dataset.target;
+        const target = document.getElementById(id);
+        if (!target) return;
+        target.open = true;
+        target.scrollIntoView({behavior: 'smooth', block: 'start'});
+      });
+    });
+
+    const navBack = document.getElementById('navBack');
+    if (navBack) navBack.addEventListener('click', () => {
+      if (window.history.length > 1) history.back();
+      else window.location.href = '../index.html';
+    });
+  })();
+  </script>
+</body>
+</html>

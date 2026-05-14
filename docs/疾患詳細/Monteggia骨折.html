@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="color-scheme" content="light dark" />
+  <title>Monteggia 骨折 | ER ノート</title>
+  <link rel="stylesheet" href="../er-note.css" />
+  <style>
+    .dx-quick {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px;
+      margin: 10px 0 4px;
+    }
+    .dx-quick__btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      padding: 10px 6px;
+      border-radius: 10px;
+      background: color-mix(in srgb, var(--accent) 10%, var(--surface));
+      border: 1.5px solid var(--accent);
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 13px;
+      line-height: 1.2;
+      text-align: center;
+      cursor: pointer;
+      transition: background 120ms ease;
+    }
+    .dx-quick__btn:hover {
+      background: color-mix(in srgb, var(--accent) 18%, var(--surface));
+    }
+    .dx-quick__icon { font-size: 20px; }
+    .dx-quick__sub {
+      font-size: 10.5px;
+      font-weight: 500;
+      color: var(--muted);
+    }
+
+    .dx-tri {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+      margin: 6px 0 4px;
+      align-items: start;
+    }
+    .dx-tri__card {
+      background: var(--surface);
+      border-radius: 10px;
+      padding: 10px 12px;
+      border: 1.5px solid color-mix(in srgb, var(--text) 18%, transparent);
+    }
+    .dx-tri__card--vasc { border-color: #c0392b; background: color-mix(in srgb, #c0392b 6%, var(--surface)); }
+    .dx-tri__card--neuro { border-color: #b5651d; background: color-mix(in srgb, #b5651d 6%, var(--surface)); }
+    .dx-tri__card--typical { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 6%, var(--surface)); }
+    .dx-tri__title {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 800;
+      font-size: 13.5px;
+      margin-bottom: 4px;
+    }
+    .dx-tri__card--vasc .dx-tri__title { color: #c0392b; }
+    .dx-tri__card--neuro .dx-tri__title { color: #b5651d; }
+    .dx-tri__list {
+      margin: 0;
+      padding-left: 18px;
+      font-size: 12.5px;
+      line-height: 1.5;
+    }
+    .dx-tri__list li { margin: 2px 0; }
+
+    details.dx-tri__card { padding: 0; }
+    details.dx-tri__card > summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 10px 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 800;
+      font-size: 13.5px;
+    }
+    details.dx-tri__card > summary::-webkit-details-marker { display: none; }
+    details.dx-tri__card > summary::after {
+      content: "▸";
+      margin-left: auto;
+      font-size: 12px;
+      color: var(--muted);
+      transition: transform 120ms ease;
+    }
+    details.dx-tri__card[open] > summary::after { transform: rotate(90deg); }
+    details.dx-tri__card--vasc > summary { color: #c0392b; }
+    details.dx-tri__card--neuro > summary { color: #b5651d; }
+    details.dx-tri__card > .dx-tri__list { padding: 0 14px 12px 30px; }
+    details.dx-tri__card > .dx-tri__hint {
+      padding: 0 14px 6px 30px;
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    details.dx-box {
+      background: var(--surface);
+      border: 1.5px solid color-mix(in srgb, var(--text) 18%, transparent);
+      border-radius: 10px;
+      margin: 10px 0;
+      scroll-margin-top: 8px;
+    }
+    details.dx-box > summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 12px 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 800;
+      font-size: 14.5px;
+    }
+    details.dx-box > summary::-webkit-details-marker { display: none; }
+    details.dx-box > summary::after {
+      content: "▸";
+      margin-left: auto;
+      font-size: 13px;
+      color: var(--muted);
+      transition: transform 120ms ease;
+    }
+    details.dx-box[open] > summary::after { transform: rotate(90deg); }
+    details.dx-box[open] {
+      border-color: var(--accent);
+    }
+    details.dx-box > .dx-box__body {
+      padding: 0 14px 14px;
+    }
+
+    @media (max-width: 640px) {
+      .dx-quick { gap: 6px; }
+      .dx-quick__btn { padding: 8px 4px; font-size: 11.5px; border-radius: 8px; }
+      .dx-quick__icon { font-size: 17px; }
+      .dx-quick__sub { font-size: 9.5px; }
+
+      .dx-tri { grid-template-columns: 1fr; gap: 8px; }
+      .dx-tri__card { padding: 8px 10px; }
+      details.dx-tri__card > summary { padding: 8px 10px; font-size: 12.5px; }
+      details.dx-tri__card > .dx-tri__list { padding: 0 12px 10px 26px; }
+      .dx-tri__title { font-size: 12.5px; }
+      .dx-tri__list { font-size: 12px; }
+
+      details.dx-box > summary { padding: 10px 12px; font-size: 13.5px; }
+      details.dx-box > .dx-box__body { padding: 0 12px 12px; }
+    }
+
+    .dx-step {
+      margin: 18px 0 6px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 11.5px;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+    }
+    .dx-step::before, .dx-step::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: color-mix(in srgb, var(--text) 18%, transparent);
+    }
+
+    .dx-template {
+      background: color-mix(in srgb, var(--text) 4%, var(--surface));
+      border-left: 3px solid var(--accent);
+      border-radius: 6px;
+      padding: 10px 12px;
+      margin: 6px 0 0;
+      font-size: 13px;
+      line-height: 1.6;
+      white-space: pre-wrap;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+    .dx-template__hint {
+      font-size: 11px;
+      color: var(--muted);
+      margin: 0 0 4px;
+    }
+
+    .dx-alert {
+      background: color-mix(in srgb, #c0392b 8%, var(--surface));
+      border-left: 4px solid #c0392b;
+      border-radius: 6px;
+      padding: 10px 12px;
+      margin: 10px 0;
+      font-size: 13px;
+      line-height: 1.55;
+    }
+    .dx-alert strong { color: #c0392b; }
+  </style>
+</head>
+<body>
+  <header class="hokuto-top">
+    <a class="hokuto-top__btn" href="../薬剤情報.html">
+      <span class="hokuto-top__icon">℞</span><span>薬剤情報</span>
+    </a>
+    <a class="hokuto-top__btn" href="../表計算.html">
+      <span class="hokuto-top__icon">⊞</span><span>表計算</span>
+    </a>
+  </header>
+
+  <main class="hokuto-main">
+    <article class="note-shell">
+      <h1 class="page-title">Monteggia 骨折</h1>
+
+      <!-- スマホですぐ開きたい 3 つ -->
+      <nav class="dx-quick" aria-label="クイックタップ">
+        <button class="dx-quick__btn" type="button" data-target="img-read">
+          <span>画像の見方</span>
+          <span class="dx-quick__sub">Bado／radiocapitellar line</span>
+        </button>
+        <button class="dx-quick__btn" type="button" data-target="plan">
+          <span>治療方針</span>
+          <span class="dx-quick__sub">小児は即時整形</span>
+        </button>
+        <button class="dx-quick__btn" type="button" data-target="consult">
+          <span>コンサル文</span>
+          <span class="dx-quick__sub">Bado 分類＋PIN 評価</span>
+        </button>
+      </nav>
+
+      <!-- 上位概念のアラート -->
+      <div class="dx-alert">
+        <strong>「尺骨骨折を見たら全例で橈骨頭脱臼を探す」</strong> — 尺骨単独骨折にしか見えなくても、<strong>radiocapitellar line で小頭中央通過を確認</strong>するクセを。<strong>必ず正面・側面 2 方向</strong>で（片方しか異常が出ないことがある）。PIN 損傷 10〜20%。
+      </div>
+
+      <!-- 同時評価 3 列 -->
+      <div class="dx-step"><span>同時並行で評価する 3 軸</span></div>
+      <div class="dx-tri">
+
+        <div class="dx-tri__card dx-tri__card--typical">
+          <div class="dx-tri__title">典型像</div>
+          <ul class="dx-tri__list">
+            <li><strong>尺骨近位部骨折＋橈骨頭脱臼</strong>を呈する脱臼骨折</li>
+            <li>肘外傷の <strong>1% 未満と稀</strong>だが、見逃しやすく早期介入しないと機能予後に影響</li>
+            <li>受傷機転は <strong>FOOSH</strong>（肘脱臼の代わりに尺骨が折れて橈骨頭だけ脱臼）</li>
+            <li><strong>好発年齢：4〜10 歳</strong>（小学生肘痛では顆上・外顆と並び鑑別）</li>
+            <li>所見：肘〜前腕近位部の腫脹・変形・激痛、橈骨頭部の圧痛</li>
+          </ul>
+        </div>
+
+        <details class="dx-tri__card dx-tri__card--vasc">
+          <summary>血管</summary>
+          <p class="dx-tri__hint">血管損傷は<strong>稀</strong>だが、変形強い例では橈骨動脈・尺骨動脈の触知を必ず。</p>
+          <ul class="dx-tri__list">
+            <li><strong>橈骨動脈・尺骨動脈</strong>を触知（左右比較）</li>
+            <li>CRT・色調・温度・SpO₂ の確認</li>
+            <li>6P（Pain・Pallor・Paralysis・Paresthesia・Pressure・Pulselessness）</li>
+            <li>開放創なら破傷風・抗菌薬・即整形＋血管外科</li>
+          </ul>
+        </details>
+
+        <details class="dx-tri__card dx-tri__card--neuro">
+          <summary>神経</summary>
+          <p class="dx-tri__hint"><strong>PIN（後骨間神経／橈骨神経の枝）損傷が 10〜20%</strong>。下垂指がサイン、感覚障害なし。</p>
+          <ul class="dx-tri__list">
+            <li><strong>PIN 損傷の徴候 = 下垂指（drop finger）</strong>：<strong>MP 関節の伸展障害</strong>。手関節伸展は<strong>可能</strong></li>
+            <li>感覚障害は<strong>なし</strong>（純粋運動枝）</li>
+            <li>正中神経・尺骨神経も評価（橈骨頭脱臼で正中も時に圧迫）</li>
+            <li>整復前後で必ず記録（医原性の責任分界）</li>
+          </ul>
+        </details>
+      </div>
+
+      <!-- 画像の見方 -->
+      <details class="dx-box" id="img-read">
+        <summary><span>画像の見方（Bado 分類 × radiocapitellar line）</span></summary>
+        <div class="dx-box__body">
+          <ul>
+            <li><strong>肘＋前腕の 2 方向</strong>（正面・側面）— <strong>必ず両方撮る</strong></li>
+            <li>尺骨近位部骨折を見たら<strong>橈骨頭脱臼を能動的に探す</strong></li>
+            <li><strong>Radiocapitellar line</strong>（橈骨中心線の延長線）：
+              <ul>
+                <li><strong>正常：小頭の中央を通過</strong></li>
+                <li><strong>異常：小頭の上 or 外側を通過 → 橈骨頭脱臼あり = Monteggia 骨折</strong></li>
+                <li>正常小児でも 15.6% で中央を外れる → <strong>小児尺骨骨折を見た時に限って引く</strong>のがコツ</li>
+              </ul>
+            </li>
+            <li><strong>Bado 分類</strong>（橈骨頭脱臼の方向）：
+              <ul>
+                <li><strong>Type I（70%、最多）</strong>：側面像で radiocapitellar line が<strong>小頭の上</strong>を通過（橈骨頭の前方脱臼）</li>
+                <li><strong>Type III（25%）</strong>：正面像で radiocapitellar line が<strong>小頭の外側</strong>を通過（橈骨頭の外側脱臼）</li>
+                <li>Type II / IV は稀でラインも結局中央を通る → 非整形外科医は <strong>I と III の 2 タイプを覚えれば十分</strong></li>
+              </ul>
+            </li>
+            <li><strong>片方しか異常が出ないことがある</strong> → 正面・側面の 2 方向で必ず確認</li>
+            <li>整復前後でレントゲンを 2 枚撮影し、紹介状に添付</li>
+          </ul>
+        </div>
+      </details>
+
+      <!-- 治療方針 -->
+      <details class="dx-box" id="plan">
+        <summary><span>治療方針（小児 Monteggia は原則 即時整形）</span></summary>
+        <div class="dx-box__body">
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>所見</th><th>マネジメント</th><th>ER の動き</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>小児 Monteggia 骨折（Bado I/III）</td>
+                  <td><strong>即時整形コンサルト</strong>（脱臼整復＋尺骨整復・固定）</td>
+                  <td>肘 90° 屈曲シーネで仮固定、絶飲食、ライン確保、PIN 評価記録</td>
+                </tr>
+                <tr>
+                  <td><strong>PIN 麻痺合併（下垂指）</strong></td>
+                  <td><strong>即時整形＋神経評価</strong></td>
+                  <td>即コンサルト、整復前後の所見を必ず記録</td>
+                </tr>
+                <tr>
+                  <td><strong>open / 神経血管症状</strong></td>
+                  <td><strong>緊急手術</strong></td>
+                  <td>抗菌薬・破傷風・絶飲食・即コンサルト</td>
+                </tr>
+                <tr>
+                  <td>成人 Monteggia 骨折（稀）</td>
+                  <td><strong>原則手術</strong>（観血的整復＋プレート固定）</td>
+                  <td>シーネ仮固定、整形外科コンサルト</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3>ER で打つ手</h3>
+          <ul>
+            <li><strong>肘 90° 屈曲位の後方シーネ＋三角巾</strong>で仮固定（応急処置）</li>
+            <li><strong>固定だけでの帰宅は不可</strong> — 神経損傷リスクが高く、橈骨頭脱臼の整復が必要</li>
+            <li>絶飲食、ライン確保、採血・胸部 X 線・心電図（術前準備）</li>
+            <li>鎮痛はアセトアミノフェン中心、<strong>神経ブロックは整形医到着前は避ける</strong>（神経評価困難になる）</li>
+            <li>PIN 麻痺（下垂指）の有無を必ず記録（整復前後で）</li>
+            <li>家族へ：神経合併症の説明、術後経過の説明</li>
+          </ul>
+        </div>
+      </details>
+
+      <!-- コンサル文 -->
+      <details class="dx-box" id="consult">
+        <summary><span>コンサル文（カルテに貼る）</span></summary>
+        <div class="dx-box__body">
+          <p class="dx-template__hint">『他科コンサルト実践マニュアル』の院内紹介状フォーマットに準拠（【目的】【疾患】【既往歴】【内服薬】【ADL】【現病歴】）。<strong>Bado 分類＋PIN 評価</strong>を明記。</p>
+          <div class="dx-template">【目的】小児 Monteggia 骨折の整復・固定／手術のご相談。
+【疾患】#1 [右/左] Monteggia 骨折（Bado Type [I／III]、尺骨近位部骨折＋橈骨頭脱臼）
+【既往歴】[特記事項なし／○○]
+【内服薬】[なし／○○]
+【ADL（受傷前）】[年齢相当／○○]
+【現病歴】[年齢]歳[男/女]児。[受傷機転：転倒で手をついた（FOOSH）／○○]で受傷し、[来院経緯]で来院。
+ ・身体所見：肘〜前腕近位部の腫脹・変形・激痛、橈骨頭部圧痛
+ ・血管：橈骨動脈 [良好／弱／触知不能]、尺骨動脈 [良好／弱／触知不能]、CRT [○○秒]、手指色調 [良／不良]
+ ・神経：PIN [問題なし／麻痺]、下垂指（MP 伸展障害） [なし／あり]、手関節伸展 [可／不可]、感覚障害 [なし／あり]、正中 [問題なし／麻痺]、尺骨 [問題なし／麻痺]
+ ・画像：肘＋前腕 2 方向（正面・側面）。尺骨近位部骨折あり、radiocapitellar line [小頭中央通過／小頭の上を通過＝Bado I／小頭の外側を通過＝Bado III]
+ ・ER 処置：肘 90° 屈曲位の後方シーネ＋三角巾で仮固定、絶飲食、ライン確保
+ ・術前検査：採血・胸部 X 線・心電図 [済／未]
+よろしくお願いいたします。</div>
+        </div>
+      </details>
+
+      <!-- AIN vs PIN 整理 -->
+      <details class="dx-box">
+        <summary><span>覚え方：AIN vs PIN（顆上 vs Monteggia）</span></summary>
+        <div class="dx-box__body">
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th></th><th>前骨間神経（AIN）損傷</th><th>後骨間神経（PIN）損傷</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>外傷</td><td>上腕骨顆上骨折に随伴</td><td><strong>Monteggia 骨折に随伴</strong></td></tr>
+                <tr><td>分枝</td><td>正中神経の枝</td><td>橈骨神経の枝</td></tr>
+                <tr><td>運動障害</td><td>DIP/IP の屈曲障害（<strong>teardrop sign</strong>）</td><td>MP の伸展障害（<strong>下垂指</strong>）、手関節伸展は可</td></tr>
+                <tr><td>感覚障害</td><td>なし</td><td>なし</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p style="font-size:12px;color:var(--muted);">似た名前を「疾患・分枝・所見」でセット記憶。両方とも純粋運動枝なので感覚障害なし。</p>
+        </div>
+      </details>
+
+      <!-- 関連ハブ -->
+      <details class="dx-box">
+        <summary><span>関連ハブ・隣接疾患</span></summary>
+        <div class="dx-box__body">
+          <ul>
+            <li>主訴入口：<a class="wiki-link" href="../肘周囲の外傷.html">肘周囲の外傷</a> ／ <a class="wiki-link" href="../転倒.html">転倒</a></li>
+            <li>隣接疾患：<a class="wiki-link" href="上腕骨顆上骨折.html">上腕骨顆上骨折</a>（AIN 損傷／teardrop） ／ <a class="wiki-link" href="上腕骨外顆骨折.html">上腕骨外顆骨折</a> ／ <a class="wiki-link" href="肘内障.html">肘内障</a> ／ <a class="wiki-link" href="肘関節脱臼.html">肘関節脱臼</a> ／ <a class="wiki-link" href="橈骨頭骨折.html">橈骨頭骨折</a></li>
+            <li>合併症：<a class="wiki-link" href="開放骨折.html">開放骨折</a> ／ <a class="wiki-link" href="コンパートメント症候群.html">コンパートメント症候群</a></li>
+            <li>固定法詳細：<a class="wiki-link" href="上肢骨折の固定/肘周囲骨折.html">肘周囲骨折の固定</a></li>
+          </ul>
+        </div>
+      </details>
+
+      <!-- 出典 -->
+      <details class="dx-box">
+        <summary><span>出典</span></summary>
+        <div class="dx-box__body">
+          <ul>
+            <li>増井伸高. 骨折ハンター. 中外医学社. 2019.（第 10 章 小児・肘関節痛ハンター③ — Monteggia 骨折）</li>
+            <li>Bado JL. The Monteggia lesion. <em>Clin Orthop Relat Res.</em> 1967.</li>
+            <li>Ring D, Jupiter JB, Waters PM. Monteggia fractures in children and adults. <em>J Am Acad Orthop Surg.</em> 1998.</li>
+            <li>「他科コンサルト実践マニュアル」整形外科の章.</li>
+          </ul>
+        </div>
+      </details>
+
+    </article>
+  </main>
+
+  <nav class="hokuto-bottom">
+    <button class="hokuto-bottom__btn" type="button" id="navBack">
+      <span class="hokuto-bottom__icon">←</span><span>戻る</span>
+    </button>
+    <a class="hokuto-bottom__btn" href="../ツール.html">
+      <span class="hokuto-bottom__icon">⚙</span><span>ツール</span>
+    </a>
+    <a class="hokuto-bottom__btn" href="../index.html">
+      <span class="hokuto-bottom__icon">⌂</span><span>ホーム</span>
+    </a>
+  </nav>
+
+  <script>
+  (function(){
+    document.querySelectorAll('.dx-quick__btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.dataset.target;
+        const target = document.getElementById(id);
+        if (!target) return;
+        target.open = true;
+        target.scrollIntoView({behavior: 'smooth', block: 'start'});
+      });
+    });
+
+    const navBack = document.getElementById('navBack');
+    if (navBack) navBack.addEventListener('click', () => {
+      if (window.history.length > 1) history.back();
+      else window.location.href = '../index.html';
+    });
+  })();
+  </script>
+</body>
+</html>

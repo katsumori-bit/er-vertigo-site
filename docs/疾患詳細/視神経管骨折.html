@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="color-scheme" content="light dark" />
+  <title>視神経管骨折 | ER ノート</title>
+  <link rel="stylesheet" href="../er-note.css" />
+  <style>
+    .dx-quick { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 10px 0 4px; }
+    @media (max-width: 640px) { .dx-quick { grid-template-columns: 1fr 1fr; } }
+    .dx-quick__btn {
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 2px; padding: 10px 6px; border-radius: 10px;
+      background: color-mix(in srgb, var(--accent) 10%, var(--surface));
+      border: 1.5px solid var(--accent); color: var(--text); text-decoration: none;
+      font-weight: 700; font-size: 13px; line-height: 1.2; text-align: center; cursor: pointer;
+      transition: background 120ms ease;
+    }
+    .dx-quick__btn:hover { background: color-mix(in srgb, var(--accent) 18%, var(--surface)); }
+    .dx-quick__sub { font-size: 10.5px; font-weight: 500; color: var(--muted); }
+
+    .dx-tri { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 6px 0 4px; align-items: start; }
+    .dx-tri__card {
+      background: var(--surface); border-radius: 10px; padding: 10px 12px;
+      border: 1.5px solid color-mix(in srgb, var(--text) 18%, transparent);
+    }
+    .dx-tri__card--vasc { border-color: #c0392b; background: color-mix(in srgb, #c0392b 6%, var(--surface)); }
+    .dx-tri__card--neuro { border-color: #b5651d; background: color-mix(in srgb, #b5651d 6%, var(--surface)); }
+    .dx-tri__title { display: flex; align-items: center; gap: 6px; font-weight: 800; font-size: 13.5px; margin-bottom: 4px; }
+    .dx-tri__card--vasc .dx-tri__title { color: #c0392b; }
+    .dx-tri__card--neuro .dx-tri__title { color: #b5651d; }
+    .dx-tri__list { margin: 0; padding-left: 18px; font-size: 12.5px; line-height: 1.5; }
+    .dx-tri__list li { margin: 2px 0; }
+
+    details.dx-tri__card { padding: 0; }
+    details.dx-tri__card > summary {
+      list-style: none; cursor: pointer; padding: 10px 12px;
+      display: flex; align-items: center; gap: 6px; font-weight: 800; font-size: 13.5px;
+    }
+    details.dx-tri__card > summary::-webkit-details-marker { display: none; }
+    details.dx-tri__card > summary::after { content: "▸"; margin-left: auto; font-size: 12px; color: var(--muted); transition: transform 120ms ease; }
+    details.dx-tri__card[open] > summary::after { transform: rotate(90deg); }
+    details.dx-tri__card--vasc > summary { color: #c0392b; }
+    details.dx-tri__card--neuro > summary { color: #b5651d; }
+    details.dx-tri__card > .dx-tri__list { padding: 0 14px 12px 30px; }
+    details.dx-tri__card > .dx-tri__hint { padding: 0 14px 6px 30px; font-size: 11px; color: var(--muted); }
+
+    details.dx-box {
+      background: var(--surface); border: 1.5px solid color-mix(in srgb, var(--text) 18%, transparent);
+      border-radius: 10px; margin: 10px 0; scroll-margin-top: 8px;
+    }
+    details.dx-box > summary {
+      list-style: none; cursor: pointer; padding: 12px 14px;
+      display: flex; align-items: center; gap: 8px; font-weight: 800; font-size: 14.5px;
+    }
+    details.dx-box > summary::-webkit-details-marker { display: none; }
+    details.dx-box > summary::after { content: "▸"; margin-left: auto; font-size: 13px; color: var(--muted); transition: transform 120ms ease; }
+    details.dx-box[open] > summary::after { transform: rotate(90deg); }
+    details.dx-box[open] { border-color: var(--accent); }
+    details.dx-box > .dx-box__body { padding: 0 14px 14px; }
+
+    @media (max-width: 640px) {
+      .dx-quick { gap: 6px; }
+      .dx-quick__btn { padding: 8px 4px; font-size: 11.5px; border-radius: 8px; }
+      .dx-quick__sub { font-size: 9.5px; }
+      .dx-tri { grid-template-columns: 1fr; gap: 8px; }
+      .dx-tri__card { padding: 8px 10px; }
+      details.dx-tri__card > summary { padding: 8px 10px; font-size: 12.5px; }
+      details.dx-tri__card > .dx-tri__list { padding: 0 12px 10px 26px; }
+      .dx-tri__title { font-size: 12.5px; }
+      .dx-tri__list { font-size: 12px; }
+      details.dx-box > summary { padding: 10px 12px; font-size: 13.5px; }
+      details.dx-box > .dx-box__body { padding: 0 12px 12px; }
+    }
+
+    .dx-step {
+      margin: 18px 0 6px; display: flex; align-items: center; gap: 10px;
+      color: var(--muted); font-size: 11.5px; font-weight: 800; letter-spacing: 0.1em;
+    }
+    .dx-step::before, .dx-step::after { content: ""; flex: 1; height: 1px; background: color-mix(in srgb, var(--text) 18%, transparent); }
+
+    .dx-template {
+      background: color-mix(in srgb, var(--text) 4%, var(--surface));
+      border-left: 3px solid var(--accent); border-radius: 6px;
+      padding: 10px 12px; margin: 6px 0 0; font-size: 13px; line-height: 1.6;
+      white-space: pre-wrap; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+    .dx-template__hint { font-size: 11px; color: var(--muted); margin: 0 0 4px; }
+
+    .dx-alert {
+      background: color-mix(in srgb, #c0392b 8%, var(--surface));
+      border: 1.5px solid #c0392b; border-radius: 10px;
+      padding: 10px 12px; margin: 10px 0; color: var(--text); font-size: 13px;
+    }
+    .dx-alert strong { color: #c0392b; }
+
+    .dx-typical {
+      background: color-mix(in srgb, var(--accent) 5%, var(--surface));
+      border: 1.5px solid color-mix(in srgb, var(--accent) 50%, transparent);
+      border-radius: 10px; padding: 10px 14px; margin: 10px 0 4px;
+    }
+    .dx-typical__title { font-weight: 800; font-size: 13.5px; color: var(--accent); margin-bottom: 4px; }
+    .dx-typical__list { margin: 0; padding-left: 18px; font-size: 12.5px; line-height: 1.55; }
+    .dx-typical__list li { margin: 2px 0; }
+    @media (max-width: 640px) {
+      .dx-typical { padding: 8px 10px; }
+      .dx-typical__title { font-size: 12.5px; }
+      .dx-typical__list { font-size: 12px; }
+    }
+    .dx-box__body h3 {
+      font-size: 14px; font-weight: 800;
+      margin: 14px 0 6px;
+      color: var(--accent);
+      padding-bottom: 4px;
+      border-bottom: 1px dashed color-mix(in srgb, var(--text) 22%, transparent);
+    }
+    .dx-box__body h3:first-child { margin-top: 4px; }
+    @media (max-width: 640px) { .dx-box__body h3 { font-size: 12.5px; margin: 10px 0 4px; } }
+  </style>
+</head>
+<body>
+  <header class="hokuto-top">
+    <a class="hokuto-top__btn" href="../薬剤情報.html"><span class="hokuto-top__icon">℞</span><span>薬剤情報</span></a>
+    <a class="hokuto-top__btn" href="../表計算.html"><span class="hokuto-top__icon">⊞</span><span>表計算</span></a>
+  </header>
+
+  <main class="hokuto-main">
+    <article class="note-shell">
+      <h1 class="page-title">視神経管骨折／外傷性視神経症</h1>
+
+      <div class="dx-alert">
+        🚨 <strong>受傷直後からの急性視力低下＋RAPD</strong> は視神経管骨折／外傷性視神経症（TON）の主徴。<br>
+        画像所見を待たず、<strong>来院後すぐに視力・対光反射・RAPD を記録</strong>し、眼科・脳外を即時コール。早期介入が望ましいとされるが、ステロイド・減圧術ともエビデンスは限定的で<strong>専門医の個別判断</strong>に委ねる。
+      </div>
+
+      <nav class="dx-quick" aria-label="クイックタップ">
+        <button class="dx-quick__btn" type="button" data-target="er-actions">
+          <span>ER で打つ手</span><span class="dx-quick__sub">初期処置</span>
+        </button>
+        <button class="dx-quick__btn" type="button" data-target="consult-check">
+          <span>コンサル前確認</span><span class="dx-quick__sub">眼科・脳外を呼ぶ前に</span>
+        </button>
+        <button class="dx-quick__btn" type="button" data-target="img-plan">
+          <span>画像と治療方針</span><span class="dx-quick__sub">ステロイド / 減圧</span>
+        </button>
+        <button class="dx-quick__btn" type="button" data-target="consult">
+          <span>コンサル文</span><span class="dx-quick__sub">そのまま貼れる</span>
+        </button>
+      </nav>
+
+      <section class="dx-typical">
+        <div class="dx-typical__title">典型像（疑うきっかけ）</div>
+        <ul class="dx-typical__list">
+          <li>機転：<strong>眉間〜眼窩外上方への打撃</strong>、高エネ外傷、Le Fort II/III／ZMC／眼窩尖部骨折で合併</li>
+          <li>外見上の眼球損傷が乏しいことも多い（特に小児の "white-eyed" 様）→ <strong>意識して評価しないと見落とす</strong></li>
+          <li><strong>主徴：受傷直後の急性視力低下、RAPD（Marcus Gunn 瞳孔）</strong></li>
+          <li>視野欠損（色覚低下も初期所見）</li>
+          <li>進行性視力低下＝<strong>視神経鞘血腫</strong>や浮腫の二次性圧迫</li>
+        </ul>
+        <p style="margin: 6px 0 0; font-size: 11.5px; color: var(--muted);">→ 詳細所見は <strong>同時並行 2 軸</strong> と <strong>コンサル前確認</strong> へ</p>
+      </section>
+
+      <div class="dx-step"><span>同時並行で評価する 2 軸（治療方針を分ける所見）</span></div>
+      <div class="dx-tri">
+
+        <details class="dx-tri__card dx-tri__card--vasc" open>
+          <summary>視機能の評価と経時記録（治療判断の核）</summary>
+          <p class="dx-tri__hint">画像より身体所見が判断材料。<strong>30 分毎に記録</strong>し進行性かを判断。</p>
+          <ul class="dx-tri__list">
+            <li><strong>視力</strong>：Snellen / 指数弁 / 手動弁 / 光覚弁 / 失明 — 経時記録</li>
+            <li><strong>対光反射・RAPD</strong>（swinging flashlight test）：陽性なら片側視神経損傷を示唆</li>
+            <li>眼底所見：初期は正常（disc 浮腫は数週後）</li>
+            <li>視野（指数法・対面法）、色覚（赤色比較）</li>
+            <li><strong>進行性視力低下</strong>＝二次性圧迫（出血・浮腫） → <strong>緊急減圧術検討</strong></li>
+            <li>固定なら保存療法可（経過観察＋ステロイド検討）</li>
+          </ul>
+        </details>
+
+        <details class="dx-tri__card dx-tri__card--vasc" open>
+          <summary>合併損傷（治療ルートが分かれる）</summary>
+          <p class="dx-tri__hint">頭蓋底・頚動脈損傷を必ず評価。眼窩尖部・上眼窩裂症候群の鑑別も。</p>
+          <ul class="dx-tri__list">
+            <li><strong>眼球運動制限＋V1 知覚障害＋視力低下</strong>＝<strong>眼窩尖部症候群</strong>（II/III/IV/V1/VI 多発）</li>
+            <li>視力保たれ、眼球運動麻痺＋V1 知覚障害のみ＝上眼窩裂症候群（眼窩尖部の手前）</li>
+            <li>頭蓋底骨折・頭蓋内出血（→ <a href="../頭部外傷評価.html">頭部外傷評価</a>）</li>
+            <li><strong>外傷性内頚動脈解離</strong>：CT angio で評価検討</li>
+            <li>Le Fort II/III／ZMC 骨折と合併（→ <a href="Le%20Fort骨折.html">Le Fort 骨折</a>／<a href="頬骨上顎複合体骨折.html">頬骨上顎複合体骨折</a>）</li>
+          </ul>
+        </details>
+      </div>
+
+      <details class="dx-box" id="er-actions">
+        <summary><span>ER で打つ手（初期処置）</span></summary>
+        <div class="dx-box__body">
+          <ul>
+            <li><strong>視力・対光反射・RAPD を 30 分毎に記録</strong>（進行性かを判断）</li>
+            <li>頭部挙上 30°、SBP ≥ 110、SpO₂ ≥ 94% を維持</li>
+            <li>鼻かみ禁・くしゃみは口を開けて（眼窩内圧上昇回避）</li>
+            <li>頭部 / 顔面 / 頸椎 / 眼窩薄スライス CT を 1 セットで撮影</li>
+            <li>頭蓋内・気道・循環の安定が前提</li>
+            <li>眼科コンサルトを即時。施設方針に従いステロイド準備</li>
+            <li>頭蓋内圧亢進・頭蓋底骨折合併時は脳外と協議</li>
+            <li>絶飲食、ライン確保、術前検査</li>
+          </ul>
+        </div>
+      </details>
+
+      <details class="dx-box" id="consult-check">
+        <summary><span>眼科・脳外コンサルト前に確認すべきこと</span></summary>
+        <div class="dx-box__body">
+          <p>視神経管骨折／TON を疑ったら、即時コンサルト。並行して以下を整理。<strong>緊急であることを冒頭で明示</strong>。</p>
+          <ul>
+            <li><strong>視力</strong>（来院時 → 経時）：受傷側／健側、Snellen or 指数弁／光覚弁／失明。30 分毎の値</li>
+            <li><strong>対光反射・RAPD</strong>：左右差、RAPD の有無</li>
+            <li><strong>視野</strong>：両側／○側で耳側／鼻側半盲</li>
+            <li><strong>色覚</strong>：赤色比較で低下の有無</li>
+            <li><strong>眼球運動</strong>：制限の有無と方向（眼窩尖部症候群の鑑別）</li>
+            <li><strong>眼底</strong>：視神経乳頭浮腫の有無（初期は通常正常）</li>
+            <li><strong>受傷後の症状経過</strong>：受傷直後から低下／受傷後○時間後より進行</li>
+            <li><strong>他顔面所見</strong>：頬部しびれ、咬合異常、髄液漏</li>
+            <li><strong>画像所見</strong>：眼窩〜頭蓋底薄スライス CT で視神経管骨折線（部位）、骨片による狭窄、合併骨折（Le Fort／ZMC／眼窩尖部）</li>
+            <li><strong>MRI</strong>：施行可否、視神経腫脹の有無</li>
+            <li><strong>頭部 CT</strong>：頭蓋内病変、<strong>頸椎</strong>：問題の有無</li>
+            <li><strong>受傷前視力</strong>：両眼良好／既往（白内障・緑内障など）</li>
+            <li><strong>背景情報</strong>：抗凝固薬・抗血小板薬・ステロイド常用・糖尿病・感染症</li>
+            <li><strong>ER 処置の記録</strong>：頭部挙上、鼻かみ禁、絶飲食、ステロイド（製剤・用量・時刻）</li>
+            <li><strong>術前検査</strong>：採血・心電図・胸部 X 線</li>
+          </ul>
+        </div>
+      </details>
+
+      <details class="dx-box" id="img-plan">
+        <summary><span>画像所見と治療方針</span></summary>
+        <div class="dx-box__body">
+
+          <h3>① 画像で見る項目</h3>
+          <p><strong>眼窩〜頭蓋底の薄スライス CT（0.5〜1 mm）軸位＋冠状位再構成</strong>が必須。</p>
+          <ul>
+            <li><strong>視神経管骨折線</strong>を視神経管の内側壁・外側壁・天井・床で評価</li>
+            <li><strong>骨片による管狭窄</strong>の有無</li>
+            <li>視神経管内出血／視神経の腫脹は MRI（T2／FLAIR／DWI）が有用（CT 陰性でも TON はあり得る）</li>
+            <li>蝶形骨小翼・前頭蓋底・眼窩尖部の骨折を同時に評価</li>
+            <li>頚動脈評価が必要なら CT angio（外傷性解離・嚢動脈瘤）</li>
+            <li><strong>注意：CT 陰性でも臨床的に TON は否定できない</strong>。画像所見と症状は乖離しうる</li>
+          </ul>
+
+          <h3>② TON の分類</h3>
+          <ul>
+            <li><strong>直接型</strong>：骨折・骨片の直接圧迫</li>
+            <li><strong>間接型</strong>：剪断・浮腫・血管攣縮</li>
+          </ul>
+
+          <h3>③ 治療方針（エビデンスは限定的）</h3>
+          <p><strong>外傷性視神経症の治療は議論が続いている領域</strong>。IONTS（International Optic Nerve Trauma Study, 1999）では <strong>観察／ステロイド／手術の各群で予後に有意差なし</strong>と報告され、CRASH 試験（2004）以降は頭部外傷でのステロイドルーチン投与は推奨されない。早期介入が望ましいとされるが、<strong>「8 時間以内」を絶対視せず、専門医（眼科・脳外）の個別判断</strong>に委ねる。</p>
+          <div class="table-wrap"><table>
+            <thead><tr><th>選択肢</th><th>内容</th><th>留意点</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><strong>経過観察</strong></td>
+                <td>軽症・進行なし・RAPD のみ</td>
+                <td>保存療法でも自然改善あり（IONTS 観察群 32%）</td>
+              </tr>
+              <tr>
+                <td><strong>高用量ステロイド療法</strong></td>
+                <td>かつて NASCIS 様プロトコルが用いられた</td>
+                <td><strong>現在はルーチン推奨されない</strong>（IONTS で有意差なし、CRASH 試験で頭部外傷へのステロイドは予後改善せず）。糖尿病・感染リスクで害となる可能性。<strong>専門医個別判断</strong></td>
+              </tr>
+              <tr>
+                <td><strong>視神経管減圧術</strong></td>
+                <td>経鼻内視鏡的アプローチが主流。骨片による直接圧迫例で適応</td>
+                <td>進行性視力低下・骨片による明らかな圧迫が比較的良い適応。IONTS で観察と有意差なしの報告もあり、エビデンスは限定的</td>
+              </tr>
+              <tr>
+                <td><strong>併用療法</strong></td>
+                <td>ステロイド＋減圧術</td>
+                <td>無作為比較試験は限定的</td>
+              </tr>
+            </tbody>
+          </table></div>
+          <p style="font-size: 12px; color: var(--muted); margin-top: 6px;">※ MRI 施行前に<strong>眼球内金属異物・体内金属</strong>の禁忌確認を必ず。</p>
+          <p style="font-size: 12px; color: var(--muted);">※ <strong>頸動脈海綿静脈洞瘻（CCF）</strong>の鑑別も忘れない：眼球突出＋拍動性雑音＋眼球運動障害。</p>
+        </div>
+      </details>
+
+      <details class="dx-box" id="consult">
+        <summary><span>コンサル文（カルテに貼る）</span></summary>
+        <div class="dx-box__body">
+          <p class="dx-template__hint">眼科＋脳外科（場合により耳鼻科）宛て。【目的】【疾患】【既往歴】【内服薬】【ADL】【現病歴】の順。緊急であることを冒頭で明示。</p>
+          <div class="dx-template">【目的】緊急ご相談（外傷性視神経症の治療判断、視神経管減圧術の適応）
+【疾患】#1 視神経管骨折／外傷性視神経症（[右/左]、[直接型／間接型]）
+　　　 [#2 眼窩尖部骨折／#2 Le Fort II・III／#2 ZMC 合併／#2 頭蓋底骨折 など]
+【既往歴】[特記事項なし／○○（糖尿病・感染症など）]
+【内服薬】[なし／ワーファリン／DOAC ○○／抗血小板薬 ○○／ステロイド常用 ○○]
+【ADL（受傷前）】[独歩／杖／介助／車椅子]、<strong>受傷前視力：[両眼良好／既往：白内障 など]</strong>
+【現病歴】[年齢]歳[男/女]性。[受傷機転：高エネ／眉間〜眼窩外側打撃／交通／転落]で受傷し、[来院経緯]で来院。
+ ・受傷後の症状経過：[受傷直後より視力低下／受傷○時間後より進行]
+ ・視力（来院時 → 経時）：[両眼／右○・左○]（指数弁／光覚弁 など）
+ ・対光反射：[直接反応：右○・左○]、RAPD：[右／左／なし]
+ ・視野：[両側／○側で耳側／鼻側半盲 など]、色覚：[低下 右／左／不明]
+ ・眼球運動：[全方向可／○方向制限]、眼球突出 [なし／あり]
+ ・眼底：[正常／視神経乳頭浮腫 など]
+ ・他顔面所見：頬部しびれ [あり／なし]、咬合異常 [あり／なし]、髄液漏 [なし／鼻漏／耳漏]
+ ・画像：眼窩〜頭蓋底薄スライス CT で[視神経管骨折線：内側壁／外側壁／天井／床]、骨片による狭窄 [あり：右／左／なし]、合併骨折 [Le Fort／ZMC／眼窩尖部 など]
+ ・MRI：[施行／未施行、視神経腫脹 あり／なし]
+ ・頭部 CT：[頭蓋内病変なし／○○]、頸椎 [問題なし／○○]
+ ・ER 処置：頭部挙上、鼻かみ禁の指示、絶飲食、ステロイド [投与済（製剤・用量）／未／施設方針確認中]
+ ・術前検査：採血・心電図・胸部 X 線 [済／未]
+よろしくお願いいたします。</div>
+        </div>
+      </details>
+
+      <details class="dx-box">
+        <summary><span>出典</span></summary>
+        <div class="dx-box__body">
+          <ul>
+            <li>頭頸部外科教科書 第13章「頭蓋顔面・頸部外傷」A. 頭蓋顔面骨折／眼窩尖部骨折（p.830-832）。</li>
+            <li>Levin LA ほか. The treatment of traumatic optic neuropathy: the International Optic Nerve Trauma Study (IONTS). <em>Ophthalmology.</em> 1999;106(7):1268-1277.</li>
+            <li>Steinsapir KD, Goldberg RA. Traumatic optic neuropathy: an evolving understanding. <em>Am J Ophthalmol.</em> 2011.</li>
+            <li>Yu-Wai-Man P, Griffiths PG. Steroids for traumatic optic neuropathy. <em>Cochrane Database Syst Rev.</em> 2013.</li>
+            <li>CRASH trial. Effect of intravenous corticosteroids on death within 14 days in 10008 adults with clinically significant head injury. <em>Lancet.</em> 2004.</li>
+          </ul>
+        </div>
+      </details>
+
+    </article>
+  </main>
+
+  <nav class="hokuto-bottom">
+    <button class="hokuto-bottom__btn" type="button" id="navBack"><span class="hokuto-bottom__icon">←</span><span>戻る</span></button>
+    <a class="hokuto-bottom__btn" href="../ツール.html"><span class="hokuto-bottom__icon">⚙</span><span>ツール</span></a>
+    <a class="hokuto-bottom__btn" href="../index.html"><span class="hokuto-bottom__icon">⌂</span><span>ホーム</span></a>
+  </nav>
+
+  <script>
+  (function(){
+    document.querySelectorAll('.dx-quick__btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.dataset.target;
+        const target = document.getElementById(id);
+        if (!target) return;
+        target.open = true;
+        target.scrollIntoView({behavior: 'smooth', block: 'start'});
+      });
+    });
+    const navBack = document.getElementById('navBack');
+    if (navBack) navBack.addEventListener('click', () => {
+      if (window.history.length > 1) history.back();
+      else window.location.href = '../index.html';
+    });
+  })();
+  </script>
+</body>
+</html>

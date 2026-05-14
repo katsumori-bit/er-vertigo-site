@@ -98,6 +98,69 @@
       border-radius: 14px;
     }
     .dx-node--alcohol .dx-node__title { color: #9b7508; }
+    button.dx-node {
+      font: inherit; cursor: pointer; text-align: left;
+      width: 100%;
+    }
+
+    /* === 飲酒後転倒 ポップアップモーダル === */
+    .alc-modal[hidden] { display: none; }
+    .alc-modal {
+      position: fixed; inset: 0; z-index: 1000;
+      display: flex; align-items: center; justify-content: center;
+      padding: 16px;
+    }
+    .alc-modal__backdrop {
+      position: absolute; inset: 0;
+      background: color-mix(in srgb, #000 55%, transparent);
+    }
+    .alc-modal__dialog {
+      position: relative;
+      background: var(--surface);
+      color: var(--text);
+      max-width: 560px; width: 100%;
+      max-height: calc(100vh - 32px);
+      overflow-y: auto;
+      border: 2px solid #d4a017;
+      border-radius: 14px;
+      padding: 16px 18px 18px;
+      box-shadow: 0 12px 36px color-mix(in srgb, #000 30%, transparent);
+    }
+    .alc-modal__title {
+      margin: 0 0 8px;
+      font-size: 17px; font-weight: 800;
+      color: #9b7508;
+      padding-right: 28px;
+    }
+    .alc-modal__close {
+      position: absolute; top: 8px; right: 10px;
+      width: 28px; height: 28px;
+      border: none; background: transparent;
+      font-size: 20px; line-height: 1; cursor: pointer;
+      color: var(--muted);
+      border-radius: 6px;
+    }
+    .alc-modal__close:hover { background: color-mix(in srgb, var(--text) 8%, transparent); }
+    .alc-modal__lead {
+      margin: 0 0 10px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+    .alc-modal__body h4 {
+      margin: 10px 0 4px;
+      font-size: 13.5px;
+      color: #9b7508;
+    }
+    .alc-modal__body ul {
+      margin: 0; padding-left: 1.3em;
+      font-size: 13px; line-height: 1.55;
+    }
+    .alc-modal__body li { margin: 2px 0; }
+    .alc-modal__more {
+      margin-top: 12px;
+      font-size: 12.5px;
+      text-align: right;
+    }
 
     /* レイヤー */
     .dx-layer {
@@ -110,13 +173,13 @@
     .dx-layer--root > * { max-width: 360px; }
     .dx-layer--branch { grid-template-columns: 1fr 1fr; }
 
-    /* 矢印 */
+    /* 矢印（肩フォーマット準拠：圧縮） */
     .dx-arrow {
       display: flex; flex-direction: column;
       align-items: center; justify-content: center;
       position: relative;
-      margin: 4px 0;
-      min-height: 44px;
+      margin: 2px 0;
+      min-height: 26px;
       color: var(--muted);
       font-size: 11.5px;
       font-weight: 600;
@@ -125,7 +188,7 @@
       content: "";
       width: 2px;
       height: 100%;
-      min-height: 38px;
+      min-height: 22px;
       background: color-mix(in srgb, var(--text) 35%, transparent);
     }
     .dx-arrow::after {
@@ -253,6 +316,274 @@
       .dx-axis-header { gap: 6px; margin: 4px 0 2px; }
       .dx-axis-header__cell { font-size: 9.5px; padding: 2px 4px; }
     }
+
+    /* === Peek プレビュー === */
+    .peek-modal {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.5);
+      display: none;
+      align-items: flex-end;
+      justify-content: center;
+      z-index: 9999;
+      -webkit-backdrop-filter: blur(2px);
+      backdrop-filter: blur(2px);
+    }
+    .peek-modal.is-open { display: flex; }
+
+    .peek-modal__sheet {
+      background: var(--surface);
+      width: 100%;
+      max-width: 720px;
+      max-height: 85vh;
+      border-radius: 14px 14px 0 0;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 -6px 28px rgba(0,0,0,0.25);
+      animation: peek-slide-up 220ms ease-out;
+      overflow: hidden;
+      position: relative;
+    }
+    @keyframes peek-slide-up {
+      from { transform: translateY(30%); opacity: 0.4; }
+      to   { transform: translateY(0);   opacity: 1; }
+    }
+    .peek-modal__handle {
+      position: absolute;
+      top: 6px; left: 50%;
+      transform: translateX(-50%);
+      width: 36px; height: 4px;
+      border-radius: 999px;
+      background: color-mix(in srgb, var(--text) 22%, transparent);
+      pointer-events: none;
+    }
+    .peek-modal__header {
+      display: flex; align-items: flex-start;
+      gap: 8px;
+      padding: 16px 14px 10px;
+      border-bottom: 1px solid color-mix(in srgb, var(--text) 12%, transparent);
+      background: var(--surface);
+      flex-shrink: 0;
+    }
+    .peek-modal__title {
+      flex: 1;
+      font-weight: 800;
+      font-size: 14.5px;
+      color: var(--text);
+      line-height: 1.3;
+    }
+    .peek-modal__close {
+      background: transparent;
+      border: 1px solid color-mix(in srgb, var(--text) 22%, transparent);
+      border-radius: 999px;
+      width: 30px; height: 30px;
+      cursor: pointer;
+      font-size: 14px;
+      color: var(--text);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      font-family: inherit;
+    }
+    .peek-modal__close:hover { background: color-mix(in srgb, var(--text) 6%, transparent); }
+    .peek-modal__body {
+      flex: 1;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      padding: 12px 16px 10px;
+      font-size: 13.5px;
+      line-height: 1.55;
+      color: var(--text);
+    }
+    /* クローンしたセクション内の見出し・「メニューへ」ボタンは抑制
+       （peek のヘッダーがタイトルを担う／メニュー操作はピーク外で行う） */
+    .peek-modal__body section.section-page > h2:first-of-type,
+    .peek-modal__body .section-h2,
+    .peek-modal__body .back-to-menu { display: none; }
+    @media (min-width: 720px) {
+      .peek-modal { align-items: center; padding: 24px; }
+      .peek-modal__sheet { border-radius: 14px; max-height: 80vh; }
+      .peek-modal__handle { display: none; }
+      @keyframes peek-slide-up {
+        from { transform: scale(0.96); opacity: 0; }
+        to   { transform: scale(1);    opacity: 1; }
+      }
+    }
+    /* 長押しの OS メニューを抑制（peek 対象リンクのみ） */
+    a.dx-node, a.section-tile {
+      -webkit-touch-callout: none;
+    }
+
+    /* === 命に関わるか チェックリスト（カラー控えめ・コンパクト版） === */
+    .life-checklist {
+      background: var(--surface);
+      border: 1.5px solid color-mix(in srgb, var(--text) 18%, transparent);
+      border-radius: 10px;
+      margin: 10px 0;
+      overflow: hidden;
+    }
+    .life-checklist__group {
+      font-weight: 800;
+      font-size: 11.5px;
+      letter-spacing: 0.05em;
+      padding: 3px 12px 3px 14px;
+      background: color-mix(in srgb, var(--text) 4%, var(--surface));
+      border-top: 1px solid color-mix(in srgb, var(--text) 10%, transparent);
+      color: var(--muted);
+      position: relative;
+    }
+    .life-checklist__group:first-child { border-top: none; }
+    .life-checklist__group::before {
+      content: "";
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 4px;
+      background: color-mix(in srgb, var(--text) 30%, transparent);
+    }
+    .life-checklist__group--A::before    { background: #2980b9; }
+    .life-checklist__group--B::before    { background: #16a085; }
+    .life-checklist__group--C::before    { background: #c0392b; }
+    .life-checklist__group--D::before    { background: #8e44ad; }
+    .life-checklist__group--hx::before   { background: #2980b9; }
+    .life-checklist__group--pe::before   { background: #16a085; }
+    .life-checklist__group--ix::before   { background: #d35400; }
+    .life-checklist__group--flag {
+      background: color-mix(in srgb, #c0392b 7%, var(--surface));
+      color: #8b2a20;
+    }
+    .life-checklist__group--flag::before { background: #c0392b; }
+    .life-checklist ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .life-checklist li {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      padding: 4px 12px 4px 14px;
+      font-size: 12.5px;
+      line-height: 1.4;
+      border-top: 1px dashed color-mix(in srgb, var(--text) 8%, transparent);
+    }
+    .life-checklist li:first-child { border-top: none; }
+    .life-checklist input[type="checkbox"] {
+      margin-top: 3px;
+      width: 16px; height: 16px;
+      flex-shrink: 0;
+      cursor: pointer;
+    }
+    .life-checklist label {
+      cursor: pointer;
+      flex: 1;
+    }
+    .life-checklist__sub {
+      font-size: 11px;
+      color: var(--muted);
+      font-weight: 400;
+      margin-left: 4px;
+    }
+    .life-checklist__sub::before { content: "— "; }
+    .life-checklist input:checked + label {
+      text-decoration: line-through;
+      text-decoration-color: color-mix(in srgb, var(--text) 30%, transparent);
+      opacity: 0.55;
+    }
+    .life-checklist__action {
+      display: block;
+      font-size: 11px;
+      color: #8b2a20;
+      font-weight: 600;
+      margin-top: 1px;
+      background: none;
+      border: none;
+      padding: 0;
+    }
+    @media (max-width: 600px) {
+      .life-checklist__group { font-size: 10.5px; padding: 2px 10px 2px 12px; }
+      .life-checklist li { padding: 3px 10px 3px 12px; font-size: 11.5px; }
+      .life-checklist__sub { display: block; margin-left: 0; font-size: 10.5px; margin-top: 1px; }
+      .life-checklist__sub::before { content: ""; }
+      .life-checklist__action { font-size: 10.5px; }
+    }
+
+    /* === §2 SS：折りたたみ＋2列リスト === */
+    details.ss-fold {
+      background: var(--surface);
+      border: 1px solid color-mix(in srgb, var(--text) 14%, transparent);
+      border-radius: 8px;
+      margin: 8px 0;
+      scroll-margin-top: 8px;
+    }
+    details.ss-fold > summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 8px 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 800;
+      font-size: 14px;
+    }
+    details.ss-fold > summary::-webkit-details-marker { display: none; }
+    details.ss-fold > summary::after {
+      content: "▸";
+      margin-left: auto;
+      font-size: 12px;
+      color: var(--muted);
+      transition: transform 120ms ease;
+    }
+    details.ss-fold[open] > summary::after { transform: rotate(90deg); }
+    details.ss-fold[open] > summary {
+      border-bottom: 1px dashed color-mix(in srgb, var(--text) 12%, transparent);
+    }
+    details.ss-fold > .ss-fold__body {
+      padding: 8px 12px 10px;
+    }
+    .ss-list--2col {
+      column-count: 2;
+      column-gap: 18px;
+      padding-left: 18px;
+      margin: 4px 0;
+    }
+    .ss-list--2col li {
+      break-inside: avoid;
+      margin-bottom: 4px;
+      font-size: 13px;
+      line-height: 1.45;
+    }
+    /* テーブル → コンパクトリスト */
+    ul.ss-tlist {
+      list-style: none;
+      padding: 0;
+      margin: 4px 0;
+      font-size: 12.5px;
+      line-height: 1.45;
+    }
+    ul.ss-tlist li {
+      padding: 4px 10px;
+      border-top: 1px dashed color-mix(in srgb, var(--text) 10%, transparent);
+    }
+    ul.ss-tlist li:first-child { border-top: none; }
+    .ss-tlist__label {
+      display: inline-block;
+      min-width: 9em;
+      font-weight: 700;
+      margin-right: 6px;
+    }
+    .ss-tlist__rate {
+      font-size: 10.5px;
+      color: var(--muted);
+      font-weight: 600;
+      margin-left: 6px;
+    }
+    @media (max-width: 640px) {
+      details.ss-fold > summary { font-size: 13px; padding: 6px 10px; }
+      details.ss-fold > .ss-fold__body { padding: 6px 10px 8px; }
+      .ss-list--2col { column-count: 1; }
+      .ss-list--2col li { font-size: 12px; }
+      ul.ss-tlist { font-size: 11.5px; }
+      .ss-tlist__label { display: block; min-width: 0; margin: 0 0 1px; }
+      .ss-tlist__rate { margin-left: 4px; }
+    }
   </style>
 </head>
 <body>
@@ -275,87 +606,53 @@
           <span>🗺 転倒の診療フロー（2軸で進める）</span>
         </div>
         <div class="flow-canvas">
-          <p class="flow-canvas__hint">命の評価 → 原因精査と外傷評価を並走 → disposition</p>
           <div class="dx-flow" role="group" aria-label="転倒の診療フロー">
 
             <!-- L0: 命の評価 -->
             <div class="dx-layer dx-layer--root">
               <a class="dx-node dx-node--danger" href="#s1">
-                <div class="dx-node__title">🚨 命に関わるか？</div>
-                <div class="dx-node__sub">ABCD / 赤旗 / 失神先行</div>
+                <div class="dx-node__title">命に関わるか？</div>
               </a>
             </div>
-            <div class="dx-arrow"><span class="dx-arrow__label">否定 → 2軸並走</span></div>
+            <div class="dx-arrow"></div>
 
             <!-- 軸ヘッダー -->
             <div class="dx-axis-header">
-              <div class="dx-axis-header__cell">軸① 原因精査<br><small>なぜ倒れたか</small></div>
-              <div class="dx-axis-header__cell">軸② 外傷評価<br><small>どこを損傷したか</small></div>
+              <div class="dx-axis-header__cell">軸① 原因精査</div>
+              <div class="dx-axis-header__cell">軸② 外傷評価</div>
             </div>
 
             <!-- L1: 2軸入口 -->
             <div class="dx-layer dx-layer--branch">
               <a class="dx-node dx-node--decision" href="#s3">
                 <div class="dx-node__title">転んだ or 倒れた？</div>
-                <div class="dx-node__sub">失神否定 → 原因分類</div>
               </a>
               <a class="dx-node dx-node--decision" href="#s2">
-                <div class="dx-node__title">後遺症を残すか？</div>
-                <div class="dx-node__sub">神経・機能・社会</div>
+                <div class="dx-node__title">SS</div>
               </a>
             </div>
 
-            <!-- L1.5: 原因軸の左側分岐ラベル -->
-            <div class="dx-layer dx-layer--branch" style="margin-top:6px;">
-              <div class="dx-fork">
-                <div class="dx-fork__leg"><span class="dx-fork__label">機械的</span></div>
-                <div class="dx-fork__leg"><span class="dx-fork__label">失神/前失神</span></div>
-              </div>
-              <div class="dx-arrow"><span class="dx-arrow__label">↓</span></div>
-            </div>
-
-            <!-- L2: 各軸の詳細 -->
+            <!-- L1 → L2 矢印（ラベルなし） -->
             <div class="dx-layer dx-layer--branch">
-              <a class="dx-node dx-node--action" href="#s3">
-                <div class="dx-node__title">原因の精査</div>
-                <div class="dx-node__sub">ECG / エコー / 起立 / 採血 / 薬剤</div>
-              </a>
+              <div class="dx-arrow"></div>
+              <div class="dx-arrow"></div>
+            </div>
+
+            <!-- L2: 各軸の詳細（左 = 飲酒分岐 / 右 = 部位別診察） -->
+            <div class="dx-layer dx-layer--branch">
+              <button type="button" class="dx-node dx-node--alcohol" id="alcoholPopupTrigger">
+                <div class="dx-node__title">飲酒後転倒？</div>
+              </button>
               <a class="dx-node dx-node--action" href="#s4">
                 <div class="dx-node__title">部位別診察</div>
-                <div class="dx-node__sub">頭・頸・体幹・骨盤・四肢</div>
               </a>
-            </div>
-
-            <!-- L2.5: 飲酒分岐 / 外傷軸は5択へ -->
-            <div class="dx-layer dx-layer--branch" style="margin-top:6px;">
-              <div class="dx-arrow"><span class="dx-arrow__label">疑い時</span></div>
-              <div class="dx-arrow"><span class="dx-arrow__label">↓</span></div>
-            </div>
-            <div class="dx-layer dx-layer--branch">
-              <a class="dx-node dx-node--alcohol" href="#s3-alcohol">
-                <div class="dx-node__title">🍶 飲酒後転倒？</div>
-                <div class="dx-node__sub">神経診察難 / 意識障害並走 / 離脱リスク</div>
-              </a>
-              <a class="dx-node dx-node--decision" href="#s5">
-                <div class="dx-node__title">5択マネジメント</div>
-                <div class="dx-node__sub">即時/入院/帰宅手術/帰宅保存/再診不要</div>
-              </a>
-            </div>
-
-            <!-- 飲酒ノード補助：意識障害.html への外部リンク -->
-            <div class="dx-layer dx-layer--branch" style="margin-top:6px;">
-              <a class="dx-node dx-node--external" href="意識障害.html">
-                <div class="dx-node__sub">意識障害が並走するとき</div>
-              </a>
-              <div></div>
             </div>
 
             <!-- 合流 -->
-            <div class="dx-arrow"><span class="dx-arrow__label">合流</span></div>
+            <div class="dx-arrow"></div>
             <div class="dx-layer dx-layer--root">
               <a class="dx-node dx-node--decision" href="#s6">
-                <div class="dx-node__title">📤 disposition</div>
-                <div class="dx-node__sub">帰宅 / 入院 / コンサルト</div>
+                <div class="dx-node__title">disposition</div>
               </a>
             </div>
           </div>
@@ -364,205 +661,420 @@
 
       <!-- §タイル -->
       <nav class="section-tiles" id="sectionMenu">
-        <a class="section-tile" href="#s1"><span class="section-tile__no">🚨</span><span class="section-tile__name">命に関わるか<br><small>赤旗 / ABCD</small></span></a>
-        <a class="section-tile" href="#s2"><span class="section-tile__no">🦴</span><span class="section-tile__name">後遺症を残さないか</span></a>
-        <a class="section-tile" href="#s3"><span class="section-tile__no">🔍</span><span class="section-tile__name">転倒の原因は何か</span></a>
-        <a class="section-tile" href="#s4"><span class="section-tile__no">🧭</span><span class="section-tile__name">部位別ショートカット</span></a>
-        <a class="section-tile" href="#s5"><span class="section-tile__no">🛠</span><span class="section-tile__name">外傷マネジメント<br><small>5 択分類</small></span></a>
-        <a class="section-tile" href="#s6"><span class="section-tile__no">📤</span><span class="section-tile__name">disposition / 帰宅説明</span></a>
-        <a class="section-tile" href="#s7"><span class="section-tile__no">📝</span><span class="section-tile__name">カルテテンプレ<br><small>2 軸</small></span></a>
-        <a class="section-tile" href="#s8"><span class="section-tile__no">⚠️</span><span class="section-tile__name">見落とし・ミス</span></a>
-        <a class="section-tile" href="#s9"><span class="section-tile__no">📚</span><span class="section-tile__name">出典・リンク</span></a>
+        <a class="section-tile" href="#s1"><span class="section-tile__name">命に関わるか<br><small>赤旗 / ABCD</small></span></a>
+        <a class="section-tile" href="#s2"><span class="section-tile__name">SS</span></a>
+        <a class="section-tile" href="#s3"><span class="section-tile__name">転倒の原因は何か</span></a>
+        <a class="section-tile" href="#s4"><span class="section-tile__name">部位別ショートカット</span></a>
+        <a class="section-tile" href="#s5"><span class="section-tile__name">外傷マネジメント<br><small>5 択分類</small></span></a>
+        <a class="section-tile" href="#s6"><span class="section-tile__name">disposition / 帰宅説明</span></a>
+        <a class="section-tile" href="#s7"><span class="section-tile__name">カルテテンプレ<br><small>2 軸</small></span></a>
+        <a class="section-tile" href="#s8"><span class="section-tile__name">見落とし・ミス</span></a>
+        <a class="section-tile" href="#s9"><span class="section-tile__name">出典・リンク</span></a>
       </nav>
 
       <!-- §1 命 -->
       <section class="section-page" id="s1" hidden>
         <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🚨 1. 命に関わるか</h2>
+        <h2>1. 命に関わるか</h2>
 
-        <div class="callout callout-danger">
-          <div class="callout-title">すぐ動く赤旗</div>
-          <div class="callout-body">
-            <ul>
-              <li><strong>意識レベル低下（GCS ≤ 14）、瞳孔不同、新規の片麻痺・けいれん</strong> → 頭蓋内出血</li>
-              <li><strong>ショック、止まらない出血</strong></li>
-              <li><strong>大腿骨骨幹部の変形</strong>（出血 1–1.5 L、直達牽引が必要）</li>
-              <li><strong>頸部痛</strong> → 頸髄損傷の可能性、頸椎保護を継続</li>
-              <li><strong>抗凝固薬・抗血小板薬内服中の頭部打撲</strong> → 軽症でも頭蓋内出血を疑う</li>
-            </ul>
-            <p>※「失神が先行している転倒」は致死性不整脈・PE・出血・SAH・解離の入口 → <a class="wiki-link" href="#s3">§3 原因</a>（失神コールアウト）で扱う。</p>
+        <p>命に関わる病態を <strong>ABCD</strong> で系統的に拾う。1 つでもチェックが付いたら即対応。否定できれば 2 軸（原因 × 外傷）並走へ。</p>
+
+        <div class="life-checklist" aria-label="命に関わるかチェックリスト">
+
+          <div class="life-checklist__group life-checklist__group--A">
+            <span>A 気道（Airway）</span>
           </div>
+          <ul>
+            <li>
+              <input type="checkbox" id="cl-a-airway" data-key="a-airway">
+              <label for="cl-a-airway">
+                <strong>上気道閉塞</strong>
+                <span class="life-checklist__sub">発声異常 / 口腔内異物 / 頸部腫脹 / stridor</span>
+                <span class="life-checklist__action">⚠ 体位・吸引・気道確保、ER 上級医コール</span>
+              </label>
+            </li>
+          </ul>
+
+          <div class="life-checklist__group life-checklist__group--B">
+            <span>B 呼吸（Breathing）</span>
+          </div>
+          <ul>
+            <li>
+              <input type="checkbox" id="cl-b-flail" data-key="b-flail">
+              <label for="cl-b-flail">
+                <strong>フレイルチェスト</strong>
+                <span class="life-checklist__sub">胸郭運動の左右差 / 胸部圧痛 / 奇異呼吸</span>
+                <span class="life-checklist__action">⚠ 酸素・鎮痛、人工呼吸検討、CT</span>
+              </label>
+            </li>
+            <li>
+              <input type="checkbox" id="cl-b-tension" data-key="b-tension">
+              <label for="cl-b-tension">
+                <strong>緊張性気胸</strong>
+                <span class="life-checklist__sub">気管偏位 / 頸静脈怒張 / 呼吸音減弱 / 皮下気腫</span>
+                <span class="life-checklist__action">⚠ 画像を待たず即 脱気（第 2 肋間 鎖骨中線 or 第 5 肋間 前腋窩線）</span>
+              </label>
+            </li>
+          </ul>
+
+          <div class="life-checklist__group life-checklist__group--C">
+            <span>C 循環（Circulation）</span>
+          </div>
+          <ul>
+            <li>
+              <input type="checkbox" id="cl-c-fast" data-key="c-fast">
+              <label for="cl-c-fast">
+                <strong>FAST で 3 疾患</strong>
+                <span class="life-checklist__sub">大量血胸 / 腹腔内出血 / 心タンポナーデ</span>
+                <span class="life-checklist__action">⚠ 大量輸液準備・輸血指示、外科 or 心臓外科コール</span>
+              </label>
+            </li>
+            <li>
+              <input type="checkbox" id="cl-c-shock" data-key="c-shock">
+              <label for="cl-c-shock">
+                <strong>ショック・止血困難な外出血</strong>
+                <span class="life-checklist__sub">SBP &lt; 90 / 頻脈 / 蒼白・冷汗 / 圧迫止血が効かない</span>
+                <span class="life-checklist__action">⚠ 大口径ライン 2 本、止血、ターニケット、輸血指示</span>
+              </label>
+            </li>
+            <li>
+              <input type="checkbox" id="cl-c-femur" data-key="c-femur">
+              <label for="cl-c-femur">
+                <strong>大腿骨骨幹部の変形</strong>
+                <span class="life-checklist__sub">出血 1–1.5 L／両側なら 3 L</span>
+                <span class="life-checklist__action">⚠ 直達牽引、輸液、即整形コンサルト</span>
+              </label>
+            </li>
+          </ul>
+
+          <div class="life-checklist__group life-checklist__group--D">
+            <span>D 意識（Disability）</span>
+          </div>
+          <ul>
+            <li>
+              <input type="checkbox" id="cl-d-gcs" data-key="d-gcs">
+              <label for="cl-d-gcs">
+                <strong>GCS ≤ 14 ／ 瞳孔不同 ／ 新規片麻痺・けいれん</strong>
+                <span class="life-checklist__sub">頭蓋内出血を疑う（脳ヘルニア兆候を見落とすな）</span>
+                <span class="life-checklist__action">⚠ 頭部 CT、脳外科コール、抗凝固リバース準備</span>
+              </label>
+            </li>
+            <li>
+              <input type="checkbox" id="cl-d-glucose" data-key="d-glucose">
+              <label for="cl-d-glucose">
+                <strong>血糖測定（DONT 反射的）</strong>
+                <span class="life-checklist__sub">低血糖は意識障害の最頻原因のひとつ</span>
+                <span class="life-checklist__action">⚠ 低血糖 → ブドウ糖、Wernicke リスクなら<strong>チアミン先行</strong></span>
+              </label>
+            </li>
+          </ul>
+
+          <div class="life-checklist__group life-checklist__group--flag">
+            <span>すぐ動く赤旗（ABCD 外で命に関わる）</span>
+          </div>
+          <ul>
+            <li>
+              <input type="checkbox" id="cl-r-neck" data-key="r-neck">
+              <label for="cl-r-neck">
+                <strong>頸部痛・正中圧痛</strong>
+                <span class="life-checklist__sub">頸髄損傷の可能性、頸椎保護を継続</span>
+                <span class="life-checklist__action">⚠ 頸椎カラー維持、<a class="wiki-link" href="頸部外傷・頸部痛.html">頸部外傷・頸部痛</a> へ</span>
+              </label>
+            </li>
+            <li>
+              <input type="checkbox" id="cl-r-anticoag" data-key="r-anticoag">
+              <label for="cl-r-anticoag">
+                <strong>抗凝固薬・抗血小板薬内服中の頭部打撲</strong>
+                <span class="life-checklist__sub">軽症でも頭蓋内出血を疑う、CT 閾値を下げる</span>
+                <span class="life-checklist__action">⚠ 頭部 CT、正常でも 24 時間経過観察を検討、<a class="wiki-link" href="頭部外傷評価.html">頭部外傷評価</a></span>
+              </label>
+            </li>
+            <li>
+              <input type="checkbox" id="cl-r-syncope" data-key="r-syncope">
+              <label for="cl-r-syncope">
+                <strong>失神先行を示唆する転倒</strong>
+                <span class="life-checklist__sub">目撃者なし + 受傷機転不明確 + 外傷のわりに防御反応なし</span>
+                <span class="life-checklist__action">⚠ ECG 必須、致死性不整脈・PE・SAH・解離を鑑別 → <a class="wiki-link" href="#s3">§3 原因</a> / <a class="wiki-link" href="意識消失.html">意識消失</a></span>
+              </label>
+            </li>
+          </ul>
+
         </div>
 
-        <div class="callout callout-check">
-          <div class="callout-title">ABCD で拾う致命的病態</div>
-          <div class="callout-body">
-            <div class="table-wrap">
-              <table>
-                <thead><tr><th>項目</th><th>拾いにいく病態</th><th>具体所見</th></tr></thead>
-                <tbody>
-                  <tr><td><strong>A</strong>：気道</td><td>上気道閉塞</td><td>発声異常、口腔内異物、頸部腫脹、stridor</td></tr>
-                  <tr><td rowspan="2"><strong>B</strong>：呼吸</td><td>フレイルチェスト</td><td>胸郭運動の<strong>左右差</strong>、胸部圧痛、奇異呼吸</td></tr>
-                  <tr><td>緊張性気胸</td><td><strong>気管偏位</strong>、頸静脈怒張、呼吸音減弱、皮下気腫</td></tr>
-                  <tr><td><strong>C</strong>：循環</td><td>FAST で 3 疾患</td><td><strong>大量血胸 / 腹腔内出血 / 心タンポナーデ</strong></td></tr>
-                  <tr><td><strong>D</strong>：意識</td><td>頭蓋内病変</td><td>GCS、瞳孔、四肢の動き（左右差）</td></tr>
-                </tbody>
-              </table>
-            </div>
-            <p>頭部の詳細判断 → <a class="wiki-link" href="頭部外傷評価.html">頭部外傷評価</a> ／ 頸椎の詳細判断 → <a class="wiki-link" href="頸部外傷・頸部痛.html">頸部外傷・頸部痛</a> ／ 失神疑い → <a class="wiki-link" href="意識消失.html">意識消失</a></p>
-          </div>
-        </div>
+        <p style="font-size: 12px; color: var(--muted); margin-top: 8px;">
+          チェック状態は端末ローカルに保存されます（症例ごとにリセットしてください）。
+          <button type="button" id="lifeChecklistReset" style="margin-left: 8px; padding: 2px 10px; font-size: 12px; border-radius: 6px; border: 1px solid color-mix(in srgb, var(--text) 22%, transparent); background: var(--surface); color: var(--text); cursor: pointer;">リセット</button>
+        </p>
+
+        <p>該当部位の詳細：<a class="wiki-link" href="頭部外傷評価.html">頭部外傷評価</a> ／ <a class="wiki-link" href="頸部外傷・頸部痛.html">頸部外傷・頸部痛</a> ／ <a class="wiki-link" href="意識消失.html">意識消失</a>（失神）／ <a class="wiki-link" href="意識障害.html">意識障害</a></p>
       </section>
 
-      <!-- §2 後遺症 -->
+      <!-- §2 SS -->
       <section class="section-page" id="s2" hidden>
         <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🦴 2. 後遺症を残さないか</h2>
+        <h2>SS</h2>
 
-        <p>「命は助かっても、転倒前の生活に戻れない」を防ぐ視点。<strong>神経・機能・社会</strong>の 3 層で考える。</p>
-        <div class="callout callout-warning">
-          <div class="callout-title">後遺症の 3 層</div>
-          <div class="callout-body">
-            <ul>
-              <li><strong>神経学的後遺症</strong>：中心性頸髄損傷、慢性硬膜下血腫（抗凝固薬内服者で 24–72 時間後も含め注意）、びまん性軸索損傷による高次脳機能障害</li>
-              <li><strong>機能的後遺症</strong>：大腿骨近位部骨折・脆弱性骨盤骨折・脊椎圧迫骨折による<strong>歩行喪失</strong>、入院中のせん妄・廃用、橈骨遠位端骨折後の握力低下、肩の可動域制限</li>
-              <li><strong>社会的後遺症</strong>：独居継続困難、介護度の上昇、再転倒</li>
+        <details class="ss-fold">
+          <summary>① 問診で部位を絞る</summary>
+          <div class="ss-fold__body">
+            <ul class="ss-tlist">
+              <li><span class="ss-tlist__label">どこが痛い？</span>自覚痛部位（複数あれば全部聞く・反対側も）</li>
+              <li><span class="ss-tlist__label">動かせる？</span>自動運動可否（不能なら骨折・脱臼を強く疑う）</li>
+              <li><span class="ss-tlist__label">荷重できる？</span>下肢は体重をかけられるか（不能 → 大腿近位・骨盤・足関節）</li>
+              <li><span class="ss-tlist__label">受傷時の痛み</span>受傷直後から痛い vs 後から痛くなった（後者は occult fx を示唆）</li>
+              <li><span class="ss-tlist__label">受傷機転</span>FOOSH／側方／後方／高所／直達 → ②へ</li>
+              <li><span class="ss-tlist__label">既往・薬</span>骨粗鬆症・転倒歴・<strong>抗凝固薬</strong>（頭部・脊椎・骨盤に注意）</li>
+              <li><span class="ss-tlist__label">ADL ベース</span>普段歩けてた？ → 受傷前 ADL（disposition 判定の前提）</li>
             </ul>
           </div>
-        </div>
+        </details>
 
-        <p>具体的な occult / 見逃しやすい病態の網羅は <a class="wiki-link" href="#s8">§8 見落とし・ミス</a> に集約。ここでは「どの層に効く介入か」だけ押さえる。</p>
-        <ul>
-          <li><strong>神経軸の入口</strong> → <a class="wiki-link" href="頭部外傷評価.html">頭部外傷評価</a> / <a class="wiki-link" href="頸部外傷・頸部痛.html">頸部外傷・頸部痛</a></li>
-          <li><strong>機能軸の入口</strong> → <a class="wiki-link" href="#s4">§4 部位別ショートカット</a>（部位別の occult は §8 へ）</li>
-          <li><strong>社会軸の入口</strong> → <a class="wiki-link" href="#s6">§6 disposition</a> の再転倒予防（環境調整・服薬整理・<a class="wiki-link" href="疾患詳細/骨粗鬆症治療.html">骨粗鬆症治療</a>）</li>
-        </ul>
-        <p>高齢者転倒は <strong>BP（ビスホスホネート）未処方ならここで介入</strong>。退院処方に乗せる機会。</p>
-
-        <details class="sub-fold">
-          <summary>高齢者の 4 大脆弱性骨折（参考：頻度）</summary>
-          <div class="sub-fold__body">
-            <div class="table-wrap">
-              <table>
-                <thead><tr><th>骨折</th><th>罹患率（女性 / 男性, /10000 人年）</th><th>受傷機転</th><th>診断の要点</th></tr></thead>
-                <tbody>
-                  <tr><td><strong>脊椎圧迫骨折</strong></td><td>680 / 700</td><td>しりもち・軽微</td><td>初回 Xp では診断不能、MRI で STIR 白・T1 黒</td></tr>
-                  <tr><td><strong>大腿骨近位部骨折</strong>（頸部・転子部）</td><td>50–76 / 33–36</td><td>転倒</td><td>外旋・短縮位で即 Xp。偽陰性 2–10% は CT / MRI</td></tr>
-                  <tr><td><strong>橈骨遠位端骨折</strong></td><td>75 / 19</td><td>手をついた転倒</td><td>Xp で明確、sugar tong で固定</td></tr>
-                  <tr><td><strong>上腕骨近位部骨折</strong></td><td>42 / 15</td><td>転倒、肩を打った</td><td>ほぼ明確骨折、三角巾 ± バストバンド</td></tr>
-                </tbody>
-              </table>
-            </div>
-            <p><strong>原因不明の歩行困難で来院する高齢者の 4.4%</strong> は受傷歴のない大腿骨近位部骨折。<strong>転んでいなくても骨折を鑑別に挙げる</strong>。</p>
+        <details class="ss-fold">
+          <summary>② 受傷機転で部位を絞る</summary>
+          <div class="ss-fold__body">
+            <ul class="ss-tlist">
+              <li><span class="ss-tlist__label">FOOSH（手）</span>橈骨遠位端 ／ 舟状骨 ／ 上腕骨近位 ／ 鎖骨 ／ 肩関節脱臼 ／ 小児肘（顆上・外顆・Monteggia）</li>
+              <li><span class="ss-tlist__label">側方転倒</span>大腿骨近位 ／ 大転子部血腫 ／ 上腕骨近位 ／ 肋骨</li>
+              <li><span class="ss-tlist__label">後方転倒（しりもち）</span>脊椎圧迫 ／ 仙骨 ／ 尾骨 ／ 後頭部打撲</li>
+              <li><span class="ss-tlist__label">高所転落</span>踵骨 ／ 脊椎破裂 ／ 大腿骨骨幹部 ／ 骨盤 ／ Pilon</li>
+              <li><span class="ss-tlist__label">直達外力</span>肘頭 ／ 膝蓋骨 ／ 顔面骨 ／ 肋骨</li>
+              <li><span class="ss-tlist__label">足関節捻挫様</span>外果・内果・<strong>Maisonneuve</strong>（膝下まで触る）／第 5 中足骨基部</li>
+            </ul>
           </div>
         </details>
+
+        <details class="ss-fold">
+          <summary>③ 高齢者の 4 大脆弱性骨折</summary>
+          <div class="ss-fold__body">
+            <ul class="ss-tlist">
+              <li><span class="ss-tlist__label">脊椎圧迫骨折<span class="ss-tlist__rate">女680／男700</span></span>しりもち・軽微 ／ 初回 Xp 不能 → <strong>MRI STIR 白・T1 黒</strong></li>
+              <li><span class="ss-tlist__label">大腿骨近位部<span class="ss-tlist__rate">女50–76／男33–36</span></span>転倒 ／ <strong>外旋・短縮位</strong>で即 Xp、偽陰性 2–10% は CT/MRI</li>
+              <li><span class="ss-tlist__label">橈骨遠位端<span class="ss-tlist__rate">女75／男19</span></span>手をついた転倒 ／ <strong>dinner fork</strong>、sugar tong 固定</li>
+              <li><span class="ss-tlist__label">上腕骨近位部<span class="ss-tlist__rate">女42／男15</span></span>肩を打った転倒 ／ 三角巾 ± バストバンド</li>
+            </ul>
+            <p style="font-size: 11.5px; color: var(--muted); margin-top: 6px;">罹患率は /10000 人年。<strong>原因不明の歩行困難で来院する高齢者の 4.4%</strong> は受傷歴のない大腿骨近位部骨折 — 骨粗鬆症未治療なら <a class="wiki-link" href="疾患詳細/骨粗鬆症治療.html">骨粗鬆症治療</a> 介入。</p>
+          </div>
+        </details>
+
+        <details class="ss-fold">
+          <summary>④ 見た目で気づく徴候</summary>
+          <div class="ss-fold__body">
+            <ul class="ss-list--2col">
+              <li><strong>外旋＋短縮位</strong> → 大腿骨近位部骨折</li>
+              <li><strong>dinner fork 変形</strong> → 橈骨遠位端骨折</li>
+              <li><strong>S 字変形＋高度腫脹</strong> → 上腕骨顆上骨折（小児）</li>
+              <li><strong>skin puckering</strong> → 軟部組織嵌入のサイン</li>
+              <li><strong>鎖骨皮膚突出・テンティング</strong> → 鎖骨骨折</li>
+              <li><strong>肩 squared appearance</strong> → 肩関節脱臼</li>
+              <li><strong>大転子部血腫</strong> → 大腿骨近位部／骨盤</li>
+              <li><strong>会陰部血腫・尿道口出血</strong> → 骨盤骨折</li>
+              <li><strong>変形・短縮・回旋＋異常可動性</strong> → 明確骨折</li>
+            </ul>
+          </div>
+        </details>
+
+        <details class="ss-fold">
+          <summary>⑤ occult / 見逃しやすい部位（予想に入れる）</summary>
+          <div class="ss-fold__body">
+            <ul class="ss-list--2col">
+              <li><strong>大腿骨近位部 occult</strong>（初回 Xp 偽陰性 2–10%）→ <a class="wiki-link" href="股関節痛.html">股関節痛</a></li>
+              <li><strong>舟状骨骨折</strong>（嗅ぎたばこ窩圧痛）→ <a class="wiki-link" href="手関節・手の外傷.html">手関節</a></li>
+              <li><strong>鎖骨骨折</strong>（肩 2 方向では写らない）→ <a class="wiki-link" href="肩の外傷・痛み.html">肩</a></li>
+              <li><strong>脆弱性骨盤（仙骨部）</strong>（Xp 感度 7–44%）→ <a class="wiki-link" href="疾患詳細/脆弱性骨盤骨折.html">脆弱性骨盤</a></li>
+              <li><strong>Maisonneuve</strong>（膝下まで触る）→ <a class="wiki-link" href="足関節・足部の外傷.html">足関節</a></li>
+              <li><strong>中心性頸髄損傷</strong>（高齢軽微外傷）→ <a class="wiki-link" href="頸部外傷・頸部痛.html">頸部</a></li>
+              <li><strong>慢性硬膜下血腫</strong>（数週後・抗凝固 24–72h）→ <a class="wiki-link" href="頭部外傷評価.html">頭部</a></li>
+              <li><strong>肋骨骨折</strong>（高齢者・低エネ可）</li>
+            </ul>
+            <p style="font-size: 12px; color: var(--muted); margin-top: 6px;">網羅は <a class="wiki-link" href="#s8">§8 見落とし・ミス</a> へ。</p>
+          </div>
+        </details>
+
       </section>
 
       <!-- §3 原因 -->
       <section class="section-page" id="s3" hidden>
         <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🔍 3. 転倒の原因は何か</h2>
+        <h2>3. 転倒の原因は何か</h2>
 
-        <p>「転んだ」のか「倒れた」のか。失神が先行していれば、外傷の治療だけで帰してはいけない。</p>
-        <div class="callout callout-check">
-          <div class="callout-title">原因検索の手順</div>
-          <div class="callout-body">
-            <ol>
-              <li><strong>本人・目撃者の証言</strong>から失神の否定（−）を確認</li>
-              <li>否定できない → <strong>syncope / syncope mimic の検索</strong>（ECG・心腹部エコー・起立試験・SpO2）</li>
-              <li>何も見つからない → <strong>逆行性健忘の可能性</strong>（頭部打撲で記憶が飛び「つまずいただけ」になっている）</li>
-            </ol>
+        <div class="life-checklist" aria-label="転倒原因検索チェックリスト">
+
+          <div class="life-checklist__group life-checklist__group--hx">
+            <span>問診（聞くべきこと）</span>
           </div>
-        </div>
+          <ul>
+            <li>
+              <input type="checkbox" id="cl3-hx-prodrome" data-key="hx-prodrome">
+              <label for="cl3-hx-prodrome">
+                <strong>転倒直前の状況・前駆症状</strong>
+                <span class="life-checklist__sub">気が遠のく / 動悸 / 胸痛 / 呼吸困難 / 暗くなる視野 — あれば失神先行を疑う</span>
+              </label>
+            </li>
+            <li>
+              <input type="checkbox" id="cl3-hx-witness" data-key="hx-witness">
+              <label for="cl3-hx-witness">
+                <strong>目撃者の証言</strong>
+                <span class="life-checklist__sub">意識消失の有無 / 防御反応 / けいれん / 持続時間 / 顔色 / 呼吸停止</span>
+              </label>
+            </li>
+            <li>
+              <input type="checkbox" id="cl3-hx-trigger" data-key="hx-trigger">
+              <label for="cl3-hx-trigger">
+                <strong>状況因子</strong>
+                <span class="life-checklist__sub">起立直後（起立性）／ 排尿後・排便後・食後・長時間立位・痛み（迷走神経反射）／ 環境（段差・暗さ・履物）</span>
+              </label>
+            </li>
+            <li>
+              <input type="checkbox" id="cl3-hx-amnesia" data-key="hx-amnesia">
+              <label for="cl3-hx-amnesia">
+                <strong>健忘の有無</strong>
+                <span class="life-checklist__sub">逆行性健忘で「つまずいただけ」になっていないか — 倒れる前の記憶を細かく確認</span>
+              </label>
+            </li>
+            <li>
+              <input type="checkbox" id="cl3-hx-pmh" data-key="hx-pmh">
+              <label for="cl3-hx-pmh">
+                <strong>既往</strong>
+                <span class="life-checklist__sub">心疾患（CAD / HF / AS）／ 不整脈・ペースメーカー ／ てんかん ／ DM ／ 脳血管 ／ 失神歴</span>
+              </label>
+            </li>
+            <li>
+              <input type="checkbox" id="cl3-hx-meds" data-key="hx-meds">
+              <label for="cl3-hx-meds">
+                <strong>内服薬</strong>
+                <span class="life-checklist__sub">降圧薬・利尿薬 ／ 睡眠薬・ベンゾ ／ オピオイド ／ SU / インスリン ／ 抗不整脈（QT 延長薬） ／ <strong>抗凝固・抗血小板</strong></span>
+              </label>
+            </li>
+            <li>
+              <input type="checkbox" id="cl3-hx-alcohol" data-key="hx-alcohol">
+              <label for="cl3-hx-alcohol">
+                <strong>アルコール / 薬物</strong>
+                <span class="life-checklist__sub">飲酒量・最終飲酒時刻・離脱歴 — 陽性ならフロー「飲酒後転倒？」ポップアップ参照</span>
+              </label>
+            </li>
+          </ul>
 
-        <div class="table-wrap">
-          <table>
-            <thead><tr><th>原因</th><th>確認すること</th></tr></thead>
-            <tbody>
-              <tr><td>つまずき・滑り</td><td>環境要因（段差・暗さ・履物）</td></tr>
-              <tr><td>起立性低血圧</td><td>臥位→立位で収縮期 20 mmHg 以上低下。降圧薬・脱水</td></tr>
-              <tr><td>失神・前失神</td><td>目撃者の証言、前駆症状、ECG</td></tr>
-              <tr><td>迷走神経反射</td><td>長時間立位、排尿後、食後、痛み刺激</td></tr>
-              <tr><td>不整脈</td><td>ECG：VT/VF、AF、III 度 AVB、Mobitz II、SSS、長い pause</td></tr>
-              <tr><td>低血糖</td><td>血糖測定。インスリン・SU 薬</td></tr>
-              <tr><td>てんかん</td><td>目撃者、舌咬傷、尿失禁</td></tr>
-              <tr><td>薬剤性</td><td>睡眠薬・ベンゾ・降圧薬・利尿薬・オピオイド・血糖降下薬</td></tr>
-              <tr><td>アルコール</td><td>飲酒歴、臭い、血中アルコール</td></tr>
-              <tr><td>心エコー所見</td><td>low EF（低灌流）、壁運動異常（ACS）、HOCM、心嚢液、大動脈拡大、AAA</td></tr>
-              <tr><td>PE</td><td>胸痛、SpO2 低下</td></tr>
-            </tbody>
-          </table>
-        </div>
-
-        <div class="callout callout-warning">
-          <div class="callout-title">失神が先行している転倒</div>
-          <div class="callout-body">
-            <p>「転んだ」のではなく「倒れた」可能性がある。<strong>目撃者なし + 受傷機転が不明確 + 外傷のわりに防御反応がない</strong>なら失神を疑う。<strong>ECG は必ず取る</strong>。心疾患の既往があれば循環器へ相談も検討（ESC 2018 失神ガイドライン）。</p>
-            <p>詳細鑑別 → <a class="wiki-link" href="意識消失.html">意識消失</a>（失神 / けいれん / 意識障害の振り分け）</p>
+          <div class="life-checklist__group life-checklist__group--pe">
+            <span>身体診察（取るべき所見）</span>
           </div>
-        </div>
+          <ul>
+            <li>
+              <input type="checkbox" id="cl3-pe-vitals" data-key="pe-vitals">
+              <label for="cl3-pe-vitals">
+                <strong>バイタル + 起立試験</strong>
+                <span class="life-checklist__sub">臥位 → 立位で SBP ≥ 20 mmHg / DBP ≥ 10 mmHg 低下、または HR ↑ 30 で起立性</span>
+              </label>
+            </li>
+            <li>
+              <input type="checkbox" id="cl3-pe-heart" data-key="pe-heart">
+              <label for="cl3-pe-heart">
+                <strong>心音・頸部血管</strong>
+                <span class="life-checklist__sub">収縮期雑音（AS / HOCM）／ 不整 ／ 頸動脈雑音 ／ JVP</span>
+              </label>
+            </li>
+            <li>
+              <input type="checkbox" id="cl3-pe-neuro" data-key="pe-neuro">
+              <label for="cl3-pe-neuro">
+                <strong>神経所見</strong>
+                <span class="life-checklist__sub">麻痺 ／ 小脳 ／ 構音 ／ 歩行 ／ 瞳孔 — 飲酒・高齢で覆い隠されていないか</span>
+              </label>
+            </li>
+            <li>
+              <input type="checkbox" id="cl3-pe-seizure" data-key="pe-seizure">
+              <label for="cl3-pe-seizure">
+                <strong>けいれんの徴候</strong>
+                <span class="life-checklist__sub">舌咬傷（側縁）／ 尿失禁 ／ 筋肉痛 ／ 受傷後の混乱（postictal）</span>
+              </label>
+            </li>
+            <li>
+              <input type="checkbox" id="cl3-pe-trauma" data-key="pe-trauma">
+              <label for="cl3-pe-trauma">
+                <strong>外傷所見と防御反応の整合性</strong>
+                <span class="life-checklist__sub">外傷の割に防御反応がない（手を出していない）→ 失神先行を強く疑う</span>
+              </label>
+            </li>
+            <li>
+              <input type="checkbox" id="cl3-pe-glucose" data-key="pe-glucose">
+              <label for="cl3-pe-glucose">
+                <strong>血糖（指尖）</strong>
+                <span class="life-checklist__sub">DONT 反射的に — 意識・転倒の最頻原因の 1 つ</span>
+              </label>
+            </li>
+          </ul>
 
-        <!-- §3 内 サブ：飲酒後転倒の特殊対応 -->
-        <div class="callout callout-warning" id="s3-alcohol">
-          <div class="callout-title">🍶 飲酒後転倒の特殊対応</div>
-          <div class="callout-body">
-            <p>頻度が高い。<strong>「酔っているだけ」で帰してはいけない</strong>。神経診察が当てにならず、意識障害が並走することも多い。判断保留を恐れない。</p>
-
-            <h4>① 神経診察が信頼できない</h4>
-            <ul>
-              <li>GCS・四肢麻痺・小脳所見・構音障害が <strong>酩酊で説明できてしまう</strong>。アルコールに覆い隠される頭蓋内出血・頸髄損傷・低血糖を念頭に</li>
-              <li><strong>頭部 CT の閾値を下げる</strong>（抗凝固薬 / 高齢 / 受傷機転不明・目撃者なしならほぼ撮る）</li>
-              <li>初回診察で <strong>所見が取れなかった</strong>ことを記録 → アルコール代謝後（数時間後）の <strong>再評価</strong>を必ず計画</li>
-            </ul>
-
-            <h4>② 意識障害の並走を見逃さない</h4>
-            <ul>
-              <li>軽度の意識障害でも <strong>低血糖・低 Na・肝性脳症・Wernicke 脳症・薬物併用・CO・敗血症</strong>を鑑別</li>
-              <li><strong>血糖・血ガス（乳酸・電解質・アンモニア）</strong>は飲酒後転倒で必ず</li>
-              <li>詳細鑑別は <a class="wiki-link" href="意識障害.html">意識障害</a>（AIUEOTIPS / ABCDEs）へ</li>
-              <li>外傷後で意識消失 / 健忘がはっきりあるなら <a class="wiki-link" href="意識消失.html">意識消失</a> も並行確認</li>
-            </ul>
-
-            <h4>③ 入院時はアルコール離脱症候群リスクを必ず評価</h4>
-            <p>飲酒後転倒で <strong>入院</strong>させる場合（骨折・経過観察・意識障害精査）、入院当日中に離脱リスク評価＋予防的対応を指示しないと、入院 6〜24 時間で離脱が出始める。</p>
-            <div class="table-wrap">
-              <table>
-                <thead><tr><th>時期</th><th>症状</th><th>対応</th></tr></thead>
-                <tbody>
-                  <tr><td><strong>6–12 時間</strong></td><td>振戦・不眠・発汗・頻脈・血圧上昇・不安</td><td>CIWA-Ar 評価開始、ベンゾジアゼピン頓用</td></tr>
-                  <tr><td><strong>12–48 時間</strong></td><td>アルコール離脱けいれん（全般性）、幻視・幻聴</td><td>ジアゼパム or ロラゼパム静注、酸素・モニタ</td></tr>
-                  <tr><td><strong>48–96 時間</strong></td><td>振戦せん妄（DT）：見当識障害・自律神経亢進・致死率 5%</td><td>ICU 管理レベル、ベンゾ持続、輸液、ハロペリドール慎重</td></tr>
-                </tbody>
-              </table>
-            </div>
-            <ul>
-              <li><strong>予防</strong>：日常飲酒量・最終飲酒時刻を聴取。中等量以上＋既往ありなら入院当日からベンゾ予防投与を検討</li>
-              <li><strong>Wernicke 予防のチアミン 100–500 mg</strong> を <strong>ブドウ糖投与前</strong>に。低血糖補正でブドウ糖を先に入れない</li>
-              <li>低 Mg / 低 K / 低 P を補正、輸液は維持で十分</li>
-              <li>けいれん既往・DT 既往・直近の大量飲酒・他剤併用（ベンゾ常用・睡眠薬）は高リスク</li>
-            </ul>
-
-            <h4>④ disposition 判断のコツ</h4>
-            <ul>
-              <li><strong>素面に戻るまで観察</strong>を原則（夜間来院なら朝までベッド確保）。素面後の再診察で異常なければ帰宅を再評価</li>
-              <li>「帰宅 → 朝再診」は本人遵守が読めない。<strong>独居・連絡先不明・反復飲酒来院</strong>は入院寄りに</li>
-              <li>抗凝固薬内服 + 頭部打撲 + 飲酒は CT 正常でも経過観察入院を強く検討</li>
-            </ul>
+          <div class="life-checklist__group life-checklist__group--ix">
+            <span>検査（オーダーすべき項目）</span>
           </div>
+          <ul>
+            <li>
+              <input type="checkbox" id="cl3-ix-ecg" data-key="ix-ecg">
+              <label for="cl3-ix-ecg">
+                <strong>12 誘導 ECG（必須）</strong>
+                <span class="life-checklist__sub">VT / VF / AF / III 度 AVB / Mobitz II / SSS / long pause / QT 延長 / Brugada / WPW</span>
+              </label>
+            </li>
+            <li>
+              <input type="checkbox" id="cl3-ix-labs" data-key="ix-labs">
+              <label for="cl3-ix-labs">
+                <strong>採血</strong>
+                <span class="life-checklist__sub">血糖・電解質・Cr・Hb / トロポニン（胸痛・ECG 異常時）／ D-dimer（PE 疑い時）／ アンモニア・乳酸（飲酒・意識障害）</span>
+              </label>
+            </li>
+            <li>
+              <input type="checkbox" id="cl3-ix-gas" data-key="ix-gas">
+              <label for="cl3-ix-gas">
+                <strong>動脈血ガス + SpO2</strong>
+                <span class="life-checklist__sub">低酸素（PE）／ アシドーシス ／ 飲酒後の意識障害並走時に必須</span>
+              </label>
+            </li>
+            <li>
+              <input type="checkbox" id="cl3-ix-echo" data-key="ix-echo">
+              <label for="cl3-ix-echo">
+                <strong>心エコー（POCUS）</strong>
+                <span class="life-checklist__sub">low EF / 壁運動異常（ACS）／ HOCM / 心嚢液 / 大動脈拡大 / 右心負荷（PE）</span>
+              </label>
+            </li>
+            <li>
+              <input type="checkbox" id="cl3-ix-aaa" data-key="ix-aaa">
+              <label for="cl3-ix-aaa">
+                <strong>腹部エコー（AAA スクリーニング）</strong>
+                <span class="life-checklist__sub">60 歳以上 / 高血圧 / 喫煙 — 失神 + 腹背部痛は破裂 AAA</span>
+              </label>
+            </li>
+            <li>
+              <input type="checkbox" id="cl3-ix-ct" data-key="ix-ct">
+              <label for="cl3-ix-ct">
+                <strong>頭部 CT</strong>
+                <span class="life-checklist__sub">高齢 ／ 抗凝固薬 ／ 受傷機転不明 ／ 健忘 ／ GCS 異常 ／ 飲酒 — 閾値を下げる</span>
+              </label>
+            </li>
+          </ul>
+
         </div>
+
+        <p style="font-size: 12px; color: var(--muted); margin-top: 8px;">
+          チェック状態は端末ローカルに保存されます（症例ごとにリセットしてください）。
+          <button type="button" id="causeChecklistReset" style="margin-left: 8px; padding: 2px 10px; font-size: 12px; border-radius: 6px; border: 1px solid color-mix(in srgb, var(--text) 22%, transparent); background: var(--surface); color: var(--text); cursor: pointer;">リセット</button>
+        </p>
+
+        <p style="font-size: 12.5px; color: var(--muted); margin-top: 6px;">
+          失神先行の鑑別詳細 → <a class="wiki-link" href="意識消失.html">意識消失</a>（失神 / けいれん / 意識障害の振り分け、ESC 2018 失神 GL）
+        </p>
+
       </section>
 
       <!-- §4 部位別ショートカット -->
       <section class="section-page" id="s4" hidden>
         <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🧭 部位別ショートカット</h2>
+        <h2>部位別ショートカット</h2>
 
         <section class="quick-nav">
           <div class="quick-grid">
             <a class="quick-link" href="頭部外傷評価.html">頭部</a>
             <a class="quick-link" href="頸部外傷・頸部痛.html">頸部</a>
-            <a class="quick-link" href="肩の外傷・痛み.html">肩</a>
             <a class="quick-link" href="体幹・背部の外傷.html">体幹・背部</a>
+            <a class="quick-link" href="肩の外傷・痛み.html">肩</a>
+            <a class="quick-link" href="肘周囲の外傷.html">肘</a>
             <a class="quick-link" href="手関節・手の外傷.html">手関節</a>
             <a class="quick-link" href="股関節痛.html">股関節</a>
             <a class="quick-link" href="膝の外傷・痛み.html">膝</a>
@@ -575,7 +1087,7 @@
       <!-- §5 外傷マネジメント -->
       <section class="section-page" id="s5" hidden>
         <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>🛠 外傷のマネジメント方針（骨折ハンター式 5 択）</h2>
+        <h2>外傷のマネジメント方針（骨折ハンター式 5 択）</h2>
 
         <div class="callout callout-tip">
           <div class="callout-title">上肢外傷は原則「帰宅」、下肢外傷は原則「入院」</div>
@@ -641,7 +1153,7 @@
       <!-- §6 disposition / 帰宅説明 -->
       <section class="section-page" id="s6" hidden>
         <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>📤 disposition / 帰宅説明</h2>
+        <h2>disposition / 帰宅説明</h2>
 
         <h3>帰宅できる条件</h3>
         <ul>
@@ -661,7 +1173,7 @@
           <li><strong>失神の精査が必要</strong> → 入院 or 循環器</li>
           <li><strong>歩行不能 / ADL が維持できない</strong> → 入院</li>
           <li><strong>抗凝固薬内服中 + 頭部打撲</strong> → 経過観察入院を検討</li>
-          <li><strong>飲酒後転倒で素面に戻っていない / 神経診察不能</strong> → 観察入院（離脱対応は <a class="wiki-link" href="#s3-alcohol">§3 飲酒後転倒</a>）</li>
+          <li><strong>飲酒後転倒で素面に戻っていない / 神経診察不能</strong> → 観察入院（離脱対応はフロー「飲酒後転倒？」ポップアップ）</li>
           <li><strong>独居高齢者で見守り困難</strong> → 環境調整が済むまで入院</li>
         </ul>
 
@@ -694,7 +1206,7 @@
       <!-- §7 カルテテンプレ -->
       <section class="section-page" id="s7" hidden>
         <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>📝 カルテテンプレ（2 軸で書く）</h2>
+        <h2>カルテテンプレ（2 軸で書く）</h2>
 
         <p>※ 2軸構造の全体像はページ最上段の <a class="wiki-link" href="#">フロー</a> 参照。</p>
 
@@ -735,7 +1247,7 @@
       <!-- §8 見落とし・ミス -->
       <section class="section-page" id="s8" hidden>
         <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>⚠️ 見落としやすいもの・やりがちなミス</h2>
+        <h2>見落としやすいもの・やりがちなミス</h2>
 
         <p>occult / 見逃しやすい病態を <strong>部位別</strong>に集約。フローの「部位別診察」「後遺症」ノードから飛んできた時にここで該当部位を開く。</p>
 
@@ -779,7 +1291,7 @@
           <div class="sub-fold__body">
             <ul>
               <li><strong>失神が原因の転倒</strong>（「つまずいた」で片付けている）— 入口：<a class="wiki-link" href="意識消失.html">意識消失</a> / <a class="wiki-link" href="#s3">§3 原因</a></li>
-              <li><strong>飲酒で覆い隠された頭蓋内出血・低血糖・意識障害</strong> — 入口：<a class="wiki-link" href="#s3-alcohol">§3 飲酒後転倒</a> / <a class="wiki-link" href="意識障害.html">意識障害</a></li>
+              <li><strong>飲酒で覆い隠された頭蓋内出血・低血糖・意識障害</strong> — 入口：フロー「飲酒後転倒？」ポップアップ / <a class="wiki-link" href="意識障害.html">意識障害</a></li>
               <li><strong>抗凝固薬の確認漏れ</strong>（軽症頭部打撲でも CT 閾値を下げる）</li>
               <li><strong>NSAIDs を高齢者に出してしまう</strong>（腎障害・消化管出血）</li>
             </ul>
@@ -804,7 +1316,7 @@
       <!-- §9 出典・リンク -->
       <section class="section-page" id="s9" hidden>
         <button class="back-to-menu" type="button">← メニューへ</button>
-        <h2>📚 出典・リンク</h2>
+        <h2>出典・リンク</h2>
 
         <h3>主要文献</h3>
         <ul>
@@ -832,6 +1344,44 @@
 
     </article>
   </main>
+
+  <!-- 飲酒後転倒 ポップアップ -->
+  <div class="alc-modal" id="alcoholPopup" role="dialog" aria-modal="true" aria-labelledby="alcoholPopupTitle" hidden>
+    <div class="alc-modal__backdrop" data-close="1"></div>
+    <div class="alc-modal__dialog">
+      <button type="button" class="alc-modal__close" data-close="1" aria-label="閉じる">×</button>
+      <h3 class="alc-modal__title" id="alcoholPopupTitle">飲酒後転倒</h3>
+      <p class="alc-modal__lead">「酔っているだけ」で帰さない。神経診察は当てにならず、意識障害並走・離脱症候群・隠された頭蓋内出血を考える。</p>
+      <div class="alc-modal__body">
+        <h4>① 神経診察は信用しない</h4>
+        <ul>
+          <li>GCS・麻痺・小脳所見は酩酊で説明されてしまう → <strong>頭部 CT 閾値を下げる</strong>（抗凝固・高齢・機転不明なら原則撮る）</li>
+          <li>「所見が取れなかった」と記録し、<strong>数時間後の再評価</strong>を計画</li>
+          <li>頸椎は最後まで疑う（NEXUS / C-spine は適用不可）</li>
+        </ul>
+
+        <h4>② 意識障害並走を外す</h4>
+        <ul>
+          <li>低血糖 / 低 Na / 肝性脳症 / Wernicke / 薬物併用 / CO / 敗血症 / 頭蓋内出血</li>
+          <li><strong>血糖・血ガス（乳酸・電解質・アンモニア）</strong>と 12 誘導 ECG を必ず</li>
+        </ul>
+
+        <h4>③ 入院時は離脱症候群を予防</h4>
+        <ul>
+          <li><strong>6–12h</strong> 振戦・発汗・頻脈 → CIWA-Ar、ベンゾ頓用</li>
+          <li><strong>12–48h</strong> 離脱けいれん・幻視 → ジアゼパム / ロラゼパム静注</li>
+          <li><strong>48–96h</strong> 振戦せん妄（DT）：致死率 5% → ICU レベル</li>
+          <li>予防：<strong>チアミン 100–500 mg をブドウ糖前</strong>に。低 Mg / K / P 補正。中等量以上＋既往ありはベンゾ予防</li>
+        </ul>
+
+        <h4>④ disposition</h4>
+        <ul>
+          <li>原則 <strong>素面に戻るまで観察</strong>、素面後の再診察で異常なければ帰宅再評価</li>
+          <li><strong>独居・連絡先不明・反復飲酒来院</strong>、<strong>抗凝固＋頭部打撲</strong>は CT 正常でも入院寄り</li>
+        </ul>
+      </div>
+    </div>
+  </div>
 
   <nav class="hokuto-bottom">
     <button class="hokuto-bottom__btn" type="button" id="navBack">
@@ -897,7 +1447,140 @@
       else window.location.href = 'index.html';
     });
 
+    // === Peek プレビュー ===
+    // フローチャートのノード／セクションタイルなど内部アンカーへのリンクは、
+    // ページ遷移ではなくモーダルでクローン表示する。長押し（OS コンテキストメニュー）も
+    // 抑制し、同じプレビュー表示に統一。
+    const PEEK_SELECTOR = 'a.dx-node[href^="#"], a.section-tile[href^="#"]';
+    let peekOverlay = null;
+    let peekCurrentId = null;
+
+    function createPeekOverlay() {
+      const overlay = document.createElement('div');
+      overlay.className = 'peek-modal';
+      overlay.innerHTML =
+        '<div class="peek-modal__sheet" role="dialog" aria-modal="true" aria-labelledby="peekTitle">' +
+          '<div class="peek-modal__handle" aria-hidden="true"></div>' +
+          '<header class="peek-modal__header">' +
+            '<span class="peek-modal__title" id="peekTitle">プレビュー</span>' +
+            '<button type="button" class="peek-modal__close" aria-label="閉じる">✕</button>' +
+          '</header>' +
+          '<div class="peek-modal__body"></div>' +
+        '</div>';
+      document.body.appendChild(overlay);
+      return overlay;
+    }
+
+    function openPeek(id) {
+      if (!id) return false;
+      const target = document.getElementById(id);
+      if (!target) return false;
+      if (!peekOverlay) peekOverlay = createPeekOverlay();
+      peekCurrentId = id;
+
+      // タイトル：対象セクション内の見出しを優先
+      const heading = target.querySelector('.section-h2, h2, h3, .dx-node__title');
+      const title = heading ? heading.textContent.trim().replace(/^[#\s]+/, '') : id;
+      peekOverlay.querySelector('.peek-modal__title').textContent = title;
+
+      // 本体：対象のクローンを挿入、ID は重複防止のため除去、hidden は解除
+      const bodyEl = peekOverlay.querySelector('.peek-modal__body');
+      bodyEl.innerHTML = '';
+      const clone = target.cloneNode(true);
+      clone.removeAttribute('id');
+      clone.removeAttribute('hidden');
+      clone.hidden = false;
+      clone.querySelectorAll('[id]').forEach(el => el.removeAttribute('id'));
+      clone.querySelectorAll('[hidden]').forEach(el => { el.removeAttribute('hidden'); el.hidden = false; });
+      bodyEl.appendChild(clone);
+      bodyEl.scrollTop = 0;
+
+      peekOverlay.classList.add('is-open');
+      document.body.style.overflow = 'hidden';
+      return true;
+    }
+
+    function closePeek() {
+      if (!peekOverlay) return;
+      peekOverlay.classList.remove('is-open');
+      document.body.style.overflow = '';
+      peekCurrentId = null;
+    }
+
+    // クリック横取り（タップも同じ経路）
+    document.addEventListener('click', (e) => {
+      // peek 内のアクション
+      if (peekOverlay && peekOverlay.classList.contains('is-open')) {
+        if (e.target.classList.contains('peek-modal__close')) { e.preventDefault(); closePeek(); return; }
+        if (e.target === peekOverlay) { closePeek(); return; }
+      }
+      // 内部アンカー
+      const link = e.target.closest(PEEK_SELECTOR);
+      if (!link) return;
+      const href = link.getAttribute('href');
+      if (!href || href.length <= 1 || href[0] !== '#') return;
+      e.preventDefault();
+      openPeek(href.substring(1));
+    });
+
+    // 長押し時の OS コンテキストメニューを抑制し、同じくプレビュー
+    document.addEventListener('contextmenu', (e) => {
+      const link = e.target.closest(PEEK_SELECTOR);
+      if (!link) return;
+      e.preventDefault();
+      const href = link.getAttribute('href');
+      if (href && href.length > 1 && href[0] === '#') openPeek(href.substring(1));
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && peekOverlay && peekOverlay.classList.contains('is-open')) closePeek();
+    });
+
     syncFromHash();
+
+    // === チェックリスト：localStorage 保存（命 / 原因検査 を section スコープで分離） ===
+    function bindChecklist(rootSelector, storageKey, resetBtnId) {
+      const root = document.querySelector(rootSelector);
+      if (!root) return;
+      const cbs = root.querySelectorAll('input[type="checkbox"][data-key]');
+      if (!cbs.length) return;
+      let saved = {};
+      try { saved = JSON.parse(localStorage.getItem(storageKey) || '{}'); } catch (e) {}
+      cbs.forEach(cb => {
+        if (saved[cb.dataset.key]) cb.checked = true;
+        cb.addEventListener('change', () => {
+          const state = {};
+          cbs.forEach(c => { if (c.checked) state[c.dataset.key] = true; });
+          try { localStorage.setItem(storageKey, JSON.stringify(state)); } catch (e) {}
+        });
+      });
+      const resetBtn = document.getElementById(resetBtnId);
+      if (resetBtn) {
+        resetBtn.addEventListener('click', () => {
+          cbs.forEach(c => { c.checked = false; });
+          try { localStorage.removeItem(storageKey); } catch (e) {}
+        });
+      }
+    }
+    bindChecklist('#s1 .life-checklist', 'tento-life-checklist-v1', 'lifeChecklistReset');
+    bindChecklist('#s3 .life-checklist', 'tento-cause-checklist-v1', 'causeChecklistReset');
+
+    // === 飲酒後転倒 ポップアップ ===
+    (function() {
+      const trigger = document.getElementById('alcoholPopupTrigger');
+      const modal = document.getElementById('alcoholPopup');
+      if (!trigger || !modal) return;
+      const open = () => { modal.hidden = false; document.body.style.overflow = 'hidden'; };
+      const close = () => { modal.hidden = true; document.body.style.overflow = ''; };
+      trigger.addEventListener('click', open);
+      modal.addEventListener('click', (e) => {
+        const t = e.target;
+        if (t && t.dataset && t.dataset.close === '1') close();
+      });
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && !modal.hidden) close();
+      });
+    })();
   })();
   </script>
 </body>

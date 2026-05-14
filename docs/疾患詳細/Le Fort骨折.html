@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="color-scheme" content="light dark" />
+  <title>Le Fort 骨折 | ER ノート</title>
+  <link rel="stylesheet" href="../er-note.css" />
+  <style>
+    .dx-quick { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 10px 0 4px; }
+    @media (max-width: 640px) { .dx-quick { grid-template-columns: 1fr 1fr; } }
+    .dx-quick__btn {
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 2px; padding: 10px 6px; border-radius: 10px;
+      background: color-mix(in srgb, var(--accent) 10%, var(--surface));
+      border: 1.5px solid var(--accent); color: var(--text); text-decoration: none;
+      font-weight: 700; font-size: 13px; line-height: 1.2; text-align: center; cursor: pointer;
+      transition: background 120ms ease;
+    }
+    .dx-quick__btn:hover { background: color-mix(in srgb, var(--accent) 18%, var(--surface)); }
+    .dx-quick__sub { font-size: 10.5px; font-weight: 500; color: var(--muted); }
+
+    .dx-tri { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 6px 0 4px; align-items: start; }
+    .dx-tri__card {
+      background: var(--surface); border-radius: 10px; padding: 10px 12px;
+      border: 1.5px solid color-mix(in srgb, var(--text) 18%, transparent);
+    }
+    .dx-tri__card--vasc { border-color: #c0392b; background: color-mix(in srgb, #c0392b 6%, var(--surface)); }
+    .dx-tri__card--neuro { border-color: #b5651d; background: color-mix(in srgb, #b5651d 6%, var(--surface)); }
+    .dx-tri__title { display: flex; align-items: center; gap: 6px; font-weight: 800; font-size: 13.5px; margin-bottom: 4px; }
+    .dx-tri__card--vasc .dx-tri__title { color: #c0392b; }
+    .dx-tri__card--neuro .dx-tri__title { color: #b5651d; }
+    .dx-tri__list { margin: 0; padding-left: 18px; font-size: 12.5px; line-height: 1.5; }
+    .dx-tri__list li { margin: 2px 0; }
+
+    details.dx-tri__card { padding: 0; }
+    details.dx-tri__card > summary {
+      list-style: none; cursor: pointer; padding: 10px 12px;
+      display: flex; align-items: center; gap: 6px; font-weight: 800; font-size: 13.5px;
+    }
+    details.dx-tri__card > summary::-webkit-details-marker { display: none; }
+    details.dx-tri__card > summary::after { content: "▸"; margin-left: auto; font-size: 12px; color: var(--muted); transition: transform 120ms ease; }
+    details.dx-tri__card[open] > summary::after { transform: rotate(90deg); }
+    details.dx-tri__card--vasc > summary { color: #c0392b; }
+    details.dx-tri__card--neuro > summary { color: #b5651d; }
+    details.dx-tri__card > .dx-tri__list { padding: 0 14px 12px 30px; }
+    details.dx-tri__card > .dx-tri__hint { padding: 0 14px 6px 30px; font-size: 11px; color: var(--muted); }
+
+    details.dx-box {
+      background: var(--surface); border: 1.5px solid color-mix(in srgb, var(--text) 18%, transparent);
+      border-radius: 10px; margin: 10px 0; scroll-margin-top: 8px;
+    }
+    details.dx-box > summary {
+      list-style: none; cursor: pointer; padding: 12px 14px;
+      display: flex; align-items: center; gap: 8px; font-weight: 800; font-size: 14.5px;
+    }
+    details.dx-box > summary::-webkit-details-marker { display: none; }
+    details.dx-box > summary::after { content: "▸"; margin-left: auto; font-size: 13px; color: var(--muted); transition: transform 120ms ease; }
+    details.dx-box[open] > summary::after { transform: rotate(90deg); }
+    details.dx-box[open] { border-color: var(--accent); }
+    details.dx-box > .dx-box__body { padding: 0 14px 14px; }
+
+    @media (max-width: 640px) {
+      .dx-quick { gap: 6px; }
+      .dx-quick__btn { padding: 8px 4px; font-size: 11.5px; border-radius: 8px; }
+      .dx-quick__sub { font-size: 9.5px; }
+      .dx-tri { grid-template-columns: 1fr; gap: 8px; }
+      .dx-tri__card { padding: 8px 10px; }
+      details.dx-tri__card > summary { padding: 8px 10px; font-size: 12.5px; }
+      details.dx-tri__card > .dx-tri__list { padding: 0 12px 10px 26px; }
+      .dx-tri__title { font-size: 12.5px; }
+      .dx-tri__list { font-size: 12px; }
+      details.dx-box > summary { padding: 10px 12px; font-size: 13.5px; }
+      details.dx-box > .dx-box__body { padding: 0 12px 12px; }
+    }
+
+    .dx-step {
+      margin: 18px 0 6px; display: flex; align-items: center; gap: 10px;
+      color: var(--muted); font-size: 11.5px; font-weight: 800; letter-spacing: 0.1em;
+    }
+    .dx-step::before, .dx-step::after { content: ""; flex: 1; height: 1px; background: color-mix(in srgb, var(--text) 18%, transparent); }
+
+    .dx-template {
+      background: color-mix(in srgb, var(--text) 4%, var(--surface));
+      border-left: 3px solid var(--accent); border-radius: 6px;
+      padding: 10px 12px; margin: 6px 0 0; font-size: 13px; line-height: 1.6;
+      white-space: pre-wrap; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+    .dx-template__hint { font-size: 11px; color: var(--muted); margin: 0 0 4px; }
+
+    .dx-alert {
+      background: color-mix(in srgb, #c0392b 8%, var(--surface));
+      border: 1.5px solid #c0392b; border-radius: 10px;
+      padding: 10px 12px; margin: 10px 0; color: var(--text); font-size: 13px;
+    }
+    .dx-alert strong { color: #c0392b; }
+
+    .dx-typical {
+      background: color-mix(in srgb, var(--accent) 5%, var(--surface));
+      border: 1.5px solid color-mix(in srgb, var(--accent) 50%, transparent);
+      border-radius: 10px; padding: 10px 14px; margin: 10px 0 4px;
+    }
+    .dx-typical__title { font-weight: 800; font-size: 13.5px; color: var(--accent); margin-bottom: 4px; }
+    .dx-typical__list { margin: 0; padding-left: 18px; font-size: 12.5px; line-height: 1.55; }
+    .dx-typical__list li { margin: 2px 0; }
+    @media (max-width: 640px) {
+      .dx-typical { padding: 8px 10px; }
+      .dx-typical__title { font-size: 12.5px; }
+      .dx-typical__list { font-size: 12px; }
+    }
+    .dx-box__body h3 {
+      font-size: 14px; font-weight: 800;
+      margin: 14px 0 6px;
+      color: var(--accent);
+      padding-bottom: 4px;
+      border-bottom: 1px dashed color-mix(in srgb, var(--text) 22%, transparent);
+    }
+    .dx-box__body h3:first-child { margin-top: 4px; }
+    @media (max-width: 640px) { .dx-box__body h3 { font-size: 12.5px; margin: 10px 0 4px; } }
+  </style>
+</head>
+<body>
+  <header class="hokuto-top">
+    <a class="hokuto-top__btn" href="../薬剤情報.html"><span class="hokuto-top__icon">℞</span><span>薬剤情報</span></a>
+    <a class="hokuto-top__btn" href="../表計算.html"><span class="hokuto-top__icon">⊞</span><span>表計算</span></a>
+  </header>
+
+  <main class="hokuto-main">
+    <article class="note-shell">
+      <h1 class="page-title">Le Fort 骨折</h1>
+
+      <div class="dx-alert">
+        🚨 Le Fort II / III は<strong>高エネ機転</strong>。顔面浮腫・後咽頭血腫・舌位低下で<strong>気道閉塞リスク</strong>。<br>
+        頭蓋底骨折合併時は<strong>経鼻挿管・経鼻胃管は禁</strong>。麻酔科・形成外科に早期コール。
+      </div>
+
+      <nav class="dx-quick" aria-label="クイックタップ">
+        <button class="dx-quick__btn" type="button" data-target="er-actions">
+          <span>ER で打つ手</span><span class="dx-quick__sub">初期処置</span>
+        </button>
+        <button class="dx-quick__btn" type="button" data-target="consult-check">
+          <span>コンサル前確認</span><span class="dx-quick__sub">形成外科を呼ぶ前に</span>
+        </button>
+        <button class="dx-quick__btn" type="button" data-target="img-plan">
+          <span>画像と治療方針</span><span class="dx-quick__sub">I / II / III</span>
+        </button>
+        <button class="dx-quick__btn" type="button" data-target="consult">
+          <span>コンサル文</span><span class="dx-quick__sub">そのまま貼れる</span>
+        </button>
+      </nav>
+
+      <section class="dx-typical">
+        <div class="dx-typical__title">典型像（疑うきっかけ）</div>
+        <ul class="dx-typical__list">
+          <li>機転：<strong>高エネルギー外傷</strong>（交通／高所転落／顔面への直達外力）</li>
+          <li><strong>顔面長軸の延長</strong>、顔面浮腫、皮下血腫、鼻出血</li>
+          <li><strong>咬合異常</strong>（open bite）、上顎の動揺（鼻骨〜上顎を把持して揺らすと顔面中部が動く）</li>
+          <li>Le Fort III では <strong>dish-face deformity</strong>（皿状陥凹）</li>
+          <li>頭蓋顔面分離（craniofacial disjunction）の臨床所見</li>
+          <li>頭蓋底骨折合併が多い（Battle 徴候・Raccoon eyes・髄液漏）</li>
+        </ul>
+        <p style="margin: 6px 0 0; font-size: 11.5px; color: var(--muted);">→ 詳細所見は <strong>同時並行 2 軸</strong> と <strong>コンサル前確認</strong> へ</p>
+      </section>
+
+      <div class="dx-step"><span>同時並行で評価する 2 軸（治療方針を分ける所見）</span></div>
+      <div class="dx-tri">
+
+        <details class="dx-tri__card dx-tri__card--vasc" open>
+          <summary>気道（最優先・早期挿管判断）</summary>
+          <p class="dx-tri__hint">II / III では早期挿管準備。経鼻はリスクを評価してから。</p>
+          <ul class="dx-tri__list">
+            <li>顔面浮腫・後咽頭血腫・舌位低下で<strong>気道閉塞</strong></li>
+            <li>分泌物・血液・歯片の誤嚥</li>
+            <li>頭蓋底骨折合併 → <strong>経鼻挿管・経鼻胃管は原則禁</strong>（特に篩板骨折で脳内へ誤挿入のリスク。系統的レビューでは実際の報告は稀だが、ER の安全側ルールとして<strong>経口挿管を第一選択</strong>）</li>
+            <li>困難気道予測 → 経口挿管 ± 外科的気道（輪状甲状靱帯切開）の準備</li>
+            <li>SBP ≥ 110、SpO₂ ≥ 94% を維持</li>
+          </ul>
+        </details>
+
+        <details class="dx-tri__card dx-tri__card--vasc" open>
+          <summary>合併損傷（治療ルートが分かれる）</summary>
+          <p class="dx-tri__hint">頭蓋内・視神経・頸椎を同時に評価。それぞれ別ルートで動く。</p>
+          <ul class="dx-tri__list">
+            <li><strong>頭蓋内出血</strong>（→ <a href="../頭部外傷評価.html">頭部外傷評価</a>）：脳外即時</li>
+            <li><strong>頭蓋底骨折</strong>（前頭蓋底）：髄液漏・嗅覚低下・経鼻挿管禁</li>
+            <li><strong>視神経管骨折</strong>（→ <a href="視神経管骨折.html">視神経管骨折</a>）：急性視力低下＋RAPD → 眼科＋脳外即時</li>
+            <li><strong>頸椎損傷</strong>（→ <a href="../頸部外傷・頸部痛.html">頸部外傷・頸部痛</a>）：高エネ機転で必ず外す</li>
+            <li>ZMC ／眼窩底／鼻骨／下顎との<strong>複合骨折</strong>がほぼ常</li>
+          </ul>
+        </details>
+      </div>
+
+      <details class="dx-box" id="er-actions">
+        <summary><span>ER で打つ手（初期処置）</span></summary>
+        <div class="dx-box__body">
+          <ol>
+            <li><strong>気道確保</strong>：II / III では早期に判断。経口挿管が原則、頭蓋底骨折で経鼻禁、困難気道予測時は外科的気道準備</li>
+            <li><strong>頸椎カラー保持</strong>（高エネ＝合併率高）</li>
+            <li><strong>循環</strong>：顔面出血コントロール、輸液</li>
+            <li><strong>頭部・頸椎・顔面 CT を同時オーダー</strong>（3D 再構成）</li>
+            <li>抗生剤投与（副鼻腔と交通 → 開放骨折扱い）</li>
+            <li>絶飲食、鎮痛、頭部挙上 30°</li>
+            <li>視機能（視力・対光反射・RAPD）を記録</li>
+            <li>形成外科コンサルト（気道安定後に整復計画）</li>
+            <li>脳外科コンサルト（頭蓋内出血・頭蓋底骨折合併時）</li>
+          </ol>
+        </div>
+      </details>
+
+      <details class="dx-box" id="consult-check">
+        <summary><span>形成外科コンサルト前に確認すべきこと</span></summary>
+        <div class="dx-box__body">
+          <p>Le Fort 骨折と診断したら、コンサル前に以下を整理しておく（電話・紹介状で必ず聞かれる）。気道安定が前提。</p>
+          <ul>
+            <li><strong>気道状況</strong>：自発呼吸維持／挿管管理中（経口）／検討中</li>
+            <li><strong>循環</strong>：バイタル、ショックの有無</li>
+            <li><strong>意識・GCS</strong>：頭蓋内損傷の合併評価</li>
+            <li><strong>顔面所見</strong>：顔面長軸延長、dish-face deformity の有無、上顎の動揺</li>
+            <li><strong>咬合異常</strong>：open bite、本人申告</li>
+            <li><strong>Le Fort 線の分類</strong>（CT 所見）：I／II／III／混合型、左右対称性</li>
+            <li><strong>頭蓋底徴候</strong>：Battle／Raccoon／髄液漏／鼓室血腫の有無</li>
+            <li><strong>視機能</strong>（治療方針は変えないが記録必須）：視力、対光反射、RAPD、眼球運動</li>
+            <li><strong>頬部しびれ</strong>（V2 領域）の有無</li>
+            <li><strong>合併骨折</strong>：ZMC、眼窩底、鼻骨、下顎、視神経管</li>
+            <li><strong>頭部 CT</strong>：頭蓋内病変、<strong>頸椎 CT</strong>：頸椎損傷</li>
+            <li><strong>背景情報</strong>：抗凝固薬・抗血小板薬・既往歴・受傷前 ADL</li>
+            <li><strong>ER 処置の記録</strong>：気道確保（時刻・方法）、抗生剤投与時刻、絶飲食、頭部挙上</li>
+            <li><strong>術前検査</strong>：採血・心電図・胸部 X 線の済／未</li>
+          </ul>
+        </div>
+      </details>
+
+      <details class="dx-box" id="img-plan">
+        <summary><span>画像所見と治療方針</span></summary>
+        <div class="dx-box__body">
+
+          <h3>① Le Fort 分類（I / II / III）</h3>
+          <p>1901 年 René Le Fort（仏）が屍体実験で分類。臨床的に<strong>純粋型はまれ</strong>で混合型が多い。<strong>顔面 CT（軸位 + 冠状位 + 3D-CT）</strong>で骨折線の全体像と複合型を把握する。</p>
+          <ul>
+            <li><strong>Le Fort I（Guérin 骨折）</strong>：水平骨折。上顎骨を歯槽部とともに鼻底〜翼状突起底部で離断。<strong>上顎の浮動</strong>。咬合異常 + 上口唇腫脹。気道リスク低〜中</li>
+            <li><strong>Le Fort II（pyramidal）</strong>：鼻骨〜上顎骨〜頬骨上顎縫合〜翼状突起にかけてピラミッド型に離断。<strong>顔面中央部の浮動</strong>。眼窩下神経麻痺。<strong>髄液鼻漏は篩板・前頭蓋底損傷を合併した時に生じる</strong>（II 単独では通常起こらない）</li>
+            <li><strong>Le Fort III（craniofacial disjunction）</strong>：頭蓋顔面分離。鼻骨〜眼窩内側壁〜外側壁〜翼状突起。<strong>顔面全体が頭蓋から離れて浮動</strong>。dish-face deformity、視神経管・頭蓋底損傷を伴う</li>
+            <li><strong>混合型</strong>（例：左 Le Fort II + 右 Le Fort I+II + ZMC）は珍しくない、左右非対称評価が必要</li>
+          </ul>
+
+          <h3>② 治療方針</h3>
+          <div class="table-wrap"><table>
+            <thead><tr><th>状態</th><th>必要な処置</th><th>タイミング</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><strong>気道閉塞リスク</strong>（II/III、顔面浮腫、後咽頭血腫）</td>
+                <td>気道確保（経口挿管 or 外科的気道）。経鼻禁の確認</td>
+                <td><strong>直ちに</strong></td>
+              </tr>
+              <tr>
+                <td><strong>頭蓋内出血／頭蓋底骨折</strong>合併</td>
+                <td>脳外コンサルト、ICP 対応、髄液漏管理</td>
+                <td>直ちに</td>
+              </tr>
+              <tr>
+                <td><strong>視神経管骨折</strong>合併</td>
+                <td>眼科＋脳外、ステロイド／減圧術判断</td>
+                <td>受傷 8h 以内が望ましい</td>
+              </tr>
+              <tr>
+                <td>気道・頭蓋内安定後</td>
+                <td>骨接合術（下行的アプローチ：前頭骨〜頬骨〜上顎骨〜歯槽部、ミニプレート／マイクロプレート）</td>
+                <td>受傷後 <strong>10〜14 日</strong>の予定手術（浮腫軽快後）</td>
+              </tr>
+            </tbody>
+          </table></div>
+
+          <h3>③ 手術の原則</h3>
+          <ul>
+            <li><strong>受傷後 10〜14 日</strong>（浮腫軽快後）の予定手術が原則。緊急性はまず気道・出血・頭蓋内病変</li>
+            <li>下行的アプローチ：上から下へ（前頭骨〜頬骨〜上顎骨〜歯槽部）固定</li>
+            <li>標準切開は <strong>冠状切開＋口腔前庭切開（sublabial）＋下眼瞼切開／経結膜切開</strong> の組合せ。ミニプレート／マイクロプレート固定</li>
+            <li>Le Fort II/III は<strong>顎間固定</strong>を併用することがある</li>
+            <li>頭蓋底骨折合併・髄液漏は脳外と協議（保存的経過観察 vs 修復）</li>
+          </ul>
+        </div>
+      </details>
+
+      <details class="dx-box" id="consult">
+        <summary><span>コンサル文（カルテに貼る）</span></summary>
+        <div class="dx-box__body">
+          <p class="dx-template__hint">形成外科＋麻酔科宛て。【目的】【疾患】【既往歴】【内服薬】【ADL】【現病歴】の順。高エネ機転を強調。</p>
+          <div class="dx-template">【目的】[ご加療依頼／気道管理ご相談／観血的整復のご相談]
+【疾患】#1 Le Fort 骨折（[I／II／III／混合型]、[右/左／両側]）
+　　　 #2 [頭蓋底骨折／髄液鼻漏／視神経管骨折／ZMC 合併／頭蓋内出血 など]
+【既往歴】[特記事項なし／○○]
+【内服薬】[なし／ワーファリン／DOAC ○○／抗血小板薬 ○○]
+【ADL（受傷前）】[独歩／杖／介助／車椅子]
+【現病歴】[年齢]歳[男/女]性。[受傷機転：交通／高所転落／顔面への直達外力]で受傷し、[来院経緯]で来院。
+ ・気道：[安定／挿管管理中（経口）／検討中]、後咽頭血腫 [なし／あり]
+ ・循環：SBP ○、HR ○、SpO₂ ○%
+ ・GCS：E○V○M○、瞳孔：○/○ mm、対光反射 [良好／不良]
+ ・視診：顔面浮腫高度、顔面長軸延長 [あり／不明]、dish-face [あり／なし]、鼻出血・口腔内出血 [あり／なし]
+ ・咬合：[異常 open bite／判定困難／正常]
+ ・神経：眼窩下神経領域（頬・上口唇）しびれ [あり／なし]、視力・対光反射・RAPD、嗅覚 [評価可／不能]
+ ・頭蓋底徴候：Battle [なし／あり]、Raccoon [なし／あり]、髄液漏 [なし／鼻漏／耳漏]
+ ・画像：顔面 CT・3D-CT で[Le Fort I/II/III／混合型]、頭蓋底骨折 [あり：○部位／なし]、合併骨折 [鼻骨／ZMC／眼窩底／下顎]、視神経管 [問題なし／○○]
+ ・頭部 CT：[頭蓋内病変なし／○○]、頸椎 [問題なし／○○]
+ ・ER 処置：気道確保（[経口挿管／非挿管]、経鼻挿管・経鼻胃管は禁の指示）、抗生剤 [投与済／未]、絶飲食、頭部挙上
+ ・術前検査：採血・心電図・胸部 X 線 [済／未]
+よろしくお願いいたします。</div>
+        </div>
+      </details>
+
+      <details class="dx-box">
+        <summary><span>出典</span></summary>
+        <div class="dx-box__body">
+          <ul>
+            <li>頭頸部外科教科書 第13章「頭蓋顔面・頸部外傷」A. 頭蓋顔面骨折／Le Fort 骨折（p.848-851）。</li>
+            <li>Le Fort R. Étude expérimentale sur les fractures de la mâchoire supérieure. <em>Rev Chir.</em> 1901.</li>
+          </ul>
+        </div>
+      </details>
+
+    </article>
+  </main>
+
+  <nav class="hokuto-bottom">
+    <button class="hokuto-bottom__btn" type="button" id="navBack"><span class="hokuto-bottom__icon">←</span><span>戻る</span></button>
+    <a class="hokuto-bottom__btn" href="../ツール.html"><span class="hokuto-bottom__icon">⚙</span><span>ツール</span></a>
+    <a class="hokuto-bottom__btn" href="../index.html"><span class="hokuto-bottom__icon">⌂</span><span>ホーム</span></a>
+  </nav>
+
+  <script>
+  (function(){
+    document.querySelectorAll('.dx-quick__btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.dataset.target;
+        const target = document.getElementById(id);
+        if (!target) return;
+        target.open = true;
+        target.scrollIntoView({behavior: 'smooth', block: 'start'});
+      });
+    });
+    const navBack = document.getElementById('navBack');
+    if (navBack) navBack.addEventListener('click', () => {
+      if (window.history.length > 1) history.back();
+      else window.location.href = '../index.html';
+    });
+  })();
+  </script>
+</body>
+</html>

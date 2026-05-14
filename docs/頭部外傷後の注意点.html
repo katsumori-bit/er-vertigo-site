@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="color-scheme" content="light dark" />
+  <title>頭部外傷後の注意点 | 患者さんへ</title>
+  <link rel="stylesheet" href="er-note.css" />
+  <style>
+    .leaflet {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 16px 20px 8px;
+      background: var(--surface);
+      color: var(--text);
+      font-size: 15px;
+      line-height: 1.65;
+    }
+    .leaflet h1 {
+      font-size: 22px;
+      margin: 0 0 6px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid var(--accent);
+    }
+    .leaflet h2 {
+      font-size: 16px;
+      margin: 16px 0 4px;
+      color: var(--accent);
+      font-weight: 800;
+    }
+    .leaflet .lead {
+      font-size: 14px;
+      color: var(--muted);
+      margin: 4px 0 12px;
+    }
+    .leaflet .fill-row {
+      display: grid;
+      grid-template-columns: 100px 1fr;
+      gap: 8px;
+      margin-bottom: 6px;
+      align-items: center;
+    }
+    .leaflet .fill-label {
+      font-weight: 700;
+      font-size: 13.5px;
+    }
+    .leaflet .fill-line {
+      border-bottom: 1.5px dotted color-mix(in srgb, var(--text) 40%, transparent);
+      min-height: 22px;
+    }
+    .leaflet ul { margin: 4px 0 8px; padding-left: 1.4em; }
+    .leaflet ul li { margin: 3px 0; }
+    .leaflet p { margin: 6px 0; }
+
+    .leaflet .danger-box {
+      background: color-mix(in srgb, #c0392b 8%, var(--surface));
+      border: 2px solid #c0392b;
+      border-radius: 10px;
+      padding: 10px 14px;
+      margin: 10px 0;
+    }
+    .leaflet .danger-box .box-title {
+      color: #c0392b;
+      font-weight: 800;
+      font-size: 16px;
+      margin: 0 0 4px;
+    }
+    .leaflet .elder-box {
+      background: color-mix(in srgb, var(--accent) 10%, var(--surface));
+      border: 1.5px solid var(--accent);
+      border-radius: 10px;
+      padding: 10px 14px;
+      margin: 10px 0;
+    }
+    .leaflet .elder-box .box-title {
+      color: var(--accent);
+      font-weight: 800;
+      font-size: 15.5px;
+      margin: 0 0 4px;
+    }
+    .leaflet .signoff {
+      margin-top: 14px;
+      padding-top: 8px;
+      border-top: 1px dashed color-mix(in srgb, var(--text) 30%, transparent);
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .leaflet-actions {
+      max-width: 720px;
+      margin: 8px auto 16px;
+      display: flex; gap: 8px;
+      padding: 0 20px;
+    }
+    .leaflet-actions button {
+      flex: 1; padding: 10px;
+      background: var(--accent); color: white;
+      border: none; border-radius: 8px;
+      font-weight: 700; font-size: 14px;
+      cursor: pointer; font-family: inherit;
+    }
+    .leaflet-actions button.secondary {
+      background: transparent; color: var(--text);
+      border: 1.5px solid color-mix(in srgb, var(--text) 28%, transparent);
+    }
+
+    /* 印刷時：ナビゲーションを除き、A4 一枚を想定 */
+    @media print {
+      .hokuto-top, .hokuto-bottom, .leaflet-actions { display: none !important; }
+      body { background: white; color: black; margin: 0; }
+      .leaflet {
+        box-shadow: none;
+        padding: 10mm;
+        max-width: none;
+        font-size: 12.5px;
+        line-height: 1.55;
+      }
+      .leaflet h1 { font-size: 19px; border-bottom-color: black; }
+      .leaflet h2 { font-size: 14px; color: black; margin: 10px 0 3px; }
+      .leaflet .danger-box, .leaflet .elder-box {
+        border-color: black; background: white;
+        padding: 6px 10px; margin: 6px 0;
+      }
+      .leaflet .danger-box .box-title,
+      .leaflet .elder-box .box-title { color: black; font-size: 13px; }
+      .leaflet ul { padding-left: 1.2em; }
+      .leaflet ul li { margin: 1px 0; }
+      .leaflet .signoff { font-size: 11px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="hokuto-top">
+    <a class="hokuto-top__btn" href="頭部外傷評価.html">
+      <span class="hokuto-top__icon">←</span><span>頭部外傷評価</span>
+    </a>
+    <a class="hokuto-top__btn" href="index.html">
+      <span class="hokuto-top__icon">⌂</span><span>ホーム</span>
+    </a>
+  </header>
+
+  <main class="hokuto-main">
+    <article class="leaflet">
+      <h1>頭部外傷後の注意点</h1>
+      <p class="lead">頭をぶつけた後、ご自宅でどう過ごすか・どんな症状が出たら再受診すべきかをまとめています。ご家族とも共有してください。</p>
+
+      <div class="fill-row"><div class="fill-label">お名前</div><div class="fill-line"></div></div>
+      <div class="fill-row"><div class="fill-label">受傷日時</div><div class="fill-line"></div></div>
+      <div class="fill-row"><div class="fill-label">受傷部位</div><div class="fill-line"></div></div>
+      <div class="fill-row"><div class="fill-label">担当医</div><div class="fill-line"></div></div>
+
+      <h2>① 24〜48 時間は注意して観察してください</h2>
+      <ul>
+        <li>できれば<strong>ご家族と一緒に過ごし</strong>、1 人にならないようにしてください。</li>
+        <li>寝てしまっても構いません。ときどき声をかけて、反応がいつも通りか確認してください。</li>
+        <li><strong>飲酒・激しい運動・運転は 24 時間以上控えて</strong>ください。</li>
+        <li>処方された薬以外の鎮痛薬（特にロキソプロフェン・イブプロフェン・アスピリン）は出血リスクがあるため、自己判断で飲まないでください。</li>
+      </ul>
+
+      <div class="danger-box">
+        <div class="box-title">🚨 すぐに再受診（または救急要請）が必要な症状</div>
+        <ul>
+          <li><strong>意識がぼんやりする／呼びかけに反応が鈍くなる</strong></li>
+          <li><strong>頭痛がどんどん強くなる</strong></li>
+          <li><strong>嘔吐を繰り返す</strong>（2 回以上）</li>
+          <li><strong>けいれん</strong>を起こした</li>
+          <li><strong>手足が動かない／力が入らない／しびれる</strong></li>
+          <li>ろれつが回らない、言葉が出にくい</li>
+          <li>視野が欠ける、ものが二重に見える</li>
+          <li>透明な水のような鼻水・耳水が出る（髄液漏の可能性）</li>
+          <li>性格が急に変わる、奇妙な行動が出る</li>
+        </ul>
+      </div>
+
+      <div class="elder-box">
+        <div class="box-title">📅 ご高齢の方・血をさらさらにする薬を飲んでいる方へ — 慢性硬膜下血腫について</div>
+        <p>頭をぶつけてから <strong>2 週間〜2 ヶ月後</strong>に、脳の周りにゆっくり血がたまる「<strong>慢性硬膜下血腫</strong>」が起こることがあります。CT で「異常なし」と言われた方でも起こり得る病気です。</p>
+        <p><strong>次のような変化に気づいたら、早めに受診してください：</strong></p>
+        <ul>
+          <li>歩き方がふらつく／転びやすくなった</li>
+          <li>頭痛が続く、徐々に強くなる</li>
+          <li>もの忘れがひどくなった、ぼーっとする時間が増えた</li>
+          <li>片側の手足の力が抜ける</li>
+          <li>ろれつが回りにくくなった</li>
+        </ul>
+        <p>手術で治療できることが多い病気です。「いつもと違う」と感じたら、脳神経外科か当院へお気軽にご相談ください。</p>
+      </div>
+
+      <h2>② 次回受診・連絡先</h2>
+      <div class="fill-row"><div class="fill-label">次回外来</div><div class="fill-line"></div></div>
+      <div class="fill-row"><div class="fill-label">連絡先</div><div class="fill-line"></div></div>
+
+      <p class="signoff">この紙はご自宅の見えるところに貼り、ご家族とも内容を共有してください。</p>
+    </article>
+
+    <div class="leaflet-actions">
+      <button type="button" class="secondary" id="navBack">← 戻る</button>
+      <button type="button" id="printBtn">🖨 印刷する</button>
+    </div>
+  </main>
+
+  <script>
+  (function(){
+    const printBtn = document.getElementById('printBtn');
+    if (printBtn) printBtn.addEventListener('click', () => window.print());
+    const navBack = document.getElementById('navBack');
+    if (navBack) navBack.addEventListener('click', () => {
+      if (window.history.length > 1) history.back();
+      else window.location.href = '頭部外傷評価.html';
+    });
+  })();
+  </script>
+</body>
+</html>

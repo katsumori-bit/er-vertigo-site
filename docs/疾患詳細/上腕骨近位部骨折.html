@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="color-scheme" content="light dark" />
+  <title>上腕骨近位部骨折 | ER ノート</title>
+  <link rel="stylesheet" href="../er-note.css" />
+  <style>
+    /* ============ クイックタップ（3 つを開閉トリガー） ============ */
+    .dx-quick {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px;
+      margin: 10px 0 4px;
+    }
+    .dx-quick__btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      padding: 10px 6px;
+      border-radius: 10px;
+      background: color-mix(in srgb, var(--accent) 10%, var(--surface));
+      border: 1.5px solid var(--accent);
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 13px;
+      line-height: 1.2;
+      text-align: center;
+      cursor: pointer;
+      transition: background 120ms ease;
+    }
+    .dx-quick__btn:hover {
+      background: color-mix(in srgb, var(--accent) 18%, var(--surface));
+    }
+    .dx-quick__icon { font-size: 20px; }
+    .dx-quick__sub {
+      font-size: 10.5px;
+      font-weight: 500;
+      color: var(--muted);
+    }
+
+    /* ============ 同時評価 3 列（血管・神経・典型像） ============ */
+    .dx-tri {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+      margin: 6px 0 4px;
+      align-items: start;
+    }
+    .dx-tri__card {
+      background: var(--surface);
+      border-radius: 10px;
+      padding: 10px 12px;
+      border: 1.5px solid color-mix(in srgb, var(--text) 18%, transparent);
+    }
+    .dx-tri__card--vasc { border-color: #c0392b; background: color-mix(in srgb, #c0392b 6%, var(--surface)); }
+    .dx-tri__card--neuro { border-color: #b5651d; background: color-mix(in srgb, #b5651d 6%, var(--surface)); }
+    .dx-tri__card--typical { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 6%, var(--surface)); }
+    .dx-tri__title {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 800;
+      font-size: 13.5px;
+      margin-bottom: 4px;
+    }
+    .dx-tri__card--vasc .dx-tri__title { color: #c0392b; }
+    .dx-tri__card--neuro .dx-tri__title { color: #b5651d; }
+    .dx-tri__list {
+      margin: 0;
+      padding-left: 18px;
+      font-size: 12.5px;
+      line-height: 1.5;
+    }
+    .dx-tri__list li { margin: 2px 0; }
+
+    /* details 形式の血管/神経カード：summary にチェック印、開閉時の挙動 */
+    details.dx-tri__card { padding: 0; }
+    details.dx-tri__card > summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 10px 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 800;
+      font-size: 13.5px;
+    }
+    details.dx-tri__card > summary::-webkit-details-marker { display: none; }
+    details.dx-tri__card > summary::after {
+      content: "▸";
+      margin-left: auto;
+      font-size: 12px;
+      color: var(--muted);
+      transition: transform 120ms ease;
+    }
+    details.dx-tri__card[open] > summary::after { transform: rotate(90deg); }
+    details.dx-tri__card--vasc > summary { color: #c0392b; }
+    details.dx-tri__card--neuro > summary { color: #b5651d; }
+    details.dx-tri__card > .dx-tri__list { padding: 0 14px 12px 30px; }
+    details.dx-tri__card > .dx-tri__hint {
+      padding: 0 14px 6px 30px;
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    /* ============ 大きな details ボックス（画像/治療方針/コンサル文） ============ */
+    details.dx-box {
+      background: var(--surface);
+      border: 1.5px solid color-mix(in srgb, var(--text) 18%, transparent);
+      border-radius: 10px;
+      margin: 10px 0;
+      scroll-margin-top: 8px;
+    }
+    details.dx-box > summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 12px 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 800;
+      font-size: 14.5px;
+    }
+    details.dx-box > summary::-webkit-details-marker { display: none; }
+    details.dx-box > summary::after {
+      content: "▸";
+      margin-left: auto;
+      font-size: 13px;
+      color: var(--muted);
+      transition: transform 120ms ease;
+    }
+    details.dx-box[open] > summary::after { transform: rotate(90deg); }
+    details.dx-box[open] {
+      border-color: var(--accent);
+    }
+    details.dx-box > .dx-box__body {
+      padding: 0 14px 14px;
+    }
+
+    /* スマホで 1 列に */
+    @media (max-width: 640px) {
+      .dx-quick { gap: 6px; }
+      .dx-quick__btn { padding: 8px 4px; font-size: 11.5px; border-radius: 8px; }
+      .dx-quick__icon { font-size: 17px; }
+      .dx-quick__sub { font-size: 9.5px; }
+
+      .dx-tri { grid-template-columns: 1fr; gap: 8px; }
+      .dx-tri__card { padding: 8px 10px; }
+      details.dx-tri__card > summary { padding: 8px 10px; font-size: 12.5px; }
+      details.dx-tri__card > .dx-tri__list { padding: 0 12px 10px 26px; }
+      .dx-tri__title { font-size: 12.5px; }
+      .dx-tri__list { font-size: 12px; }
+
+      details.dx-box > summary { padding: 10px 12px; font-size: 13.5px; }
+      details.dx-box > .dx-box__body { padding: 0 12px 12px; }
+    }
+
+    /* ============ 区切り帯（最小限） ============ */
+    .dx-step {
+      margin: 18px 0 6px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 11.5px;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+    }
+    .dx-step::before, .dx-step::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: color-mix(in srgb, var(--text) 18%, transparent);
+    }
+
+    /* コピペ用テンプレ */
+    .dx-template {
+      background: color-mix(in srgb, var(--text) 4%, var(--surface));
+      border-left: 3px solid var(--accent);
+      border-radius: 6px;
+      padding: 10px 12px;
+      margin: 6px 0 0;
+      font-size: 13px;
+      line-height: 1.6;
+      white-space: pre-wrap;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+    .dx-template__hint {
+      font-size: 11px;
+      color: var(--muted);
+      margin: 0 0 4px;
+    }
+  </style>
+</head>
+<body>
+  <header class="hokuto-top">
+    <a class="hokuto-top__btn" href="../薬剤情報.html">
+      <span class="hokuto-top__icon">℞</span><span>薬剤情報</span>
+    </a>
+    <a class="hokuto-top__btn" href="../表計算.html">
+      <span class="hokuto-top__icon">⊞</span><span>表計算</span>
+    </a>
+  </header>
+
+  <main class="hokuto-main">
+    <article class="note-shell">
+      <h1 class="page-title">上腕骨近位部骨折</h1>
+
+      <!-- スマホですぐ開きたい 3 つ -->
+      <nav class="dx-quick" aria-label="クイックタップ">
+        <button class="dx-quick__btn" type="button" data-target="img-read">
+          <span>画像の見方</span>
+          <span class="dx-quick__sub">肩 3 方向 → Neer</span>
+        </button>
+        <button class="dx-quick__btn" type="button" data-target="plan">
+          <span>治療方針</span>
+          <span class="dx-quick__sub">1-part 保存 / 転位は手術</span>
+        </button>
+        <button class="dx-quick__btn" type="button" data-target="consult">
+          <span>コンサル文</span>
+          <span class="dx-quick__sub">そのまま貼れる</span>
+        </button>
+      </nav>
+
+      <!-- 同時評価 3 列：典型像は常時、血管・神経は折りたたみ -->
+      <div class="dx-step"><span>同時並行で評価する 3 軸</span></div>
+      <div class="dx-tri">
+
+        <div class="dx-tri__card dx-tri__card--typical">
+          <div class="dx-tri__title">典型像</div>
+          <ul class="dx-tri__list">
+            <li>高齢女性：<strong>転倒</strong>で手をつく／肩から直接打撲（骨粗鬆症背景）</li>
+            <li>若年は<strong>高エネルギー外傷</strong>（バイク・転落・スポーツ）</li>
+            <li>肩〜上腕の腫脹・圧痛、<strong>自動挙上困難</strong></li>
+            <li><strong>皮下出血が受傷 24–48h で上腕〜前胸部に広がる</strong>（悪化と誤判断しない）</li>
+            <li>肩峰下空虚感／弾発性固定 → <strong>骨折脱臼</strong>を疑う</li>
+          </ul>
+        </div>
+
+        <details class="dx-tri__card dx-tri__card--vasc">
+          <summary>血管</summary>
+          <p class="dx-tri__hint">上腕骨近位部骨折で血管損傷はまれだが、骨折脱臼・転位高度では<strong>腋窩動脈損傷</strong>がありうる。必ず左右差を取る。</p>
+          <ul class="dx-tri__list">
+            <li><strong>橈骨動脈</strong>触知、左右差なし</li>
+            <li>毛細血管再充満（CRT）<strong>2 秒以内</strong></li>
+            <li>上腕／前腕の腫脹進行・拍動性血腫 → 血管損傷を疑う</li>
+            <li>転位型・骨折脱臼で<strong>腋窩動脈損傷</strong>を除外（脈拍左右差・冷感）</li>
+          </ul>
+        </details>
+
+        <details class="dx-tri__card dx-tri__card--neuro">
+          <summary>神経</summary>
+          <p class="dx-tri__hint"><strong>腋窩神経麻痺</strong>が最頻（外科頸骨折・脱臼合併で）。評価忘れは責任分界点で問題化する最重要項目。</p>
+          <ul class="dx-tri__list">
+            <li><strong>腋窩神経</strong>：三角筋の収縮（外転試行で触診）／<strong>外側上腕の感覚</strong></li>
+            <li>正中・尺骨・橈骨神経領域の感覚／運動</li>
+            <li>橈骨神経（手関節背屈・母指伸展）も併せて確認</li>
+            <li>記録は<strong>カルテに必ず明記</strong>（治療後の症状出現時の起点となる）</li>
+          </ul>
+        </details>
+      </div>
+
+      <!-- 画像の見方 -->
+      <details class="dx-box" id="img-read">
+        <summary><span>画像の見方</span></summary>
+        <div class="dx-box__body">
+          <ul>
+            <li><strong>肩関節 Xp 3 方向</strong>（正面 ／ 肩甲骨 Y 撮影 ／ 腋窩撮影）→ <strong>Neer 分類に必須</strong></li>
+            <li>1 方向だけでは骨折脱臼を見逃す（特に後方脱臼）。<strong>3 方向必須</strong></li>
+            <li>CT は<strong>複雑骨折・手術計画</strong>で追加（3D 再構成）</li>
+            <li><strong>Neer 分類</strong>：
+              <ul>
+                <li><strong>1-part（非転位型）</strong>：転位 &lt; 1 cm、角状変形 &lt; 45°。<strong>全体の約 70%</strong>。ほぼ全例保存治療</li>
+                <li><strong>2-part 以上</strong>：大結節 ／ 小結節 ／ 骨幹部 ／ 骨頭の各パーツの転位を数える → <strong>手術適応の判断</strong>に直結</li>
+              </ul>
+            </li>
+            <li>骨折脱臼の合併確認：肩峰下空虚感・腋窩位 Xp での骨頭位置</li>
+            <li><strong>解剖頸骨折</strong>（骨頭壊死高リスク）は CT で骨片の血流評価検討</li>
+          </ul>
+        </div>
+      </details>
+
+      <!-- 治療方針 -->
+      <details class="dx-box" id="plan">
+        <summary><span>治療方針（Neer × 合併）</span></summary>
+        <div class="dx-box__body">
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>パターン</th><th>所見</th><th>方針</th><th>ER の動き</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>1-part（非転位型）</strong></td>
+                  <td>転位 &lt; 1 cm、角状変形 &lt; 45°（約 70%）</td>
+                  <td><strong>保存治療</strong>（80–90% で良好）</td>
+                  <td>三角巾＋スウォス、1 週以内整形外来</td>
+                </tr>
+                <tr>
+                  <td>2-part 以上の転位</td>
+                  <td>大結節／小結節／骨幹部／骨頭の転位</td>
+                  <td><strong>手術検討</strong>（ORIF・逆型プロテーゼ）</td>
+                  <td>固定 → 整形コンサル</td>
+                </tr>
+                <tr>
+                  <td><strong>骨折脱臼</strong></td>
+                  <td>肩峰下空虚感、Xp で骨頭脱出</td>
+                  <td><strong>緊急コンサルト</strong>（整復不能なら手術）</td>
+                  <td>固定 → 即整形コール</td>
+                </tr>
+                <tr>
+                  <td><strong>解剖頸骨折</strong></td>
+                  <td>骨頭基部の骨折線</td>
+                  <td><strong>手術（骨頭壊死リスク高）</strong></td>
+                  <td>固定 → 整形コンサル</td>
+                </tr>
+                <tr>
+                  <td>開放骨折／神経血管損傷</td>
+                  <td>創・腋窩神経麻痺・脈拍左右差</td>
+                  <td><strong>緊急手術</strong></td>
+                  <td>止血・抗菌薬・即整形コール</td>
+                </tr>
+                <tr>
+                  <td>高齢で ADL 困難</td>
+                  <td>独居困難・疼痛コントロール不能</td>
+                  <td><strong>入院</strong>での疼痛管理・リハビリ導入</td>
+                  <td>入院オーダー（疼痛・VTE・腋窩神経記録）</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3>ER で打つ手：固定法</h3>
+          <ul>
+            <li><strong>三角巾 + スウォス（sling and swathe）</strong>：肘 90° 屈曲で三角巾に前腕を入れ、体幹にバンデージ／幅広弾性包帯で上腕を固定（体幹と上腕の一体化）→ 肩の動きを最小限に</li>
+            <li><strong>外科頸骨折（最多）</strong> → <strong>内旋位</strong>（大胸筋の牽引力を相殺）</li>
+            <li><strong>大結節骨折</strong> → <strong>外転・中間回旋位</strong>（棘上筋・棘下筋の牽引力を相殺）</li>
+            <li><strong>骨折タイプ不明なら三角巾 + swathe で内旋位</strong>に固定して整形外科に申し送り。大結節骨折が明確な場合は外転枕を整形と相談</li>
+            <li>固定の詳細手技：<a class="wiki-link" href="上肢骨折の固定/上腕骨近位部骨折.html">上肢骨折の固定／上腕骨近位部骨折</a></li>
+          </ul>
+
+          <h3>帰宅指示（保存例）</h3>
+          <ul>
+            <li><strong>三角巾は 3–4 週間装着</strong></li>
+            <li><strong>振り子運動（Codman 体操）は受傷後 7–10 日から開始</strong>（拘縮予防）</li>
+            <li><strong>1 週以内に整形外科フォロー</strong>（X 線で二次転位がないか確認）</li>
+            <li>1-part 骨折で<strong>80–90% が保存治療で良好</strong>と説明</li>
+            <li>高齢者は骨粗鬆症評価を勧める → <a class="wiki-link" href="骨粗鬆症治療.html">骨粗鬆症治療</a></li>
+          </ul>
+
+          <h3>入院時オーダー（高齢・ADL 困難例）</h3>
+          <ul>
+            <li><strong>疼痛</strong>：高齢者は<strong>少量オピオイド ＋ アセトアミノフェン</strong>から（転倒リスクに注意）</li>
+            <li><strong>固定</strong>：三角巾＋スウォス。<strong>早期 Codman 体操</strong>の開始時期は整形外科指示（通常 1 週前後）</li>
+            <li><strong>腋窩神経</strong>：三角筋収縮・外側上腕感覚を<strong>毎日記録</strong></li>
+            <li><strong>VTE</strong>：高齢・転倒入院で活動制限が長引く場合は CHEST／施設プロトコルでリスク評価</li>
+          </ul>
+
+          <h3>外来フォロー・退院後</h3>
+          <ul>
+            <li><strong>1 週以内</strong>：X 線で<strong>二次転位</strong>がないか（1-part でも監視）</li>
+            <li><strong>リハビリ</strong>：段階的可動域訓練（ECI・AO が保存例の早期活動を支持）</li>
+            <li><strong>手術例</strong>：ORIF・逆型プロテーゼは術後リハビリパスに従う</li>
+          </ul>
+        </div>
+      </details>
+
+      <!-- コンサル文 -->
+      <details class="dx-box" id="consult">
+        <summary><span>コンサル文（カルテに貼る）</span></summary>
+        <div class="dx-box__body">
+          <p class="dx-template__hint">『他科コンサルト実践マニュアル』の院内紹介状フォーマットに準拠（【目的】【疾患】【既往歴】【内服薬】【ADL】【現病歴】）。1-part は外来フォロー、転位型・骨折脱臼・神経血管損傷は緊急コンサルト。</p>
+          <div class="dx-template">【目的】整形外科外来でのご加療依頼／（転位型・骨折脱臼・神経血管損傷なら緊急コンサルト）。
+【疾患】#1 [右/左]上腕骨近位部骨折（Neer [1-part／2-part／3-part／4-part]、[外科頸／大結節／小結節／骨頭]主体）、骨折脱臼 [なし／あり]
+【既往歴】骨粗鬆症 [なし／あり]、[特記事項なし／○○]
+【内服薬】[なし／○○]
+【ADL（受傷前）】[自立／○○]
+【現病歴】[年齢]歳[男/女]性。[受傷機転：転倒で手をついた／肩から直接打撲／高エネ外傷（若年）]で受傷し、[来院経緯]で来院。
+ ・身体所見：肩〜上腕の腫脹・圧痛 [+]、皮下出血 [+]（受傷 24-48h で上腕〜前胸部に広がる）、肩関節自動挙上 [困難]、肩峰下空虚感 [+/−]（脱臼合併）
+ ・血管：橈骨動脈触知 [良好]、毛細血管再充満 [良好]、左右差なし
+ ・神経：腋窩神経（三角筋収縮・外側上腕感覚）[問題なし／低下]、正中・尺骨・橈骨神経 [問題なし]
+ ・画像：肩関節 Xp 3 方向（正面／肩甲骨 Y／腋窩）、Neer 分類で[1-part／2-part以上]、骨折脱臼 [なし／あり]、必要時 CT 追加
+ ・ER 処置：三角巾＋スウォス固定（外科頸=内旋位／大結節=外転・中間回旋位）、患肢挙上、Codman 体操の開始時期は整形外科指示
+よろしくお願いいたします。</div>
+        </div>
+      </details>
+
+      <!-- ピットフォール -->
+      <details class="dx-box">
+        <summary><span>ピットフォール</span></summary>
+        <div class="dx-box__body">
+          <ul>
+            <li><strong>腋窩神経評価の忘れ</strong>（最重要）。三角筋収縮・外側上腕感覚をカルテに必ず記載</li>
+            <li>1-part 骨折を「保存で OK」とだけ説明し、<strong>早期 Codman 体操（7–10 日）を伝え忘れる</strong>（拘縮の原因）</li>
+            <li>受傷 24–48h 後に上腕〜前胸部に広がる<strong>皮下出血を「悪化」と誤判断</strong>しない</li>
+            <li><strong>骨折脱臼合併を 1 方向 Xp で見逃す</strong>（特に後方脱臼）→ 3 方向必須</li>
+            <li>高齢者の脆弱性骨折で<strong>骨粗鬆症治療介入の機会を逸失</strong>しない</li>
+          </ul>
+        </div>
+      </details>
+
+      <!-- 関連ハブ -->
+      <details class="dx-box">
+        <summary><span>関連ハブ・隣接疾患</span></summary>
+        <div class="dx-box__body">
+          <ul>
+            <li>主訴入口：<a class="wiki-link" href="../肩の外傷・痛み.html">肩の外傷・痛み</a> ／ <a class="wiki-link" href="../転倒.html">転倒</a></li>
+            <li>固定法詳細：<a class="wiki-link" href="上肢骨折の固定/上腕骨近位部骨折.html">上肢骨折の固定／上腕骨近位部骨折</a>（三角巾＋スウォスの手技）</li>
+            <li>隣接疾患：<a class="wiki-link" href="鎖骨骨折.html">鎖骨骨折</a> ／ <a class="wiki-link" href="上腕骨骨幹部骨折.html">上腕骨骨幹部骨折</a> ／ <a class="wiki-link" href="肩関節脱臼.html">肩関節脱臼</a> ／ <a class="wiki-link" href="骨粗鬆症治療.html">骨粗鬆症治療</a></li>
+            <li>処置：三角巾＋スウォス ／ 外転枕（大結節骨折時、整形外科指示）</li>
+          </ul>
+        </div>
+      </details>
+
+      <!-- 出典 -->
+      <details class="dx-box">
+        <summary><span>出典</span></summary>
+        <div class="dx-box__body">
+          <ul>
+            <li><strong>AO Foundation</strong>：Proximal Humerus Fracture Management.（Neer 分類と肢位による固定）</li>
+            <li><strong>ECI（Emergency Care Institute NSW）</strong>：Proximal humerus fractures clinical tool.（1-part は保存、早期リハビリ推奨）</li>
+            <li>Biomechanical cadaveric study（<em>Sci Rep.</em> 2024）：骨折タイプ別の最適固定肢位</li>
+            <li><strong>CHEST 2012</strong>（VTE）：Guyatt GH ほか. <a class="wiki-link" href="https://doi.org/10.1378/chest.11-2302">https://doi.org/10.1378/chest.11-2302</a></li>
+            <li>佐藤弘明 ほか. 他科コンサルト実践マニュアル. 羊土社.</li>
+          </ul>
+        </div>
+      </details>
+
+    </article>
+  </main>
+
+  <nav class="hokuto-bottom">
+    <button class="hokuto-bottom__btn" type="button" id="navBack">
+      <span class="hokuto-bottom__icon">←</span><span>戻る</span>
+    </button>
+    <a class="hokuto-bottom__btn" href="../ツール.html">
+      <span class="hokuto-bottom__icon">⚙</span><span>ツール</span>
+    </a>
+    <a class="hokuto-bottom__btn" href="../index.html">
+      <span class="hokuto-bottom__icon">⌂</span><span>ホーム</span>
+    </a>
+  </nav>
+
+  <script>
+  (function(){
+    document.querySelectorAll('.dx-quick__btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.dataset.target;
+        const target = document.getElementById(id);
+        if (!target) return;
+        target.open = true;
+        target.scrollIntoView({behavior: 'smooth', block: 'start'});
+      });
+    });
+
+    const navBack = document.getElementById('navBack');
+    if (navBack) navBack.addEventListener('click', () => {
+      if (window.history.length > 1) history.back();
+      else window.location.href = '../index.html';
+    });
+  })();
+  </script>
+</body>
+</html>

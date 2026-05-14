@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="color-scheme" content="light dark" />
+  <title>脳挫傷 | ER ノート</title>
+  <link rel="stylesheet" href="../er-note.css" />
+  <style>
+    .dx-quick { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 10px 0 4px; }
+    @media (max-width: 640px) { .dx-quick { grid-template-columns: 1fr 1fr; } }
+    .dx-quick__btn {
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 2px; padding: 10px 6px; border-radius: 10px;
+      background: color-mix(in srgb, var(--accent) 10%, var(--surface));
+      border: 1.5px solid var(--accent); color: var(--text); text-decoration: none;
+      font-weight: 700; font-size: 13px; line-height: 1.2; text-align: center; cursor: pointer;
+      transition: background 120ms ease;
+    }
+    .dx-quick__btn:hover { background: color-mix(in srgb, var(--accent) 18%, var(--surface)); }
+    .dx-quick__sub { font-size: 10.5px; font-weight: 500; color: var(--muted); }
+
+    .dx-tri { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 6px 0 4px; align-items: start; }
+    .dx-tri__card {
+      background: var(--surface); border-radius: 10px; padding: 10px 12px;
+      border: 1.5px solid color-mix(in srgb, var(--text) 18%, transparent);
+    }
+    .dx-tri__card--vasc { border-color: #c0392b; background: color-mix(in srgb, #c0392b 6%, var(--surface)); }
+    .dx-tri__card--neuro { border-color: #b5651d; background: color-mix(in srgb, #b5651d 6%, var(--surface)); }
+    .dx-tri__title { display: flex; align-items: center; gap: 6px; font-weight: 800; font-size: 13.5px; margin-bottom: 4px; }
+    .dx-tri__card--vasc .dx-tri__title { color: #c0392b; }
+    .dx-tri__card--neuro .dx-tri__title { color: #b5651d; }
+    .dx-tri__list { margin: 0; padding-left: 18px; font-size: 12.5px; line-height: 1.5; }
+    .dx-tri__list li { margin: 2px 0; }
+
+    details.dx-tri__card { padding: 0; }
+    details.dx-tri__card > summary {
+      list-style: none; cursor: pointer; padding: 10px 12px;
+      display: flex; align-items: center; gap: 6px; font-weight: 800; font-size: 13.5px;
+    }
+    details.dx-tri__card > summary::-webkit-details-marker { display: none; }
+    details.dx-tri__card > summary::after { content: "▸"; margin-left: auto; font-size: 12px; color: var(--muted); transition: transform 120ms ease; }
+    details.dx-tri__card[open] > summary::after { transform: rotate(90deg); }
+    details.dx-tri__card--vasc > summary { color: #c0392b; }
+    details.dx-tri__card--neuro > summary { color: #b5651d; }
+    details.dx-tri__card > .dx-tri__list { padding: 0 14px 12px 30px; }
+    details.dx-tri__card > .dx-tri__hint { padding: 0 14px 6px 30px; font-size: 11px; color: var(--muted); }
+
+    details.dx-box {
+      background: var(--surface); border: 1.5px solid color-mix(in srgb, var(--text) 18%, transparent);
+      border-radius: 10px; margin: 10px 0; scroll-margin-top: 8px;
+    }
+    details.dx-box > summary {
+      list-style: none; cursor: pointer; padding: 12px 14px;
+      display: flex; align-items: center; gap: 8px; font-weight: 800; font-size: 14.5px;
+    }
+    details.dx-box > summary::-webkit-details-marker { display: none; }
+    details.dx-box > summary::after { content: "▸"; margin-left: auto; font-size: 13px; color: var(--muted); transition: transform 120ms ease; }
+    details.dx-box[open] > summary::after { transform: rotate(90deg); }
+    details.dx-box[open] { border-color: var(--accent); }
+    details.dx-box > .dx-box__body { padding: 0 14px 14px; }
+
+    @media (max-width: 640px) {
+      .dx-quick { gap: 6px; }
+      .dx-quick__btn { padding: 8px 4px; font-size: 11.5px; border-radius: 8px; }
+      .dx-quick__sub { font-size: 9.5px; }
+      .dx-tri { grid-template-columns: 1fr; gap: 8px; }
+      .dx-tri__card { padding: 8px 10px; }
+      details.dx-tri__card > summary { padding: 8px 10px; font-size: 12.5px; }
+      details.dx-tri__card > .dx-tri__list { padding: 0 12px 10px 26px; }
+      .dx-tri__title { font-size: 12.5px; }
+      .dx-tri__list { font-size: 12px; }
+      details.dx-box > summary { padding: 10px 12px; font-size: 13.5px; }
+      details.dx-box > .dx-box__body { padding: 0 12px 12px; }
+    }
+
+    .dx-step {
+      margin: 18px 0 6px; display: flex; align-items: center; gap: 10px;
+      color: var(--muted); font-size: 11.5px; font-weight: 800; letter-spacing: 0.1em;
+    }
+    .dx-step::before, .dx-step::after { content: ""; flex: 1; height: 1px; background: color-mix(in srgb, var(--text) 18%, transparent); }
+
+    .dx-template {
+      background: color-mix(in srgb, var(--text) 4%, var(--surface));
+      border-left: 3px solid var(--accent); border-radius: 6px;
+      padding: 10px 12px; margin: 6px 0 0; font-size: 13px; line-height: 1.6;
+      white-space: pre-wrap; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+    .dx-template__hint { font-size: 11px; color: var(--muted); margin: 0 0 4px; }
+
+    .dx-alert {
+      background: color-mix(in srgb, #c0392b 8%, var(--surface));
+      border: 1.5px solid #c0392b; border-radius: 10px;
+      padding: 10px 12px; margin: 10px 0; color: var(--text); font-size: 13px;
+    }
+    .dx-alert strong { color: #c0392b; }
+
+    .dx-typical {
+      background: color-mix(in srgb, var(--accent) 5%, var(--surface));
+      border: 1.5px solid color-mix(in srgb, var(--accent) 50%, transparent);
+      border-radius: 10px; padding: 10px 14px; margin: 10px 0 4px;
+    }
+    .dx-typical__title { font-weight: 800; font-size: 13.5px; color: var(--accent); margin-bottom: 4px; }
+    .dx-typical__list { margin: 0; padding-left: 18px; font-size: 12.5px; line-height: 1.55; }
+    .dx-typical__list li { margin: 2px 0; }
+    @media (max-width: 640px) {
+      .dx-typical { padding: 8px 10px; }
+      .dx-typical__title { font-size: 12.5px; }
+      .dx-typical__list { font-size: 12px; }
+    }
+    .dx-box__body h3 {
+      font-size: 14px; font-weight: 800;
+      margin: 14px 0 6px;
+      color: var(--accent);
+      padding-bottom: 4px;
+      border-bottom: 1px dashed color-mix(in srgb, var(--text) 22%, transparent);
+    }
+    .dx-box__body h3:first-child { margin-top: 4px; }
+    @media (max-width: 640px) { .dx-box__body h3 { font-size: 12.5px; margin: 10px 0 4px; } }
+  </style>
+</head>
+<body>
+  <header class="hokuto-top">
+    <a class="hokuto-top__btn" href="../薬剤情報.html"><span class="hokuto-top__icon">℞</span><span>薬剤情報</span></a>
+    <a class="hokuto-top__btn" href="../表計算.html"><span class="hokuto-top__icon">⊞</span><span>表計算</span></a>
+  </header>
+
+  <main class="hokuto-main">
+    <article class="note-shell">
+      <h1 class="page-title">脳挫傷（cerebral contusion）</h1>
+
+      <div class="dx-alert">
+        <strong>受傷後 6〜12h で増大する</strong>のが特徴。初回 CT が軽微でも油断せず、<strong>再 CT を計画</strong>する。抗凝固薬例ではさらに増大リスク高い。けいれん発症リスクもあるためレベチラセタム予防投与を検討。
+      </div>
+
+      <nav class="dx-quick" aria-label="クイックタップ">
+        <button class="dx-quick__btn" type="button" data-target="er-actions">
+          <span>ER で打つ手</span><span class="dx-quick__sub">初期処置</span>
+        </button>
+        <button class="dx-quick__btn" type="button" data-target="consult-check">
+          <span>コンサル前確認</span><span class="dx-quick__sub">脳外を呼ぶ前に</span>
+        </button>
+        <button class="dx-quick__btn" type="button" data-target="img-plan">
+          <span>画像と治療方針</span><span class="dx-quick__sub">再 CT / 手術閾値</span>
+        </button>
+        <button class="dx-quick__btn" type="button" data-target="consult">
+          <span>コンサル文</span><span class="dx-quick__sub">そのまま貼れる</span>
+        </button>
+      </nav>
+
+      <section class="dx-typical">
+        <div class="dx-typical__title">典型像（疑うきっかけ）</div>
+        <ul class="dx-typical__list">
+          <li>機転：<strong>頭部への直達外力</strong>、加速・減速外傷、転倒、交通外傷</li>
+          <li>好発部位：<strong>前頭葉底部・側頭葉前部</strong>（頭蓋底の凹凸で摩擦を受ける部位）</li>
+          <li><strong>contre-coup（対側損傷）</strong>：受傷部位の反対側にも挫傷を生じる</li>
+          <li>CT：<strong>斑状の高吸収（出血）＋周囲低吸収（浮腫）</strong>。多発することが多い</li>
+          <li>意識障害、見当識障害、けいれん、片麻痺の可能性</li>
+          <li><strong>受傷後 6〜12h で増大</strong>することが多く、再 CT で評価必須</li>
+        </ul>
+        <p style="margin: 6px 0 0; font-size: 11.5px; color: var(--muted);">→ 詳細所見は <strong>同時並行 2 軸</strong> と <strong>コンサル前確認</strong> へ</p>
+      </section>
+
+      <div class="dx-step"><span>同時並行で評価する 2 軸（治療方針を分ける所見）</span></div>
+      <div class="dx-tri">
+
+        <details class="dx-tri__card dx-tri__card--vasc" open>
+          <summary>増大評価（再 CT の計画）</summary>
+          <p class="dx-tri__hint">脳挫傷は<strong>進行性</strong>。1 回の CT で判断しない。</p>
+          <ul class="dx-tri__list">
+            <li><strong>6〜12h 後に再 CT</strong>を計画（増大評価）</li>
+            <li>1〜2h ごとの neuro check（GCS・瞳孔・麻痺）</li>
+            <li>悪化兆候（GCS 低下・瞳孔不同・嘔吐・けいれん）あれば即時再 CT</li>
+            <li>抗凝固薬例ではさらに早めの再 CT（4〜6h）</li>
+            <li>増大があれば手術適応の再評価（容量 ≥ 50 mL／midline shift ≥ 5 mm／脳幹圧迫）</li>
+          </ul>
+        </details>
+
+        <details class="dx-tri__card dx-tri__card--vasc" open>
+          <summary>けいれん予防と抗凝固リバース</summary>
+          <p class="dx-tri__hint">脳実質損傷ではけいれんリスクが高い。出血進展を止める。</p>
+          <ul class="dx-tri__list">
+            <li><strong>レベチラセタム</strong>での早期けいれん予防（500〜1000 mg × 2/日、または初回 1000〜1500 mg loading、特に皮質挫傷・側頭葉挫傷）</li>
+            <li><strong>TXA（CRASH-3）</strong>：受傷 3h 以内・GCS 9〜15 で 1 g/10 分 + 1 g/8h（脳実質損傷型 TBI で死亡率改善）</li>
+            <li>けいれん発症時の対応：レベチラセタム静注、必要時ベンゾジアゼピン</li>
+            <li>抗凝固薬例 → 即リバース（ワルファリン:4F-PCC+VK、DOAC:イダルシズマブ／アンデキサネット）</li>
+            <li>抗血小板薬：PATCH 試験以降ルーチン血小板輸血は推奨されない</li>
+            <li>SBP ≥ 110、PaCO₂ 35–40 を維持し<strong>二次性脳損傷を防ぐ</strong></li>
+          </ul>
+        </details>
+      </div>
+
+      <details class="dx-box" id="er-actions">
+        <summary><span>ER で打つ手（初期処置）</span></summary>
+        <div class="dx-box__body">
+          <ol>
+            <li>バイタル・GCS・瞳孔・四肢麻痺を即時記録、経時で reassess</li>
+            <li>頭部 CT を即時オーダー（脳実質条件 + 骨条件）</li>
+            <li>抗凝固薬・抗血小板薬の有無を確認、必要時リバース</li>
+            <li>GCS ≤ 8 → 気道確保、頸椎保護</li>
+            <li><strong>レベチラセタム</strong>でけいれん予防（皮質挫傷・側頭葉挫傷で特に）</li>
+            <li><strong>脳外科コンサルト</strong>（手術不要でも経過観察方針を共有）</li>
+            <li>ICP 亢進対応：ヘッドアップ 30°・SBP ≥ 110・PaCO₂ 35–40</li>
+            <li><strong>6〜12h 後の再 CT</strong>を必ず計画（抗凝固薬例は早めに）</li>
+            <li>絶飲食、ライン確保</li>
+            <li>頸椎評価（→ <a href="../頸部外傷・頸部痛.html">頸部外傷・頸部痛</a>）</li>
+          </ol>
+        </div>
+      </details>
+
+      <details class="dx-box" id="consult-check">
+        <summary><span>脳外科コンサルト前に確認すべきこと</span></summary>
+        <div class="dx-box__body">
+          <p>脳挫傷と診断したら、コンサル前に以下を整理しておく。</p>
+          <ul>
+            <li><strong>受傷機転・時刻</strong>：機転と接触部位</li>
+            <li><strong>意識経過</strong>：受傷時 LOC、現在の GCS と推移</li>
+            <li><strong>バイタル</strong>：SBP・HR・SpO₂</li>
+            <li><strong>瞳孔径と対光反射</strong>：左右差</li>
+            <li><strong>神経学的所見</strong>：麻痺・けいれん・見当識</li>
+            <li><strong>画像所見</strong>：挫傷の<strong>部位（前頭葉底／側頭葉前）・数・最大径・容量</strong>、midline shift、合併する SDH/SAH/骨折</li>
+            <li><strong>抗凝固薬・抗血小板薬</strong>：薬剤名、最終内服時刻、リバース済みか</li>
+            <li><strong>けいれん歴・発症</strong>：レベチラセタム投与の有無・時刻</li>
+            <li><strong>合併損傷</strong>：頸椎、顔面骨折、多発外傷</li>
+            <li><strong>背景情報</strong>：年齢・既往歴・受傷前 ADL</li>
+            <li><strong>再 CT 計画</strong>：いつ施行予定か</li>
+          </ul>
+        </div>
+      </details>
+
+      <details class="dx-box" id="img-plan">
+        <summary><span>画像所見と治療方針</span></summary>
+        <div class="dx-box__body">
+
+          <h3>① 画像で見る項目</h3>
+          <ul>
+            <li><strong>CT</strong>：<strong>斑状の高吸収（出血）＋周囲低吸収（浮腫）</strong>。salt-and-pepper appearance</li>
+            <li>好発：<strong>前頭葉底部・側頭葉前部</strong>。<strong>contre-coup</strong> で対側にも生じる</li>
+            <li>多発が一般的</li>
+            <li>合併する SDH・SAH・頭蓋骨折・脳浮腫を評価</li>
+            <li>増大・midline shift・脳幹圧迫の有無</li>
+            <li><strong>MRI（DWI/SWI）</strong>：DAI や微小出血の評価に有用（重症例）</li>
+          </ul>
+
+          <h3>② 経過観察と再 CT</h3>
+          <div class="table-wrap"><table>
+            <thead><tr><th>状態</th><th>再 CT のタイミング</th></tr></thead>
+            <tbody>
+              <tr>
+                <td>標準症例</td>
+                <td><strong>受傷後 6〜12h で再 CT</strong>（増大評価）</td>
+              </tr>
+              <tr>
+                <td>抗凝固薬・抗血小板薬例</td>
+                <td>4〜6h 後再 CT（増大リスク高）</td>
+              </tr>
+              <tr>
+                <td>神経症状悪化（GCS 低下／瞳孔不同／嘔吐／けいれん）</td>
+                <td><strong>即時再 CT</strong></td>
+              </tr>
+              <tr>
+                <td>軽微・症状安定</td>
+                <td>24h 以内に再 CT（症例に応じ）</td>
+              </tr>
+            </tbody>
+          </table></div>
+
+          <h3>③ 手術適応（BTF ガイドライン目安）</h3>
+          <ul>
+            <li>多くは<strong>保存療法</strong></li>
+            <li>手術検討（Bullock 2006 基準）：<strong>容量 > 50 mL</strong>、または <strong>容量 ≥ 20 mL + GCS 6〜8 + midline shift ≥ 5 mm or 基底槽消失</strong>、脳幹圧迫／進行性 GCS 低下／ICP コントロール不能</li>
+            <li>けいれん予防：<strong>レベチラセタム 7 日間</strong>が一般的（早期けいれん予防）</li>
+            <li>頭蓋内圧管理：ヘッドアップ・浸透圧療法・SBP/PaCO₂ 制御</li>
+          </ul>
+        </div>
+      </details>
+
+      <details class="dx-box" id="consult">
+        <summary><span>コンサル文（カルテに貼る）</span></summary>
+        <div class="dx-box__body">
+          <p class="dx-template__hint">脳神経外科宛て。【目的】【疾患】【既往歴】【内服薬】【ADL】【現病歴】の順。</p>
+          <div class="dx-template">【目的】[ご相談（保存療法の方針・再 CT 計画）／手術ご検討]
+【疾患】#1 脳挫傷（[右/左、前頭葉底／側頭葉前／contre-coup]、最大径 ○ cm、容量 ○ mL）
+　　　 [#2 急性硬膜下血腫／#2 外傷性くも膜下出血／#2 頭蓋骨折／#2 頸椎合併 など]
+【既往歴】[特記事項なし／○○]
+【内服薬】[なし／ワーファリン／DOAC ○○／抗血小板薬 ○○]（リバース [製剤・用量・時刻／未]）
+【ADL（受傷前）】[独歩／杖／介助／車椅子]
+【現病歴】[年齢]歳[男/女]性。[受傷機転：転倒で○部打撲／交通／殴打]で受傷し、[来院経緯]で来院。
+ ・意識経過：[受傷時 LOC 有無、現在の GCS と推移]
+ ・バイタル：SBP ○、HR ○、SpO₂ ○%
+ ・GCS：E○V○M○、瞳孔：○/○ mm、対光反射 [良好／不良]
+ ・神経：[麻痺なし／○○]、けいれん [なし／あり：時刻・薬剤]
+ ・画像：頭部 CT で[挫傷部位・数・最大径・容量・midline shift]、合併 [SDH／SAH／骨折]
+ ・頸椎：[問題なし／○○]
+ ・ER 処置：[レベチラセタム投与時刻、抗凝固リバース時刻]
+ ・再 CT 計画：[受傷後 ○h を予定]
+よろしくお願いいたします。</div>
+        </div>
+      </details>
+
+      <details class="dx-box">
+        <summary><span>出典</span></summary>
+        <div class="dx-box__body">
+          <ul>
+            <li>Brain Trauma Foundation: Guidelines for the Management of Severe Traumatic Brain Injury（4th ed., 2016 / 更新系列）.</li>
+            <li>Bullock MR ほか. Surgical management of traumatic parenchymal lesions. <em>Neurosurgery.</em> 2006;58(3 Suppl):S25-S46.</li>
+            <li>CRASH-3 trial：<em>Lancet.</em> 2019;394(10210):1713-1723.</li>
+          </ul>
+        </div>
+      </details>
+
+    </article>
+  </main>
+
+  <nav class="hokuto-bottom">
+    <button class="hokuto-bottom__btn" type="button" id="navBack"><span class="hokuto-bottom__icon">←</span><span>戻る</span></button>
+    <a class="hokuto-bottom__btn" href="../ツール.html"><span class="hokuto-bottom__icon">⚙</span><span>ツール</span></a>
+    <a class="hokuto-bottom__btn" href="../index.html"><span class="hokuto-bottom__icon">⌂</span><span>ホーム</span></a>
+  </nav>
+
+  <script>
+  (function(){
+    document.querySelectorAll('.dx-quick__btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.dataset.target;
+        const target = document.getElementById(id);
+        if (!target) return;
+        target.open = true;
+        target.scrollIntoView({behavior: 'smooth', block: 'start'});
+      });
+    });
+    const navBack = document.getElementById('navBack');
+    if (navBack) navBack.addEventListener('click', () => {
+      if (window.history.length > 1) history.back();
+      else window.location.href = '../index.html';
+    });
+  })();
+  </script>
+</body>
+</html>

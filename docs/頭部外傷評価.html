@@ -58,10 +58,6 @@
       border-color: #c0392b;
     }
     .dx-node--danger .dx-node__title { color: #c0392b; }
-    .dx-node--action {
-      background: color-mix(in srgb, var(--text) 5%, var(--surface));
-      border-style: dashed;
-    }
     .dx-node--external {
       text-decoration: none; color: var(--text); border-style: dashed;
       position: relative;
@@ -80,16 +76,15 @@
     .dx-layer--root   { grid-template-columns: 1fr; justify-items: center; }
     .dx-layer--root > * { max-width: 360px; }
     .dx-layer--branch { grid-template-columns: 1fr 1fr; }
-    .dx-layer--quad   { grid-template-columns: repeat(4, 1fr); }
 
     /* 矢印 */
     .dx-arrow {
       display: flex; flex-direction: column; align-items: center; justify-content: center;
-      position: relative; margin: 4px 0; min-height: 44px;
+      position: relative; margin: 2px 0; min-height: 24px;
       color: var(--muted); font-size: 11.5px; font-weight: 600;
     }
     .dx-arrow::before {
-      content: ""; width: 2px; height: 100%; min-height: 38px;
+      content: ""; width: 2px; height: 100%; min-height: 18px;
       background: color-mix(in srgb, var(--text) 35%, transparent);
     }
     .dx-arrow::after {
@@ -98,13 +93,6 @@
       border-left: 5px solid transparent; border-right: 5px solid transparent;
       border-top: 7px solid color-mix(in srgb, var(--text) 35%, transparent);
     }
-    .dx-arrow__label {
-      background: var(--surface); padding: 1px 8px; border-radius: 999px;
-      border: 1px solid color-mix(in srgb, var(--text) 18%, transparent);
-      position: absolute; left: 50%; top: 50%;
-      transform: translate(-50%, -50%); white-space: nowrap; z-index: 1;
-    }
-
     /* 分岐 Y 字 */
     .dx-fork {
       display: grid; grid-template-columns: 1fr 1fr;
@@ -145,13 +133,6 @@
       gap: 12px; align-items: start; margin-top: 4px;
     }
     .dx-tree { display: flex; flex-direction: column; gap: 6px; }
-    .dx-tree__group {
-      font-size: 11px; font-weight: 700; color: var(--muted);
-      text-align: center; padding: 6px 0 2px; margin-top: 4px;
-      border-bottom: 1px dashed color-mix(in srgb, var(--text) 22%, transparent);
-      letter-spacing: 0.02em;
-    }
-    .dx-tree__group:first-child { margin-top: 0; }
 
     /* メモ */
     .dx-note {
@@ -201,7 +182,6 @@
       .dx-arrow { min-height: 24px; margin: 1px 0; }
       .dx-arrow::before { min-height: 20px; width: 1.5px; }
       .dx-arrow::after { border-left-width: 4px; border-right-width: 4px; border-top-width: 6px; }
-      .dx-arrow__label { font-size: 8.5px; padding: 0 4px; line-height: 1.4; }
 
       .dx-fork { min-height: 22px; }
       .dx-fork::before { height: 1.5px; }
@@ -213,21 +193,12 @@
 
       .dx-trees { gap: 4px; }
       .dx-tree { gap: 3px; }
-      .dx-tree__group { font-size: 8.5px; padding: 4px 0 1px; margin-top: 2px; }
       .dx-note { padding: 4px 7px; font-size: 9.5px; }
 
       a.dx-node::after { top: 1px; right: 3px; font-size: 9px; }
     }
 
     /* === 来院後チェック === */
-    .dx-arrival-divider {
-      margin: 18px 0 8px; display: flex; align-items: center; gap: 10px;
-      color: var(--muted); font-size: 11.5px; font-weight: 800; letter-spacing: 0.1em;
-    }
-    .dx-arrival-divider::before, .dx-arrival-divider::after {
-      content: ""; flex: 1; height: 1px;
-      background: color-mix(in srgb, var(--text) 18%, transparent);
-    }
     .dx-checklist {
       background: var(--surface); border-radius: 10px;
       border: 1.5px solid color-mix(in srgb, var(--text) 14%, transparent);
@@ -278,28 +249,30 @@
       .dx-checklist__list li { font-size: 11.5px; }
       .dx-checklist__sub { font-size: 10px; }
       .dx-checklist__reset { font-size: 9.5px; padding: 1px 6px; }
-      .dx-arrival-divider { font-size: 10px; margin: 14px 0 6px; }
+    }
+
+    /* フロー peek からのみ参照される panel は可視には非表示（DOM は peek 用に保持） */
+    #imagingPanel,
+    #historyPanel,
+    #examPanel,
+    #dispoPanel,
+    #rxPanel,
+    #ctReadPanel { display: none !important; }
+
+
+    /* checklist 内のサブグループ見出し */
+    .dx-checklist__subgroup {
+      font-size: 11px; font-weight: 800; color: var(--muted);
+      margin: 10px 0 2px; padding: 4px 6px 2px;
+      letter-spacing: 0.06em;
+      border-bottom: 1px dashed color-mix(in srgb, var(--text) 22%, transparent);
+    }
+    .dx-checklist__subgroup:first-of-type { margin-top: 4px; }
+    @media (max-width: 600px) {
+      .dx-checklist__subgroup { font-size: 10px; }
     }
 
     /* === トリガー連動ルール === */
-    .dx-rules-l2 {
-      margin-top: 12px;
-      background: var(--surface); border-radius: 10px;
-      border: 1.5px solid color-mix(in srgb, #c0392b 35%, transparent);
-      padding: 10px 14px;
-    }
-    .dx-rules-l2 > summary {
-      cursor: pointer; font-weight: 800; font-size: 13.5px;
-      list-style: none; user-select: none;
-      display: flex; align-items: center; gap: 6px; color: #c0392b;
-    }
-    .dx-rules-l2 > summary::-webkit-details-marker { display: none; }
-    .dx-rules-l2 > summary::before {
-      content: "▶"; font-size: 10px; color: #c0392b;
-      transition: transform 150ms ease; flex-shrink: 0;
-    }
-    .dx-rules-l2[open] > summary::before { transform: rotate(90deg); }
-    .dx-rules-l2__intro { font-size: 11px; color: var(--muted); margin: 8px 0 4px; line-height: 1.5; }
     .dx-rules-l2__group {
       font-size: 11px; font-weight: 800; color: var(--muted);
       margin: 12px 0 5px; padding: 0; letter-spacing: 0.06em;
@@ -343,9 +316,6 @@
     .dx-rule.is-critical .dx-rule__then strong { color: #c0392b; }
 
     @media (max-width: 600px) {
-      .dx-rules-l2 { padding: 8px 10px; }
-      .dx-rules-l2 > summary { font-size: 12px; }
-      .dx-rules-l2__intro { font-size: 10px; }
       .dx-rules-l2__group { font-size: 10px; margin-top: 10px; }
       .dx-rule { font-size: 11px; padding: 6px 8px; line-height: 1.4; }
       .dx-rule__tag { font-size: 9px; padding: 0 5px; }
@@ -379,8 +349,95 @@
       .dx-imaging__list { font-size: 11.5px; }
     }
 
-    /* §メニュータイル非表示（互換用） */
-    .section-tiles { display: none !important; }
+    /* === Peek プレビュー === */
+    .peek-modal {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.5);
+      display: none;
+      align-items: flex-end;
+      justify-content: center;
+      z-index: 9999;
+      -webkit-backdrop-filter: blur(2px);
+      backdrop-filter: blur(2px);
+    }
+    .peek-modal.is-open { display: flex; }
+    .peek-modal__sheet {
+      background: var(--surface);
+      width: 100%;
+      max-width: 720px;
+      max-height: 85vh;
+      border-radius: 14px 14px 0 0;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 -6px 28px rgba(0,0,0,0.25);
+      animation: peek-slide-up 220ms ease-out;
+      overflow: hidden;
+      position: relative;
+    }
+    @keyframes peek-slide-up {
+      from { transform: translateY(30%); opacity: 0.4; }
+      to   { transform: translateY(0);   opacity: 1; }
+    }
+    .peek-modal__handle {
+      position: absolute;
+      top: 6px; left: 50%;
+      transform: translateX(-50%);
+      width: 36px; height: 4px;
+      border-radius: 999px;
+      background: color-mix(in srgb, var(--text) 22%, transparent);
+      pointer-events: none;
+    }
+    .peek-modal__header {
+      display: flex; align-items: flex-start; gap: 8px;
+      padding: 16px 14px 10px;
+      border-bottom: 1px solid color-mix(in srgb, var(--text) 12%, transparent);
+      background: var(--surface);
+      flex-shrink: 0;
+    }
+    .peek-modal__title {
+      flex: 1;
+      font-weight: 800;
+      font-size: 14.5px;
+      color: var(--text);
+      line-height: 1.3;
+    }
+    .peek-modal__close {
+      background: transparent;
+      border: 1px solid color-mix(in srgb, var(--text) 22%, transparent);
+      border-radius: 999px;
+      width: 30px; height: 30px;
+      cursor: pointer;
+      font-size: 14px;
+      color: var(--text);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      font-family: inherit;
+    }
+    .peek-modal__close:hover { background: color-mix(in srgb, var(--text) 6%, transparent); }
+    .peek-modal__body {
+      flex: 1;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      padding: 12px 16px 10px;
+      font-size: 13.5px;
+      line-height: 1.55;
+      color: var(--text);
+    }
+    /* peek 内で details は常に開いた状態で表示（JS で open=true を付与）。トップレベルのサマリーは peek ヘッダーと重複するため非表示 */
+    .peek-modal__body > details > summary { display: none; }
+    .peek-modal__body details > summary { pointer-events: none; }
+    /* checklist 内の reset ボタンも peek では機能しないので非表示 */
+    .peek-modal__body .dx-checklist__reset { display: none; }
+    @media (min-width: 720px) {
+      .peek-modal { align-items: center; padding: 24px; }
+      .peek-modal__sheet { border-radius: 14px; max-height: 80vh; }
+      .peek-modal__handle { display: none; }
+      @keyframes peek-slide-up {
+        from { transform: scale(0.96); opacity: 0; }
+        to   { transform: scale(1);    opacity: 1; }
+      }
+    }
+    a.dx-node { -webkit-touch-callout: none; }
   </style>
 </head>
 <body>
@@ -399,135 +456,196 @@
 
       <!-- 単純化診療フロー -->
       <div class="action-header flow-box" id="flowBox">
-        <div class="action-header__title flow-box__title" id="flowBoxClose" role="button" tabindex="0" aria-label="診療フローを閉じる">
-          <span>🗺 単純化診療フロー</span>
-          <span class="flow-box__hint">タップで閉じる ✕</span>
+        <div class="action-header__title flow-box__title">
+          <span>単純化診療フロー</span>
         </div>
 
         <div class="flow-canvas">
           <div class="dx-flow" role="group" aria-label="頭部外傷の単純化診療フロー">
 
-            <!-- L0: Red flags -->
+            <!-- Root -->
             <div class="dx-layer dx-layer--root">
-              <a class="dx-node dx-node--decision dx-node--danger" href="#redflags">
-                <div class="dx-node__title">🚨 Red flags 確認</div>
-                <div class="dx-node__sub">GCS低下／瞳孔不同／ヘルニア徴候／頭蓋底骨折</div>
-              </a>
+              <div class="dx-node dx-node--decision">頭部外傷</div>
             </div>
+            <div class="dx-arrow"></div>
 
-            <div class="dx-fork">
-              <div class="dx-fork__leg"><span class="dx-fork__label">あり</span></div>
-              <div class="dx-fork__leg"><span class="dx-fork__label">なし</span></div>
-            </div>
-
+            <!-- 問診 + 身体診察（同時並行で実施） -->
             <div class="dx-layer dx-layer--branch">
-              <a class="dx-node dx-node--danger" href="#redflags">
-                <div class="dx-node__title">緊急対応</div>
-                <div class="dx-node__sub">即CT／脳外コンサルト／気道確保</div>
+              <a class="dx-node" href="#historyPanel">
+                <div class="dx-node__title">問診</div>
               </a>
-              <div class="dx-arrow"><span class="dx-arrow__label">↓ GCS で重症度判定</span></div>
+              <a class="dx-node" href="#examPanel">
+                <div class="dx-node__title">身体診察</div>
+              </a>
             </div>
+            <div class="dx-arrow"></div>
 
-            <!-- L1: GCS 重症度 -->
-            <div class="dx-layer dx-layer--root">
-              <div class="dx-node dx-node--judge">GCS は？</div>
+            <!-- 意識障害の並走（フォークではなく注意書き） -->
+            <div class="dx-note" style="text-align:center; max-width:520px; margin:0 auto;">
+              意識障害があれば <a href="意識障害.html">意識障害.html</a> を並走で評価（ABCD／血糖／薬剤／脳卒中）
             </div>
+            <div class="dx-arrow"></div>
 
+            <!-- CT 適応 ＋ CT 所見（並列） -->
+            <div class="dx-layer dx-layer--branch">
+              <a class="dx-node dx-node--judge" href="#imagingPanel">
+                <div class="dx-node__title">CT 適応</div>
+              </a>
+              <a class="dx-node dx-node--judge" href="#ctReadPanel">
+                <div class="dx-node__title">CT 所見</div>
+              </a>
+            </div>
             <div class="dx-fork dx-fork--triple">
-              <div class="dx-fork__leg"><span class="dx-fork__label">軽症 13–15</span></div>
-              <div class="dx-fork__leg"><span class="dx-fork__label">中等症 9–12</span></div>
-              <div class="dx-fork__leg"><span class="dx-fork__label">重症 ≤8</span></div>
+              <div class="dx-fork__leg"><span class="dx-fork__label">頭蓋内出血</span></div>
+              <div class="dx-fork__leg"><span class="dx-fork__label">頭蓋骨骨折</span></div>
+              <div class="dx-fork__leg"><span class="dx-fork__label">顔面骨折</span></div>
             </div>
-
-            <!-- L2/L3: 3列の方針＆病態ツリー -->
             <div class="dx-trees">
 
-              <!-- 1) 軽症 GCS 13-15 -->
+              <!-- 頭蓋内出血 -->
               <div class="dx-tree">
-                <div class="dx-tree__group">CT 適応判断</div>
-                <a class="dx-node" href="#imagingPanel">
-                  <div class="dx-node__title">Canadian CT Head Rule</div>
-                  <div class="dx-node__sub">成人 GCS 13–15 主軸</div>
-                </a>
-                <a class="dx-node" href="#imagingPanel">
-                  <div class="dx-node__title">PECARN（小児）</div>
-                  <div class="dx-node__sub">2歳未満／2歳以上で別ルール</div>
-                </a>
-                <a class="dx-node" href="#imagingPanel">
-                  <div class="dx-node__title">NICE CG232</div>
-                  <div class="dx-node__sub">抗凝固薬例で原則 CT</div>
-                </a>
-
-                <div class="dx-tree__group">病態</div>
-                <div class="dx-node">
-                  <div class="dx-node__title">脳震盪・軽症 TBI</div>
-                  <div class="dx-node__sub">CT 陰性で 4–6h 観察</div>
-                </div>
-                <a class="dx-node" href="#dx-chronic-sdh">
-                  <div class="dx-node__title">慢性 SDH（後日発症）</div>
-                  <div class="dx-node__sub">2–8週後の歩行障害・認知低下</div>
-                </a>
-
-                <div class="dx-note">CT 正常 + 抗凝固薬例 → <strong>24h 観察入院</strong>を基本</div>
-              </div>
-
-              <!-- 2) 中等症 GCS 9-12 -->
-              <div class="dx-tree">
-                <div class="dx-tree__group">原則：全例 CT + 入院</div>
-                <a class="dx-node dx-node--danger" href="#dx-edh">
-                  <div class="dx-node__title">急性 EDH</div>
+                <a class="dx-node dx-node--danger" href="疾患詳細/急性硬膜外血腫.html">
+                  <div class="dx-node__title">急性硬膜外血腫</div>
                   <div class="dx-node__sub">凸レンズ／側頭骨折／lucid interval</div>
                 </a>
-                <a class="dx-node dx-node--danger" href="#dx-sdh">
-                  <div class="dx-node__title">急性 SDH</div>
+                <a class="dx-node dx-node--danger" href="疾患詳細/急性硬膜下血腫.html">
+                  <div class="dx-node__title">急性硬膜下血腫</div>
                   <div class="dx-node__sub">三日月／高齢・抗凝固で多い</div>
                 </a>
-                <a class="dx-node" href="#dx-tsah">
-                  <div class="dx-node__title">外傷性 SAH</div>
+                <a class="dx-node" href="疾患詳細/外傷性くも膜下出血.html">
+                  <div class="dx-node__title">外傷性くも膜下出血</div>
                   <div class="dx-node__sub">脳溝・基底槽の高吸収</div>
                 </a>
-                <a class="dx-node" href="#dx-contusion">
-                  <div class="dx-node__title">脳挫傷・外傷性脳内血腫</div>
+                <a class="dx-node" href="疾患詳細/脳挫傷.html">
+                  <div class="dx-node__title">脳挫傷</div>
                   <div class="dx-node__sub">前頭・側頭葉、contre-coup</div>
                 </a>
-
-                <div class="dx-note">neuro check 1–2h ごと、悪化で再 CT</div>
+                <div class="dx-note">→ 脳外コンサルト + 入院</div>
               </div>
 
-              <!-- 3) 重症 GCS ≤8 -->
+              <!-- 頭蓋骨骨折 -->
               <div class="dx-tree">
-                <div class="dx-tree__group">気道確保 + ICU</div>
-                <a class="dx-node dx-node--danger" href="#icp">
-                  <div class="dx-node__title">頭蓋内圧亢進対応</div>
-                  <div class="dx-node__sub">挿管／ヘッドアップ／浸透圧</div>
-                </a>
-                <a class="dx-node dx-node--danger" href="#dx-skullbase">
+                <a class="dx-node dx-node--danger" href="疾患詳細/頭蓋底骨折.html">
                   <div class="dx-node__title">頭蓋底骨折</div>
-                  <div class="dx-node__sub">経鼻挿管・経鼻胃管禁</div>
+                  <div class="dx-node__sub">Battle／Raccoon／髄液漏／鼓室血腫</div>
                 </a>
-                <a class="dx-node dx-node--danger" href="#dx-dai">
-                  <div class="dx-node__title">びまん性軸索損傷（DAI）</div>
-                  <div class="dx-node__sub">機転に不釣合な意識障害</div>
+                <a class="dx-node dx-node--danger" href="疾患詳細/陥没骨折.html">
+                  <div class="dx-node__title">陥没骨折</div>
+                  <div class="dx-node__sub">幅 &gt; 骨厚／開放性で手術</div>
                 </a>
-                <a class="dx-node dx-node--external" href="頸部外傷・頸部痛.html">
-                  <div class="dx-node__title">頸椎損傷を必ず外す</div>
-                  <div class="dx-node__sub">頭部外傷で 5–10% 合併</div>
-                </a>
-
-                <div class="dx-note">SBP ≥ 110、SpO₂ ≥ 94%、PaCO₂ 35–40 を目標</div>
+                <div class="dx-note">→ 脳外（頭蓋底は耳鼻科も）</div>
               </div>
 
+              <!-- 顔面骨折 -->
+              <div class="dx-tree">
+                <a class="dx-node dx-node--danger" href="疾患詳細/視神経管骨折.html">
+                  <div class="dx-node__title">視神経管骨折</div>
+                  <div class="dx-node__sub">急性視力低下＋RAPD</div>
+                </a>
+                <a class="dx-node dx-node--danger" href="疾患詳細/鼻骨骨折.html">
+                  <div class="dx-node__title">鼻骨骨折</div>
+                  <div class="dx-node__sub">鼻中隔血腫＝即切開</div>
+                </a>
+                <a class="dx-node" href="疾患詳細/眼窩吹き抜け骨折.html">
+                  <div class="dx-node__title">眼窩吹き抜け骨折</div>
+                  <div class="dx-node__sub">複視／teardrop sign</div>
+                </a>
+                <a class="dx-node" href="疾患詳細/頬骨上顎複合体骨折.html">
+                  <div class="dx-node__title">頬骨上顎複合体骨折</div>
+                  <div class="dx-node__sub">tripod／頬部陥凹</div>
+                </a>
+                <a class="dx-node dx-node--danger" href="疾患詳細/Le%20Fort骨折.html">
+                  <div class="dx-node__title">Le Fort 骨折</div>
+                  <div class="dx-node__sub">気道閉塞リスク</div>
+                </a>
+                <a class="dx-node" href="疾患詳細/下顎骨骨折.html">
+                  <div class="dx-node__title">下顎骨骨折</div>
+                  <div class="dx-node__sub">咬合異常／condyle</div>
+                </a>
+                <div class="dx-note">→ 形成外科（鼻骨は耳鼻科）</div>
+              </div>
+
+            </div>
+            <div class="dx-arrow"></div>
+
+            <!-- disposition -->
+            <div class="dx-layer dx-layer--root">
+              <a class="dx-node dx-node--decision" href="#dispoPanel">
+                <div class="dx-node__title">disposition</div>
+                <div class="dx-node__sub">抗凝固例／独居・認知症／観察可／紙交付</div>
+              </a>
             </div>
 
           </div>
 
-          <!-- 来院後チェック -->
-          <div class="dx-arrival-divider"><span>来院後のチェック</span></div>
+          <details class="dx-checklist" id="ctReadPanel">
+            <summary>
+              <span class="dx-checklist__head" style="flex:1;">
+                <span>CT 読影チェックリスト — フローの「CT 所見」ノードから参照</span>
+                <button type="button" class="dx-checklist__reset" aria-label="CT 読影チェックをすべて外す">リセット</button>
+              </span>
+            </summary>
+
+            <div class="dx-checklist__subgroup">A. ウィンドウ設定</div>
+            <ul class="dx-checklist__list">
+              <li><label><input type="checkbox" data-key="ct-window"> <span><strong>脳実質条件・骨条件・軟部条件を切り替え</strong> <span class="dx-checklist__sub">3 ウィンドウ全て見る習慣をつける（片方だけだと骨折や軟部組織異物を見落とす）</span></span></label></li>
+            </ul>
+
+            <div class="dx-checklist__subgroup">B. 脳実質（脳実質条件で）</div>
+            <ul class="dx-checklist__list">
+              <li><label><input type="checkbox" data-key="ct-edh"> <span><strong>凸レンズ型の高吸収</strong> <span class="dx-checklist__sub">縫合線を越えない／側頭骨折を伴うことあり／swirl sign（活動性出血）→ <a href="疾患詳細/急性硬膜外血腫.html">急性硬膜外血腫</a></span></span></label></li>
+              <li><label><input type="checkbox" data-key="ct-sdh"> <span><strong>三日月型の高吸収</strong> <span class="dx-checklist__sub">硬膜とくも膜の間／<strong>縫合線を越える</strong>／高齢者・抗凝固薬で多い → <a href="疾患詳細/急性硬膜下血腫.html">急性硬膜下血腫</a></span></span></label></li>
+              <li><label><input type="checkbox" data-key="ct-tsah"> <span><strong>脳溝・脳裂・基底槽の高吸収</strong> <span class="dx-checklist__sub">皮質寄り＝外傷性／脳底槽中心＝動脈瘤性を疑い CTA → <a href="疾患詳細/外傷性くも膜下出血.html">外傷性くも膜下出血</a></span></span></label></li>
+              <li><label><input type="checkbox" data-key="ct-contusion"> <span><strong>斑状高吸収＋周囲低吸収（浮腫）</strong> <span class="dx-checklist__sub">前頭葉底部・側頭葉前部に好発、contre-coup で対側にも／6〜12h 後に増大 → <a href="疾患詳細/脳挫傷.html">脳挫傷</a></span></span></label></li>
+              <li><label><input type="checkbox" data-key="ct-shift"> <span><strong>midline shift</strong> <span class="dx-checklist__sub">5 mm 以上で手術寄り、各血腫の手術閾値判定に直結</span></span></label></li>
+              <li><label><input type="checkbox" data-key="ct-cistern"> <span><strong>基底槽の評価</strong> <span class="dx-checklist__sub">消失は ICP 亢進・予後不良サイン</span></span></label></li>
+              <li><label><input type="checkbox" data-key="ct-ventricle"> <span><strong>脳室サイズ</strong> <span class="dx-checklist__sub">拡大＝水頭症、圧排＝ICP 亢進</span></span></label></li>
+            </ul>
+
+            <div class="dx-checklist__subgroup">C. 頭蓋骨（骨条件で）</div>
+            <ul class="dx-checklist__list">
+              <li><label><input type="checkbox" data-key="ct-depressed"> <span><strong>頭蓋冠の陥没骨折</strong> <span class="dx-checklist__sub">陥没幅と骨厚を比較、開放性／静脈洞上の有無 → <a href="疾患詳細/陥没骨折.html">陥没骨折</a></span></span></label></li>
+              <li><label><input type="checkbox" data-key="ct-skullbase"> <span><strong>頭蓋底骨折線</strong> <span class="dx-checklist__sub">前頭蓋窩／中頭蓋窩／後頭蓋窩。1 mm 以下薄スライス＋3D 再構成 → <a href="疾患詳細/頭蓋底骨折.html">頭蓋底骨折</a></span></span></label></li>
+              <li><label><input type="checkbox" data-key="ct-sinus"> <span><strong>副鼻腔・乳突洞の液体／air-fluid level</strong> <span class="dx-checklist__sub">頭蓋底骨折の間接所見</span></span></label></li>
+              <li><label><input type="checkbox" data-key="ct-pneumo"> <span><strong>頭蓋内 air（pneumocephalus）</strong> <span class="dx-checklist__sub">硬膜損傷の指標</span></span></label></li>
+            </ul>
+
+            <div class="dx-checklist__subgroup">D. 顔面骨（顔面 CT があれば）</div>
+            <ul class="dx-checklist__list">
+              <li><label><input type="checkbox" data-key="ct-orbit"> <span><strong>眼窩底・内側壁</strong> <span class="dx-checklist__sub">teardrop sign／missing muscle syndrome／眼窩気腫 → <a href="疾患詳細/眼窩吹き抜け骨折.html">眼窩吹き抜け骨折</a></span></span></label></li>
+              <li><label><input type="checkbox" data-key="ct-optic"> <span><strong>視神経管</strong> <span class="dx-checklist__sub">骨片による狭窄（眼窩〜頭蓋底薄スライス） → <a href="疾患詳細/視神経管骨折.html">視神経管骨折</a></span></span></label></li>
+              <li><label><input type="checkbox" data-key="ct-nasal"> <span><strong>鼻骨</strong> <span class="dx-checklist__sub">転位・open book・NOE（内眼角間距離拡大） → <a href="疾患詳細/鼻骨骨折.html">鼻骨骨折</a></span></span></label></li>
+              <li><label><input type="checkbox" data-key="ct-zmc"> <span><strong>頬骨上顎複合体（ZMC）</strong> <span class="dx-checklist__sub">4 縫合の評価／tripod／tetrapod／頬骨弓 in-fracture → <a href="疾患詳細/頬骨上顎複合体骨折.html">ZMC 骨折</a></span></span></label></li>
+              <li><label><input type="checkbox" data-key="ct-lefort"> <span><strong>Le Fort 線（I／II／III）</strong> <span class="dx-checklist__sub">3D-CT で複合型・左右非対称を把握 → <a href="疾患詳細/Le%20Fort骨折.html">Le Fort 骨折</a></span></span></label></li>
+              <li><label><input type="checkbox" data-key="ct-mandible"> <span><strong>下顎骨</strong> <span class="dx-checklist__sub">関節突起／体部／顎角／正中、顆頭の中頭蓋窩陥入を必ず除外（パノラマ／3D-CT）→ <a href="疾患詳細/下顎骨骨折.html">下顎骨骨折</a></span></span></label></li>
+            </ul>
+
+            <div class="dx-checklist__subgroup">E. 軟部組織</div>
+            <ul class="dx-checklist__list">
+              <li><label><input type="checkbox" data-key="ct-scalp"> <span><strong>頭皮血腫・皮下血腫</strong> <span class="dx-checklist__sub">受傷部位の手がかり、後頭部血腫は仰臥位で見落としやすい</span></span></label></li>
+              <li><label><input type="checkbox" data-key="ct-retropharyngeal"> <span><strong>顔面浮腫・後咽頭血腫</strong> <span class="dx-checklist__sub">気道閉塞リスク、Le Fort II/III で重要</span></span></label></li>
+              <li><label><input type="checkbox" data-key="ct-foreign"> <span><strong>異物・骨片の散在</strong> <span class="dx-checklist__sub">開放骨折・穿通損傷で評価</span></span></label></li>
+            </ul>
+
+            <div class="dx-checklist__subgroup">F. 追加検査の判断</div>
+            <ul class="dx-checklist__list">
+              <li><label><input type="checkbox" data-key="ct-optic-slice"> <span><strong>視神経管薄スライス（眼窩〜頭蓋底）</strong> <span class="dx-checklist__sub">急性視力低下＋RAPD あれば追加</span></span></label></li>
+              <li><label><input type="checkbox" data-key="ct-cta"> <span><strong>CTA</strong> <span class="dx-checklist__sub">BCVI（Modified Denver Criteria：頚椎骨折／頭蓋底骨折／LeFort II/III／不釣合な神経症状 など）／動脈瘤性 SAH 疑い</span></span></label></li>
+              <li><label><input type="checkbox" data-key="ct-mri"> <span><strong>MRI（DWI／SWI）</strong> <span class="dx-checklist__sub">機転に不釣合な意識障害＝DAI 疑い</span></span></label></li>
+            </ul>
+
+            <div class="dx-checklist__subgroup">G. 再 CT 計画</div>
+            <ul class="dx-checklist__list">
+              <li><label><input type="checkbox" data-key="ct-recheck-anticoag"> <span><strong>抗凝固薬例で初回陰性</strong> <span class="dx-checklist__sub">→ 4〜6h 後再 CT</span></span></label></li>
+              <li><label><input type="checkbox" data-key="ct-recheck-contusion"> <span><strong>脳挫傷</strong> <span class="dx-checklist__sub">→ 6〜12h 後再 CT で増大評価</span></span></label></li>
+              <li><label><input type="checkbox" data-key="ct-recheck-deterioration"> <span><strong>神経症状悪化</strong> <span class="dx-checklist__sub">GCS 低下／瞳孔不同／嘔吐／けいれん → 即時再 CT</span></span></label></li>
+            </ul>
+          </details>
 
           <details class="dx-checklist" id="historyPanel">
             <summary>
               <span class="dx-checklist__head" style="flex:1;">
-                <span>🗣 問診（来院後に実施）</span>
+                <span>問診</span>
                 <button type="button" class="dx-checklist__reset" aria-label="問診チェックをすべて外す">リセット</button>
               </span>
             </summary>
@@ -549,195 +667,209 @@
           <details class="dx-checklist" id="examPanel">
             <summary>
               <span class="dx-checklist__head" style="flex:1;">
-                <span>🔍 身体診察（来院後に実施）</span>
+                <span>身体診察</span>
                 <button type="button" class="dx-checklist__reset" aria-label="身体診察チェックをすべて外す">リセット</button>
               </span>
             </summary>
+            <div class="dx-checklist__subgroup">A. 頭蓋内・全身系</div>
             <ul class="dx-checklist__list">
-              <li><label><input type="checkbox" data-key="e-vital"> <span><strong>バイタル</strong> <span class="dx-checklist__sub">SBP ≥ 110、SpO₂ ≥ 94%、Cushing 反応に注意</span></span></label></li>
-              <li><label><input type="checkbox" data-key="e-gcs"> <span><strong>GCS（E・V・M）</strong> <span class="dx-checklist__sub">挿管中は V を T。受傷後の<em>変化</em>を重視</span></span></label></li>
-              <li><label><input type="checkbox" data-key="e-pupil"> <span><strong>瞳孔径・対光反射・左右差</strong> <span class="dx-checklist__sub">不同→ヘルニア。両側散大固定→重症</span></span></label></li>
-              <li><label><input type="checkbox" data-key="e-paresis"> <span><strong>四肢麻痺・腱反射・Babinski</strong> <span class="dx-checklist__sub">片麻痺の検出</span></span></label></li>
-              <li><label><input type="checkbox" data-key="e-cn"> <span><strong>脳神経</strong> <span class="dx-checklist__sub">動眼／顔面／聴／嗅。頭蓋底骨折の評価</span></span></label></li>
-              <li><label><input type="checkbox" data-key="e-scalp"> <span><strong>頭皮の触診（後頭部・髪の中も）</strong> <span class="dx-checklist__sub">仰臥位で見落としやすい裂創・血腫</span></span></label></li>
-              <li><label><input type="checkbox" data-key="e-battle"> <span><strong>Battle 徴候</strong> <span class="dx-checklist__sub">耳介後部の皮下出血→側頭骨／後頭蓋底骨折</span></span></label></li>
-              <li><label><input type="checkbox" data-key="e-raccoon"> <span><strong>Raccoon eyes</strong> <span class="dx-checklist__sub">両眼周囲血腫→前頭蓋底骨折</span></span></label></li>
-              <li><label><input type="checkbox" data-key="e-csf"> <span><strong>髄液鼻漏・耳漏</strong> <span class="dx-checklist__sub">halo sign、糖陽性</span></span></label></li>
-              <li><label><input type="checkbox" data-key="e-tympanum"> <span><strong>鼓室血腫・外耳道出血</strong> <span class="dx-checklist__sub">側頭骨骨折</span></span></label></li>
-              <li><label><input type="checkbox" data-key="e-cspine"> <span><strong>頸椎評価</strong> <span class="dx-checklist__sub">正中圧痛・神経症状。頸椎カラー保持</span></span></label></li>
-              <li><label><input type="checkbox" data-key="e-trauma"> <span><strong>多発外傷の検索</strong> <span class="dx-checklist__sub">成人で頭蓋内出血単独はショックを来しにくい</span></span></label></li>
-            </ul>
-          </details>
-
-          <!-- トリガー連動の注意 -->
-          <details class="dx-rules-l2" id="rulesL2Panel">
-            <summary>⚠️ トリガー連動の注意（条件で意識）</summary>
-            <p class="dx-rules-l2__intro">特定の状況に出会ったら必ず思い出すべき注意点。フローの判断と並行して意識する。</p>
-
-            <h4 class="dx-rules-l2__group">緊急トリガー（即 CT・即コンサルト）</h4>
-            <ul class="dx-rules-l2__list">
-              <li class="dx-rule is-critical" id="redflags">
-                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>GCS ≤ 8 ／ 受傷 2h 後も GCS &lt; 15</span></div>
-                <div class="dx-rule__then"><strong>気道確保準備 + 即 CT</strong>。in-line stabilization で頸椎保護</div>
-              </li>
-              <li class="dx-rule is-critical">
-                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>瞳孔不同・対光反射消失</span></div>
-                <div class="dx-rule__then"><strong>ヘルニア徴候</strong>。即 CT、脳外コンサルト、ICP 対応開始</div>
-              </li>
-              <li class="dx-rule is-critical">
-                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>けいれん持続・群発けいれん</span></div>
-                <div class="dx-rule__then"><strong>レベチラセタムで治療</strong>。長時間けいれんは ICP をさらに上げる</div>
-              </li>
-              <li class="dx-rule is-critical">
-                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>抗凝固薬・抗血小板薬内服 + CT で出血</span></div>
-                <div class="dx-rule__then">サイズ問わず<strong>脳外コンサルト + 即リバース</strong>（4F-PCC／イダルシズマブ／アンデキサネット）</div>
-              </li>
-              <li class="dx-rule is-critical">
-                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>Cushing 反応（徐脈+高血圧+不規則呼吸）</span></div>
-                <div class="dx-rule__then"><strong>切迫脳ヘルニア</strong>。挿管・ヘッドアップ 30°・浸透圧療法・脳外即コンサルト</div>
-              </li>
-              <li class="dx-rule is-critical">
-                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>頭蓋底骨折所見（Battle／Raccoon／髄液漏／鼓室血腫）</span></div>
-                <div class="dx-rule__then"><strong>経鼻挿管・経鼻胃管は禁</strong>。脳外・耳鼻科コンサルト、入院</div>
-              </li>
-              <li class="dx-rule is-critical">
-                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>頭部外傷 + 出血性ショック</span></div>
-                <div class="dx-rule__then">成人では頭蓋内出血単独でショックは稀 →<strong> 他部位出血</strong>を必ず探す</div>
-              </li>
+              <li><label><input type="checkbox" data-key="e-vital"> <span><strong>バイタル</strong> <span class="dx-checklist__sub">SBP ≥ 110、SpO₂ ≥ 94%。Cushing 反応（徐脈+高血圧+不規則呼吸）に注意</span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-conscious"> <span><strong>意識・GCS・瞳孔</strong> <span class="dx-checklist__sub">挿管中は V を T。<em>変化</em>を重視。瞳孔不同→ヘルニア、両側散大固定→重症</span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-neuro"> <span><strong>神経学的所見</strong> <span class="dx-checklist__sub">四肢麻痺・腱反射・Babinski（片麻痺の検出）、脳神経（動眼／顔面／聴／嗅）</span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-skullbase"> <span><strong>頭蓋底骨折所見</strong> <span class="dx-checklist__sub">Battle 徴候・Raccoon eyes・髄液鼻漏/耳漏（halo sign、糖陽性／確診は β2-トランスフェリン）・鼓室血腫／外耳道出血 — 1 つでも陽性で<strong>経鼻挿管・経鼻胃管・経鼻ファイバー全て禁</strong></span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-scalp"> <span><strong>頭皮の触診（後頭部・髪の中も）</strong> <span class="dx-checklist__sub">仰臥位で見落としやすい裂創・帽状腱膜下血腫</span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-cspine-trauma"> <span><strong>頸椎・多発外傷</strong> <span class="dx-checklist__sub">頸椎正中圧痛・神経症状でカラー継続。成人で頭蓋内出血単独はショックを来しにくい → 他部位出血を探す</span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-nai"> <span><strong>非偶発的外傷（NAI）の評価</strong> <span class="dx-checklist__sub">乳児の頭蓋内出血／繰り返す打撲／機転と所見の不一致／不自然な皮下出血／養育者の供述変化 → 小児科・児相と連携</span></span></label></li>
             </ul>
 
-            <h4 class="dx-rules-l2__group">見逃し回避トリガー</h4>
-            <ul class="dx-rules-l2__list">
-              <li class="dx-rule">
-                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>後頭部打撲・仰臥位で運ばれてきた</span></div>
-                <div class="dx-rule__then"><strong>頭をひっくり返して髪の中を触る</strong>。後頭部裂創・帽状腱膜下血腫を見逃さない</div>
-              </li>
-              <li class="dx-rule">
-                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>本人が「薬は飲んでない」と言う</span></div>
-                <div class="dx-rule__then">鵜呑みにしない。<strong>お薬手帳・家族・薬局へ電話</strong>。DOAC は申告漏れが多い</div>
-              </li>
-              <li class="dx-rule">
-                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>飲酒 + 頭部打撲 + 意識障害</span></div>
-                <div class="dx-rule__then">「酔っているだけ」と片付けない。<strong>閾値を下げて CT</strong>（→ <a href="転倒.html#s3-alcohol">飲酒後転倒</a>）</div>
-              </li>
-              <li class="dx-rule">
-                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>高齢者の歩行障害・認知低下・片麻痺（受傷から数週後）</span></div>
-                <div class="dx-rule__then" id="dx-chronic-sdh"><strong>慢性硬膜下血腫</strong>を疑う。受傷を本人が忘れていることも。CT で確認</div>
-              </li>
-              <li class="dx-rule">
-                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>機転に対して意識障害が不釣合</span></div>
-                <div class="dx-rule__then" id="dx-dai"><strong>DAI</strong> を疑う。MRI（DWI／SWI）で皮髄境界・脳梁・脳幹の点状出血を評価</div>
-              </li>
-              <li class="dx-rule">
-                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>側頭部打撲 + lucid interval</span></div>
-                <div class="dx-rule__then" id="dx-edh"><strong>急性 EDH</strong> の典型。観察中の急速悪化に備え再 CT・脳外コンサルト準備</div>
-              </li>
-              <li class="dx-rule">
-                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>高齢者の軽微外傷</span></div>
-                <div class="dx-rule__then" id="dx-sdh">同一平面転倒でも<strong>急性 SDH</strong>を起こす。CT 閾値を下げる（→ <a href="転倒.html">転倒</a>）</div>
-              </li>
-              <li class="dx-rule">
-                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>頭痛・嘔吐 + 脳溝・基底槽高吸収</span></div>
-                <div class="dx-rule__then" id="dx-tsah"><strong>外傷性 SAH</strong>。動脈瘤性 SAH との鑑別、再出血・血管攣縮を念頭に</div>
-              </li>
-              <li class="dx-rule">
-                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>前頭・側頭葉に斑状出血</span></div>
-                <div class="dx-rule__then" id="dx-contusion"><strong>脳挫傷</strong>。contre-coup で受傷部位の対側に好発、6–12h 後の再 CT で増大評価</div>
-              </li>
-              <li class="dx-rule">
-                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>頭部外傷を見つけた</span></div>
-                <div class="dx-rule__then"><strong>頸椎損傷を必ず外す</strong>（5–10% 合併、→ <a href="頸部外傷・頸部痛.html">頸部外傷・頸部痛</a>）</div>
-              </li>
-              <li class="dx-rule">
-                <div class="dx-rule__if"><span class="dx-rule__tag">if</span><span>乳児の頭蓋内出血・繰り返す頭部打撲</span></div>
-                <div class="dx-rule__then">機転と所見の不一致、不自然な皮下出血、養育者の供述変化 →<strong> 非偶発的外傷（NAI）</strong>を疑い小児科・児相と連携</div>
-              </li>
-            </ul>
-
-            <h4 class="dx-rules-l2__group">ピットフォール</h4>
-            <ul class="dx-rules-l2__list">
-              <li class="dx-rule is-pitfall">
-                <div class="dx-rule__if"><span class="dx-rule__tag">⚠</span><span>軽症で観察時間を短くしすぎる</span></div>
-                <div class="dx-rule__then">CT 後は<strong> ER で 4–6h の neuro check</strong>。抗凝固薬例は原則 24h 入院観察</div>
-              </li>
-              <li class="dx-rule is-pitfall">
-                <div class="dx-rule__if"><span class="dx-rule__tag">⚠</span><span>初回 CT 陰性で安心して帰宅</span></div>
-                <div class="dx-rule__then">抗凝固薬例・進行所見・脳挫傷では<strong>遅発性出血</strong>あり。4–6h 後の再 CT を計画</div>
-              </li>
-              <li class="dx-rule is-pitfall">
-                <div class="dx-rule__if"><span class="dx-rule__tag">⚠</span><span>帰宅説明が口頭のみ</span></div>
-                <div class="dx-rule__then"><strong>書面で再受診基準</strong>を渡し家族にも口頭で説明（意識低下・頭痛増強・嘔吐反復・けいれん・麻痺・性格変化・髄液漏）</div>
-              </li>
-              <li class="dx-rule is-pitfall">
-                <div class="dx-rule__if"><span class="dx-rule__tag">⚠</span><span>独居・認知症で観察体制が組めない</span></div>
-                <div class="dx-rule__then"><strong>見守りが確保できるまで帰宅を控える</strong>（提言 9 号の死亡事例で繰り返される）</div>
-              </li>
-              <li class="dx-rule is-pitfall">
-                <div class="dx-rule__if"><span class="dx-rule__tag">⚠</span><span>抗血小板薬例で血小板輸血をルーチン</span></div>
-                <div class="dx-rule__then"><strong>PATCH 試験</strong>以降、ルーチン血小板輸血は推奨されない。緊急開頭時に脳外と個別判断</div>
-              </li>
-              <li class="dx-rule is-pitfall">
-                <div class="dx-rule__if"><span class="dx-rule__tag">⚠</span><span>失神先行例の頭部外傷</span></div>
-                <div class="dx-rule__then">頭部評価だけで満足しない。<strong>失神原因の精査</strong>（→ <a href="意識消失.html">意識消失</a>）</div>
-              </li>
-              <li class="dx-rule is-pitfall">
-                <div class="dx-rule__if"><span class="dx-rule__tag">⚠</span><span>意識障害を外傷だけで説明</span></div>
-                <div class="dx-rule__then">低血糖・薬物・電解質・脳卒中などの<strong>外傷以外の原因</strong>も並走（→ <a href="意識障害.html">意識障害</a>）</div>
-              </li>
+            <div class="dx-checklist__subgroup">B. 顔面系（緊急性高い順）</div>
+            <ul class="dx-checklist__list">
+              <li><label><input type="checkbox" data-key="e-septal"> <span><strong>鼻中隔の前鼻鏡</strong> <span class="dx-checklist__sub">鼻出血＋鼻中隔腫脹 → septal hematoma を疑え、数時間以内に切開（鞍鼻予防）</span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-vision"> <span><strong>視力・対光反射・RAPD</strong> <span class="dx-checklist__sub">急性視力低下→視神経管骨折を疑う。直ちに眼科・脳外</span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-airway-face"> <span><strong>顔面外傷時の気道評価</strong> <span class="dx-checklist__sub">Le Fort II/III・下顎多発骨折・後咽頭血腫で閉塞リスク。早期挿管準備</span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-cheek"> <span><strong>視診：顔面腫脹・頬骨弓の左右差・陥凹</strong> <span class="dx-checklist__sub">ZMC／頬骨弓骨折。頬部陥凹は浮腫が引いてから見えることも</span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-occlusion"> <span><strong>咬合異常（機能）</strong> <span class="dx-checklist__sub">「いつも通り噛めるか」を本人に確認。下顎骨折・Le Fort II/III の所見</span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-mandible"> <span><strong>下顎運動・開口・段差・動揺歯</strong> <span class="dx-checklist__sub">下顎骨折。耳前部圧痛は condyle 骨折</span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-diplopia"> <span><strong>複視・眼球運動制限（下方視）</strong> <span class="dx-checklist__sub">眼窩底骨折／外眼筋嵌頓。小児 trap door type は緊急</span></span></label></li>
+              <li><label><input type="checkbox" data-key="e-v-area"> <span><strong>顔面感覚（V1/V2/V3）</strong> <span class="dx-checklist__sub">頬部しびれ＝眼窩下神経麻痺（眼窩底／ZMC 骨折）</span></span></label></li>
             </ul>
           </details>
 
           <!-- CT 適応・撮影方向の備忘 -->
           <details class="dx-imaging" id="imagingPanel">
-            <summary>📷 CT 適応ルール・撮影方向の備忘</summary>
+            <summary>CT 適応</summary>
+
+            <h4 class="dx-rules-l2__group">30 秒で決める（撮る／撮らない）</h4>
+            <ul class="dx-rules-l2__list">
+              <li class="dx-rule is-critical">
+                <div class="dx-rule__if"><span class="dx-rule__tag">即撮影</span><span>Canadian/NICE 高リスク 1 項目以上／GCS&lt;13／focal neuro／けいれん／開放・陥没・頭蓋底骨折所見</span></div>
+                <div class="dx-rule__then"><strong>単純頭部 CT を直ちに</strong>。clinical clearance 不能なら<strong>頸椎 CT も同時</strong>。気道不安定・Le Fort II/III は気道確保後</div>
+              </li>
+              <li class="dx-rule">
+                <div class="dx-rule__if"><span class="dx-rule__tag">原則撮影</span><span>65 歳以上 + 抗凝固/抗血小板薬／妊婦／脳室シャント／貫通損傷</span></div>
+                <div class="dx-rule__then"><strong>LOC・健忘なくても撮影</strong>（NICE CG232 抗凝固節）。家族説明 + 4–6h 後再 CT を計画（→ <a href="#dispoPanel">disposition</a>）</div>
+              </li>
+              <li class="dx-rule">
+                <div class="dx-rule__if"><span class="dx-rule__tag">撮らない</span><span>Canadian/NICE/PECARN 全項目陰性 + 症状安定 + 抗凝固なし</span></div>
+                <div class="dx-rule__then"><strong>頭蓋内損傷リスク &lt;0.5%</strong>（Canadian NPV ~100%、PECARN ciTBI &lt;0.05%）。書面交付して帰宅（→ <a href="#dispoPanel">disposition</a>）</div>
+              </li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">成人軽症（GCS 13–15）の CT 適応</h4>
             <ul class="dx-imaging__list">
-              <li><strong>Canadian CT Head Rule（成人 GCS 13–15）</strong>：高リスク＝受傷 2h 後 GCS&lt;15／開放・陥没・頭蓋底骨折／嘔吐 ≥2 回／65 歳以上／中等度＝健忘 ≥30 分／危険機転（歩行者対車・車外放出・1 m or 階段 5 段以上の転落）</li>
+              <li><strong>Canadian CT Head Rule</strong>：高リスク＝受傷 2h 後 GCS&lt;15／開放・陥没・頭蓋底骨折／嘔吐 ≥2 回／65 歳以上／中等度＝健忘 ≥30 分／危険機転（歩行者対車・車外放出・1 m or 階段 5 段以上の転落）</li>
               <li><strong>Canadian の適用外</strong>：GCS&lt;13、抗凝固・抗血小板薬、けいれん、貫通損傷、脳室シャント、妊婦、16 歳未満 → <strong>低い閾値で CT</strong></li>
               <li><strong>NICE CG232</strong>：1h 以内＝GCS&lt;13／2h 後 GCS&lt;15／開放・陥没・頭蓋底骨折／けいれん／嘔吐 ≥1 回／focal neuro。8h 以内＝65 歳以上+LOC or 健忘／危険機転／前向健忘 ≥30 分／<strong>抗凝固薬</strong>（GCS 15 でも原則撮影）</li>
-              <li><strong>PECARN（&lt;18 歳）</strong>：2 歳未満＝GCS≤14／意識変容／頭蓋骨触知異常／非前頭部血腫／LOC≥5 秒／重症機転／親が「いつもと違う」。2 歳以上＝GCS≤14／意識変容／頭蓋底骨折所見／LOC／嘔吐／重症機転／重度頭痛。該当なしで CT 不要、中間層は<strong>4–6h 観察</strong></li>
-              <li><strong>頭部単純 CT</strong>：脳実質条件 + <strong>骨条件</strong>必須</li>
-              <li><strong>頸椎 CT</strong>：高エネ・神経所見・酩酊で評価困難な場合に<strong>セットでオーダー</strong></li>
-              <li><strong>側頭骨薄スライス／顔面 CT</strong>：頭蓋底骨折・顔面外傷の追加評価</li>
-              <li><strong>再 CT</strong>：抗凝固薬例で初回陰性 → 4–6h 後再撮影／脳挫傷は 6–12h 後増大評価</li>
-              <li><strong>MRI（DWI／SWI）</strong>：機転に不釣合な意識障害（DAI 疑い）</li>
+              <li><strong>NICE 8h の運用注意</strong>：「8h 以内に撮影」の意味で 8h 待つ意味ではない。日本の運用では初診時撮影が一般的</li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">小児の CT 適応（PECARN &lt; 18 歳）</h4>
+            <ul class="dx-imaging__list">
+              <li><strong>2 歳未満</strong>：GCS≤14／意識変容／頭蓋骨触知異常／非前頭部血腫／LOC≥5 秒／重症機転／親が「いつもと違う」</li>
+              <li><strong>2 歳以上</strong>：GCS≤14／意識変容／頭蓋底骨折所見／LOC／嘔吐／重症機転／重度頭痛</li>
+              <li><strong>該当なし</strong>：CT 不要（ciTBI リスク 2 歳未満 &lt;0.05%、2 歳以上 &lt;0.02%、NPV ~100%）</li>
+              <li><strong>中間層の二段階判断</strong>：単独所見（isolated LOC ／ isolated vomit など）は<strong>観察寄り</strong>。複数所見・症状悪化・親が強く希望・経験浅い医師なら<strong>CT 寄り</strong>。4–6h ER 観察で再評価</li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">撮影プロトコル分岐</h4>
+            <ul class="dx-imaging__list">
+              <li><strong>単純頭部 CT</strong>：上記適応のデフォルト</li>
+              <li><strong>顔面 CT 追加</strong>：頬骨弓圧痛・複視・咬合異常・段差・顔面腫脹（→ 形成・鼻骨は耳鼻科）</li>
+              <li><strong>視神経管薄スライス CT</strong>：急性視力低下 + RAPD（疑い時点で眼科コール）</li>
+              <li><strong>CTA（頭蓋〜頸部）</strong>：頭蓋底骨折線あり・Le Fort II/III・頸椎骨折で BCVI（鈍的脳血管損傷）スクリーニング</li>
+              <li><strong>MRI / SWI</strong>：機転と意識障害が釣り合わない／DAI 疑い／初回 CT 陰性で症状遷延（脳外科と相談）</li>
+              <li><strong>頭蓋底骨折所見あり</strong>：撮影理由の追加に加え、<strong>経鼻挿管・経鼻胃管・経鼻ファイバー全て禁</strong>（治療方針にも影響）</li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">頸椎 CT との連動（NEXUS / Canadian C-Spine）</h4>
+            <ul class="dx-imaging__list">
+              <li><strong>clinical clearance 不能</strong>：GCS&lt;15／酩酊・薬物影響下／挿管下／focal neuro／注意散漫させる他部位重症外傷 → <strong>頭部 CT と同時に頸椎 CT</strong></li>
+              <li><strong>NEXUS 全陰性</strong>（後頸部正中圧痛なし・神経所見なし・意識正常・酩酊なし・他部位重症外傷なし）で頸椎画像不要</li>
+              <li><strong>Canadian C-Spine</strong>：65 歳以上／危険機転／上肢しびれ → 撮影。安全因子（軽症追突 etc.）+ 自動回旋 45° 可能なら撮らない</li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">再 CT</h4>
+            <ul class="dx-imaging__list">
+              <li>抗凝固薬例で初回陰性 → <strong>4–6h 後再撮影</strong></li>
+              <li>脳挫傷 → <strong>6–12h 後</strong>増大評価</li>
             </ul>
           </details>
 
           <!-- 抗凝固リバース・ICP 対応 -->
           <details class="dx-imaging" id="rxPanel">
-            <summary id="icp">💊 抗凝固リバース／ICP 亢進初期対応</summary>
+            <summary id="icp">治療リファレンス：抗凝固リバース／ICP 亢進初期対応</summary>
             <ul class="dx-imaging__list">
               <li><strong>ワルファリン</strong>：4F-PCC（PT-INR 値で量決定）+ <strong>ビタミン K 静注</strong>。FFP は 4F-PCC が無いとき代替</li>
               <li><strong>ダビガトラン</strong>：<strong>イダルシズマブ</strong>（特異的中和抗体）。不可なら活性炭（直近内服）／PCC／透析</li>
               <li><strong>第 Xa 因子阻害（リバーロキサバン・アピキサバン・エドキサバン）</strong>：<strong>アンデキサネット アルファ</strong>。無ければ 4F-PCC 代替</li>
               <li><strong>未分画ヘパリン</strong>：プロタミン硫酸（直近 1 mg / 100 単位の目安）。低分子ヘパリンは部分的に拮抗</li>
               <li><strong>抗血小板薬</strong>：原則輸血で中和できない。<strong>PATCH 試験</strong>以降ルーチン血小板輸血は推奨されない</li>
-              <li><strong>ICP 亢進初期対応</strong>：① GCS≤8 で挿管／② ヘッドアップ 30°・頸部正中／③ SBP ≥110、PaCO₂ 35–40／④ 高張食塩水（3% NaCl）or D-マンニトール／⑤ レベチラセタムでけいれん予防／⑥ 高体温・高血糖を避ける／⑦ 過換気は救命的脳ヘルニアの一時しのぎのみ（PaCO₂ 30–35、長時間禁）</li>
-              <li><strong>頭蓋底骨折</strong> id 用：<span id="dx-skullbase"></span>経鼻挿管・経鼻胃管禁。髄液漏・聴力低下・脳神経麻痺を評価</li>
+              <li><strong>ICP 亢進初期対応</strong>：GCS≤8 で挿管／ヘッドアップ 30°・頸部正中／SBP ≥110、PaCO₂ 35–40／高張食塩水（3% NaCl）or D-マンニトール／レベチラセタムでけいれん予防／高体温・高血糖を避ける／過換気は救命的脳ヘルニアの一時しのぎのみ（PaCO₂ 30–35、長時間禁）</li>
+              <li><strong>頭蓋底骨折</strong>：経鼻挿管・経鼻胃管禁。髄液漏・聴力低下・脳神経麻痺を評価</li>
               <li><strong>開頭の閾値（目安）</strong>：EDH 厚さ ≥15 mm／midline shift ≥5 mm／容量 ≥30 mL。SDH 厚さ ≥10 mm or midline shift ≥5 mm。陥没幅が頭蓋骨厚を超える／開放性。急性水頭症（IVH 合併）／進行性意識低下／瞳孔不同出現</li>
             </ul>
           </details>
 
           <!-- disposition -->
           <details class="dx-imaging" id="dispoPanel">
-            <summary>📤 disposition の目安</summary>
+            <summary>disposition の目安</summary>
+            <h4 class="dx-rules-l2__group">30 秒で決める（CT 所見ベース）</h4>
+            <ul class="dx-rules-l2__list">
+              <li class="dx-rule is-critical">
+                <div class="dx-rule__if"><span class="dx-rule__tag">入院確定</span><span>頭蓋内出血／陥没・頭蓋底骨折／GCS &lt; 13 遷延</span></div>
+                <div class="dx-rule__then"><strong>脳外コンサルト + 入院（HCU／ICU）</strong>。頭蓋底は耳鼻科、顔面骨折は形成外科（鼻骨は耳鼻科）も並走。気道・循環安定化 + 再 CT 計画</div>
+              </li>
+              <li class="dx-rule">
+                <div class="dx-rule__if"><span class="dx-rule__tag">観察入院</span><span>CT 正常 + 抗凝固／抗血小板薬</span></div>
+                <div class="dx-rule__then">原則 <strong>24h 観察入院 + 4–6h 後再 CT</strong>。強く帰宅希望なら同居者見守り + 書面再受診基準 + 電話到達確保で個別判断（カルテに根拠を明記）</div>
+              </li>
+              <li class="dx-rule">
+                <div class="dx-rule__if"><span class="dx-rule__tag">ER 観察→帰宅</span><span>CT 正常 + 抗凝固なし + 症状安定</span></div>
+                <div class="dx-rule__then"><strong>ER で 4–6h neuro check → 帰宅</strong>。帰宅例全例で <a href="頭部外傷後の注意点.html">頭部外傷後の注意点（紙）</a> を交付し家族にも口頭で説明</div>
+              </li>
+              <li class="dx-rule">
+                <div class="dx-rule__if"><span class="dx-rule__tag">CT 不要→帰宅</span><span>Canadian/NICE/PECARN で除外 + 症状安定</span></div>
+                <div class="dx-rule__then">症状安定を確認の上、<strong>書面交付 + 家族説明で帰宅</strong>。高齢者・抗凝固薬例・飲酒例・小児中間層は閾値を下げて撮影 or 4–6h 観察へ</div>
+              </li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">観察時間サマリー</h4>
             <ul class="dx-imaging__list">
-              <li><strong>CT で頭蓋内出血</strong>：脳外コンサルト + 入院（HCU／ICU）</li>
-              <li><strong>GCS &lt; 13 が遷延</strong>：入院。気道・循環安定化 + 再 CT 計画</li>
-              <li><strong>陥没／頭蓋底骨折</strong>：脳外・耳鼻科コンサルト、入院</li>
-              <li><strong>CT 正常 + 抗凝固／抗血小板薬</strong>：原則<strong> 24 時間観察入院</strong>。強く帰宅希望なら同居者見守り + 書面再受診基準 + 電話到達確保で個別判断（カルテに根拠を明記）</li>
-              <li><strong>CT 正常 + 抗凝固なし + 症状安定</strong>：4–6h ER 観察後帰宅可、書面で再受診基準</li>
-              <li><strong>独居・認知症・観察できない</strong>：見守り確保まで帰宅を控える</li>
+              <li><strong>4–6h ER neuro check</strong>：CT 正常 + 抗凝固なし + 症状安定／PECARN 中間層の小児</li>
+              <li><strong>24h 観察入院</strong>：CT 正常 + 抗凝固／抗血小板薬</li>
+              <li><strong>4–6h 後再 CT</strong>：抗凝固薬例で初回 CT 陰性</li>
+              <li><strong>6–12h 後再 CT</strong>：脳挫傷の増大評価</li>
+              <li><strong>素面に戻るまで観察</strong>：飲酒例（独居・反復来院は入院寄り、詳細は <a href="転倒.html">転倒</a> フロー「🍶 飲酒後転倒？」ポップアップ）</li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">社会軸・特殊状況</h4>
+            <ul class="dx-imaging__list">
+              <li><strong>独居・認知症・観察できない</strong>：見守り確保まで帰宅を控える（提言 9 号の死亡事例で繰り返される）</li>
               <li><strong>頸椎損傷併発疑い</strong>：頸椎カラー継続、整形・脊椎外科コンサルト</li>
-              <li><strong>失神先行</strong>：循環器・神経で原因精査（→ <a href="意識消失.html">意識消失</a>）</li>
+              <li><strong>失神先行</strong>：頭部評価だけで満足しない。循環器・神経で原因精査（→ <a href="意識消失.html">意識消失</a>）</li>
               <li><strong>NAI を疑う小児</strong>：小児科・児童相談所と連携、安易に帰宅させない</li>
               <li><strong>院内に脳外なし + 出血所見・気道不安定・GCS 低下</strong>：早期転院。電話で受け入れ確認 → CT 画像転送 → 救急車選定。搬送中は SBP ≥110、SpO₂ ≥94%、血糖 140–180 を目標</li>
             </ul>
+
+            <h4 class="dx-rules-l2__group">高齢者を帰宅させる場合の追加責任</h4>
+            <ul class="dx-rules-l2__list">
+              <li class="dx-rule is-critical">
+                <div class="dx-rule__if"><span class="dx-rule__tag">必須</span><span>高齢者（とくに抗凝固薬例）で CT 正常 → 帰宅</span></div>
+                <div class="dx-rule__then"><strong>2 週〜2 ヶ月後の慢性硬膜下血腫</strong>を必ず家族にも警告。歩行ふらつき／頭痛持続／もの忘れ／片麻痺で再診。<a href="頭部外傷後の注意点.html">leaflet</a> の elder-box を一緒に確認</div>
+              </li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">退室前ピットフォール</h4>
+            <ul class="dx-rules-l2__list">
+              <li class="dx-rule is-pitfall">
+                <div class="dx-rule__if"><span class="dx-rule__tag">注意</span><span>軽症で観察時間を短くしすぎる</span></div>
+                <div class="dx-rule__then">CT 後は<strong> ER で 4–6h の neuro check</strong>。抗凝固薬例は原則 24h 入院観察</div>
+              </li>
+              <li class="dx-rule is-pitfall">
+                <div class="dx-rule__if"><span class="dx-rule__tag">注意</span><span>初回 CT 陰性で安心して帰宅</span></div>
+                <div class="dx-rule__then">抗凝固薬例・進行所見・脳挫傷では<strong>遅発性出血</strong>あり。4–6h 後の再 CT を計画</div>
+              </li>
+              <li class="dx-rule is-pitfall">
+                <div class="dx-rule__if"><span class="dx-rule__tag">注意</span><span>帰宅説明が口頭のみ</span></div>
+                <div class="dx-rule__then"><strong>書面で再受診基準</strong>を渡し家族にも口頭で説明（意識低下・頭痛増強・嘔吐反復・けいれん・麻痺・性格変化・髄液漏）</div>
+              </li>
+              <li class="dx-rule is-pitfall">
+                <div class="dx-rule__if"><span class="dx-rule__tag">注意</span><span>独居・認知症で観察体制が組めない</span></div>
+                <div class="dx-rule__then"><strong>見守りが確保できるまで帰宅を控える</strong>（提言 9 号の死亡事例で繰り返される）</div>
+              </li>
+              <li class="dx-rule is-pitfall">
+                <div class="dx-rule__if"><span class="dx-rule__tag">注意</span><span>抗血小板薬例で血小板輸血をルーチン</span></div>
+                <div class="dx-rule__then"><strong>PATCH 試験</strong>以降、ルーチン血小板輸血は推奨されない。緊急開頭時に脳外と個別判断</div>
+              </li>
+              <li class="dx-rule is-pitfall">
+                <div class="dx-rule__if"><span class="dx-rule__tag">注意</span><span>失神先行例の頭部外傷</span></div>
+                <div class="dx-rule__then">頭部評価だけで満足しない。<strong>失神原因の精査</strong>（→ <a href="意識消失.html">意識消失</a>）</div>
+              </li>
+              <li class="dx-rule is-pitfall">
+                <div class="dx-rule__if"><span class="dx-rule__tag">注意</span><span>意識障害を外傷だけで説明</span></div>
+                <div class="dx-rule__then">低血糖・薬物・電解質・脳卒中などの<strong>外傷以外の原因</strong>も並走（→ <a href="意識障害.html">意識障害</a>）</div>
+              </li>
+            </ul>
+
+            <h4 class="dx-rules-l2__group">退室前チェック</h4>
+            <ul class="dx-checklist__list">
+              <li><label><input type="checkbox" data-key="dispo-leaflet"> <span><strong>頭部外傷後の注意点（紙）を交付した</strong> <span class="dx-checklist__sub">家族にも口頭で内容を共有</span></span></label></li>
+              <li><label><input type="checkbox" data-key="dispo-redflag"> <span><strong>再受診基準を口頭で説明した</strong> <span class="dx-checklist__sub">意識低下・頭痛増強・嘔吐反復・けいれん・麻痺・性格変化・髄液漏</span></span></label></li>
+              <li><label><input type="checkbox" data-key="dispo-observer"> <span><strong>同居者見守りまたは電話到達を確保した</strong> <span class="dx-checklist__sub">独居・認知症は帰宅を控える</span></span></label></li>
+              <li><label><input type="checkbox" data-key="dispo-restrict"> <span><strong>24h は飲酒・激しい運動・運転を控える指示</strong> <span class="dx-checklist__sub">けいれん発症例は運転制限期間（道交法・公安委員会申告）も伝える</span></span></label></li>
+              <li><label><input type="checkbox" data-key="dispo-anticoag-plan"> <span><strong>抗凝固薬例は 4–6h 後再 CT or 24h 観察の方針を確定</strong> <span class="dx-checklist__sub">遅発性出血の説明と書面記録</span></span></label></li>
+              <li><label><input type="checkbox" data-key="dispo-csdh"> <span><strong>高齢者には慢性硬膜下血腫（2 週〜2 ヶ月後）を警告</strong> <span class="dx-checklist__sub">leaflet の elder-box を一緒に確認</span></span></label></li>
+            </ul>
+
+            <a class="dx-node dx-node--external" href="頭部外傷後の注意点.html" style="margin-top: 14px;">
+              <div class="dx-node__title">頭部外傷後の注意点（紙で渡す）</div>
+              <div class="dx-node__sub">印刷 → 家族にも口頭で説明 → 退室前チェック完了</div>
+            </a>
           </details>
 
           <!-- 出典・関連リンク -->
           <details class="dx-imaging" id="refsPanel">
-            <summary>📚 出典・関連リンク</summary>
+            <summary>出典・関連リンク</summary>
             <ul class="dx-imaging__list">
               <li><strong>Canadian CT Head Rule</strong>：Stiell IG ほか. <em>Lancet.</em> 2001;357(9266):1391-1396.</li>
               <li><strong>NICE CG232 Head injury: assessment and early management</strong>（2023 update）.</li>
@@ -746,8 +878,9 @@
               <li><strong>PATCH 試験</strong>：Baharoglu MI ほか. <em>Lancet.</em> 2016;387(10038):2605-2613.（抗血小板薬服用中の頭蓋内出血に対する血小板輸血）</li>
               <li><strong>Falls Decision Rule</strong>：Abdulaziz K ほか. <em>CMAJ.</em> 2023;195(47):E1614.</li>
               <li><strong>日本医療安全調査機構 提言 9 号</strong>（2019）：入院中の転倒・転落による頭部外傷に係る死亡事例の分析.</li>
-              <li>関連ページ：<a href="転倒.html">転倒</a>／<a href="転倒.html#s3-alcohol">飲酒後転倒</a>／<a href="頸部外傷・頸部痛.html">頸部外傷・頸部痛</a>／<a href="疾患詳細/頸椎損傷.html">頸椎損傷</a>／<a href="意識消失.html">意識消失</a>／<a href="意識障害.html">意識障害</a>／<a href="頭痛.html">頭痛</a>／<a href="疾患詳細/神経診察.html">神経診察</a></li>
-              <li>#ER #救急 #頭部外傷 #TBI #CanadianCTHeadRule #PECARN #NICEcg232 #抗凝固薬 #DOAC #SDH #EDH #慢性硬膜下血腫 #頭蓋底骨折</li>
+              <li><strong>頭蓋顔面・頸部外傷</strong>：耳鼻咽喉科・頭頸部外科教科書 第 13 章（頭蓋顔面骨折／鼻骨骨折／Le Fort 骨折／頬骨上顎複合体骨折／下顎骨骨折／視神経管骨折）。</li>
+              <li>関連ページ：<a href="転倒.html">転倒</a>／<a href="頸部外傷・頸部痛.html">頸部外傷・頸部痛</a>／<a href="疾患詳細/頸椎損傷.html">頸椎損傷</a>／<a href="意識消失.html">意識消失</a>／<a href="意識障害.html">意識障害</a>／<a href="頭痛.html">頭痛</a>／<a href="疾患詳細/神経診察.html">神経診察</a></li>
+              <li>#ER #救急 #頭部外傷 #TBI #CanadianCTHeadRule #PECARN #NICEcg232 #抗凝固薬 #DOAC #SDH #EDH #慢性硬膜下血腫 #頭蓋底骨折 #顔面骨折 #LeFort #鼻中隔血腫 #視神経管骨折</li>
             </ul>
           </details>
 
@@ -771,17 +904,6 @@
 
   <script>
   (function(){
-    const flowBox = document.getElementById('flowBox');
-    const flowBoxClose = document.getElementById('flowBoxClose');
-
-    if (flowBox && flowBoxClose) {
-      const dismiss = () => { flowBox.hidden = true; };
-      flowBoxClose.addEventListener('click', dismiss);
-      flowBoxClose.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); dismiss(); }
-      });
-    }
-
     // 来院後チェックリスト：localStorage 永続化 + per-panel リセット
     const STORAGE_KEY = 'head-injury-dx-checklist-v1';
     let stored = {};
@@ -810,7 +932,7 @@
     });
 
     // パネル開閉状態を localStorage で復元
-    ['historyPanel', 'examPanel', 'rulesL2Panel', 'imagingPanel', 'rxPanel', 'dispoPanel', 'refsPanel'].forEach(id => {
+    ['historyPanel', 'examPanel', 'ctReadPanel', 'imagingPanel', 'rxPanel', 'dispoPanel', 'refsPanel'].forEach(id => {
       const el = document.getElementById(id);
       if (!el) return;
       const key = `head-injury-${id}-open-v1`;
@@ -825,6 +947,113 @@
     if (navBack) navBack.addEventListener('click', () => {
       if (window.history.length > 1) history.back();
       else window.location.href = 'index.html';
+    });
+
+    // === Peek プレビュー ===
+    // フローのノードで内部アンカー（#...）はモーダルで対象セクションを
+    // クローン表示。外部ページへのリンク（.html）は通常遷移。長押しの OS
+    // メニューも抑制してタップと同じ挙動に統一。
+    const PEEK_SELECTOR = 'a.dx-node[href^="#"]';
+    let peekOverlay = null;
+
+    function createPeekOverlay() {
+      const overlay = document.createElement('div');
+      overlay.className = 'peek-modal';
+      overlay.innerHTML =
+        '<div class="peek-modal__sheet" role="dialog" aria-modal="true" aria-labelledby="peekTitle">' +
+          '<div class="peek-modal__handle" aria-hidden="true"></div>' +
+          '<header class="peek-modal__header">' +
+            '<span class="peek-modal__title" id="peekTitle">プレビュー</span>' +
+            '<button type="button" class="peek-modal__close" aria-label="閉じる">✕</button>' +
+          '</header>' +
+          '<div class="peek-modal__body"></div>' +
+        '</div>';
+      document.body.appendChild(overlay);
+      return overlay;
+    }
+
+    // 対象 ID をピーク向けに解決。dx-rule__then のように内側の div を指す
+    // 場合は親 <li class="dx-rule"> を採用して if/then を一緒に見せる。
+    function resolvePeekTarget(id) {
+      const el = document.getElementById(id);
+      if (!el) return null;
+      const rule = el.closest('li.dx-rule');
+      if (rule) return rule;
+      return el;
+    }
+
+    function deriveTitle(target, id) {
+      // details はサマリーをタイトルに
+      if (target.tagName === 'DETAILS') {
+        const sum = target.querySelector('summary');
+        if (sum) return sum.textContent.trim();
+      }
+      // dx-rule なら if 条件をタイトルに
+      const ifNode = target.querySelector('.dx-rule__if');
+      if (ifNode) {
+        const clone = ifNode.cloneNode(true);
+        clone.querySelectorAll('.dx-rule__tag').forEach(t => t.remove());
+        return clone.textContent.trim();
+      }
+      // dx-node 自身ならタイトル
+      const ntitle = target.querySelector('.dx-node__title');
+      if (ntitle) return ntitle.textContent.trim();
+      return id;
+    }
+
+    function openPeek(id) {
+      const target = resolvePeekTarget(id);
+      if (!target) return false;
+      if (!peekOverlay) peekOverlay = createPeekOverlay();
+
+      peekOverlay.querySelector('.peek-modal__title').textContent = deriveTitle(target, id);
+
+      const bodyEl = peekOverlay.querySelector('.peek-modal__body');
+      bodyEl.innerHTML = '';
+      const clone = target.cloneNode(true);
+      // クローン内の ID 重複を防ぐ
+      clone.removeAttribute('id');
+      clone.querySelectorAll('[id]').forEach(el => el.removeAttribute('id'));
+      // details は開いた状態にして、サマリー操作はピーク内では無効化
+      if (clone.tagName === 'DETAILS') clone.open = true;
+      clone.querySelectorAll('details').forEach(d => { d.open = true; });
+      bodyEl.appendChild(clone);
+      bodyEl.scrollTop = 0;
+
+      peekOverlay.classList.add('is-open');
+      document.body.style.overflow = 'hidden';
+      return true;
+    }
+
+    function closePeek() {
+      if (!peekOverlay) return;
+      peekOverlay.classList.remove('is-open');
+      document.body.style.overflow = '';
+    }
+
+    document.addEventListener('click', (e) => {
+      if (peekOverlay && peekOverlay.classList.contains('is-open')) {
+        if (e.target.classList.contains('peek-modal__close')) { e.preventDefault(); closePeek(); return; }
+        if (e.target === peekOverlay) { closePeek(); return; }
+      }
+      const link = e.target.closest(PEEK_SELECTOR);
+      if (!link) return;
+      const href = link.getAttribute('href');
+      if (!href || href.length <= 1 || href[0] !== '#') return;
+      e.preventDefault();
+      openPeek(href.substring(1));
+    });
+
+    document.addEventListener('contextmenu', (e) => {
+      const link = e.target.closest(PEEK_SELECTOR);
+      if (!link) return;
+      e.preventDefault();
+      const href = link.getAttribute('href');
+      if (href && href.length > 1 && href[0] === '#') openPeek(href.substring(1));
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && peekOverlay && peekOverlay.classList.contains('is-open')) closePeek();
     });
   })();
   </script>

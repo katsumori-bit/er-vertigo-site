@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="color-scheme" content="light dark" />
+  <title>急性硬膜下血腫 | ER ノート</title>
+  <link rel="stylesheet" href="../er-note.css" />
+  <style>
+    .dx-quick { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 10px 0 4px; }
+    @media (max-width: 640px) { .dx-quick { grid-template-columns: 1fr 1fr; } }
+    .dx-quick__btn {
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 2px; padding: 10px 6px; border-radius: 10px;
+      background: color-mix(in srgb, var(--accent) 10%, var(--surface));
+      border: 1.5px solid var(--accent); color: var(--text); text-decoration: none;
+      font-weight: 700; font-size: 13px; line-height: 1.2; text-align: center; cursor: pointer;
+      transition: background 120ms ease;
+    }
+    .dx-quick__btn:hover { background: color-mix(in srgb, var(--accent) 18%, var(--surface)); }
+    .dx-quick__sub { font-size: 10.5px; font-weight: 500; color: var(--muted); }
+
+    .dx-tri { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 6px 0 4px; align-items: start; }
+    .dx-tri__card {
+      background: var(--surface); border-radius: 10px; padding: 10px 12px;
+      border: 1.5px solid color-mix(in srgb, var(--text) 18%, transparent);
+    }
+    .dx-tri__card--vasc { border-color: #c0392b; background: color-mix(in srgb, #c0392b 6%, var(--surface)); }
+    .dx-tri__card--neuro { border-color: #b5651d; background: color-mix(in srgb, #b5651d 6%, var(--surface)); }
+    .dx-tri__title { display: flex; align-items: center; gap: 6px; font-weight: 800; font-size: 13.5px; margin-bottom: 4px; }
+    .dx-tri__card--vasc .dx-tri__title { color: #c0392b; }
+    .dx-tri__card--neuro .dx-tri__title { color: #b5651d; }
+    .dx-tri__list { margin: 0; padding-left: 18px; font-size: 12.5px; line-height: 1.5; }
+    .dx-tri__list li { margin: 2px 0; }
+
+    details.dx-tri__card { padding: 0; }
+    details.dx-tri__card > summary {
+      list-style: none; cursor: pointer; padding: 10px 12px;
+      display: flex; align-items: center; gap: 6px; font-weight: 800; font-size: 13.5px;
+    }
+    details.dx-tri__card > summary::-webkit-details-marker { display: none; }
+    details.dx-tri__card > summary::after { content: "▸"; margin-left: auto; font-size: 12px; color: var(--muted); transition: transform 120ms ease; }
+    details.dx-tri__card[open] > summary::after { transform: rotate(90deg); }
+    details.dx-tri__card--vasc > summary { color: #c0392b; }
+    details.dx-tri__card--neuro > summary { color: #b5651d; }
+    details.dx-tri__card > .dx-tri__list { padding: 0 14px 12px 30px; }
+    details.dx-tri__card > .dx-tri__hint { padding: 0 14px 6px 30px; font-size: 11px; color: var(--muted); }
+
+    details.dx-box {
+      background: var(--surface); border: 1.5px solid color-mix(in srgb, var(--text) 18%, transparent);
+      border-radius: 10px; margin: 10px 0; scroll-margin-top: 8px;
+    }
+    details.dx-box > summary {
+      list-style: none; cursor: pointer; padding: 12px 14px;
+      display: flex; align-items: center; gap: 8px; font-weight: 800; font-size: 14.5px;
+    }
+    details.dx-box > summary::-webkit-details-marker { display: none; }
+    details.dx-box > summary::after { content: "▸"; margin-left: auto; font-size: 13px; color: var(--muted); transition: transform 120ms ease; }
+    details.dx-box[open] > summary::after { transform: rotate(90deg); }
+    details.dx-box[open] { border-color: var(--accent); }
+    details.dx-box > .dx-box__body { padding: 0 14px 14px; }
+
+    @media (max-width: 640px) {
+      .dx-quick { gap: 6px; }
+      .dx-quick__btn { padding: 8px 4px; font-size: 11.5px; border-radius: 8px; }
+      .dx-quick__sub { font-size: 9.5px; }
+      .dx-tri { grid-template-columns: 1fr; gap: 8px; }
+      .dx-tri__card { padding: 8px 10px; }
+      details.dx-tri__card > summary { padding: 8px 10px; font-size: 12.5px; }
+      details.dx-tri__card > .dx-tri__list { padding: 0 12px 10px 26px; }
+      .dx-tri__title { font-size: 12.5px; }
+      .dx-tri__list { font-size: 12px; }
+      details.dx-box > summary { padding: 10px 12px; font-size: 13.5px; }
+      details.dx-box > .dx-box__body { padding: 0 12px 12px; }
+    }
+
+    .dx-step {
+      margin: 18px 0 6px; display: flex; align-items: center; gap: 10px;
+      color: var(--muted); font-size: 11.5px; font-weight: 800; letter-spacing: 0.1em;
+    }
+    .dx-step::before, .dx-step::after { content: ""; flex: 1; height: 1px; background: color-mix(in srgb, var(--text) 18%, transparent); }
+
+    .dx-template {
+      background: color-mix(in srgb, var(--text) 4%, var(--surface));
+      border-left: 3px solid var(--accent); border-radius: 6px;
+      padding: 10px 12px; margin: 6px 0 0; font-size: 13px; line-height: 1.6;
+      white-space: pre-wrap; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+    .dx-template__hint { font-size: 11px; color: var(--muted); margin: 0 0 4px; }
+
+    .dx-alert {
+      background: color-mix(in srgb, #c0392b 8%, var(--surface));
+      border: 1.5px solid #c0392b; border-radius: 10px;
+      padding: 10px 12px; margin: 10px 0; color: var(--text); font-size: 13px;
+    }
+    .dx-alert strong { color: #c0392b; }
+
+    .dx-typical {
+      background: color-mix(in srgb, var(--accent) 5%, var(--surface));
+      border: 1.5px solid color-mix(in srgb, var(--accent) 50%, transparent);
+      border-radius: 10px; padding: 10px 14px; margin: 10px 0 4px;
+    }
+    .dx-typical__title { font-weight: 800; font-size: 13.5px; color: var(--accent); margin-bottom: 4px; }
+    .dx-typical__list { margin: 0; padding-left: 18px; font-size: 12.5px; line-height: 1.55; }
+    .dx-typical__list li { margin: 2px 0; }
+    @media (max-width: 640px) {
+      .dx-typical { padding: 8px 10px; }
+      .dx-typical__title { font-size: 12.5px; }
+      .dx-typical__list { font-size: 12px; }
+    }
+    .dx-box__body h3 {
+      font-size: 14px; font-weight: 800;
+      margin: 14px 0 6px;
+      color: var(--accent);
+      padding-bottom: 4px;
+      border-bottom: 1px dashed color-mix(in srgb, var(--text) 22%, transparent);
+    }
+    .dx-box__body h3:first-child { margin-top: 4px; }
+    @media (max-width: 640px) { .dx-box__body h3 { font-size: 12.5px; margin: 10px 0 4px; } }
+  </style>
+</head>
+<body>
+  <header class="hokuto-top">
+    <a class="hokuto-top__btn" href="../薬剤情報.html"><span class="hokuto-top__icon">℞</span><span>薬剤情報</span></a>
+    <a class="hokuto-top__btn" href="../表計算.html"><span class="hokuto-top__icon">⊞</span><span>表計算</span></a>
+  </header>
+
+  <main class="hokuto-main">
+    <article class="note-shell">
+      <h1 class="page-title">急性硬膜下血腫（acute subdural hematoma, SDH）</h1>
+
+      <div class="dx-alert">
+        <strong>高齢者・抗凝固薬例で多い</strong>。<strong>同一平面転倒でも起こる</strong>ことを念頭に CT 閾値を下げる。EDH より予後不良で、<strong>手術閾値を満たせば緊急開頭血腫除去</strong>。抗凝固薬例はサイズ問わず脳外コンサルト＋即リバース。受傷後数週〜数ヶ月で<strong>慢性 SDH</strong> に移行することもある。
+      </div>
+
+      <nav class="dx-quick" aria-label="クイックタップ">
+        <button class="dx-quick__btn" type="button" data-target="er-actions">
+          <span>ER で打つ手</span><span class="dx-quick__sub">初期処置</span>
+        </button>
+        <button class="dx-quick__btn" type="button" data-target="consult-check">
+          <span>コンサル前確認</span><span class="dx-quick__sub">脳外を呼ぶ前に</span>
+        </button>
+        <button class="dx-quick__btn" type="button" data-target="img-plan">
+          <span>画像と治療方針</span><span class="dx-quick__sub">手術閾値</span>
+        </button>
+        <button class="dx-quick__btn" type="button" data-target="consult">
+          <span>コンサル文</span><span class="dx-quick__sub">そのまま貼れる</span>
+        </button>
+      </nav>
+
+      <section class="dx-typical">
+        <div class="dx-typical__title">典型像（疑うきっかけ）</div>
+        <ul class="dx-typical__list">
+          <li>機転：<strong>高齢者の転倒（同一平面でも）</strong>、抗凝固薬例、高エネ外傷。bridging vein 損傷が主原因</li>
+          <li>CT：硬膜とくも膜の間に<strong>三日月型（crescent）</strong>の高吸収域。<strong>縫合線を越える</strong></li>
+          <li>意識障害・片麻痺・瞳孔不同が頻度高い</li>
+          <li>EDH より広く薄く広がる、ただし<strong>脳実質損傷を伴いやすく予後不良</strong></li>
+          <li>受傷数週〜数ヶ月後に<strong>慢性 SDH</strong>として再来することあり（歩行障害・認知低下・片麻痺）</li>
+        </ul>
+        <p style="margin: 6px 0 0; font-size: 11.5px; color: var(--muted);">→ 詳細所見は <strong>同時並行 2 軸</strong> と <strong>コンサル前確認</strong> へ</p>
+      </section>
+
+      <div class="dx-step"><span>同時並行で評価する 2 軸（治療方針を分ける所見）</span></div>
+      <div class="dx-tri">
+
+        <details class="dx-tri__card dx-tri__card--vasc" open>
+          <summary>手術適応の判定</summary>
+          <p class="dx-tri__hint">下記が 1 つでも該当すれば<strong>緊急開頭血腫除去</strong>。脳外即時コンサルト。</p>
+          <ul class="dx-tri__list">
+            <li><strong>厚さ ≥ 10 mm</strong></li>
+            <li><strong>midline shift ≥ 5 mm</strong></li>
+            <li><strong>進行性意識低下</strong>（GCS が 2 点以上低下）</li>
+            <li><strong>瞳孔不同・対光反射消失</strong></li>
+            <li>上記なし＋ GCS 安定 → 集中観察、1〜2h ごと neuro check、4〜6h 後再 CT</li>
+          </ul>
+        </details>
+
+        <details class="dx-tri__card dx-tri__card--vasc" open>
+          <summary>抗凝固薬リバース</summary>
+          <p class="dx-tri__hint">高齢者では抗凝固薬服用率高い。サイズ問わず<strong>即リバース</strong>。</p>
+          <ul class="dx-tri__list">
+            <li><strong>ワルファリン</strong>：<strong>4F-PCC</strong>（INR 2–4 で 25 U/kg、INR 4–6 で 35 U/kg、INR >6 で 50 U/kg）+ <strong>ビタミン K 10 mg 静注</strong>を併用</li>
+            <li><strong>ダビガトラン</strong>：イダルシズマブ 5 g 静注</li>
+            <li><strong>第 Xa 因子阻害（リバーロキサバン・アピキサバン・エドキサバン）</strong>：アンデキサネット アルファ。未採用施設では 4F-PCC 50 U/kg 代替</li>
+            <li><strong>未分画ヘパリン</strong>：プロタミン硫酸 1 mg / 100 U（最大 50 mg、5 分以上）</li>
+            <li><strong>抗血小板薬</strong>：PATCH 試験（自発性 ICH 対象）以降ルーチン血小板輸血は推奨されない。緊急開頭時に脳外と個別判断</li>
+            <li><strong>TXA（CRASH-3）</strong>：受傷 3h 以内・GCS 9–15 で 1 g/10 分 + 1 g/8h（SDH も死亡率改善の可能性）</li>
+          </ul>
+        </details>
+      </div>
+
+      <details class="dx-box" id="er-actions">
+        <summary><span>ER で打つ手（初期処置）</span></summary>
+        <div class="dx-box__body">
+          <ol>
+            <li>バイタル・GCS・<strong>瞳孔径と対光反射</strong>・四肢麻痺を即時記録、経時で reassess</li>
+            <li>頭部 CT を即時オーダー（脳実質条件 + 骨条件）</li>
+            <li><strong>抗凝固薬・抗血小板薬の有無を確認</strong>（高齢者では本人申告だけで信用しない、お薬手帳・家族・薬局確認）、リバース準備</li>
+            <li>GCS ≤ 8 / 切迫ヘルニア徴候あり → 気道確保（挿管）、in-line stabilization で頸椎保護</li>
+            <li><strong>脳外科即時コンサルト</strong>（CT 画像を確認できる状態で連絡）</li>
+            <li>ICP 亢進対応：ヘッドアップ 30°・頸部正中・SBP ≥ 110・PaCO₂ 35–40・浸透圧療法</li>
+            <li>けいれん予防：レベチラセタム</li>
+            <li>絶飲食、ライン確保、術前検査</li>
+            <li>頸椎評価（→ <a href="../頸部外傷・頸部痛.html">頸部外傷・頸部痛</a>）</li>
+            <li>慢性 SDH へ移行リスクの説明（受傷から数週後の歩行障害・認知低下・片麻痺で再受診）</li>
+          </ol>
+        </div>
+      </details>
+
+      <details class="dx-box" id="consult-check">
+        <summary><span>脳外科コンサルト前に確認すべきこと</span></summary>
+        <div class="dx-box__body">
+          <p>SDH と診断したら、コンサル前に以下を整理しておく。</p>
+          <ul>
+            <li><strong>受傷機転・時刻</strong>：同一平面転倒か高エネ外傷か</li>
+            <li><strong>意識経過</strong>：受傷時 LOC、現在の GCS と推移</li>
+            <li><strong>バイタル</strong>：SBP・HR・SpO₂・Cushing 反応の有無</li>
+            <li><strong>瞳孔径と対光反射</strong>：左右差・RAPD</li>
+            <li><strong>神経学的所見</strong>：麻痺の有無・部位、けいれんの有無</li>
+            <li><strong>気道</strong>：自発呼吸／挿管管理中</li>
+            <li><strong>画像所見</strong>：厚さ・midline shift・部位、頭蓋骨折の有無、他部位出血の有無</li>
+            <li><strong>抗凝固薬・抗血小板薬</strong>：薬剤名、最終内服時刻、<strong>リバース済みか</strong>（製剤・用量・時刻）</li>
+            <li><strong>合併損傷</strong>：頸椎、顔面骨折、多発外傷</li>
+            <li><strong>背景情報</strong>：年齢・性別・既往歴・受傷前 ADL、認知症の有無</li>
+            <li><strong>ER 処置の記録</strong>：気道確保、ICP 対応、けいれん予防、リバース</li>
+            <li><strong>術前検査</strong>：採血・心電図・胸部 X 線の済／未</li>
+          </ul>
+        </div>
+      </details>
+
+      <details class="dx-box" id="img-plan">
+        <summary><span>画像所見と治療方針</span></summary>
+        <div class="dx-box__body">
+
+          <h3>① 画像で見る項目</h3>
+          <ul>
+            <li><strong>形状</strong>：硬膜とくも膜の間に<strong>三日月型（crescent）</strong>の高吸収域</li>
+            <li><strong>縫合線を越える</strong>のが特徴（EDH と区別）</li>
+            <li><strong>厚さ・midline shift</strong>を計測</li>
+            <li>脳実質損傷（脳挫傷・浮腫）の合併が多い</li>
+            <li>頭蓋内他部位の出血（EDH／SAH／脳挫傷）を同時に評価</li>
+          </ul>
+
+          <h3>② 手術適応（BTF ガイドライン目安）</h3>
+          <div class="table-wrap"><table>
+            <thead><tr><th>所見</th><th>マネジメント</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><strong>厚さ ≥ 10 mm／midline shift ≥ 5 mm</strong></td>
+                <td><strong>緊急開頭血腫除去</strong></td>
+              </tr>
+              <tr>
+                <td>進行性意識低下／瞳孔不同出現</td>
+                <td><strong>緊急開頭血腫除去</strong></td>
+              </tr>
+              <tr>
+                <td>上記なし + GCS 安定 + 抗凝固薬なし</td>
+                <td>集中観察、1〜2h neuro check、4〜6h 後再 CT</td>
+              </tr>
+              <tr>
+                <td>抗凝固薬・抗血小板薬服用例</td>
+                <td>サイズ問わず脳外コンサルト + <strong>即リバース</strong></td>
+              </tr>
+            </tbody>
+          </table></div>
+
+          <h3>③ 慢性硬膜下血腫への移行に注意</h3>
+          <ul>
+            <li>受傷数週〜数ヶ月後（典型は 2〜8 週）に<strong>慢性 SDH</strong>として再来することがある</li>
+            <li>症状：歩行障害・認知低下・片麻痺・頭痛</li>
+            <li>高齢者・抗凝固薬例で特に多い</li>
+            <li>退院時に<strong>頭部外傷後の注意点</strong>（紙）で必ず説明（→ <a href="../頭部外傷後の注意点.html">頭部外傷後の注意点</a>）</li>
+            <li>受傷を本人が忘れていることも多い</li>
+            <li>治療：穿頭ドレナージが第一選択。<strong>中硬膜動脈塞栓術（MMA embolization）</strong>が再発予防や初回治療として有効（EMBOLISE / MAGIC-MT / STEM 2024-2025 RCT）— 専門施設で導入進行中</li>
+          </ul>
+        </div>
+      </details>
+
+      <details class="dx-box" id="consult">
+        <summary><span>コンサル文（カルテに貼る）</span></summary>
+        <div class="dx-box__body">
+          <p class="dx-template__hint">脳神経外科宛て。【目的】【疾患】【既往歴】【内服薬】【ADL】【現病歴】の順。緊急性を冒頭で明示。</p>
+          <div class="dx-template">【目的】緊急ご相談（開頭血腫除去のご検討）
+【疾患】#1 急性硬膜下血腫（[右/左／両側]、厚さ ○ mm／midline shift ○ mm）
+　　　 [#2 脳挫傷／#2 外傷性くも膜下出血／#2 頭蓋骨折／#2 頸椎合併 など]
+【既往歴】[特記事項なし／○○（認知症・てんかん など）]
+【内服薬】[なし／ワーファリン／DOAC ○○／抗血小板薬 ○○]（最終内服 [時刻]、リバース [製剤・用量・時刻／未]）
+【ADL（受傷前）】[独歩／杖／介助／車椅子]
+【現病歴】[年齢]歳[男/女]性。[受傷機転：同一平面転倒／高所転落／交通／殴打 など]で受傷し、[来院経緯]で来院。
+ ・受傷後経過：[受傷時 LOC の有無、現在までの意識変化]
+ ・バイタル：SBP ○、HR ○、SpO₂ ○%、Cushing 反応 [なし／あり]
+ ・GCS：E○V○M○（経時：○→○）、瞳孔：○/○ mm、対光反射 [良好／不良／消失]
+ ・神経：[四肢麻痺なし／右/左片麻痺]、けいれん [なし／あり]
+ ・気道：[自発呼吸／挿管管理中]
+ ・画像：頭部 CT で[三日月型 SDH、midline shift、脳挫傷／他部位出血の有無]
+ ・頸椎：[問題なし／○○]
+ ・ER 処置：[ICP 対応／レベチラセタム／抗凝固リバース時刻]
+ ・術前検査：採血・心電図・胸部 X 線 [済／未]
+よろしくお願いいたします。</div>
+        </div>
+      </details>
+
+      <details class="dx-box">
+        <summary><span>出典</span></summary>
+        <div class="dx-box__body">
+          <ul>
+            <li>Brain Trauma Foundation: Guidelines for the Management of Severe Traumatic Brain Injury（4th ed., 2016 / 更新系列）.</li>
+            <li>Bullock MR ほか. Surgical management of acute subdural hematomas. <em>Neurosurgery.</em> 2006;58(3 Suppl):S16-S24.</li>
+            <li>PATCH 試験：Baharoglu MI ほか. <em>Lancet.</em> 2016;387(10038):2605-2613.</li>
+            <li>CRASH-3 trial：<em>Lancet.</em> 2019;394(10210):1713-1723.</li>
+            <li>EMBOLISE / MAGIC-MT / STEM trial：MMA embolization for chronic subdural hematoma. 2024-2025.</li>
+          </ul>
+        </div>
+      </details>
+
+    </article>
+  </main>
+
+  <nav class="hokuto-bottom">
+    <button class="hokuto-bottom__btn" type="button" id="navBack"><span class="hokuto-bottom__icon">←</span><span>戻る</span></button>
+    <a class="hokuto-bottom__btn" href="../ツール.html"><span class="hokuto-bottom__icon">⚙</span><span>ツール</span></a>
+    <a class="hokuto-bottom__btn" href="../index.html"><span class="hokuto-bottom__icon">⌂</span><span>ホーム</span></a>
+  </nav>
+
+  <script>
+  (function(){
+    document.querySelectorAll('.dx-quick__btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.dataset.target;
+        const target = document.getElementById(id);
+        if (!target) return;
+        target.open = true;
+        target.scrollIntoView({behavior: 'smooth', block: 'start'});
+      });
+    });
+    const navBack = document.getElementById('navBack');
+    if (navBack) navBack.addEventListener('click', () => {
+      if (window.history.length > 1) history.back();
+      else window.location.href = '../index.html';
+    });
+  })();
+  </script>
+</body>
+</html>

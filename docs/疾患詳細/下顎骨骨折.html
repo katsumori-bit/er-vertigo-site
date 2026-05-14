@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="color-scheme" content="light dark" />
+  <title>下顎骨骨折 | ER ノート</title>
+  <link rel="stylesheet" href="../er-note.css" />
+  <style>
+    .dx-quick { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 10px 0 4px; }
+    @media (max-width: 640px) { .dx-quick { grid-template-columns: 1fr 1fr; } }
+    .dx-quick__btn {
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 2px; padding: 10px 6px; border-radius: 10px;
+      background: color-mix(in srgb, var(--accent) 10%, var(--surface));
+      border: 1.5px solid var(--accent); color: var(--text); text-decoration: none;
+      font-weight: 700; font-size: 13px; line-height: 1.2; text-align: center; cursor: pointer;
+      transition: background 120ms ease;
+    }
+    .dx-quick__btn:hover { background: color-mix(in srgb, var(--accent) 18%, var(--surface)); }
+    .dx-quick__sub { font-size: 10.5px; font-weight: 500; color: var(--muted); }
+
+    .dx-tri { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin: 6px 0 4px; align-items: start; }
+    .dx-tri__card {
+      background: var(--surface); border-radius: 10px; padding: 10px 12px;
+      border: 1.5px solid color-mix(in srgb, var(--text) 18%, transparent);
+    }
+    .dx-tri__card--vasc { border-color: #c0392b; background: color-mix(in srgb, #c0392b 6%, var(--surface)); }
+    .dx-tri__card--neuro { border-color: #b5651d; background: color-mix(in srgb, #b5651d 6%, var(--surface)); }
+    .dx-tri__card--typical { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 6%, var(--surface)); }
+    .dx-tri__title { display: flex; align-items: center; gap: 6px; font-weight: 800; font-size: 13.5px; margin-bottom: 4px; }
+    .dx-tri__card--vasc .dx-tri__title { color: #c0392b; }
+    .dx-tri__card--neuro .dx-tri__title { color: #b5651d; }
+    .dx-tri__list { margin: 0; padding-left: 18px; font-size: 12.5px; line-height: 1.5; }
+    .dx-tri__list li { margin: 2px 0; }
+
+    details.dx-tri__card { padding: 0; }
+    details.dx-tri__card > summary {
+      list-style: none; cursor: pointer; padding: 10px 12px;
+      display: flex; align-items: center; gap: 6px; font-weight: 800; font-size: 13.5px;
+    }
+    details.dx-tri__card > summary::-webkit-details-marker { display: none; }
+    details.dx-tri__card > summary::after { content: "▸"; margin-left: auto; font-size: 12px; color: var(--muted); transition: transform 120ms ease; }
+    details.dx-tri__card[open] > summary::after { transform: rotate(90deg); }
+    details.dx-tri__card--vasc > summary { color: #c0392b; }
+    details.dx-tri__card--neuro > summary { color: #b5651d; }
+    details.dx-tri__card > .dx-tri__list { padding: 0 14px 12px 30px; }
+    details.dx-tri__card > .dx-tri__hint { padding: 0 14px 6px 30px; font-size: 11px; color: var(--muted); }
+
+    details.dx-box {
+      background: var(--surface); border: 1.5px solid color-mix(in srgb, var(--text) 18%, transparent);
+      border-radius: 10px; margin: 10px 0; scroll-margin-top: 8px;
+    }
+    details.dx-box > summary {
+      list-style: none; cursor: pointer; padding: 12px 14px;
+      display: flex; align-items: center; gap: 8px; font-weight: 800; font-size: 14.5px;
+    }
+    details.dx-box > summary::-webkit-details-marker { display: none; }
+    details.dx-box > summary::after { content: "▸"; margin-left: auto; font-size: 13px; color: var(--muted); transition: transform 120ms ease; }
+    details.dx-box[open] > summary::after { transform: rotate(90deg); }
+    details.dx-box[open] { border-color: var(--accent); }
+    details.dx-box > .dx-box__body { padding: 0 14px 14px; }
+
+    @media (max-width: 640px) {
+      .dx-quick { gap: 6px; }
+      .dx-quick__btn { padding: 8px 4px; font-size: 11.5px; border-radius: 8px; }
+      .dx-quick__sub { font-size: 9.5px; }
+      .dx-tri { grid-template-columns: 1fr; gap: 8px; }
+      .dx-tri__card { padding: 8px 10px; }
+      details.dx-tri__card > summary { padding: 8px 10px; font-size: 12.5px; }
+      details.dx-tri__card > .dx-tri__list { padding: 0 12px 10px 26px; }
+      .dx-tri__title { font-size: 12.5px; }
+      .dx-tri__list { font-size: 12px; }
+      details.dx-box > summary { padding: 10px 12px; font-size: 13.5px; }
+      details.dx-box > .dx-box__body { padding: 0 12px 12px; }
+    }
+
+    .dx-step {
+      margin: 18px 0 6px; display: flex; align-items: center; gap: 10px;
+      color: var(--muted); font-size: 11.5px; font-weight: 800; letter-spacing: 0.1em;
+    }
+    .dx-step::before, .dx-step::after { content: ""; flex: 1; height: 1px; background: color-mix(in srgb, var(--text) 18%, transparent); }
+
+    .dx-template {
+      background: color-mix(in srgb, var(--text) 4%, var(--surface));
+      border-left: 3px solid var(--accent); border-radius: 6px;
+      padding: 10px 12px; margin: 6px 0 0; font-size: 13px; line-height: 1.6;
+      white-space: pre-wrap; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+    .dx-template__hint { font-size: 11px; color: var(--muted); margin: 0 0 4px; }
+
+    /* 典型像（概観：評価軸ではなく初期把握用） */
+    .dx-typical {
+      background: color-mix(in srgb, var(--accent) 5%, var(--surface));
+      border: 1.5px solid color-mix(in srgb, var(--accent) 50%, transparent);
+      border-radius: 10px;
+      padding: 10px 14px;
+      margin: 10px 0 4px;
+    }
+    .dx-typical__title {
+      font-weight: 800; font-size: 13.5px;
+      color: var(--accent); margin-bottom: 4px;
+    }
+    .dx-typical__list { margin: 0; padding-left: 18px; font-size: 12.5px; line-height: 1.55; }
+    .dx-typical__list li { margin: 2px 0; }
+    @media (max-width: 640px) {
+      .dx-typical { padding: 8px 10px; }
+      .dx-typical__title { font-size: 12.5px; }
+      .dx-typical__list { font-size: 12px; }
+    }
+
+    /* 治療方針内の見出し */
+    .dx-box__body h3 {
+      font-size: 14px; font-weight: 800;
+      margin: 14px 0 6px;
+      color: var(--accent);
+      padding-bottom: 4px;
+      border-bottom: 1px dashed color-mix(in srgb, var(--text) 22%, transparent);
+    }
+    .dx-box__body h3:first-child { margin-top: 4px; }
+    @media (max-width: 640px) {
+      .dx-box__body h3 { font-size: 12.5px; margin: 10px 0 4px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="hokuto-top">
+    <a class="hokuto-top__btn" href="../薬剤情報.html"><span class="hokuto-top__icon">℞</span><span>薬剤情報</span></a>
+    <a class="hokuto-top__btn" href="../表計算.html"><span class="hokuto-top__icon">⊞</span><span>表計算</span></a>
+  </header>
+
+  <main class="hokuto-main">
+    <article class="note-shell">
+      <h1 class="page-title">下顎骨骨折（mandibular fracture）</h1>
+
+      <nav class="dx-quick" aria-label="クイックタップ">
+        <button class="dx-quick__btn" type="button" data-target="er-actions">
+          <span>ER で打つ手</span><span class="dx-quick__sub">初期処置</span>
+        </button>
+        <button class="dx-quick__btn" type="button" data-target="consult-check">
+          <span>コンサル前確認</span><span class="dx-quick__sub">形成外科を呼ぶ前に</span>
+        </button>
+        <button class="dx-quick__btn" type="button" data-target="img-plan">
+          <span>画像と治療方針</span><span class="dx-quick__sub">部位別 / タイミング</span>
+        </button>
+        <button class="dx-quick__btn" type="button" data-target="consult">
+          <span>コンサル文</span><span class="dx-quick__sub">そのまま貼れる</span>
+        </button>
+      </nav>
+
+      <section class="dx-typical">
+        <div class="dx-typical__title">典型像（疑うきっかけ）</div>
+        <ul class="dx-typical__list">
+          <li>機転：交通外傷・自転車／バイク・スポーツ・喧嘩・転倒・転落</li>
+          <li><strong>「いつも通り噛めない」と本人が訴える</strong>（咬合異常は最も鋭敏な所見）</li>
+          <li>部位別頻度：<strong>condyle 24% > body 20% > angle 16% > symphysis/parasymphysis 14%</strong>。耳前部圧痛で condyle を疑う</li>
+          <li><strong>多発骨折が高頻度（2 部位 30〜50%）</strong>：1 箇所見つけたら他にもあると思って探す</li>
+        </ul>
+        <p style="margin: 6px 0 0; font-size: 11.5px; color: var(--muted);">→ 詳細な所見は <strong>同時並行で評価する 2 軸</strong> と <strong>コンサル前確認</strong> へ</p>
+      </section>
+
+      <div class="dx-step"><span>同時並行で評価する 2 軸（治療方針を分ける所見）</span></div>
+      <div class="dx-tri" style="grid-template-columns: 1fr 1fr;">
+
+        <details class="dx-tri__card dx-tri__card--vasc" open>
+          <summary>気道</summary>
+          <p class="dx-tri__hint">両側骨折・舌位低下・後咽頭血腫で<strong>気道閉塞リスク</strong>。</p>
+          <ul class="dx-tri__list">
+            <li>両側 parasymphysis 骨折＝舌の支持が破綻し<strong>舌根沈下</strong>で閉塞</li>
+            <li>多発骨折・著明腫脹・口腔内出血 → <strong>早期挿管準備</strong></li>
+            <li>後咽頭出血／血腫の評価（CT で確認）</li>
+            <li>仰臥位禁、<strong>座位 or 側臥位</strong>、必要時 jaw-thrust</li>
+          </ul>
+        </details>
+
+        <details class="dx-tri__card dx-tri__card--vasc" open>
+          <summary>開放骨折</summary>
+          <p class="dx-tri__hint">口腔内に交通すれば全例 <strong>開放骨折扱い</strong>。感染リスク高い。</p>
+          <ul class="dx-tri__list">
+            <li>口腔内を直視：<strong>歯肉裂創／歯列の段差／出血</strong>を確認</li>
+            <li>動揺歯・脱落歯：誤嚥防止のため保存（再植検討）、無理に抜かない</li>
+            <li><strong>抗生剤を即時投与</strong>（嫌気性カバー、例：アンピシリン/スルバクタム or クリンダマイシン 600mg q8h（β ラクタムアレルギー時））</li>
+            <li>破傷風予防：口腔内菌叢主体で TIG（破傷風免疫グロブリン）は通常不要、Td booster を既往ワクチン歴で判断</li>
+            <li>口腔内洗浄、絶飲食</li>
+          </ul>
+        </details>
+      </div>
+
+      <details class="dx-box" id="er-actions">
+        <summary><span>ER で打つ手（初期処置）</span></summary>
+        <div class="dx-box__body">
+          <ul>
+            <li><strong>気道評価を最優先</strong>。座位 or 側臥位、両側 parasymphysis ＋ 舌根沈下なら早期挿管準備</li>
+            <li>口腔内・咽頭出血のコントロール、吸引</li>
+            <li>絶飲食、ライン確保、鎮痛、頭部挙上</li>
+            <li>口腔内交通あれば<strong>抗生剤即時</strong>（嫌気性カバー、例：アンピシリン/スルバクタム or クリンダマイシン 600mg q8h（β ラクタムアレルギー時））</li>
+            <li>破傷風予防：口腔内菌叢主体で TIG は通常不要、Td booster を既往ワクチン歴で判断</li>
+            <li>動揺歯・脱落歯は保存（誤嚥防止、再植検討）、無理に抜かない</li>
+            <li><strong>仮固定</strong>（顎間 or 包帯）で疼痛軽減・追加損傷防止</li>
+            <li>頭部 CT・頸椎 CT を同時オーダー（高エネ機転で合併多い → <a href="../頭部外傷評価.html">頭部外傷評価</a> / <a href="../頸部外傷・頸部痛.html">頸部外傷・頸部痛</a>）</li>
+            <li>形成外科コンサルト（コンサル前確認 → コンサル文 の順で）</li>
+          </ul>
+        </div>
+      </details>
+
+      <details class="dx-box" id="consult-check">
+        <summary><span>形成外科コンサルト前に確認すべきこと</span></summary>
+        <div class="dx-box__body">
+          <p>下顎骨折と診断したら、コンサルト前に以下を整理しておく（電話・紹介状で必ず聞かれる）。</p>
+          <ul>
+            <li><strong>気道は安定しているか</strong>：両側 parasymphysis 骨折・舌根沈下・後咽頭血腫の有無</li>
+            <li><strong>開放骨折か</strong>：口腔内交通の有無。抗生剤・破傷風予防は投与済みか</li>
+            <li><strong>咬合の異常</strong>：本人申告が最も鋭敏。「いつも通り噛めるか」を必ず聞く</li>
+            <li><strong>開口障害</strong>：開口距離（cm）、痛みで開けられない／物理的に開かないの別</li>
+            <li><strong>触診所見</strong>：下顎縁の段差・動揺・捻髪音の部位、耳前部圧痛（condyle）</li>
+            <li><strong>神経所見</strong>（治療方針は変えないが記録必須）：
+              <ul>
+                <li><strong>下歯槽神経 (V3) 麻痺</strong>＝下口唇・オトガイ部しびれ。体部〜角部骨折を示唆。多くは保存療法で自然回復</li>
+                <li><strong>顔面神経 (VII) 末梢枝麻痺</strong>：顆頭骨折で出現することは<strong>極めて稀</strong>。むしろ<strong>側頭骨骨折を疑い除外</strong>すべき</li>
+                <li><strong>外耳道前壁損傷</strong>：顆突起脱臼で耳出血として気付く</li>
+              </ul>
+            </li>
+            <li><strong>歯の状態</strong>：動揺歯・脱落歯（誤嚥源）。保存（再植検討）済みか</li>
+            <li><strong>画像所見</strong>：顔面 CT・3D-CT で骨折部位・転位・粉砕の程度。<strong>顆頭の中頭蓋窩陥入</strong>を必ず除外</li>
+            <li><strong>合併損傷</strong>：頭部 CT で頭蓋内病変、頸椎 CT で頸椎損傷（高エネ機転）</li>
+            <li><strong>背景情報</strong>：抗凝固薬・抗血小板薬・既往歴・受傷前 ADL（コンサルト文に必須）</li>
+            <li><strong>ER 処置の記録</strong>：仮固定（顎間 or 包帯）、絶飲食、鎮痛、抗生剤投与時刻</li>
+          </ul>
+        </div>
+      </details>
+
+      <details class="dx-box" id="img-plan">
+        <summary><span>画像所見と治療方針</span></summary>
+        <div class="dx-box__body">
+
+          <h3>① 部位別の頻度と方針</h3>
+          <p>骨折線の方向と咀嚼筋の引っ張る方向で「安定／不安定」が決まり、治療法（顎間固定だけで済むか、観血的整復＋プレート固定が必要か）が分かれる。</p>
+          <div class="table-wrap"><table>
+            <thead><tr><th>部位</th><th>頻度</th><th>治療方針</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><strong>関節突起 condylar process</strong></td>
+                <td>多い（25〜35%）</td>
+                <td><strong>顎間固定 2〜4 週＋早期 ROM 訓練</strong>が原則（後述）</td>
+              </tr>
+              <tr>
+                <td>顎角 angle</td>
+                <td>多い（25〜30%、若年男性の喧嘩外傷で増加）</td>
+                <td>安定なら顎間固定／不安定なら<strong>観血的整復＋プレート固定</strong>。第三大臼歯（智歯）が骨折線上にあると不安定化しやすい</td>
+              </tr>
+              <tr>
+                <td>体部 body</td>
+                <td>15〜20%</td>
+                <td>安定なら<strong>顎間固定 4〜6 週</strong>／不安定なら<strong>観血的整復＋プレート固定</strong></td>
+              </tr>
+              <tr>
+                <td>正中部／傍正中 symphysis / parasymphysis</td>
+                <td>10〜15%</td>
+                <td>同上</td>
+              </tr>
+              <tr>
+                <td>上行枝 ramus／筋突起 coronoid</td>
+                <td>少ない</td>
+                <td>個別判断</td>
+              </tr>
+            </tbody>
+          </table></div>
+
+          <h3>② favourable / unfavourable（安定性）の判断</h3>
+          <p>下顎には咀嚼筋（咬筋・側頭筋・内側翼突筋・外側翼突筋）が付着しており、骨折線の角度によって筋肉が骨片を <strong>寄せる</strong> か <strong>離す</strong> かが決まる：</p>
+          <ul>
+            <li><strong>favourable（安定）</strong>：筋肉が骨片を<strong>寄せる方向</strong>に働く → 骨折面が密着し、<strong>顎間固定だけで癒合する</strong></li>
+            <li><strong>unfavourable（不安定）</strong>：筋肉が骨片を<strong>離す方向</strong>に働く → 骨片が離開し顎間固定が外れる → <strong>観血的整復＋プレート固定が必要</strong></li>
+          </ul>
+          <p>例：顎角骨折で骨折線が <em>後上→前下</em>に走れば内側翼突筋が後方骨片を上前方へ引いて骨折面を寄せる＝favourable。逆向き（前上→後下）なら離す＝unfavourable。</p>
+          <p>ER で判定する必要はなく、CT で形成外科が判断する材料。<strong>「不安定要因」のフラグ</strong>として頭に置く。</p>
+
+          <h3>③ 関節突起骨折の特殊性</h3>
+          <p>関節突起 (condylar) 骨折は他部位と違い、<strong>原則として手術しない</strong>（顎間固定が主流）。</p>
+          <ul>
+            <li><strong>関節包内 intracapsular</strong>（顆頭そのものが関節包内で骨折）：<strong>顎間固定 2〜4 週＋早期 ROM 訓練</strong>。理由は粉砕ではなく、①手術アプローチが解剖学的に困難（顔面神経・耳下腺）／②関節包内は血流が乏しく内固定しても癒合しにくい／③手術で<strong>関節強直 (ankylosis)</strong> を生じやすく機能予後が悪い</li>
+            <li><strong>関節包外 extracapsular</strong>（顆頚 condylar neck・subcondylar の骨折）：アプローチ可能で観血的整復も選択肢。<strong>近年の RCT（Eckelt 2006, Schneider 2008 等）では転位・脱臼を伴う成人で ORIF が closed treatment と同等以上</strong>。脱臼の有無・転位の程度で形成外科が判断</li>
+          </ul>
+          <p>関節強直を避けるため、長期顎間固定はせず<strong>2〜4 週で外して ROM 訓練</strong>を始めるのがコツ。</p>
+          <p><strong>観血的整復が必要な例（限定的）</strong>：</p>
+          <ul>
+            <li>顆頭の<strong>中頭蓋窩への陥入</strong>（3D-CT で必ず確認）</li>
+            <li>両側骨折で<strong>咬合の再建が不能</strong></li>
+            <li>側方への<strong>高度脱臼</strong></li>
+            <li>関節腔内に骨片が迷入</li>
+          </ul>
+
+          <h3>④ 手術タイミング</h3>
+          <p><strong>真に緊急なのは気道・大出血のみ</strong>。骨接合術自体は浮腫軽快後で良い。開放骨折も抗生剤投与下なら数日〜1 週間の待機で感染率に有意差はない（Maloney 2002 / Webb 2009）。</p>
+          <div class="table-wrap"><table>
+            <thead><tr><th>状態</th><th>必要な処置</th><th>タイミング</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><strong>気道閉塞</strong>（両側 parasymphysis 舌根沈下／後咽頭血腫）</td>
+                <td>気道確保（挿管 or 外科的気道）</td>
+                <td><strong>直ちに</strong></td>
+              </tr>
+              <tr>
+                <td><strong>大出血の制御困難</strong></td>
+                <td>圧迫・タンポン・血管結紮（IR・耳鼻科協力）</td>
+                <td><strong>直ちに</strong></td>
+              </tr>
+              <tr>
+                <td>開放骨折（口腔内交通）</td>
+                <td>抗生剤投与下で待機、骨接合術</td>
+                <td>24〜72h 以内が望ましいが、抗生剤投与下なら数日〜1 週間の待機可</td>
+              </tr>
+              <tr>
+                <td>閉鎖骨折・単独骨折</td>
+                <td>骨接合術（顎間固定 or 観血的整復＋プレート）</td>
+                <td>浮腫軽快後、数日〜2 週間の予定手術</td>
+              </tr>
+            </tbody>
+          </table></div>
+
+          <h3>⑤ 必ず除外する画像所見</h3>
+          <ul>
+            <li><strong>顆頭の中頭蓋窩陥入</strong>（稀）：3D-CT で必ず確認</li>
+            <li>外耳道前壁損傷（顆突起脱臼の合併）</li>
+            <li>歯槽骨折・脱臼歯（誤嚥源）</li>
+            <li>頭蓋底・頸椎の合併損傷（高エネ機転）</li>
+          </ul>
+        </div>
+      </details>
+
+      <details class="dx-box" id="consult">
+        <summary><span>コンサル文（カルテに貼る）</span></summary>
+        <div class="dx-box__body">
+          <p class="dx-template__hint">形成外科宛て。【目的】【疾患】【既往歴】【内服薬】【ADL】【現病歴】の順。</p>
+          <div class="dx-template">【目的】[ご加療依頼／観血的整復のご相談]
+【疾患】#1 下顎骨骨折（[symphysis／parasymphysis／body／angle／ramus／condyle／coronoid]、[右/左／両側]、[favourable／unfavourable]）
+　　　 [#2 開放骨折／#2 関節脱臼伴う／#2 顔面多発骨折 など]
+【既往歴】[特記事項なし／○○]
+【内服薬】[なし／ワーファリン／DOAC ○○／抗血小板薬 ○○]
+【ADL（受傷前）】[独歩／杖／介助／車椅子]
+【現病歴】[年齢]歳[男/女]性。[受傷機転：交通／転倒／喧嘩／スポーツ]で受傷し、[来院経緯]で来院。
+ ・主訴：[咬合異常／開口障害／下顎痛／下口唇しびれ]
+ ・視診：下顎部腫脹・皮下血腫、開口 [○ cm／不能]、口腔内裂創 [あり／なし]、動揺歯 [あり：第○歯／なし]
+ ・触診：段差・動揺・捻髪音 [部位を明記]、耳前部圧痛 [あり：右/左／なし]
+ ・神経：下口唇・オトガイ部しびれ [あり：右/左／なし]、顔面神経麻痺 [なし／あり]
+ ・気道：[安定／不安／挿管管理中]
+ ・画像：パノラマ X 線・顔面 CT で[部位]骨折、3D-CT で[転位・粉砕・顆頭脱臼など]
+ ・頭部 CT：[頭蓋内病変なし／○○]、頸椎評価 [問題なし／○○]
+ ・ER 処置：絶飲食、抗生剤 [投与済／未]、鎮痛、固定 [なし／顎間固定済]
+ ・術前検査：採血・心電図・胸部 X 線 [済／未]
+よろしくお願いいたします。</div>
+        </div>
+      </details>
+
+      <details class="dx-box">
+        <summary><span>出典</span></summary>
+        <div class="dx-box__body">
+          <ul>
+            <li>頭頸部外科教科書 第13章「頭蓋顔面・頸部外傷」A. 頭蓋顔面骨折／下顎骨骨折（p.858-864）。</li>
+            <li>Olson RA ほか. Fractures of the mandible.</li>
+            <li>Ellis E III, el-Attar A, Moos KF. An analysis of 2,067 cases of zygomatico-orbital fracture. <em>J Oral Maxillofac Surg.</em></li>
+          </ul>
+        </div>
+      </details>
+
+    </article>
+  </main>
+
+  <nav class="hokuto-bottom">
+    <button class="hokuto-bottom__btn" type="button" id="navBack"><span class="hokuto-bottom__icon">←</span><span>戻る</span></button>
+    <a class="hokuto-bottom__btn" href="../ツール.html"><span class="hokuto-bottom__icon">⚙</span><span>ツール</span></a>
+    <a class="hokuto-bottom__btn" href="../index.html"><span class="hokuto-bottom__icon">⌂</span><span>ホーム</span></a>
+  </nav>
+
+  <script>
+  (function(){
+    document.querySelectorAll('.dx-quick__btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.dataset.target;
+        const target = document.getElementById(id);
+        if (!target) return;
+        target.open = true;
+        target.scrollIntoView({behavior: 'smooth', block: 'start'});
+      });
+    });
+    const navBack = document.getElementById('navBack');
+    if (navBack) navBack.addEventListener('click', () => {
+      if (window.history.length > 1) history.back();
+      else window.location.href = '../index.html';
+    });
+  })();
+  </script>
+</body>
+</html>
